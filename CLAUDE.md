@@ -180,12 +180,12 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 | # | 도구 | 국문명 | URL | 설명 | 상태 |
 |---|------|--------|-----|------|------|
-| 1 | JSON Formatter / Validator | JSON 포매터 | `/json-formatter` | JSON 문자열을 붙여넣으면 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지 및 유효성 검사 포함 | ⬜ |
+| 1 | JSON Formatter / Validator | JSON 포매터 | `/json-formatter` | JSON 문자열을 붙여넣으면 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지 및 유효성 검사 포함 | ✅ |
 | 2 | Base64 Encoder / Decoder | Base64 인코더·디코더 | `/base64` | 텍스트 또는 파일을 Base64로 인코딩하거나 디코딩. 완전 클라이언트 사이드 처리 | ⬜ |
 | 3 | URL Encoder / Decoder | URL 인코더·디코더 | `/url-encoder` | URL 특수문자를 퍼센트 인코딩으로 변환하거나 원래 문자열로 복원 | ⬜ |
 | 4 | Unix Timestamp Converter | 유닉스 타임스탬프 변환기 | `/timestamp` | Unix timestamp ↔ 사람이 읽을 수 있는 날짜·시간 양방향 변환. 현재 시각 실시간 표시 | ⬜ |
-| 5 | Character / Word Counter | 글자 수·단어 수 카운터 | `/character-counter` | 텍스트 입력 시 글자 수·단어 수·문장 수·줄 수 실시간 집계. SNS 글자 수 제한 안내 포함 | ⬜ |
-| 6 | CSS Gradient Generator | CSS 그라디언트 생성기 | `/css-gradient` | linear/radial/conic 그라디언트를 시각적으로 편집하고 CSS 코드 즉시 복사 | ⬜ |
+| 5 | Character / Word Counter | 글자 수·단어 수 카운터 | `/character-counter` | 텍스트 입력 시 글자 수·단어 수·문장 수·줄 수 실시간 집계. SNS 글자 수 제한 안내 포함 | ✅ |
+| 6 | CSS Gradient Generator | CSS 그라디언트 생성기 | `/css-gradient` | linear/radial/conic 그라디언트를 시각적으로 편집하고 CSS 코드 즉시 복사 | ✅ |
 | 7 | Color Picker / HEX–RGB Converter | 색상 변환기 | `/color-converter` | HEX·RGB·HSL·HSV 간 상호 변환. 컬러 피커 UI와 팔레트 저장 기능 | ⬜ |
 | 8 | Cron Expression Generator | 크론 표현식 생성기 | `/cron-generator` | 크론 스케줄을 UI로 설정하면 표현식 자동 생성. 다음 실행 시각 미리보기 포함 | ⬜ |
 | 9 | Markdown to HTML | 마크다운 → HTML 변환기 | `/markdown-to-html` | 마크다운 텍스트를 실시간으로 HTML로 변환. 좌우 분할 미리보기 제공 | ⬜ |
@@ -196,3 +196,51 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 14 | Aspect Ratio Calculator | 화면 비율 계산기 | `/aspect-ratio` | 가로·세로 입력 시 비율 산출 및 비율 유지 리사이즈 계산. 주요 비율 프리셋 제공 | ⬜ |
 
 **범례:** ⬜ 미구현 · 🚧 진행 중 · ✅ 완료
+
+---
+
+## 구현 현황 (2026-06-09 기준)
+
+### 코드/아키텍처
+- **Next.js 15 App Router + TypeScript + Tailwind v4** 로 구현. 디자인 토큰은
+  `app/globals.css` `@theme` 블록에 스펙과 1:1 매핑.
+- **다국어 = URL 기반**: KO는 루트(`/json-formatter`), EN은 `/en/json-formatter`.
+  각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
+  (localStorage 토글 아님)
+- **페이지 콘텐츠 단일 출처**: `app/lib/content.ts` 에 페이지별 **제목/설명/키워드**를
+  KO·EN로 모아두고 → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용.
+  **텍스트 수정은 이 파일만 고치면 됨.**
+- 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
+- 레이아웃: 960px 기준 자동 반응형(≥좌우분할/<상하분할), 공통 `.kf-pagehead`.
+
+### SEO
+- 페이지별 title/description/keywords + `canonical` + `hreflang`(ko-KR/en-US/x-default) + OpenGraph
+- JSON-LD: 도구 `WebApplication`, 허브 `WebSite`+`ItemList`
+- `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
+- 구글 서치콘솔(DNS 인증) · 네이버 서치어드바이저(메타태그 `naver-site-verification`) 등록
+
+### 인프라
+- **배포**: Vercel (GitHub `joyfive/kitfolio` 연결, main 푸시 시 자동 배포)
+- **도메인**: `kitfolio.app` (가비아 구매, 기본 네임서버 + DNS 레코드 A `@`→76.76.21.21 / CNAME `www`→cname.vercel-dns.com)
+- **SSL**: Vercel 자동 발급·자동 갱신 (Let's Encrypt)
+- 대표 도메인 = apex `kitfolio.app` → 코드의 `SITE.url`과 일치
+
+### 광고 / 분석
+- **AdSense**: pub `ca-pub-7537584957079478`. 로더 스크립트(layout) + 확인 메타태그 + `public/ads.txt` 적용.
+  광고 단위 컴포넌트 `app/components/AdUnit.tsx` 준비됨 (슬롯 ID만 넣으면 동작, dev는 플레이스홀더).
+  **단, AdSense 사이트 승인은 아직 안 받음 → 실제 광고 미노출 상태.**
+- **GA4**: `G-BW26VT6W47`. `@next/third-parties` `<GoogleAnalytics>` 로 연동 (GTM 미사용).
+
+---
+
+## 다음 세션 TODO
+
+1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
+   - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단
+   - 콘텐츠 분량이 승인 기준에 빠듯할 수 있음 → 도구를 더 채운 뒤 신청하는 편이 유리
+2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
+   - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
+   - `content.ts` 의 해당 항목에 `title/description/steps` 추가 + `ready: true` 전환
+   - 테마: dev=IDE / design=Canvas / text=Clean
+3. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
+4. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)
