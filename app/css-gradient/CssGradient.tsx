@@ -1,0 +1,477 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import SiteHeader from "../components/SiteHeader";
+import { useBodyTheme } from "../components/useBodyTheme";
+import { useT, type Dict } from "../lib/i18n";
+
+const DICT: Dict = {
+  ko: {
+    "grad.ko": "그라디언트 생성기",
+    "grad.type": "타입",
+    "grad.angle": "각도",
+    "grad.position": "중심 위치",
+    "grad.stops": "색상 정지점",
+    "grad.addStop": "정지점 추가",
+    "grad.css": "CSS",
+    "grad.random": "랜덤",
+    "grad.reverse": "반전",
+    "grad.lead":
+      "linear·radial·conic 그라디언트를 시각적으로 편집합니다. 정지점을 드래그해 색과 위치를 맞추고 각도·중심을 조절한 뒤, 완성된 CSS 코드를 바로 복사하세요. 모든 처리는 브라우저 안에서 이루어집니다.",
+    "grad.step1": "타입·각도 선택",
+    "grad.step2": "정지점 드래그로 색 조절",
+    "grad.step3": "CSS 복사",
+  },
+  en: {
+    "grad.ko": "Gradient Generator",
+    "grad.type": "Type",
+    "grad.angle": "Angle",
+    "grad.position": "Center",
+    "grad.stops": "Color Stops",
+    "grad.addStop": "Add stop",
+    "grad.css": "CSS",
+    "grad.random": "Random",
+    "grad.reverse": "Reverse",
+    "grad.lead":
+      "Edit linear, radial and conic gradients visually. Drag the stops to set colors and positions, tune the angle and center, then copy the finished CSS. Everything runs in your browser.",
+    "grad.step1": "Pick type & angle",
+    "grad.step2": "Drag stops to set colors",
+    "grad.step3": "Copy the CSS",
+  },
+};
+
+type GType = "linear" | "radial" | "conic";
+type Stop = { color: string; pos: number };
+
+const PALETTES = [
+  ["#899ff3", "#22499f"],
+  ["#a7b6f6", "#2d5dc8", "#0a1d48"],
+  ["#6486ef", "#18377c"],
+  ["#c4cdf9", "#3a70eb", "#18377c"],
+  ["#e3e7fc", "#6486ef", "#22499f"],
+];
+const MID_COLORS = ["#6486ef", "#3a70eb", "#a7b6f6", "#18377c", "#c4cdf9"];
+
+export default function CssGradient() {
+  useBodyTheme("canvas");
+  const t = useT(DICT);
+
+  const [type, setType] = useState<GType>("linear");
+  const [angle, setAngle] = useState(135);
+  const [posX, setPosX] = useState(50);
+  const [posY, setPosY] = useState(50);
+  const [stops, setStops] = useState<Stop[]>([
+    { color: "#899ff3", pos: 0 },
+    { color: "#22499f", pos: 100 },
+  ]);
+  const [selected, setSelected] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const dialRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<number | null>(null);
+  const dialDragRef = useRef(false);
+
+  const sorted = [...stops].sort((a, b) => a.pos - b.pos);
+  const stopStr = sorted
+    .map((s) => `${s.color} ${Math.round(s.pos)}%`)
+    .join(", ");
+
+  function gradientStr() {
+    if (type === "linear") return `linear-gradient(${angle}deg, ${stopStr})`;
+    if (type === "radial")
+      return `radial-gradient(circle at ${posX}% ${posY}%, ${stopStr})`;
+    return `conic-gradient(from ${angle}deg at ${posX}% ${posY}%, ${stopStr})`;
+  }
+  const trackGradient = `linear-gradient(90deg, ${stopStr})`;
+
+  // window-level drag handlers for track stops + angle dial
+  useEffect(() => {
+    function onMove(e: MouseEvent) {
+      if (dragRef.current !== null && trackRef.current) {
+        const r = trackRef.current.getBoundingClientRect();
+        const p = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+        const i = dragRef.current;
+        setStops((prev) => prev.map((s, idx) => (idx === i ? { ...s, pos: p } : s)));
+      }
+      if (dialDragRef.current && dialRef.current) {
+        const r = dialRef.current.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        let a =
+          (Math.atan2(e.clientX - cx, -(e.clientY - cy)) * 180) / Math.PI;
+        setAngle(Math.round((a + 360) % 360));
+      }
+    }
+    function onUp() {
+      dragRef.current = null;
+      dialDragRef.current = false;
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, []);
+
+  function sampleAt(p: number) {
+    for (let i = 0; i < sorted.length - 1; i++) {
+      if (p >= sorted[i].pos && p <= sorted[i + 1].pos) return sorted[i].color;
+    }
+    return sorted[sorted.length - 1].color;
+  }
+
+  function onTrackMouseDown(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    const stopEl = target.closest<HTMLElement>(".stop");
+    if (stopEl) {
+      const i = Number(stopEl.dataset.i);
+      setSelected(i);
+      dragRef.current = i;
+      e.preventDefault();
+      return;
+    }
+    if (!trackRef.current) return;
+    const r = trackRef.current.getBoundingClientRect();
+    const p = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+    setStops((prev) => {
+      const next = [...prev, { color: sampleAt(p), pos: p }];
+      dragRef.current = next.length - 1;
+      setSelected(next.length - 1);
+      return next;
+    });
+  }
+
+  function addStop() {
+    let gap = -1;
+    let at = 50;
+    for (let i = 0; i < sorted.length - 1; i++) {
+      const d = sorted[i + 1].pos - sorted[i].pos;
+      if (d > gap) {
+        gap = d;
+        at = (sorted[i].pos + sorted[i + 1].pos) / 2;
+      }
+    }
+    const color = MID_COLORS[Math.floor(Math.random() * MID_COLORS.length)];
+    setStops((prev) => {
+      const next = [...prev, { color, pos: at }];
+      setSelected(next.length - 1);
+      return next;
+    });
+  }
+
+  function updateStop(i: number, patch: Partial<Stop>) {
+    setStops((prev) => prev.map((s, idx) => (idx === i ? { ...s, ...patch } : s)));
+  }
+  function deleteStop(i: number) {
+    setStops((prev) => {
+      if (prev.length <= 2) return prev;
+      const next = prev.filter((_, idx) => idx !== i);
+      setSelected((sel) => Math.max(0, Math.min(sel, next.length - 1)));
+      return next;
+    });
+  }
+
+  function random() {
+    const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
+    setStops(
+      p.map((c, i) => ({ color: c, pos: Math.round((i / (p.length - 1)) * 100) })),
+    );
+    setAngle(Math.floor(Math.random() * 360));
+    setSelected(0);
+  }
+  function reverse() {
+    setStops((prev) => prev.map((s) => ({ color: s.color, pos: 100 - s.pos })));
+  }
+
+  function dialFromEvent(e: React.MouseEvent) {
+    if (!dialRef.current) return;
+    const r = dialRef.current.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const a = (Math.atan2(e.clientX - cx, -(e.clientY - cy)) * 180) / Math.PI;
+    setAngle(Math.round((a + 360) % 360));
+  }
+
+  async function copyCss() {
+    try {
+      await navigator.clipboard.writeText("background: " + gradientStr() + ";");
+    } catch {
+      /* ignore */
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  }
+
+  const geomLabel =
+    type === "linear"
+      ? t("grad.angle")
+      : type === "conic"
+        ? t("grad.angle") + " · " + t("grad.position")
+        : t("grad.position");
+
+  const g = gradientStr();
+
+  return (
+    <>
+      <SiteHeader active="design" />
+      <main className="tool-page">
+        <div className="kf-pagehead">
+          <span className="ph-eyebrow">
+            <span>{t("nav.design")}</span>
+            <span className="ph-sep">·</span>
+            <span className="ph-theme">Canvas</span>
+          </span>
+          <h1>
+            CSS Gradient <span className="ph-ko">{t("grad.ko")}</span>
+          </h1>
+          <p className="ph-lead">{t("grad.lead")}</p>
+          <div className="ph-how">
+            <span className="ph-step">
+              <b>1</b>
+              <span>{t("grad.step1")}</span>
+            </span>
+            <span className="ph-step">
+              <b>2</b>
+              <span>{t("grad.step2")}</span>
+            </span>
+            <span className="ph-step">
+              <b>3</b>
+              <span>{t("grad.step3")}</span>
+            </span>
+          </div>
+        </div>
+
+        <div className="cv-work">
+          <div className="cv-canvas">
+            <div className="preview" style={{ background: g }} />
+          </div>
+
+          <div className="cv-panel">
+            <div className="panel-inner">
+              {/* type */}
+              <div className="field-group">
+                <span className="field-label">{t("grad.type")}</span>
+                <div className="type-seg">
+                  {(["linear", "radial", "conic"] as GType[]).map((tp) => (
+                    <button
+                      key={tp}
+                      className={type === tp ? "is-active" : ""}
+                      onClick={() => setType(tp)}
+                    >
+                      {tp[0].toUpperCase() + tp.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* angle / position */}
+              <div className="field-group">
+                <span className="field-label">{geomLabel}</span>
+                {type !== "radial" && (
+                  <div className="dial-row">
+                    <div
+                      className="dial"
+                      ref={dialRef}
+                      onMouseDown={(e) => {
+                        dialDragRef.current = true;
+                        dialFromEvent(e);
+                        e.preventDefault();
+                      }}
+                    >
+                      <div
+                        className="needle"
+                        style={{
+                          transform: `translate(-50%,-100%) rotate(${angle}deg)`,
+                        }}
+                      />
+                      <div className="hub" />
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={360}
+                      value={angle}
+                      onChange={(e) => setAngle(Number(e.target.value))}
+                    />
+                    <span className="slider-val">{angle}°</span>
+                  </div>
+                )}
+                {type !== "linear" && (
+                  <div>
+                    <div className="slider-row">
+                      <label>X</label>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={posX}
+                        onChange={(e) => setPosX(Number(e.target.value))}
+                      />
+                      <span className="slider-val">{posX}%</span>
+                    </div>
+                    <div className="slider-row">
+                      <label>Y</label>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={posY}
+                        onChange={(e) => setPosY(Number(e.target.value))}
+                      />
+                      <span className="slider-val">{posY}%</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* stops */}
+              <div className="field-group">
+                <span className="field-label">{t("grad.stops")}</span>
+                <div className="track-wrap">
+                  <div
+                    className="track"
+                    ref={trackRef}
+                    style={{ background: trackGradient }}
+                    onMouseDown={onTrackMouseDown}
+                  >
+                    {stops.map((s, i) => (
+                      <div
+                        key={i}
+                        className={"stop" + (i === selected ? " sel" : "")}
+                        data-i={i}
+                        style={{ left: s.pos + "%", background: s.color }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="stops">
+                  {stops.map((s, i) => (
+                    <div
+                      key={i}
+                      className={"stop-row" + (i === selected ? " sel" : "")}
+                      onMouseDown={(e) => {
+                        if (!(e.target as HTMLElement).closest("button"))
+                          setSelected(i);
+                      }}
+                    >
+                      <span className="swatch" style={{ background: s.color }}>
+                        <input
+                          type="color"
+                          value={s.color}
+                          onChange={(e) =>
+                            updateStop(i, { color: e.target.value })
+                          }
+                        />
+                      </span>
+                      <input
+                        className="hex-in"
+                        type="text"
+                        value={s.color.toUpperCase()}
+                        maxLength={7}
+                        onChange={(e) => {
+                          let v = e.target.value.trim();
+                          if (!v.startsWith("#")) v = "#" + v;
+                          if (/^#[0-9a-fA-F]{6}$/.test(v))
+                            updateStop(i, { color: v });
+                        }}
+                      />
+                      <input
+                        className="pos-in"
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={Math.round(s.pos)}
+                        onChange={(e) =>
+                          updateStop(i, {
+                            pos: Math.max(
+                              0,
+                              Math.min(100, Number(e.target.value) || 0),
+                            ),
+                          })
+                        }
+                      />
+                      <span
+                        style={{
+                          color: "var(--color-blue-gray-400)",
+                          fontSize: 12,
+                        }}
+                      >
+                        %
+                      </span>
+                      <button
+                        className="stop-del"
+                        disabled={stops.length <= 2}
+                        aria-label="remove"
+                        onClick={() => deleteStop(i)}
+                      >
+                        <svg
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        >
+                          <path d="M4 4l8 8M12 4l-8 8" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <button className="add-stop" onClick={addStop}>
+                  <svg
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <path d="M8 3v10M3 8h10" />
+                  </svg>
+                  <span>{t("grad.addStop")}</span>
+                </button>
+              </div>
+
+              {/* output */}
+              <div className="field-group">
+                <span className="field-label">{t("grad.css")}</span>
+                <div className="css-out">
+                  <button
+                    className="btn btn-sm btn-ghost copy-css"
+                    onClick={copyCss}
+                    style={copied ? { color: "var(--color-blue-primary-700)" } : undefined}
+                  >
+                    {copied ? t("common.copied") : t("common.copy")}
+                  </button>
+                  <pre>
+                    <span className="ct-prop">background</span>:{" "}
+                    <span className="ct-fn">{g}</span>;
+                  </pre>
+                </div>
+                <div className="out-actions">
+                  <button className="btn btn-sm btn-outline" onClick={random}>
+                    <svg
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    >
+                      <circle cx="5" cy="5" r="1.2" fill="currentColor" />
+                      <circle cx="11" cy="5" r="1.2" fill="currentColor" />
+                      <circle cx="8" cy="8" r="1.2" fill="currentColor" />
+                      <circle cx="5" cy="11" r="1.2" fill="currentColor" />
+                      <circle cx="11" cy="11" r="1.2" fill="currentColor" />
+                    </svg>
+                    <span>{t("grad.random")}</span>
+                  </button>
+                  <button className="btn btn-sm btn-outline" onClick={reverse}>
+                    <span>{t("grad.reverse")}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
