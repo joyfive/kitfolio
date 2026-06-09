@@ -13,8 +13,11 @@ export const metadata: Metadata = {
     template: "%s — Kitfolio",
   },
   description: HUB.description.ko,
-  // AdSense 사이트 확인용 메타태그
-  other: { "google-adsense-account": ADSENSE_CLIENT },
+  // 사이트 확인용 메타태그 (AdSense · 네이버 서치어드바이저)
+  other: {
+    "google-adsense-account": ADSENSE_CLIENT,
+    "naver-site-verification": "2674011389c2cf98abc4b445f1edf09e973f6e74",
+  },
 };
 
 export default function RootLayout({
