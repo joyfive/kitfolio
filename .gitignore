@@ -33,3 +33,6 @@ next-env.d.ts
 
 # local claude code settings
 .claude/
+
+# stray third-party html dumps (not part of the project)
+/crack-*.html

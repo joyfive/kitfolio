@@ -142,13 +142,14 @@ body[data-theme="clean"]  { background: #fff; }
   overflow: hidden; height: 30px;
 }
 .is-dark .kf-lang { border-color: var(--color-blue-gray-700); }
-.kf-lang button {
+.kf-lang button, .kf-lang a {
+  display: inline-flex; align-items: center;
   font-family: var(--font-inter); font-size: 12px; font-weight: 600;
   padding: 0 9px; height: 100%; color: var(--color-blue-gray-500); background: transparent;
 }
-.kf-lang button.is-active { background: var(--color-blue-primary-700); color: #fff; }
-.is-dark .kf-lang button { color: var(--color-blue-gray-400); }
-.is-dark .kf-lang button.is-active { background: var(--color-blue-primary-700); color: #fff; }
+.kf-lang button.is-active, .kf-lang a.is-active { background: var(--color-blue-primary-700); color: #fff; }
+.is-dark .kf-lang button, .is-dark .kf-lang a { color: var(--color-blue-gray-400); }
+.is-dark .kf-lang button.is-active, .is-dark .kf-lang a.is-active { background: var(--color-blue-primary-700); color: #fff; }
 
 /* search field in header */
 .kf-search {

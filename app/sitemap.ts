@@ -1,12 +1,22 @@
 import type { MetadataRoute } from "next";
-
-const BASE = "https://kitfolio.app";
+import { SITE, TOOLS, localizedHref } from "./lib/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ["", "/json-formatter", "/css-gradient", "/character-counter"];
-  return routes.map((path) => ({
-    url: `${BASE}${path}`,
-    changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.8,
-  }));
+  const paths = ["/", ...TOOLS.filter((t) => t.ready).map((t) => "/" + t.slug)];
+  const entries: MetadataRoute.Sitemap = [];
+
+  for (const p of paths) {
+    const koUrl = SITE.url + localizedHref("ko", p);
+    const enUrl = SITE.url + localizedHref("en", p);
+    const languages = { ko: koUrl, en: enUrl };
+    for (const url of [koUrl, enUrl]) {
+      entries.push({
+        url,
+        changeFrequency: "weekly",
+        priority: p === "/" ? 1 : 0.8,
+        alternates: { languages },
+      });
+    }
+  }
+  return entries;
 }

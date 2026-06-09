@@ -1,25 +1,20 @@
 "use client";
 
 /* ============================================================
-   Kitfolio — i18n (KO / EN), React port of the prototype engine.
-   - LangProvider holds the current language + persists to
-     localStorage('kitfolio-lang'). Default: ko.
-   - useT(dict?) returns a t(key) that resolves against the
-     page-local dict first, then the common dict, then the key.
+   Kitfolio — i18n (KO / EN), route-driven.
+
+   언어는 URL로 결정됩니다 (KO=루트, EN=/en). 각 서브트리의 레이아웃이
+   <LangProvider lang="..."> 로 고정 언어를 주입하고, 컴포넌트는 useLang()/
+   useT()로 읽습니다. localStorage 토글이 아니라 URL 전환(LangToggle)으로
+   언어를 바꾸므로 서버 렌더가 언어별로 정확히 일치합니다 (SEO 정합).
+
+   페이지 SEO 카피(제목·설명·키워드·가이드)는 lib/content.ts 에 있고,
+   여기 COMMON 은 헤더/버튼 등 공통 UI 마이크로카피만 담습니다.
    ============================================================ */
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext } from "react";
 
 export type Lang = "ko" | "en";
 export type Dict = Partial<Record<Lang, Record<string, string>>>;
-
-const STORE = "kitfolio-lang";
 
 const COMMON: Record<Lang, Record<string, string>> = {
   en: {
@@ -34,14 +29,6 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "common.clear": "Clear",
     "common.paste": "Paste",
     "common.sample": "Sample",
-    "common.download": "Download",
-    "common.upload": "Upload",
-    "common.layout": "Layout",
-    "common.split": "Split",
-    "common.stack": "Stacked",
-    "common.input": "Input",
-    "common.output": "Output",
-    "common.result": "Result",
     "common.privacy": "Runs entirely in your browser — nothing is uploaded.",
   },
   ko: {
@@ -56,47 +43,29 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "common.clear": "지우기",
     "common.paste": "붙여넣기",
     "common.sample": "예시",
-    "common.download": "다운로드",
-    "common.upload": "업로드",
-    "common.layout": "레이아웃",
-    "common.split": "좌우 분할",
-    "common.stack": "상하 분할",
-    "common.input": "입력",
-    "common.output": "출력",
-    "common.result": "결과",
     "common.privacy": "모든 처리는 브라우저 안에서만 — 어떤 데이터도 전송되지 않습니다.",
   },
 };
 
-type Ctx = { lang: Lang; setLang: (l: Lang) => void };
-const LangCtx = createContext<Ctx>({ lang: "ko", setLang: () => {} });
+const LangCtx = createContext<Lang>("ko");
 
-export function LangProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("ko");
-
-  useEffect(() => {
-    const stored = (localStorage.getItem(STORE) as Lang) || "ko";
-    setLangState(stored);
-    document.documentElement.setAttribute("lang", stored);
-  }, []);
-
-  const setLang = useCallback((l: Lang) => {
-    setLangState(l);
-    localStorage.setItem(STORE, l);
-    document.documentElement.setAttribute("lang", l);
-  }, []);
-
-  const value = useMemo(() => ({ lang, setLang }), [lang, setLang]);
-  return <LangCtx.Provider value={value}>{children}</LangCtx.Provider>;
+export function LangProvider({
+  lang,
+  children,
+}: {
+  lang: Lang;
+  children: React.ReactNode;
+}) {
+  return <LangCtx.Provider value={lang}>{children}</LangCtx.Provider>;
 }
 
 export function useLang() {
-  return useContext(LangCtx);
+  return { lang: useContext(LangCtx) };
 }
 
-/** Returns a translator bound to the current language and an optional page dict. */
+/** 현재 언어 + 페이지 dict 에 바인딩된 translator. */
 export function useT(dict?: Dict) {
-  const { lang } = useLang();
+  const lang = useContext(LangCtx);
   return useCallback(
     (key: string) =>
       dict?.[lang]?.[key] ??

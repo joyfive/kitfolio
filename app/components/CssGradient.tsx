@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import SiteHeader from "../components/SiteHeader";
-import { useBodyTheme } from "../components/useBodyTheme";
-import { useT, type Dict } from "../lib/i18n";
+import SiteHeader from "./SiteHeader";
+import { useBodyTheme } from "./useBodyTheme";
+import { getTool } from "../lib/content";
+import { useLang, useT, type Dict } from "../lib/i18n";
 
 const DICT: Dict = {
   ko: {
-    "grad.ko": "그라디언트 생성기",
     "grad.type": "타입",
     "grad.angle": "각도",
     "grad.position": "중심 위치",
@@ -16,14 +16,8 @@ const DICT: Dict = {
     "grad.css": "CSS",
     "grad.random": "랜덤",
     "grad.reverse": "반전",
-    "grad.lead":
-      "linear·radial·conic 그라디언트를 시각적으로 편집합니다. 정지점을 드래그해 색과 위치를 맞추고 각도·중심을 조절한 뒤, 완성된 CSS 코드를 바로 복사하세요. 모든 처리는 브라우저 안에서 이루어집니다.",
-    "grad.step1": "타입·각도 선택",
-    "grad.step2": "정지점 드래그로 색 조절",
-    "grad.step3": "CSS 복사",
   },
   en: {
-    "grad.ko": "Gradient Generator",
     "grad.type": "Type",
     "grad.angle": "Angle",
     "grad.position": "Center",
@@ -32,11 +26,6 @@ const DICT: Dict = {
     "grad.css": "CSS",
     "grad.random": "Random",
     "grad.reverse": "Reverse",
-    "grad.lead":
-      "Edit linear, radial and conic gradients visually. Drag the stops to set colors and positions, tune the angle and center, then copy the finished CSS. Everything runs in your browser.",
-    "grad.step1": "Pick type & angle",
-    "grad.step2": "Drag stops to set colors",
-    "grad.step3": "Copy the CSS",
   },
 };
 
@@ -54,7 +43,9 @@ const MID_COLORS = ["#6486ef", "#3a70eb", "#a7b6f6", "#18377c", "#c4cdf9"];
 
 export default function CssGradient() {
   useBodyTheme("canvas");
+  const { lang } = useLang();
   const t = useT(DICT);
+  const c = getTool("css-gradient");
 
   const [type, setType] = useState<GType>("linear");
   const [angle, setAngle] = useState(135);
@@ -85,7 +76,6 @@ export default function CssGradient() {
   }
   const trackGradient = `linear-gradient(90deg, ${stopStr})`;
 
-  // window-level drag handlers for track stops + angle dial
   useEffect(() => {
     function onMove(e: MouseEvent) {
       if (dragRef.current !== null && trackRef.current) {
@@ -98,7 +88,7 @@ export default function CssGradient() {
         const r = dialRef.current.getBoundingClientRect();
         const cx = r.left + r.width / 2;
         const cy = r.top + r.height / 2;
-        let a =
+        const a =
           (Math.atan2(e.clientX - cx, -(e.clientY - cy)) * 180) / Math.PI;
         setAngle(Math.round((a + 360) % 360));
       }
@@ -176,7 +166,10 @@ export default function CssGradient() {
   function random() {
     const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
     setStops(
-      p.map((c, i) => ({ color: c, pos: Math.round((i / (p.length - 1)) * 100) })),
+      p.map((col, i) => ({
+        color: col,
+        pos: Math.round((i / (p.length - 1)) * 100),
+      })),
     );
     setAngle(Math.floor(Math.random() * 360));
     setSelected(0);
@@ -221,25 +214,19 @@ export default function CssGradient() {
           <span className="ph-eyebrow">
             <span>{t("nav.design")}</span>
             <span className="ph-sep">·</span>
-            <span className="ph-theme">Canvas</span>
+            <span className="ph-theme">{c.themeLabel}</span>
           </span>
           <h1>
-            CSS Gradient <span className="ph-ko">{t("grad.ko")}</span>
+            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
           </h1>
-          <p className="ph-lead">{t("grad.lead")}</p>
+          <p className="ph-lead">{c.description![lang]}</p>
           <div className="ph-how">
-            <span className="ph-step">
-              <b>1</b>
-              <span>{t("grad.step1")}</span>
-            </span>
-            <span className="ph-step">
-              <b>2</b>
-              <span>{t("grad.step2")}</span>
-            </span>
-            <span className="ph-step">
-              <b>3</b>
-              <span>{t("grad.step3")}</span>
-            </span>
+            {c.steps![lang].map((s, i) => (
+              <span className="ph-step" key={i}>
+                <b>{i + 1}</b>
+                <span>{s}</span>
+              </span>
+            ))}
           </div>
         </div>
 
@@ -438,7 +425,11 @@ export default function CssGradient() {
                   <button
                     className="btn btn-sm btn-ghost copy-css"
                     onClick={copyCss}
-                    style={copied ? { color: "var(--color-blue-primary-700)" } : undefined}
+                    style={
+                      copied
+                        ? { color: "var(--color-blue-primary-700)" }
+                        : undefined
+                    }
                   >
                     {copied ? t("common.copied") : t("common.copy")}
                   </button>

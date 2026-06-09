@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import SiteHeader from "../components/SiteHeader";
-import { useBodyTheme } from "../components/useBodyTheme";
+import SiteHeader from "./SiteHeader";
+import { useBodyTheme } from "./useBodyTheme";
+import { getTool } from "../lib/content";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
+// 컨트롤 마이크로카피만 로컬 dict. 페이지 SEO 카피(제목·설명·가이드)는 content.ts.
 const DICT: Dict = {
   ko: {
     "json.indent": "들여쓰기",
@@ -15,12 +17,6 @@ const DICT: Dict = {
     "json.status.invalid": "문법 오류",
     "json.lines": "줄",
     "json.keys": "키",
-    "json.ko": "JSON 포매터",
-    "json.lead":
-      "JSON 문자열을 붙여넣으면 들여쓰기와 색상 강조로 즉시 정리하고, 문법 오류가 있으면 줄·열 위치까지 짚어 유효성을 검사합니다. 한 줄로 압축(minify)할 수도 있어요. 모든 처리는 브라우저 안에서만 이루어집니다.",
-    "json.step1": "왼쪽 칸에 JSON 붙여넣기",
-    "json.step2": "자동 포맷 · 유효성 확인",
-    "json.step3": "오른쪽 결과 복사",
   },
   en: {
     "json.indent": "Indent",
@@ -31,12 +27,6 @@ const DICT: Dict = {
     "json.status.invalid": "Syntax error",
     "json.lines": "lines",
     "json.keys": "keys",
-    "json.ko": "JSON Formatter",
-    "json.lead":
-      "Paste a JSON string and it is instantly formatted with indentation and syntax highlighting. Syntax errors are pinpointed by line and column, and you can minify to a single line too. Everything runs entirely in your browser.",
-    "json.step1": "Paste JSON on the left",
-    "json.step2": "Auto-format & validate",
-    "json.step3": "Copy the result on the right",
   },
 };
 
@@ -94,6 +84,7 @@ export default function JsonFormatter() {
   useBodyTheme("ide");
   const { lang } = useLang();
   const t = useT(DICT);
+  const c = getTool("json-formatter");
 
   const [text, setText] = useState(SAMPLE);
   const [indent, setIndent] = useState("2");
@@ -182,25 +173,19 @@ export default function JsonFormatter() {
           <span className="ph-eyebrow">
             <span>{t("nav.dev")}</span>
             <span className="ph-sep">·</span>
-            <span className="ph-theme">IDE / Editor</span>
+            <span className="ph-theme">{c.themeLabel}</span>
           </span>
           <h1>
-            JSON Formatter <span className="ph-ko">{t("json.ko")}</span>
+            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
           </h1>
-          <p className="ph-lead">{t("json.lead")}</p>
+          <p className="ph-lead">{c.description![lang]}</p>
           <div className="ph-how">
-            <span className="ph-step">
-              <b>1</b>
-              <span>{t("json.step1")}</span>
-            </span>
-            <span className="ph-step">
-              <b>2</b>
-              <span>{t("json.step2")}</span>
-            </span>
-            <span className="ph-step">
-              <b>3</b>
-              <span>{t("json.step3")}</span>
-            </span>
+            {c.steps![lang].map((s, i) => (
+              <span className="ph-step" key={i}>
+                <b>{i + 1}</b>
+                <span>{s}</span>
+              </span>
+            ))}
           </div>
         </div>
 

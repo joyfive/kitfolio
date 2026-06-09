@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import SiteHeader from "../components/SiteHeader";
-import { useBodyTheme } from "../components/useBodyTheme";
+import SiteHeader from "./SiteHeader";
+import { useBodyTheme } from "./useBodyTheme";
+import { getTool } from "../lib/content";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
 const DICT: Dict = {
@@ -22,12 +23,6 @@ const DICT: Dict = {
     "cc.limitsSub": "현재 글자 수 기준 남은 분량입니다.",
     "cc.left": "남음",
     "cc.over": "초과",
-    "cc.ko": "글자 수·단어 수 카운터",
-    "cc.lead":
-      "텍스트를 입력하거나 붙여넣으면 글자·단어·문장·줄·단락 수를 실시간으로 집계합니다. 공백 포함·제외 글자 수와 예상 읽기 시간, 트위터·스레드·인스타그램 등 SNS 글자 수 제한까지 한눈에 확인하세요. 모든 처리는 브라우저 안에서만 이루어집니다.",
-    "cc.step1": "텍스트 입력·붙여넣기",
-    "cc.step2": "실시간 집계 확인",
-    "cc.step3": "SNS 글자 수 제한 점검",
   },
   en: {
     "cc.editorLabel": "Your text",
@@ -45,12 +40,6 @@ const DICT: Dict = {
     "cc.limitsSub": "Remaining length based on current count.",
     "cc.left": "left",
     "cc.over": "over",
-    "cc.ko": "Character & Word Counter",
-    "cc.lead":
-      "Type or paste text and it counts characters, words, sentences, lines and paragraphs in real time. See counts with and without spaces, estimated reading time, and character limits for X, Threads, Instagram and more. Everything runs in your browser.",
-    "cc.step1": "Type or paste your text",
-    "cc.step2": "Watch the live counts",
-    "cc.step3": "Check social limits",
   },
 };
 
@@ -75,10 +64,11 @@ export default function CharacterCounter() {
   useBodyTheme("clean");
   const { lang } = useLang();
   const t = useT(DICT);
+  const c = getTool("character-counter");
 
-  const [text, setText] = useState(SAMPLE_KO);
+  const [text, setText] = useState(lang === "en" ? SAMPLE_EN : SAMPLE_KO);
 
-  // swap the seed sample on language change, but only if untouched
+  // 사용자가 손대지 않은 샘플이면 언어 전환 시 샘플도 교체
   useEffect(() => {
     setText((cur) =>
       cur === SAMPLE_KO || cur === SAMPLE_EN || cur === ""
@@ -92,9 +82,9 @@ export default function CharacterCounter() {
   function timeStr(sec: number) {
     sec = Math.round(sec);
     if (sec < 60) return sec + (lang === "ko" ? "초" : "s");
-    const m = Math.floor(sec / 60);
+    const mn = Math.floor(sec / 60);
     const s = sec % 60;
-    return lang === "ko" ? `${m}분 ${s}초` : `${m}m ${s}s`;
+    return lang === "ko" ? `${mn}분 ${s}초` : `${mn}m ${s}s`;
   }
 
   const m = useMemo(() => {
@@ -111,7 +101,17 @@ export default function CharacterCounter() {
     const readTime = (words / 200) * 60;
     const speakTime = (words / 130) * 60;
     const bytes = new Blob([v]).size;
-    return { chars, noSpace, words, sentences, lines, paras, readTime, speakTime, bytes };
+    return {
+      chars,
+      noSpace,
+      words,
+      sentences,
+      lines,
+      paras,
+      readTime,
+      speakTime,
+      bytes,
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, lang]);
 
@@ -132,25 +132,19 @@ export default function CharacterCounter() {
           <span className="ph-eyebrow">
             <span>{t("nav.text")}</span>
             <span className="ph-sep">·</span>
-            <span className="ph-theme">Clean SaaS</span>
+            <span className="ph-theme">{c.themeLabel}</span>
           </span>
           <h1>
-            Character Counter <span className="ph-ko">{t("cc.ko")}</span>
+            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
           </h1>
-          <p className="ph-lead">{t("cc.lead")}</p>
+          <p className="ph-lead">{c.description![lang]}</p>
           <div className="ph-how">
-            <span className="ph-step">
-              <b>1</b>
-              <span>{t("cc.step1")}</span>
-            </span>
-            <span className="ph-step">
-              <b>2</b>
-              <span>{t("cc.step2")}</span>
-            </span>
-            <span className="ph-step">
-              <b>3</b>
-              <span>{t("cc.step3")}</span>
-            </span>
+            {c.steps![lang].map((s, i) => (
+              <span className="ph-step" key={i}>
+                <b>{i + 1}</b>
+                <span>{s}</span>
+              </span>
+            ))}
           </div>
         </div>
 
@@ -171,10 +165,7 @@ export default function CharacterCounter() {
                 </svg>
                 <span>{t("common.paste")}</span>
               </button>
-              <button
-                className="mini-act"
-                onClick={() => setText("")}
-              >
+              <button className="mini-act" onClick={() => setText("")}>
                 <svg
                   viewBox="0 0 16 16"
                   fill="none"

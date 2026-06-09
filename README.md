@@ -11,17 +11,27 @@
 - **Next.js 15** (App Router) — 폴더명이 곧 URL 서브패스 (`app/json-formatter` → `/json-formatter`)
 - **TypeScript**
 - **Tailwind CSS v4** — `app/globals.css`의 `@theme` 블록에 디자인 토큰을 1:1 매핑
-- 클라이언트 사이드 i18n (KO/EN, `localStorage` 영속)
+- **URL 기반 다국어(i18n)** — KO는 루트, EN은 `/en` 프리픽스. 각 URL이 서버에서 해당
+  언어로 렌더되어 양국어 모두 색인됨 + `hreflang` 연결
 - Vercel 배포 대상
+
+## SEO 구조
+
+- **콘텐츠 단일 출처**: `app/lib/content.ts` 한 파일에 페이지별 **제목 / 설명 / 키워드**를
+  KO·EN로 모아두고 → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 모두 재사용.
+  텍스트 수정은 이 파일만 고치면 됩니다.
+- **메타데이터**: 페이지별 title/description/keywords + `canonical` + `hreflang`(ko/en/x-default) + OpenGraph
+- **구조화 데이터(JSON-LD)**: 도구=`WebApplication`, 허브=`WebSite`+`ItemList`
+- `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
 
 ## 구현 범위 (초안)
 
-| 페이지 | 경로 | 테마 |
-|--------|------|------|
-| 허브 | `/` | Clean SaaS |
-| JSON 포매터 | `/json-formatter` | IDE / Editor (다크) |
-| CSS 그라디언트 생성기 | `/css-gradient` | Canvas |
-| 글자 수·단어 수 카운터 | `/character-counter` | Clean SaaS |
+| 페이지 | KO 경로 | EN 경로 | 테마 |
+|--------|---------|---------|------|
+| 허브 | `/` | `/en` | Clean SaaS |
+| JSON 포매터 | `/json-formatter` | `/en/json-formatter` | IDE / Editor (다크) |
+| CSS 그라디언트 생성기 | `/css-gradient` | `/en/css-gradient` | Canvas |
+| 글자 수·단어 수 카운터 | `/character-counter` | `/en/character-counter` | Clean SaaS |
 
 나머지 10개 도구는 허브에 "준비 중" 카드로 노출됩니다.
 
@@ -29,21 +39,28 @@
 
 ```
 app/
-├── layout.tsx              # 루트 레이아웃 + 폰트 + LangProvider
+├── layout.tsx              # 루트(KO) 레이아웃 + 폰트 + LangProvider
 ├── globals.css             # Tailwind v4 @theme 토큰 + 컴포넌트/페이지 CSS
 ├── page.tsx                # 허브 (/)
+├── json-formatter/page.tsx # /json-formatter  (얇은 래퍼: 메타 + JSON-LD + 컴포넌트)
+├── css-gradient/page.tsx
+├── character-counter/page.tsx
+├── en/                     # EN 서브트리 (lang=en 주입)
+│   ├── layout.tsx
+│   ├── page.tsx            # /en
+│   └── <tool>/page.tsx     # /en/<tool>
 ├── sitemap.ts · robots.ts  # SEO
 ├── lib/
-│   ├── i18n.tsx            # LangProvider · useT
-│   └── tools.ts            # 도구 카탈로그 데이터
-├── components/
-│   ├── Hub.tsx             # 허브 (검색·카테고리·즐겨찾기)
-│   ├── SiteHeader.tsx      # 도구 페이지 공통 헤더
-│   ├── LangToggle.tsx      # KO/EN 토글
-│   └── useBodyTheme.ts     # 페이지별 body 배경 테마
-├── json-formatter/         # /json-formatter
-├── css-gradient/           # /css-gradient
-└── character-counter/      # /character-counter
+│   ├── content.ts          # ★ 페이지 콘텐츠 단일 출처 (제목/설명/키워드 KO·EN)
+│   └── i18n.tsx            # LangProvider · useT (URL 기반)
+└── components/
+    ├── Hub.tsx             # 허브 (검색·카테고리·즐겨찾기)
+    ├── JsonFormatter.tsx · CssGradient.tsx · CharacterCounter.tsx
+    ├── SiteHeader.tsx      # 도구 페이지 공통 헤더
+    ├── LangToggle.tsx      # KO/EN 토글 (로케일 URL 이동)
+    ├── SetHtmlLang.tsx     # /en 에서 <html lang> 설정
+    ├── JsonLd.tsx          # 구조화 데이터 주입
+    └── useBodyTheme.ts     # 페이지별 body 배경 테마
 ```
 
 ## 개발
