@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { LangProvider } from "./lib/i18n";
 import { HUB, SITE } from "./lib/content";
 
 const ADSENSE_CLIENT = "ca-pub-7537584957079478";
+const GA_ID = "G-BW26VT6W47";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -51,6 +53,8 @@ export default function RootLayout({
         {/* 루트 = KO. /en 서브트리가 LangProvider lang="en"으로 덮어씀 */}
         <LangProvider lang="ko">{children}</LangProvider>
       </body>
+      {/* GA4 (페이지뷰 자동 추적, SPA 라우팅 포함) */}
+      <GoogleAnalytics gaId={GA_ID} />
     </html>
   );
 }
