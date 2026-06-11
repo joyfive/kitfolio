@@ -150,6 +150,35 @@ export const TOOLS: Tool[] = [
     },
   },
   {
+    slug: "tools/slack-timestamp-converter",
+    cat: "dev",
+    theme: "IDE",
+    themeLabel: "IDE / Editor",
+    ico: "ts",
+    ready: true,
+    name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
+    card: {
+      ko: "Unix 타임스탬프 ↔ 날짜 ↔ Slack date 구문 양방향 변환. 현재 타임스탬프 실시간 표시.",
+      en: "Convert Unix timestamps to dates and Slack date syntax. Live current timestamp.",
+    },
+    keywords: {
+      ko: ["슬랙 타임스탬프", "유닉스 타임스탬프", "타임스탬프 변환", "슬랙 날짜", "unix time 변환"],
+      en: ["slack timestamp", "unix timestamp", "timestamp converter", "slack date format", "unix time to date"],
+    },
+    title: {
+      ko: "슬랙 타임스탬프 변환기 — Unix 시간·날짜 변환기",
+      en: "Slack Timestamp Converter — Convert Unix Time to Date",
+    },
+    description: {
+      ko: "Slack에서 쓰는 Unix 타임스탬프를 읽기 쉬운 날짜·시간으로 변환합니다. UTC·로컬 타임존·상대 시간 표시와 Slack date 구문 생성을 지원합니다.",
+      en: "Convert Slack Unix timestamps into readable dates and times. Supports UTC, local timezone, relative time, and Slack date syntax generation.",
+    },
+    steps: {
+      ko: ["타임스탬프 또는 날짜 입력", "자동 변환 결과 확인", "원하는 형식 복사"],
+      en: ["Paste timestamp or date", "See converted results", "Copy the format you need"],
+    },
+  },
+  {
     slug: "jwt-decoder",
     cat: "dev",
     theme: "IDE",
