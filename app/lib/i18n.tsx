@@ -30,6 +30,11 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "common.paste": "Paste",
     "common.sample": "Sample",
     "common.privacy": "Runs entirely in your browser — nothing is uploaded.",
+    "foot.tools": "Tools",
+    "foot.about": "About",
+    "foot.privacy": "Privacy",
+    "foot.feedback": "Feedback",
+    "foot.madeby": "Free web tools for developers & designers",
   },
   ko: {
     "nav.all": "전체 도구",
@@ -44,6 +49,11 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "common.paste": "붙여넣기",
     "common.sample": "예시",
     "common.privacy": "모든 처리는 브라우저 안에서만 — 어떤 데이터도 전송되지 않습니다.",
+    "foot.tools": "도구",
+    "foot.about": "소개",
+    "foot.privacy": "개인정보",
+    "foot.feedback": "피드백",
+    "foot.madeby": "개발자·디자이너를 위한 무료 웹 도구",
   },
 };
 
