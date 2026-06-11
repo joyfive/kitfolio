@@ -127,7 +127,7 @@ export default function Hub() {
   const home = localizedHref(lang, "/");
 
   return (
-    <>
+    <div className="hub-page">
       <header className="kf-header">
         <Link className="kf-brand" href={home}>
           <span className="kf-logomark">K</span>
@@ -171,6 +171,24 @@ export default function Hub() {
           <LangToggle />
         </div>
       </header>
+
+      {/* Mobile category chip bar — sticky, ≤640px only */}
+      <div className="hub-mcats" aria-label="Categories">
+        <div className="hub-mcats-track">
+          {navItems.map((it) => (
+            <button
+              key={it.cat}
+              className={activeCat === it.cat ? "is-active" : ""}
+              onClick={() => {
+                setActiveCat(it.cat);
+                setOnlyFav(false);
+              }}
+            >
+              {t(it.key)}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <main className="hub-main">
         <section className="hub-hero">
@@ -257,10 +275,42 @@ export default function Hub() {
       </main>
 
       <footer className="hub-footer">
-        <span className="kf-logomark">K</span>
-        <span>© 2026 Kitfolio · {t("common.privacy")}</span>
+        <div className="hub-footer-inner">
+          <div className="foot-brand">
+            <div className="foot-brandrow">
+              <span className="kf-logomark">K</span>
+              <b>Kitfolio</b>
+            </div>
+            <div className="foot-privacy">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M8 1.5l5 2v3.5c0 3-2.1 5.4-5 6.5-2.9-1.1-5-3.5-5-6.5V3.5z" />
+                <path d="M6 8l1.5 1.5L10.5 6.5" />
+              </svg>
+              <span>{t("common.privacy")}</span>
+            </div>
+          </div>
+          <div className="foot-links">
+            <div className="foot-col">
+              <span className="foot-h">{t("foot.tools")}</span>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveCat("dev"); window.scrollTo({top:0,behavior:"smooth"}); }}>{t("nav.dev")}</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveCat("design"); window.scrollTo({top:0,behavior:"smooth"}); }}>{t("nav.design")}</a>
+              <a href="#" onClick={(e) => { e.preventDefault(); setActiveCat("text"); window.scrollTo({top:0,behavior:"smooth"}); }}>{t("nav.text")}</a>
+            </div>
+            <div className="foot-col">
+              <span className="foot-h">{t("foot.about")}</span>
+              <a href="#">{t("foot.privacy")}</a>
+              <a href="#">{t("foot.feedback")}</a>
+              <a href="https://github.com/joyfive/kitfolio" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+        </div>
+        <div className="foot-bottom">
+          <span>© 2026 Kitfolio</span>
+          <span className="dotsep" />
+          <span>{t("foot.madeby")}</span>
+        </div>
       </footer>
-    </>
+    </div>
   );
 }
 
