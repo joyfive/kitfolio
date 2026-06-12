@@ -1,45 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Faq from "./Faq";
 import PageHead from "./PageHead";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { getTool } from "../lib/content";
+import { useLang, useT } from "../lib/i18n";
 
-const DICT: Dict = {
-  ko: {
-    "cc.editorLabel": "텍스트 입력",
-    "cc.placeholder": "여기에 텍스트를 입력하거나 붙여넣으세요…",
-    "cc.chars": "글자 수",
-    "cc.noSpace": "(공백 제외)",
-    "cc.words": "단어 수",
-    "cc.sentences": "문장",
-    "cc.lines": "줄",
-    "cc.paras": "단락",
-    "cc.readTime": "예상 읽기",
-    "cc.speakTime": "예상 발화",
-    "cc.size": "바이트",
-    "cc.limitsTitle": "SNS 글자 수 제한",
-    "cc.limitsSub": "현재 글자 수 기준 남은 분량입니다.",
-    "cc.left": "남음",
-    "cc.over": "초과",
-  },
-  en: {
-    "cc.editorLabel": "Your text",
-    "cc.placeholder": "Type or paste your text here…",
-    "cc.chars": "Characters",
-    "cc.noSpace": "(no spaces)",
-    "cc.words": "Words",
-    "cc.sentences": "Sentences",
-    "cc.lines": "Lines",
-    "cc.paras": "Paragraphs",
-    "cc.readTime": "Read time",
-    "cc.speakTime": "Speak time",
-    "cc.size": "Bytes",
-    "cc.limitsTitle": "Social character limits",
-    "cc.limitsSub": "Remaining length based on current count.",
-    "cc.left": "left",
-    "cc.over": "over",
-  },
-};
+// 모든 텍스트(페이지 카피·컨트롤 마이크로카피·FAQ)는 content.ts 한 파일에서 관리.
+const UI = getTool("character-counter").ui;
 
 const LIMITS = [
   { net: "X (Twitter)", max: 280 },
@@ -60,7 +28,7 @@ function fmt(n: number) {
 
 export default function CharacterCounter() {
   const { lang } = useLang();
-  const t = useT(DICT);
+  const t = useT(UI);
 
   const [text, setText] = useState(lang === "en" ? SAMPLE_EN : SAMPLE_KO);
 
@@ -255,6 +223,8 @@ export default function CharacterCounter() {
             </div>
           </div>
       </div>
+
+      <Faq slug="character-counter" />
     </>
   );
 }

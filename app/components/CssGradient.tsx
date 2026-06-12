@@ -1,31 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Faq from "./Faq";
 import PageHead from "./PageHead";
-import { useT, type Dict } from "../lib/i18n";
+import { getTool } from "../lib/content";
+import { useT } from "../lib/i18n";
 
-const DICT: Dict = {
-  ko: {
-    "grad.type": "타입",
-    "grad.angle": "각도",
-    "grad.position": "중심 위치",
-    "grad.stops": "색상 정지점",
-    "grad.addStop": "정지점 추가",
-    "grad.css": "CSS",
-    "grad.random": "랜덤",
-    "grad.reverse": "반전",
-  },
-  en: {
-    "grad.type": "Type",
-    "grad.angle": "Angle",
-    "grad.position": "Center",
-    "grad.stops": "Color Stops",
-    "grad.addStop": "Add stop",
-    "grad.css": "CSS",
-    "grad.random": "Random",
-    "grad.reverse": "Reverse",
-  },
-};
+// 모든 텍스트(페이지 카피·컨트롤 마이크로카피·FAQ)는 content.ts 한 파일에서 관리.
+const UI = getTool("css-gradient").ui;
 
 type GType = "linear" | "radial" | "conic";
 type Stop = { color: string; pos: number };
@@ -40,7 +22,7 @@ const PALETTES = [
 const MID_COLORS = ["#6486ef", "#3a70eb", "#a7b6f6", "#18377c", "#c4cdf9"];
 
 export default function CssGradient() {
-  const t = useT(DICT);
+  const t = useT(UI);
 
   const [type, setType] = useState<GType>("linear");
   const [angle, setAngle] = useState(135);
@@ -439,6 +421,8 @@ export default function CssGradient() {
             <div className="preview" style={{ background: g }} />
           </div>
       </div>
+
+      <Faq slug="css-gradient" />
     </>
   );
 }

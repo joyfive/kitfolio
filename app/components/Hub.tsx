@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useLang, useT } from "../lib/i18n";
 import {
   CATS,
   HUB,
@@ -10,29 +10,6 @@ import {
   localizedHref,
   type Tool,
 } from "../lib/content";
-
-const DICT: Dict = {
-  ko: { soon: "준비 중", open: "열기", empty: "검색 결과가 없습니다." },
-  en: { soon: "Soon", open: "Open", empty: "No tools match your search." },
-};
-
-const CAT_LABELS: Record<
-  "dev" | "design" | "text",
-  { ko: { big: string; small: string }; en: { big: string; small: string } }
-> = {
-  dev: {
-    ko: { big: "개발", small: "Developer" },
-    en: { big: "Developer", small: "IDE theme" },
-  },
-  design: {
-    ko: { big: "디자인", small: "Design" },
-    en: { big: "Design", small: "Canvas theme" },
-  },
-  text: {
-    ko: { big: "텍스트", small: "Text" },
-    en: { big: "Text", small: "Clean theme" },
-  },
-};
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -57,7 +34,7 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 
 export default function Hub() {
   const { lang } = useLang();
-  const t = useT(DICT);
+  const t = useT(HUB.ui);
 
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<"all" | "dev" | "design" | "text">(
@@ -165,11 +142,7 @@ export default function Hub() {
             <SearchIcon />
             <input
               type="text"
-              placeholder={
-                lang === "en"
-                  ? "What do you need? (e.g. JSON, gradient, word count)"
-                  : "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)"
-              }
+              placeholder={t("searchPlaceholder")}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -200,7 +173,7 @@ export default function Hub() {
         {CATS.map((cat) => {
           const items = visibleByCat[cat.id];
           if (items.length === 0) return null;
-          const label = CAT_LABELS[cat.id][lang];
+          const label = cat.label[lang];
           return (
             <section className="cat" id={cat.id} key={cat.id}>
               <div className="cat-head">

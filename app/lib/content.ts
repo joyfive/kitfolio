@@ -1,20 +1,40 @@
 /* ============================================================
-   Kitfolio — 페이지 콘텐츠 단일 출처 (Single Source of Truth)
+   Kitfolio — 사이트 전체 텍스트 단일 출처 (Single Source of Truth)
 
-   SEO 최적화를 위해 "제목 / 설명 / 키워드" 3요소를 페이지마다
-   국문·영문으로 여기 한곳에 모읍니다. 텍스트 수정은 이 파일만 고치면 됩니다.
+   "모든 페이지의 모든 텍스트(KO·EN)"를 이 파일 한곳에서 관리합니다.
+   도구가 50개로 늘어나도 이 파일 하나에 50개 × 2개 언어 세트를
+   추가하면 됩니다. 텍스트 수정은 이 파일만 고치면 됩니다.
+
+   ── 구조 (페이지 텍스트 영역별) ────────────────────────────
+   ① COMMON : 전역 공통 UI — 헤더 네비·푸터·복사/지우기 버튼 등
+              (lib/i18n.tsx 의 t() 가 fallback 으로 사용)
+   ② HUB    : 허브 페이지 — 히어로·검색 플레이스홀더·빈 결과 등
+   ③ CATS   : 카테고리 라벨 (허브 섹션 헤더)
+   ④ TOOLS  : 도구별 페이지 텍스트 — 각 항목이 화면 영역과 1:1 매핑
+       ├ themeLabel  : 뱃지(eyebrow) 보조 텍스트       ── 뱃지 영역
+       ├ name        : h1 (영문 메인 + 국문 보조)      ── 타이틀 영역
+       ├ description : meta description = 페이지 설명  ── 리드 문단 영역
+       ├ steps       : 3단계 사용 가이드                ── 스텝 영역
+       ├ faq         : FAQ 섹션 Q&A (+ FAQPage JSON-LD) ── FAQ 영역
+       ├ ui          : 해당 도구 화면의 컨트롤 마이크로카피
+       ├ card        : 허브 카드 한 줄 설명
+       ├ keywords    : meta keywords + 허브 검색 색인
+       └ title       : <title> 태그
 
    이 데이터는 →
-     ① 메타데이터 (buildToolMetadata / buildHubMetadata)
-     ② 화면 카피 (h1 · 설명 · 사용 가이드)
-     ③ 구조화 데이터 (toolJsonLd / hubJsonLd)
-     ④ 허브 검색 색인 (keywords)
+     · 메타데이터 (buildToolMetadata / buildHubMetadata)
+     · 화면 카피 (PageHead · Faq · 각 도구 컨트롤)
+     · 구조화 데이터 (toolJsonLd: WebApplication + FAQPage / hubJsonLd)
+     · 허브 검색 색인 (keywords)
    에 모두 재사용됩니다.
    ============================================================ */
 import type { Metadata } from "next";
 
 export type Lang = "ko" | "en";
 type L<T = string> = { ko: T; en: T };
+
+/** FAQ 한 문항 */
+export type QA = { q: string; a: string };
 
 export type Tool = {
   slug: string;
@@ -34,6 +54,8 @@ export type Tool = {
   title?: L; // <title> (50~60자)
   description?: L; // meta description = 화면 설명 겸용 (1~3줄)
   steps?: L<[string, string, string]>; // 3단계 사용 가이드
+  faq?: L<QA[]>; // FAQ 섹션 (3~5문항) — FAQPage JSON-LD에도 재사용
+  ui?: L<Record<string, string>>; // 도구 화면 컨트롤 마이크로카피
 };
 
 export const SITE = {
@@ -41,7 +63,55 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
-/* ---------------- 허브 (/ , /en) ---------------- */
+/* ============================================================
+   ① COMMON — 전역 공통 UI 텍스트 (헤더 / 푸터 / 공용 버튼)
+   ============================================================ */
+export const COMMON: Record<Lang, Record<string, string>> = {
+  en: {
+    "nav.all": "All tools",
+    "nav.dev": "Developer",
+    "nav.design": "Design",
+    "nav.text": "Text",
+    "header.search": "Search tools…",
+    "header.favorites": "Favorites",
+    "common.copy": "Copy",
+    "common.copied": "Copied",
+    "common.clear": "Clear",
+    "common.paste": "Paste",
+    "common.sample": "Sample",
+    "common.faq": "Frequently asked questions",
+    "common.privacy": "Runs entirely in your browser — nothing is uploaded.",
+    "foot.tools": "Tools",
+    "foot.about": "About",
+    "foot.privacy": "Privacy",
+    "foot.feedback": "Feedback",
+    "foot.madeby": "Free web tools for developers & designers",
+  },
+  ko: {
+    "nav.all": "전체 도구",
+    "nav.dev": "개발",
+    "nav.design": "디자인",
+    "nav.text": "텍스트",
+    "header.search": "도구 검색…",
+    "header.favorites": "즐겨찾기",
+    "common.copy": "복사",
+    "common.copied": "복사됨",
+    "common.clear": "지우기",
+    "common.paste": "붙여넣기",
+    "common.sample": "예시",
+    "common.faq": "자주 묻는 질문",
+    "common.privacy": "모든 처리는 브라우저 안에서만 — 어떤 데이터도 전송되지 않습니다.",
+    "foot.tools": "도구",
+    "foot.about": "소개",
+    "foot.privacy": "개인정보",
+    "foot.feedback": "피드백",
+    "foot.madeby": "개발자·디자이너를 위한 무료 웹 도구",
+  },
+};
+
+/* ============================================================
+   ② HUB — 허브 페이지 (/ , /en)
+   ============================================================ */
 export const HUB = {
   title: {
     ko: "Kitfolio — 개발자·디자이너를 위한 무료 웹 도구",
@@ -63,9 +133,60 @@ export const HUB = {
     ko: "개발자와 디자이너를 위한 가볍고 빠른 유틸리티 모음. 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
     en: "A lightweight set of utilities for developers and designers. Everything runs in your browser — no data is ever sent to a server.",
   } as L,
+  /** 허브 화면 마이크로카피 */
+  ui: {
+    ko: {
+      soon: "준비 중",
+      open: "열기",
+      empty: "검색 결과가 없습니다.",
+      searchPlaceholder: "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)",
+    },
+    en: {
+      soon: "Soon",
+      open: "Open",
+      empty: "No tools match your search.",
+      searchPlaceholder: "What do you need? (e.g. JSON, gradient, word count)",
+    },
+  } as L<Record<string, string>>,
 };
 
-/* ---------------- 도구 목록 ---------------- */
+/* ============================================================
+   ③ CATS — 카테고리 라벨 (허브 섹션 헤더 + 네비 키)
+   ============================================================ */
+export const CATS: {
+  id: "dev" | "design" | "text";
+  navKey: string;
+  label: L<{ big: string; small: string }>;
+}[] = [
+  {
+    id: "dev",
+    navKey: "nav.dev",
+    label: {
+      ko: { big: "개발", small: "Developer" },
+      en: { big: "Developer", small: "IDE theme" },
+    },
+  },
+  {
+    id: "design",
+    navKey: "nav.design",
+    label: {
+      ko: { big: "디자인", small: "Design" },
+      en: { big: "Design", small: "Canvas theme" },
+    },
+  },
+  {
+    id: "text",
+    navKey: "nav.text",
+    label: {
+      ko: { big: "텍스트", small: "Text" },
+      en: { big: "Text", small: "Clean theme" },
+    },
+  },
+];
+
+/* ============================================================
+   ④ TOOLS — 도구별 페이지 텍스트
+   ============================================================ */
 export const TOOLS: Tool[] = [
   // ── Developer ─────────────────────────────
   {
@@ -96,6 +217,66 @@ export const TOOLS: Tool[] = [
         "Auto-format & validate",
         "Copy the result on the right",
       ],
+    },
+    faq: {
+      ko: [
+        {
+          q: "입력한 JSON이 서버로 전송되나요?",
+          a: "아니요. 포맷팅·검증·압축은 전부 브라우저 안에서 JavaScript로 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않으므로 민감한 데이터도 안심하고 사용할 수 있습니다.",
+        },
+        {
+          q: "JSON 문법 오류는 어떻게 찾아주나요?",
+          a: "유효하지 않은 JSON을 붙여넣으면 하단 상태 표시줄에 오류 내용과 함께 줄·열 위치를 표시합니다. 해당 위치를 수정하면 결과가 실시간으로 다시 검증됩니다.",
+        },
+        {
+          q: "들여쓰기 간격을 바꾸거나 한 줄로 압축할 수 있나요?",
+          a: "툴바에서 2칸·4칸·탭 들여쓰기를 선택할 수 있고, 압축 버튼을 누르면 공백을 제거한 한 줄(minify) JSON으로 변환됩니다.",
+        },
+        {
+          q: "어느 정도 크기의 JSON까지 처리할 수 있나요?",
+          a: "처리가 브라우저 메모리에서 이루어지므로 일반적인 수 MB 수준의 JSON은 문제없이 다룰 수 있습니다. 매우 큰 파일은 기기 성능에 따라 느려질 수 있습니다.",
+        },
+      ],
+      en: [
+        {
+          q: "Is my JSON sent to a server?",
+          a: "No. Formatting, validation and minification all happen in your browser with JavaScript. Nothing is uploaded or stored, so it is safe to use with sensitive data.",
+        },
+        {
+          q: "How are syntax errors reported?",
+          a: "When you paste invalid JSON, the status bar shows the error message along with the line and column. Fix the spot and the result re-validates in real time.",
+        },
+        {
+          q: "Can I change the indentation or minify to one line?",
+          a: "Pick 2-space, 4-space or tab indentation from the toolbar, or press Minify to strip whitespace into a single-line JSON string.",
+        },
+        {
+          q: "How large a JSON document can it handle?",
+          a: "Everything is processed in browser memory, so documents up to a few megabytes work fine. Very large files may slow down depending on your device.",
+        },
+      ],
+    },
+    ui: {
+      ko: {
+        "json.indent": "들여쓰기",
+        "json.format": "포맷",
+        "json.minify": "압축",
+        "json.status.idle": "입력 대기 중",
+        "json.status.valid": "유효한 JSON",
+        "json.status.invalid": "문법 오류",
+        "json.lines": "줄",
+        "json.keys": "키",
+      },
+      en: {
+        "json.indent": "Indent",
+        "json.format": "Format",
+        "json.minify": "Minify",
+        "json.status.idle": "Waiting for input",
+        "json.status.valid": "Valid JSON",
+        "json.status.invalid": "Syntax error",
+        "json.lines": "lines",
+        "json.keys": "keys",
+      },
     },
   },
   {
@@ -176,6 +357,88 @@ export const TOOLS: Tool[] = [
     steps: {
       ko: ["타임스탬프 또는 날짜 입력", "자동 변환 결과 확인", "원하는 형식 복사"],
       en: ["Paste timestamp or date", "See converted results", "Copy the format you need"],
+    },
+    faq: {
+      ko: [
+        {
+          q: "어떤 입력 형식을 인식하나요?",
+          a: "Unix 초·밀리초·마이크로초 타임스탬프, ISO 8601 같은 일반 날짜·시간 문자열, 그리고 <!date^...> Slack date 구문을 자동으로 감지해 변환합니다.",
+        },
+        {
+          q: "Slack date 구문은 어디에 쓰나요?",
+          a: "변환 결과의 Slack 구문을 메시지에 붙여넣으면, 받는 사람의 타임존과 언어 설정에 맞춰 날짜·시간이 자동으로 표시됩니다. 타임존이 다른 글로벌 팀 공지에 유용합니다.",
+        },
+        {
+          q: "타임존은 어떻게 처리되나요?",
+          a: "같은 시각을 UTC와 현재 브라우저의 로컬 타임존으로 동시에 보여주고, 지금 시점 기준의 상대 시간(예: 3시간 전)도 함께 표시합니다.",
+        },
+        {
+          q: "입력한 값이 서버로 전송되나요?",
+          a: "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          q: "Which input formats are recognized?",
+          a: "Unix timestamps in seconds, milliseconds or microseconds, common date-time strings such as ISO 8601, and Slack's <!date^...> syntax are all auto-detected and converted.",
+        },
+        {
+          q: "What is the Slack date syntax for?",
+          a: "Paste the generated Slack syntax into a message and Slack renders the date and time in each reader's own timezone and locale — handy for announcements across global teams.",
+        },
+        {
+          q: "How are timezones handled?",
+          a: "The same instant is shown in UTC and in your browser's local timezone side by side, along with a live relative time such as “3 hours ago”.",
+        },
+        {
+          q: "Is anything I enter sent to a server?",
+          a: "No. Every conversion happens inside your browser and no data ever leaves it.",
+        },
+      ],
+    },
+    ui: {
+      ko: {
+        "in.panel": "입력",
+        "in.clear": "지우기",
+        "in.ph": "Unix 타임스탬프 또는 날짜·시간 입력…",
+        "in.ph2": "예: 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\n또는 <!date^...> Slack 구문",
+        "out.panel": "변환 결과",
+        "row.utc": "UTC",
+        "row.local": "Local",
+        "row.readable": "Readable",
+        "row.relative": "Relative",
+        "row.unix": "Unix (초)",
+        "row.slack": "Slack 구문",
+        "now.label": "현재 타임스탬프",
+        "err.empty": "타임스탬프 또는 날짜를 입력하세요",
+        "kind.unix-s": "Unix seconds",
+        "kind.unix-ms": "Unix ms",
+        "kind.unix-us": "Unix μs",
+        "kind.datetime": "DateTime",
+        "kind.slack": "Slack syntax",
+        "kind.invalid": "Invalid",
+      },
+      en: {
+        "in.panel": "Input",
+        "in.clear": "Clear",
+        "in.ph": "Enter Unix timestamp or date / time…",
+        "in.ph2": "e.g. 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\nor <!date^...> Slack syntax",
+        "out.panel": "Output",
+        "row.utc": "UTC",
+        "row.local": "Local",
+        "row.readable": "Readable",
+        "row.relative": "Relative",
+        "row.unix": "Unix (seconds)",
+        "row.slack": "Slack syntax",
+        "now.label": "Current Timestamp",
+        "err.empty": "Enter a timestamp or date to convert",
+        "kind.unix-s": "Unix seconds",
+        "kind.unix-ms": "Unix ms",
+        "kind.unix-us": "Unix μs",
+        "kind.datetime": "DateTime",
+        "kind.slack": "Slack syntax",
+        "kind.invalid": "Invalid",
+      },
     },
   },
   {
@@ -260,6 +523,66 @@ export const TOOLS: Tool[] = [
       ko: ["타입·각도 선택", "정지점 드래그로 색 조절", "CSS 복사"],
       en: ["Pick type & angle", "Drag stops to set colors", "Copy the CSS"],
     },
+    faq: {
+      ko: [
+        {
+          q: "어떤 그라디언트 타입을 지원하나요?",
+          a: "linear(선형)·radial(원형)·conic(원뿔형) 세 가지 타입을 지원합니다. 타입을 바꾸면 각도·중심 위치 등 조절할 수 있는 옵션이 함께 바뀝니다.",
+        },
+        {
+          q: "색상 정지점은 어떻게 추가하고 옮기나요?",
+          a: "그라디언트 트랙의 빈 곳을 클릭하거나 ‘정지점 추가’ 버튼을 누르면 추가됩니다. 정지점을 드래그해 위치를 옮길 수 있고, HEX 색상값과 % 위치를 직접 입력할 수도 있습니다.",
+        },
+        {
+          q: "복사한 CSS는 모든 브라우저에서 동작하나요?",
+          a: "linear·radial 그라디언트는 모든 모던 브라우저에서 동작합니다. conic-gradient도 최신 브라우저에서 폭넓게 지원되지만, 매우 오래된 브라우저에서는 표시되지 않을 수 있습니다.",
+        },
+        {
+          q: "만든 그라디언트를 저장할 수 있나요?",
+          a: "생성된 CSS 코드를 복사해 프로젝트나 메모에 보관하는 방식을 권장합니다. 같은 코드를 다시 붙여넣으면 언제든 동일한 그라디언트를 재현할 수 있습니다.",
+        },
+      ],
+      en: [
+        {
+          q: "Which gradient types are supported?",
+          a: "Linear, radial and conic gradients are all supported. Switching the type also switches the available options such as angle and center position.",
+        },
+        {
+          q: "How do I add and move color stops?",
+          a: "Click an empty spot on the gradient track or press “Add stop”. Drag a stop to reposition it, or type an exact HEX value and % position directly.",
+        },
+        {
+          q: "Will the copied CSS work in every browser?",
+          a: "Linear and radial gradients work in all modern browsers. conic-gradient is also widely supported in current browsers, though very old ones may not render it.",
+        },
+        {
+          q: "Can I save a gradient I made?",
+          a: "Copy the generated CSS and keep it in your project or notes — pasting the same code reproduces the exact gradient any time.",
+        },
+      ],
+    },
+    ui: {
+      ko: {
+        "grad.type": "타입",
+        "grad.angle": "각도",
+        "grad.position": "중심 위치",
+        "grad.stops": "색상 정지점",
+        "grad.addStop": "정지점 추가",
+        "grad.css": "CSS",
+        "grad.random": "랜덤",
+        "grad.reverse": "반전",
+      },
+      en: {
+        "grad.type": "Type",
+        "grad.angle": "Angle",
+        "grad.position": "Center",
+        "grad.stops": "Color Stops",
+        "grad.addStop": "Add stop",
+        "grad.css": "CSS",
+        "grad.random": "Random",
+        "grad.reverse": "Reverse",
+      },
+    },
   },
   {
     slug: "color-converter",
@@ -327,6 +650,80 @@ export const TOOLS: Tool[] = [
         "Check social limits",
       ],
     },
+    faq: {
+      ko: [
+        {
+          q: "글자 수에 공백이 포함되나요?",
+          a: "공백 포함 글자 수를 기본으로 보여주고, 같은 카드 안에 공백 제외 글자 수도 함께 표시합니다. 한글·이모지도 한 글자 단위로 정확하게 계산합니다.",
+        },
+        {
+          q: "어떤 SNS 글자 수 제한을 확인할 수 있나요?",
+          a: "X(트위터) 280자, 스레드 500자, 인스타그램 2,200자, 블루스카이 300자, SMS 90자를 기준으로 남은 글자 수를 실시간 게이지로 보여줍니다.",
+        },
+        {
+          q: "입력한 글이 어딘가에 저장되나요?",
+          a: "아니요. 집계는 전부 브라우저 안에서 처리되며 어떤 텍스트도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 내용도 사라집니다.",
+        },
+        {
+          q: "예상 읽기 시간은 어떻게 계산하나요?",
+          a: "분당 200단어 읽기 속도와 분당 130단어 발화 속도를 기준으로 계산합니다. 발표 대본이나 영상 스크립트 길이를 가늠할 때 활용하세요.",
+        },
+      ],
+      en: [
+        {
+          q: "Do the character counts include spaces?",
+          a: "The main number includes spaces, and the count without spaces is shown right below it. Korean characters and emoji are counted accurately as single characters.",
+        },
+        {
+          q: "Which social media limits can I check?",
+          a: "Live gauges show your remaining length against X (Twitter) 280, Threads 500, Instagram 2,200, Bluesky 300 and SMS 90 characters.",
+        },
+        {
+          q: "Is my text stored anywhere?",
+          a: "No. Counting happens entirely in your browser and nothing is uploaded or saved. Close the tab and the text is gone.",
+        },
+        {
+          q: "How is the reading time estimated?",
+          a: "It assumes a reading speed of 200 words per minute and a speaking speed of 130 words per minute — useful for sizing scripts and presentations.",
+        },
+      ],
+    },
+    ui: {
+      ko: {
+        "cc.editorLabel": "텍스트 입력",
+        "cc.placeholder": "여기에 텍스트를 입력하거나 붙여넣으세요…",
+        "cc.chars": "글자 수",
+        "cc.noSpace": "(공백 제외)",
+        "cc.words": "단어 수",
+        "cc.sentences": "문장",
+        "cc.lines": "줄",
+        "cc.paras": "단락",
+        "cc.readTime": "예상 읽기",
+        "cc.speakTime": "예상 발화",
+        "cc.size": "바이트",
+        "cc.limitsTitle": "SNS 글자 수 제한",
+        "cc.limitsSub": "현재 글자 수 기준 남은 분량입니다.",
+        "cc.left": "남음",
+        "cc.over": "초과",
+      },
+      en: {
+        "cc.editorLabel": "Your text",
+        "cc.placeholder": "Type or paste your text here…",
+        "cc.chars": "Characters",
+        "cc.noSpace": "(no spaces)",
+        "cc.words": "Words",
+        "cc.sentences": "Sentences",
+        "cc.lines": "Lines",
+        "cc.paras": "Paragraphs",
+        "cc.readTime": "Read time",
+        "cc.speakTime": "Speak time",
+        "cc.size": "Bytes",
+        "cc.limitsTitle": "Social character limits",
+        "cc.limitsSub": "Remaining length based on current count.",
+        "cc.left": "left",
+        "cc.over": "over",
+      },
+    },
   },
   {
     slug: "markdown-to-html",
@@ -379,12 +776,6 @@ export const TOOLS: Tool[] = [
       en: ["image to base64", "data url", "image encoder"],
     },
   },
-];
-
-export const CATS: { id: "dev" | "design" | "text"; navKey: string }[] = [
-  { id: "dev", navKey: "nav.dev" },
-  { id: "design", navKey: "nav.design" },
-  { id: "text", navKey: "nav.text" },
 ];
 
 /* ---------------- helpers ---------------- */
@@ -460,11 +851,11 @@ export function buildHubMetadata(lang: Lang): Metadata {
   };
 }
 
-/** 도구 페이지 JSON-LD (WebApplication) */
+/** 도구 페이지 JSON-LD — WebApplication (+ FAQ가 있으면 FAQPage 포함 배열) */
 export function toolJsonLd(slug: string, lang: Lang) {
   const t = getTool(slug);
   const url = SITE.url + localizedHref(lang, "/" + t.slug);
-  return {
+  const app = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: t.title![lang],
@@ -478,6 +869,19 @@ export function toolJsonLd(slug: string, lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
   };
+  if (!t.faq) return app;
+  return [
+    app,
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: t.faq[lang].map(({ q, a }) => ({
+        "@type": "Question",
+        name: q,
+        acceptedAnswer: { "@type": "Answer", text: a },
+      })),
+    },
+  ];
 }
 
 /** 허브 JSON-LD (WebSite + ItemList) */

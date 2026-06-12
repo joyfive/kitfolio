@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Faq from "./Faq";
 import PageHead from "./PageHead";
-import { useT, type Dict } from "../lib/i18n";
+import { getTool } from "../lib/content";
+import { useT } from "../lib/i18n";
 import {
   parseInput,
   toUTC,
@@ -13,53 +15,11 @@ import {
   type InputKind,
 } from "../lib/timestamp";
 
-const DICT: Dict = {
-  ko: {
-    "in.panel": "입력",
-    "in.clear": "지우기",
-    "in.ph": "Unix 타임스탬프 또는 날짜·시간 입력…",
-    "in.ph2": "예: 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\n또는 <!date^...> Slack 구문",
-    "out.panel": "변환 결과",
-    "row.utc": "UTC",
-    "row.local": "Local",
-    "row.readable": "Readable",
-    "row.relative": "Relative",
-    "row.unix": "Unix (초)",
-    "row.slack": "Slack 구문",
-    "now.label": "현재 타임스탬프",
-    "err.empty": "타임스탬프 또는 날짜를 입력하세요",
-    "kind.unix-s": "Unix seconds",
-    "kind.unix-ms": "Unix ms",
-    "kind.unix-us": "Unix μs",
-    "kind.datetime": "DateTime",
-    "kind.slack": "Slack syntax",
-    "kind.invalid": "Invalid",
-  },
-  en: {
-    "in.panel": "Input",
-    "in.clear": "Clear",
-    "in.ph": "Enter Unix timestamp or date / time…",
-    "in.ph2": "e.g. 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\nor <!date^...> Slack syntax",
-    "out.panel": "Output",
-    "row.utc": "UTC",
-    "row.local": "Local",
-    "row.readable": "Readable",
-    "row.relative": "Relative",
-    "row.unix": "Unix (seconds)",
-    "row.slack": "Slack syntax",
-    "now.label": "Current Timestamp",
-    "err.empty": "Enter a timestamp or date to convert",
-    "kind.unix-s": "Unix seconds",
-    "kind.unix-ms": "Unix ms",
-    "kind.unix-us": "Unix μs",
-    "kind.datetime": "DateTime",
-    "kind.slack": "Slack syntax",
-    "kind.invalid": "Invalid",
-  },
-};
+// 모든 텍스트(페이지 카피·컨트롤 마이크로카피·FAQ)는 content.ts 한 파일에서 관리.
+const UI = getTool("tools/slack-timestamp-converter").ui;
 
 export default function SlackTimestampConverter() {
-  const t = useT(DICT);
+  const t = useT(UI);
 
   const [input, setInput] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -101,7 +61,7 @@ export default function SlackTimestampConverter() {
 
   const slackFormats = valid ? toSlackFormats(result!.unixSeconds) : [];
 
-  const kindLabel = result ? t(`kind.${result.kind}` as keyof typeof DICT.ko) : "";
+  const kindLabel = result ? t(`kind.${result.kind}`) : "";
 
   return (
     <>
@@ -250,6 +210,8 @@ export default function SlackTimestampConverter() {
             )}
           </div>
       </div>
+
+      <Faq slug="tools/slack-timestamp-converter" />
     </>
   );
 }

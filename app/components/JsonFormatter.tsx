@@ -1,32 +1,13 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Faq from "./Faq";
 import PageHead from "./PageHead";
-import { useT, type Dict } from "../lib/i18n";
+import { getTool } from "../lib/content";
+import { useT } from "../lib/i18n";
 
-// 컨트롤 마이크로카피만 로컬 dict. 페이지 SEO 카피(제목·설명·가이드)는 content.ts.
-const DICT: Dict = {
-  ko: {
-    "json.indent": "들여쓰기",
-    "json.format": "포맷",
-    "json.minify": "압축",
-    "json.status.idle": "입력 대기 중",
-    "json.status.valid": "유효한 JSON",
-    "json.status.invalid": "문법 오류",
-    "json.lines": "줄",
-    "json.keys": "키",
-  },
-  en: {
-    "json.indent": "Indent",
-    "json.format": "Format",
-    "json.minify": "Minify",
-    "json.status.idle": "Waiting for input",
-    "json.status.valid": "Valid JSON",
-    "json.status.invalid": "Syntax error",
-    "json.lines": "lines",
-    "json.keys": "keys",
-  },
-};
+// 모든 텍스트(페이지 카피·컨트롤 마이크로카피·FAQ)는 content.ts 한 파일에서 관리.
+const UI = getTool("json-formatter").ui;
 
 const SAMPLE = `{"service":"Kitfolio","version":2,"free":true,"tools":[{"id":"json-formatter","theme":"IDE","ready":true},{"id":"css-gradient","theme":"Canvas","ready":true},{"id":"character-counter","theme":"Clean","ready":true}],"meta":{"clientSide":true,"trackingApi":null,"locales":["ko","en"]}}`;
 
@@ -79,7 +60,7 @@ function lineNumbers(n: number) {
 }
 
 export default function JsonFormatter() {
-  const t = useT(DICT);
+  const t = useT(UI);
 
   const [text, setText] = useState(SAMPLE);
   const [indent, setIndent] = useState("2");
@@ -293,6 +274,8 @@ export default function JsonFormatter() {
             <span>{result.sizeInfo}</span>
           </div>
       </div>
+
+      <Faq slug="json-formatter" />
     </>
   );
 }

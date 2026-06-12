@@ -237,9 +237,14 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **다국어 = URL 기반**: KO는 루트(`/json-formatter`), EN은 `/en/json-formatter`.
   각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
   (localStorage 토글 아님)
-- **페이지 콘텐츠 단일 출처**: `app/lib/content.ts` 에 페이지별 **제목/설명/키워드**를
-  KO·EN로 모아두고 → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용.
-  **텍스트 수정은 이 파일만 고치면 됨.**
+- **사이트 전체 텍스트 단일 출처**: `app/lib/content.ts` 한 파일에서 모든 텍스트(KO·EN)를 관리.
+  ① `COMMON`(전역 공통 UI — i18n `t()`의 fallback) ② `HUB`(+`ui` 마이크로카피) ③ `CATS`(카테고리 라벨)
+  ④ `TOOLS`(도구별 — 뱃지 `themeLabel` / h1 `name` / 리드 `description` / `steps` / **`faq`** / 컨트롤 `ui` /
+  허브 카드 `card` / `keywords` / `title`). 화면 영역과 필드가 1:1 매핑.
+  → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **텍스트 수정은 이 파일만 고치면 됨.**
+  도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
+- **FAQ**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`, `.kf-faq` 아코디언) 렌더.
+  콘텐츠는 `content.ts`의 `faq` 필드에서, `toolJsonLd()`가 같은 데이터로 `FAQPage` JSON-LD도 함께 생성.
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
 - **공통 레이아웃**: 루트 `layout.tsx` = `SiteHeader` + `<main class="kf-main">`(max 1216px) + `SiteFooter`.
   헤더·푸터는 `usePathname()`으로 언어(`/en` 프리픽스)와 액티브 카테고리를 도출 (`routeLang()` in `lib/i18n`).
@@ -248,7 +253,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ### SEO
 - 페이지별 title/description/keywords + `canonical` + `hreflang`(ko-KR/en-US/x-default) + OpenGraph
-- JSON-LD: 도구 `WebApplication`, 허브 `WebSite`+`ItemList`
+- JSON-LD: 도구 `WebApplication` + `FAQPage`(FAQ 보유 시), 허브 `WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
 - 구글 서치콘솔(DNS 인증) · 네이버 서치어드바이저(메타태그 `naver-site-verification`) 등록
 
@@ -273,7 +278,8 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
    - 콘텐츠 분량이 승인 기준에 빠듯할 수 있음 → 도구를 더 채운 뒤 신청하는 편이 유리
 2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
    - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
-   - `content.ts` 의 해당 항목에 `title/description/steps` 추가 + `ready: true` 전환
+   - `content.ts` 의 해당 항목에 `title/description/steps/faq/ui` 추가 + `ready: true` 전환
+   - 컴포넌트 끝에 `<Faq slug="..." />` 추가 (FAQ 콘텐츠는 content.ts에서)
    - 테마: dev=IDE / design=Canvas / text=Clean
 3. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
 4. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)
