@@ -1,9 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Faq from "./Faq";
+import RelatedTools from "./RelatedTools";
+import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
+// 컨트롤 마이크로카피(레이블·단위)만 로컬 dict.
+// 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
 const DICT: Dict = {
   ko: {
     "cc.editorLabel": "텍스트 입력",
@@ -255,6 +260,10 @@ export default function CharacterCounter() {
             </div>
           </div>
       </div>
+
+      <ToolAbout slug="character-counter" />
+      <Faq slug="character-counter" />
+      <RelatedTools slug="character-counter" />
     </>
   );
 }

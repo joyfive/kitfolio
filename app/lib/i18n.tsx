@@ -8,14 +8,17 @@
    useT()로 읽습니다. localStorage 토글이 아니라 URL 전환(LangToggle)으로
    언어를 바꾸므로 서버 렌더가 언어별로 정확히 일치합니다 (SEO 정합).
 
-   페이지 SEO 카피(제목·설명·키워드·가이드)는 lib/content.ts 에 있고,
-   여기 COMMON 은 헤더/버튼 등 공통 UI 마이크로카피만 담습니다.
+   역할 분담:
+   - 렌더링 콘텐츠 텍스트(페이지 카피·FAQ·메타) → lib/content.ts (단일 출처)
+   - UI 마이크로카피 — 전역 공통(헤더 네비·푸터·공용 버튼)은 여기 COMMON,
+     도구별 컨트롤 라벨은 각 컴포넌트의 로컬 DICT.
    ============================================================ */
 import { createContext, useCallback, useContext } from "react";
 
 export type Lang = "ko" | "en";
 export type Dict = Partial<Record<Lang, Record<string, string>>>;
 
+/** 전역 공통 UI 마이크로카피 — t() 의 fallback 사전 */
 const COMMON: Record<Lang, Record<string, string>> = {
   en: {
     "nav.all": "All tools",
@@ -34,7 +37,7 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "foot.about": "About",
     "foot.privacy": "Privacy",
     "foot.feedback": "Feedback",
-    "foot.madeby": "Free web tools for developers & designers",
+    "foot.madeby": "Small tools for modern knowledge workers",
   },
   ko: {
     "nav.all": "전체 도구",
@@ -53,7 +56,7 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "foot.about": "소개",
     "foot.privacy": "개인정보",
     "foot.feedback": "피드백",
-    "foot.madeby": "개발자·디자이너를 위한 무료 웹 도구",
+    "foot.madeby": "일하는 사람을 위한 작은 웹 도구",
   },
 };
 

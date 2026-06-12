@@ -1,10 +1,14 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import Faq from "./Faq";
+import RelatedTools from "./RelatedTools";
+import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
 
-// 컨트롤 마이크로카피만 로컬 dict. 페이지 SEO 카피(제목·설명·가이드)는 content.ts.
+// 컨트롤 마이크로카피(버튼·상태 라벨)만 로컬 dict.
+// 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
 const DICT: Dict = {
   ko: {
     "json.indent": "들여쓰기",
@@ -293,6 +297,10 @@ export default function JsonFormatter() {
             <span>{result.sizeInfo}</span>
           </div>
       </div>
+
+      <ToolAbout slug="json-formatter" />
+      <Faq slug="json-formatter" />
+      <RelatedTools slug="json-formatter" />
     </>
   );
 }

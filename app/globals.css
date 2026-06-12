@@ -251,6 +251,144 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .kf-pagehead h1 { font-size: 24px; }
 }
 
+/* ============================================================
+   Shared FAQ section — 디자인 핸드오프(faq.html) 기준
+   아코디언: 한 번에 하나만 열림 · 1번 기본 오픈 · 높이 애니메이션
+   ============================================================ */
+.kf-faq { max-width: 760px; margin: 64px auto 0; }
+
+/* section intro */
+.kf-faq-intro { text-align: center; padding-bottom: 28px; }
+.kf-faq-intro .eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-inter); font-size: 12px; font-weight: 600;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 16px;
+}
+.kf-faq-intro h2 { margin: 0 0 10px; font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--color-blue-gray-950); }
+.kf-faq-intro p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--color-blue-gray-500); }
+
+/* accordion card (1개의 화이트 카드 안에 항목들) */
+.kf-faq-card {
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.kf-faq-item { border-top: 1px solid var(--color-blue-gray-100); }
+.kf-faq-item:first-child { border-top: none; }
+
+/* question row (button) */
+.kf-faq-q {
+  width: 100%;
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 22px;
+  text-align: left;
+  background: transparent;
+  transition: background .14s ease;
+}
+.kf-faq-q:hover { background: var(--color-blue-gray-50); }
+.kf-faq-item.open > .kf-faq-q { background: transparent; }
+.kf-faq-q-text {
+  flex: 1;
+  font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--color-blue-gray-900);
+  line-height: 1.45; text-wrap: pretty;
+}
+.kf-faq-item.open .kf-faq-q-text { color: var(--color-blue-primary-700); }
+
+/* chevron icon (열리면 프라이머리 배경 + 180° 회전) */
+.kf-faq-icon {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--color-blue-gray-50); color: var(--color-blue-gray-500);
+  transition: background .18s ease, color .18s ease, transform .28s cubic-bezier(.4,0,.2,1);
+}
+.kf-faq-q:hover .kf-faq-icon { background: var(--color-blue-gray-100); }
+.kf-faq-item.open .kf-faq-icon {
+  background: var(--color-blue-primary-700); color: #fff;
+  transform: rotate(180deg);
+}
+.kf-faq-icon svg { width: 15px; height: 15px; }
+
+/* answer — animated height via grid-rows trick */
+.kf-faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .3s cubic-bezier(.4,0,.2,1);
+}
+.kf-faq-item.open .kf-faq-a { grid-template-rows: 1fr; }
+.kf-faq-a-inner { overflow: hidden; }
+.kf-faq-a-text {
+  margin: 0;
+  padding: 0 22px 22px;
+  font-size: 14.5px; line-height: 1.7; color: var(--color-blue-gray-600);
+  text-wrap: pretty;
+}
+
+/* contact footer under the accordion */
+.kf-faq-more {
+  margin: 22px 0 0; text-align: center;
+  font-size: 14px; color: var(--color-blue-gray-500);
+}
+.kf-faq-more a { color: var(--color-blue-primary-700); font-weight: 600; }
+.kf-faq-more a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .kf-faq { margin-top: 44px; }
+  .kf-faq-intro { padding-bottom: 22px; }
+  .kf-faq-intro h2 { font-size: 22px; }
+  .kf-faq-q { padding: 17px 18px; gap: 12px; }
+  .kf-faq-q-text { font-size: 15px; }
+  .kf-faq-a-text { padding: 0 18px 18px; font-size: 14px; }
+}
+
+/* ============================================================
+   About this tool (AEO) — What is / Who for / How / Why
+   ============================================================ */
+.kf-aeo { margin-top: 56px; }
+.kf-aeo h2 {
+  margin: 0 0 16px; font-size: 20px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
+}
+.kf-aeo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.kf-aeo-item {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+}
+.kf-aeo-item h3 {
+  margin: 0 0 8px; font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em; color: var(--color-blue-gray-900);
+}
+.kf-aeo-item p {
+  margin: 0; font-size: 14px; line-height: 1.7;
+  color: var(--color-blue-gray-600); text-wrap: pretty;
+}
+
+@media (max-width: 640px) {
+  .kf-aeo { margin-top: 40px; }
+  .kf-aeo h2 { font-size: 18px; }
+  .kf-aeo-grid { grid-template-columns: 1fr; gap: 11px; }
+}
+
+/* ============================================================
+   Related Tools section — 도구 상세 하단, 허브 카드 스타일 재사용
+   ============================================================ */
+.kf-related { margin-top: 56px; }
+.kf-related h2 {
+  margin: 0 0 16px; font-size: 20px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
+}
+.kf-related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 14px; }
+
+@media (max-width: 640px) {
+  .kf-related { margin-top: 40px; }
+  .kf-related h2 { font-size: 18px; }
+  .kf-related-grid { grid-template-columns: 1fr; gap: 11px; }
+}
+
 /* utility */
 .kf-mono { font-family: var(--font-mono); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
@@ -297,6 +435,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hub-favbtn svg { width: 16px; height: 16px; }
 .hub-stat { font-family: var(--font-inter); font-size: 13px; color: var(--color-blue-gray-500); font-weight: 500; }
 .hub-stat b { color: var(--color-blue-gray-900); font-weight: 700; }
+
+/* 타겟(직군) 필터 칩 */
+.hub-targets { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.hub-targets button {
+  font-size: 12.5px; font-weight: 600; white-space: nowrap;
+  color: var(--color-blue-gray-600); background: #fff;
+  padding: 7px 14px; border-radius: 999px; border: 1px solid var(--color-blue-gray-200);
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.hub-targets button:hover { background: var(--color-blue-gray-50); }
+.hub-targets button.is-active {
+  background: var(--color-blue-primary-700); color: #fff;
+  border-color: var(--color-blue-primary-700);
+}
 
 .cat { padding-top: 44px; scroll-margin-top: calc(var(--header-h) + 12px); }
 .cat-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }

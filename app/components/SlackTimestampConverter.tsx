@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Faq from "./Faq";
+import RelatedTools from "./RelatedTools";
+import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
 import {
@@ -13,6 +16,8 @@ import {
   type InputKind,
 } from "../lib/timestamp";
 
+// 컨트롤 마이크로카피(패널·행 라벨)만 로컬 dict.
+// 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
 const DICT: Dict = {
   ko: {
     "in.panel": "입력",
@@ -101,11 +106,11 @@ export default function SlackTimestampConverter() {
 
   const slackFormats = valid ? toSlackFormats(result!.unixSeconds) : [];
 
-  const kindLabel = result ? t(`kind.${result.kind}` as keyof typeof DICT.ko) : "";
+  const kindLabel = result ? t(`kind.${result.kind}`) : "";
 
   return (
     <>
-      <PageHead slug="tools/slack-timestamp-converter" />
+      <PageHead slug="slack-timestamp-converter" />
 
       <div className="ide ts-ide">
           {/* ── IDE toolbar ── */}
@@ -250,6 +255,10 @@ export default function SlackTimestampConverter() {
             )}
           </div>
       </div>
+
+      <ToolAbout slug="slack-timestamp-converter" />
+      <Faq slug="slack-timestamp-converter" />
+      <RelatedTools slug="slack-timestamp-converter" />
     </>
   );
 }

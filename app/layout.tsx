@@ -13,10 +13,10 @@ const GA_ID = "G-BW26VT6W47";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: HUB.title.ko,
+    default: HUB.seo.ko.title,
     template: "%s — Kitfolio",
   },
-  description: HUB.description.ko,
+  description: HUB.seo.ko.description,
   // 사이트 확인용 메타태그 (AdSense · 네이버 서치어드바이저)
   other: {
     "google-adsense-account": ADSENSE_CLIENT,

@@ -6,33 +6,34 @@ import { useLang, useT, type Dict } from "../lib/i18n";
 import {
   CATS,
   HUB,
+  LAYOUT_LABEL,
+  TARGET_LABELS,
   TOOLS,
   localizedHref,
+  type TargetTag,
   type Tool,
 } from "../lib/content";
 
+// 허브 화면 UI 마이크로카피(상태 라벨·인풋 플레이스홀더)만 로컬 dict.
+// 히어로 카피·카드 설명·타겟 라벨·검색 색인은 content.ts 레지스트리.
 const DICT: Dict = {
-  ko: { soon: "준비 중", open: "열기", empty: "검색 결과가 없습니다." },
-  en: { soon: "Soon", open: "Open", empty: "No tools match your search." },
+  ko: {
+    soon: "준비 중",
+    open: "열기",
+    empty: "검색 결과가 없습니다.",
+    searchPlaceholder: "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)",
+    allTargets: "전체 직군",
+  },
+  en: {
+    soon: "Soon",
+    open: "Open",
+    empty: "No tools match your search.",
+    searchPlaceholder: "What do you need? (e.g. JSON, gradient, word count)",
+    allTargets: "All roles",
+  },
 };
 
-const CAT_LABELS: Record<
-  "dev" | "design" | "text",
-  { ko: { big: string; small: string }; en: { big: string; small: string } }
-> = {
-  dev: {
-    ko: { big: "개발", small: "Developer" },
-    en: { big: "Developer", small: "IDE theme" },
-  },
-  design: {
-    ko: { big: "디자인", small: "Design" },
-    en: { big: "Design", small: "Canvas theme" },
-  },
-  text: {
-    ko: { big: "텍스트", small: "Text" },
-    en: { big: "Text", small: "Clean theme" },
-  },
-};
+const TARGET_TAGS = Object.keys(TARGET_LABELS) as TargetTag[];
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -58,12 +59,14 @@ const StarIcon = ({ filled }: { filled: boolean }) => (
 export default function Hub() {
   const { lang } = useLang();
   const t = useT(DICT);
+  const hero = HUB.hero[lang];
 
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<"all" | "dev" | "design" | "text">(
     "all",
   );
   const [onlyFav, setOnlyFav] = useState(false);
+  const [target, setTarget] = useState<TargetTag | null>(null);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -89,17 +92,18 @@ export default function Hub() {
     const hay = [
       tool.name.en,
       tool.name.ko,
-      tool.card.ko,
-      tool.card.en,
-      ...tool.keywords.ko,
-      ...tool.keywords.en,
+      tool.content.ko.card,
+      tool.content.en.card,
+      ...tool.seo.ko.keywords,
+      ...tool.seo.en.keywords,
     ]
       .join(" ")
       .toLowerCase();
     const matchQ = !q || hay.includes(q);
     const matchFav = !onlyFav || favs.has(tool.slug);
     const matchCat = activeCat === "all" || tool.cat === activeCat;
-    return matchQ && matchFav && matchCat;
+    const matchTarget = !target || tool.targets.includes(target);
+    return matchQ && matchFav && matchCat && matchTarget;
   }
 
   const visibleByCat = useMemo(() => {
@@ -109,7 +113,7 @@ export default function Hub() {
     });
     return map;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, activeCat, onlyFav, favs]);
+  }, [query, activeCat, onlyFav, favs, target]);
 
   const totalVisible = Object.values(visibleByCat).reduce(
     (n, arr) => n + arr.length,
@@ -144,32 +148,28 @@ export default function Hub() {
       </div>
 
       <section className="hub-hero">
-        <span className="hub-eyebrow">{HUB.eyebrow[lang]}</span>
+        <span className="hub-eyebrow">{hero.eyebrow}</span>
         <h1>
-          {lang === "en" ? (
-            <>
-              Every <span className="accent">web tool</span> you need,
-              <br />
-              in one fast place.
-            </>
-          ) : (
-            <>
-              필요한 <span className="accent">웹 도구</span>,<br />한 곳에서
-              빠르게.
-            </>
+          {hero.h1.pre}
+          <span className="accent">{hero.h1.accent}</span>
+          {hero.h1.post.split("\n").map((part, i) =>
+            i === 0 ? (
+              part
+            ) : (
+              <span key={i}>
+                <br />
+                {part}
+              </span>
+            ),
           )}
         </h1>
-        <p>{HUB.subtitle[lang]}</p>
+        <p>{hero.subtitle}</p>
         <div className="hub-herobar">
           <label className="hub-bigsearch">
             <SearchIcon />
             <input
               type="text"
-              placeholder={
-                lang === "en"
-                  ? "What do you need? (e.g. JSON, gradient, word count)"
-                  : "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)"
-              }
+              placeholder={t("searchPlaceholder")}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -183,16 +183,28 @@ export default function Hub() {
             <span>{t("header.favorites")}</span>
           </button>
           <span className="hub-stat">
-            {lang === "en" ? (
-              <>
-                <b>{TOOLS.length}</b> tools · 3 categories
-              </>
-            ) : (
-              <>
-                <b>{TOOLS.length}</b>개 도구 · 3개 카테고리
-              </>
-            )}
+            <b>{TOOLS.length}</b>
+            {hero.stat}
           </span>
+        </div>
+
+        {/* 타겟(직군) 필터 — 내부 메타데이터 태그 기반, URL 아님 */}
+        <div className="hub-targets" aria-label="Filter by role">
+          <button
+            className={target === null ? "is-active" : ""}
+            onClick={() => setTarget(null)}
+          >
+            {t("allTargets")}
+          </button>
+          {TARGET_TAGS.map((tag) => (
+            <button
+              key={tag}
+              className={target === tag ? "is-active" : ""}
+              onClick={() => setTarget((cur) => (cur === tag ? null : tag))}
+            >
+              {TARGET_LABELS[tag][lang]}
+            </button>
+          ))}
         </div>
       </section>
 
@@ -200,7 +212,7 @@ export default function Hub() {
         {CATS.map((cat) => {
           const items = visibleByCat[cat.id];
           if (items.length === 0) return null;
-          const label = CAT_LABELS[cat.id][lang];
+          const label = cat.label[lang];
           return (
             <section className="cat" id={cat.id} key={cat.id}>
               <div className="cat-head">
@@ -213,7 +225,7 @@ export default function Hub() {
                   <ToolCard
                     key={tool.slug}
                     tool={tool}
-                    desc={tool.card[lang]}
+                    desc={tool.content[lang].card}
                     href={
                       tool.ready
                         ? localizedHref(lang, "/" + tool.slug)
@@ -276,7 +288,7 @@ function ToolCard({
       </div>
       <p className="tool-desc">{desc}</p>
       <div className="tool-foot">
-        <span className="theme-tag">{tool.theme}</span>
+        <span className="theme-tag">{LAYOUT_LABEL[tool.layout]}</span>
         {tool.ready ? (
           <span className="tool-go">
             <span>{openLabel}</span>
