@@ -343,14 +343,16 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   ⑤ `TOOLS` — 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
   `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
   `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
-  타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (본문 `ToolAbout`과 JSON-LD가 공유).
+  타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
   → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
   도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
 - **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
   전역 공통(헤더 네비·푸터·복사/지우기 버튼)은 `lib/i18n.tsx`의 `COMMON`,
   도구별 컨트롤 라벨은 각 컴포넌트의 로컬 `DICT`.
-- **FAQ**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`, `.kf-faq` 아코디언) 렌더.
-  콘텐츠는 `content.ts`의 `faq` 필드에서, `toolJsonLd()`가 같은 데이터로 `FAQPage` JSON-LD도 함께 생성.
+- **FAQ / About(AEO)**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`) 렌더.
+  **칩 탭으로 "이 도구에 대하여"(AEO: What/Who/How/Why) ↔ "자주 묻는 질문"(FAQ)** 전환 — 두 탭 모두
+  동일한 `.kf-faq` 아코디언(한 번에 하나만 열림, 1번 기본 오픈). 콘텐츠는 `content.ts`의 `content.aeo`(→`aeoQA()`)와
+  `faq` 필드에서, `toolJsonLd()`가 두 세트를 합쳐 `FAQPage` JSON-LD로 함께 생성.
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
 - **공통 레이아웃**: 루트 `layout.tsx` = `SiteHeader` + `<main class="kf-main">`(max 1216px) + `SiteFooter`.
   헤더·푸터는 `usePathname()`으로 언어(`/en` 프리픽스)와 액티브 카테고리를 도출 (`routeLang()` in `lib/i18n`).
@@ -387,8 +389,8 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
    - [x] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ next.config 308 영구 리다이렉트, sitemap 자동 갱신)
    - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
    - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트 — 허브 카드 스타일 재사용)
-   - [x] AEO용 **What is / Who for / How / Why** 명시 문단 — 레지스트리 `content.aeo` 필드 + `ToolAbout` 섹션,
-     같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함 — AI 검색 질의 직접 매칭)
+   - [x] AEO용 **What is / Who for / How / Why** 명시 문단 — 레지스트리 `content.aeo` 필드 + 탭형 `Faq` 섹션
+     ("이 도구에 대하여" 탭), 같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함 — AI 검색 질의 직접 매칭)
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
    - [x] 타겟 태그 기반 필터 1단계 — 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.

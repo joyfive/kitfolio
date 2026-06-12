@@ -184,20 +184,35 @@ export const CATS: {
 /* ============================================================
    ④ FAQ_SECTION — FAQ 섹션 공통 카피
    ============================================================ */
+/* FAQ / About 통합 섹션 — 탭(칩) 라벨 + 인트로 카피 */
 export const FAQ_SECTION = {
   ko: {
-    eyebrow: "자주 묻는 질문",
+    tab: "자주 묻는 질문",
     title: "무엇이든 물어보세요",
     sub: "이 도구를 쓰면서 가장 많이 받는 질문들을 모았습니다.",
     more: "찾는 답이 없나요?",
     moreLink: "피드백 보내기 →",
   },
   en: {
-    eyebrow: "Frequently Asked Questions",
+    tab: "FAQ",
     title: "Ask us anything",
     sub: "The questions we hear most often about this tool.",
     more: "Didn’t find what you’re looking for?",
     moreLink: "Send feedback →",
+  },
+};
+
+/* AEO(About this tool) 섹션 — What is / Who for / How / Why */
+export const AEO_SECTION = {
+  ko: {
+    tab: "이 도구에 대하여",
+    title: "이 도구에 대하여",
+    sub: "이 도구가 무엇인지, 누구에게·어떻게·왜 필요한지 한눈에 정리했습니다.",
+  },
+  en: {
+    tab: "About this tool",
+    title: "About this tool",
+    sub: "What it is, who it's for, how it works and why you'd use it.",
   },
 };
 
@@ -211,12 +226,6 @@ export const RELATED_SECTION = {
 export const OG_BADGE = {
   ko: "무료 · 브라우저에서 바로",
   en: "Free · Runs in your browser",
-};
-
-/* AEO(About this tool) 섹션 공통 카피 */
-export const AEO_SECTION = {
-  ko: { title: "이 도구에 대하여" },
-  en: { title: "About this tool" },
 };
 
 /* 타겟 태그 표시 라벨 — 허브 직군 필터 칩 */
