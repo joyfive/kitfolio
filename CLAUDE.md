@@ -341,8 +341,9 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
   ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATS`(카테고리 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
   ⑤ `TOOLS` — 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
-  `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks)/
+  `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
   `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
+  타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (본문 `ToolAbout`과 JSON-LD가 공유).
   → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
   도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
 - **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
@@ -386,10 +387,12 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
    - [x] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ next.config 308 영구 리다이렉트, sitemap 자동 갱신)
    - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
    - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트 — 허브 카드 스타일 재사용)
-   - [ ] AEO용 **What is / Who for / How / Why** 명시 문단(How It Works 확장) — 현재는 description+howItWorks+FAQ로 부분 충족
+   - [x] AEO용 **What is / Who for / How / Why** 명시 문단 — 레지스트리 `content.aeo` 필드 + `ToolAbout` 섹션,
+     같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함 — AI 검색 질의 직접 매칭)
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
-   - [ ] 카테고리(dev/design/text) 노출을 타겟 태그 기반 필터로 점진 전환 검토
+   - [x] 타겟 태그 기반 필터 1단계 — 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
+     카테고리 섹션/네비는 유지 (완전 전환 여부는 추후 데이터 보고 결정)
 
 1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
    - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단

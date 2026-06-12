@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
+import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
@@ -260,6 +261,7 @@ export default function CharacterCounter() {
           </div>
       </div>
 
+      <ToolAbout slug="character-counter" />
       <Faq slug="character-counter" />
       <RelatedTools slug="character-counter" />
     </>

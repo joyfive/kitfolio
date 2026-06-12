@@ -7,27 +7,33 @@ import {
   CATS,
   HUB,
   LAYOUT_LABEL,
+  TARGET_LABELS,
   TOOLS,
   localizedHref,
+  type TargetTag,
   type Tool,
 } from "../lib/content";
 
 // 허브 화면 UI 마이크로카피(상태 라벨·인풋 플레이스홀더)만 로컬 dict.
-// 히어로 카피·카드 설명·검색 색인은 content.ts 레지스트리.
+// 히어로 카피·카드 설명·타겟 라벨·검색 색인은 content.ts 레지스트리.
 const DICT: Dict = {
   ko: {
     soon: "준비 중",
     open: "열기",
     empty: "검색 결과가 없습니다.",
     searchPlaceholder: "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)",
+    allTargets: "전체 직군",
   },
   en: {
     soon: "Soon",
     open: "Open",
     empty: "No tools match your search.",
     searchPlaceholder: "What do you need? (e.g. JSON, gradient, word count)",
+    allTargets: "All roles",
   },
 };
+
+const TARGET_TAGS = Object.keys(TARGET_LABELS) as TargetTag[];
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -60,6 +66,7 @@ export default function Hub() {
     "all",
   );
   const [onlyFav, setOnlyFav] = useState(false);
+  const [target, setTarget] = useState<TargetTag | null>(null);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -95,7 +102,8 @@ export default function Hub() {
     const matchQ = !q || hay.includes(q);
     const matchFav = !onlyFav || favs.has(tool.slug);
     const matchCat = activeCat === "all" || tool.cat === activeCat;
-    return matchQ && matchFav && matchCat;
+    const matchTarget = !target || tool.targets.includes(target);
+    return matchQ && matchFav && matchCat && matchTarget;
   }
 
   const visibleByCat = useMemo(() => {
@@ -105,7 +113,7 @@ export default function Hub() {
     });
     return map;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, activeCat, onlyFav, favs]);
+  }, [query, activeCat, onlyFav, favs, target]);
 
   const totalVisible = Object.values(visibleByCat).reduce(
     (n, arr) => n + arr.length,
@@ -178,6 +186,25 @@ export default function Hub() {
             <b>{TOOLS.length}</b>
             {hero.stat}
           </span>
+        </div>
+
+        {/* 타겟(직군) 필터 — 내부 메타데이터 태그 기반, URL 아님 */}
+        <div className="hub-targets" aria-label="Filter by role">
+          <button
+            className={target === null ? "is-active" : ""}
+            onClick={() => setTarget(null)}
+          >
+            {t("allTargets")}
+          </button>
+          {TARGET_TAGS.map((tag) => (
+            <button
+              key={tag}
+              className={target === tag ? "is-active" : ""}
+              onClick={() => setTarget((cur) => (cur === tag ? null : tag))}
+            >
+              {TARGET_LABELS[tag][lang]}
+            </button>
+          ))}
         </div>
       </section>
 

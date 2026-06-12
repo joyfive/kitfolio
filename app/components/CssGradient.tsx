@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
+import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
 
@@ -444,6 +445,7 @@ export default function CssGradient() {
           </div>
       </div>
 
+      <ToolAbout slug="css-gradient" />
       <Faq slug="css-gradient" />
       <RelatedTools slug="css-gradient" />
     </>

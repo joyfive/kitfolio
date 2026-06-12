@@ -65,6 +65,9 @@ type ToolCopy = {
   description?: string;
   /** How It Works — 3단계 사용 가이드 — ready 도구만 */
   howItWorks?: string[];
+  /** AEO 명시 문단 — What is / Who is it for / How does it work / Why use it.
+   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출 — ready 도구만 */
+  aeo?: { what: string; who: string; how: string; why: string };
 };
 
 type ToolOg = { title: string; subtitle: string };
@@ -210,6 +213,22 @@ export const OG_BADGE = {
   en: "Free · Runs in your browser",
 };
 
+/* AEO(About this tool) 섹션 공통 카피 */
+export const AEO_SECTION = {
+  ko: { title: "이 도구에 대하여" },
+  en: { title: "About this tool" },
+};
+
+/* 타겟 태그 표시 라벨 — 허브 직군 필터 칩 */
+export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
+  pm: { ko: "PM", en: "PM" },
+  designer: { ko: "디자이너", en: "Designer" },
+  developer: { ko: "개발자", en: "Developer" },
+  "job-seeker": { ko: "취업 준비생", en: "Job seeker" },
+  "office-worker": { ko: "직장인", en: "Office worker" },
+  "small-business-owner": { ko: "자영업자", en: "Small business" },
+};
+
 /* ============================================================
    ⑤ TOOLS — 도구 레지스트리
    ============================================================ */
@@ -245,6 +264,12 @@ export const TOOLS: Tool[] = [
         description:
           "JSON 문자열을 붙여넣으면 들여쓰기와 색상 강조로 즉시 정리하고, 문법 오류가 있으면 줄·열 위치까지 짚어 유효성을 검사합니다. 한 줄로 압축(minify)할 수도 있어요. 모든 처리는 브라우저 안에서만 이루어집니다.",
         howItWorks: ["왼쪽 칸에 JSON 붙여넣기", "자동 포맷 · 유효성 확인", "오른쪽 결과 복사"],
+        aeo: {
+          what: "JSON 포매터는 한 줄로 뭉치거나 어지럽게 섞인 JSON 문자열을 들여쓰기와 색상 강조가 적용된 읽기 쉬운 형태로 정리하고, 동시에 문법 오류를 검사해주는 도구입니다.",
+          who: "API 응답과 설정 파일을 다루는 개발자, 로그·데이터 페이로드를 확인해야 하는 PM과 데이터 작업자를 위한 도구입니다.",
+          how: "왼쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 오른쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
+          why: "서버 전송 없이 브라우저에서만 동작해 민감한 데이터도 안전하고, 설치·가입 없이 바로 쓸 수 있어 디버깅 시간을 줄여줍니다.",
+        },
       },
       en: {
         card: "Format JSON with indentation and syntax highlighting. Detects errors and validates.",
@@ -255,6 +280,12 @@ export const TOOLS: Tool[] = [
           "Auto-format & validate",
           "Copy the result on the right",
         ],
+        aeo: {
+          what: "JSON Formatter is a tool that turns a minified or messy JSON string into a readable, indented and syntax-highlighted document while validating it.",
+          who: "It is for developers working with API responses and config files, and for PMs or data workers who need to inspect JSON logs and payloads.",
+          how: "Paste JSON into the left pane and it is parsed instantly in your browser — the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
+          why: "It runs entirely in your browser with no upload, so sensitive data stays safe — and with no install or sign-up, debugging gets faster.",
+        },
       },
     },
     faq: {
@@ -398,12 +429,24 @@ export const TOOLS: Tool[] = [
         description:
           "Slack에서 쓰는 Unix 타임스탬프를 읽기 쉬운 날짜·시간으로 변환합니다. UTC·로컬 타임존·상대 시간 표시와 Slack date 구문 생성을 지원합니다.",
         howItWorks: ["타임스탬프 또는 날짜 입력", "자동 변환 결과 확인", "원하는 형식 복사"],
+        aeo: {
+          what: "슬랙 타임스탬프 변환기는 Slack에서 쓰는 Unix 타임스탬프를 사람이 읽을 수 있는 날짜·시간으로 바꾸고, Slack date 구문까지 생성해주는 변환 도구입니다.",
+          who: "Slack API·웹훅을 다루는 개발자, 타임존이 다른 글로벌 팀에 시간 공지를 보내는 PM을 위한 도구입니다.",
+          how: "타임스탬프나 날짜를 입력하면 형식을 자동으로 감지해 UTC·로컬 시간·상대 시간과 Slack <!date> 구문으로 한 번에 변환합니다.",
+          why: "타임존 계산 실수를 막아주고, 받는 사람의 시간대에 맞춰 표시되는 Slack 구문을 클릭 한 번으로 만들 수 있습니다.",
+        },
       },
       en: {
         card: "Convert Unix timestamps to dates and Slack date syntax. Live current timestamp.",
         description:
           "Convert Slack Unix timestamps into readable dates and times. Supports UTC, local timezone, relative time, and Slack date syntax generation.",
         howItWorks: ["Paste timestamp or date", "See converted results", "Copy the format you need"],
+        aeo: {
+          what: "A Slack Timestamp Converter converts Unix timestamps used by Slack into human-readable dates and times, and generates Slack's <!date> syntax.",
+          who: "It is for developers working with the Slack API and webhooks, and for PMs announcing times to teams across timezones.",
+          how: "Enter a timestamp or date and the format is auto-detected, then converted to UTC, your local time, relative time and Slack date syntax all at once.",
+          why: "It prevents timezone mistakes and produces Slack syntax that renders in each reader's own timezone with a single click.",
+        },
       },
     },
     faq: {
@@ -548,12 +591,24 @@ export const TOOLS: Tool[] = [
         description:
           "linear·radial·conic 그라디언트를 시각적으로 편집합니다. 정지점을 드래그해 색과 위치를 맞추고 각도·중심을 조절한 뒤, 완성된 CSS 코드를 바로 복사하세요. 모든 처리는 브라우저 안에서 이루어집니다.",
         howItWorks: ["타입·각도 선택", "정지점 드래그로 색 조절", "CSS 복사"],
+        aeo: {
+          what: "CSS 그라디언트 생성기는 linear·radial·conic 그라디언트를 시각적으로 편집하고, 완성된 CSS 코드를 만들어주는 디자인 도구입니다.",
+          who: "웹사이트 배경·버튼·배너를 만드는 디자이너와 프론트엔드 개발자를 위한 도구입니다.",
+          how: "타입과 각도를 고르고 트랙에서 색상 정지점을 드래그하면 미리보기가 실시간으로 갱신되고, 결과 CSS를 바로 복사할 수 있습니다.",
+          why: "그라디언트 문법을 외울 필요 없이 눈으로 확인하며 만들 수 있어 시안 작업과 코드 작성이 모두 빨라집니다.",
+        },
       },
       en: {
         card: "Edit linear, radial and conic gradients visually and copy the CSS instantly.",
         description:
           "Edit linear, radial and conic gradients visually. Drag the stops to set colors and positions, tune the angle and center, then copy the finished CSS. Everything runs in your browser.",
         howItWorks: ["Pick type & angle", "Drag stops to set colors", "Copy the CSS"],
+        aeo: {
+          what: "CSS Gradient Generator is a design tool for editing linear, radial and conic gradients visually and producing ready-to-use CSS code.",
+          who: "It is for designers and front-end developers building website backgrounds, buttons and banners.",
+          how: "Pick a type and angle, drag color stops on the track, watch the live preview update, then copy the resulting CSS.",
+          why: "You can build gradients by eye without memorizing the syntax, speeding up both mockups and code.",
+        },
       },
     },
     faq: {
@@ -682,12 +737,24 @@ export const TOOLS: Tool[] = [
         description:
           "텍스트를 입력하거나 붙여넣으면 글자·단어·문장·줄·단락 수를 실시간으로 집계합니다. 공백 포함·제외 글자 수와 예상 읽기 시간, 트위터·스레드·인스타그램 등 SNS 글자 수 제한까지 한눈에 확인하세요. 모든 처리는 브라우저 안에서만 이루어집니다.",
         howItWorks: ["텍스트 입력·붙여넣기", "실시간 집계 확인", "SNS 글자 수 제한 점검"],
+        aeo: {
+          what: "글자 수·단어 수 카운터는 텍스트의 글자·단어·문장·줄·단락 수를 실시간으로 집계해주는 글쓰기 보조 도구입니다.",
+          who: "자기소개서를 다듬는 취업 준비생, SNS·공지 글을 쓰는 마케터와 직장인 등 글자 수 제한이 있는 글을 쓰는 모두를 위한 도구입니다.",
+          how: "텍스트를 입력하거나 붙여넣으면 즉시 공백 포함·제외 글자 수와 예상 읽기 시간, 주요 SNS별 남은 글자 수를 보여줍니다.",
+          why: "플랫폼별 글자 수 제한을 한 화면에서 확인할 수 있어, 글을 올리기 전에 따로 세어보거나 잘릴 걱정을 할 필요가 없습니다.",
+        },
       },
       en: {
         card: "Live counts of characters, words, sentences and lines. With social limits.",
         description:
           "Type or paste text and it counts characters, words, sentences, lines and paragraphs in real time. See counts with and without spaces, estimated reading time, and character limits for X, Threads, Instagram and more. Everything runs in your browser.",
         howItWorks: ["Type or paste your text", "Watch the live counts", "Check social limits"],
+        aeo: {
+          what: "Character Counter is a writing aid that counts characters, words, sentences, lines and paragraphs in real time.",
+          who: "It is for job seekers polishing application essays, and for marketers and office workers writing posts with length limits.",
+          how: "Type or paste text and it instantly shows counts with and without spaces, estimated reading time, and remaining characters for major social platforms.",
+          why: "You can check every platform's length limit on one screen, so nothing gets cut off after you post.",
+        },
       },
     },
     faq: {
@@ -816,6 +883,36 @@ export function localizedHref(lang: Lang, path: string): string {
   return path === "/" ? "/en" : "/en" + path;
 }
 
+/** 마지막 글자 받침 여부 (한국어 조사 선택용) */
+function hasJongseong(word: string): boolean {
+  const code = word.charCodeAt(word.length - 1);
+  if (code < 0xac00 || code > 0xd7a3) return false;
+  return (code - 0xac00) % 28 > 0;
+}
+
+/** AEO 명시 문단을 Q&A 목록으로 변환 — ToolAbout 섹션과 FAQPage JSON-LD가 공유.
+ *  질문에 도구 이름을 포함해 AI 검색 질의("What is a …?")와 직접 매칭되게 한다. */
+export function aeoQA(slug: string, lang: Lang): QA[] {
+  const t = getTool(slug);
+  const aeo = t.content[lang].aeo;
+  if (!aeo) return [];
+  if (lang === "ko") {
+    const p = hasJongseong(t.name.ko) ? "이란" : "란";
+    return [
+      { question: `${t.name.ko}${p} 어떤 도구인가요?`, answer: aeo.what },
+      { question: "누구를 위한 도구인가요?", answer: aeo.who },
+      { question: "어떻게 동작하나요?", answer: aeo.how },
+      { question: "왜 사용하나요?", answer: aeo.why },
+    ];
+  }
+  return [
+    { question: `What is ${t.name.en}?`, answer: aeo.what },
+    { question: "Who is it for?", answer: aeo.who },
+    { question: "How does it work?", answer: aeo.how },
+    { question: "Why use it?", answer: aeo.why },
+  ];
+}
+
 const APP_CATEGORY: Record<Tool["cat"], string> = {
   dev: "DeveloperApplication",
   design: "DesignApplication",
@@ -896,13 +993,15 @@ export function toolJsonLd(slug: string, lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
   };
-  if (!t.faq) return app;
+  // AEO 명시 문단 + FAQ — 페이지에 보이는 Q&A 전부를 FAQPage로 노출
+  const qa = [...aeoQA(slug, lang), ...(t.faq?.[lang] ?? [])];
+  if (qa.length === 0) return app;
   return [
     app,
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: t.faq[lang].map(({ question, answer }) => ({
+      mainEntity: qa.map(({ question, answer }) => ({
         "@type": "Question",
         name: question,
         acceptedAnswer: { "@type": "Answer", text: answer },
