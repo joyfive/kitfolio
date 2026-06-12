@@ -1,10 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import SiteHeader from "./SiteHeader";
-import { useBodyTheme } from "./useBodyTheme";
-import { getTool } from "../lib/content";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import PageHead from "./PageHead";
+import { useT, type Dict } from "../lib/i18n";
 
 // 컨트롤 마이크로카피만 로컬 dict. 페이지 SEO 카피(제목·설명·가이드)는 content.ts.
 const DICT: Dict = {
@@ -81,10 +79,7 @@ function lineNumbers(n: number) {
 }
 
 export default function JsonFormatter() {
-  useBodyTheme("ide");
-  const { lang } = useLang();
   const t = useT(DICT);
-  const c = getTool("json-formatter");
 
   const [text, setText] = useState(SAMPLE);
   const [indent, setIndent] = useState("2");
@@ -167,29 +162,9 @@ export default function JsonFormatter() {
 
   return (
     <>
-      <SiteHeader dark active="dev" />
-      <main className="tool-page">
-        <div className="kf-pagehead is-dark">
-          <span className="ph-eyebrow">
-            <span>{t("nav.dev")}</span>
-            <span className="ph-sep">·</span>
-            <span className="ph-theme">{c.themeLabel}</span>
-          </span>
-          <h1>
-            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
-          </h1>
-          <p className="ph-lead">{c.description![lang]}</p>
-          <div className="ph-how">
-            {c.steps![lang].map((s, i) => (
-              <span className="ph-step" key={i}>
-                <b>{i + 1}</b>
-                <span>{s}</span>
-              </span>
-            ))}
-          </div>
-        </div>
+      <PageHead slug="json-formatter" />
 
-        <div className="ide">
+      <div className="ide">
           <div className="ide-bar">
             <div className="ide-title">
               <span className="dot" />
@@ -232,7 +207,7 @@ export default function JsonFormatter() {
           </div>
 
           <div className="panes">
-            <div className="pane">
+            <div className="pane pane-in">
               <div className="pane-head">
                 <span className="pane-tab">
                   <span className="tab-dot" />
@@ -279,7 +254,7 @@ export default function JsonFormatter() {
               </div>
             </div>
 
-            <div className="pane">
+            <div className="pane pane-out">
               <div className="pane-head">
                 <span className="pane-tab">
                   <span
@@ -317,8 +292,7 @@ export default function JsonFormatter() {
             <span className="spacer" />
             <span>{result.sizeInfo}</span>
           </div>
-        </div>
-      </main>
+      </div>
     </>
   );
 }

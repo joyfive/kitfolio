@@ -57,6 +57,12 @@ const COMMON: Record<Lang, Record<string, string>> = {
   },
 };
 
+/** URL 경로에서 언어 도출 (KO=루트, EN=/en). 루트 layout의 공통 헤더/푸터처럼
+ *  LangProvider 서브트리 바깥에서 렌더되는 컴포넌트가 사용한다. */
+export function routeLang(pathname: string): Lang {
+  return pathname === "/en" || pathname.startsWith("/en/") ? "en" : "ko";
+}
+
 const LangCtx = createContext<Lang>("ko");
 
 export function LangProvider({

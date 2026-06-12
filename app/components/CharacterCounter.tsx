@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import SiteHeader from "./SiteHeader";
-import { useBodyTheme } from "./useBodyTheme";
-import { getTool } from "../lib/content";
+import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
 const DICT: Dict = {
@@ -61,10 +59,8 @@ function fmt(n: number) {
 }
 
 export default function CharacterCounter() {
-  useBodyTheme("clean");
   const { lang } = useLang();
   const t = useT(DICT);
-  const c = getTool("character-counter");
 
   const [text, setText] = useState(lang === "en" ? SAMPLE_EN : SAMPLE_KO);
 
@@ -126,29 +122,9 @@ export default function CharacterCounter() {
 
   return (
     <>
-      <SiteHeader active="text" />
-      <div className="cc-wrap">
-        <div className="kf-pagehead">
-          <span className="ph-eyebrow">
-            <span>{t("nav.text")}</span>
-            <span className="ph-sep">·</span>
-            <span className="ph-theme">{c.themeLabel}</span>
-          </span>
-          <h1>
-            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
-          </h1>
-          <p className="ph-lead">{c.description![lang]}</p>
-          <div className="ph-how">
-            {c.steps![lang].map((s, i) => (
-              <span className="ph-step" key={i}>
-                <b>{i + 1}</b>
-                <span>{s}</span>
-              </span>
-            ))}
-          </div>
-        </div>
+      <PageHead slug="character-counter" />
 
-        <div className="cc-work">
+      <div className="cc-work">
           <div className="editor-card">
             <div className="editor-head">
               <span className="lbl">{t("cc.editorLabel")}</span>
@@ -278,7 +254,6 @@ export default function CharacterCounter() {
               <span>{t("common.privacy")}</span>
             </div>
           </div>
-        </div>
       </div>
     </>
   );

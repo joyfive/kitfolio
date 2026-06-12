@@ -60,6 +60,33 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 
 ---
 
+### 공통 레이아웃 / 스타일 규칙 (2026-06-12 개정)
+
+> 아래 규칙은 기존 테마별 가이드보다 우선한다.
+
+1. **배경**: 개발 / 디자인 / 텍스트 — 모든 테마의 페이지 배경은 `blue-gray-50`.
+   글로벌 CSS(`body`)에 공통 적용. (IDE 다크는 페이지 전체가 아니라 **출력 박스 내부에만** 적용)
+2. **콘텐츠 영역**: 모든 테마 공통 `max-width: 1216px` — 공통 레이아웃 컴포넌트(`.kf-main`)로 반영.
+3. **공통 컴포넌트 구조**: 루트 `app/layout.tsx`가 헤더 / 본문 / 푸터를 공통 컴포넌트로 렌더.
+   ```
+   layout.tsx
+   ├ SiteHeader.tsx          (공통 헤더 — 언어·액티브 카테고리는 URL에서 도출)
+   ├ <main class="kf-main">{children}</main>
+   └ SiteFooter.tsx          (공통 푸터)
+   ```
+4. **테마별 인풋-출력 박스 형태**
+   - **개발 (IDE)**: 1개의 박스가 좌우 2열로 분할. 인풋 = 화이트 박스 → 출력 박스 = IDE(다크) 형태.
+   - **디자인 (Canvas)**: 1개의 박스가 좌우 2열로 분할. 인풋 = 화이트 박스 → 출력 = 그레이 컬러 활용.
+   - **텍스트 (Clean)**: 인풋과 출력 박스를 각각 별도로 배치. 출력은 카드 2열 그리드 또는
+     1개 박스 내 요소 배치 등 유동적으로 적용. 인풋 = 화이트 박스 → 출력 = 그레이 컬러 활용.
+5. **페이지 헤더 / 뱃지 / 설명 영역**: 모든 테마 공통 스타일 — `PageHead` 컴포넌트(`.kf-pagehead`) 사용.
+6. **페이지 구성**: 좌측 = 인풋 / 우측 = 출력 기준. 단, 디자인(Canvas) 도구는 기능에 따라
+   유동적으로 적용. 모바일은 상하 배치 (인풋 위 → 출력 아래).
+7. **인풋 높이**: 모든 인풋은 모바일에서 height 최솟값 240px, 콘텐츠에 따라 유동적으로 늘어나되
+   최대 600px로 제한.
+
+---
+
 ### 컬러 토큰
 
 Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
@@ -100,28 +127,30 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 #### 테마별 컬러 사용 가이드
 
-**IDE / Editor** (다크 전용)
-- 배경: `blue-gray-950` (#1b1d21)
-- 패널: `blue-gray-900` (#23262b)
+> 페이지 배경은 모든 테마 공통 `blue-gray-50`. 아래는 인풋/출력 박스 내부 기준.
+
+**IDE / Editor** (출력 박스만 다크)
+- 작업 박스 / 인풋 패널: white (텍스트 `blue-gray-900`, 테두리 `blue-gray-200`)
+- 출력 패널 배경: `blue-gray-950` (#1b1d21)
+- 출력 패널 헤더: `blue-gray-900` (#23262b)
 - 라인 넘버 / 주석: `blue-gray-700` (#4c5059)
-- 일반 텍스트: `blue-gray-200` (#c6c9d1)
+- 출력 일반 텍스트: `blue-gray-200` (#c6c9d1)
 - 신택스 — 키워드: `blue-primary-400` (#899ff3)
 - 신택스 — 함수: `blue-primary-500` (#6486ef)
 - 신택스 — 문자열: `blue-primary-300` (#a7b6f6)
 - 액티브 탭 / 포인트: `blue-primary-700` (#2d5dc8)
-- 성공 배지 배경: `blue-primary-900` (#18377c)
+- 상태 배지(라이트 영역): `blue-primary-100` bg + `blue-primary-700` text
 
-**Canvas** (라이트 전용)
-- 캔버스 배경: `blue-gray-50` (#f0f1f3)
-- 패널 / 사이드바: white
+**Canvas** (라이트)
+- 작업 박스 / 인풋(컨트롤) 패널: white
+- 출력(프리뷰) 영역: `blue-gray-50` + `blue-gray-100` 체커보드 (그레이 활용)
 - 테두리: `blue-gray-200` (#c6c9d1)
 - 포인트 / 액티브: `blue-primary-700` (#2d5dc8)
 - 액티브 툴 배경: `blue-primary-100` (#e3e7fc)
 
-**Clean SaaS** (라이트 전용)
-- 배경: white
-- 인풋 / 카드 배경: `blue-gray-50` (#f0f1f3)
-- 테두리: `blue-gray-200` (#c6c9d1)
+**Clean SaaS** (라이트)
+- 인풋 카드: white
+- 출력 카드: `blue-gray-100` bg + `blue-gray-200` border (그레이 활용)
 - CTA 버튼: `blue-primary-700` (#2d5dc8)
 - 배지: `blue-primary-100` bg + `blue-primary-700` text
 
@@ -167,12 +196,13 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ### 공통 헤더 구조
 ```
-[로고마크 + Toolbox] [전체 도구 | 개발 | 디자인 | 텍스트] ··· [검색] [즐겨찾기]
+[로고마크 + Kitfolio] [전체 도구 | 개발 | 디자인 | 텍스트] ··· [KO/EN 토글]
 ```
 - 높이: 48px
 - 하단 보더: 0.5px `blue-gray-100`
 - 네비 아이템: 라운드 6px, 액티브 시 `blue-primary-100` 배경
-- 모바일: 햄버거 메뉴로 네비 축소
+- 검색·즐겨찾기는 허브 히어로 영역에 배치 (헤더 아님)
+- 모바일: 네비 숨김 (허브는 스티키 카테고리 칩 바로 대체)
 
 ---
 
@@ -211,7 +241,10 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   KO·EN로 모아두고 → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용.
   **텍스트 수정은 이 파일만 고치면 됨.**
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
-- 레이아웃: 960px 기준 자동 반응형(≥좌우분할/<상하분할), 공통 `.kf-pagehead`.
+- **공통 레이아웃**: 루트 `layout.tsx` = `SiteHeader` + `<main class="kf-main">`(max 1216px) + `SiteFooter`.
+  헤더·푸터는 `usePathname()`으로 언어(`/en` 프리픽스)와 액티브 카테고리를 도출 (`routeLang()` in `lib/i18n`).
+- 페이지 헤더(뱃지·제목·설명·3단계 가이드)는 공통 `PageHead` 컴포넌트 (`<PageHead slug="..." />`).
+- 레이아웃: 960px 기준 자동 반응형(≥좌우분할/<상하분할). 인풋은 모바일 min 240px / max 600px (`field-sizing: content`).
 
 ### SEO
 - 페이지별 title/description/keywords + `canonical` + `hreflang`(ko-KR/en-US/x-default) + OpenGraph

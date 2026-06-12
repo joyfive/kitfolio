@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import SiteHeader from "./SiteHeader";
-import { useBodyTheme } from "./useBodyTheme";
-import { getTool } from "../lib/content";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import PageHead from "./PageHead";
+import { useT, type Dict } from "../lib/i18n";
 import {
   parseInput,
   toUTC,
@@ -61,11 +59,7 @@ const DICT: Dict = {
 };
 
 export default function SlackTimestampConverter() {
-  const { lang } = useLang();
   const t = useT(DICT);
-  const tool = getTool("tools/slack-timestamp-converter");
-
-  useBodyTheme("ide");
 
   const [input, setInput] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
@@ -111,30 +105,9 @@ export default function SlackTimestampConverter() {
 
   return (
     <>
-      <SiteHeader active="dev" dark />
-      <div className="tool-page">
-        <div className="kf-pagehead is-dark">
-          <div className="ph-eyebrow">
-            {tool.themeLabel}
-            <span className="ph-sep">·</span>
-            <span className="ph-theme">{tool.name.ko}</span>
-          </div>
-          <h1>
-            {lang === "ko" ? tool.name.ko : tool.name.en}
-            {lang === "en" && <span className="ph-ko">{tool.name.ko}</span>}
-          </h1>
-          <p className="ph-lead">{tool.description![lang]}</p>
-          <div className="ph-how">
-            {tool.steps![lang].map((step, i) => (
-              <span className="ph-step" key={i}>
-                <b>{i + 1}</b>
-                {step}
-              </span>
-            ))}
-          </div>
-        </div>
+      <PageHead slug="tools/slack-timestamp-converter" />
 
-        <div className="ide ts-ide">
+      <div className="ide ts-ide">
           {/* ── IDE toolbar ── */}
           <div className="ide-bar">
             <div className="ide-title">
@@ -161,7 +134,7 @@ export default function SlackTimestampConverter() {
           {/* ── Panes ── */}
           <div className="panes">
             {/* Left: Input */}
-            <div className="pane">
+            <div className="pane pane-in">
               <div className="pane-head">
                 <span className="pane-tab">
                   <span className="tab-dot" />
@@ -194,7 +167,7 @@ export default function SlackTimestampConverter() {
             </div>
 
             {/* Right: Output */}
-            <div className="pane">
+            <div className="pane pane-out">
               <div className="pane-head">
                 <span className="pane-tab">
                   <span
@@ -276,7 +249,6 @@ export default function SlackTimestampConverter() {
               </>
             )}
           </div>
-        </div>
       </div>
     </>
   );
