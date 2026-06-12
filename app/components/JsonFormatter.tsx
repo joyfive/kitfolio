@@ -3,7 +3,6 @@
 import { useMemo, useRef, useState } from "react";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
-import ToolAbout from "./ToolAbout";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
 
@@ -298,7 +297,6 @@ export default function JsonFormatter() {
           </div>
       </div>
 
-      <ToolAbout slug="json-formatter" />
       <Faq slug="json-formatter" />
       <RelatedTools slug="json-formatter" />
     </>

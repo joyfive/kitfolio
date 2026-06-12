@@ -258,7 +258,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .kf-faq { max-width: 760px; margin: 64px auto 0; }
 
 /* section intro */
-.kf-faq-intro { text-align: center; padding-bottom: 28px; }
+.kf-faq-intro { text-align: center; padding-bottom: 20px; }
 .kf-faq-intro .eyebrow {
   display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--font-inter); font-size: 12px; font-weight: 600;
@@ -267,6 +267,23 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .kf-faq-intro h2 { margin: 0 0 10px; font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--color-blue-gray-950); }
 .kf-faq-intro p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--color-blue-gray-500); }
+
+/* 탭(칩) — 이 도구에 대하여 ↔ 자주 묻는 질문 */
+.kf-faq-tabs {
+  display: flex; justify-content: center; gap: 8px;
+  margin: 0 0 20px;
+}
+.kf-faq-tabs button {
+  font-family: var(--font-sans); font-size: 13.5px; font-weight: 600; white-space: nowrap;
+  color: var(--color-blue-gray-600); background: #fff;
+  padding: 9px 18px; border-radius: 999px; border: 1px solid var(--color-blue-gray-200);
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.kf-faq-tabs button:hover { background: var(--color-blue-gray-50); }
+.kf-faq-tabs button.is-active {
+  background: var(--color-blue-primary-700); color: #fff;
+  border-color: var(--color-blue-primary-700);
+}
 
 /* accordion card (1개의 화이트 카드 안에 항목들) */
 .kf-faq-card {
@@ -342,35 +359,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .kf-faq-q { padding: 17px 18px; gap: 12px; }
   .kf-faq-q-text { font-size: 15px; }
   .kf-faq-a-text { padding: 0 18px 18px; font-size: 14px; }
-}
-
-/* ============================================================
-   About this tool (AEO) — What is / Who for / How / Why
-   ============================================================ */
-.kf-aeo { margin-top: 56px; }
-.kf-aeo h2 {
-  margin: 0 0 16px; font-size: 20px; font-weight: 700;
-  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
-}
-.kf-aeo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.kf-aeo-item {
-  background: #fff; border: 1px solid var(--color-blue-gray-200);
-  border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
-  padding: 20px 22px;
-}
-.kf-aeo-item h3 {
-  margin: 0 0 8px; font-size: 15px; font-weight: 600;
-  letter-spacing: -0.01em; color: var(--color-blue-gray-900);
-}
-.kf-aeo-item p {
-  margin: 0; font-size: 14px; line-height: 1.7;
-  color: var(--color-blue-gray-600); text-wrap: pretty;
-}
-
-@media (max-width: 640px) {
-  .kf-aeo { margin-top: 40px; }
-  .kf-aeo h2 { font-size: 18px; }
-  .kf-aeo-grid { grid-template-columns: 1fr; gap: 11px; }
 }
 
 /* ============================================================
