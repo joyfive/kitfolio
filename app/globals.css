@@ -344,6 +344,22 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .kf-faq-a-text { padding: 0 18px 18px; font-size: 14px; }
 }
 
+/* ============================================================
+   Related Tools section — 도구 상세 하단, 허브 카드 스타일 재사용
+   ============================================================ */
+.kf-related { margin-top: 56px; }
+.kf-related h2 {
+  margin: 0 0 16px; font-size: 20px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
+}
+.kf-related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 14px; }
+
+@media (max-width: 640px) {
+  .kf-related { margin-top: 40px; }
+  .kf-related h2 { font-size: 18px; }
+  .kf-related-grid { grid-template-columns: 1fr; gap: 11px; }
+}
+
 /* utility */
 .kf-mono { font-family: var(--font-mono); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }

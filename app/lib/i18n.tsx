@@ -37,7 +37,7 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "foot.about": "About",
     "foot.privacy": "Privacy",
     "foot.feedback": "Feedback",
-    "foot.madeby": "Free web tools for developers & designers",
+    "foot.madeby": "Small tools for modern knowledge workers",
   },
   ko: {
     "nav.all": "전체 도구",
@@ -56,7 +56,7 @@ const COMMON: Record<Lang, Record<string, string>> = {
     "foot.about": "소개",
     "foot.privacy": "개인정보",
     "foot.feedback": "피드백",
-    "foot.madeby": "개발자·디자이너를 위한 무료 웹 도구",
+    "foot.madeby": "일하는 사람을 위한 작은 웹 도구",
   },
 };
 

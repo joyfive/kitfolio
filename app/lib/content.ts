@@ -110,35 +110,35 @@ export const LAYOUT_LABEL: Record<Layout, string> = {
 export const HUB = {
   seo: {
     ko: {
-      title: "Kitfolio — 개발자·디자이너를 위한 무료 웹 도구",
+      title: "Kitfolio — 일하는 사람을 위한 작은 웹 도구 모음",
       description:
-        "JSON 포매터, CSS 그라디언트 생성기, 글자 수 카운터 등 브라우저에서 바로 쓰는 무료 웹 도구 모음. 설치 없이, 데이터 전송 없이 클라이언트에서 동작합니다.",
-      keywords: ["무료 웹 도구", "개발자 도구", "온라인 유틸리티"],
+        "글자 수 카운터, JSON 포매터, 그라디언트 생성기 등 업무에 필요한 계산기·생성기·유틸리티 모음. 설치 없이, 가입 없이, 모든 처리가 브라우저 안에서 끝납니다.",
+      keywords: ["무료 웹 도구", "업무 계산기", "온라인 유틸리티"],
     },
     en: {
-      title: "Kitfolio — Free web tools for developers & designers",
+      title: "Kitfolio — Small tools for modern knowledge workers",
       description:
-        "A collection of free web tools — JSON formatter, CSS gradient generator, character counter and more. No install, no sign-up, everything runs in your browser.",
-      keywords: ["free web tools", "developer tools", "online utilities"],
+        "Work calculators, generators and utilities that run entirely in your browser — character counter, JSON formatter, gradient generator and more. No login, no installation, no server-side processing.",
+      keywords: ["free web tools", "work calculators", "online utilities"],
     },
   },
   hero: {
     ko: {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
-      h1: { pre: "필요한 ", accent: "웹 도구", post: ",\n한 곳에서 빠르게." },
+      h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
       subtitle:
-        "개발자와 디자이너를 위한 가볍고 빠른 유틸리티 모음. 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
+        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티 — 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
       stat: "개 도구 · 3개 카테고리",
     },
     en: {
       eyebrow: "No install · No sign-up · Right in your browser",
       h1: {
-        pre: "Every ",
-        accent: "web tool",
-        post: " you need,\nin one fast place.",
+        pre: "Small ",
+        accent: "tools",
+        post: " for modern\nknowledge workers.",
       },
       subtitle:
-        "A lightweight set of utilities for developers and designers. Everything runs in your browser — no data is ever sent to a server.",
+        "Browser-based micro tools for modern knowledge workers — work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
       stat: " tools · 3 categories",
     },
   },
@@ -198,6 +198,18 @@ export const FAQ_SECTION = {
   },
 };
 
+/* Related Tools 섹션 공통 카피 */
+export const RELATED_SECTION = {
+  ko: { title: "함께 쓰면 좋은 도구" },
+  en: { title: "Related tools" },
+};
+
+/* 동적 OG 이미지 하단 배지 카피 */
+export const OG_BADGE = {
+  ko: "무료 · 브라우저에서 바로",
+  en: "Free · Runs in your browser",
+};
+
 /* ============================================================
    ⑤ TOOLS — 도구 레지스트리
    ============================================================ */
@@ -212,7 +224,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "IDE / Editor",
     name: { ko: "JSON 포매터", en: "JSON Formatter" },
-    relatedTools: ["base64", "jwt-decoder", "regex-tester"],
+    relatedTools: ["slack-timestamp-converter", "base64", "regex-tester"],
     seo: {
       ko: {
         title: "JSON 포매터 · 검증기",
@@ -357,7 +369,7 @@ export const TOOLS: Tool[] = [
     },
   },
   {
-    slug: "tools/slack-timestamp-converter",
+    slug: "slack-timestamp-converter",
     layout: "ide",
     cat: "dev",
     targets: ["pm", "developer"],
@@ -515,7 +527,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Canvas",
     name: { ko: "그라디언트 생성기", en: "CSS Gradient" },
-    relatedTools: ["color-converter", "aspect-ratio"],
+    relatedTools: ["color-converter", "aspect-ratio", "character-counter"],
     seo: {
       ko: {
         title: "CSS 그라디언트 생성기",
@@ -649,7 +661,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Clean SaaS",
     name: { ko: "글자 수·단어 수 카운터", en: "Character Counter" },
-    relatedTools: ["lorem-ipsum", "markdown-to-html"],
+    relatedTools: ["lorem-ipsum", "markdown-to-html", "css-gradient"],
     seo: {
       ko: {
         title: "글자 수·단어 수 카운터",

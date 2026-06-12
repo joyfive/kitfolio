@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Faq from "./Faq";
+import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
 import {
@@ -108,7 +109,7 @@ export default function SlackTimestampConverter() {
 
   return (
     <>
-      <PageHead slug="tools/slack-timestamp-converter" />
+      <PageHead slug="slack-timestamp-converter" />
 
       <div className="ide ts-ide">
           {/* ── IDE toolbar ── */}
@@ -254,7 +255,8 @@ export default function SlackTimestampConverter() {
           </div>
       </div>
 
-      <Faq slug="tools/slack-timestamp-converter" />
+      <Faq slug="slack-timestamp-converter" />
+      <RelatedTools slug="slack-timestamp-converter" />
     </>
   );
 }

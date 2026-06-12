@@ -358,8 +358,12 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ### SEO
 - 페이지별 title/description/keywords + `canonical` + `hreflang`(ko-KR/en-US/x-default) + OpenGraph
+- **동적 OG 이미지**: 도구·허브 라우트별 `opengraph-image.tsx`(1200×630 PNG, 빌드 시 정적 생성).
+  공통 렌더러 `app/lib/og.tsx`가 레지스트리 `og.title/subtitle` 소비.
+  한글 폰트는 `app/lib/fonts/NotoSansKR-{Bold,Medium}.ttf` (리포 포함, 빌드 시 로컬 로드)
 - JSON-LD: 도구 `WebApplication` + `FAQPage`(FAQ 보유 시), 허브 `WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
+- 구 URL `/tools/slack-timestamp-converter`(±`/en`)는 next.config 영구 리다이렉트로 플랫 URL에 연결
 - 구글 서치콘솔(DNS 인증) · 네이버 서치어드바이저(메타태그 `naver-site-verification`) 등록
 
 ### 인프라
@@ -379,13 +383,12 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 ## 다음 세션 TODO
 
 0. **제품 방향(2026-06-12)과 현행 코드의 갭 해소**
-   - [ ] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ 301 리다이렉트, sitemap 갱신)
+   - [x] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ next.config 308 영구 리다이렉트, sitemap 자동 갱신)
    - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
-   - [ ] 도구 페이지에 **Related Tools** 섹션 추가 — 레지스트리 `relatedTools` 필드는 완료, 섹션 UI 미구현
+   - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트 — 허브 카드 스타일 재사용)
    - [ ] AEO용 **What is / Who for / How / Why** 명시 문단(How It Works 확장) — 현재는 description+howItWorks+FAQ로 부분 충족
-   - [x] `og.subtitle` 필드 (OG description에 반영) — 동적 OG 이미지 생성은 미구현
-   - [ ] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
-     (현재 "개발자·디자이너를 위한…" — content.ts `HUB`/`COMMON`만 고치면 됨)
+   - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
+   - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
    - [ ] 카테고리(dev/design/text) 노출을 타겟 태그 기반 필터로 점진 전환 검토
 
 1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
