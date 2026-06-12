@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import Faq from "./Faq";
 import PageHead from "./PageHead";
-import { getTool } from "../lib/content";
-import { useT } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 import {
   parseInput,
   toUTC,
@@ -15,11 +14,55 @@ import {
   type InputKind,
 } from "../lib/timestamp";
 
-// 모든 텍스트(페이지 카피·컨트롤 마이크로카피·FAQ)는 content.ts 한 파일에서 관리.
-const UI = getTool("tools/slack-timestamp-converter").ui;
+// 컨트롤 마이크로카피(패널·행 라벨)만 로컬 dict.
+// 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
+const DICT: Dict = {
+  ko: {
+    "in.panel": "입력",
+    "in.clear": "지우기",
+    "in.ph": "Unix 타임스탬프 또는 날짜·시간 입력…",
+    "in.ph2": "예: 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\n또는 <!date^...> Slack 구문",
+    "out.panel": "변환 결과",
+    "row.utc": "UTC",
+    "row.local": "Local",
+    "row.readable": "Readable",
+    "row.relative": "Relative",
+    "row.unix": "Unix (초)",
+    "row.slack": "Slack 구문",
+    "now.label": "현재 타임스탬프",
+    "err.empty": "타임스탬프 또는 날짜를 입력하세요",
+    "kind.unix-s": "Unix seconds",
+    "kind.unix-ms": "Unix ms",
+    "kind.unix-us": "Unix μs",
+    "kind.datetime": "DateTime",
+    "kind.slack": "Slack syntax",
+    "kind.invalid": "Invalid",
+  },
+  en: {
+    "in.panel": "Input",
+    "in.clear": "Clear",
+    "in.ph": "Enter Unix timestamp or date / time…",
+    "in.ph2": "e.g. 1718071200 · 1718071200.123 · 2026-06-11T15:00:00\nor <!date^...> Slack syntax",
+    "out.panel": "Output",
+    "row.utc": "UTC",
+    "row.local": "Local",
+    "row.readable": "Readable",
+    "row.relative": "Relative",
+    "row.unix": "Unix (seconds)",
+    "row.slack": "Slack syntax",
+    "now.label": "Current Timestamp",
+    "err.empty": "Enter a timestamp or date to convert",
+    "kind.unix-s": "Unix seconds",
+    "kind.unix-ms": "Unix ms",
+    "kind.unix-us": "Unix μs",
+    "kind.datetime": "DateTime",
+    "kind.slack": "Slack syntax",
+    "kind.invalid": "Invalid",
+  },
+};
 
 export default function SlackTimestampConverter() {
-  const t = useT(UI);
+  const t = useT(DICT);
 
   const [input, setInput] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);

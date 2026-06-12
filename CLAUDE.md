@@ -338,12 +338,16 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **다국어 = URL 기반**: KO는 루트(`/json-formatter`), EN은 `/en/json-formatter`.
   각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
   (localStorage 토글 아님)
-- **사이트 전체 텍스트 단일 출처**: `app/lib/content.ts` 한 파일에서 모든 텍스트(KO·EN)를 관리.
-  ① `COMMON`(전역 공통 UI — i18n `t()`의 fallback) ② `HUB`(+`ui` 마이크로카피) ③ `CATS`(카테고리 라벨)
-  ④ `TOOLS`(도구별 — 뱃지 `themeLabel` / h1 `name` / 리드 `description` / `steps` / **`faq`** / 컨트롤 `ui` /
-  허브 카드 `card` / `keywords` / `title`). 화면 영역과 필드가 1:1 매핑.
-  → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **텍스트 수정은 이 파일만 고치면 됨.**
+- **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
+  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATS`(카테고리 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
+  ⑤ `TOOLS` — 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
+  `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks)/
+  `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
+  → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
   도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
+- **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
+  전역 공통(헤더 네비·푸터·복사/지우기 버튼)은 `lib/i18n.tsx`의 `COMMON`,
+  도구별 컨트롤 라벨은 각 컴포넌트의 로컬 `DICT`.
 - **FAQ**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`, `.kf-faq` 아코디언) 렌더.
   콘텐츠는 `content.ts`의 `faq` 필드에서, `toolJsonLd()`가 같은 데이터로 `FAQPage` JSON-LD도 함께 생성.
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
@@ -376,10 +380,10 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 0. **제품 방향(2026-06-12)과 현행 코드의 갭 해소**
    - [ ] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ 301 리다이렉트, sitemap 갱신)
-   - [ ] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
-   - [ ] 도구 페이지에 **Related Tools** 섹션 추가 (레지스트리 `relatedTools` 필드)
-   - [ ] AEO용 **What is / Who for / How / Why** 명시 문단(How It Works 확장) — 현재는 description+steps+FAQ로 부분 충족
-   - [ ] `og.subtitle` 필드 + (향후) 동적 OG 이미지 생성
+   - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
+   - [ ] 도구 페이지에 **Related Tools** 섹션 추가 — 레지스트리 `relatedTools` 필드는 완료, 섹션 UI 미구현
+   - [ ] AEO용 **What is / Who for / How / Why** 명시 문단(How It Works 확장) — 현재는 description+howItWorks+FAQ로 부분 충족
+   - [x] `og.subtitle` 필드 (OG description에 반영) — 동적 OG 이미지 생성은 미구현
    - [ ] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
      (현재 "개발자·디자이너를 위한…" — content.ts `HUB`/`COMMON`만 고치면 됨)
    - [ ] 카테고리(dev/design/text) 노출을 타겟 태그 기반 필터로 점진 전환 검토
@@ -389,8 +393,8 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
    - 콘텐츠 분량이 승인 기준에 빠듯할 수 있음 → 도구를 더 채운 뒤 신청하는 편이 유리
 2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
    - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
-   - `content.ts` 의 해당 항목에 `title/description/steps/faq/ui` 추가 + `ready: true` 전환
-   - 컴포넌트 끝에 `<Faq slug="..." />` 추가 (FAQ 콘텐츠는 content.ts에서)
+   - `content.ts` 레지스트리 항목에 `seo(title·description)/content(description·howItWorks)/faq/og` 채우고 `ready: true` 전환
+   - 컨트롤 마이크로카피는 컴포넌트 로컬 `DICT`로, 컴포넌트 끝에 `<Faq slug="..." />` 추가
    - 테마: dev=IDE / design=Canvas / text=Clean
 3. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
 4. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)
