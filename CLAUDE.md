@@ -6,6 +6,107 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 
 ---
 
+## 제품 방향 & 아키텍처 (2026-06-12 확정)
+
+> 아래 방향이 기존 "개발자 도구 사이트" 컨셉을 대체한다. 다른 섹션과 충돌 시 이 섹션이 우선.
+
+### Overview
+**Kitfolio는 개발자 도구 사이트가 아니다.**
+초기에 추가된 Character Counter, CSS Gradient Generator, Slack Timestamp Converter 등은
+브랜드 방향 확정 전 MVP 단계에서 생성된 초기 도구들이다.
+
+### 브랜드 포지셔닝
+- **Brand Message**: *Small tools for modern knowledge workers*
+- **Supporting Message (SEO/AEO)**: *Work calculators, generators and utilities*
+- **제품 정의**: 모던 지식 노동자를 위한 브라우저 기반 마이크로 SaaS 도구 모음.
+  업무·일상 직업 활동에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·포매터·유틸리티.
+  전부 브라우저에서 실행 — **No login / No installation / No server-side processing.**
+
+### 타겟 유저
+PM · Designer · Developer · Job Seeker · Office Worker · Small Business Owner
+
+**중요**: 타겟은 URL 카테고리가 **아니다**. 필터링·디스커버리·분석용 **내부 메타데이터 태그**로만 사용.
+```ts
+{ slug: "flex-work-calculator", targets: ["office-worker"] }
+```
+
+### 사이트 아키텍처
+- **URL은 플랫 구조 유지. 카테고리 기반 URL 도입 금지.** 모든 도구는 1뎁스 라우트.
+  예: `/character-counter` `/slack-timestamp-converter` `/flex-work-calculator`
+  `/meeting-cost-calculator` `/prd-generator` `/resume-bullet-generator`
+- **홈페이지는 SEO 랜딩이 아니다.** 홈 = Tool Directory · Discovery Hub · 검색 진입점
+  (검색 / 브라우즈 / 필터 / 디스커버리). **실제 SEO 랜딩은 각 도구 페이지.**
+
+### SEO 전략
+- 각 도구 페이지가 구체적인 검색 의도 1개를 타겟. 사용자는 "Kitfolio"를 검색하지 않는다 —
+  "Character Counter", "Flex Work Calculator", "Resume Bullet Generator"를 검색한다.
+- **도구 페이지 필수 구성**: ① Tool Title ② Tool Description ③ 동작하는 도구 UI
+  ④ How It Works ⑤ FAQ ⑥ Related Tools ⑦ 구조화 메타데이터 ⑧ 개별 OG 메타데이터
+- 도구 자체가 본질적 가치. SEO 콘텐츠는 발견성(discoverability) 보조.
+
+### AEO 전략
+AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 도구 페이지는 다음 질문에 답해야 한다:
+- What is this tool? / Who is it for? / How does it work? / Why would someone use it?
+- 예: "What is a Slack Timestamp Converter?" → "A Slack Timestamp Converter converts Unix
+  timestamps used by Slack into human-readable dates and times."
+- 이 설명은 **본문 콘텐츠와 구조화 데이터 양쪽에** 보여야 한다.
+
+### 콘텐츠 전략
+- **Kitfolio는 콘텐츠 플랫폼이 아니다. CMS 불필요.** 텍스트는 SEO·AEO·메타데이터·도구 설명 지원용.
+- 목표는 콘텐츠 발행이 아니라 **도구를 이해 가능하고 발견 가능하게** 만드는 것.
+- **Single Source of Truth**: 모든 텍스트는 중앙 레지스트리에서 관리. 페이지에 카피 하드코딩 금지.
+  (현재 구현: `app/lib/content.ts`)
+- **다국어**: 모든 도구는 ko·en 양 언어 세트 필수 정의.
+
+### 도구 레지스트리 구조 (권장 스키마)
+각 도구는 레지스트리 항목 하나에 완결 정의:
+```ts
+{
+  slug: "slack-timestamp-converter",
+  layout: "ide",                       // 레이아웃 타입
+  targets: ["pm", "developer"],        // 내부 타겟 태그
+  seo:     { ko: { title, description, keywords }, en: {...} },
+  content: { ko: { title, description, howItWorks, relatedTools }, en: {...} },
+  faq:     { ko: [{ question, answer }], en: [...] },
+  og:      { ko: { title, subtitle }, en: {...} },
+}
+```
+
+### FAQ 정책
+- **모든 도구 페이지에 FAQ 필수.** 목적: SEO · AEO · 롱테일 검색 유입 · AI 답변 노출.
+- FAQ 콘텐츠는 중앙 레지스트리에서만 관리. **페이지 컴포넌트에 하드코딩 금지.**
+
+### 메타데이터 철학
+- 콘텐츠를 **아티클이 아니라 메타데이터로** 취급한다.
+- ❌ Tool + Content = Content Platform → ⭕ **Tool + Metadata = Searchable Tool**
+- 도구가 제품이고, 텍스트는 발견을 돕는다.
+
+### OG 전략
+- 모든 도구는 **자기만의 OG 메타데이터**를 가진다. 전 도구 공용 OG 타이틀 금지.
+- OG는 레지스트리에서 생성. 향후 동적 OG 이미지 생성도 이 값을 소비.
+
+### 디자인 시스템 — 레이아웃 3종 (추가 금지)
+| 타입 | 이름 | 패턴 | 예 |
+|------|------|------|-----|
+| **A** | Card | Input → Result | Character Counter, Flex Work Calculator, Meeting Cost Calculator, Salary Calculator |
+| **B** | IDE | Input → Transform → Output | Slack Timestamp Converter, Prompt Formatter, Markdown Formatter, JSON Formatter |
+| **C** | Full Width / Canvas | Controls → Live Visual Output | Gradient Generator, Banner Generator, OG Generator |
+
+(현행 테마 명칭 매핑: Clean SaaS = A · IDE/Editor = B · Canvas = C)
+
+### 신규 도구 평가 기준
+1. 내가 직접 쓸 도구인가?  2. 반복되는 실제 문제가 존재하는가?  3. 검색 수요가 있는가?
+4. 완전히 브라우저에서 실행 가능한가?  5. 하루 안에 구현 가능한가?
+→ generic 유틸리티보다 **실용적인 도구** 우선.
+
+### 장기 비전
+Kitfolio = **a searchable library of browser-based micro SaaS tools for modern knowledge workers.**
+해자(moat)는 단일 도구가 아니라, 강한 검색 의도 + 무마찰 접근으로 반복 업무 문제를 푸는
+**커지는 실용 도구 컬렉션**이다. 성공 요인: 유용한 도구 · 강한 검색 의도 · 빠른 접근 ·
+일관된 UX · 확장 가능한 메타데이터 관리 — 콘텐츠 생산이 아님.
+
+---
+
 ## 기술 스택
 - Next.js (App Router)
 - Tailwind CSS v4
@@ -272,6 +373,16 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 ---
 
 ## 다음 세션 TODO
+
+0. **제품 방향(2026-06-12)과 현행 코드의 갭 해소**
+   - [ ] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ 301 리다이렉트, sitemap 갱신)
+   - [ ] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
+   - [ ] 도구 페이지에 **Related Tools** 섹션 추가 (레지스트리 `relatedTools` 필드)
+   - [ ] AEO용 **What is / Who for / How / Why** 명시 문단(How It Works 확장) — 현재는 description+steps+FAQ로 부분 충족
+   - [ ] `og.subtitle` 필드 + (향후) 동적 OG 이미지 생성
+   - [ ] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
+     (현재 "개발자·디자이너를 위한…" — content.ts `HUB`/`COMMON`만 고치면 됨)
+   - [ ] 카테고리(dev/design/text) 노출을 타겟 태그 기반 필터로 점진 전환 검토
 
 1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
    - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단

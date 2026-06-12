@@ -252,42 +252,96 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
-   Shared FAQ section — 모든 도구 상세 페이지 공통
-   (인풋=화이트 카드 규칙을 따르는 아코디언)
+   Shared FAQ section — 디자인 핸드오프(faq.html) 기준
+   아코디언: 한 번에 하나만 열림 · 1번 기본 오픈 · 높이 애니메이션
    ============================================================ */
-.kf-faq { margin-top: 56px; }
-.kf-faq h2 {
-  margin: 0 0 16px; font-size: 20px; font-weight: 700;
-  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
+.kf-faq { max-width: 760px; margin: 64px auto 0; }
+
+/* section intro */
+.kf-faq-intro { text-align: center; padding-bottom: 28px; }
+.kf-faq-intro .eyebrow {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-inter); font-size: 12px; font-weight: 600;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 16px;
 }
-.kf-faq-list { display: grid; gap: 10px; max-width: 860px; }
-.kf-faq-item {
-  background: #fff; border: 1px solid var(--color-blue-gray-200);
-  border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+.kf-faq-intro h2 { margin: 0 0 10px; font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--color-blue-gray-950); }
+.kf-faq-intro p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--color-blue-gray-500); }
+
+/* accordion card (1개의 화이트 카드 안에 항목들) */
+.kf-faq-card {
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
-.kf-faq-item summary {
-  list-style: none; cursor: pointer;
-  display: flex; align-items: center; gap: 12px;
-  padding: 15px 18px;
-  font-size: 14.5px; font-weight: 600; color: var(--color-blue-gray-800);
+.kf-faq-item { border-top: 1px solid var(--color-blue-gray-100); }
+.kf-faq-item:first-child { border-top: none; }
+
+/* question row (button) */
+.kf-faq-q {
+  width: 100%;
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 22px;
+  text-align: left;
+  background: transparent;
+  transition: background .14s ease;
 }
-.kf-faq-item summary::-webkit-details-marker { display: none; }
-.kf-faq-item summary .q { flex: 1; }
-.kf-faq-item summary svg {
-  width: 16px; height: 16px; flex-shrink: 0;
-  color: var(--color-blue-gray-400); transition: transform .15s ease;
+.kf-faq-q:hover { background: var(--color-blue-gray-50); }
+.kf-faq-item.open > .kf-faq-q { background: transparent; }
+.kf-faq-q-text {
+  flex: 1;
+  font-size: 16px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--color-blue-gray-900);
+  line-height: 1.45; text-wrap: pretty;
 }
-.kf-faq-item[open] summary svg { transform: rotate(180deg); }
-.kf-faq-item[open] summary { color: var(--color-blue-primary-700); }
-.kf-faq-item p {
-  margin: 0; padding: 0 18px 16px;
-  font-size: 14px; line-height: 1.7; color: var(--color-blue-gray-600);
+.kf-faq-item.open .kf-faq-q-text { color: var(--color-blue-primary-700); }
+
+/* chevron icon (열리면 프라이머리 배경 + 180° 회전) */
+.kf-faq-icon {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--color-blue-gray-50); color: var(--color-blue-gray-500);
+  transition: background .18s ease, color .18s ease, transform .28s cubic-bezier(.4,0,.2,1);
+}
+.kf-faq-q:hover .kf-faq-icon { background: var(--color-blue-gray-100); }
+.kf-faq-item.open .kf-faq-icon {
+  background: var(--color-blue-primary-700); color: #fff;
+  transform: rotate(180deg);
+}
+.kf-faq-icon svg { width: 15px; height: 15px; }
+
+/* answer — animated height via grid-rows trick */
+.kf-faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .3s cubic-bezier(.4,0,.2,1);
+}
+.kf-faq-item.open .kf-faq-a { grid-template-rows: 1fr; }
+.kf-faq-a-inner { overflow: hidden; }
+.kf-faq-a-text {
+  margin: 0;
+  padding: 0 22px 22px;
+  font-size: 14.5px; line-height: 1.7; color: var(--color-blue-gray-600);
   text-wrap: pretty;
 }
 
-@media (max-width: 640px) {
-  .kf-faq { margin-top: 40px; }
-  .kf-faq h2 { font-size: 18px; }
+/* contact footer under the accordion */
+.kf-faq-more {
+  margin: 22px 0 0; text-align: center;
+  font-size: 14px; color: var(--color-blue-gray-500);
+}
+.kf-faq-more a { color: var(--color-blue-primary-700); font-weight: 600; }
+.kf-faq-more a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .kf-faq { margin-top: 44px; }
+  .kf-faq-intro { padding-bottom: 22px; }
+  .kf-faq-intro h2 { font-size: 22px; }
+  .kf-faq-q { padding: 17px 18px; gap: 12px; }
+  .kf-faq-q-text { font-size: 15px; }
+  .kf-faq-a-text { padding: 0 18px 18px; font-size: 14px; }
 }
 
 /* utility */
