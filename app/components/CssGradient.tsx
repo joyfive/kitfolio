@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import SiteHeader from "./SiteHeader";
-import { useBodyTheme } from "./useBodyTheme";
-import { getTool } from "../lib/content";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import PageHead from "./PageHead";
+import { useT, type Dict } from "../lib/i18n";
 
 const DICT: Dict = {
   ko: {
@@ -42,10 +40,7 @@ const PALETTES = [
 const MID_COLORS = ["#6486ef", "#3a70eb", "#a7b6f6", "#18377c", "#c4cdf9"];
 
 export default function CssGradient() {
-  useBodyTheme("canvas");
-  const { lang } = useLang();
   const t = useT(DICT);
-  const c = getTool("css-gradient");
 
   const [type, setType] = useState<GType>("linear");
   const [angle, setAngle] = useState(135);
@@ -208,33 +203,10 @@ export default function CssGradient() {
 
   return (
     <>
-      <SiteHeader active="design" />
-      <main className="tool-page">
-        <div className="kf-pagehead">
-          <span className="ph-eyebrow">
-            <span>{t("nav.design")}</span>
-            <span className="ph-sep">·</span>
-            <span className="ph-theme">{c.themeLabel}</span>
-          </span>
-          <h1>
-            {c.name.en} <span className="ph-ko">{c.name.ko}</span>
-          </h1>
-          <p className="ph-lead">{c.description![lang]}</p>
-          <div className="ph-how">
-            {c.steps![lang].map((s, i) => (
-              <span className="ph-step" key={i}>
-                <b>{i + 1}</b>
-                <span>{s}</span>
-              </span>
-            ))}
-          </div>
-        </div>
+      <PageHead slug="css-gradient" />
 
-        <div className="cv-work">
-          <div className="cv-canvas">
-            <div className="preview" style={{ background: g }} />
-          </div>
-
+      <div className="cv-work">
+          {/* 인풋(컨트롤) — 좌측 화이트 패널 */}
           <div className="cv-panel">
             <div className="panel-inner">
               {/* type */}
@@ -461,8 +433,12 @@ export default function CssGradient() {
               </div>
             </div>
           </div>
-        </div>
-      </main>
+
+          {/* 출력(프리뷰) — 우측 그레이 영역 */}
+          <div className="cv-canvas">
+            <div className="preview" style={{ background: g }} />
+          </div>
+      </div>
     </>
   );
 }
