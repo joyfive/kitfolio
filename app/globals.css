@@ -232,11 +232,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin: 0 0 10px; font-size: 30px; line-height: 1.15; font-weight: 700;
   letter-spacing: -0.025em; color: var(--color-blue-gray-950);
   display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  width: 100%; white-space: pre-line;
 }
 .kf-pagehead h1 .ph-ko { font-size: 15px; font-weight: 500; color: var(--color-blue-gray-400); letter-spacing: -0.01em; }
 .kf-pagehead .ph-lead {
   margin: 0; font-size: 15px; line-height: 1.65; color: var(--color-blue-gray-600);
-  max-width: 70ch; text-wrap: pretty;
+  width: 100%; max-width: 100%; text-wrap: pretty; white-space: pre-line;
 }
 .kf-pagehead .ph-how { margin: 16px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; }
 .kf-pagehead .ph-step { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--color-blue-gray-500); }
