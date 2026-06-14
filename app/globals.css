@@ -494,6 +494,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: var(--color-blue-gray-50); border: 1px solid var(--color-blue-gray-100);
 }
 .tool.is-soon .theme-tag { background: #fff; }
+/* 카드 타겟(직군) 태그 — 여러 개 가능 */
+.tool-tags { display: flex; flex-wrap: wrap; gap: 5px; min-width: 0; }
+.target-tag {
+  font-family: var(--font-inter); font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em;
+  padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+}
 .tool-go { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-inter); font-size: 12.5px; font-weight: 600; color: var(--color-blue-primary-700); opacity: 0; transform: translateX(-4px); transition: opacity .14s ease, transform .14s ease; }
 .tool.is-ready:hover .tool-go { opacity: 1; transform: translateX(0); }
 .tool-go svg { width: 14px; height: 14px; }
@@ -528,6 +535,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
     transition: background .12s ease, color .12s ease, border-color .12s ease; cursor: pointer;
   }
   .hub-mcats-track button.is-active { background: var(--color-blue-primary-700); color: #fff; border-color: var(--color-blue-primary-700); }
+
+  /* 모바일에선 스티키 칩 바가 대신하므로 히어로 칩은 숨김 */
+  .hub-targets { display: none; }
 
   /* hero: compact, full-width search */
   .hub-hero { padding: 26px 0 20px; }

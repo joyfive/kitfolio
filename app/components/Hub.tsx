@@ -4,9 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import {
-  CATS,
   HUB,
-  LAYOUT_LABEL,
   TARGET_LABELS,
   TOOLS,
   localizedHref,
@@ -14,26 +12,31 @@ import {
   type Tool,
 } from "../lib/content";
 
-// 허브 화면 UI 마이크로카피(상태 라벨·인풋 플레이스홀더)만 로컬 dict.
-// 히어로 카피·카드 설명·타겟 라벨·검색 색인은 content.ts 레지스트리.
+// 허브 화면 UI 마이크로카피만 로컬 dict. 카피·라벨·검색 색인은 content.ts.
 const DICT: Dict = {
   ko: {
-    soon: "준비 중",
     open: "열기",
     empty: "검색 결과가 없습니다.",
     searchPlaceholder: "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)",
-    allTargets: "전체 직군",
+    allTargets: "전체",
   },
   en: {
-    soon: "Soon",
     open: "Open",
     empty: "No tools match your search.",
     searchPlaceholder: "What do you need? (e.g. JSON, gradient, word count)",
-    allTargets: "All roles",
+    allTargets: "All",
   },
 };
 
-const TARGET_TAGS = Object.keys(TARGET_LABELS) as TargetTag[];
+// 허브 분류 = 타겟(직군). 칩/카드 태그가 이 순서를 공유.
+const TARGET_ORDER: TargetTag[] = [
+  "pm",
+  "designer",
+  "developer",
+  "job-seeker",
+  "office-worker",
+  "small-business-owner",
+];
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -62,11 +65,8 @@ export default function Hub() {
   const hero = HUB.hero[lang];
 
   const [query, setQuery] = useState("");
-  const [activeCat, setActiveCat] = useState<"all" | "dev" | "design" | "text">(
-    "all",
-  );
+  const [activeTarget, setActiveTarget] = useState<"all" | TargetTag>("all");
   const [onlyFav, setOnlyFav] = useState(false);
-  const [target, setTarget] = useState<TargetTag | null>(null);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -77,10 +77,10 @@ export default function Hub() {
     }
   }, []);
 
-  // 푸터 등에서 /?target=pm 로 진입하면 해당 직군 필터를 적용
+  // 푸터 등에서 /?target=pm 로 진입하면 해당 직군 칩을 선택
   useEffect(() => {
     const p = new URLSearchParams(window.location.search).get("target");
-    if (p && p in TARGET_LABELS) setTarget(p as TargetTag);
+    if (p && p in TARGET_LABELS) setActiveTarget(p as TargetTag);
   }, []);
 
   function toggleFav(id: string) {
@@ -93,61 +93,64 @@ export default function Hub() {
     });
   }
 
-  function matches(tool: Tool) {
+  const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const hay = [
-      tool.name.en,
-      tool.name.ko,
-      tool.content.ko.card,
-      tool.content.en.card,
-      ...tool.seo.ko.keywords,
-      ...tool.seo.en.keywords,
-    ]
-      .join(" ")
-      .toLowerCase();
-    const matchQ = !q || hay.includes(q);
-    const matchFav = !onlyFav || favs.has(tool.slug);
-    const matchCat = activeCat === "all" || tool.cat === activeCat;
-    const matchTarget = !target || tool.targets.includes(target);
-    return matchQ && matchFav && matchCat && matchTarget;
-  }
-
-  const visibleByCat = useMemo(() => {
-    const map: Record<string, Tool[]> = {};
-    CATS.forEach((cat) => {
-      map[cat.id] = TOOLS.filter((x) => x.cat === cat.id && matches(x));
+    return TOOLS.filter((tool) => {
+      const hay = [
+        tool.name.en,
+        tool.name.ko,
+        tool.content.ko.card,
+        tool.content.en.card,
+        ...tool.seo.ko.keywords,
+        ...tool.seo.en.keywords,
+      ]
+        .join(" ")
+        .toLowerCase();
+      const matchQ = !q || hay.includes(q);
+      const matchFav = !onlyFav || favs.has(tool.slug);
+      const matchTarget =
+        activeTarget === "all" || tool.targets.includes(activeTarget);
+      return matchQ && matchFav && matchTarget;
     });
-    return map;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, activeCat, onlyFav, favs, target]);
+  }, [query, onlyFav, favs, activeTarget]);
 
-  const totalVisible = Object.values(visibleByCat).reduce(
-    (n, arr) => n + arr.length,
-    0,
-  );
-
-  const navItems: { cat: "all" | "dev" | "design" | "text"; key: string }[] = [
-    { cat: "all", key: "nav.all" },
-    { cat: "dev", key: "nav.dev" },
-    { cat: "design", key: "nav.design" },
-    { cat: "text", key: "nav.text" },
+  const chips: { key: "all" | TargetTag; label: string }[] = [
+    { key: "all", label: t("allTargets") },
+    ...TARGET_ORDER.map((tag) => ({ key: tag, label: TARGET_LABELS[tag][lang] })),
   ];
+
+  const ChipBar = ({ className }: { className: string }) => (
+    <div className={className} aria-label="Filter by role">
+      {chips.map((c) => (
+        <button
+          key={c.key}
+          className={activeTarget === c.key ? "is-active" : ""}
+          onClick={() => {
+            setActiveTarget(c.key);
+            setOnlyFav(false);
+          }}
+        >
+          {c.label}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <>
-      {/* Mobile category chip bar — sticky, ≤640px only */}
-      <div className="hub-mcats" aria-label="Categories">
+      {/* 모바일 스티키 칩 바 (≤640px) */}
+      <div className="hub-mcats" aria-label="Roles">
         <div className="hub-mcats-track">
-          {navItems.map((it) => (
+          {chips.map((c) => (
             <button
-              key={it.cat}
-              className={activeCat === it.cat ? "is-active" : ""}
+              key={c.key}
+              className={activeTarget === c.key ? "is-active" : ""}
               onClick={() => {
-                setActiveCat(it.cat);
+                setActiveTarget(c.key);
                 setOnlyFav(false);
               }}
             >
-              {t(it.key)}
+              {c.label}
             </button>
           ))}
         </div>
@@ -189,97 +192,57 @@ export default function Hub() {
             <span>{t("header.favorites")}</span>
           </button>
           <span className="hub-stat">
-            <b>{TOOLS.length}</b>
+            <b>{visible.length}</b>
             {hero.stat}
           </span>
         </div>
 
-        {/* 타겟(직군) 필터 — 내부 메타데이터 태그 기반, URL 아님 */}
-        <div className="hub-targets" aria-label="Filter by role">
-          <button
-            className={target === null ? "is-active" : ""}
-            onClick={() => setTarget(null)}
-          >
-            {t("allTargets")}
-          </button>
-          {TARGET_TAGS.map((tag) => (
-            <button
-              key={tag}
-              className={target === tag ? "is-active" : ""}
-              onClick={() => setTarget((cur) => (cur === tag ? null : tag))}
-            >
-              {TARGET_LABELS[tag][lang]}
-            </button>
-          ))}
-        </div>
+        {/* 데스크톱 직군 칩 — 선택 시 해당 타겟 도구만 필터링 */}
+        <ChipBar className="hub-targets" />
       </section>
 
-      <div id="catalog">
-        {CATS.map((cat) => {
-          const items = visibleByCat[cat.id];
-          if (items.length === 0) return null;
-          const label = cat.label[lang];
-          return (
-            <section className="cat" id={cat.id} key={cat.id}>
-              <div className="cat-head">
-                <h2>{label.small}</h2>
-                <span className="cat-ko">{label.big}</span>
-                <span className="cat-count">{items.length}</span>
-              </div>
-              <div className="cat-grid">
-                {items.map((tool) => (
-                  <ToolCard
-                    key={tool.slug}
-                    tool={tool}
-                    desc={tool.content[lang].card}
-                    href={
-                      tool.ready
-                        ? localizedHref(lang, "/" + tool.slug)
-                        : undefined
-                    }
-                    fav={favs.has(tool.slug)}
-                    onFav={() => toggleFav(tool.slug)}
-                    openLabel={t("open")}
-                    soonLabel={t("soon")}
-                  />
-                ))}
-              </div>
-            </section>
-          );
-        })}
+      <div className="cat-grid" id="catalog">
+        {visible.map((tool) => (
+          <ToolCard
+            key={tool.slug}
+            tool={tool}
+            lang={lang}
+            href={localizedHref(lang, "/" + tool.slug)}
+            fav={favs.has(tool.slug)}
+            onFav={() => toggleFav(tool.slug)}
+            openLabel={t("open")}
+          />
+        ))}
       </div>
 
-      {totalVisible === 0 && <div className="hub-empty">{t("empty")}</div>}
+      {visible.length === 0 && <div className="hub-empty">{t("empty")}</div>}
     </>
   );
 }
 
 function ToolCard({
   tool,
-  desc,
+  lang,
   href,
   fav,
   onFav,
   openLabel,
-  soonLabel,
 }: {
   tool: Tool;
-  desc: string;
-  href?: string;
+  lang: "ko" | "en";
+  href: string;
   fav: boolean;
   onFav: () => void;
   openLabel: string;
-  soonLabel: string;
 }) {
-  const inner = (
-    <>
+  return (
+    <Link className="tool is-ready" href={href}>
       <div className="tool-top">
         <span className={"tool-ico " + (tool.icoClass || "")}>{tool.ico}</span>
         <button
           className={"tool-fav" + (fav ? " is-on" : "")}
           title="즐겨찾기"
           aria-label="Favorite"
-          disabled={!tool.ready}
           onClick={(e) => {
             e.preventDefault();
             onFav();
@@ -292,34 +255,27 @@ function ToolCard({
         <span className="tool-en">{tool.name.en}</span>
         <span className="tool-ko">{tool.name.ko}</span>
       </div>
-      <p className="tool-desc">{desc}</p>
+      <p className="tool-desc">{tool.content[lang].card}</p>
       <div className="tool-foot">
-        <span className="theme-tag">{LAYOUT_LABEL[tool.layout]}</span>
-        {tool.ready ? (
-          <span className="tool-go">
-            <span>{openLabel}</span>
-            <svg
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-            >
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
-          </span>
-        ) : (
-          <span className="soon-tag">{soonLabel}</span>
-        )}
+        <span className="tool-tags">
+          {tool.targets.map((tag) => (
+            <span className="target-tag" key={tag}>
+              {TARGET_LABELS[tag][lang]}
+            </span>
+          ))}
+        </span>
+        <span className="tool-go">
+          <span>{openLabel}</span>
+          <svg
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+          >
+            <path d="M3 8h10M9 4l4 4-4 4" />
+          </svg>
+        </span>
       </div>
-    </>
+    </Link>
   );
-
-  if (href) {
-    return (
-      <Link className="tool is-ready" href={href}>
-        {inner}
-      </Link>
-    );
-  }
-  return <div className="tool is-soon">{inner}</div>;
 }

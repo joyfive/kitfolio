@@ -131,7 +131,7 @@ export const HUB = {
       h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
       subtitle:
         "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티 — 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
-      stat: "개 도구 · 3개 카테고리",
+      stat: "개 도구",
     },
     en: {
       eyebrow: "No install · No sign-up · Right in your browser",
@@ -142,7 +142,7 @@ export const HUB = {
       },
       subtitle:
         "Browser-based micro tools for modern knowledge workers — work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
-      stat: " tools · 3 categories",
+      stat: " tools",
     },
   },
 };
@@ -252,7 +252,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "IDE / Editor",
     name: { ko: "JSON 포매터", en: "JSON Formatter" },
-    relatedTools: ["slack-timestamp-converter", "base64", "regex-tester"],
+    relatedTools: ["slack-timestamp-converter", "tailwind-palette-generator", "character-counter"],
     seo: {
       ko: {
         title: "JSON 포매터 · 검증기",
@@ -355,60 +355,6 @@ export const TOOLS: Tool[] = [
     },
   },
   {
-    slug: "base64",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: "b64",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "Base64 인코더·디코더", en: "Base64 Encoder / Decoder" },
-    seo: {
-      ko: { keywords: ["Base64 인코딩", "Base64 디코더", "Base64 변환"] },
-      en: { keywords: ["base64 encode", "base64 decode", "base64 converter"] },
-    },
-    content: {
-      ko: { card: "텍스트·파일을 Base64로 인코딩하거나 디코딩. 완전 클라이언트 사이드 처리." },
-      en: { card: "Encode or decode text and files to Base64. Fully client-side." },
-    },
-  },
-  {
-    slug: "url-encoder",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: "%",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "URL 인코더·디코더", en: "URL Encoder / Decoder" },
-    seo: {
-      ko: { keywords: ["URL 인코딩", "퍼센트 인코딩", "URL 디코더"] },
-      en: { keywords: ["url encode", "percent encoding", "url decoder"] },
-    },
-    content: {
-      ko: { card: "URL 특수문자를 퍼센트 인코딩으로 변환하거나 원래 문자열로 복원." },
-      en: { card: "Percent-encode URL special characters or restore the original string." },
-    },
-  },
-  {
-    slug: "timestamp",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: "Ts",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "타임스탬프 변환기", en: "Unix Timestamp Converter" },
-    seo: {
-      ko: { keywords: ["유닉스 타임스탬프", "타임스탬프 변환", "epoch 변환"] },
-      en: { keywords: ["unix timestamp", "epoch converter", "timestamp to date"] },
-    },
-    content: {
-      ko: { card: "Unix timestamp ↔ 사람이 읽는 날짜·시간 양방향 변환. 현재 시각 실시간 표시." },
-      en: { card: "Convert Unix timestamps to and from human dates. Live current time." },
-    },
-  },
-  {
     slug: "slack-timestamp-converter",
     layout: "ide",
     cat: "dev",
@@ -417,7 +363,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
-    relatedTools: ["timestamp", "cron-generator", "json-formatter"],
+    relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
     seo: {
       ko: {
         title: "슬랙 타임스탬프 변환기 — Unix 시간·날짜 변환기",
@@ -513,60 +459,6 @@ export const TOOLS: Tool[] = [
       },
     },
   },
-  {
-    slug: "jwt-decoder",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: "JWT",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "JWT 디코더", en: "JWT Decoder" },
-    seo: {
-      ko: { keywords: ["JWT 디코더", "JWT 파싱", "토큰 디코딩"] },
-      en: { keywords: ["jwt decoder", "jwt parser", "decode token"] },
-    },
-    content: {
-      ko: { card: "JWT 토큰을 header·payload·signature로 분리 표시. 만료 여부 확인." },
-      en: { card: "Split a JWT into header, payload and signature. Checks expiry." },
-    },
-  },
-  {
-    slug: "regex-tester",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: ".*",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "정규식 테스터", en: "Regex Tester" },
-    seo: {
-      ko: { keywords: ["정규식 테스터", "정규표현식", "regex 매칭"] },
-      en: { keywords: ["regex tester", "regular expression", "regex match"] },
-    },
-    content: {
-      ko: { card: "정규식 패턴과 테스트 문자열의 매칭 결과를 실시간 하이라이트." },
-      en: { card: "Live-highlight regex matches against your test string." },
-    },
-  },
-  {
-    slug: "cron-generator",
-    layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
-    ico: "* *",
-    ready: false,
-    badge: "IDE / Editor",
-    name: { ko: "크론 표현식 생성기", en: "Cron Generator" },
-    seo: {
-      ko: { keywords: ["크론 표현식", "cron 생성기", "스케줄 표현식"] },
-      en: { keywords: ["cron generator", "cron expression", "crontab"] },
-    },
-    content: {
-      ko: { card: "크론 스케줄을 UI로 설정하면 표현식 자동 생성. 다음 실행 시각 미리보기." },
-      en: { card: "Build cron schedules visually. Previews the next run times." },
-    },
-  },
 
   // ── Design ─────────────────────────────
   {
@@ -579,7 +471,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Canvas",
     name: { ko: "그라디언트 생성기", en: "CSS Gradient" },
-    relatedTools: ["color-converter", "aspect-ratio", "character-counter"],
+    relatedTools: ["tailwind-palette-generator", "character-counter", "json-formatter"],
     seo: {
       ko: {
         title: "CSS 그라디언트 생성기",
@@ -686,7 +578,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Canvas",
     name: { ko: "Tailwind 팔레트 생성기", en: "Tailwind Palette" },
-    relatedTools: ["css-gradient", "color-converter", "character-counter"],
+    relatedTools: ["css-gradient", "json-formatter", "character-counter"],
     seo: {
       ko: {
         title: "Tailwind 팔레트 생성기 — HEX 하나로 11단계 색상",
@@ -784,43 +676,6 @@ export const TOOLS: Tool[] = [
       },
     },
   },
-  {
-    slug: "color-converter",
-    layout: "canvas",
-    cat: "design",
-    targets: ["designer"],
-    ico: "",
-    icoClass: "ico-color",
-    ready: false,
-    badge: "Canvas",
-    name: { ko: "색상 변환기", en: "Color Converter" },
-    seo: {
-      ko: { keywords: ["색상 변환기", "HEX RGB 변환", "컬러 피커"] },
-      en: { keywords: ["color converter", "hex to rgb", "color picker"] },
-    },
-    content: {
-      ko: { card: "HEX·RGB·HSL·HSV 상호 변환. 컬러 피커 UI와 팔레트 저장 기능." },
-      en: { card: "Convert between HEX, RGB, HSL and HSV with a picker and saved palettes." },
-    },
-  },
-  {
-    slug: "aspect-ratio",
-    layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer"],
-    ico: "16:9",
-    ready: false,
-    badge: "Canvas",
-    name: { ko: "화면 비율 계산기", en: "Aspect Ratio Calculator" },
-    seo: {
-      ko: { keywords: ["화면 비율 계산기", "비율 계산", "aspect ratio"] },
-      en: { keywords: ["aspect ratio calculator", "ratio calculator", "resize ratio"] },
-    },
-    content: {
-      ko: { card: "가로·세로 입력 시 비율 산출 및 비율 유지 리사이즈 계산. 프리셋 제공." },
-      en: { card: "Compute ratios and aspect-locked resizes from width and height. Includes presets." },
-    },
-  },
 
   // ── Text ─────────────────────────────
   {
@@ -832,7 +687,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Clean SaaS",
     name: { ko: "글자 수·단어 수 카운터", en: "Character Counter" },
-    relatedTools: ["lorem-ipsum", "markdown-to-html", "css-gradient"],
+    relatedTools: ["json-formatter", "slack-timestamp-converter", "css-gradient"],
     seo: {
       ko: {
         title: "글자 수·단어 수 카운터",
@@ -928,60 +783,6 @@ export const TOOLS: Tool[] = [
         title: "Character & Word Counter",
         subtitle: "Live character, word and sentence counts with social limits",
       },
-    },
-  },
-  {
-    slug: "markdown-to-html",
-    layout: "card",
-    cat: "text",
-    targets: ["developer", "pm"],
-    ico: "M↓",
-    ready: false,
-    badge: "Clean SaaS",
-    name: { ko: "마크다운 → HTML", en: "Markdown to HTML" },
-    seo: {
-      ko: { keywords: ["마크다운 변환", "마크다운 HTML", "markdown 미리보기"] },
-      en: { keywords: ["markdown to html", "markdown converter", "markdown preview"] },
-    },
-    content: {
-      ko: { card: "마크다운을 실시간 HTML로 변환. 좌우 분할 미리보기 제공." },
-      en: { card: "Convert Markdown to HTML in real time with a side-by-side preview." },
-    },
-  },
-  {
-    slug: "lorem-ipsum",
-    layout: "card",
-    cat: "text",
-    targets: ["designer", "developer"],
-    ico: "¶¶",
-    ready: false,
-    badge: "Clean SaaS",
-    name: { ko: "로렘 입숨 생성기", en: "Lorem Ipsum Generator" },
-    seo: {
-      ko: { keywords: ["로렘 입숨", "더미 텍스트", "샘플 텍스트 생성"] },
-      en: { keywords: ["lorem ipsum generator", "dummy text", "placeholder text"] },
-    },
-    content: {
-      ko: { card: "단락·단어·문장 수를 지정해 더미 텍스트 생성. 한국어 옵션 포함." },
-      en: { card: "Generate dummy text by paragraphs, words or sentences. Korean option included." },
-    },
-  },
-  {
-    slug: "image-to-base64",
-    layout: "card",
-    cat: "text",
-    targets: ["developer"],
-    ico: "IMG",
-    ready: false,
-    badge: "Clean SaaS",
-    name: { ko: "이미지 → Base64", en: "Image to Base64" },
-    seo: {
-      ko: { keywords: ["이미지 Base64", "Data URL 변환", "이미지 인코딩"] },
-      en: { keywords: ["image to base64", "data url", "image encoder"] },
-    },
-    content: {
-      ko: { card: "이미지 파일을 Base64 Data URL로 변환. 복사 및 미리보기 제공." },
-      en: { card: "Convert image files to a Base64 Data URL with copy and preview." },
     },
   },
 ];
