@@ -152,31 +152,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: #fff;
   border-top: 0.5px solid var(--color-blue-gray-100);
 }
-/* 컴팩트 — 상단: 브랜드(좌) ↔ 링크(우) / 하단: 카피라이트(좌). 높이 최소화 */
+/* 컴팩트 — 상단 브랜드 / 1행: 태그라인(좌)↔타겟(우) / 2행: 카피(좌)↔외부링크(우) */
 .kf-footer-inner {
   max-width: var(--content-max); margin: 0 auto;
-  display: flex; flex-direction: column; gap: 16px; padding: 26px 24px 22px;
+  display: flex; flex-direction: column; gap: 12px; padding: 26px 24px 24px;
 }
-.foot-top {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 32px; flex-wrap: wrap;
-}
-.foot-brand-block { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
 .foot-brandrow { display: flex; align-items: center; gap: 8px; }
 .foot-brandrow .kf-logomark { width: 22px; height: 22px; border-radius: 6px; font-size: 12px; }
 .foot-brandrow b { font-family: var(--font-inter); font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
-/* 카피 — 더 크게 */
-.foot-tagline { margin: 1px 0 0; font-family: var(--font-inter); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
-/* 서브카피(개인정보) — 현재 폰트 유지 */
-.foot-privacy { margin: 3px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--color-blue-gray-400); }
 
-.foot-links-block { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.foot-row { display: flex; justify-content: space-between; align-items: center; gap: 14px 24px; flex-wrap: wrap; }
+/* 태그라인 — 크게 */
+.foot-tagline { margin: 0; font-family: var(--font-inter); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
+.foot-copy { margin: 0; font-size: 12.5px; color: var(--color-blue-gray-400); }
+
 .foot-targets, .foot-ext { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px 16px; }
 .foot-targets a, .foot-ext a { font-size: 13px; color: var(--color-blue-gray-600); transition: color .12s ease; }
 .foot-targets a:hover, .foot-ext a:hover { color: var(--color-blue-primary-700); }
 .foot-ext a { font-weight: 600; }
-
-.foot-copy { margin: 0; font-size: 12px; color: var(--color-blue-gray-400); text-align: left; }
 
 /* ---------- Shared buttons ---------- */
 .btn {
@@ -563,8 +556,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
   /* footer: 모바일 — 스택 + 좌측 정렬 */
   .kf-footer-inner { padding: 24px 16px 20px; }
-  .foot-top { flex-direction: column; gap: 18px; }
-  .foot-links-block { align-items: flex-start; }
+  .foot-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .foot-targets, .foot-ext { justify-content: flex-start; }
 }
 
