@@ -7,17 +7,17 @@
    ============================================================ */
 @theme {
   /* Base — Blue Gray */
-  --color-blue-gray-50:  #f0f1f3;
-  --color-blue-gray-100: #e4e5e9;
-  --color-blue-gray-200: #c6c9d1;
-  --color-blue-gray-300: #abb1bc;
-  --color-blue-gray-400: #8f96a5;
-  --color-blue-gray-500: #787f8c;
-  --color-blue-gray-600: #636873;
-  --color-blue-gray-700: #4c5059;
-  --color-blue-gray-800: #383b42;
-  --color-blue-gray-900: #23262b;
-  --color-blue-gray-950: #1b1d21;
+  --color-blue-gray-50:  #F2F5FF;
+  --color-blue-gray-100: #E5EAF6;
+  --color-blue-gray-200: #D4D9E5;
+  --color-blue-gray-300: #BCC0CC;
+  --color-blue-gray-400: #9B9FAB;
+  --color-blue-gray-500: #878B96;
+  --color-blue-gray-600: #737782;
+  --color-blue-gray-700: #61646F;
+  --color-blue-gray-800: #50535E;
+  --color-blue-gray-900: #434650;
+  --color-blue-gray-950: #21242D;
 
   /* Point — Blue Primary */
   --color-blue-primary-50:  #f1f3fd;

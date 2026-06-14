@@ -34,7 +34,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#f0f1f3",
+          background: "#F2F5FF",
           fontFamily: "NotoSansKR",
         }}
       >
@@ -56,7 +56,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
           >
             K
           </div>
-          <div style={{ fontSize: 34, fontWeight: 700, color: "#23262b" }}>
+          <div style={{ fontSize: 34, fontWeight: 700, color: "#434650" }}>
             {SITE.name}
           </div>
         </div>
@@ -67,7 +67,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
             style={{
               fontSize: 68,
               fontWeight: 700,
-              color: "#1b1d21",
+              color: "#21242D",
               letterSpacing: "-2px",
               lineHeight: 1.15,
             }}
@@ -79,7 +79,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
               style={{
                 fontSize: 31,
                 fontWeight: 500,
-                color: "#636873",
+                color: "#737782",
                 lineHeight: 1.4,
               }}
             >
@@ -96,7 +96,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
             alignItems: "center",
           }}
         >
-          <div style={{ fontSize: 24, fontWeight: 500, color: "#8f96a5" }}>
+          <div style={{ fontSize: 24, fontWeight: 500, color: "#9B9FAB" }}>
             kitfolio.app
           </div>
           <div

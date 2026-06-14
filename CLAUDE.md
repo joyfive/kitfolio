@@ -195,17 +195,17 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 #### Base — Blue Gray
 ```css
 @theme {
-  --color-blue-gray-50:  #f0f1f3;
-  --color-blue-gray-100: #e4e5e9;
-  --color-blue-gray-200: #c6c9d1;
-  --color-blue-gray-300: #abb1bc;
-  --color-blue-gray-400: #8f96a5;
-  --color-blue-gray-500: #787f8c;
-  --color-blue-gray-600: #636873;
-  --color-blue-gray-700: #4c5059;
-  --color-blue-gray-800: #383b42;
-  --color-blue-gray-900: #23262b;
-  --color-blue-gray-950: #1b1d21;
+  --color-blue-gray-50:  #F2F5FF;
+  --color-blue-gray-100: #E5EAF6;
+  --color-blue-gray-200: #D4D9E5;
+  --color-blue-gray-300: #BCC0CC;
+  --color-blue-gray-400: #9B9FAB;
+  --color-blue-gray-500: #878B96;
+  --color-blue-gray-600: #737782;
+  --color-blue-gray-700: #61646F;
+  --color-blue-gray-800: #50535E;
+  --color-blue-gray-900: #434650;
+  --color-blue-gray-950: #21242D;
 }
 ```
 
@@ -232,10 +232,10 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 **IDE / Editor** (출력 박스만 다크)
 - 작업 박스 / 인풋 패널: white (텍스트 `blue-gray-900`, 테두리 `blue-gray-200`)
-- 출력 패널 배경: `blue-gray-950` (#1b1d21)
-- 출력 패널 헤더: `blue-gray-900` (#23262b)
-- 라인 넘버 / 주석: `blue-gray-700` (#4c5059)
-- 출력 일반 텍스트: `blue-gray-200` (#c6c9d1)
+- 출력 패널 배경: `blue-gray-950` (#21242D)
+- 출력 패널 헤더: `blue-gray-900` (#434650)
+- 라인 넘버 / 주석: `blue-gray-700` (#61646F)
+- 출력 일반 텍스트: `blue-gray-200` (#D4D9E5)
 - 신택스 — 키워드: `blue-primary-400` (#899ff3)
 - 신택스 — 함수: `blue-primary-500` (#6486ef)
 - 신택스 — 문자열: `blue-primary-300` (#a7b6f6)
@@ -245,7 +245,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 **Canvas** (라이트)
 - 작업 박스 / 인풋(컨트롤) 패널: white
 - 출력(프리뷰) 영역: `blue-gray-50` + `blue-gray-100` 체커보드 (그레이 활용)
-- 테두리: `blue-gray-200` (#c6c9d1)
+- 테두리: `blue-gray-200` (#D4D9E5)
 - 포인트 / 액티브: `blue-primary-700` (#2d5dc8)
 - 액티브 툴 배경: `blue-primary-100` (#e3e7fc)
 
@@ -257,7 +257,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 **공통 헤더**
 - 배경: white
-- 하단 보더: `blue-gray-100` (#e4e5e9)
+- 하단 보더: `blue-gray-100` (#E5EAF6)
 - 로고마크 배경: `blue-primary-700` (#2d5dc8)
 - 네비 액티브: `blue-primary-100` bg + `blue-primary-700` text
 - CTA: `blue-primary-700` (#2d5dc8)

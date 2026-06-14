@@ -70,7 +70,7 @@ function generatePalette(hex: string): Shade[] {
 
 /** 스와치 위 텍스트 대비 — 밝은 색엔 어두운 글씨, 어두운 색엔 흰 글씨 */
 function readableText(l: number) {
-  return l > 0.62 ? "#1b1d21" : "#ffffff";
+  return l > 0.62 ? "#21242D" : "#ffffff";
 }
 
 type FormatId = "v4" | "v3" | "css";
