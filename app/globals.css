@@ -152,30 +152,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: #fff;
   border-top: 0.5px solid var(--color-blue-gray-100);
 }
+/* 컴팩트 단일 열 — 브랜드 / 신뢰(개인정보) / 타겟 / 외부링크 / 카피라이트 */
 .kf-footer-inner {
   max-width: var(--content-max); margin: 0 auto;
-  display: flex; align-items: flex-start; gap: 40px;
-  padding: 40px 24px 32px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 12px; padding: 32px 24px 28px;
 }
-.foot-brand { flex: 1; min-width: 0; }
-.foot-brandrow { display: flex; align-items: center; gap: 9px; margin-bottom: 12px; }
-.foot-brandrow .kf-logomark { width: 24px; height: 24px; border-radius: 6px; font-size: 13px; }
+.foot-brandrow { display: flex; align-items: center; gap: 8px; }
+.foot-brandrow .kf-logomark { width: 22px; height: 22px; border-radius: 6px; font-size: 12px; }
 .foot-brandrow b { font-family: var(--font-inter); font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
-.foot-privacy { display: flex; align-items: flex-start; gap: 7px; font-size: 13px; line-height: 1.55; color: var(--color-blue-gray-500); max-width: 30ch; }
-.foot-privacy svg { width: 14px; height: 14px; color: var(--color-blue-primary-500); flex-shrink: 0; margin-top: 2px; }
-.foot-links { display: flex; gap: 48px; flex-shrink: 0; }
-.foot-col { display: flex; flex-direction: column; gap: 10px; }
-.foot-h { font-family: var(--font-inter); font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-blue-gray-400); margin-bottom: 2px; }
-.foot-col a { font-size: 13.5px; color: var(--color-blue-gray-600); transition: color .12s ease; }
-.foot-col a:hover { color: var(--color-blue-primary-700); }
-.foot-bottom {
-  max-width: var(--content-max); margin: 0 auto;
-  display: flex; align-items: center; gap: 8px;
-  padding: 16px 24px 32px;
-  border-top: 0.5px solid var(--color-blue-gray-100);
-  font-size: 12.5px; color: var(--color-blue-gray-400);
+.foot-tagline { margin: 0; font-family: var(--font-inter); font-size: 13px; font-weight: 500; color: var(--color-blue-gray-500); }
+.foot-privacy { margin: 4px 0 0; font-size: 12.5px; line-height: 1.55; color: var(--color-blue-gray-400); }
+.foot-targets, .foot-ext { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; }
+.foot-targets a, .foot-ext a {
+  font-size: 13px; color: var(--color-blue-gray-600); transition: color .12s ease;
 }
-.dotsep::before { content: "·"; }
+.foot-targets a:hover, .foot-ext a:hover { color: var(--color-blue-primary-700); }
+.foot-ext { margin-top: 2px; }
+.foot-ext a { font-weight: 600; }
+.foot-copy { margin: 6px 0 0; font-size: 12px; color: var(--color-blue-gray-400); }
 
 /* ---------- Shared buttons ---------- */
 .btn {
@@ -550,11 +545,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .tool.is-ready .tool-go { opacity: 1; transform: none; margin-left: auto; }
   .tool-foot { margin-top: 13px; }
 
-  /* footer: stacked */
-  .kf-footer-inner { flex-direction: column; gap: 22px; padding: 28px 16px 20px; }
-  .kf-footer .foot-links { margin-left: 0; gap: 40px; }
-  .kf-footer .foot-brand { max-width: none; }
-  .foot-bottom { flex-wrap: wrap; padding: 14px 16px 30px; }
+  /* footer: 모바일 패딩 축소 */
+  .kf-footer-inner { padding: 26px 16px 22px; }
 }
 
 /* ============================================================

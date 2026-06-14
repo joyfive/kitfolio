@@ -77,6 +77,12 @@ export default function Hub() {
     }
   }, []);
 
+  // 푸터 등에서 /?target=pm 로 진입하면 해당 직군 필터를 적용
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("target");
+    if (p && p in TARGET_LABELS) setTarget(p as TargetTag);
+  }, []);
+
   function toggleFav(id: string) {
     setFavs((prev) => {
       const next = new Set(prev);
