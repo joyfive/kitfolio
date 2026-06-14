@@ -48,36 +48,40 @@ function FooterInner({ lang }: { lang: Lang }) {
   return (
     <footer className="kf-footer">
       <div className="kf-footer-inner">
-        {/* 브랜드 */}
-        <div className="foot-brandrow">
-          <span className="kf-logomark">K</span>
-          <b>Kitfolio</b>
+        <div className="foot-top">
+          {/* 좌측: 브랜드 */}
+          <div className="foot-brand-block">
+            <div className="foot-brandrow">
+              <span className="kf-logomark">K</span>
+              <b>Kitfolio</b>
+            </div>
+            <p className="foot-tagline">
+              Small tools for modern knowledge workers
+            </p>
+            <p className="foot-privacy">
+              {line1}
+              <br />
+              {line2}
+            </p>
+          </div>
+
+          {/* 우측: 타겟(직군) + 외부 링크 */}
+          <div className="foot-links-block">
+            <nav className="foot-targets" aria-label="By role">
+              {TARGET_ORDER.map((tag) => (
+                <Link key={tag} href={`${home}?target=${tag}`}>
+                  {TARGET_LABELS[tag][lang]}
+                </Link>
+              ))}
+            </nav>
+            <nav className="foot-ext" aria-label="Links">
+              <a href={`mailto:${FEEDBACK_EMAIL}`}>{t("foot.feedback")}</a>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                GitHub
+              </a>
+            </nav>
+          </div>
         </div>
-        <p className="foot-tagline">Small tools for modern knowledge workers</p>
-
-        {/* 신뢰(개인정보) */}
-        <p className="foot-privacy">
-          {line1}
-          <br />
-          {line2}
-        </p>
-
-        {/* 타겟(직군) 링크 — 홈의 타겟 필터로 이동 */}
-        <nav className="foot-targets" aria-label="By role">
-          {TARGET_ORDER.map((tag) => (
-            <Link key={tag} href={`${home}?target=${tag}`}>
-              {TARGET_LABELS[tag][lang]}
-            </Link>
-          ))}
-        </nav>
-
-        {/* 외부 링크 */}
-        <nav className="foot-ext" aria-label="Links">
-          <a href={`mailto:${FEEDBACK_EMAIL}`}>{t("foot.feedback")}</a>
-          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-        </nav>
 
         <p className="foot-copy">© 2026 Kitfolio. All rights reserved.</p>
       </div>
