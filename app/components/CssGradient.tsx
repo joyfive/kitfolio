@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { clampChroma, formatHex } from "culori";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -34,14 +35,30 @@ const DICT: Dict = {
 type GType = "linear" | "radial" | "conic";
 type Stop = { color: string; pos: number };
 
-const PALETTES = [
-  ["#899ff3", "#22499f"],
-  ["#a7b6f6", "#2d5dc8", "#0a1d48"],
-  ["#6486ef", "#18377c"],
-  ["#c4cdf9", "#3a70eb", "#18377c"],
-  ["#e3e7fc", "#6486ef", "#22499f"],
-];
 const MID_COLORS = ["#6486ef", "#3a70eb", "#a7b6f6", "#18377c", "#c4cdf9"];
+
+/** 전체 색상에서 랜덤하되 보기 좋은 그라디언트 stop 생성.
+ *  - 랜덤 베이스 hue에서 조화로운 방향으로 hue를 이동(analogous~triadic 범위)
+ *  - OKLCH 명도를 밝음→어두움으로 펼쳐 대비 확보, 채도는 선명한 구간 유지
+ *  - clampChroma로 sRGB 게멋에 맞춰 깨지지 않게 보정 */
+function randomPrettyStops(): { color: string; pos: number }[] {
+  const baseHue = Math.random() * 360;
+  const n = Math.random() < 0.5 ? 2 : 3; // 2~3 stop
+  const spread = 30 + Math.random() * 100; // 전체 hue 이동폭(도)
+  const dir = Math.random() < 0.5 ? 1 : -1; // 시계/반시계
+  const lHi = 0.74 + Math.random() * 0.12; // 밝은 끝 명도
+  const lLo = 0.46 + Math.random() * 0.12; // 어두운 끝 명도
+  const chroma = 0.13 + Math.random() * 0.07; // 선명도
+  const flip = Math.random() < 0.5; // 밝음↔어두움 방향 랜덤
+  return Array.from({ length: n }, (_, i) => {
+    const tt = i / (n - 1);
+    const h = (baseHue + dir * spread * tt + 360) % 360;
+    const lt = flip ? 1 - tt : tt;
+    const l = lHi + (lLo - lHi) * lt;
+    const hex = formatHex(clampChroma({ mode: "oklch", l, c: chroma, h }, "oklch"))!;
+    return { color: hex, pos: Math.round(tt * 100) };
+  });
+}
 
 export default function CssGradient() {
   const t = useT(DICT);
@@ -163,13 +180,7 @@ export default function CssGradient() {
   }
 
   function random() {
-    const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-    setStops(
-      p.map((col, i) => ({
-        color: col,
-        pos: Math.round((i / (p.length - 1)) * 100),
-      })),
-    );
+    setStops(randomPrettyStops());
     setAngle(Math.floor(Math.random() * 360));
     setSelected(0);
   }
