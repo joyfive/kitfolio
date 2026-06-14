@@ -906,3 +906,42 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .ts-copy:hover { background: var(--color-blue-gray-800); color: var(--color-blue-gray-200); }
 .ts-copy.is-copied { color: #5fd6a0; }
 .ts-copy svg { width: 14px; height: 14px; }
+
+/* ============================================================
+   Tailwind Palette Generator (Canvas)
+   ============================================================ */
+.pal-work { display: flex; flex-direction: column; gap: 22px; }
+
+.pal-controls {
+  display: flex; flex-wrap: wrap; gap: 24px 28px;
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl); padding: 22px;
+}
+.pal-controls .field-group { gap: 9px; }
+.pal-baserow { display: flex; align-items: center; gap: 10px; }
+.pal-baserow .swatch { width: 40px; height: 40px; border-radius: var(--radius-md); }
+.pal-nameinput {
+  font-family: var(--font-inter); font-size: 14px; height: 40px;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
+  padding: 0 12px; color: var(--color-blue-gray-900); background: var(--color-blue-gray-50);
+  outline: none; min-width: 200px;
+}
+.pal-nameinput:focus { border-color: var(--color-blue-primary-400); background: #fff; }
+
+.pal-swatches { display: grid; grid-template-columns: repeat(11, 1fr); gap: 8px; }
+@media (max-width: 720px) { .pal-swatches { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 420px) { .pal-swatches { grid-template-columns: repeat(3, 1fr); } }
+.pal-swatch {
+  display: flex; flex-direction: column; gap: 3px; justify-content: flex-end;
+  height: 96px; border-radius: var(--radius-md); padding: 10px;
+  border: 1px solid rgba(27, 29, 33, 0.08); cursor: pointer; text-align: left;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.pal-swatch:hover { transform: translateY(-2px); box-shadow: var(--shadow-card-hover); }
+.pal-stop { font-family: var(--font-inter); font-size: 12px; font-weight: 700; opacity: .92; }
+.pal-hex { font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; opacity: .88; }
+
+.pal-codehead {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 10px; flex-wrap: wrap;
+}

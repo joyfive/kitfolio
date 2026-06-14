@@ -678,6 +678,113 @@ export const TOOLS: Tool[] = [
     },
   },
   {
+    slug: "tailwind-palette-generator",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer"],
+    ico: "◧",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "Tailwind 팔레트 생성기", en: "Tailwind Palette" },
+    relatedTools: ["css-gradient", "color-converter", "character-counter"],
+    seo: {
+      ko: {
+        title: "Tailwind 팔레트 생성기 — HEX 하나로 11단계 색상",
+        description:
+          "베이스 색상 하나(HEX)를 입력하면 Tailwind용 11단계 팔레트(50~950)를 자동으로 생성합니다. 각 색상을 클릭해 복사하거나, Tailwind v4 @theme · v3 config · CSS 변수 형태로 코드를 바로 복사하세요. 모든 처리는 브라우저 안에서 이루어집니다.",
+        keywords: ["Tailwind 팔레트 생성기", "Tailwind 색상 생성", "11단계 색상 팔레트"],
+      },
+      en: {
+        title: "Tailwind Palette Generator — 11 shades from one HEX",
+        description:
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
+        keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette"],
+      },
+    },
+    content: {
+      ko: {
+        card: "베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사.",
+        description:
+          "베이스 색상 하나(HEX)를 입력하면 Tailwind용 11단계 팔레트(50~950)를 자동으로 생성합니다. OKLCH 명도 스케일을 사용해 밝은 50부터 어두운 950까지 고르게 펼치고, 입력한 색은 가장 가까운 단계에 그대로 고정됩니다. 각 색을 클릭해 HEX를 복사하거나 Tailwind v4 @theme · v3 config · CSS 변수로 한 번에 복사하세요.",
+        howItWorks: ["베이스 색상(HEX) 입력", "11단계 팔레트 자동 생성", "스와치 클릭 또는 코드 복사"],
+        aeo: {
+          what: "Tailwind 팔레트 생성기는 베이스 색상 하나로 Tailwind CSS용 11단계 색상 팔레트(50~950)를 만들어주는 도구입니다.",
+          who: "Tailwind CSS로 작업하는 프론트엔드 개발자와, 디자인 토큰·컬러 스케일을 정의해야 하는 디자이너를 위한 도구입니다.",
+          how: "베이스 HEX를 입력하면 OKLCH 명도 스케일을 따라 50부터 950까지 색이 생성되고, 결과를 스와치 클릭으로 복사하거나 Tailwind config·@theme·CSS 변수 코드로 복사합니다.",
+          why: "색상 단계를 손으로 맞출 필요 없이 일관된 명암 스케일을 즉시 얻을 수 있어, 디자인 시스템과 테마 토큰 작업이 빨라집니다.",
+        },
+      },
+      en: {
+        card: "Generate an 11-shade Tailwind palette (50–950) from one base HEX and copy the code.",
+        description:
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). It uses an OKLCH lightness scale to spread shades evenly from a light 50 to a dark 950, pinning your input color to its nearest step. Click any shade to copy its HEX, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables.",
+        howItWorks: ["Enter a base color (HEX)", "Get an 11-shade palette", "Click a swatch or copy the code"],
+        aeo: {
+          what: "Tailwind Palette Generator is a tool that builds an 11-shade Tailwind CSS color palette (50–950) from a single base color.",
+          who: "It is for front-end developers working with Tailwind CSS and designers who need to define color scales and design tokens.",
+          how: "Enter a base HEX and shades from 50 to 950 are generated along an OKLCH lightness scale; copy a shade by clicking it, or copy the palette as Tailwind config, an @theme block or CSS variables.",
+          why: "You get a consistent light-to-dark scale instantly without hand-tuning each step, speeding up design systems and theme tokens.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "팔레트는 어떻게 생성되나요?",
+          answer:
+            "입력한 베이스 색상의 색조(hue)와 채도(chroma)를 유지한 채, OKLCH 색공간의 명도(lightness) 스케일을 따라 50(가장 밝음)부터 950(가장 어두움)까지 11단계를 만듭니다. 입력한 색은 명도가 가장 가까운 단계에 그대로 고정됩니다.",
+        },
+        {
+          question: "왜 500이 입력한 색과 다를 수 있나요?",
+          answer:
+            "입력 색의 밝기에 따라 가장 가까운 단계에 고정되기 때문입니다. 예를 들어 밝은 색을 넣으면 300이나 400에 고정되고, 500은 같은 색조의 중간 명도 색으로 계산됩니다.",
+        },
+        {
+          question: "어떤 형식으로 복사할 수 있나요?",
+          answer:
+            "스와치를 클릭하면 해당 HEX가 복사됩니다. 전체 팔레트는 Tailwind v4 @theme 블록, Tailwind v3 config 객체, 일반 CSS 변수 세 가지 형식으로 복사할 수 있습니다.",
+        },
+        {
+          question: "데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 색 계산은 전부 브라우저 안에서 이루어지며, 어떤 색상값도 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "How is the palette generated?",
+          answer:
+            "It keeps the hue and chroma of your base color and walks an OKLCH lightness scale to build 11 steps from 50 (lightest) to 950 (darkest). Your input color is pinned to the step whose lightness is closest to it.",
+        },
+        {
+          question: "Why can 500 differ from the color I entered?",
+          answer:
+            "Your color is pinned to its nearest step by lightness. If you enter a light color it may pin to 300 or 400, and 500 is computed as the mid-lightness shade of the same hue.",
+        },
+        {
+          question: "What copy formats are available?",
+          answer:
+            "Click a swatch to copy its HEX. The full palette can be copied as a Tailwind v4 @theme block, a Tailwind v3 config object, or plain CSS variables.",
+        },
+        {
+          question: "Is any data sent to a server?",
+          answer:
+            "No. All color math runs in your browser; no color values are uploaded or stored anywhere.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "Tailwind 팔레트 생성기",
+        subtitle: "HEX 하나로 11단계 색상 + 코드 복사",
+      },
+      en: {
+        title: "Tailwind Palette",
+        subtitle: "11 shades from one HEX, ready to copy",
+      },
+    },
+  },
+  {
     slug: "color-converter",
     layout: "canvas",
     cat: "design",

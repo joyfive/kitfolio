@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@next/third-parties": "^15.5.19",
+    "@types/culori": "^4.0.1",
+    "culori": "^4.0.2",
     "next": "^15.5.19",
     "react": "19.1.0",
     "react-dom": "19.1.0"
