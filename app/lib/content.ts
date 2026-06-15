@@ -785,6 +785,134 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "flex-work-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "pm", "developer", "designer"],
+    ico: "Σh",
+    ready: true,
+    badge: "Clean SaaS",
+    name: { ko: "유연근무 잔여시간 계산기", en: "Flex Work Calculator" },
+    relatedTools: ["character-counter", "slack-timestamp-converter", "json-formatter"],
+    seo: {
+      ko: {
+        title: "유연근무 잔여 근무시간 계산기",
+        description:
+          "이번 달 목표 근무시간과 남은 근무시간, 남은 영업일, 하루 평균 필요 근무시간을 한 번에 계산합니다. 연차·반차·시간차를 차감하고 공휴일을 자동 반영해, 지금 페이스면 시간이 남는지 부족한지 바로 확인하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "유연근무 계산기",
+          "남은 근무시간 계산기",
+          "근무시간 계산기",
+          "유연근무제",
+          "목표 근무시간",
+          "월 근무시간 계산",
+        ],
+      },
+      en: {
+        title: "Flex Work Calculator — Remaining Work Hours",
+        description:
+          "Calculate this month's target hours, remaining hours, remaining business days and the daily average you need under a flexible work schedule. It deducts annual, half-day and hourly leave, factors in public holidays, and shows whether you're ahead or behind. Everything runs in your browser.",
+        keywords: [
+          "flex work calculator",
+          "remaining work hours calculator",
+          "flexible work hours calculator",
+          "monthly target hours",
+          "work hours calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영.",
+        description:
+          "이번 달 목표 근무시간과 남은 근무시간, 남은 영업일, 하루 평균 필요 근무시간을 한 번에 계산합니다. 연차·반차·시간차를 소정근로시간 기준으로 차감하고 주말과 공휴일을 영업일에서 빼, 지금 페이스면 시간이 남는지 부족한지 바로 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "연·월·소정근로시간 입력",
+          "사용한 휴가·누적 근무시간 입력",
+          "하루 평균·여유/부족 확인",
+        ],
+        aeo: {
+          what: "유연근무 잔여시간 계산기는 유연근무제에서 이번 달 목표 근무시간 대비 남은 근무시간, 남은 영업일, 그리고 남은 기간 하루 평균 필요 근무시간을 계산해주는 도구입니다.",
+          who: "선택적 근로시간제·시차출퇴근제 등 유연근무제를 쓰는 직장인과, 월 단위로 근무시간을 직접 관리해야 하는 PM·개발자·디자이너를 위한 도구입니다.",
+          how: "연도·월·1일 소정근로시간을 입력하면 주말과 공휴일을 뺀 영업일로 월 목표시간을 구하고, 연차·반차·시간차를 차감해 실제 목표를 계산합니다. 현재 누적 근무시간을 넣으면 남은 목표를 남은 영업일로 나눠 하루 평균 필요시간과 여유·부족을 보여줍니다.",
+          why: "매달 엑셀이나 수기로 반복하던 계산을 30초 만에 끝낼 수 있고, 공휴일과 휴가까지 반영해 '하루에 몇 시간씩 일해야 하는지'를 정확히 알려주기 때문입니다.",
+        },
+      },
+      en: {
+        card: "Target vs. remaining hours and the daily average you need under flex work. Leave & holidays included.",
+        description:
+          "Calculate this month's target hours, remaining hours, remaining business days and the daily average you need under a flexible work schedule. It deducts annual, half-day and hourly leave against your standard daily hours and removes weekends and public holidays from the business days, so you instantly see whether you're ahead or behind. Everything runs in your browser.",
+        howItWorks: [
+          "Enter year, month & daily hours",
+          "Add leave used & hours worked",
+          "See the daily average & balance",
+        ],
+        aeo: {
+          what: "A Flex Work Calculator works out, under a flexible work schedule, how many hours you still need this month, how many business days remain, and the daily average required to hit your target.",
+          who: "It is for office workers on flexible or flextime schedules, and for PMs, developers and designers who track their own monthly hours.",
+          how: "Enter the year, month and your standard daily hours; it builds the monthly target from business days (weekends and public holidays removed), then deducts annual, half-day and hourly leave. Add your hours worked so far and it divides the remaining target by the remaining business days to show the daily average and your surplus or deficit.",
+          why: "It replaces the spreadsheet math people redo every month, finishing in about 30 seconds while accounting for holidays and leave so you know exactly how many hours a day to work.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "공휴일은 어떻게 반영되나요?",
+          answer:
+            "‘공휴일 제외’ 옵션을 켜면 대한민국 공휴일(설날·추석·대체공휴일 포함)을 영업일에서 자동으로 빼고 계산합니다. 토요일 근무 등 공휴일을 따로 챙겨야 하는 경우 옵션을 꺼서 주말만 제외할 수도 있습니다. 현재 2025~2027년 공휴일을 지원합니다.",
+        },
+        {
+          question: "연차·반차·시간차는 어떻게 차감되나요?",
+          answer:
+            "연차는 1일 소정근로시간만큼, 반차는 그 절반만큼, 시간차는 입력한 시간만큼 목표 근무시간에서 차감합니다. 소정근로시간을 8시간이 아닌 값(예: 7시간)으로 바꾸면 연차·반차 차감도 그 기준으로 함께 조정됩니다.",
+        },
+        {
+          question: "‘남은 영업일’은 어느 날짜를 기준으로 하나요?",
+          answer:
+            "오늘 날짜를 기준으로, 이번 달 남은 영업일을 셉니다. ‘오늘 포함’ 옵션으로 오늘을 남은 영업일에 넣을지 뺄지 선택할 수 있어요. 과거 달을 선택하면 남은 영업일은 0이 되고, 미래 달은 그 달 전체 영업일을 보여줍니다.",
+        },
+        {
+          question: "입력한 근무시간이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 어떤 근무 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+        },
+      ],
+      en: [
+        {
+          question: "How are public holidays handled?",
+          answer:
+            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays — say on Saturdays — turn it off to exclude weekends only. Holidays for 2025–2027 are currently supported.",
+        },
+        {
+          question: "How is annual, half-day and hourly leave deducted?",
+          answer:
+            "Annual leave is deducted as one full day of your standard hours, half-day leave as half of that, and hourly leave by the hours you enter. If you set daily hours to something other than 8 (say 7), the annual and half-day deductions scale to that value too.",
+        },
+        {
+          question: "Which date do the remaining business days use?",
+          answer:
+            "They are counted from today through the end of the selected month. The “Count today” option lets you include or exclude today. Pick a past month and remaining days is 0; pick a future month and it shows that month's full business days.",
+        },
+        {
+          question: "Are the hours I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser with JavaScript, and no work data is uploaded or stored. Close the tab and your inputs are gone.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "유연근무 잔여시간 계산기",
+        subtitle: "남은 목표 · 하루 평균 · 여유/부족을 한 번에",
+      },
+      en: {
+        title: "Flex Work Calculator",
+        subtitle: "Remaining target, daily average and balance at a glance",
+      },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
