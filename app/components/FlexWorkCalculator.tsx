@@ -49,6 +49,7 @@ const DICT: Dict = {
     "fw.u.days": "일",
     "fw.u.times": "회",
     "fw.u.hours": "시간",
+    "fw.u.minutes": "분",
     "fw.u.h": "시간",
     "fw.u.m": "분",
     "fw.u.d": "일",
@@ -91,6 +92,7 @@ const DICT: Dict = {
     "fw.u.days": "days",
     "fw.u.times": "×",
     "fw.u.hours": "hrs",
+    "fw.u.minutes": "min",
     "fw.u.h": "h",
     "fw.u.m": "m",
     "fw.u.d": "d",
@@ -106,7 +108,8 @@ const DEFAULTS = {
   full: "0",
   half: "0",
   hour: "0",
-  worked: "0",
+  workedH: "0",
+  workedM: "0",
 };
 
 function num(s: string, fallback = 0): number {
@@ -124,7 +127,8 @@ export default function FlexWorkCalculator() {
   const [full, setFull] = useState(DEFAULTS.full);
   const [half, setHalf] = useState(DEFAULTS.half);
   const [hour, setHour] = useState(DEFAULTS.hour);
-  const [worked, setWorked] = useState(DEFAULTS.worked);
+  const [workedH, setWorkedH] = useState(DEFAULTS.workedH);
+  const [workedM, setWorkedM] = useState(DEFAULTS.workedM);
   const [excludeHol, setExcludeHol] = useState(true);
   const [includeToday, setIncludeToday] = useState(true);
   const [fmt, setFmt] = useState<Fmt>("dec");
@@ -146,7 +150,8 @@ export default function FlexWorkCalculator() {
     setFull(DEFAULTS.full);
     setHalf(DEFAULTS.half);
     setHour(DEFAULTS.hour);
-    setWorked(DEFAULTS.worked);
+    setWorkedH(DEFAULTS.workedH);
+    setWorkedM(DEFAULTS.workedM);
     setExcludeHol(true);
     setIncludeToday(true);
   }
@@ -163,13 +168,13 @@ export default function FlexWorkCalculator() {
       fullLeave: Math.max(0, num(full)),
       halfLeave: Math.max(0, num(half)),
       hourLeave: Math.max(0, num(hour)),
-      worked: Math.max(0, num(worked)),
+      worked: Math.max(0, num(workedH) + num(workedM) / 60),
       excludeHolidays: excludeHol,
       includeToday,
       today: base,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [yNum, mNum, daily, full, half, hour, worked, excludeHol, includeToday, today]);
+  }, [yNum, mNum, daily, full, half, hour, workedH, workedM, excludeHol, includeToday, today]);
 
   // ── 시간 포맷 (소수점 / 시:분) ──
   function fmtH(h: number, withSign = false): string {
@@ -293,16 +298,34 @@ export default function FlexWorkCalculator() {
               </Field>
             </div>
 
-            <Field label={t("fw.worked")} suffix={t("fw.u.hours")}>
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step={0.5}
-                value={worked}
-                onChange={(e) => setWorked(e.target.value)}
-              />
-            </Field>
+            <div className="fw-field">
+              <span className="fw-field-lbl">{t("fw.worked")}</span>
+              <div className="fw-dual">
+                <span className="fw-field-input">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    step={1}
+                    value={workedH}
+                    onChange={(e) => setWorkedH(e.target.value)}
+                  />
+                  <span className="fw-field-suffix">{t("fw.u.hours")}</span>
+                </span>
+                <span className="fw-field-input">
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    max={59}
+                    step={1}
+                    value={workedM}
+                    onChange={(e) => setWorkedM(e.target.value)}
+                  />
+                  <span className="fw-field-suffix">{t("fw.u.minutes")}</span>
+                </span>
+              </div>
+            </div>
 
             <div className="fw-checks">
               <label className="fw-check">

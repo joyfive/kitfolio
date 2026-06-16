@@ -999,6 +999,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .fw-field-suffix {
   flex-shrink: 0; font-size: 12px; font-weight: 500; color: var(--color-blue-gray-400);
 }
+.fw-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .fw-checks { display: flex; flex-direction: column; gap: 12px; margin-top: 2px; }
 .fw-check { display: flex; align-items: center; gap: 9px; cursor: pointer; }
