@@ -106,6 +106,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .kf-logomark {
   width: 26px; height: 26px; display: block; flex-shrink: 0;
 }
+/* 가로형 풀 로고 (심볼 + 워드마크) — 헤더·푸터 브랜드 */
+.kf-logo { height: 22px; width: auto; display: block; flex-shrink: 0; }
+.foot-brandrow .kf-logo { height: 19px; }
 .kf-brand-name {
   font-family: var(--font-inter); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
   color: var(--color-blue-gray-900);

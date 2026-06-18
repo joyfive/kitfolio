@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TARGET_LABELS, localizedHref, type TargetTag } from "../lib/content";
 import { LangProvider, routeLang, useT, type Lang } from "../lib/i18n";
-import { LogoMark } from "./Logo";
+import { LogoHorizontal } from "./Logo";
 
 const FEEDBACK_EMAIL = "joy_five@kakao.com";
 const GITHUB_URL = "https://github.com/joyfive/kitfolio";
@@ -39,8 +39,7 @@ function FooterInner({ lang }: { lang: Lang }) {
       <div className="kf-footer-inner">
         {/* 상단: 브랜드 */}
         <div className="foot-brandrow">
-          <LogoMark title="Kitfolio" />
-          <b>Kitfolio</b>
+          <LogoHorizontal />
         </div>
 
         {/* 1행: 태그라인(좌) ↔ 타겟별 서비스 리스트(우) */}
