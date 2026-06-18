@@ -104,10 +104,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .kf-brand { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
 .kf-logomark {
-  width: 26px; height: 26px; border-radius: 7px;
-  background: var(--color-blue-primary-700); color: #fff;
-  display: grid; place-items: center;
-  font-family: var(--font-inter); font-weight: 700; font-size: 15px; letter-spacing: -0.02em;
+  width: 26px; height: 26px; display: block; flex-shrink: 0;
 }
 .kf-brand-name {
   font-family: var(--font-inter); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
@@ -145,6 +142,25 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
+   Route loading fallback (app/loading.tsx)
+   ============================================================ */
+.kf-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 50vh; width: 100%;
+}
+.kf-loading-mark {
+  width: 48px; height: 48px;
+  animation: kf-loading-pulse 1.2s ease-in-out infinite;
+}
+@keyframes kf-loading-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(0.94); }
+  50%      { opacity: 1;    transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kf-loading-mark { animation: none; }
+}
+
+/* ============================================================
    Common Footer
    ============================================================ */
 .kf-footer {
@@ -158,7 +174,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex; flex-direction: column; gap: 12px; padding: 26px 24px 24px;
 }
 .foot-brandrow { display: flex; align-items: center; gap: 8px; }
-.foot-brandrow .kf-logomark { width: 22px; height: 22px; border-radius: 6px; font-size: 12px; }
+.foot-brandrow .kf-logomark { width: 22px; height: 22px; }
 .foot-brandrow b { font-family: var(--font-inter); font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
 
 .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 14px 24px; flex-wrap: wrap; }
