@@ -12,6 +12,16 @@ import { HUB, OG_BADGE, SITE, getTool, type Lang } from "./content";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
+/* 브랜드 심볼 (app/icon.svg 와 동일) — Satori 는 SVG 데이터 URI 이미지를 렌더 */
+const LOGO_SVG =
+  '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+  '<path d="M1 7V1H2.76471V3.15858H3.58824L5.02353 1H6.92941L5.14118 3.78698L7 7H5.07059L3.6 4.55385H2.76471V7H1Z" fill="#50535E"/>' +
+  '<rect x="1" y="9" width="6" height="6" rx="1" fill="#D4D9E5"/>' +
+  '<rect x="9" y="9" width="6" height="6" rx="1" fill="#9B9FAB"/>' +
+  '<rect x="9" y="1" width="6" height="6" rx="1" fill="#737782"/></svg>';
+const LOGO_DATA_URI =
+  "data:image/svg+xml;base64," + Buffer.from(LOGO_SVG).toString("base64");
+
 let fontsPromise: Promise<{ bold: Buffer; medium: Buffer }> | null = null;
 function loadFonts() {
   const dir = join(process.cwd(), "app", "lib", "fonts");
@@ -40,22 +50,8 @@ async function renderOg(title: string, subtitle: string, badge: string) {
       >
         {/* 브랜드 */}
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 14,
-              background: "#2d5dc8",
-              color: "#fff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 32,
-              fontWeight: 700,
-            }}
-          >
-            K
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={LOGO_DATA_URI} width={56} height={56} alt="" />
           <div style={{ fontSize: 34, fontWeight: 700, color: "#434650" }}>
             {SITE.name}
           </div>
