@@ -31,8 +31,9 @@ next-env.d.ts
 # vercel
 .vercel
 
-# local claude code settings
-.claude/
+# local claude code settings (but keep shared project skills)
+.claude/*
+!.claude/skills/
 
 # stray third-party html dumps (not part of the project)
 /crack-*.html
