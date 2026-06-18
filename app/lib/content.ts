@@ -913,6 +913,220 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "time-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "pm", "developer"],
+    ico: "±h",
+    ready: true,
+    badge: "Clean SaaS",
+    name: { ko: "시간 더하기 빼기 계산기", en: "Time Calculator" },
+    relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
+    seo: {
+      ko: {
+        title: "시간 더하기 빼기 계산기 — 근무시간 합산",
+        description:
+          "여러 시간 블록을 더하거나 빼서 총 근무시간을 계산합니다. 타임시트 작성, 청구 시간 합산, 초과·조기퇴근 계산에 사용하세요. 결과를 시:분:초, 소수점 시간, 분, 초로 한 번에 확인할 수 있습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: ["시간 더하기 계산기", "시간 빼기 계산기", "근무시간 합산", "타임시트 계산기", "시간 계산"],
+      },
+      en: {
+        title: "Time Calculator — Add and Subtract Hours Minutes",
+        description:
+          "Add or subtract multiple time blocks to calculate total work hours. Perfect for timesheets, billing hours, overtime and break calculations. Results shown in H:M:S, decimal hours, minutes and seconds all at once. Everything runs in your browser.",
+        keywords: ["time calculator", "add subtract hours minutes", "timesheet calculator", "hours minutes calculator", "work hours calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용.",
+        description:
+          "여러 시간 블록을 더하거나 빼서 총 근무시간을 계산합니다. 타임시트 작성, 청구 시간 합산, 초과·조기퇴근 계산에 사용하세요. 결과를 시:분:초, 소수점 시간, 분, 초로 한 번에 확인할 수 있습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["시간 블록 입력(+/- 선택)", "항목 추가·삭제로 조정", "합계 결과 확인 및 복사"],
+        aeo: {
+          what: "시간 더하기 빼기 계산기는 여러 시간값(시·분·초)을 더하거나 빼서 총 합계를 시:분:초, 소수점 시간, 총 분, 총 초 형식으로 보여주는 계산 도구입니다.",
+          who: "타임시트를 작성하는 프리랜서, 청구 시간을 집계하는 PM, 출퇴근 시간이나 휴게 시간을 계산해야 하는 직장인을 위한 도구입니다.",
+          how: "시간 블록(시·분·초)을 입력하고 각 항목에 더하기(+) 또는 빼기(-) 연산자를 선택하면, 실시간으로 총 합계를 계산해 여러 형식으로 보여줍니다. 항목을 자유롭게 추가하거나 삭제할 수 있습니다.",
+          why: "머릿속에서 시간을 계산하다 실수하는 일 없이, 여러 근무 블록의 합계를 정확하게 구할 수 있고 청구 시간이나 타임시트 작성 시간을 줄여줍니다.",
+        },
+      },
+      en: {
+        card: "Add and subtract time blocks to total up work hours. Built for timesheets and billing.",
+        description:
+          "Add or subtract multiple time blocks to calculate total work hours. Perfect for timesheets, billing hours, overtime and break calculations. Results shown in H:M:S, decimal hours, minutes and seconds all at once. Everything runs in your browser.",
+        howItWorks: ["Enter time blocks with + or −", "Add or remove rows freely", "Copy the total in any format"],
+        aeo: {
+          what: "Time Calculator is a tool that adds or subtracts multiple time values (hours, minutes, seconds) and displays the total as H:M:S, decimal hours, total minutes and total seconds.",
+          who: "It is for freelancers filling out timesheets, PMs tallying billable hours, and office workers calculating shifts, breaks or overtime.",
+          how: "Enter each time block in hours, minutes and seconds, choose + or − for each row, and the running total updates instantly in multiple formats. Add or remove rows as needed.",
+          why: "It eliminates mental arithmetic errors when summing multiple time blocks, making timesheet entry and billing calculations faster and more accurate.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "소수점 시간 형식은 어디에 쓰나요?",
+          answer:
+            "청구 시간(billable hours) 계산에 주로 쓰입니다. 예를 들어 1시간 30분은 1.5h로 표시됩니다. 프리랜서 인보이스나 시급 계산 시 편리하게 활용하세요.",
+        },
+        {
+          question: "시간이 음수(마이너스)가 될 수 있나요?",
+          answer:
+            "네. 빼기(-) 항목이 더하기(+) 항목보다 크면 결과가 음수로 표시됩니다. 예를 들어 초과 근무한 시간보다 조기 퇴근 시간이 많으면 마이너스로 나타납니다.",
+        },
+        {
+          question: "초(seconds)도 입력할 수 있나요?",
+          answer:
+            "네. 각 시간 블록에 시·분·초를 모두 입력할 수 있습니다. 초 단위가 필요 없는 경우 0으로 두면 됩니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the decimal hours format used for?",
+          answer:
+            "Decimal hours are mainly used for billing calculations. For example, 1 hour 30 minutes is shown as 1.5h — handy for freelance invoices and hourly rate calculations.",
+        },
+        {
+          question: "Can the total go negative?",
+          answer:
+            "Yes. If the subtracted time exceeds the added time the result goes negative. This is useful when calculating whether you left early versus overtime.",
+        },
+        {
+          question: "Can I include seconds in a time block?",
+          answer:
+            "Yes. Each row accepts hours, minutes and seconds. If you don't need seconds, just leave them at 0.",
+        },
+        {
+          question: "Is anything I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser and no data is ever uploaded or stored. Close the tab and your inputs are gone.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "시간 더하기 빼기 계산기",
+        subtitle: "시간 블록을 더하고 빼서 총 근무시간을 계산",
+      },
+      en: {
+        title: "Time Calculator",
+        subtitle: "Add and subtract time blocks to get the total",
+      },
+    },
+  },
+  {
+    slug: "time-converter",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "pm"],
+    ico: "h↔d",
+    ready: true,
+    badge: "Clean SaaS",
+    name: { ko: "시간 단위 변환기", en: "Time Converter" },
+    relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
+    seo: {
+      ko: {
+        title: "시간 단위 변환기 — 시간·일·주·월 변환",
+        description:
+          "시간·분·초·일·주·월·년 단위를 서로 변환합니다. 캘린더 기준(24시간/일)과 근무 기준(8시간/일, 5일/주)을 선택해 프로젝트 기간 산출, 근무시간 단위 환산에 사용하세요. 모든 변환은 브라우저 안에서 이루어집니다.",
+        keywords: ["시간 단위 변환", "시간 일 주 변환기", "시간 변환기", "hours to days", "분 시간 변환"],
+      },
+      en: {
+        title: "Time Converter — Hours to Days, Weeks, Months",
+        description:
+          "Convert between seconds, minutes, hours, days, weeks, months and years instantly. Choose calendar basis (24h/day) or work basis (8h/day, 5d/week) to calculate project durations and work hour conversions. Everything runs in your browser.",
+        keywords: ["time converter", "hours to days converter", "hours to weeks", "time unit converter", "hours days weeks months calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능.",
+        description:
+          "시간·분·초·일·주·월·년 단위를 서로 변환합니다. 캘린더 기준(24시간/일)과 근무 기준(8시간/일, 5일/주)을 선택해 프로젝트 기간 산출, 근무시간 단위 환산에 사용하세요. 모든 변환은 브라우저 안에서 이루어집니다.",
+        howItWorks: ["숫자와 단위 입력", "캘린더/근무 기준 선택", "전체 단위 변환 결과 확인"],
+        aeo: {
+          what: "시간 단위 변환기는 초·분·시간·일·주·월·년 단위를 서로 변환하고, 캘린더 기준(24시간/일)과 근무 기준(8시간/일, 5일/주)을 선택해 결과를 동시에 보여주는 도구입니다.",
+          who: "프로젝트 기간을 시간 단위로 환산해야 하는 PM, 근무시간을 일·주 단위로 파악해야 하는 직장인을 위한 도구입니다.",
+          how: "숫자와 단위를 입력하면 모든 단위(초·분·시간·일·주·월·년)로 변환된 결과를 한 화면에 보여줍니다. 캘린더 기준과 근무 기준 중 계산 방식을 선택할 수 있습니다.",
+          why: "프로젝트 견적에서 '200시간이 몇 주인지', 온보딩에서 '2주가 몇 시간인지' 같은 계산을 매번 직접 하지 않고 즉시 확인할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Convert hours, days, weeks and months instantly. Switch between calendar and work basis.",
+        description:
+          "Convert between seconds, minutes, hours, days, weeks, months and years instantly. Choose calendar basis (24h/day) or work basis (8h/day, 5d/week) to calculate project durations and work hour conversions. Everything runs in your browser.",
+        howItWorks: ["Enter a number and pick a unit", "Choose calendar or work basis", "See all unit conversions at once"],
+        aeo: {
+          what: "Time Converter is a tool that converts between seconds, minutes, hours, days, weeks, months and years, with the option to switch between calendar basis (24h/day) and work basis (8h/day, 5d/week).",
+          who: "It is for PMs translating project estimates into hours or weeks, and for office workers who need to convert between time units quickly.",
+          how: "Enter a number and select a unit; the result appears in every other unit simultaneously. Toggle between calendar basis and work basis to match your context.",
+          why: "It saves the mental calculation of questions like 'how many weeks is 200 hours?' or 'how many hours is 2 weeks?' that come up repeatedly in project planning and scheduling.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "캘린더 기준과 근무 기준의 차이는 무엇인가요?",
+          answer:
+            "캘린더 기준은 1일 = 24시간, 1주 = 7일로 계산합니다. 근무 기준은 1일 = 8시간, 1주 = 5일(40시간)로 계산합니다. 프로젝트 공수 산정에는 근무 기준을, 시차 계산이나 일반 시간 변환에는 캘린더 기준을 사용하세요.",
+        },
+        {
+          question: "월(month) 변환은 어떻게 계산되나요?",
+          answer:
+            "캘린더 기준에서 1개월 = 30.44일(365.25/12), 근무 기준에서 1개월 = 21.75일(261/12, 1년 261 근무일 기준)로 계산합니다. 정확한 월 수는 달마다 일수가 다르므로 근사값입니다.",
+        },
+        {
+          question: "어떤 단위까지 지원하나요?",
+          answer:
+            "초(seconds), 분(minutes), 시간(hours), 일(days), 주(weeks), 월(months), 년(years) 7개 단위를 지원합니다. 입력 단위로 어느 단위든 선택할 수 있습니다.",
+        },
+        {
+          question: "입력한 숫자가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the difference between calendar and work basis?",
+          answer:
+            "Calendar basis uses 1 day = 24 hours and 1 week = 7 days. Work basis uses 1 day = 8 hours and 1 week = 5 days (40 hours). Use work basis for project effort estimation and calendar basis for time zone math or general time conversions.",
+        },
+        {
+          question: "How is a month calculated?",
+          answer:
+            "On calendar basis, 1 month = 30.44 days (365.25 ÷ 12). On work basis, 1 month = 21.75 working days (261 ÷ 12, based on 261 working days per year). These are averages since months vary in length.",
+        },
+        {
+          question: "Which units are supported?",
+          answer:
+            "Seconds, minutes, hours, days, weeks, months and years — 7 units in total. You can pick any of them as the input unit.",
+        },
+        {
+          question: "Is anything I enter sent to a server?",
+          answer:
+            "No. All conversions run in your browser and no data is ever uploaded or stored.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "시간 단위 변환기",
+        subtitle: "시간·일·주·월·년 단위 즉시 변환, 근무 기준 지원",
+      },
+      en: {
+        title: "Time Converter",
+        subtitle: "Convert hours, days, weeks and months — with work basis",
+      },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
