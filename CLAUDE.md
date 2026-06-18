@@ -6,6 +6,25 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 
 ---
 
+## AI 작업 지침 (Skills & Context Docs)
+
+이 문서가 제품 방향의 단일 출처(SoT)다. 작업 유형에 따라 아래 스킬·문서를 함께 사용한다.
+
+**호출 가능한 Skill** (`.claude/skills/`): 작업 시 `/skill-name` 으로 호출
+- `/new-tool` — 신규 도구 추가 체크리스트 + 필수 구조 (5개 평가 기준은 하드 게이트)
+- `/product-review` — 제품 방향·스코프 리뷰 (feature creep 방지)
+- `/branding` — 브랜딩·톤 가드레일
+- `/seo` — 도구 페이지 SEO 리뷰 체크리스트
+- `/aeo` — What/Who/How/Why + 구조화 데이터 AEO 리뷰
+
+**참고 컨텍스트 문서** (`docs/ai/`)
+- `PROJECT_CONTEXT.md` — 영문 요약 컨텍스트 (이 파일의 영문판)
+- `MONETIZATION.md` — 수익화 전략
+- `TOOL_SELECTION.md` — 도구 아이디어 25점 평가표
+- `CONTENT_POLICY.md` — 콘텐츠 운영 원칙
+
+---
+
 ## 제품 방향 & 아키텍처 (2026-06-12 확정)
 
 > 아래 방향이 기존 "개발자 도구 사이트" 컨셉을 대체한다. 다른 섹션과 충돌 시 이 섹션이 우선.
