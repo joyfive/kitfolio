@@ -25,29 +25,50 @@ const DICT: Dict = {
 
 const STOPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
 
-// Tailwind 기본 팔레트에 가까운 OKLCH 명도 스케일
+// tints.dev 레퍼런스에서 역산한 OKLCH 명도 스케일.
+// Tailwind 기본보다 넓고 어두워, 각 stop 의 hex 첫 글자가
+// F·e·C·B·9·8·7·5·3·2·1 분포로 떨어진다.
 const L_SCALE: Record<number, number> = {
-  50: 0.971,
-  100: 0.936,
-  200: 0.885,
-  300: 0.808,
-  400: 0.704,
-  500: 0.637,
-  600: 0.577,
-  700: 0.505,
-  800: 0.444,
-  900: 0.396,
-  950: 0.262,
+  50: 0.977,
+  100: 0.945,
+  200: 0.872,
+  300: 0.788,
+  400: 0.7,
+  500: 0.593,
+  600: 0.517,
+  700: 0.425,
+  800: 0.333,
+  900: 0.24,
+  950: 0.19,
+};
+
+// 채도 곡선 — 600 에서 최대, 밝은쪽·어두운쪽으로 갈수록 감쇠 (레퍼런스 정규화).
+// 밝은 틴트는 옅게, 어두운 셰이드는 진하되 과채도를 피한다.
+const C_FACTOR: Record<number, number> = {
+  50: 0.045,
+  100: 0.1,
+  200: 0.25,
+  300: 0.42,
+  400: 0.62,
+  500: 0.8441,
+  600: 1,
+  700: 0.8212,
+  800: 0.6436,
+  900: 0.4659,
+  950: 0.3636,
 };
 
 type Shade = { stop: number; hex: string; l: number };
 
-/** 베이스 색의 hue·chroma 유지 + OKLCH 명도 스케일로 11단계 생성.
- *  입력색은 명도가 가장 가까운 stop 에 그대로 고정. */
+/** 베이스 색의 hue 유지 + OKLCH 명도·채도 스케일로 11단계 생성.
+ *  입력색은 지각적 밝기(L)가 가장 가까운 stop 에 그대로 고정하고,
+ *  나머지 stop 은 명도 스케일과 채도 곡선으로 채운다. */
 function generatePalette(hex: string): Shade[] {
   const base = oklch(hex);
   if (!base) return [];
   const baseL = base.l ?? 0;
+
+  // 지각적 밝기로 입력색이 속한 stop 판단
   let nearest = 500;
   let best = Infinity;
   for (const s of STOPS) {
@@ -57,11 +78,15 @@ function generatePalette(hex: string): Shade[] {
       nearest = s;
     }
   }
+
+  // 입력 채도를 600 기준 피크 채도로 환산 → 곡선대로 각 stop 에 분배
+  const peakC = (base.c ?? 0) / C_FACTOR[nearest];
+
   return STOPS.map((s) => {
     if (s === nearest) return { stop: s, hex: formatHex(hex)!, l: baseL };
     const l = L_SCALE[s];
     const c = clampChroma(
-      { mode: "oklch", l, c: base.c ?? 0, h: base.h },
+      { mode: "oklch", l, c: peakC * C_FACTOR[s], h: base.h },
       "oklch",
     );
     return { stop: s, hex: formatHex(c)!, l };
