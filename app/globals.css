@@ -1380,6 +1380,18 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .lc-leap-lbl { font-family: var(--font-inter); font-size: 14px; font-weight: 600; color: var(--color-blue-gray-700); }
 .lc-leap-hint { font-size: 12px; color: var(--color-blue-gray-400); }
 
+/* Year number input */
+.lc-input-year {
+  width: 100%; font-family: var(--font-inter); font-size: 18px; font-weight: 600;
+  color: var(--color-blue-gray-900); background: #fff;
+  border: 1.5px solid var(--color-blue-gray-200); border-radius: var(--radius-lg);
+  padding: 10px 14px; outline: none; transition: border-color 0.15s;
+  -moz-appearance: textfield;
+}
+.lc-input-year::-webkit-inner-spin-button,
+.lc-input-year::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.lc-input-year:focus { border-color: var(--color-blue-primary-500); }
+
 /* Result card */
 .lc-result-card {
   background: var(--color-blue-gray-50); border: 1.5px solid var(--color-blue-gray-200);
@@ -1391,10 +1403,23 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
   background: var(--color-blue-primary-700); border-radius: calc(var(--radius-xl) - 1px) calc(var(--radius-xl) - 1px) 0 0;
   padding: 24px 22px 20px;
 }
+.lc-result-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
 .lc-result-label {
   font-family: var(--font-inter); font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--color-blue-primary-300); margin-bottom: 10px;
+  color: var(--color-blue-primary-300);
 }
+.lc-copy-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-inter); font-size: 12px; font-weight: 600;
+  color: var(--color-blue-primary-300); background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2); border-radius: 6px;
+  padding: 4px 10px; cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.lc-copy-btn:hover { background: rgba(255,255,255,.22); color: #fff; }
+.lc-copy-btn.copied { color: #fff; background: rgba(255,255,255,.22); }
+.lc-copy-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 .lc-result-date {
   display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px;
   font-family: var(--font-inter); line-height: 1.1;

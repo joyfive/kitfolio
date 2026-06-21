@@ -1155,7 +1155,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Lunar–Solar Date Converter — 1901 to 2100",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganjiji year name. Runs entirely in your browser — no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
         keywords: [
           "lunar solar converter",
           "korean lunar calendar",
@@ -1187,16 +1187,16 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901–2100 with leap months.",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganjiji year name. Runs entirely in your browser — no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
         howItWorks: [
           "Choose conversion direction (solar → lunar or lunar → solar)",
           "Enter year, month and day (toggle intercalation if needed)",
-          "See the converted date with ganjiji year and zodiac",
+          "See the converted date with ganzhi year and zodiac",
         ],
         aeo: {
           what: "A Lunar–Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
           who: "It is for office workers and small business owners who need to look up lunar-calendar anniversaries, memorial days and traditional holidays in the Gregorian calendar, or the reverse.",
-          how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser — including the traditional Korean ganjiji year name and zodiac animal.",
+          how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser — including the traditional Korean ganzhi year name and zodiac animal.",
           why: "It saves the annual calendar-flipping or search needed to cross-reference lunar and solar dates for any date from 1901 to 2100.",
         },
       },

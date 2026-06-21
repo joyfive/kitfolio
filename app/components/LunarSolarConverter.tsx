@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Solar, Lunar } from "lunar-javascript";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
@@ -11,7 +11,7 @@ const DICT: Dict = {
   ko: {
     "lc.modeSL": "양력 → 음력",
     "lc.modeLS": "음력 → 양력",
-    "lc.year": "연도",
+    "lc.year": "연도 (1901–2100)",
     "lc.month": "월",
     "lc.day": "일",
     "lc.leap": "윤달",
@@ -22,42 +22,41 @@ const DICT: Dict = {
     "lc.leapBadge": "윤달",
     "lc.ganzhi": "간지",
     "lc.zodiac": "띠",
-    "lc.weekday": "요일",
     "lc.today": "오늘 날짜로",
+    "lc.copy": "결과 복사",
+    "lc.copied": "복사됨",
     "lc.invalidDate": "유효하지 않은 날짜입니다.",
     "lc.outOfRange": "1901~2100년 범위를 벗어났습니다.",
-    "lc.placeholder": "날짜를 선택하면 자동으로 변환됩니다.",
     "lc.leapHint": "이 달에는 윤달이 없습니다",
   },
   en: {
     "lc.modeSL": "Solar → Lunar",
     "lc.modeLS": "Lunar → Solar",
-    "lc.year": "Year",
+    "lc.year": "Year (1901–2100)",
     "lc.month": "Month",
     "lc.day": "Day",
-    "lc.leap": "Leap month",
-    "lc.solarLabel": "Enter solar (Gregorian) date",
-    "lc.lunarLabel": "Enter lunar date",
+    "lc.leap": "Intercalation month",
+    "lc.solarLabel": "Solar (Gregorian) date",
+    "lc.lunarLabel": "Lunar date",
     "lc.resultSolar": "Solar",
     "lc.resultLunar": "Lunar",
     "lc.leapBadge": "Leap",
-    "lc.ganzhi": "Ganjiji",
+    "lc.ganzhi": "Ganzhi",
     "lc.zodiac": "Zodiac",
-    "lc.weekday": "Day of week",
     "lc.today": "Use today",
+    "lc.copy": "Copy",
+    "lc.copied": "Copied",
     "lc.invalidDate": "Invalid date.",
     "lc.outOfRange": "Date is outside the 1901–2100 range.",
-    "lc.placeholder": "Select a date to convert.",
-    "lc.leapHint": "No intercalation month this month",
+    "lc.leapHint": "No intercalation month",
   },
 };
 
-const MONTHS_KO = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
-const MONTHS_EN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS_EN_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS_EN_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const WEEKDAYS_KO = ["일","월","화","수","목","금","토"];
 const WEEKDAYS_EN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-// GanZhi Chinese → Korean pronunciation map
 const GAN_KO: Record<string, string> = {
   甲:"갑",乙:"을",丙:"병",丁:"정",戊:"무",己:"기",庚:"경",辛:"신",壬:"임",癸:"계",
 };
@@ -93,7 +92,18 @@ function solarMonthDays(year: number, month: number) {
   return new Date(year, month, 0).getDate();
 }
 
-// Check if a given lunar year+month has an intercalation version
+// Determine actual days in a lunar month by round-tripping day 30
+function lunarMonthDays(year: number, month: number, isLeap: boolean): number {
+  try {
+    const m = isLeap ? -month : month;
+    const l = Lunar.fromYmd(year, m, 30);
+    const back = l.getSolar().getLunar();
+    return Math.abs(back.getMonth()) === Math.abs(m) && back.getDay() === 30 ? 30 : 29;
+  } catch {
+    return 29;
+  }
+}
+
 function hasLeapMonth(lunarYear: number, lunarMonth: number): boolean {
   try {
     const l = Lunar.fromYmd(lunarYear, -lunarMonth, 1);
@@ -116,16 +126,14 @@ function convertSolarToLunar(year: number, month: number, day: number): ConvertR
     const solar = Solar.fromDate(new Date(year, month - 1, day));
     const lunar = solar.getLunar();
     const lm = lunar.getMonth();
-    const isLeap = lm < 0;
     return {
       ok: true,
       year: lunar.getYear(),
       month: Math.abs(lm),
       day: lunar.getDay(),
-      isLeap,
+      isLeap: lm < 0,
       ganzhiYear: lunar.getYearInGanZhi(),
       zodiac: lunar.getYearShengXiao(),
-      weekday: solar.getWeek(),
     };
   } catch {
     return { ok: false, error: "invalidDate" };
@@ -135,8 +143,7 @@ function convertSolarToLunar(year: number, month: number, day: number): ConvertR
 function convertLunarToSolar(year: number, month: number, day: number, isLeap: boolean): ConvertResult {
   try {
     if (year < 1901 || year > 2100) return { ok: false, error: "outOfRange" };
-    const lunarMonth = isLeap ? -month : month;
-    const lunar = Lunar.fromYmd(year, lunarMonth, day);
+    const lunar = Lunar.fromYmd(year, isLeap ? -month : month, day);
     const solar = lunar.getSolar();
     if (solar.getYear() < 1901 || solar.getYear() > 2100) return { ok: false, error: "outOfRange" };
     return {
@@ -154,6 +161,21 @@ function convertLunarToSolar(year: number, month: number, day: number, isLeap: b
   }
 }
 
+function buildCopyText(result: ConvertResult & { ok: true }, mode: Mode, lang: "ko" | "en"): string {
+  if (mode === "solar-to-lunar") {
+    const leap = result.isLeap ? (lang === "ko" ? "윤" : "Leap ") : "";
+    return lang === "ko"
+      ? `음력 ${result.year}년 ${leap}${result.month}월 ${result.day}일`
+      : `Lunar ${leap}Month ${result.month}, Day ${result.day}, ${result.year}`;
+  }
+  const wd = result.weekday !== undefined
+    ? (lang === "ko" ? ` (${WEEKDAYS_KO[result.weekday]}요일)` : ` (${WEEKDAYS_EN[result.weekday]})`)
+    : "";
+  return lang === "ko"
+    ? `${result.year}년 ${result.month}월 ${result.day}일${wd}`
+    : `${MONTHS_EN_FULL[result.month - 1]} ${result.day}, ${result.year}${wd}`;
+}
+
 export default function LunarSolarConverter() {
   const { lang } = useLang();
   const t = useT(DICT);
@@ -161,61 +183,78 @@ export default function LunarSolarConverter() {
   const today = todaySolar();
   const [mode, setMode] = useState<Mode>("solar-to-lunar");
   const [year, setYear] = useState(today.year);
+  const [yearStr, setYearStr] = useState(String(today.year));
   const [month, setMonth] = useState(today.month);
   const [day, setDay] = useState(today.day);
   const [isLeap, setIsLeap] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  // Clamp day when month/year changes
-  const maxDay = mode === "solar-to-lunar"
-    ? solarMonthDays(year, month)
-    : 30; // lunar months are max 30 days
-  const safeDay = clamp(day, 1, maxDay);
+  // Keep text input in sync when year is set externally (e.g. resetToToday)
+  useEffect(() => { setYearStr(String(year)); }, [year]);
 
-  // Check if current month has a leap version (for lunar→solar mode)
-  const leapAvailable = useMemo(() => {
-    if (mode !== "lunar-to-solar") return false;
-    return hasLeapMonth(year, month);
-  }, [mode, year, month]);
+  const leapAvailable = useMemo(
+    () => mode === "lunar-to-solar" && hasLeapMonth(year, month),
+    [mode, year, month],
+  );
 
-  // Auto-disable leap if not available
   const effectiveLeap = isLeap && leapAvailable;
 
-  const result: ConvertResult = useMemo(() => {
-    if (mode === "solar-to-lunar") {
-      return convertSolarToLunar(year, month, safeDay);
-    } else {
-      return convertLunarToSolar(year, month, safeDay, effectiveLeap);
-    }
-  }, [mode, year, month, safeDay, effectiveLeap]);
+  const maxDay = useMemo(
+    () => mode === "solar-to-lunar" ? solarMonthDays(year, month) : lunarMonthDays(year, month, effectiveLeap),
+    [mode, year, month, effectiveLeap],
+  );
 
+  const safeDay = clamp(day, 1, maxDay);
+
+  const result: ConvertResult = useMemo(
+    () => mode === "solar-to-lunar"
+      ? convertSolarToLunar(year, month, safeDay)
+      : convertLunarToSolar(year, month, safeDay, effectiveLeap),
+    [mode, year, month, safeDay, effectiveLeap],
+  );
+
+  // Date is reset to today; mode is intentionally preserved
   function resetToToday() {
     const t2 = todaySolar();
     setYear(t2.year);
+    setYearStr(String(t2.year));
     setMonth(t2.month);
     setDay(t2.day);
     setIsLeap(false);
-    setMode("solar-to-lunar");
   }
 
+  // Mode switch: preserve the current date values, just clear the leap toggle
   function handleModeChange(m: Mode) {
     setMode(m);
     setIsLeap(false);
-    // Reset to today in solar mode when switching
-    if (m === "solar-to-lunar") {
-      setYear(today.year);
-      setMonth(today.month);
-      setDay(today.day);
-    }
   }
 
-  const monthsLabel = lang === "ko" ? MONTHS_KO : MONTHS_EN;
-  // weekday of the SOLAR date (input for s→l, output for l→s)
-  const weekdayLabel = result.ok && result.weekday !== undefined
-    ? (lang === "ko" ? WEEKDAYS_KO[result.weekday] + "요일" : WEEKDAYS_EN[result.weekday])
-    : null;
+  async function handleCopy() {
+    if (!result.ok) return;
+    try {
+      await navigator.clipboard.writeText(buildCopyText(result, mode, lang));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* ignore */ }
+  }
 
-  const yearOptions = [];
-  for (let y = 1901; y <= 2100; y++) yearOptions.push(y);
+  function handleYearInput(v: string) {
+    setYearStr(v);
+    const n = parseInt(v, 10);
+    if (!isNaN(n) && n >= 1901 && n <= 2100) setYear(n);
+  }
+
+  function handleYearBlur() {
+    const n = parseInt(yearStr, 10);
+    const safe = isNaN(n) ? today.year : clamp(n, 1901, 2100);
+    setYear(safe);
+    setYearStr(String(safe));
+  }
+
+  // Weekday is only meaningful for the output solar date (lunar→solar mode)
+  const weekdayLabel = result.ok && result.weekday !== undefined && mode === "lunar-to-solar"
+    ? (lang === "ko" ? `${WEEKDAYS_KO[result.weekday]}요일` : WEEKDAYS_EN[result.weekday])
+    : null;
 
   return (
     <>
@@ -248,18 +287,18 @@ export default function LunarSolarConverter() {
               <span className="lbl">{mode === "solar-to-lunar" ? t("lc.solarLabel") : t("lc.lunarLabel")}</span>
             </div>
             <div className="lc-fields">
-              {/* Year */}
+              {/* Year — number input, no 200-item dropdown */}
               <div className="lc-field-group">
                 <label className="lc-field-label">{t("lc.year")}</label>
-                <select
-                  className="lc-select lc-select-year"
-                  value={year}
-                  onChange={(e) => setYear(Number(e.target.value))}
-                >
-                  {yearOptions.map((y) => (
-                    <option key={y} value={y}>{y}{lang === "ko" ? "년" : ""}</option>
-                  ))}
-                </select>
+                <input
+                  type="number"
+                  className="lc-input-year"
+                  value={yearStr}
+                  min={1901}
+                  max={2100}
+                  onChange={(e) => handleYearInput(e.target.value)}
+                  onBlur={handleYearBlur}
+                />
               </div>
 
               {/* Month */}
@@ -272,13 +311,17 @@ export default function LunarSolarConverter() {
                 >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
                     <option key={m} value={m}>
-                      {lang === "ko" ? `${m}월` : monthsLabel[m - 1]}
+                      {lang === "ko"
+                        ? `${m}월`
+                        : mode === "solar-to-lunar"
+                          ? MONTHS_EN_SHORT[m - 1]
+                          : `Month ${m}`}
                     </option>
                   ))}
                 </select>
               </div>
 
-              {/* Day */}
+              {/* Day — max clamped to actual lunar month length */}
               <div className="lc-field-group">
                 <label className="lc-field-label">{t("lc.day")}</label>
                 <select
@@ -292,7 +335,7 @@ export default function LunarSolarConverter() {
                 </select>
               </div>
 
-              {/* Leap month toggle (lunar→solar only) */}
+              {/* Intercalation toggle — lunar→solar only */}
               {mode === "lunar-to-solar" && (
                 <div className="lc-leap-row">
                   <label className={`lc-leap-toggle${!leapAvailable ? " disabled" : ""}`}>
@@ -318,34 +361,47 @@ export default function LunarSolarConverter() {
             {result.ok ? (
               <>
                 <div className="lc-result-main">
-                  <div className="lc-result-label">
-                    {mode === "solar-to-lunar" ? t("lc.resultLunar") : t("lc.resultSolar")}
+                  <div className="lc-result-header">
+                    <span className="lc-result-label">
+                      {mode === "solar-to-lunar" ? t("lc.resultLunar") : t("lc.resultSolar")}
+                    </span>
+                    <button
+                      className={`lc-copy-btn${copied ? " copied" : ""}`}
+                      onClick={handleCopy}
+                      aria-label={t("lc.copy")}
+                    >
+                      {copied ? (
+                        <>
+                          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 8l3 3 7-6" />
+                          </svg>
+                          {t("lc.copied")}
+                        </>
+                      ) : (
+                        <>
+                          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <rect x="5.5" y="3.5" width="8" height="10" rx="1.5" />
+                            <path d="M5.5 5H4a1 1 0 00-1 1v7a1 1 0 001 1h6a1 1 0 001-1v-1.5" />
+                          </svg>
+                          {t("lc.copy")}
+                        </>
+                      )}
+                    </button>
                   </div>
+
                   <div className="lc-result-date">
-                    {mode === "solar-to-lunar" ? (
-                      <>
-                        <span className="lc-result-year num">{result.year}</span>
-                        <span className="lc-result-sep">{lang === "ko" ? "년 " : "–"}</span>
-                        {result.isLeap && (
-                          <span className="lc-leap-badge">{t("lc.leapBadge")}</span>
-                        )}
-                        <span className="lc-result-month num">{result.month}</span>
-                        <span className="lc-result-sep">{lang === "ko" ? "월 " : "–"}</span>
-                        <span className="lc-result-day num">{result.day}</span>
-                        {lang === "ko" && <span className="lc-result-sep">일</span>}
-                      </>
-                    ) : (
-                      <>
-                        <span className="lc-result-year num">{result.year}</span>
-                        <span className="lc-result-sep">{lang === "ko" ? "년 " : "–"}</span>
-                        <span className="lc-result-month num">{result.month}</span>
-                        <span className="lc-result-sep">{lang === "ko" ? "월 " : "–"}</span>
-                        <span className="lc-result-day num">{result.day}</span>
-                        {lang === "ko" && <span className="lc-result-sep">일</span>}
-                      </>
+                    <span className="lc-result-year num">{result.year}</span>
+                    <span className="lc-result-sep">{lang === "ko" ? "년" : "/"}</span>
+                    {result.isLeap && (
+                      <span className="lc-leap-badge">{t("lc.leapBadge")}</span>
                     )}
+                    <span className="lc-result-month num">{result.month}</span>
+                    <span className="lc-result-sep">{lang === "ko" ? "월" : "/"}</span>
+                    <span className="lc-result-day num">{result.day}</span>
+                    {lang === "ko" && <span className="lc-result-sep">일</span>}
                   </div>
-                  {weekdayLabel && mode === "lunar-to-solar" && (
+
+                  {weekdayLabel && (
                     <div className="lc-weekday">{weekdayLabel}</div>
                   )}
                 </div>
