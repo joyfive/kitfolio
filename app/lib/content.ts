@@ -1127,6 +1127,152 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "lunar-solar-converter",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "pm", "small-business-owner"],
+    ico: "☽↔",
+    ready: true,
+    badge: "Clean SaaS",
+    name: { ko: "음력 양력 변환기", en: "Lunar–Solar Converter" },
+    relatedTools: ["slack-timestamp-converter", "time-calculator", "flex-work-calculator"],
+    seo: {
+      ko: {
+        title: "음력 양력 변환기 — 1901~2100년 날짜 변환",
+        description:
+          "양력 날짜를 음력으로, 음력 날짜를 양력으로 즉시 변환합니다. 1901년부터 2100년까지 지원하며 윤달 처리와 갑자·띠 정보도 함께 확인할 수 있습니다. 설치·가입 없이 브라우저에서 바로 사용하세요.",
+        keywords: [
+          "음력 양력 변환",
+          "음력 변환기",
+          "양력 음력 변환",
+          "음력 날짜 변환",
+          "음력 양력 계산기",
+          "음력 계산기",
+          "윤달 계산",
+        ],
+      },
+      en: {
+        title: "Lunar–Solar Date Converter — 1901 to 2100",
+        description:
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
+        keywords: [
+          "lunar solar converter",
+          "korean lunar calendar",
+          "lunar date converter",
+          "solar to lunar",
+          "lunar to solar",
+          "korean calendar converter",
+          "intercalation month",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함.",
+        description:
+          "양력 날짜를 음력으로, 음력 날짜를 양력으로 즉시 변환합니다. 1901년부터 2100년까지 지원하며 윤달 처리와 갑자·띠 정보도 함께 확인할 수 있습니다. 설치·가입 없이 브라우저에서 바로 사용하세요.",
+        howItWorks: [
+          "변환 방향 선택 (양력→음력 또는 음력→양력)",
+          "연·월·일 입력 (윤달 여부 선택 가능)",
+          "변환 결과와 갑자·띠 확인",
+        ],
+        aeo: {
+          what: "음력 양력 변환기는 양력(그레고리력) 날짜와 음력(한국 음력) 날짜를 양방향으로 변환해주는 도구입니다. 1901년부터 2100년까지 지원하며 윤달도 정확하게 처리합니다.",
+          who: "제삿날·생일·명절처럼 음력 기준 날짜를 양력으로 확인해야 하는 직장인과 자영업자, 또는 양력 날짜가 음력으로 며칠인지 확인하려는 분을 위한 도구입니다.",
+          how: "변환 방향을 선택한 뒤 연·월·일을 입력하면 브라우저 안에서 즉시 상대 역법의 날짜로 변환하고 갑자(干支)와 띠 정보를 함께 표시합니다.",
+          why: "음력과 양력을 매년 달력을 뒤적이거나 검색하지 않고 1901~2100년 범위 어느 날짜든 한 번에 확인할 수 있기 때문입니다.",
+        },
+      },
+      en: {
+        card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901–2100 with leap months.",
+        description:
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
+        howItWorks: [
+          "Choose conversion direction (solar → lunar or lunar → solar)",
+          "Enter year, month and day (toggle intercalation if needed)",
+          "See the converted date with ganzhi year and zodiac",
+        ],
+        aeo: {
+          what: "A Lunar–Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
+          who: "It is for office workers and small business owners who need to look up lunar-calendar anniversaries, memorial days and traditional holidays in the Gregorian calendar, or the reverse.",
+          how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser — including the traditional Korean ganzhi year name and zodiac animal.",
+          why: "It saves the annual calendar-flipping or search needed to cross-reference lunar and solar dates for any date from 1901 to 2100.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "음력 양력 변환기란 어떤 도구인가요?",
+          answer:
+            "양력(그레고리력) 날짜를 한국 음력 날짜로, 또는 음력 날짜를 양력 날짜로 변환해주는 도구입니다. 제삿날·생일·명절처럼 음력 기준 날짜를 양력으로 확인하거나, 반대로 양력 날짜가 음력으로 며칠인지 알고 싶을 때 사용합니다.",
+        },
+        {
+          question: "윤달은 어떻게 처리하나요?",
+          answer:
+            "음력 입력 모드에서 특정 달을 선택하면 해당 달에 윤달이 존재할 경우 '윤달' 토글이 활성화됩니다. 윤달을 켜면 해당 윤달의 양력 날짜로 변환합니다. 양력→음력 변환 시에는 결과에 윤달 여부가 자동으로 표시됩니다.",
+        },
+        {
+          question: "어느 기간의 날짜까지 변환할 수 있나요?",
+          answer:
+            "1901년 1월 1일부터 2100년 12월 31일까지의 양력 날짜를 지원합니다. 그 범위 안의 음력 날짜도 모두 변환 가능합니다.",
+        },
+        {
+          question: "입력한 날짜가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 변환은 브라우저 안에서 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+        },
+        {
+          question: "갑자(干支)와 띠는 어떤 기준으로 계산되나요?",
+          answer:
+            "음력 해당 연도를 기준으로 갑자(천간·지지)와 띠를 계산합니다. 양력→음력 변환 결과에 표시되는 갑자·띠는 그 날짜가 속한 음력 연도를 기준으로 합니다.",
+        },
+        {
+          question: "음력 날짜를 잘못 입력하면 어떻게 되나요?",
+          answer:
+            "존재하지 않는 음력 날짜(예: 실제로 29일까지밖에 없는 달의 30일)를 입력하면 오류 메시지가 표시됩니다. 올바른 날짜를 다시 입력하면 정상 변환됩니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is a Lunar–Solar Converter?",
+          answer:
+            "It is a tool that converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. Use it to find the Gregorian date of a lunar anniversary or memorial day, or to find the lunar date that corresponds to a given Gregorian date.",
+        },
+        {
+          question: "How are intercalation (leap) months handled?",
+          answer:
+            "In lunar-input mode, a leap-month toggle appears when the selected month has an intercalation counterpart in that year. Turning it on converts the intercalation-month date to the correct Gregorian date. In solar-to-lunar mode, the result automatically indicates whether the date falls in an intercalation month.",
+        },
+        {
+          question: "What date range is supported?",
+          answer:
+            "Solar dates from January 1, 1901 to December 31, 2100 are supported, along with all corresponding lunar dates within that range.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. All conversions run entirely in your browser. No data is uploaded or stored.",
+        },
+        {
+          question: "What standard does the Korean lunar calendar follow?",
+          answer:
+            "The Korean lunisolar calendar follows the traditional East Asian calendar system based on astronomical new moons. It matches the calendar published by the Korea Astronomy and Space Science Institute (KASI).",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "음력 양력 변환기",
+        subtitle: "양력 ↔ 음력 날짜 즉시 변환 · 1901~2100년 지원",
+      },
+      en: {
+        title: "Lunar–Solar Converter",
+        subtitle: "Convert between Gregorian and Korean lunar dates instantly",
+      },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
