@@ -17,7 +17,6 @@ export function LogoMark({
       aria-label={title}
       aria-hidden={title ? undefined : true}
     >
-      {title && <title>{title}</title>}
       <path
         d="M1 7V1H2.76471V3.15858H3.58824L5.02353 1H6.92941L5.14118 3.78698L7 7H5.07059L3.6 4.55385H2.76471V7H1Z"
         fill="#50535E"
