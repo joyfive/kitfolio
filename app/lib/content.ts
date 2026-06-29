@@ -45,7 +45,8 @@ export type TargetTag =
   | "developer"
   | "job-seeker"
   | "office-worker"
-  | "small-business-owner";
+  | "small-business-owner"
+  | "marketer";
 
 export type QA = { question: string; answer: string };
 
@@ -236,6 +237,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
   "job-seeker": { ko: "취업 준비생", en: "Job seeker" },
   "office-worker": { ko: "직장인", en: "Office worker" },
   "small-business-owner": { ko: "자영업자", en: "Small business" },
+  marketer: { ko: "마케터", en: "Marketer" },
 };
 
 /* ============================================================
@@ -2800,6 +2802,885 @@ export const TOOLS: Tool[] = [
     og: {
       ko: { title: "성장 예측 계산기", subtitle: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측" },
       en: { title: "Growth Projection Calculator", subtitle: "Project future value with compound growth rate instantly" },
+    },
+  },
+
+  // ── Marketing Calculators ──────────────────
+  {
+    slug: "ad-budget-pacing-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "pace",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
+    relatedTools: ["roas-calculator", "cpa-calculator", "funnel-conversion-calculator"],
+    seo: {
+      ko: {
+        title: "광고 예산 페이싱 계산기 — 광고비 소진율·집행률 확인",
+        description:
+          "캠페인 기간 진행률과 예산 소진율을 비교해 광고비가 계획보다 빠르게 또는 느리게 집행되고 있는지 즉시 확인합니다. 남은 기간에 필요한 일평균 광고비와 예상 최종 지출액도 함께 계산합니다. 매일·평일 집행 기준 선택 가능. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "광고 예산 페이싱 계산기",
+          "광고비 소진율 계산",
+          "캠페인 예산 계산기",
+          "광고 일예산 계산기",
+          "광고 예산 진도",
+          "광고비 집행률",
+        ],
+      },
+      en: {
+        title: "Ad Budget Pacing Calculator — Campaign Budget Burn Rate",
+        description:
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "ad budget pacing calculator",
+          "campaign budget pacing",
+          "ad spend pacing calculator",
+          "daily ad budget calculator",
+          "campaign budget burn rate",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인.",
+        description:
+          "캠페인 기간 진행률과 예산 소진율을 비교해 광고비가 계획보다 빠르게 또는 느리게 집행되고 있는지 즉시 확인합니다. 남은 기간에 필요한 일평균 광고비와 예상 최종 지출액도 함께 계산합니다. 매일·평일 집행 기준 선택 가능. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "총예산·기간·누적 지출액 입력",
+          "기간 진행률과 예산 소진율 비교",
+          "페이싱 상태와 필요 일평균 광고비 확인",
+        ],
+        aeo: {
+          what: "광고 예산 페이싱 계산기는 캠페인의 기간 진행률과 예산 소진율을 비교해 광고비가 계획 속도로 집행되고 있는지 확인하고, 남은 기간에 필요한 일평균 광고비와 예상 최종 지출액을 계산하는 도구입니다.",
+          who: "광고 예산을 관리하는 마케터, 디지털 마케팅을 운영하는 소상공인과 자영업자, 캠페인 ROI를 추적하는 PM을 위한 도구입니다.",
+          how: "총예산·시작일·종료일·기준일·누적 지출액을 입력하면 브라우저에서 즉시 기간 진행률, 예산 소진율, 페이싱 차이, 남은 예산, 필요 일평균 광고비를 계산합니다.",
+          why: "광고비가 계획보다 빠르게 소진되면 캠페인 후반에 예산이 부족해지고, 너무 느리면 집행 효율이 떨어집니다. 페이싱 계산기로 매일 현황을 파악하면 예산을 최적으로 배분할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Compare campaign time progress vs budget burn rate to spot overpacing or underpacing instantly.",
+        description:
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Enter total budget, campaign dates and spend to date",
+          "Compare time progress vs budget burn rate",
+          "See pacing status and required daily spend",
+        ],
+        aeo: {
+          what: "Ad Budget Pacing Calculator is a tool that compares your campaign's time elapsed with its budget consumed to tell you whether your ad spend is on track, ahead, or behind schedule — and calculates the daily spend needed for the remaining period.",
+          who: "It is for marketers managing ad budgets, small business owners running digital campaigns, and PMs tracking campaign ROI.",
+          how: "Enter your total budget, campaign start and end dates, the reference date, and spend to date. The calculator instantly computes time progress, budget burn rate, pacing gap, remaining budget, and required daily spend — all in your browser.",
+          why: "If ad spend burns too fast, your campaign runs dry before it ends. Too slow, and you under-deliver. Daily pacing checks let you reallocate budget at the right moment.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "기간 진행률과 예산 소진율의 차이는 무엇인가요?",
+          answer:
+            "기간 진행률은 전체 집행일 중 얼마나 지났는지를 나타내는 시간 기준 비율이고, 예산 소진율은 총예산 중 얼마를 사용했는지를 나타내는 금액 기준 비율입니다. 두 비율의 차이가 페이싱 상태를 결정합니다.",
+        },
+        {
+          question: "시작일과 종료일은 집행일 수에 포함되나요?",
+          answer:
+            "네, 시작일과 종료일 모두 집행일 수에 포함됩니다. 기준일까지의 경과 집행일 수도 기준일 당일을 포함해 계산합니다.",
+        },
+        {
+          question: "평일만 집행 기준으로 선택하면 어떻게 계산되나요?",
+          answer:
+            "평일만 옵션을 선택하면 월요일~금요일만 집행일로 계산합니다. 공휴일은 자동으로 제외되지 않습니다. 공휴일을 제외해야 한다면 매뉴얼로 날짜를 조정하거나 집행일 수를 직접 입력해야 합니다.",
+        },
+        {
+          question: "예상 최종 지출액은 어떻게 계산되나요?",
+          answer:
+            "예상 최종 지출액은 현재 누적 지출액에 예상 일평균 광고비 × 남은 집행일 수를 더해 계산합니다. 예상 일평균 광고비를 별도로 입력하지 않으면 현재까지의 실제 일평균 광고비를 사용합니다.",
+        },
+        {
+          question: "입력한 예산·지출 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the difference between time progress and budget burn rate?",
+          answer:
+            "Time progress is how far through the campaign period you are (elapsed days ÷ total days). Budget burn rate is how much of the total budget you have spent (spend to date ÷ total budget). The gap between the two is the pacing difference.",
+        },
+        {
+          question: "Are the start date and end date included in the day count?",
+          answer:
+            "Yes, both the start date and the end date are included in the total day count. The elapsed days up to the reference date also include the reference date itself.",
+        },
+        {
+          question: "How does the weekday-only pacing option work?",
+          answer:
+            "When you select weekdays only, only Monday through Friday are counted as running days. Public holidays are not automatically excluded. If you need to exclude holidays, adjust the dates manually.",
+        },
+        {
+          question: "How is the projected final spend calculated?",
+          answer:
+            "Projected final spend = spend to date + (expected daily spend × remaining days). If you do not enter a custom expected daily spend, the calculator uses your current actual daily average (spend to date ÷ elapsed days).",
+        },
+        {
+          question: "Is my budget data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "광고 예산 페이싱 계산기", subtitle: "기간 진행률 대비 예산 소진율 비교 · 일평균 광고비 역산" },
+      en: { title: "Ad Budget Pacing Calculator", subtitle: "Compare time progress vs budget burn rate for your campaign" },
+    },
+  },
+  {
+    slug: "roas-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "ROAS",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "ROAS 계산기", en: "ROAS Calculator" },
+    relatedTools: ["cpa-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
+    seo: {
+      ko: {
+        title: "ROAS 계산기 — 광고 수익률·목표 매출·허용 광고비 계산",
+        description:
+          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "ROAS 계산기",
+          "광고 수익률 계산",
+          "광고비 대비 매출",
+          "목표 ROAS 계산",
+          "손익분기 ROAS",
+          "return on ad spend calculator",
+        ],
+      },
+      en: {
+        title: "ROAS Calculator — Return on Ad Spend, Target Revenue & Budget",
+        description:
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "ROAS calculator",
+          "return on ad spend calculator",
+          "target ROAS calculator",
+          "ad revenue calculator",
+          "break even ROAS",
+          "advertising ROI calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함.",
+        description:
+          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "계산 모드 선택(ROAS·목표 매출·허용 광고비)",
+          "광고비·매출 또는 목표값 입력",
+          "ROAS와 관련 수치 즉시 확인",
+        ],
+        aeo: {
+          what: "ROAS 계산기는 광고비 대비 매출 비율인 ROAS(Return on Ad Spend)를 계산하고, 목표 ROAS에서 필요 매출과 허용 광고비를 역산하며, 매출총이익률로 손익분기 ROAS를 도출하는 도구입니다.",
+          who: "광고 성과를 추적하는 마케터, 디지털 광고를 운영하는 소상공인, 캠페인 예산을 계획하는 PM을 위한 도구입니다.",
+          how: "ROAS 계산 모드에서는 광고비와 광고 매출을 입력하면 ROAS(%)와 ROAS 배수를 즉시 계산합니다. 목표 매출·허용 광고비 모드에서는 목표값을 역산합니다. 매출총이익률을 추가로 입력하면 손익분기 ROAS도 계산됩니다.",
+          why: "ROAS는 광고 효율을 가장 직관적으로 나타내는 지표입니다. 목표 ROAS를 설정하고 역산하면 광고 예산을 더 정확하게 계획할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
+        description:
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Choose a calculation mode (ROAS, target revenue, or allowable budget)",
+          "Enter ad spend, revenue, or target values",
+          "See ROAS and related metrics instantly",
+        ],
+        aeo: {
+          what: "ROAS Calculator is a tool that computes Return on Ad Spend (ad revenue ÷ ad spend × 100), reverse-calculates target revenue or allowable ad budget from a target ROAS, and derives break-even ROAS from a gross margin percentage.",
+          who: "It is for marketers tracking ad performance, small business owners running digital ads, and PMs planning campaign budgets.",
+          how: "In ROAS mode, enter ad spend and revenue to get ROAS (%) and ROAS multiple instantly. In target modes, enter the target value to reverse-calculate the missing number. Enter a gross margin percentage to see the break-even ROAS.",
+          why: "ROAS is the most direct measure of advertising efficiency. Setting a target ROAS and reverse-calculating required inputs lets you plan budgets with precision rather than guesswork.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "ROAS는 무엇인가요?",
+          answer:
+            "ROAS(Return on Ad Spend)는 광고 수익률로, 광고비 1원을 투자했을 때 매출이 얼마나 발생했는지를 나타냅니다. ROAS(%) = 광고 매출 ÷ 광고비 × 100으로 계산합니다. 예를 들어 광고비 100만 원으로 400만 원의 매출을 달성하면 ROAS는 400%입니다.",
+        },
+        {
+          question: "ROAS와 ROI의 차이는 무엇인가요?",
+          answer:
+            "ROAS는 광고비 대비 매출만 비교하는 단순 지표입니다. ROI(Return on Investment)는 광고비 외에 제조원가·운영비 등 전체 비용을 고려한 순이익 기준 지표입니다. 광고 효율만 빠르게 비교할 때는 ROAS를, 전체 사업 수익성을 볼 때는 ROI를 사용합니다.",
+        },
+        {
+          question: "손익분기 ROAS는 어떻게 계산하나요?",
+          answer:
+            "손익분기 ROAS = 100 ÷ 매출총이익률(소수)로 계산합니다. 예를 들어 매출총이익률이 30%이면 손익분기 ROAS는 100 ÷ 0.3 = 333.33%입니다. 이 값 이상의 ROAS를 달성해야 광고비를 제외하고도 이익이 발생합니다.",
+        },
+        {
+          question: "입력한 광고비와 매출 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is ROAS?",
+          answer:
+            "ROAS (Return on Ad Spend) measures how much revenue you earn for every dollar spent on advertising. ROAS (%) = ad revenue ÷ ad spend × 100. For example, spending $1,000 on ads and generating $4,000 in revenue gives you a ROAS of 400%.",
+        },
+        {
+          question: "What is the difference between ROAS and ROI?",
+          answer:
+            "ROAS only compares ad revenue to ad spend. ROI (Return on Investment) factors in all costs — cost of goods, operations, etc. — and measures net profit. Use ROAS for a quick read on ad efficiency; use ROI for overall profitability.",
+        },
+        {
+          question: "How is break-even ROAS calculated?",
+          answer:
+            "Break-even ROAS = 100 ÷ gross margin (as a decimal). For example, a 30% gross margin gives a break-even ROAS of 100 ÷ 0.3 = 333.33%. You need to achieve at least this ROAS for ads to be profitable after accounting for cost of goods.",
+        },
+        {
+          question: "Is my ad spend and revenue data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "ROAS 계산기", subtitle: "광고 수익률 · 목표 매출 · 허용 광고비 역산" },
+      en: { title: "ROAS Calculator", subtitle: "Return on ad spend, target revenue and allowable budget" },
+    },
+  },
+  {
+    slug: "cpa-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "CPA",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "CPA 계산기", en: "CPA Calculator" },
+    relatedTools: ["roas-calculator", "cpc-calculator", "funnel-conversion-calculator"],
+    seo: {
+      ko: {
+        title: "CPA 계산기 — 전환당 광고비·예상 전환 수·필요 예산 계산",
+        description:
+          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "CPA 계산기",
+          "전환당 비용 계산",
+          "목표 CPA 계산",
+          "전환 광고비 계산",
+          "cost per acquisition calculator",
+          "cost per action calculator",
+        ],
+      },
+      en: {
+        title: "CPA Calculator — Cost Per Acquisition, Conversions & Budget",
+        description:
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "CPA calculator",
+          "cost per acquisition calculator",
+          "cost per action calculator",
+          "conversion cost calculator",
+          "target CPA calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함.",
+        description:
+          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "계산 모드 선택(CPA·예상 전환 수·필요 예산)",
+          "광고비·전환 수 또는 목표값 입력",
+          "CPA와 관련 수치 즉시 확인",
+        ],
+        aeo: {
+          what: "CPA 계산기는 광고비 ÷ 전환 수로 전환당 광고비(CPA, Cost Per Acquisition)를 계산하고, 목표 CPA와 예산으로 예상 전환 수를 역산하거나 목표 전환 수와 CPA로 필요 예산을 계산하는 도구입니다.",
+          who: "전환 성과를 추적하는 마케터, 퍼포먼스 광고를 운영하는 소상공인, 캠페인 KPI를 관리하는 PM을 위한 도구입니다.",
+          how: "CPA 계산 모드에서는 광고비와 전환 수를 입력하면 CPA를 즉시 계산합니다. 목표 CPA 역산 모드에서는 예산과 목표 CPA로 예상 전환 수를, 필요 예산 모드에서는 목표 전환 수와 CPA로 필요 예산을 계산합니다.",
+          why: "CPA는 광고 효율을 전환 기준으로 측정하는 핵심 지표입니다. 목표 CPA를 설정하고 역산하면 광고 예산을 더 정밀하게 계획할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
+        description:
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Choose a calculation mode (CPA, expected conversions, or required budget)",
+          "Enter ad spend, conversions, or target values",
+          "See CPA and related metrics instantly",
+        ],
+        aeo: {
+          what: "CPA Calculator is a tool that computes Cost Per Acquisition (ad spend ÷ conversions), reverse-calculates expected conversions from a budget and target CPA, and finds the required budget for a target number of conversions.",
+          who: "It is for marketers tracking conversion performance, small business owners running performance ads, and PMs managing campaign KPIs.",
+          how: "In CPA mode, enter ad spend and conversions to see CPA instantly. In reverse modes, enter a target CPA with a budget to get expected conversions, or a target conversion count with a CPA to get the required budget.",
+          why: "CPA measures advertising efficiency in terms of outcomes rather than clicks or impressions. Setting a target CPA lets you plan budgets around actual business goals.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "CPA란 무엇인가요?",
+          answer:
+            "CPA(Cost Per Acquisition 또는 Cost Per Action)는 전환 1건을 달성하는 데 든 광고비를 나타냅니다. CPA = 광고비 ÷ 전환 수로 계산합니다. 전환은 구매·회원가입·신청·다운로드 등 목표로 정한 행동을 의미합니다.",
+        },
+        {
+          question: "예상 전환 수는 왜 소수점이 아닌 정수로 표시되나요?",
+          answer:
+            "예상 전환 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 100만 원, 목표 CPA 30만 원이면 예상 전환 수는 floor(1,000,000 ÷ 300,000) = 3건입니다.",
+        },
+        {
+          question: "CPA와 CPC의 차이는 무엇인가요?",
+          answer:
+            "CPC(Cost Per Click)는 클릭 1번당 광고비이고, CPA(Cost Per Acquisition)는 전환 1건당 광고비입니다. CPC는 트래픽 비용을, CPA는 실제 성과(구매·신청 등) 비용을 측정합니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is CPA?",
+          answer:
+            "CPA (Cost Per Acquisition or Cost Per Action) is the average cost of achieving one conversion. CPA = ad spend ÷ conversions. A conversion can be a purchase, sign-up, application, download — any goal action you define.",
+        },
+        {
+          question: "Why is the expected conversion count a whole number?",
+          answer:
+            "Expected conversions use floor (round down) because you can only achieve whole conversions. For example, with a $1,000 budget and $300 target CPA, expected conversions = floor(1000 ÷ 300) = 3.",
+        },
+        {
+          question: "What is the difference between CPA and CPC?",
+          answer:
+            "CPC (Cost Per Click) measures the cost of each click on your ad. CPA (Cost Per Acquisition) measures the cost of each actual conversion — a purchase, sign-up, etc. CPC tracks traffic cost; CPA tracks outcome cost.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "CPA 계산기", subtitle: "전환당 광고비 · 예상 전환 수 · 필요 예산 역산" },
+      en: { title: "CPA Calculator", subtitle: "Cost per acquisition, expected conversions and required budget" },
+    },
+  },
+  {
+    slug: "cpc-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "CPC",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "CPC 계산기", en: "CPC Calculator" },
+    relatedTools: ["ctr-calculator", "cpm-calculator", "cpa-calculator"],
+    seo: {
+      ko: {
+        title: "CPC 계산기 — 클릭당 광고비·예상 클릭 수·필요 예산 계산",
+        description:
+          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "CPC 계산기",
+          "클릭당 비용 계산",
+          "목표 CPC 계산",
+          "광고 클릭 비용",
+          "cost per click calculator",
+          "average CPC calculator",
+        ],
+      },
+      en: {
+        title: "CPC Calculator — Cost Per Click, Expected Clicks & Budget",
+        description:
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "CPC calculator",
+          "cost per click calculator",
+          "average CPC calculator",
+          "ad click cost",
+          "target CPC calculator",
+          "PPC calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함.",
+        description:
+          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "계산 모드 선택(CPC·예상 클릭 수·필요 예산)",
+          "광고비·클릭 수 또는 목표값 입력",
+          "CPC와 관련 수치 즉시 확인",
+        ],
+        aeo: {
+          what: "CPC 계산기는 광고비 ÷ 클릭 수로 클릭당 광고비(CPC, Cost Per Click)를 계산하고, 목표 CPC와 예산으로 예상 클릭 수를 역산하거나 목표 클릭 수와 CPC로 필요 예산을 계산하는 도구입니다.",
+          who: "검색·디스플레이 광고를 운영하는 마케터, PPC 캠페인을 관리하는 소상공인, 클릭 기반 트래픽 예산을 계획하는 PM을 위한 도구입니다.",
+          how: "CPC 계산 모드에서는 광고비와 클릭 수를 입력하면 CPC를 즉시 계산합니다. 역산 모드에서는 목표값을 입력하면 예상 클릭 수 또는 필요 예산을 계산합니다.",
+          why: "CPC를 파악하면 광고비 대비 트래픽 효율을 측정할 수 있습니다. 목표 CPC를 기준으로 예산과 클릭 수를 역산하면 SEM·PPC 캠페인 계획을 더 정확하게 세울 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
+        description:
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Choose a calculation mode (CPC, expected clicks, or required budget)",
+          "Enter ad spend, clicks, or target values",
+          "See CPC and related metrics instantly",
+        ],
+        aeo: {
+          what: "CPC Calculator is a tool that computes Cost Per Click (ad spend ÷ clicks), reverse-calculates expected clicks from a budget and target CPC, and finds the required budget for a target number of clicks.",
+          who: "It is for marketers running search and display ads, small business owners managing PPC campaigns, and PMs planning click-based traffic budgets.",
+          how: "In CPC mode, enter ad spend and clicks to see CPC instantly. In reverse modes, enter a target CPC with a budget to get expected clicks, or a target click count with a CPC to get the required budget.",
+          why: "Knowing your CPC lets you measure traffic efficiency per advertising dollar. Reverse-calculating from a target CPC helps you plan SEM and PPC budgets with precision.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "CPC란 무엇인가요?",
+          answer:
+            "CPC(Cost Per Click)는 광고 클릭 1번당 지불한 광고비를 나타냅니다. CPC = 광고비 ÷ 클릭 수로 계산합니다. Google Ads, Meta Ads 등 대부분의 퍼포먼스 광고에서 핵심 효율 지표로 사용됩니다.",
+        },
+        {
+          question: "예상 클릭 수는 왜 소수점이 아닌 정수로 표시되나요?",
+          answer:
+            "예상 클릭 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPC 300원이면 예상 클릭 수는 floor(100,000 ÷ 300) = 333건입니다.",
+        },
+        {
+          question: "CPC와 CPM의 차이는 무엇인가요?",
+          answer:
+            "CPC는 클릭 1번당 광고비이고, CPM은 노출 1,000회당 광고비입니다. 클릭 기반 과금 방식에서는 CPC를, 노출 기반 과금 방식에서는 CPM을 주요 지표로 사용합니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is CPC?",
+          answer:
+            "CPC (Cost Per Click) is the average amount you pay for each click on your ad. CPC = ad spend ÷ clicks. It is a core efficiency metric in Google Ads, Meta Ads, and most performance advertising platforms.",
+        },
+        {
+          question: "Why is the expected click count a whole number?",
+          answer:
+            "Expected clicks use floor (round down) because you can only receive whole clicks. For example, with a $100 budget and a $0.30 target CPC, expected clicks = floor(100 ÷ 0.30) = 333.",
+        },
+        {
+          question: "What is the difference between CPC and CPM?",
+          answer:
+            "CPC is cost per click; CPM is cost per 1,000 impressions. Use CPC for click-based (CPC bidding) campaigns and CPM for impression-based (CPM bidding) campaigns.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "CPC 계산기", subtitle: "클릭당 광고비 · 예상 클릭 수 · 필요 예산 역산" },
+      en: { title: "CPC Calculator", subtitle: "Cost per click, expected clicks and required budget" },
+    },
+  },
+  {
+    slug: "cpm-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "CPM",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "CPM 계산기", en: "CPM Calculator" },
+    relatedTools: ["ctr-calculator", "cpc-calculator", "ad-budget-pacing-calculator"],
+    seo: {
+      ko: {
+        title: "CPM 계산기 — 천 회 노출당 광고비·예상 노출 수·필요 예산 계산",
+        description:
+          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "CPM 계산기",
+          "천 회 노출당 비용",
+          "광고 노출 비용 계산",
+          "목표 CPM 계산",
+          "cost per mille calculator",
+          "cost per thousand impressions",
+        ],
+      },
+      en: {
+        title: "CPM Calculator — Cost Per Mille, Impressions & Budget",
+        description:
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "CPM calculator",
+          "cost per mille calculator",
+          "cost per thousand impressions",
+          "ad impression cost",
+          "target CPM calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함.",
+        description:
+          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "계산 모드 선택(CPM·예상 노출 수·필요 예산)",
+          "광고비·노출 수 또는 목표값 입력",
+          "CPM과 관련 수치 즉시 확인",
+        ],
+        aeo: {
+          what: "CPM 계산기는 광고비 ÷ 노출 수 × 1,000으로 천 회 노출당 광고비(CPM, Cost Per Mille)를 계산하고, 목표 CPM과 예산으로 예상 노출 수를 역산하거나 목표 노출 수와 CPM으로 필요 예산을 계산하는 도구입니다.",
+          who: "디스플레이·영상·소셜 광고를 운영하는 마케터, 브랜드 인지도 캠페인을 집행하는 소상공인, 노출 기반 광고 예산을 계획하는 PM을 위한 도구입니다.",
+          how: "CPM 계산 모드에서는 광고비와 노출 수를 입력하면 CPM을 즉시 계산합니다. 역산 모드에서는 목표 CPM과 예산으로 예상 노출 수를, 또는 목표 노출 수와 CPM으로 필요 예산을 계산합니다.",
+          why: "CPM은 브랜드 인지도 캠페인에서 광고비 효율을 측정하는 핵심 지표입니다. 목표 CPM을 기준으로 역산하면 노출 기반 광고 예산을 더 정확하게 계획할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
+        description:
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Choose a calculation mode (CPM, expected impressions, or required budget)",
+          "Enter ad spend, impressions, or target values",
+          "See CPM and related metrics instantly",
+        ],
+        aeo: {
+          what: "CPM Calculator is a tool that computes Cost Per Mille (ad spend ÷ impressions × 1,000), reverse-calculates expected impressions from a budget and target CPM, and finds the required budget for a target number of impressions.",
+          who: "It is for marketers running display, video, and social ads, small business owners running brand awareness campaigns, and PMs planning impression-based ad budgets.",
+          how: "In CPM mode, enter ad spend and impressions to see CPM instantly. In reverse modes, enter a target CPM with a budget to get expected impressions, or a target impression count with a CPM to get the required budget.",
+          why: "CPM is the standard metric for measuring cost efficiency in brand awareness campaigns. Reverse-calculating from a target CPM helps you plan impression-based budgets accurately.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "CPM이란 무엇인가요?",
+          answer:
+            "CPM(Cost Per Mille)은 광고 노출 1,000회당 지불한 광고비를 나타냅니다. CPM = 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 의미합니다.",
+        },
+        {
+          question: "예상 노출 수는 왜 소수점이 아닌 정수로 표시되나요?",
+          answer:
+            "예상 노출 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPM 500원이면 예상 노출 수는 floor(100,000 ÷ 500 × 1,000) = 200,000회입니다.",
+        },
+        {
+          question: "CPM과 CPC의 차이는 무엇인가요?",
+          answer:
+            "CPM은 노출 1,000회당 광고비이고, CPC는 클릭 1번당 광고비입니다. 브랜드 인지도·도달 중심 캠페인에는 CPM이, 트래픽·전환 중심 캠페인에는 CPC가 더 적합한 지표입니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is CPM?",
+          answer:
+            "CPM (Cost Per Mille) is the average cost you pay for 1,000 ad impressions. CPM = ad spend ÷ impressions × 1,000. 'Mille' is Latin for 1,000.",
+        },
+        {
+          question: "Why is the expected impression count a whole number?",
+          answer:
+            "Expected impressions use floor (round down) because you can only serve whole impressions. For example, with a $100 budget and a $5 target CPM, expected impressions = floor(100 ÷ 5 × 1,000) = 20,000.",
+        },
+        {
+          question: "What is the difference between CPM and CPC?",
+          answer:
+            "CPM is cost per 1,000 impressions; CPC is cost per click. CPM is the standard metric for brand awareness and reach campaigns. CPC is better suited for traffic and conversion campaigns.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "CPM 계산기", subtitle: "천 회 노출당 광고비 · 예상 노출 수 · 필요 예산 역산" },
+      en: { title: "CPM Calculator", subtitle: "Cost per mille, expected impressions and required budget" },
+    },
+  },
+  {
+    slug: "ctr-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "small-business-owner", "pm"],
+    ico: "CTR",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "CTR 계산기", en: "CTR Calculator" },
+    relatedTools: ["cpc-calculator", "cpm-calculator", "funnel-conversion-calculator"],
+    seo: {
+      ko: {
+        title: "CTR 계산기 — 클릭률·필요 클릭 수·필요 노출 수 계산",
+        description:
+          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "CTR 계산기",
+          "클릭률 계산",
+          "광고 클릭률",
+          "목표 CTR 계산",
+          "click through rate calculator",
+          "CTR percentage calculator",
+        ],
+      },
+      en: {
+        title: "CTR Calculator — Click-Through Rate, Clicks & Impressions",
+        description:
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+        keywords: [
+          "CTR calculator",
+          "click through rate calculator",
+          "CTR percentage calculator",
+          "ad click rate",
+          "target CTR calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함.",
+        description:
+          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "계산 모드 선택(CTR·필요 클릭 수·필요 노출 수)",
+          "클릭 수·노출 수 또는 목표값 입력",
+          "CTR과 관련 수치 즉시 확인",
+        ],
+        aeo: {
+          what: "CTR 계산기는 클릭 수 ÷ 노출 수 × 100으로 클릭률(CTR, Click-Through Rate)을 계산하고, 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나 목표 CTR과 클릭 수로 필요 노출 수를 계산하는 도구입니다.",
+          who: "광고·이메일·콘텐츠 성과를 분석하는 마케터, 디지털 광고를 운영하는 소상공인, 클릭률 목표를 설정하는 PM을 위한 도구입니다.",
+          how: "CTR 계산 모드에서는 클릭 수와 노출 수를 입력하면 CTR(%)을 즉시 계산합니다. 역산 모드에서는 목표 CTR을 기준으로 필요 클릭 수 또는 노출 수를 계산합니다.",
+          why: "CTR은 광고·이메일·콘텐츠의 참여도를 측정하는 핵심 지표입니다. 목표 CTR을 기준으로 역산하면 도달 목표와 클릭 목표를 더 정확하게 계획할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
+        description:
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+        howItWorks: [
+          "Choose a calculation mode (CTR, required clicks, or required impressions)",
+          "Enter clicks, impressions, or target values",
+          "See CTR and related metrics instantly",
+        ],
+        aeo: {
+          what: "CTR Calculator is a tool that computes Click-Through Rate (clicks ÷ impressions × 100), reverse-calculates required clicks from a target CTR and impression count, and finds the required impressions for a target CTR and click count.",
+          who: "It is for marketers analyzing ad, email, and content performance, small business owners running digital ads, and PMs setting click-rate targets.",
+          how: "In CTR mode, enter clicks and impressions to see CTR (%) instantly. In reverse modes, enter a target CTR with impressions to get required clicks, or with clicks to get required impressions.",
+          why: "CTR measures audience engagement with your ads, emails, and content. Reverse-calculating from a target CTR lets you plan reach and click goals with precision.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "CTR이란 무엇인가요?",
+          answer:
+            "CTR(Click-Through Rate, 클릭률)은 광고가 노출된 횟수 중 실제로 클릭된 비율을 나타냅니다. CTR(%) = 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고·이메일·검색 결과의 참여도를 측정하는 핵심 지표입니다.",
+        },
+        {
+          question: "필요 클릭 수와 필요 노출 수는 왜 올림으로 처리되나요?",
+          answer:
+            "목표를 달성하는 데 필요한 수량은 부족하면 안 되므로 ceil(올림) 처리합니다. 예를 들어 노출 수 10,000회에서 목표 CTR 2.5%를 달성하려면 ceil(10,000 × 0.025) = 250번의 클릭이 필요합니다.",
+        },
+        {
+          question: "클릭 수가 노출 수보다 많을 수도 있나요?",
+          answer:
+            "일반적으로 클릭 수는 노출 수를 초과할 수 없습니다. 다만 리타겟팅·교차 디바이스 트래킹 등 특수한 측정 방식에서 이런 현상이 나타날 수 있습니다. 이 계산기는 계산 자체는 허용하되 경고를 표시합니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is CTR?",
+          answer:
+            "CTR (Click-Through Rate) is the percentage of ad impressions that result in a click. CTR (%) = clicks ÷ impressions × 100. It is a core metric for measuring engagement with ads, emails, and search results.",
+        },
+        {
+          question: "Why are required clicks and impressions rounded up?",
+          answer:
+            "Required quantities use ceil (round up) because you need at least that many to hit your target. For example, to achieve a 2.5% CTR on 10,000 impressions, you need ceil(10,000 × 0.025) = 250 clicks.",
+        },
+        {
+          question: "Can clicks ever exceed impressions?",
+          answer:
+            "Normally, clicks cannot exceed impressions. However, retargeting, cross-device tracking, and certain measurement setups can produce this. This calculator allows the calculation but shows a warning.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "CTR 계산기", subtitle: "클릭률 · 필요 클릭 수 · 필요 노출 수 역산" },
+      en: { title: "CTR Calculator", subtitle: "Click-through rate, required clicks and required impressions" },
+    },
+  },
+  {
+    slug: "funnel-conversion-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["marketer", "pm", "small-business-owner"],
+    ico: "⇢%",
+    ready: true,
+    badge: "Marketing Calculator",
+    name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
+    relatedTools: ["ctr-calculator", "cpa-calculator", "ad-budget-pacing-calculator"],
+    seo: {
+      ko: {
+        title: "퍼널 전환율 계산기 — 마케팅 퍼널 분석·목표 역산",
+        description:
+          "마케팅 퍼널 단계별 전환율과 이탈률을 계산하고, 최종 목표 전환 수를 달성하기 위해 각 상위 단계에서 필요한 수량을 역산합니다. 광고·리드·커머스 퍼널 프리셋 포함. 단계 추가·삭제·이름 변경 가능. 모든 계산은 브라우저에서만 처리됩니다.",
+        keywords: [
+          "퍼널 전환율 계산기",
+          "마케팅 퍼널 계산",
+          "전환율 역산",
+          "목표 전환 수 계산",
+          "퍼널 이탈률",
+          "필요 트래픽 계산",
+        ],
+      },
+      en: {
+        title: "Funnel Conversion Calculator — Marketing Funnel Analysis & Reverse Planning",
+        description:
+          "Calculate stage-by-stage conversion rates and drop-off rates for your marketing funnel, then reverse-calculate how many visitors you need at each stage to hit your final conversion target. Includes ad, lead, and commerce funnel presets. Add, remove, and rename stages freely. Everything runs in your browser.",
+        keywords: [
+          "funnel conversion calculator",
+          "reverse funnel calculator",
+          "conversion funnel planner",
+          "required traffic calculator",
+          "funnel drop off calculator",
+          "marketing funnel calculator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산.",
+        description:
+          "마케팅 퍼널 단계별 전환율과 이탈률을 계산하고, 최종 목표 전환 수를 달성하기 위해 각 상위 단계에서 필요한 수량을 역산합니다. 광고·리드·커머스 퍼널 프리셋 포함. 단계 추가·삭제·이름 변경 가능. 모든 계산은 브라우저에서만 처리됩니다.",
+        howItWorks: [
+          "퍼널 단계와 각 단계 수량 입력(또는 프리셋 선택)",
+          "단계별 전환율·이탈률 즉시 확인",
+          "목표 역산 모드로 필요 트래픽 계획",
+        ],
+        aeo: {
+          what: "퍼널 전환율 계산기는 마케팅 퍼널의 단계별 전환율·이탈률을 계산하고, 목표 최종 전환 수를 달성하기 위해 각 상위 단계에서 필요한 수량을 역산하는 도구입니다.",
+          who: "마케팅 퍼널을 분석하고 최적화하는 마케터, 전환율을 개선하려는 PM, 온라인 판매 전환율을 파악하려는 소상공인을 위한 도구입니다.",
+          how: "퍼널 단계 이름과 각 단계 수량을 입력하면 단계별 전환율·이탈률과 전체 전환율이 즉시 계산됩니다. 목표 역산 모드에서는 최종 목표 수량과 단계별 예상 전환율을 입력하면 각 상위 단계에서 필요한 수량을 계산합니다.",
+          why: "퍼널 분석으로 가장 많은 이탈이 발생하는 구간을 파악하면 개선 우선순위를 정할 수 있습니다. 목표 역산으로 필요 트래픽을 미리 계획하면 광고 예산도 더 정확하게 설정할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Analyze stage-by-stage conversion and drop-off rates for your funnel, then reverse-calculate required traffic.",
+        description:
+          "Calculate stage-by-stage conversion rates and drop-off rates for your marketing funnel, then reverse-calculate how many visitors you need at each stage to hit your final conversion target. Includes ad, lead, and commerce funnel presets. Add, remove, and rename stages freely. Everything runs in your browser.",
+        howItWorks: [
+          "Enter funnel stages and counts (or choose a preset)",
+          "See stage-by-stage conversion and drop-off rates instantly",
+          "Switch to reverse mode to plan required traffic",
+        ],
+        aeo: {
+          what: "Funnel Conversion Calculator is a tool that computes stage-by-stage conversion rates and drop-off rates for a marketing funnel, and reverse-calculates the number of visitors needed at each upper stage to hit a final conversion target.",
+          who: "It is for marketers analyzing and optimizing funnels, PMs improving conversion rates, and small business owners understanding their online sales funnel.",
+          how: "Enter stage names and counts. The calculator instantly shows conversion rate, drop-off rate, and drop-off count for each step, plus the overall conversion rate. Switch to reverse mode, enter a final target and stage conversion rates, and it calculates how many visitors you need at every stage.",
+          why: "Funnel analysis pinpoints where most visitors drop off, letting you prioritize improvements. Reverse-calculating required traffic helps you set realistic ad budgets before a campaign launches.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "단계 전환율과 전체 전환율의 차이는 무엇인가요?",
+          answer:
+            "단계 전환율은 인접한 두 단계 사이의 전환율(다음 단계 수 ÷ 이전 단계 수 × 100)이고, 전체 전환율은 첫 번째 단계부터 마지막 단계까지의 전환율(마지막 단계 수 ÷ 첫 번째 단계 수 × 100)입니다.",
+        },
+        {
+          question: "퍼널 단계 이름을 변경하거나 단계를 추가·삭제할 수 있나요?",
+          answer:
+            "네. 단계 이름은 직접 수정할 수 있고, 단계 추가와 삭제 버튼으로 단계 수를 조절할 수 있습니다. 최소 2단계, 최대 10단계를 지원합니다.",
+        },
+        {
+          question: "목표 역산 모드는 어떻게 계산하나요?",
+          answer:
+            "마지막 단계(목표 전환 수)부터 역순으로 계산합니다. 이전 단계 필요 수량 = ceil(다음 단계 목표 수량 ÷ 전환율)로 계산합니다. 달성에 필요한 수량이 부족하지 않도록 올림(ceil) 처리합니다.",
+        },
+        {
+          question: "다음 단계 수량이 이전 단계보다 클 수 있나요?",
+          answer:
+            "일반적으로 퍼널에서는 다음 단계로 내려갈수록 수량이 감소합니다. 다만 리타겟팅·중복 이벤트·측정 기준 차이 등으로 이런 현상이 나타날 수 있으며, 이 경우 경고를 표시하되 계산은 허용합니다.",
+        },
+        {
+          question: "입력한 데이터가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the difference between stage conversion rate and overall conversion rate?",
+          answer:
+            "Stage conversion rate is the rate between two adjacent stages (next stage count ÷ previous stage count × 100). Overall conversion rate is from the very first stage to the last (last stage count ÷ first stage count × 100).",
+        },
+        {
+          question: "Can I rename stages or add and remove them?",
+          answer:
+            "Yes. Edit stage names directly in the input fields, and use the add and remove buttons to adjust the number of stages. The calculator supports 2 to 10 stages.",
+        },
+        {
+          question: "How does the reverse calculation mode work?",
+          answer:
+            "Starting from the last stage (target conversions), it calculates backwards: required count at previous stage = ceil(next stage target ÷ conversion rate). Ceil (round up) is used to ensure you never fall short of the target.",
+        },
+        {
+          question: "Can a lower stage have more visitors than the stage above it?",
+          answer:
+            "Normally, visitor counts decrease at each funnel stage. However, retargeting, duplicate events, or different measurement standards can cause this. The calculator allows it but shows a warning.",
+        },
+        {
+          question: "Is my data sent to a server?",
+          answer:
+            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "퍼널 전환율 계산기", subtitle: "단계별 전환율·이탈률 분석과 목표 달성 트래픽 역산" },
+      en: { title: "Funnel Conversion Calculator", subtitle: "Stage-by-stage conversion analysis and required traffic planning" },
     },
   },
 ];

@@ -31,6 +31,7 @@ const DICT: Dict = {
 // 허브 분류 = 타겟(직군). 칩/카드 태그가 이 순서를 공유.
 const TARGET_ORDER: TargetTag[] = [
   "pm",
+  "marketer",
   "designer",
   "developer",
   "job-seeker",
