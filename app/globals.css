@@ -1769,3 +1769,191 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
   .uc-input { font-size: 18px; }
   .uc-output-value { font-size: 18px; }
 }
+
+/* ── Growth Calculator (gc-*) ──────────────────────────── */
+
+.gc-work {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.gc-card {
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gc-inputs {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gc-field { display: flex; flex-direction: column; gap: 8px; }
+
+.gc-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-blue-gray-500);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.gc-input-row {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--color-blue-gray-200);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+.gc-input-row:focus-within { border-color: var(--color-blue-primary-400); }
+
+.gc-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-family: var(--font-inter);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--color-blue-gray-900);
+  background: transparent;
+  min-width: 0;
+}
+.gc-input-unit {
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-blue-gray-400);
+  padding: 0 12px;
+  border-left: 1px solid var(--color-blue-gray-100);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Right column */
+.gc-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Results card */
+.gc-results-card {
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: 12px;
+  padding: 24px;
+  min-height: 120px;
+}
+
+.gc-empty {
+  color: var(--color-blue-gray-400);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.gc-error {
+  color: #dc2626;
+  font-size: 14px;
+  text-align: center;
+  padding: 16px 0;
+}
+
+.gc-result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.gc-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--color-blue-gray-50);
+  border: 1px solid var(--color-blue-gray-100);
+  border-radius: 10px;
+}
+.gc-result-item.is-primary {
+  grid-column: span 2;
+  background: var(--color-blue-primary-50);
+  border-color: var(--color-blue-primary-200);
+}
+
+.gc-result-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-blue-gray-500);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.gc-result-item.is-primary .gc-result-label { color: var(--color-blue-primary-700); }
+
+.gc-result-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gc-result-value {
+  font-family: var(--font-inter);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-blue-gray-900);
+  line-height: 1;
+}
+.gc-result-item.is-primary .gc-result-value { font-size: 32px; color: var(--color-blue-primary-700); }
+.gc-result-value.is-positive { color: #16a34a; }
+.gc-result-value.is-negative { color: #dc2626; }
+.gc-result-value.dir-up   { color: #16a34a; font-size: 18px; font-weight: 600; }
+.gc-result-value.dir-down { color: #dc2626; font-size: 18px; font-weight: 600; }
+.gc-result-value.dir-flat { color: var(--color-blue-gray-500); font-size: 18px; font-weight: 600; }
+
+/* Formula block */
+.gc-formula {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.gc-formula-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-blue-gray-400);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.gc-formula-code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-blue-gray-700);
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: none;
+  padding: 0;
+}
+
+@media (max-width: 960px) {
+  .gc-work { grid-template-columns: 1fr; }
+  .gc-result-grid { grid-template-columns: 1fr; }
+  .gc-result-item.is-primary { grid-column: span 1; }
+  .gc-result-value { font-size: 22px; }
+  .gc-result-item.is-primary .gc-result-value { font-size: 28px; }
+}
+
+@media (max-width: 600px) {
+  .gc-inputs { padding: 16px; }
+  .gc-results-card { padding: 16px; }
+  .gc-input { font-size: 18px; }
+}
