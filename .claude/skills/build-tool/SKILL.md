@@ -1,6 +1,6 @@
 ---
 name: build-tool
-description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description — registry entry, component, routes, OG, hub card, SEO/AEO copy, and source structure. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool.
+description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description — registry entry, component, routes, OG, hub card, SEO/AEO copy, source structure, and the README/CLAUDE.md feature-list update. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool with docs updated.
 ---
 
 # Build a KitFolio Tool (end-to-end)
@@ -11,7 +11,7 @@ Goal: the user describes a feature in one or two sentences, and you ship a **com
 
 ---
 
-## What every tool needs (the 6 deliverables)
+## What every tool needs (the 7 deliverables)
 
 For a tool with slug `<slug>` and component `<Comp>`:
 
@@ -21,8 +21,11 @@ For a tool with slug `<slug>` and component `<Comp>`:
 4. **KO route** → `app/<slug>/page.tsx` + `app/<slug>/opengraph-image.tsx`
 5. **EN route** → `app/en/<slug>/page.tsx` + `app/en/<slug>/opengraph-image.tsx`
 6. **Verify** → typecheck/build; confirm hub card, sitemap, JSON-LD all picked it up automatically
+7. **Docs** → append the tool to the feature-list tables in `README.md` and `CLAUDE.md` (this is NOT auto-generated — see Step 6)
 
 Auto-derived (do NOT edit by hand): hub card (`Hub.tsx`), sitemap (`sitemap.ts`), JSON-LD (`toolJsonLd`), Related Tools (`RelatedTools.tsx`), search index (uses `name`/`card`/`keywords`).
+
+**NOT auto-derived — you must edit by hand:** the feature-list tables in `README.md` and `CLAUDE.md`. These are static docs, not generated from the registry, so a new tool will NOT appear there unless you do Step 6.
 
 ---
 
@@ -209,6 +212,47 @@ Verify before finishing:
 
 ---
 
+## Step 6 — Update the docs (README.md + CLAUDE.md) — manual, easy to forget
+
+The hub/sitemap/JSON-LD update themselves, but the **feature-list tables in `README.md` and `CLAUDE.md` are hand-maintained static docs**. A new tool will not show up there on its own. Always do this step before finishing.
+
+Both files contain a "구현된 기능" feature table with the **same 5 columns**:
+
+`| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |`
+
+- **`README.md`** — section heading `## 구현된 기능 (도구 N종)`
+- **`CLAUDE.md`** — section heading `## 구현된 기능 목록 (<date> 기준, 도구 N종)`, placed just above the "도구 로드맵" section.
+
+For the new tool, append **one row to each table**:
+
+| Column | Value |
+|--------|-------|
+| No | next sequential number (current last + 1) |
+| 기능명 | `<국문명> / <English Name>` (= registry `name.ko` / `name.en`) |
+| KO 경로 | `` `/<slug>` `` |
+| EN 경로 | `` `/en/<slug>` `` |
+| 기능 요약 | the registry `content.ko.card` string |
+
+Then **bump the tool count** in both headings (`N종` → `N+1종`), and refresh the date in the CLAUDE.md heading to today.
+
+To regenerate the canonical row data from the registry instead of hand-copying (recommended — keeps it exact and in registry order):
+
+```bash
+npx tsx -e '
+import { TOOLS } from "./app/lib/content";
+const rows=(TOOLS as any[]).filter(t=>t.ready).map((t,i)=>
+  `| ${i+1} | ${t.name.ko} / ${t.name.en} | \`/${t.slug}\` | \`/en/${t.slug}\` | ${t.content.ko.card} |`);
+console.log(`구현된 기능 (도구 ${rows.length}종)`);
+console.log("| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |");
+console.log("|---|---|---|---|---|");
+console.log(rows.join("\n"));
+'
+```
+
+Append the new tool's row to both tables (or replace the whole table body with the regenerated output) and update the `N종` count. Keep README and CLAUDE.md in sync — same rows, same count.
+
+---
+
 ## Final checklist
 
 - [ ] Registry entry appended, `ready: true`, all ko+en fields filled
@@ -219,3 +263,4 @@ Verify before finishing:
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
 - [ ] 4 route files created (KO/EN page + KO/EN opengraph-image)
 - [ ] Build/typecheck/lint pass; hub card, sitemap, JSON-LD auto-picked-up
+- [ ] **Docs updated** — new row appended to the feature table in BOTH `README.md` and `CLAUDE.md`, tool count (`N종`) bumped, CLAUDE.md date refreshed
