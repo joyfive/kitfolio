@@ -1780,6 +1780,1028 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+
+  // ── Growth Calculator Series ─────────────────────────────
+
+  {
+    slug: "growth-rate-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "office-worker", "small-business-owner", "developer"],
+    ico: "%↑",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
+    relatedTools: ["cagr-calculator", "goal-growth-calculator", "mom-growth-calculator"],
+    seo: {
+      ko: {
+        title: "성장률 계산기 — 시작값과 종료값으로 성장률 계산",
+        description:
+          "시작 값과 종료 값을 입력하면 성장률(%), 차이, 배수를 즉시 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능. 브라우저 안에서만 동작합니다.",
+        keywords: ["성장률 계산기", "growth rate calculator", "성장률 계산", "퍼센트 변화"],
+      },
+      en: {
+        title: "Growth Rate Calculator — Calculate Growth Rate Instantly",
+        description:
+          "Enter a start value and end value to instantly calculate growth rate (%), difference, and multiplier. Works for revenue, users, traffic, or any metric. Runs entirely in your browser.",
+        keywords: ["growth rate calculator", "calculate growth rate", "percentage growth", "growth percentage calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "시작값·종료값으로 성장률·차이·배수 즉시 계산.",
+        description:
+          "시작 값과 종료 값을 입력하면 성장률(%), 차이, 배수를 즉시 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["시작 값 입력", "종료 값 입력", "성장률·차이·배수 확인 및 복사"],
+        aeo: {
+          what: "성장률 계산기는 두 값 사이의 변화율을 퍼센트로 계산해주는 도구입니다. 시작 값과 종료 값을 입력하면 성장률, 차이, 배수를 즉시 보여줍니다.",
+          who: "매출·사용자 수·트래픽 등 수치 변화를 분석해야 하는 PM, 마케터, 비즈니스 담당자, 개발자를 위한 도구입니다.",
+          how: "시작 값과 종료 값을 입력하면 (종료−시작)÷시작×100 공식으로 성장률을 즉시 계산합니다.",
+          why: "수기 계산 없이 정확한 성장률을 빠르게 얻을 수 있어 보고서 작성이나 데이터 분석 시 시간을 절약할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate growth rate, difference, and multiplier from two values.",
+        description:
+          "Enter a start value and end value to instantly calculate growth rate (%), difference, and multiplier. Works for revenue, users, traffic, or any metric. Runs entirely in your browser.",
+        howItWorks: ["Enter the start value", "Enter the end value", "Read or copy the growth rate, difference, and multiplier"],
+        aeo: {
+          what: "A Growth Rate Calculator computes the percentage change between two values. Enter a start and end value to instantly see the growth rate, difference, and multiplier.",
+          who: "It is for PMs, marketers, analysts, and business owners who need to measure the change in revenue, users, traffic, or any numeric metric.",
+          how: "Enter start and end values; the calculator applies (End − Start) / Start × 100 and returns the growth rate, signed difference, and multiplier instantly.",
+          why: "It eliminates manual calculation and speeds up reporting — paste the values, get the number, move on.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "성장률이란 무엇인가요?", answer: "성장률은 두 시점 사이의 값 변화를 퍼센트로 나타낸 지표입니다. (종료−시작)÷시작×100으로 계산합니다." },
+        { question: "성장률이 음수가 될 수 있나요?", answer: "네. 종료 값이 시작 값보다 작으면 성장률은 음수(감소)로 표시됩니다." },
+        { question: "시작 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 성장률을 계산할 수 없습니다. 오류 메시지가 표시됩니다." },
+      ],
+      en: [
+        { question: "What is growth rate?", answer: "Growth rate measures the percentage change between two values over a period. It is calculated as (End − Start) / Start × 100." },
+        { question: "Can growth rate be negative?", answer: "Yes. If the end value is lower than the start value, the growth rate will be negative, indicating a decline." },
+        { question: "What happens if the start value is zero?", answer: "Division by zero is undefined, so growth rate cannot be calculated. An error message will appear." },
+      ],
+    },
+    og: {
+      ko: { title: "성장률 계산기", subtitle: "시작값·종료값으로 성장률·차이·배수 즉시 계산" },
+      en: { title: "Growth Rate Calculator", subtitle: "Calculate growth rate, difference & multiplier instantly" },
+    },
+  },
+
+  {
+    slug: "percentage-change-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "office-worker", "small-business-owner"],
+    ico: "Δ%",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "퍼센트 변화율 계산기", en: "Percentage Change Calculator" },
+    relatedTools: ["growth-rate-calculator", "cagr-calculator", "mom-growth-calculator"],
+    seo: {
+      ko: {
+        title: "퍼센트 변화율 계산기 — 증가·감소 자동 판단",
+        description:
+          "이전 값과 현재 값을 입력하면 변화율(%)을 자동으로 계산합니다. 증가·감소를 자동으로 판단하며, 차이와 배수도 함께 표시합니다.",
+        keywords: ["퍼센트 변화율 계산기", "percentage change calculator", "변화율 계산", "증가율 감소율"],
+      },
+      en: {
+        title: "Percentage Change Calculator — Auto-detect Increase or Decrease",
+        description:
+          "Enter an old value and new value to calculate the percentage change automatically. Detects increase or decrease, and also shows absolute difference and multiplier.",
+        keywords: ["percentage change calculator", "percent change calculator", "calculate percentage change", "increase decrease calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "이전 값과 현재 값으로 변화율·차이·배수 계산.",
+        description:
+          "이전 값과 현재 값을 입력하면 변화율(%)을 자동으로 계산합니다. 증가·감소를 자동으로 판단하며, 차이와 배수도 함께 표시합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["이전 값 입력", "현재 값 입력", "변화율·방향·차이 확인"],
+        aeo: {
+          what: "퍼센트 변화율 계산기는 두 값의 변화를 퍼센트로 계산하고 증가·감소를 자동으로 구분해주는 도구입니다.",
+          who: "수치 변화를 빠르게 확인해야 하는 비즈니스 담당자, PM, 마케터, 오피스 워커를 위한 도구입니다.",
+          how: "(새 값 − 이전 값) ÷ |이전 값| × 100 공식으로 변화율을 계산하고, 양수·음수에 따라 방향을 표시합니다.",
+          why: "증가인지 감소인지 별도로 계산할 필요 없이 하나의 계산기로 방향·비율·차이를 한눈에 확인할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate percentage change with automatic increase/decrease detection.",
+        description:
+          "Enter an old value and new value to calculate the percentage change automatically. Detects increase or decrease, and also shows absolute difference and multiplier.",
+        howItWorks: ["Enter the previous value", "Enter the current value", "Read the change rate, direction, and difference"],
+        aeo: {
+          what: "A Percentage Change Calculator computes the percentage difference between two values and automatically identifies whether it is an increase or decrease.",
+          who: "It is for business professionals, PMs, marketers, and office workers who need to quickly assess how a metric has changed.",
+          how: "The formula (New − Old) / |Old| × 100 is applied; the sign determines the direction, which the calculator labels as Increase or Decrease.",
+          why: "It saves you from mentally tracking the sign and handles both directions in one place — no need for separate increase/decrease calculators.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "퍼센트 변화율이란 무엇인가요?", answer: "두 값 사이의 변화를 퍼센트로 나타낸 수치입니다. (새 값 − 이전 값) ÷ 이전 값 × 100으로 계산합니다." },
+        { question: "성장률 계산기와 다른가요?", answer: "계산식은 동일합니다. 퍼센트 변화율은 증가와 감소를 모두 포함하는 일반 용어이고, 성장률은 주로 긍정적 변화에 사용됩니다." },
+        { question: "결과가 음수로 나오면 무엇을 의미하나요?", answer: "현재 값이 이전 값보다 작다는 의미로, 해당 지표가 감소했음을 나타냅니다." },
+      ],
+      en: [
+        { question: "What is percentage change?", answer: "Percentage change measures how much a value has changed relative to its original value, expressed as a percentage: (New − Old) / Old × 100." },
+        { question: "Is this different from a growth rate calculator?", answer: "The formula is identical. Percentage change is the general term covering both increases and decreases; growth rate is more commonly used for positive changes." },
+        { question: "What does a negative result mean?", answer: "A negative percentage change means the current value is lower than the previous value — the metric has declined." },
+      ],
+    },
+    og: {
+      ko: { title: "퍼센트 변화율 계산기", subtitle: "증가·감소 자동 판단, 변화율·차이·배수 즉시 계산" },
+      en: { title: "Percentage Change Calculator", subtitle: "Auto-detect increase or decrease — calculate % change instantly" },
+    },
+  },
+
+  {
+    slug: "percentage-increase-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "office-worker", "small-business-owner"],
+    ico: "+%",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "증가율 계산기", en: "Percentage Increase Calculator" },
+    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "goal-growth-calculator"],
+    seo: {
+      ko: {
+        title: "증가율 계산기 — 원래 값에서 얼마나 증가했나?",
+        description:
+          "원래 값과 증가된 값을 입력하면 증가율(%)을 즉시 계산합니다. 매출·가격·수량 등 숫자 증가율을 빠르게 확인하세요.",
+        keywords: ["증가율 계산기", "percentage increase calculator", "증가율 계산", "퍼센트 증가"],
+      },
+      en: {
+        title: "Percentage Increase Calculator — How Much Did It Increase?",
+        description:
+          "Enter the original value and the increased value to instantly calculate the percentage increase. Works for revenue, price, headcount, or any numeric metric.",
+        keywords: ["percentage increase calculator", "percent increase calculator", "calculate percentage increase", "how much did it increase"],
+      },
+    },
+    content: {
+      ko: {
+        card: "원래 값과 증가된 값으로 증가율 즉시 계산.",
+        description:
+          "원래 값과 증가된 값을 입력하면 증가율(%)을 즉시 계산합니다. 매출·가격·수량 등 숫자 증가율을 빠르게 확인하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["원래 값 입력", "증가된 값 입력", "증가율·차이·배수 확인"],
+        aeo: {
+          what: "증가율 계산기는 값이 얼마나 증가했는지 퍼센트로 계산해주는 도구입니다.",
+          who: "매출·수량·가격 등 수치 증가를 분석해야 하는 비즈니스 담당자와 오피스 워커를 위한 도구입니다.",
+          how: "(증가된 값 − 원래 값) ÷ 원래 값 × 100 공식으로 증가율을 즉시 계산합니다.",
+          why: "손으로 계산할 필요 없이 원래 값과 최종 값만 입력하면 즉시 증가율을 알 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate the percentage increase between two values instantly.",
+        description:
+          "Enter the original value and the increased value to instantly calculate the percentage increase. Works for revenue, price, headcount, or any numeric metric.",
+        howItWorks: ["Enter the original value", "Enter the increased value", "Read the percentage increase and multiplier"],
+        aeo: {
+          what: "A Percentage Increase Calculator tells you by what percentage a value has grown relative to its original amount.",
+          who: "It is for business owners, analysts, and office workers tracking revenue growth, price hikes, or headcount increases.",
+          how: "The formula (New − Original) / Original × 100 is applied; the result is the percentage increase along with the absolute difference and multiplier.",
+          why: "It removes manual calculation from reporting and lets you confirm an increase instantly with just two numbers.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "증가율과 성장률은 다른가요?", answer: "동일한 개념입니다. 증가율은 양의 변화에 초점을 맞춘 표현이고, 성장률은 비즈니스 지표에서 더 일반적으로 쓰입니다." },
+        { question: "결과가 음수로 나왔어요.", answer: "입력한 증가된 값이 원래 값보다 작은 경우입니다. 이 계산기는 증가율에 특화되어 있지만, 음수 결과도 그대로 표시합니다." },
+        { question: "배수(Multiplier)란 무엇인가요?", answer: "최종 값이 원래 값의 몇 배인지를 나타냅니다. 예를 들어 100이 150이 되면 배수는 1.5입니다." },
+      ],
+      en: [
+        { question: "Is percentage increase the same as growth rate?", answer: "They are the same calculation. Percentage increase focuses on positive changes, while growth rate is the more common business term." },
+        { question: "The result came out negative.", answer: "This means the entered 'increased' value is actually lower than the original. This calculator shows the result regardless of sign." },
+        { question: "What is the multiplier?", answer: "The multiplier shows how many times the final value is relative to the original. For example, if 100 becomes 150, the multiplier is 1.5." },
+      ],
+    },
+    og: {
+      ko: { title: "증가율 계산기", subtitle: "원래 값과 최종 값으로 증가율 즉시 계산" },
+      en: { title: "Percentage Increase Calculator", subtitle: "Calculate the % increase between two values instantly" },
+    },
+  },
+
+  {
+    slug: "percentage-decrease-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "office-worker", "small-business-owner"],
+    ico: "-%",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "감소율 계산기", en: "Percentage Decrease Calculator" },
+    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "required-growth-calculator"],
+    seo: {
+      ko: {
+        title: "감소율 계산기 — 얼마나 감소했나?",
+        description:
+          "원래 값과 감소된 값을 입력하면 감소율(%)을 즉시 계산합니다. 비용·재고·가격 감소 등을 분석할 때 바로 사용하세요.",
+        keywords: ["감소율 계산기", "percentage decrease calculator", "감소율 계산", "퍼센트 감소"],
+      },
+      en: {
+        title: "Percentage Decrease Calculator — How Much Did It Decrease?",
+        description:
+          "Enter the original value and the decreased value to instantly calculate the percentage decrease. Great for analyzing cost reductions, price drops, or inventory changes.",
+        keywords: ["percentage decrease calculator", "percent decrease calculator", "calculate percentage decrease", "how much did it decrease"],
+      },
+    },
+    content: {
+      ko: {
+        card: "원래 값과 감소된 값으로 감소율 즉시 계산.",
+        description:
+          "원래 값과 감소된 값을 입력하면 감소율(%)을 즉시 계산합니다. 비용·재고·가격 감소 등을 분석할 때 바로 사용하세요.",
+        howItWorks: ["원래 값 입력", "감소된 값 입력", "감소율·차이·배수 확인"],
+        aeo: {
+          what: "감소율 계산기는 값이 얼마나 줄었는지 퍼센트로 계산해주는 도구입니다.",
+          who: "비용 절감·가격 인하·재고 감소 등 수치 변화를 추적해야 하는 비즈니스 담당자와 오피스 워커를 위한 도구입니다.",
+          how: "(원래 값 − 새 값) ÷ 원래 값 × 100 공식으로 감소율을 즉시 계산합니다.",
+          why: "수기 계산 없이 두 값만 입력하면 즉시 감소율을 알 수 있어 보고서 작성 시간을 절약할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate the percentage decrease between two values instantly.",
+        description:
+          "Enter the original value and the decreased value to instantly calculate the percentage decrease. Great for analyzing cost reductions, price drops, or inventory changes.",
+        howItWorks: ["Enter the original value", "Enter the decreased value", "Read the percentage decrease and difference"],
+        aeo: {
+          what: "A Percentage Decrease Calculator tells you by what percentage a value has fallen relative to its original amount.",
+          who: "It is for business owners, analysts, and office workers tracking cost reductions, price cuts, or falling metrics.",
+          how: "The formula (Original − New) / Original × 100 is applied to return the percentage decrease, absolute difference, and multiplier.",
+          why: "It removes manual effort from analysis and gives you the exact decrease percentage instantly with just two inputs.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "감소율과 성장률(음수)은 같은가요?", answer: "동일한 계산식입니다. 감소율은 음의 변화에 초점을 맞춘 표현으로, 결과는 절댓값 또는 음수로 표시할 수 있습니다." },
+        { question: "결과가 양수로 나왔어요.", answer: "감소된 값이 원래 값보다 크면 실제로는 증가한 것입니다. 입력값을 다시 확인해주세요." },
+        { question: "배수가 1보다 작게 나오는 이유는 무엇인가요?", answer: "최종 값이 원래 값보다 작기 때문입니다. 배수 0.75는 원래 값의 75%만 남았다는 의미입니다." },
+      ],
+      en: [
+        { question: "Is percentage decrease the same as negative growth?", answer: "Yes, the formula is identical. Percentage decrease focuses on values that have fallen, while negative growth rate expresses the same thing in a business context." },
+        { question: "The result came out positive.", answer: "If the 'decreased' value is actually larger than the original, the result will be positive. Double-check which value goes in which field." },
+        { question: "Why is the multiplier less than 1?", answer: "A multiplier below 1 means the final value is a fraction of the original. A multiplier of 0.75 means 75% of the original value remains." },
+      ],
+    },
+    og: {
+      ko: { title: "감소율 계산기", subtitle: "원래 값과 최종 값으로 감소율 즉시 계산" },
+      en: { title: "Percentage Decrease Calculator", subtitle: "Calculate the % decrease between two values instantly" },
+    },
+  },
+
+  {
+    slug: "percent-difference-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "office-worker", "developer"],
+    ico: "|Δ|",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "퍼센트 차이 계산기", en: "Percent Difference Calculator" },
+    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "cagr-calculator"],
+    seo: {
+      ko: {
+        title: "퍼센트 차이 계산기 — 두 값의 상대적 차이",
+        description:
+          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다.",
+        keywords: ["퍼센트 차이 계산기", "percent difference calculator", "두 값 비교", "상대적 차이"],
+      },
+      en: {
+        title: "Percent Difference Calculator — Relative Difference Between Two Values",
+        description:
+          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction (not increase or decrease).",
+        keywords: ["percent difference calculator", "percentage difference calculator", "relative difference", "compare two values"],
+      },
+    },
+    content: {
+      ko: {
+        card: "두 값 A·B의 상대적 퍼센트 차이 계산.",
+        description:
+          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["값 A 입력", "값 B 입력", "퍼센트 차이 확인"],
+        aeo: {
+          what: "퍼센트 차이 계산기는 두 값의 상대적 차이를 퍼센트로 계산하는 도구입니다. 증가·감소 방향이 아닌 두 값 사이의 크기 차이를 구할 때 사용합니다.",
+          who: "두 그룹·두 측정값을 비교해야 하는 연구자, 분석가, 비즈니스 담당자를 위한 도구입니다.",
+          how: "|A − B| ÷ ((A + B) / 2) × 100 공식으로 두 값의 평균을 기준으로 한 상대적 차이를 계산합니다.",
+          why: "퍼센트 변화율과 달리 기준 방향이 없으므로, 어느 쪽이 이전/이후인지 관계없이 두 값의 차이를 구할 때 유용합니다.",
+        },
+      },
+      en: {
+        card: "Calculate the relative percent difference between values A and B.",
+        description:
+          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction.",
+        howItWorks: ["Enter value A", "Enter value B", "Read the percent difference"],
+        aeo: {
+          what: "A Percent Difference Calculator computes the relative difference between two values as a percentage of their average. It has no directional bias — neither value is 'before' or 'after'.",
+          who: "It is for researchers, analysts, and business users who need to compare two measurements, test results, or data points without implying which came first.",
+          how: "The formula |A − B| / ((A + B) / 2) × 100 uses the average of the two values as the reference point, making the result symmetric.",
+          why: "Unlike percentage change, it does not require you to designate a 'before' and 'after' — ideal for comparing two independent measurements.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "퍼센트 변화율과 퍼센트 차이의 차이는 무엇인가요?", answer: "퍼센트 변화율은 이전 값을 기준으로 변화를 계산하고 방향(증가/감소)을 나타냅니다. 퍼센트 차이는 두 값의 평균을 기준으로 계산하며 방향이 없습니다." },
+        { question: "A와 B의 순서가 결과에 영향을 주나요?", answer: "영향을 주지 않습니다. 퍼센트 차이 공식은 절댓값을 사용하므로 A·B의 순서와 관계없이 동일한 결과가 나옵니다." },
+        { question: "두 값이 모두 0이면 어떻게 되나요?", answer: "평균이 0이 되어 0으로 나누기가 발생하므로 계산할 수 없습니다." },
+      ],
+      en: [
+        { question: "What is the difference between percent difference and percent change?", answer: "Percent change uses the original value as the base and has a direction (increase/decrease). Percent difference uses the average of both values and is non-directional." },
+        { question: "Does the order of A and B affect the result?", answer: "No. The formula uses an absolute value, so swapping A and B produces the same result." },
+        { question: "What if both values are zero?", answer: "The average would be zero, causing a division by zero error. A result cannot be computed." },
+      ],
+    },
+    og: {
+      ko: { title: "퍼센트 차이 계산기", subtitle: "두 값의 방향 없는 상대적 차이를 퍼센트로 계산" },
+      en: { title: "Percent Difference Calculator", subtitle: "Calculate the relative % difference between two values" },
+    },
+  },
+
+  {
+    slug: "mom-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "MoM",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "MoM 성장률 계산기", en: "MoM Growth Calculator" },
+    relatedTools: ["yoy-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
+    seo: {
+      ko: {
+        title: "MoM 성장률 계산기 — 전월 대비 성장률 계산",
+        description:
+          "지난달 값과 이번달 값을 입력하면 전월 대비(MoM) 성장률을 즉시 계산합니다. 매출·유저 수·트래픽 등 월별 성과를 빠르게 확인하세요.",
+        keywords: ["MoM 성장률 계산기", "MoM growth calculator", "전월 대비 성장률", "month over month growth"],
+      },
+      en: {
+        title: "MoM Growth Calculator — Month Over Month Growth Rate",
+        description:
+          "Enter last month's value and this month's value to instantly calculate the month-over-month (MoM) growth rate. Track revenue, users, or traffic changes on a monthly basis.",
+        keywords: ["MoM growth calculator", "month over month growth calculator", "MoM growth rate", "monthly growth calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "지난달·이번달 값으로 MoM 성장률 즉시 계산.",
+        description:
+          "지난달 값과 이번달 값을 입력하면 전월 대비(MoM) 성장률을 즉시 계산합니다. 매출·유저 수·트래픽 등 월별 성과를 빠르게 확인하세요.",
+        howItWorks: ["지난달 값 입력", "이번달 값 입력", "MoM 성장률·차이·방향 확인"],
+        aeo: {
+          what: "MoM 성장률 계산기는 전월 대비 성장률을 퍼센트로 계산해주는 도구입니다. MoM은 Month over Month의 약자입니다.",
+          who: "월별 매출·유저·트래픽 등 비즈니스 지표를 추적하는 PM, 마케터, 스타트업 창업자를 위한 도구입니다.",
+          how: "(이번달 − 지난달) ÷ 지난달 × 100 공식으로 전월 대비 성장률을 즉시 계산합니다.",
+          why: "월별 성과 보고에서 매번 계산할 필요 없이 두 숫자만 입력하면 MoM 수치를 바로 얻을 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate month-over-month (MoM) growth rate from two monthly values.",
+        description:
+          "Enter last month's value and this month's value to instantly calculate the month-over-month (MoM) growth rate. Track revenue, users, or traffic changes on a monthly basis.",
+        howItWorks: ["Enter the previous month's value", "Enter this month's value", "Read the MoM growth rate and direction"],
+        aeo: {
+          what: "A MoM Growth Calculator computes the month-over-month growth rate, showing how much a metric changed from the previous month to the current month as a percentage.",
+          who: "It is for PMs, marketers, and startup founders who report monthly metrics like revenue, active users, or traffic.",
+          how: "The formula (Current − Previous) / Previous × 100 is applied; the result shows the MoM growth rate, absolute difference, and direction.",
+          why: "It speeds up monthly performance reviews by turning two numbers into a MoM percentage in one step.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "MoM이란 무엇인가요?", answer: "MoM은 Month over Month의 약자로, 이번 달 수치가 지난달 대비 얼마나 변했는지를 나타내는 지표입니다." },
+        { question: "MoM과 YoY의 차이는 무엇인가요?", answer: "MoM은 전월 대비, YoY는 전년 동월 대비 변화율입니다. MoM은 단기 트렌드, YoY는 계절성을 제거한 연간 성장을 확인할 때 사용합니다." },
+        { question: "지난달 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 계산할 수 없습니다. 오류 메시지가 표시됩니다." },
+      ],
+      en: [
+        { question: "What does MoM mean?", answer: "MoM stands for Month over Month. It measures how much a metric changed between the current month and the previous month." },
+        { question: "What is the difference between MoM and YoY?", answer: "MoM compares this month to last month; YoY compares this period to the same period last year. MoM tracks short-term trends; YoY removes seasonal variation." },
+        { question: "What if last month's value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message will appear." },
+      ],
+    },
+    og: {
+      ko: { title: "MoM 성장률 계산기", subtitle: "전월 대비(Month over Month) 성장률 즉시 계산" },
+      en: { title: "MoM Growth Calculator", subtitle: "Calculate month-over-month growth rate instantly" },
+    },
+  },
+
+  {
+    slug: "yoy-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "YoY",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "YoY 성장률 계산기", en: "YoY Growth Calculator" },
+    relatedTools: ["mom-growth-calculator", "qoq-growth-calculator", "cagr-calculator"],
+    seo: {
+      ko: {
+        title: "YoY 성장률 계산기 — 전년 대비 성장률 계산",
+        description:
+          "작년 값과 올해 값을 입력하면 전년 대비(YoY) 성장률을 즉시 계산합니다. 연간 매출·사용자·트래픽 등 연도별 성과 비교에 활용하세요.",
+        keywords: ["YoY 성장률 계산기", "YoY growth calculator", "전년 대비 성장률", "year over year growth"],
+      },
+      en: {
+        title: "YoY Growth Calculator — Year Over Year Growth Rate",
+        description:
+          "Enter last year's value and this year's value to instantly calculate the year-over-year (YoY) growth rate. Compare annual revenue, users, or any metric across two years.",
+        keywords: ["YoY growth calculator", "year over year growth calculator", "YoY growth rate", "annual growth calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "작년·올해 값으로 YoY 성장률 즉시 계산.",
+        description:
+          "작년 값과 올해 값을 입력하면 전년 대비(YoY) 성장률을 즉시 계산합니다. 연간 성과 보고에 바로 사용하세요.",
+        howItWorks: ["작년 값 입력", "올해 값 입력", "YoY 성장률·차이·방향 확인"],
+        aeo: {
+          what: "YoY 성장률 계산기는 올해 수치와 작년 수치를 비교해 연간 성장률을 퍼센트로 계산해주는 도구입니다. YoY는 Year over Year의 약자입니다.",
+          who: "연간 보고서를 작성하거나 연도별 비즈니스 성과를 비교해야 하는 PM, 경영진, 소상공인을 위한 도구입니다.",
+          how: "(올해 − 작년) ÷ 작년 × 100 공식으로 전년 대비 성장률을 즉시 계산합니다.",
+          why: "계절성을 제거한 연간 성장 추세를 단 두 숫자로 빠르게 확인할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate year-over-year (YoY) growth rate from two annual values.",
+        description:
+          "Enter last year's value and this year's value to instantly calculate the year-over-year (YoY) growth rate. Compare annual revenue, users, or any metric across two years.",
+        howItWorks: ["Enter last year's value", "Enter this year's value", "Read the YoY growth rate and direction"],
+        aeo: {
+          what: "A YoY Growth Calculator computes the year-over-year growth rate, comparing a current period to the same period a year ago to eliminate seasonal distortion.",
+          who: "It is for PMs, executives, and small business owners who prepare annual reports or track year-on-year business performance.",
+          how: "The formula (This Year − Last Year) / Last Year × 100 is applied; the result shows the YoY growth rate, absolute difference, and direction.",
+          why: "YoY removes seasonal noise, giving a cleaner view of whether the business is growing, and this calculator delivers that number instantly.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "YoY란 무엇인가요?", answer: "YoY는 Year over Year의 약자로, 이번 연도 수치가 전년도 대비 얼마나 변했는지를 나타내는 지표입니다." },
+        { question: "YoY와 CAGR의 차이는 무엇인가요?", answer: "YoY는 두 연도를 직접 비교한 단순 성장률입니다. CAGR은 여러 해에 걸친 연평균 성장률로, 복리 효과를 반영합니다." },
+        { question: "전년도 값이 음수일 수 있나요?", answer: "가능합니다. 예를 들어 손익이 음수일 때도 계산할 수 있습니다. 다만 해석 시 주의가 필요합니다." },
+      ],
+      en: [
+        { question: "What does YoY mean?", answer: "YoY stands for Year over Year. It measures how much a metric changed between this year and the same period last year." },
+        { question: "What is the difference between YoY and CAGR?", answer: "YoY is a simple growth rate between two specific years. CAGR (Compound Annual Growth Rate) smooths growth over multiple years by accounting for compounding." },
+        { question: "Can the previous year value be negative?", answer: "Yes, for example when comparing losses. However, interpret the result carefully as percentage change from a negative base can be counterintuitive." },
+      ],
+    },
+    og: {
+      ko: { title: "YoY 성장률 계산기", subtitle: "전년 대비(Year over Year) 성장률 즉시 계산" },
+      en: { title: "YoY Growth Calculator", subtitle: "Calculate year-over-year growth rate instantly" },
+    },
+  },
+
+  {
+    slug: "qoq-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "QoQ",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "QoQ 성장률 계산기", en: "QoQ Growth Calculator" },
+    relatedTools: ["mom-growth-calculator", "yoy-growth-calculator", "growth-rate-calculator"],
+    seo: {
+      ko: {
+        title: "QoQ 성장률 계산기 — 전분기 대비 성장률 계산",
+        description:
+          "지난 분기 값과 이번 분기 값을 입력하면 전분기 대비(QoQ) 성장률을 즉시 계산합니다. 분기별 실적 분석에 활용하세요.",
+        keywords: ["QoQ 성장률 계산기", "QoQ growth calculator", "전분기 대비", "quarter over quarter growth"],
+      },
+      en: {
+        title: "QoQ Growth Calculator — Quarter Over Quarter Growth Rate",
+        description:
+          "Enter the previous quarter's value and this quarter's value to instantly calculate the quarter-over-quarter (QoQ) growth rate for any business metric.",
+        keywords: ["QoQ growth calculator", "quarter over quarter growth calculator", "QoQ growth rate", "quarterly growth calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "지난 분기·이번 분기 값으로 QoQ 성장률 즉시 계산.",
+        description:
+          "지난 분기 값과 이번 분기 값을 입력하면 전분기 대비(QoQ) 성장률을 즉시 계산합니다. 분기별 실적 분석에 바로 활용하세요.",
+        howItWorks: ["지난 분기 값 입력", "이번 분기 값 입력", "QoQ 성장률·차이·방향 확인"],
+        aeo: {
+          what: "QoQ 성장률 계산기는 이번 분기 수치가 지난 분기 대비 얼마나 변했는지 퍼센트로 계산해주는 도구입니다. QoQ는 Quarter over Quarter의 약자입니다.",
+          who: "분기 실적 보고서를 작성하거나 분기별 비즈니스 성과를 비교하는 PM, 경영진, 재무 담당자를 위한 도구입니다.",
+          how: "(이번 분기 − 지난 분기) ÷ 지난 분기 × 100 공식으로 전분기 대비 성장률을 즉시 계산합니다.",
+          why: "분기별 실적 검토 시 매번 계산할 필요 없이 두 숫자만 입력하면 QoQ 수치를 즉시 얻을 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate quarter-over-quarter (QoQ) growth rate from two quarterly values.",
+        description:
+          "Enter the previous quarter's value and this quarter's value to instantly calculate the QoQ growth rate for any business metric.",
+        howItWorks: ["Enter the previous quarter's value", "Enter this quarter's value", "Read the QoQ growth rate and direction"],
+        aeo: {
+          what: "A QoQ Growth Calculator measures how much a metric changed from one quarter to the next, expressed as a percentage. QoQ stands for Quarter over Quarter.",
+          who: "It is for PMs, finance teams, and executives who prepare quarterly business reviews or earnings reports.",
+          how: "The formula (Current Quarter − Previous Quarter) / Previous Quarter × 100 is applied instantly.",
+          why: "Quarterly reporting requires the same calculation every cycle — this calculator removes the repetitive math.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "QoQ란 무엇인가요?", answer: "QoQ는 Quarter over Quarter의 약자로, 이번 분기 수치가 바로 전 분기 대비 얼마나 변했는지를 나타내는 지표입니다." },
+        { question: "QoQ와 YoY 중 어느 것을 사용해야 하나요?", answer: "단기 모멘텀을 보려면 QoQ, 계절성을 제거한 연간 성장을 보려면 YoY를 사용합니다. 두 지표를 함께 사용하는 것이 가장 효과적입니다." },
+        { question: "분기 기간은 어떻게 정의하나요?", answer: "일반적으로 Q1(1~3월), Q2(4~6월), Q3(7~9월), Q4(10~12월)로 나뉩니다. 이 계산기는 기간 정의 없이 두 값만 비교합니다." },
+      ],
+      en: [
+        { question: "What does QoQ mean?", answer: "QoQ stands for Quarter over Quarter. It measures how much a metric changed from the previous quarter to the current quarter." },
+        { question: "When should I use QoQ vs. YoY?", answer: "Use QoQ to track short-term momentum and sequential growth. Use YoY to compare the same quarter across years, removing seasonal effects. Both together give the best picture." },
+        { question: "How are quarters defined?", answer: "Typically Q1 (Jan–Mar), Q2 (Apr–Jun), Q3 (Jul–Sep), Q4 (Oct–Dec). This calculator compares any two values regardless of how you define the quarter." },
+      ],
+    },
+    og: {
+      ko: { title: "QoQ 성장률 계산기", subtitle: "전분기 대비(Quarter over Quarter) 성장률 즉시 계산" },
+      en: { title: "QoQ Growth Calculator", subtitle: "Calculate quarter-over-quarter growth rate instantly" },
+    },
+  },
+
+  {
+    slug: "wow-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "developer", "small-business-owner"],
+    ico: "WoW",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "WoW 성장률 계산기", en: "WoW Growth Calculator" },
+    relatedTools: ["mom-growth-calculator", "growth-rate-calculator", "growth-projection-calculator"],
+    seo: {
+      ko: {
+        title: "WoW 성장률 계산기 — 전주 대비 성장률 계산",
+        description:
+          "지난주 값과 이번주 값을 입력하면 전주 대비(WoW) 성장률을 즉시 계산합니다. 주간 DAU·트래픽·매출 추적에 활용하세요.",
+        keywords: ["WoW 성장률 계산기", "WoW growth calculator", "전주 대비", "week over week growth"],
+      },
+      en: {
+        title: "WoW Growth Calculator — Week Over Week Growth Rate",
+        description:
+          "Enter last week's value and this week's value to instantly calculate the week-over-week (WoW) growth rate. Track weekly DAU, traffic, revenue, or any short-cycle metric.",
+        keywords: ["WoW growth calculator", "week over week growth calculator", "WoW growth rate", "weekly growth calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "지난주·이번주 값으로 WoW 성장률 즉시 계산.",
+        description:
+          "지난주 값과 이번주 값을 입력하면 전주 대비(WoW) 성장률을 즉시 계산합니다. 주간 DAU·트래픽·매출 추적에 활용하세요.",
+        howItWorks: ["지난주 값 입력", "이번주 값 입력", "WoW 성장률·차이·방향 확인"],
+        aeo: {
+          what: "WoW 성장률 계산기는 이번 주 수치가 지난주 대비 얼마나 변했는지 퍼센트로 계산해주는 도구입니다. WoW는 Week over Week의 약자입니다.",
+          who: "주간 단위로 DAU·트래픽·매출을 추적하는 스타트업 PM, 성장 팀, 마케터를 위한 도구입니다.",
+          how: "(이번주 − 지난주) ÷ 지난주 × 100 공식으로 전주 대비 성장률을 즉시 계산합니다.",
+          why: "주간 스프린트 리뷰나 성장 보고에서 매번 계산할 필요 없이 두 숫자만 입력하면 WoW 수치를 즉시 얻을 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate week-over-week (WoW) growth rate from two weekly values.",
+        description:
+          "Enter last week's value and this week's value to instantly calculate the WoW growth rate. Track weekly DAU, traffic, revenue, or any short-cycle metric.",
+        howItWorks: ["Enter last week's value", "Enter this week's value", "Read the WoW growth rate and direction"],
+        aeo: {
+          what: "A WoW Growth Calculator measures how much a metric changed from last week to this week, expressed as a percentage. WoW stands for Week over Week.",
+          who: "It is for startup PMs, growth teams, and marketers who track weekly active users, traffic, or revenue in short sprint cycles.",
+          how: "The formula (Current Week − Previous Week) / Previous Week × 100 is applied instantly.",
+          why: "Weekly reviews happen fast — this calculator gives the WoW number in one step without spreadsheet formulas.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "WoW란 무엇인가요?", answer: "WoW는 Week over Week의 약자로, 이번 주 수치가 지난주 대비 얼마나 변했는지를 나타내는 지표입니다." },
+        { question: "WoW와 MoM 중 어느 것을 사용해야 하나요?", answer: "단기 모멘텀이나 스프린트 성과를 볼 때는 WoW, 월간 비즈니스 트렌드를 볼 때는 MoM이 적합합니다." },
+        { question: "주간 데이터가 불규칙할 수 있지 않나요?", answer: "네. 공휴일·캠페인 등으로 인해 주간 데이터는 변동이 클 수 있습니다. WoW는 단기 변동을 보여주므로, 트렌드 파악을 위해서는 이동 평균이나 YoY와 함께 활용하세요." },
+      ],
+      en: [
+        { question: "What does WoW mean?", answer: "WoW stands for Week over Week. It measures how much a metric changed from the previous week to the current week." },
+        { question: "When should I use WoW vs. MoM?", answer: "Use WoW for fast-moving metrics in sprint or growth contexts. Use MoM for broader monthly business trends where weekly noise is less relevant." },
+        { question: "Can weekly data be noisy?", answer: "Yes. Holidays, campaigns, and day-of-week effects can cause WoW to spike or drop. Pair it with a rolling average or YoY comparison for a cleaner trend view." },
+      ],
+    },
+    og: {
+      ko: { title: "WoW 성장률 계산기", subtitle: "전주 대비(Week over Week) 성장률 즉시 계산" },
+      en: { title: "WoW Growth Calculator", subtitle: "Calculate week-over-week growth rate instantly" },
+    },
+  },
+
+  {
+    slug: "goal-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "→%",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "목표 성장률 계산기", en: "Goal Growth Calculator" },
+    relatedTools: ["required-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
+    seo: {
+      ko: {
+        title: "목표 성장률 계산기 — 목표 달성에 필요한 성장률",
+        description:
+          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
+        keywords: ["목표 성장률 계산기", "goal growth calculator", "필요 성장률", "target growth calculator"],
+      },
+      en: {
+        title: "Goal Growth Calculator — Growth Rate Needed to Hit Your Target",
+        description:
+          "Enter your current value and target value to instantly calculate the growth rate required to reach your goal. Great for revenue targets, KPI planning, and business goals.",
+        keywords: ["goal growth calculator", "target growth calculator", "required growth rate", "how much growth do I need"],
+      },
+    },
+    content: {
+      ko: {
+        card: "현재 값과 목표 값으로 필요 성장률 즉시 계산.",
+        description:
+          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
+        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 성장률·차이·배수 확인"],
+        aeo: {
+          what: "목표 성장률 계산기는 현재 값에서 목표 값까지 달성하기 위해 필요한 성장률을 계산해주는 도구입니다.",
+          who: "매출 목표·KPI를 계획하는 PM, 스타트업 창업자, 소상공인, 영업 담당자를 위한 도구입니다.",
+          how: "(목표 − 현재) ÷ 현재 × 100 공식으로 필요 성장률을 즉시 계산합니다.",
+          why: "목표를 숫자로 설정했을 때 '얼마나 성장해야 하는가'를 즉시 알 수 있어 현실적인 계획을 세우는 데 도움이 됩니다.",
+        },
+      },
+      en: {
+        card: "Calculate the growth rate needed to reach your target from your current value.",
+        description:
+          "Enter your current value and target value to instantly calculate the required growth rate. Great for revenue targets, KPI planning, and business goals.",
+        howItWorks: ["Enter the current value", "Enter the target value", "Read the required growth rate and multiplier"],
+        aeo: {
+          what: "A Goal Growth Calculator computes the percentage growth rate required to move from a current value to a target value.",
+          who: "It is for PMs, startup founders, sales teams, and small business owners who set numeric targets and want to know exactly what growth rate is needed.",
+          how: "The formula (Target − Current) / Current × 100 is applied; the result shows the required growth rate, difference, and multiplier needed.",
+          why: "It turns a vague goal into a concrete growth percentage, making targets more actionable and easier to communicate.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "음수 성장률이 나옵니다. 이는 목표 달성을 위해 수치를 줄여야 한다는 의미입니다(예: 비용 절감 목표)." },
+        { question: "기간을 반영할 수 있나요?", answer: "이 계산기는 단순 성장률만 계산합니다. 연도별 성장률이 필요하다면 CAGR 계산기를 사용하세요." },
+        { question: "목표를 달성하기 위해 필요한 배수란 무엇인가요?", answer: "현재 값에 곱해야 하는 수입니다. 예를 들어 현재 1,000에서 1,500이 목표면, 배수는 1.5입니다." },
+      ],
+      en: [
+        { question: "What if the target is less than the current value?", answer: "The result will be a negative growth rate, meaning you need to reduce the metric (e.g., cutting costs to hit a lower target)." },
+        { question: "Can I factor in a time period?", answer: "This calculator returns a total growth rate. If you need an annualized rate across multiple years, use the CAGR Calculator." },
+        { question: "What does the multiplier needed mean?", answer: "The multiplier is the number you multiply the current value by to reach the target. A multiplier of 1.5 means the target is 1.5× the current value." },
+      ],
+    },
+    og: {
+      ko: { title: "목표 성장률 계산기", subtitle: "현재값·목표값으로 필요 성장률·배수 즉시 계산" },
+      en: { title: "Goal Growth Calculator", subtitle: "Find the growth rate needed to hit your target instantly" },
+    },
+  },
+
+  {
+    slug: "required-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "req",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "필요 증가량 계산기", en: "Required Growth Calculator" },
+    relatedTools: ["goal-growth-calculator", "reverse-growth-calculator", "growth-rate-calculator"],
+    seo: {
+      ko: {
+        title: "필요 증가량 계산기 — 목표 달성에 필요한 증가량",
+        description:
+          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 달성률을 즉시 계산합니다.",
+        keywords: ["필요 증가량 계산기", "required growth calculator", "목표 달성률", "growth target calculator"],
+      },
+      en: {
+        title: "Required Growth Calculator — How Much Do You Need to Grow?",
+        description:
+          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
+        keywords: ["required growth calculator", "growth target calculator", "how much do I need to grow", "target progress calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "현재값·목표값으로 필요 증가량·달성률 즉시 계산.",
+        description:
+          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 남은 갭, 달성률을 즉시 계산합니다.",
+        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 증가량·달성률·남은 갭 확인"],
+        aeo: {
+          what: "필요 증가량 계산기는 현재 값에서 목표 값까지 도달하기 위해 필요한 증가량과 달성률을 계산해주는 도구입니다.",
+          who: "매출·KPI 목표를 추적하고 얼마나 더 성장해야 하는지 파악하려는 PM, 영업 담당자, 소상공인을 위한 도구입니다.",
+          how: "현재 값과 목표 값을 입력하면 필요 증가량(목표−현재), 필요 성장률, 달성률(현재÷목표×100)을 즉시 계산합니다.",
+          why: "목표까지 얼마나 남았는지 숫자로 확인해 팀과 공유하고 우선순위를 설정하는 데 도움이 됩니다.",
+        },
+      },
+      en: {
+        card: "Calculate the required increase, growth rate, and progress to your goal.",
+        description:
+          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
+        howItWorks: ["Enter the current value", "Enter the target value", "Read required increase, growth rate, gap, and progress"],
+        aeo: {
+          what: "A Required Growth Calculator shows exactly how much a metric needs to increase to reach a target, along with the current progress percentage.",
+          who: "It is for PMs, sales reps, and business owners who track targets and want to know the gap between where they are and where they need to be.",
+          how: "Required Increase = Target − Current; Progress = Current / Target × 100; Required Growth Rate = (Target − Current) / Current × 100.",
+          why: "It quantifies the gap to goal in multiple ways — absolute increase, percentage growth, and progress — so you can plan and communicate clearly.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "필요 증가량과 남은 갭의 차이는 무엇인가요?", answer: "이 계산기에서는 두 값이 동일합니다(목표−현재). 필요 증가량은 '얼마나 늘려야 하는가', 남은 갭은 '얼마나 부족한가'의 관점에서 같은 수치를 나타냅니다." },
+        { question: "달성률이 100%를 넘을 수 있나요?", answer: "네. 현재 값이 목표보다 크면 달성률이 100%를 초과합니다. 이미 목표를 달성했다는 의미입니다." },
+        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "필요 증가량이 음수로 나옵니다. 이는 수치를 줄여야 목표를 달성할 수 있음을 의미합니다(예: 비용 절감)." },
+      ],
+      en: [
+        { question: "What is the difference between required increase and remaining gap?", answer: "In this calculator they are the same value (Target − Current). Required Increase frames it as 'how much to add'; Remaining Gap frames it as 'how far you are from the goal'." },
+        { question: "Can progress to target exceed 100%?", answer: "Yes. If the current value is already above the target, progress will be above 100%, meaning the goal has been exceeded." },
+        { question: "What if the target is lower than the current value?", answer: "The required increase will be negative, indicating you need to reduce the metric to hit a lower target (e.g., cost reduction goals)." },
+      ],
+    },
+    og: {
+      ko: { title: "필요 증가량 계산기", subtitle: "현재값·목표값으로 필요 증가량·달성률 즉시 계산" },
+      en: { title: "Required Growth Calculator", subtitle: "See how much you need to grow to hit your target" },
+    },
+  },
+
+  {
+    slug: "reverse-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "developer", "office-worker"],
+    ico: "÷%",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "역산 계산기", en: "Reverse Growth Calculator" },
+    relatedTools: ["goal-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
+    seo: {
+      ko: {
+        title: "역산 계산기 — 최종값과 성장률로 원래 값 역산",
+        description:
+          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
+        keywords: ["역산 계산기", "reverse growth calculator", "원래 값 역산", "성장률 역산"],
+      },
+      en: {
+        title: "Reverse Growth Calculator — Find the Original Value from Final Value and Growth Rate",
+        description:
+          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
+        keywords: ["reverse growth calculator", "reverse percentage calculator", "find original value", "reverse percent change"],
+      },
+    },
+    content: {
+      ko: {
+        card: "최종 값과 성장률로 원래 값 역산.",
+        description:
+          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
+        howItWorks: ["최종 값 입력", "성장률(%) 입력", "원래 값·차이·배수 확인"],
+        aeo: {
+          what: "역산 계산기는 최종 값과 성장률을 알고 있을 때 원래 값을 계산해주는 도구입니다.",
+          who: "기준값·세전 금액·할인 전 가격 등 성장 전 원래 수치를 알아야 하는 비즈니스 담당자, 회계 담당자, PM을 위한 도구입니다.",
+          how: "원래 값 = 최종 값 ÷ (1 + 성장률 ÷ 100) 공식으로 역산합니다.",
+          why: "최종 값과 변화율만 알고 시작값을 모를 때, 역방향으로 계산해 원래 수치를 빠르게 구할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate the original value from a final value and a known growth rate.",
+        description:
+          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
+        howItWorks: ["Enter the final value", "Enter the growth rate (%)", "Read the original value and difference"],
+        aeo: {
+          what: "A Reverse Growth Calculator finds the original value when you know the final value and the percentage change applied to it.",
+          who: "It is for business analysts, accountants, and PMs who need to back-calculate a base figure from a final number and a known rate.",
+          how: "Original Value = Final Value / (1 + Growth Rate / 100). This reverses any standard percentage growth calculation.",
+          why: "When the end result and growth rate are known but the starting point is not, this calculator solves it in one step without manual algebra.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "언제 역산 계산기를 사용하나요?", answer: "최종 값과 성장률은 알지만 시작 값을 모를 때 사용합니다. 예를 들어 성장 후 125가 됐고 성장률이 25%였다면, 원래 값은 100입니다." },
+        { question: "성장률이 음수일 수 있나요?", answer: "네. 감소율을 입력하면 최종 값보다 큰 원래 값이 계산됩니다." },
+        { question: "성장률이 -100%이면 어떻게 되나요?", answer: "-100%이면 분모가 0이 되어 계산이 불가능합니다. 오류 메시지가 표시됩니다." },
+      ],
+      en: [
+        { question: "When do I use a reverse growth calculator?", answer: "Use it when you know the final value and the growth rate but not the starting value. For example, if a value grew 25% to reach 125, the original value was 100." },
+        { question: "Can the growth rate be negative?", answer: "Yes. A negative growth rate means the value decreased; the calculator will return an original value larger than the final value." },
+        { question: "What happens if the growth rate is -100%?", answer: "A growth rate of -100% makes the denominator zero, which is undefined. An error message will appear." },
+      ],
+    },
+    og: {
+      ko: { title: "역산 계산기", subtitle: "최종값과 성장률로 원래 값 역산" },
+      en: { title: "Reverse Growth Calculator", subtitle: "Find the original value from final value and growth rate" },
+    },
+  },
+
+  {
+    slug: "cagr-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "cagr",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
+    relatedTools: ["compound-growth-calculator", "growth-projection-calculator", "growth-rate-calculator"],
+    seo: {
+      ko: {
+        title: "CAGR 계산기 — 연평균 성장률 계산",
+        description:
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
+        keywords: ["CAGR 계산기", "CAGR calculator", "연평균 성장률", "annual growth rate calculator"],
+      },
+      en: {
+        title: "CAGR Calculator — Compound Annual Growth Rate",
+        description:
+          "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Use it for investment returns, revenue growth analysis, and business planning.",
+        keywords: ["CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "시작값·종료값·기간으로 CAGR 즉시 계산.",
+        description:
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
+        howItWorks: ["시작 값 입력", "종료 값 입력", "기간(년) 입력 후 CAGR·총 성장률 확인"],
+        aeo: {
+          what: "CAGR 계산기는 시작값과 종료값, 기간을 사용해 연평균 복리 성장률(CAGR)을 계산해주는 도구입니다. CAGR은 Compound Annual Growth Rate의 약자입니다.",
+          who: "투자 수익률을 분석하거나 다년간의 비즈니스 성장률을 비교하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
+          how: "CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다.",
+          why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 용이합니다.",
+        },
+      },
+      en: {
+        card: "Calculate CAGR (Compound Annual Growth Rate) from start, end, and years.",
+        description:
+          "Enter a start value, end value, and number of years to instantly calculate CAGR. Use it for investment returns, revenue growth analysis, and business planning.",
+        howItWorks: ["Enter the start value", "Enter the end value", "Enter the number of years, then read CAGR and total growth"],
+        aeo: {
+          what: "A CAGR Calculator computes the Compound Annual Growth Rate — the smoothed annual growth rate that describes how much a value grew each year on a compounded basis.",
+          who: "It is for investors, PMs, and business owners who need to compare multi-year growth across different time periods or asset sizes.",
+          how: "CAGR = (End / Start) ^ (1 / Years) − 1. The result is the annualized growth rate assuming constant compounding.",
+          why: "CAGR normalizes growth across different time spans, making it the standard metric for comparing investment returns or business growth rates.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "CAGR이란 무엇인가요?", answer: "CAGR(Compound Annual Growth Rate)은 연평균 복리 성장률입니다. 시작값에서 종료값까지 매년 동일한 비율로 성장했다면 그 비율이 CAGR입니다." },
+        { question: "CAGR과 단순 성장률의 차이는 무엇인가요?", answer: "단순 성장률은 시작과 끝 두 시점만 비교합니다. CAGR은 복리를 적용해 매년 균등한 성장률을 구하므로, 다년간 비교에 더 정확합니다." },
+        { question: "CAGR이 음수가 될 수 있나요?", answer: "네. 종료 값이 시작 값보다 작으면 CAGR은 음수가 됩니다. 다만 시작 값은 반드시 양수여야 합니다." },
+      ],
+      en: [
+        { question: "What does CAGR mean?", answer: "CAGR stands for Compound Annual Growth Rate. It is the constant annual rate at which a value would have grown from the start value to the end value over a given number of years." },
+        { question: "How is CAGR different from simple growth rate?", answer: "Simple growth rate compares only two points in time. CAGR compounds the growth evenly across each year, making it more useful for comparing growth over different time periods." },
+        { question: "Can CAGR be negative?", answer: "Yes. If the end value is lower than the start value, CAGR will be negative, indicating an average annual decline. The start value must always be positive." },
+      ],
+    },
+    og: {
+      ko: { title: "CAGR 계산기", subtitle: "시작값·종료값·기간으로 연평균 성장률(CAGR) 즉시 계산" },
+      en: { title: "CAGR Calculator", subtitle: "Calculate Compound Annual Growth Rate instantly" },
+    },
+  },
+
+  {
+    slug: "compound-growth-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "^n",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
+    relatedTools: ["cagr-calculator", "growth-projection-calculator", "goal-growth-calculator"],
+    seo: {
+      ko: {
+        title: "복리 성장 계산기 — 초기값·성장률·기간으로 최종값 계산",
+        description:
+          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
+        keywords: ["복리 성장 계산기", "compound growth calculator", "복리 계산기", "future value calculator"],
+      },
+      en: {
+        title: "Compound Growth Calculator — Calculate Final Value with Compound Growth",
+        description:
+          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth. Great for projecting revenue, investment, or any compounding metric.",
+        keywords: ["compound growth calculator", "compound growth rate calculator", "future value calculator", "compounding calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "초기값·성장률·기간으로 복리 최종값 즉시 계산.",
+        description:
+          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
+        howItWorks: ["초기 값 입력", "성장률(%) 입력", "기간(회차) 입력 후 최종값·총 성장률 확인"],
+        aeo: {
+          what: "복리 성장 계산기는 초기 값에 성장률을 복리로 적용해 일정 기간 후의 최종 값을 계산해주는 도구입니다.",
+          who: "매출·투자·사용자 수 등을 복리로 성장시켰을 때 최종 값을 예측하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
+          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다.",
+          why: "복리의 힘을 직관적으로 확인하고, 성장률과 기간에 따른 결과를 즉시 비교할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Calculate the final value after compound growth over multiple periods.",
+        description:
+          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth.",
+        howItWorks: ["Enter the initial value", "Enter the growth rate (%)", "Enter the number of periods, then read the final value"],
+        aeo: {
+          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value, accounting for the compounding effect.",
+          who: "It is for investors, PMs, and business owners who want to project revenue, users, or investments using a constant periodic growth rate.",
+          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Each period's growth is applied to the running total, not the original.",
+          why: "Compound growth produces dramatically different results than simple growth at scale — this calculator makes that difference visible instantly.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간의 누적 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
+        { question: "기간(회차)을 0으로 설정하면 어떻게 되나요?", answer: "0 기간은 허용됩니다. 최종값은 초기값과 동일합니다." },
+        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 감소하는 복리 감소를 계산합니다." },
+      ],
+      en: [
+        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value. This causes exponential growth over time." },
+        { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value — no growth has occurred." },
+        { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
+      ],
+    },
+    og: {
+      ko: { title: "복리 성장 계산기", subtitle: "초기값·성장률·기간으로 복리 최종값 즉시 계산" },
+      en: { title: "Compound Growth Calculator", subtitle: "Calculate final value with compound growth rate instantly" },
+    },
+  },
+
+  {
+    slug: "growth-projection-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["pm", "small-business-owner", "office-worker"],
+    ico: "f(n)",
+    ready: true,
+    badge: "Calculator",
+    name: { ko: "성장 예측 계산기", en: "Growth Projection Calculator" },
+    relatedTools: ["cagr-calculator", "compound-growth-calculator", "goal-growth-calculator"],
+    seo: {
+      ko: {
+        title: "성장 예측 계산기 — 현재값과 성장률로 미래값 예측",
+        description:
+          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
+        keywords: ["성장 예측 계산기", "growth projection calculator", "미래값 계산기", "성장 시나리오"],
+      },
+      en: {
+        title: "Growth Projection Calculator — Project Future Value with a Growth Rate",
+        description:
+          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth. Perfect for revenue forecasting, user growth planning, and scenario analysis.",
+        keywords: ["growth projection calculator", "future value calculator", "growth forecast calculator", "revenue projection calculator"],
+      },
+    },
+    content: {
+      ko: {
+        card: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측.",
+        description:
+          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
+        howItWorks: ["현재 값 입력", "성장률(%) 입력", "기간 입력 후 예측값·총 성장률 확인"],
+        aeo: {
+          what: "성장 예측 계산기는 현재 값에서 일정 성장률이 복리로 적용됐을 때 미래 값을 예측해주는 도구입니다.",
+          who: "매출·사용자 수·트래픽 등의 성장 시나리오를 계획하는 PM, 스타트업 창업자, 투자자를 위한 도구입니다.",
+          how: "예측값 = 현재값 × (1 + 성장률/100)^기간 공식으로 복리 기반 미래값을 계산합니다.",
+          why: "단순한 숫자 입력만으로 다양한 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Project future value using compound growth over multiple periods.",
+        description:
+          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth.",
+        howItWorks: ["Enter the current value", "Enter the growth rate (%)", "Enter the number of periods, then read the projected value"],
+        aeo: {
+          what: "A Growth Projection Calculator forecasts a future value by applying a compound growth rate to a current value over a specified number of periods.",
+          who: "It is for PMs, startup founders, and investors who need to model revenue forecasts, user growth scenarios, or investment projections.",
+          how: "Projected Value = Current Value × (1 + Rate / 100) ^ Periods. The result is the compounded future value after the given number of periods.",
+          why: "It turns a growth rate assumption into a concrete future number, making scenario planning faster and presentations more grounded.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        { question: "성장 예측 계산기와 복리 성장 계산기의 차이는 무엇인가요?", answer: "계산식은 동일합니다. 복리 성장 계산기는 초기 투자값을 기준으로, 성장 예측 계산기는 현재 비즈니스 지표를 기준으로 사용하는 관점의 차이입니다." },
+        { question: "성장률이 매 기간 동일하다고 가정하는 건가요?", answer: "네. 이 계산기는 모든 기간에 동일한 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 각 기간별로 수동 계산이 필요합니다." },
+        { question: "기간 단위는 무엇인가요?", answer: "기간 단위는 자유롭게 설정할 수 있습니다. 주·월·분기·연도 등 분석에 적합한 단위를 사용하세요." },
+      ],
+      en: [
+        { question: "How is this different from the Compound Growth Calculator?", answer: "The formula is identical. The difference is framing: Compound Growth Calculator focuses on growing an investment or initial amount; Growth Projection Calculator focuses on projecting a live business metric forward." },
+        { question: "Does this assume a constant growth rate each period?", answer: "Yes. This calculator assumes the same growth rate is applied every period. For variable growth rates, you would need to calculate each period separately." },
+        { question: "What unit should I use for periods?", answer: "Any unit works — weeks, months, quarters, or years. Just be consistent: if your growth rate is monthly, your periods should be months." },
+      ],
+    },
+    og: {
+      ko: { title: "성장 예측 계산기", subtitle: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측" },
+      en: { title: "Growth Projection Calculator", subtitle: "Project future value with compound growth rate instantly" },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
