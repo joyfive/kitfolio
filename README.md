@@ -24,16 +24,50 @@
 - **구조화 데이터(JSON-LD)**: 도구=`WebApplication`, 허브=`WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
 
-## 구현 범위 (초안)
+## 구현된 기능 (도구 36종)
 
-| 페이지 | KO 경로 | EN 경로 | 테마 |
-|--------|---------|---------|------|
-| 허브 | `/` | `/en` | Clean SaaS |
-| JSON 포매터 | `/json-formatter` | `/en/json-formatter` | IDE / Editor (다크) |
-| CSS 그라디언트 생성기 | `/css-gradient` | `/en/css-gradient` | Canvas |
-| 글자 수·단어 수 카운터 | `/character-counter` | `/en/character-counter` | Clean SaaS |
+각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ/AEO를
+`app/lib/content.ts` 레지스트리에서 단일 출처로 관리합니다. 허브(`/`, `/en`)는 전체 도구의
+검색·필터·디스커버리 진입점입니다.
 
-나머지 10개 도구는 허브에 "준비 중" 카드로 노출됩니다.
+| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |
+|---|---|---|---|---|
+| 1 | JSON 포매터 / JSON Formatter | `/json-formatter` | `/en/json-formatter` | JSON 문자열을 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지와 유효성 검사 포함. |
+| 2 | 슬랙 타임스탬프 변환기 / Slack Timestamp Converter | `/slack-timestamp-converter` | `/en/slack-timestamp-converter` | Unix 타임스탬프 ↔ 날짜 ↔ Slack date 구문 양방향 변환. 현재 타임스탬프 실시간 표시. |
+| 3 | Rem → Px 변환기 / Rem to Px Converter | `/rem-to-px` | `/en/rem-to-px` | rem ↔ px 즉시 변환. 루트 폰트 크기 설정 지원. |
+| 4 | Em → Px 변환기 / Em to Px Converter | `/em-to-px` | `/en/em-to-px` | em ↔ px 즉시 변환. 부모 폰트 크기 설정 지원. |
+| 5 | Vw → Px 변환기 / Vw to Px Converter | `/vw-to-px` | `/en/vw-to-px` | vw ↔ px 즉시 변환. 반응형 뷰포트 너비 프리셋 지원. |
+| 6 | % → Px 변환기 / Percent to Px Converter | `/percent-to-px` | `/en/percent-to-px` | CSS % ↔ px 즉시 변환. 부모 요소 너비 설정 지원. |
+| 7 | Ms → S 변환기 / Ms to S Converter | `/ms-to-s` | `/en/ms-to-s` | ms ↔ s 즉시 변환. CSS 애니메이션·트랜지션 시간 계산에 유용. |
+| 8 | 그라디언트 생성기 / CSS Gradient | `/css-gradient` | `/en/css-gradient` | linear·radial·conic 그라디언트를 시각적으로 편집하고 CSS 코드를 즉시 복사. |
+| 9 | Tailwind 팔레트 생성기 / Tailwind Palette | `/tailwind-palette-generator` | `/en/tailwind-palette-generator` | 베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사. |
+| 10 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
+| 11 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
+| 12 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
+| 13 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
+| 14 | 음력 양력 변환기 / Lunar–Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 15 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 시작값·종료값으로 성장률·차이·배수 즉시 계산. |
+| 16 | 퍼센트 변화율 계산기 / Percentage Change Calculator | `/percentage-change-calculator` | `/en/percentage-change-calculator` | 이전 값과 현재 값으로 변화율·차이·배수 계산. |
+| 17 | 증가율 계산기 / Percentage Increase Calculator | `/percentage-increase-calculator` | `/en/percentage-increase-calculator` | 원래 값과 증가된 값으로 증가율 즉시 계산. |
+| 18 | 감소율 계산기 / Percentage Decrease Calculator | `/percentage-decrease-calculator` | `/en/percentage-decrease-calculator` | 원래 값과 감소된 값으로 감소율 즉시 계산. |
+| 19 | 퍼센트 차이 계산기 / Percent Difference Calculator | `/percent-difference-calculator` | `/en/percent-difference-calculator` | 두 값 A·B의 상대적 퍼센트 차이 계산. |
+| 20 | MoM 성장률 계산기 / MoM Growth Calculator | `/mom-growth-calculator` | `/en/mom-growth-calculator` | 지난달·이번달 값으로 MoM 성장률 즉시 계산. |
+| 21 | YoY 성장률 계산기 / YoY Growth Calculator | `/yoy-growth-calculator` | `/en/yoy-growth-calculator` | 작년·올해 값으로 YoY 성장률 즉시 계산. |
+| 22 | QoQ 성장률 계산기 / QoQ Growth Calculator | `/qoq-growth-calculator` | `/en/qoq-growth-calculator` | 지난 분기·이번 분기 값으로 QoQ 성장률 즉시 계산. |
+| 23 | WoW 성장률 계산기 / WoW Growth Calculator | `/wow-growth-calculator` | `/en/wow-growth-calculator` | 지난주·이번주 값으로 WoW 성장률 즉시 계산. |
+| 24 | 목표 성장률 계산기 / Goal Growth Calculator | `/goal-growth-calculator` | `/en/goal-growth-calculator` | 현재 값과 목표 값으로 필요 성장률 즉시 계산. |
+| 25 | 필요 증가량 계산기 / Required Growth Calculator | `/required-growth-calculator` | `/en/required-growth-calculator` | 현재값·목표값으로 필요 증가량·달성률 즉시 계산. |
+| 26 | 역산 계산기 / Reverse Growth Calculator | `/reverse-growth-calculator` | `/en/reverse-growth-calculator` | 최종 값과 성장률로 원래 값 역산. |
+| 27 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. |
+| 28 | 복리 성장 계산기 / Compound Growth Calculator | `/compound-growth-calculator` | `/en/compound-growth-calculator` | 초기값·성장률·기간으로 복리 최종값 즉시 계산. |
+| 29 | 성장 예측 계산기 / Growth Projection Calculator | `/growth-projection-calculator` | `/en/growth-projection-calculator` | 현재값·성장률·기간으로 복리 기반 미래값 즉시 예측. |
+| 30 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 31 | ROAS 계산기 / ROAS Calculator | `/roas-calculator` | `/en/roas-calculator` | 광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함. |
+| 32 | CPA 계산기 / CPA Calculator | `/cpa-calculator` | `/en/cpa-calculator` | 광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함. |
+| 33 | CPC 계산기 / CPC Calculator | `/cpc-calculator` | `/en/cpc-calculator` | 광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함. |
+| 34 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | `/en/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
+| 35 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
+| 36 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
 
 ## 디렉토리 구조
 
