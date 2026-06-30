@@ -1103,6 +1103,86 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 }
 
 /* ============================================================
+   Salary Net Pay Calculator (Clean SaaS theme)
+   인풋(화이트 박스 — 급여 정보) + 결과(KPI 3카드 · 공제 상세 표)
+   ============================================================ */
+.sc-work { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 960px) { .sc-work { grid-template-columns: 1fr 1.1fr; } }
+
+.sc-seg { width: 100%; }
+.sc-seg button { flex: 1; }
+
+.sc-lbl-sub { font-weight: 500; color: var(--color-blue-gray-400); }
+
+/* Stepper — 부양가족 / 자녀 수 */
+.sc-stepper {
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
+  background: #fff; height: 42px; padding: 0 5px;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.sc-stepper:focus-within {
+  border-color: var(--color-blue-primary-400);
+  box-shadow: 0 0 0 3px var(--color-blue-primary-100);
+}
+.sc-stepper button {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: var(--radius-sm);
+  border: 1px solid var(--color-blue-gray-200); background: var(--color-blue-gray-50);
+  color: var(--color-blue-gray-700); font-size: 18px; line-height: 1;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.sc-stepper button:hover:not(:disabled) {
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-700);
+  border-color: var(--color-blue-primary-200);
+}
+.sc-stepper button:disabled { opacity: .4; cursor: not-allowed; }
+.sc-stepper input {
+  flex: 1; min-width: 0; width: 100%; border: none; outline: none; background: none;
+  text-align: center; font-family: var(--font-inter); font-size: 15px; font-weight: 500;
+  color: var(--color-blue-gray-900); font-feature-settings: "tnum" 1;
+}
+.sc-stepper-suffix { flex-shrink: 0; font-size: 12px; color: var(--color-blue-gray-400); }
+
+/* KPI 3카드 — 월 실수령(primary) · 총 공제 · 연 실수령 */
+.sc-kpis { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 520px) { .sc-kpis { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 520px) { .sc-kpis .fw-emph-card.primary { grid-column: 1 / -1; } }
+.sc-kpis .fw-emph-card .ec-value { font-size: 28px; }
+.sc-kpis .fw-emph-card.primary .ec-value { font-size: 34px; }
+
+/* 공제 상세 표 헤더 */
+.sc-bd-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.sc-bd-head h3 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-blue-gray-900); }
+.sc-year {
+  font-family: var(--font-inter); font-size: 11px; font-weight: 500;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  padding: 2px 8px; border-radius: 999px; flex-shrink: 0;
+}
+.bd-row.total.sc-net-row { border-top: none; margin-top: 0; padding-top: 6px; }
+.bd-row.total.sc-net-row .v { color: var(--color-blue-primary-700); }
+
+.sc-disclaimer {
+  margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--color-blue-gray-500);
+  background: var(--color-blue-gray-100); border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md); padding: 11px 13px; text-wrap: pretty;
+}
+
+/* 빈 입력 / 잘못된 입력 안내 */
+.sc-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; text-align: center; min-height: 240px;
+  background: #fff; border: 1px dashed var(--color-blue-gray-300);
+  border-radius: var(--radius-xl); padding: 32px 24px;
+}
+.sc-placeholder svg { width: 40px; height: 40px; color: var(--color-blue-gray-300); }
+.sc-placeholder p { margin: 0; font-size: 13.5px; color: var(--color-blue-gray-500); max-width: 280px; text-wrap: pretty; }
+
+@media (max-width: 600px) {
+  .sc-kpis .fw-emph-card.primary .ec-value { font-size: 30px; }
+}
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스 — 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */
