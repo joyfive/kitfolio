@@ -1185,6 +1185,157 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "open-graph-preview",
+    layout: "canvas",
+    cat: "design",
+    targets: ["pm", "designer", "developer"],
+    ico: "◧",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "OG 미리보기 테스트", en: "Open Graph Preview Tester" },
+    relatedTools: ["css-gradient", "tailwind-palette-generator", "character-counter"],
+    seo: {
+      ko: {
+        title: "OG 미리보기 테스트 — 카카오톡·Facebook·X 공유 카드 확인",
+        description:
+          "OG 이미지 파일, 이미지 URL 또는 SVG·HTML/CSS 코드를 입력하고 제목과 설명이 카카오톡, Facebook, X, Threads, LinkedIn, 네이버 블로그, Notion에서 어떻게 보이는지 비교하세요. 모든 처리는 브라우저에서 진행되며 이미지 파일은 서버로 전송되지 않습니다.",
+        keywords: [
+          "OG 미리보기",
+          "OG 이미지 테스트",
+          "오픈그래프 미리보기",
+          "카카오톡 링크 미리보기",
+          "SNS 공유 이미지",
+          "Open Graph 테스트",
+          "링크 카드 미리보기",
+        ],
+      },
+      en: {
+        title: "Open Graph Preview Tester — Compare Social Link Cards",
+        description:
+          "Preview an Open Graph image, title, and description across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Upload an image, enter an image URL, or render SVG and HTML/CSS code directly in your browser without sending files to a server.",
+        keywords: [
+          "Open Graph preview",
+          "OG image tester",
+          "social media preview",
+          "link card preview",
+          "Facebook link preview",
+          "X card preview",
+          "LinkedIn post preview",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다.",
+        description:
+          "이미지 파일, 이미지 URL 또는 생성 코드를 입력하고 카카오톡, Facebook, X, Threads, LinkedIn, 네이버 블로그, Notion의 링크 카드 형태를 한 화면에서 비교하세요. 플랫폼별 이미지 크롭과 제목·설명 노출 형태를 배포 전에 확인할 수 있으며, 모든 처리는 브라우저 안에서 이루어집니다.",
+        howItWorks: [
+          "이미지 첨부, 이미지 URL 또는 생성 코드 중 하나를 선택합니다.",
+          "제목과 설명, 표시 도메인을 입력합니다.",
+          "플랫폼별 이미지 크롭과 텍스트 노출 형태를 비교합니다.",
+        ],
+        aeo: {
+          what: "OG 미리보기 테스트는 이미지와 메타 텍스트가 주요 플랫폼의 링크 카드에서 어떻게 보이는지 시뮬레이션하는 도구입니다.",
+          who: "웹페이지, 콘텐츠, 캠페인 또는 프로덕트의 공유 이미지를 검수하는 PM, 디자이너와 개발자를 위한 도구입니다.",
+          how: "이미지 파일, 이미지 URL 또는 SVG·HTML/CSS 코드를 입력하고 제목과 설명을 추가하면 플랫폼별 프리뷰를 생성합니다.",
+          why: "페이지를 배포하기 전에 이미지 크롭, 해상도, 제목과 설명의 잘림 가능성을 확인할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Compare how an Open Graph image, title, and description appear across major platforms.",
+        description:
+          "Upload an image, enter an image URL, or render SVG and HTML/CSS code to compare link card layouts across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Spot image cropping and truncated titles or descriptions before you publish — everything runs in your browser.",
+        howItWorks: [
+          "Upload an image, enter an image URL, or paste supported image source code.",
+          "Enter the title, description, and display domain.",
+          "Compare image crops and text layouts across platforms.",
+        ],
+        aeo: {
+          what: "The Open Graph Preview Tester simulates how an image and metadata text may appear in link cards across major platforms.",
+          who: "It is designed for product managers, designers, and developers reviewing social sharing assets.",
+          how: "The tool accepts an uploaded image, a direct image URL, or SVG and HTML/CSS code, then applies the content to platform-specific preview layouts.",
+          why: "It helps identify image cropping, low resolution, and truncated titles or descriptions before a page is published.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "OG 미리보기 테스트란 무엇인가요?",
+          answer:
+            "OG 이미지와 제목, 설명이 주요 플랫폼의 링크 카드에서 어떻게 보일지 비교하는 도구입니다. 이미지 크롭과 텍스트 잘림 가능성을 페이지 배포 전에 확인할 수 있습니다.",
+        },
+        {
+          question: "어떤 방식으로 이미지를 입력할 수 있나요?",
+          answer:
+            "PNG, JPG, WebP 파일을 직접 첨부하거나 이미지 파일 URL을 입력할 수 있습니다. SVG 또는 정적 HTML/CSS 코드를 이미지로 렌더링하는 방식도 지원합니다.",
+        },
+        {
+          question: "이미지 URL을 불러오지 못하는 이유는 무엇인가요?",
+          answer:
+            "외부 서버가 이미지 직접 접근을 차단하거나 CORS, 핫링크, 보안 정책을 적용하면 브라우저에서 이미지를 불러오지 못할 수 있습니다. 이 경우 이미지를 직접 첨부하여 확인해야 합니다.",
+        },
+        {
+          question: "실제 플랫폼과 완전히 동일하게 표시되나요?",
+          answer:
+            "아닙니다. 각 프리뷰는 대표적인 링크 카드 구조를 기준으로 한 시뮬레이션입니다. 실제 결과는 플랫폼 앱 버전, 기기, 이미지 캐시 및 내부 처리 방식에 따라 달라질 수 있습니다.",
+        },
+        {
+          question: "React 또는 Next.js OG 이미지 코드를 실행할 수 있나요?",
+          answer:
+            "지원하지 않습니다. MVP에서는 SVG와 정적 HTML/CSS 코드만 렌더링하며 JavaScript, React, TSX, Next.js ImageResponse 코드는 실행하지 않습니다.",
+        },
+        {
+          question: "첨부한 이미지와 입력 내용이 서버에 저장되나요?",
+          answer:
+            "아닙니다. 이미지와 입력 내용은 서버로 전송되거나 저장되지 않으며 모든 처리는 현재 브라우저 안에서 진행됩니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is an Open Graph Preview Tester?",
+          answer:
+            "It is a browser-based tool that simulates how an Open Graph image, title, and description may appear in link cards across major platforms. You can spot image cropping and text truncation before a page is published.",
+        },
+        {
+          question: "How can I add an Open Graph image?",
+          answer:
+            "You can upload a PNG, JPG, or WebP file, enter a direct image URL, or render supported SVG and static HTML/CSS code.",
+        },
+        {
+          question: "Why does an image URL fail to load?",
+          answer:
+            "The remote server may block direct image access through CORS, hotlink protection, or other security policies. Upload the image directly when the remote URL cannot be loaded.",
+        },
+        {
+          question: "Are the previews identical to the actual platforms?",
+          answer:
+            "No. The previews simulate common link card layouts. Actual results may vary depending on the platform, app version, device, cache, and internal processing rules.",
+        },
+        {
+          question: "Can the tool run React or Next.js Open Graph code?",
+          answer:
+            "No. The MVP supports SVG and static HTML/CSS only. It does not execute JavaScript, React, TSX, npm packages, or Next.js ImageResponse code.",
+        },
+        {
+          question: "Are uploaded images or entered content stored?",
+          answer:
+            "No. Images and entered content are processed in the browser and are not uploaded to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "OG 미리보기 테스트",
+        subtitle: "카카오톡·Facebook·X 등 주요 플랫폼의 링크 카드를 비교하세요.",
+      },
+      en: {
+        title: "Open Graph Preview Tester",
+        subtitle: "Compare link cards across major sharing platforms.",
+      },
+    },
+  },
 
   // ── Text ─────────────────────────────
   {
