@@ -1295,6 +1295,160 @@ export const TOOLS: Tool[] = [
     },
   },
   {
+    slug: "salary-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "job-seeker", "pm", "developer"],
+    ico: "₩",
+    ready: true,
+    badge: "Clean SaaS",
+    name: { ko: "연봉 실수령액 계산기", en: "Salary Net Pay Calculator" },
+    relatedTools: [
+      "percentage-increase-calculator",
+      "growth-rate-calculator",
+      "flex-work-calculator",
+    ],
+    seo: {
+      ko: {
+        title: "연봉 실수령액 계산기 — 월급 실수령 계산",
+        description:
+          "세전 연봉이나 월급을 입력하면 4대보험과 근로소득세·지방소득세를 빼고 예상 월 실수령액·연 실수령액과 공제 내역을 바로 보여줍니다. 비과세액, 부양가족 수, 20세 이하 자녀 수, 원천징수 비율(80·100·120%)을 반영합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "연봉 실수령액 계산기",
+          "실수령액 계산기",
+          "월급 실수령액",
+          "연봉 계산기",
+          "세후 연봉 계산",
+          "4대보험 계산기",
+          "연봉 실수령",
+        ],
+      },
+      en: {
+        title: "Salary Net Pay Calculator — Korea Take-Home Pay",
+        description:
+          "Enter your gross annual salary or monthly pay and instantly see estimated monthly and yearly take-home pay after Korea's four major insurances and income & local taxes, with a full deduction breakdown. Adjust non-taxable amount, dependents, children and withholding rate. Everything runs in your browser.",
+        keywords: [
+          "salary net pay calculator",
+          "korea take-home pay calculator",
+          "net salary calculator korea",
+          "after tax salary korea",
+          "korean income tax calculator",
+          "monthly net pay",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산.",
+        description:
+          "세전 연봉이나 월급을 입력하면 국민연금·건강보험·장기요양·고용보험과 근로소득세·지방소득세를 빼고 예상 월 실수령액과 연 실수령액, 그리고 항목별 공제 내역을 표로 보여줍니다. 비과세액, 부양가족 수, 20세 이하 자녀 수, 원천징수 선택비율(80·100·120%)을 반영해 입사·이직·연봉협상 때 빠르게 확인할 수 있습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "연봉 또는 월급 금액 입력",
+          "비과세·부양가족·자녀·원천징수 비율 설정",
+          "월·연 실수령액과 공제 내역 확인",
+        ],
+        aeo: {
+          what: "연봉 실수령액 계산기는 세전 연봉이나 월급을 입력하면 4대보험과 근로소득세·지방소득세를 공제한 예상 월·연 실수령액과 항목별 공제 내역을 보여주는 도구입니다.",
+          who: "연봉협상이나 이직을 앞둔 직장인, 취업준비생, 제안받은 연봉을 비교하려는 사람, 그리고 대략적인 실수령액을 빠르게 확인해야 하는 HR·PM·개발자를 위한 도구입니다.",
+          how: "연봉 또는 월급을 입력하면 비과세액을 뺀 과세소득으로 국민연금·건강보험·장기요양·고용보험을 계산하고, 근로소득 간이세액표 방식을 근사해 근로소득세와 지방소득세를 산출한 뒤 모두 더해 실수령액을 구합니다. 부양가족 수, 20세 이하 자녀 수, 원천징수 선택비율을 반영합니다.",
+          why: "광고가 많고 입력이 복잡한 다른 계산기 대신, 입력하면 바로 결과가 나오는 빠른 예상 계산기로 연봉협상·이직 비교를 몇 초 만에 끝낼 수 있기 때문입니다.",
+        },
+      },
+      en: {
+        card: "Estimate monthly & yearly take-home pay from gross salary after Korea's insurances and taxes, with a full breakdown.",
+        description:
+          "Enter your gross annual salary or monthly pay and this calculator deducts Korea's National Pension, Health Insurance, Long-Term Care and Employment Insurance, plus income and local income tax, to show estimated monthly and yearly take-home pay with an itemized deduction table. It accounts for your non-taxable amount, dependents, children under 20 and the withholding rate (80/100/120%), so you can check the number fast during hiring, a job change or a salary negotiation. Everything runs in your browser.",
+        howItWorks: [
+          "Enter your annual or monthly pay",
+          "Set non-taxable, dependents, children & withholding rate",
+          "See monthly & yearly net pay with the breakdown",
+        ],
+        aeo: {
+          what: "A Salary Net Pay Calculator takes a gross annual salary or monthly pay in Korea and shows the estimated monthly and yearly take-home pay after the four major insurances and income & local taxes, with an itemized deduction breakdown.",
+          who: "It is for office workers heading into a salary negotiation or job change, job seekers comparing offers, and HR, PMs or developers who need a quick estimate of net pay.",
+          how: "Enter an annual or monthly amount; the calculator subtracts the non-taxable portion, computes National Pension, Health, Long-Term Care and Employment Insurance on the taxable base, and approximates income and local tax from Korea's simplified withholding tax table. It reflects the number of dependents, children under 20 and the chosen withholding rate.",
+          why: "Unlike ad-heavy calculators with long forms, it returns a result the moment you type, so you can finish a salary comparison or negotiation check in seconds.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "실수령액 계산 결과가 실제 급여명세서와 다를 수 있나요?",
+          answer:
+            "네. 본 계산기는 대한민국 4대보험 요율과 근로소득 간이세액표 방식을 근사한 예상값입니다. 회사별 비과세 항목, 상여·성과급, 중도 입퇴사, 연말정산, 추가 소득공제 등은 반영하지 않으므로 실제 급여명세서와 차이가 발생할 수 있습니다.",
+        },
+        {
+          question: "비과세 금액은 무엇이고 기본값은 왜 20만원인가요?",
+          answer:
+            "비과세 금액은 식대 등 세금과 4대보험에서 제외되는 월 급여 항목입니다. 2024년부터 식대 비과세 한도가 월 20만원이라 기본값으로 두었으며, 본인 급여 조건에 맞게 수정할 수 있습니다. 비과세액이 커지면 과세표준이 줄어 실수령액이 늘어납니다.",
+        },
+        {
+          question: "부양가족 수와 자녀 수는 어떻게 입력하나요?",
+          answer:
+            "부양가족 수는 본인을 포함한 공제대상 가족 수로, 기본값은 1(본인만)입니다. 20세 이하 자녀 수는 추가로 입력하며, 근로소득 간이세액표 방식에 따라 공제대상 가족 수에 가산되어 근로소득세를 줄여줍니다.",
+        },
+        {
+          question: "원천징수 80%·100%·120%는 무슨 뜻인가요?",
+          answer:
+            "근로자는 매월 떼는 근로소득세를 간이세액표의 80%·100%·120% 중에서 선택할 수 있습니다. 100%가 기본이며, 80%를 선택하면 매월 세금을 덜 떼는 대신 연말정산에서 더 낼 수 있고, 120%는 그 반대입니다. 연간 총세액은 동일합니다.",
+        },
+        {
+          question: "4대보험 요율은 어느 연도 기준인가요?",
+          answer:
+            "국민연금·건강보험·장기요양·고용보험 요율은 연도별 상수로 분리해 관리하며, 계산기는 가장 최신 연도 요율을 기본으로 적용합니다. 요율이 바뀌면 상수만 갱신되므로 계산식은 그대로 유지됩니다.",
+        },
+        {
+          question: "입력한 급여 정보가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 연봉·월급 등 어떤 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Can the result differ from my actual payslip?",
+          answer:
+            "Yes. This is an estimate based on Korea's four-insurance rates and an approximation of the simplified withholding tax table. It does not account for company-specific non-taxable items, bonuses, mid-year joining/leaving, year-end settlement or extra deductions, so it can differ from your real payslip.",
+        },
+        {
+          question: "What is the non-taxable amount and why is 200,000 the default?",
+          answer:
+            "The non-taxable amount is the part of monthly pay (such as a meal allowance) excluded from tax and insurance. Korea's meal-allowance exemption is 200,000 won per month, so that is the default; adjust it to match your own pay. A larger non-taxable amount lowers the taxable base and raises take-home pay.",
+        },
+        {
+          question: "How do I enter dependents and children?",
+          answer:
+            "Dependents is the number of qualifying family members including yourself, defaulting to 1 (just you). Children under 20 are entered separately and, following the simplified tax-table method, are added to the dependent count to reduce income tax.",
+        },
+        {
+          question: "What do the 80% / 100% / 120% withholding options mean?",
+          answer:
+            "Employees in Korea can choose to have 80%, 100% or 120% of the simplified-table income tax withheld each month. 100% is the default; 80% withholds less monthly but you may owe more at year-end settlement, while 120% is the reverse. The annual total tax is the same.",
+        },
+        {
+          question: "Which year's insurance rates does it use?",
+          answer:
+            "National Pension, Health, Long-Term Care and Employment Insurance rates are kept as per-year constants, and the calculator applies the most recent year by default. When rates change, only the constants are updated and the formula stays the same.",
+        },
+        {
+          question: "Is the salary information I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser with JavaScript, and no salary data is uploaded or stored. Close the tab and your inputs are gone.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "연봉 실수령액 계산기",
+        subtitle: "세전 연봉·월급으로 월·연 실수령액을 바로 계산",
+      },
+      en: {
+        title: "Salary Net Pay Calculator",
+        subtitle: "Gross salary to monthly & yearly take-home pay, instantly",
+      },
+    },
+  },
+  {
     slug: "flex-work-calculator",
     layout: "card",
     cat: "text",
