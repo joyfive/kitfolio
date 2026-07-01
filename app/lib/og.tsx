@@ -89,6 +89,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
                 letterSpacing: "-1.5px",
                 lineHeight: 1.25,
                 textAlign: "center",
+                wordBreak: "keep-all",
               }}
             >
               {title}
@@ -101,6 +102,7 @@ async function renderOg(title: string, subtitle: string, badge: string) {
                   color: "#737782",
                   lineHeight: 1.4,
                   textAlign: "center",
+                  wordBreak: "keep-all",
                 }}
               >
                 {subtitle}
