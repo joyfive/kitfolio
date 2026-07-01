@@ -61,6 +61,12 @@ function FooterInner({ lang }: { lang: Lang }) {
         <div className="foot-row">
           <p className="foot-copy">© 2026 Kitfolio. All rights reserved.</p>
           <nav className="foot-ext" aria-label="Links">
+            <Link href={localizedHref(lang, "/privacy-policy")}>
+              {t("foot.privacy")}
+            </Link>
+            <Link href={localizedHref(lang, "/terms-of-service")}>
+              {t("foot.terms")}
+            </Link>
             <a href={`mailto:${FEEDBACK_EMAIL}`}>{t("foot.feedback")}</a>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
               GitHub

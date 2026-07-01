@@ -265,6 +265,47 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
+   Legal pages — 개인정보처리방침 / 이용약관 (Clean, 텍스트 본문)
+   ============================================================ */
+.kf-legal { max-width: 760px; margin: 0 auto; padding: 40px 0 24px; }
+.kf-legal h1 {
+  margin: 0 0 20px; font-size: 30px; line-height: 1.15; font-weight: 700;
+  letter-spacing: -0.025em; color: var(--color-blue-gray-950);
+}
+.kf-legal .legal-intro {
+  margin: 0 0 8px; font-size: 15px; line-height: 1.75;
+  color: var(--color-blue-gray-600); text-wrap: pretty;
+}
+.kf-legal .legal-section { margin-top: 32px; }
+.kf-legal .legal-section h2 {
+  margin: 0 0 12px; font-size: 18px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--color-blue-gray-900);
+}
+.kf-legal .legal-section p {
+  margin: 0 0 12px; font-size: 15px; line-height: 1.75;
+  color: var(--color-blue-gray-700); text-wrap: pretty;
+}
+.kf-legal .legal-section p:last-child { margin-bottom: 0; }
+.kf-legal .legal-section strong { font-weight: 700; color: var(--color-blue-gray-900); }
+.kf-legal a { color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px; }
+.kf-legal a:hover { color: var(--color-blue-primary-800); }
+.kf-legal .legal-meta {
+  margin: 40px 0 0; padding: 20px 22px; display: flex; flex-wrap: wrap; gap: 12px 40px;
+  background: var(--color-blue-gray-100); border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md);
+}
+.kf-legal .legal-meta div { margin: 0; }
+.kf-legal .legal-meta dt {
+  font-family: var(--font-inter); font-size: 11.5px; font-weight: 600; letter-spacing: 0.02em;
+  text-transform: uppercase; color: var(--color-blue-gray-500); margin-bottom: 4px;
+}
+.kf-legal .legal-meta dd { margin: 0; font-size: 14px; font-weight: 500; color: var(--color-blue-gray-800); }
+@media (max-width: 640px) {
+  .kf-legal { padding: 28px 0 20px; }
+  .kf-legal h1 { font-size: 24px; }
+}
+
+/* ============================================================
    Shared FAQ section — 디자인 핸드오프(faq.html) 기준
    아코디언: 한 번에 하나만 열림 · 1번 기본 오픈 · 높이 애니메이션
    ============================================================ */
