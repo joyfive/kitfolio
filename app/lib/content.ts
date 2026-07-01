@@ -241,6 +241,264 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
 };
 
 /* ============================================================
+   ⑥ LEGAL — 약관/정책 페이지 (도구 아님, 별도 레지스트리)
+
+   개인정보처리방침 · 이용약관. 도구가 아니므로 TOOLS(허브·검색·sitemap
+   tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
+   본문 문자열은 최소 인라인 마크업 지원: **굵게**, [라벨](url).
+   ============================================================ */
+export const LEGAL_EMAIL = "joy_five@kakao.com";
+export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
+
+export const LEGAL_SLUGS = ["privacy-policy", "terms-of-service"] as const;
+export type LegalSlug = (typeof LEGAL_SLUGS)[number];
+
+export type LegalSection = { heading: string; body: string[] };
+export type LegalDoc = {
+  title: string;
+  /** 리드 문단 (선택) */
+  intro?: string;
+  sections: LegalSection[];
+  /** "시행일자" 라벨 */
+  effectiveLabel: string;
+  /** "문의 이메일" 라벨 */
+  contactLabel: string;
+};
+
+type LegalEntry = {
+  /** 푸터·네비 짧은 라벨 */
+  navLabel: { ko: string; en: string };
+  seo: {
+    ko: { title: string; description: string };
+    en: { title: string; description: string };
+  };
+  doc: { ko: LegalDoc; en: LegalDoc };
+};
+
+export const LEGAL: Record<LegalSlug, LegalEntry> = {
+  "privacy-policy": {
+    navLabel: { ko: "개인정보처리방침", en: "Privacy Policy" },
+    seo: {
+      ko: {
+        title: "개인정보처리방침 — Kitfolio",
+        description:
+          "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 쿠키·광고 식별자(Google AdSense) 이용 안내를 확인하세요.",
+      },
+      en: {
+        title: "Privacy Policy — Kitfolio",
+        description:
+          "Kitfolio requires no account and never transmits the data you enter to any server — everything is processed in your browser. Learn how cookies and advertising identifiers (Google AdSense) are used.",
+      },
+    },
+    doc: {
+      ko: {
+        title: "개인정보처리방침",
+        intro:
+          "Kitfolio(이하 '본 사이트')는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.",
+        sections: [
+          {
+            heading: "1. 개인정보의 수집 및 처리 (DB·서버 전송 없음)",
+            body: [
+              "본 사이트는 모던 지식 노동자를 위한, 브라우저에서 단독으로 동작하는 웹 도구 모음 서비스입니다.",
+              "**비회원제 운영:** 본 사이트는 회원가입이나 로그인 절차가 없으며, 이용자의 이름·이메일·연락처 등 어떠한 개인정보도 요구하거나 수집하지 않습니다.",
+              "**데이터 서버 전송 없음:** 이용자가 각 도구에 입력하는 모든 데이터는 이용자의 브라우저 안에서만 처리되며, 본 사이트의 서버나 외부 데이터베이스(DB)로 전송되지 않습니다. 브라우저를 닫거나 새로고침하면 입력된 데이터는 즉시 소멸합니다.",
+            ],
+          },
+          {
+            heading: "2. 쿠키 및 광고 식별자",
+            body: [
+              "본 사이트는 이용자에게 적합하고 유용한 서비스를 제공하기 위해 정보를 저장하고 수시로 불러오는 '쿠키(cookie)' 및 광고 식별자를 사용합니다.",
+              "**구글 애드센스(Google AdSense):** 본 사이트는 구글이 제공하는 웹 광고 서비스 '구글 애드센스'를 게재합니다. 구글은 이용자가 본 사이트 또는 다른 웹사이트를 방문한 기록을 바탕으로 맞춤형 광고를 제공하기 위해 쿠키를 사용합니다.",
+              "**쿠키 차단 및 설정 방법:** 맞춤형 광고를 원치 않을 경우 [구글 광고 설정](https://www.google.com/settings/ads) 페이지에서 맞춤형 광고를 차단할 수 있습니다. 또한 브라우저 설정을 통해 모든 쿠키의 저장을 거부하거나, 쿠키가 저장될 때마다 확인을 거치도록 설정할 수 있습니다. (쿠키 저장을 거부하면 일부 기능 이용에 불편이 있을 수 있습니다.)",
+            ],
+          },
+          {
+            heading: "3. 제3자 제공 및 위탁",
+            body: [
+              "본 사이트는 이용자의 개인정보를 수집하지 않으므로 제3자에게 제공하거나 외부에 위탁하지 않습니다. 다만 위에 명시된 구글 애드센스 등 서드파티 광고 플랫폼이 통계 및 광고 게재 목적으로 익명의 웹 트래픽 데이터를 처리할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "4. 개인정보 보호책임자 및 문의처",
+            body: [
+              "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.",
+            ],
+          },
+        ],
+        effectiveLabel: "시행일자",
+        contactLabel: "문의 이메일",
+      },
+      en: {
+        title: "Privacy Policy",
+        intro:
+          "Kitfolio (\"we\", \"our\", or \"the Website\") values the privacy of our users and complies with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.",
+        sections: [
+          {
+            heading: "1. Collection and Processing of Data (No Server/DB Transmission)",
+            body: [
+              "Kitfolio is a collection of browser-based web tools for modern knowledge workers that operates entirely on the client side.",
+              "**No Registration Required:** We do not require any account or login, and we do not collect personal information such as names, email addresses, or contact details.",
+              "**No Server Transmission:** All data you type or process within our tools is executed entirely within your web browser. No data is ever transmitted to our servers or any external databases. Once you close or refresh the browser, all entered data is permanently cleared.",
+            ],
+          },
+          {
+            heading: "2. Cookies and Advertising Identifiers",
+            body: [
+              "We use cookies and advertising identifiers to store and retrieve information in order to provide a relevant and useful service.",
+              "**Google AdSense:** This Website displays advertisements served by Google AdSense. Google uses cookies to serve ads based on a user's prior visits to this Website or other websites, enabling Google and its partners to serve personalized advertising.",
+              "**Opting Out:** If you prefer not to receive personalized ads, you can opt out on the [Google Ads Settings](https://www.google.com/settings/ads) page. You may also refuse all cookies or set your browser to prompt before storing a cookie through its settings. (Blocking cookies may affect some website features.)",
+            ],
+          },
+          {
+            heading: "3. Third-Party Data Sharing",
+            body: [
+              "Since we do not collect or store personal data, we do not share or sell any personal information to third parties. Anonymous, non-personally identifiable traffic data may be processed by third-party services such as Google AdSense for analytics and ad-serving purposes.",
+            ],
+          },
+          {
+            heading: "4. Contact",
+            body: [
+              "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address below.",
+            ],
+          },
+        ],
+        effectiveLabel: "Effective date",
+        contactLabel: "Contact email",
+      },
+    },
+  },
+  "terms-of-service": {
+    navLabel: { ko: "이용약관", en: "Terms of Service" },
+    seo: {
+      ko: {
+        title: "이용약관 — Kitfolio",
+        description:
+          "Kitfolio가 제공하는 무료 웹 도구 서비스의 이용 조건, 이용자의 의무, 계산·처리 결과에 대한 면책 조항과 지적재산권 안내입니다.",
+      },
+      en: {
+        title: "Terms of Service — Kitfolio",
+        description:
+          "The terms of use for Kitfolio's free web tools — service provision, user obligations, disclaimer and limitation of liability for tool outputs, and intellectual property.",
+      },
+    },
+    doc: {
+      ko: {
+        title: "이용약관",
+        intro:
+          "본 약관은 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.",
+        sections: [
+          {
+            heading: "제1조 (서비스의 제공 및 변경)",
+            body: [
+              "본 사이트는 모던 지식 노동자를 위한 브라우저 기반 유틸리티 도구를 무료로 제공합니다.",
+              "본 서비스는 전적으로 이용자의 웹 브라우저에서 동작하며, 별도의 회원가입 없이 누구나 자유롭게 이용할 수 있습니다.",
+              "서비스의 내용·디자인·도구의 종류는 성능 개선 및 최적화를 위해 사전 고지 없이 변경되거나 중단될 수 있습니다.",
+            ],
+          },
+          {
+            heading: "제2조 (이용자의 의무 및 데이터 보안)",
+            body: [
+              "이용자는 본 사이트가 제공하는 도구를 합법적인 목적 및 용도로만 이용해야 합니다.",
+              "본 사이트의 모든 도구는 입력된 데이터를 서버로 전송하지 않고 브라우저 내부에서만 처리하므로, 입력 데이터의 유실 방지 및 백업 책임은 전적으로 이용자에게 있습니다.",
+            ],
+          },
+          {
+            heading: "제3조 (면책 조항 · 책임의 제한)",
+            body: [
+              "**계산 및 처리 결과의 정확성:** 본 사이트가 제공하는 모든 도구(성장률 계산기, 실수령액 계산기, 마케팅 지표 계산기 등)의 결과 수치와 데이터 처리는 범용적인 수식·알고리즘을 기반으로 동작합니다. 본 사이트는 계산 결과의 완전성·정확성·최신성 및 특정 목적에의 적합성을 보장하지 않습니다.",
+              "**책임의 제한:** 이용자가 본 사이트의 계산 결과나 도구 출력값을 신뢰하여 발생한 어떠한 재정적·법적·업무적 손실이나 손해(업무 중단, 세금 계산 착오, 시스템 오류 등 포함)에 대해서도 본 사이트는 법적 책임을 지지 않습니다. 모든 최종 의사결정과 검증의 책임은 이용자 본인에게 있습니다.",
+            ],
+          },
+          {
+            heading: "제4조 (지적재산권)",
+            body: [
+              "본 사이트의 디자인·로고·소스코드 구조 및 콘텐츠 레지스트리에 대한 지적재산권은 본 사이트 운영자에게 있습니다.",
+              "이용자는 본 사이트의 서비스를 복제·수정·배포하여 상업적으로 재판매하는 행위를 할 수 없습니다.",
+            ],
+          },
+          {
+            heading: "제5조 (준거법)",
+            body: [
+              "본 서비스 이용과 관련하여 분쟁이 발생할 경우 대한민국 관련 법령에 따릅니다.",
+            ],
+          },
+        ],
+        effectiveLabel: "시행일자",
+        contactLabel: "문의 이메일",
+      },
+      en: {
+        title: "Terms of Service",
+        intro:
+          "These Terms of Service (\"Terms\") govern the use of the web tools and services (the \"Service\") provided by Kitfolio (\"we\", \"our\", or \"the Website\"), defining the rights, obligations, and responsibilities of both users and the Website.",
+        sections: [
+          {
+            heading: "Article 1 (Provision and Modification of Services)",
+            body: [
+              "We provide free browser-based utility tools for modern knowledge workers.",
+              "The Service runs entirely within the user's web browser and can be used freely without any account registration.",
+              "The content, design, and types of tools provided may be modified, updated, or discontinued at any time without prior notice for optimization purposes.",
+            ],
+          },
+          {
+            heading: "Article 2 (User Obligations and Data Security)",
+            body: [
+              "Users agree to use the Service only for lawful purposes.",
+              "Because all data is processed strictly client-side and never saved on our servers, users are solely responsible for managing and backing up their own data.",
+            ],
+          },
+          {
+            heading: "Article 3 (Disclaimer and Limitation of Liability)",
+            body: [
+              "**Accuracy of Outputs:** The calculations and processing provided by our tools (e.g., growth rate calculators, net pay calculator, marketing metric calculators) are based on generalized formulas and algorithms. We do not guarantee the absolute accuracy, completeness, timeliness, or fitness for a particular purpose of any output.",
+              "**Limitation of Liability:** In no event shall Kitfolio be liable for any direct, indirect, incidental, or consequential damages (including, but not limited to, financial losses, business interruptions, tax miscalculations, or system errors) arising from the use of, or inability to use, the tools. Users are strictly advised to independently verify any critical output.",
+            ],
+          },
+          {
+            heading: "Article 4 (Intellectual Property)",
+            body: [
+              "All intellectual property rights concerning the Website's design, logo, source code structure, and content registry belong to the owner of Kitfolio.",
+              "Users are prohibited from copying, modifying, or distributing the Service for commercial resale.",
+            ],
+          },
+          {
+            heading: "Article 5 (Governing Law)",
+            body: [
+              "Any disputes arising from or relating to the use of the Service shall be governed by and construed in accordance with the laws of the Republic of Korea.",
+            ],
+          },
+        ],
+        effectiveLabel: "Effective date",
+        contactLabel: "Contact email",
+      },
+    },
+  },
+};
+
+export function buildLegalMetadata(slug: LegalSlug, lang: Lang): Metadata {
+  const s = LEGAL[slug].seo[lang];
+  const path = "/" + slug;
+  const koUrl = path;
+  const enUrl = "/en" + path;
+  const url = lang === "ko" ? koUrl : enUrl;
+  return {
+    title: { absolute: s.title },
+    description: s.description,
+    alternates: {
+      canonical: url,
+      languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },
+    },
+    openGraph: {
+      title: s.title,
+      description: s.description,
+      url,
+      siteName: SITE.name,
+      type: "website",
+      locale: ogLocale(lang),
+    },
+  };
+}
+
+/* ============================================================
    ⑤ TOOLS — 도구 레지스트리
    ============================================================ */
 export const TOOLS: Tool[] = [
