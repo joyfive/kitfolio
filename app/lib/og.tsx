@@ -41,68 +41,84 @@ async function renderOg(title: string, subtitle: string, badge: string) {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
+          alignItems: "center",
+          justifyContent: "center",
           padding: 72,
           background: "#F2F5FF",
           fontFamily: "NotoSansKR",
         }}
       >
-        {/* 브랜드 */}
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={LOGO_DATA_URI} width={56} height={56} alt="" />
-          <div style={{ fontSize: 34, fontWeight: 700, color: "#434650" }}>
-            {SITE.name}
-          </div>
-        </div>
-
-        {/* 타이틀 / 서브타이틀 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div
-            style={{
-              fontSize: 68,
-              fontWeight: 700,
-              color: "#21242D",
-              letterSpacing: "-2px",
-              lineHeight: 1.15,
-            }}
-          >
-            {title}
-          </div>
-          {subtitle && (
-            <div
-              style={{
-                fontSize: 31,
-                fontWeight: 500,
-                color: "#737782",
-                lineHeight: 1.4,
-              }}
-            >
-              {subtitle}
-            </div>
-          )}
-        </div>
-
-        {/* 푸터 */}
+        {/*
+          센터 정렬 컬럼. 네이버·카카오 등은 1200×630 을 중앙 정사각형으로
+          크롭해서 노출하므로, 핵심 콘텐츠(로고·제목·태그)를 중앙 safe-zone
+          (가로 630px 이내)에 세로/가로 중앙 정렬로 모아 잘리지 않게 한다.
+        */}
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            flexDirection: "column",
             alignItems: "center",
+            textAlign: "center",
+            width: 560,
+            gap: 32,
           }}
         >
-          <div style={{ fontSize: 24, fontWeight: 500, color: "#9B9FAB" }}>
-            kitfolio.app
+          {/* 브랜드 */}
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={LOGO_DATA_URI} width={46} height={46} alt="" />
+            <div style={{ fontSize: 30, fontWeight: 700, color: "#434650" }}>
+              {SITE.name}
+            </div>
           </div>
+
+          {/* 타이틀 / 서브타이틀 */}
           <div
             style={{
               display: "flex",
-              padding: "10px 22px",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 18,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 58,
+                fontWeight: 700,
+                color: "#21242D",
+                letterSpacing: "-1.5px",
+                lineHeight: 1.25,
+                textAlign: "center",
+                wordBreak: "keep-all",
+              }}
+            >
+              {title}
+            </div>
+            {subtitle && (
+              <div
+                style={{
+                  fontSize: 28,
+                  fontWeight: 500,
+                  color: "#737782",
+                  lineHeight: 1.4,
+                  textAlign: "center",
+                  wordBreak: "keep-all",
+                }}
+              >
+                {subtitle}
+              </div>
+            )}
+          </div>
+
+          {/* 배지 */}
+          <div
+            style={{
+              display: "flex",
+              padding: "12px 26px",
               borderRadius: 999,
               background: "#e3e7fc",
               color: "#2d5dc8",
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: 700,
             }}
           >
