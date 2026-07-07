@@ -75,85 +75,68 @@ EN 경로는 각 KO 경로에 `/en` 프리픽스를 붙인 동일 슬러그(예:
 
 Kitfolio는 단일 도메인(`kitfolio.app`) + 서브패스 구조로 운영되며, 모든 도구는 카테고리 없이
 1뎁스 플랫 라우트(`/{slug}`)에 배치된다. 과거 존재했던 2뎁스 경로(`/tools/{slug}`)는
-`next.config.ts`의 `redirects()`에 308(permanent) 리다이렉트로 등록되어 신규 URL로 연결된다.
+308(permanent) 리다이렉트로 신규 URL에 연결된다.
 
 언어는 URL로만 결정된다. 한국어는 루트 경로(`/{slug}`), 영어는 `/en/{slug}` 프리픽스 경로를 쓰며,
-각 언어는 서버에서 해당 언어로 렌더링된 별도 페이지다. `app/en/layout.tsx`가 서브트리 전체에
-`LangProvider lang="en"`을 주입해 언어를 고정하고 `<html lang>`도 `en`으로 재설정한다. 언어 전환
-UI(`LangToggle`)는 `localStorage` 값을 바꾸는 것이 아니라 현재 경로를 상대 로케일 URL(`/foo` ↔
-`/en/foo`)로 매핑해 이동시키는 링크이며, 이로써 두 언어 버전이 각각 독립적으로 색인된다.
+각 언어는 서버에서 해당 언어로 완전히 렌더링된 별도 페이지다. 언어 전환 UI는 브라우저에 저장된
+설정을 바꾸는 방식이 아니라 현재 페이지를 상대 로케일 URL(`/foo` ↔ `/en/foo`)로 이동시키는
+링크로 구현되어 있으며, 이 덕분에 두 언어 버전이 각각 독립적인 페이지로 색인된다.
 
 허브(도구 목록) 페이지도 동일한 패턴을 따라 KO는 `/`, EN은 `/en`에 위치한다.
 
 ## SEO / AEO 정책
 
 ### 콘텐츠 단일 출처 정책
-모든 도구의 렌더링 텍스트(제목, 설명, 카드 문구, How It Works, AEO 문단, FAQ, OG 타이틀/서브타이틀,
-SEO 키워드)는 `app/lib/content.ts`의 `TOOLS` 배열 한 곳에서 KO·EN 세트로 관리된다. 각 도구
-레지스트리 항목은 `seo`(title/description/keywords), `content`(card/description/howItWorks/aeo),
-`faq`, `og` 필드로 구성되며, 이 값들이 `buildToolMetadata()`(메타데이터), `PageHead`/`Faq`/`Hub`
-컴포넌트(화면 카피), `toolJsonLd()`(구조화 데이터), 허브 검색 색인(키워드 매칭)에 그대로 재사용된다.
-페이지 컴포넌트에는 카피가 하드코딩되지 않으며, 버튼·인풋 라벨 같은 UI 마이크로카피만 예외적으로
-전역 공통(`lib/i18n.tsx`의 `COMMON`) 또는 도구별 컴포넌트 로컬 딕셔너리에서 관리한다.
+모든 도구의 렌더링 텍스트(제목, 설명, 카드 문구, 사용 가이드, AEO 문답, FAQ, OG 타이틀/서브타이틀,
+SEO 키워드)는 `content.ts` 한 곳에서 KO·EN 세트로 관리된다. 메타데이터, 화면에 노출되는 카피,
+구조화 데이터, 허브 검색 색인은 전부 이 레지스트리 값을 그대로 재사용하므로 콘텐츠를 한 번만
+수정하면 모든 노출 지점에 동시에 반영된다. 페이지에는 카피가 하드코딩되지 않으며, 버튼·인풋
+라벨 같은 UI 마이크로카피만 예외적으로 전역 공통 사전 또는 도구별 로컬 사전에서 관리한다.
 
 ### 다국어 색인 정책
-각 도구 페이지는 KO·EN 페이지 쌍(`app/{slug}/page.tsx`, `app/en/{slug}/page.tsx`)으로 구현되고,
-`buildToolMetadata(slug, lang)`가 언어별로 `canonical`과 `alternates.languages`(`ko-KR`, `en-US`,
-`x-default`)를 생성한다. `x-default`는 KO URL로 고정된다. 두 언어 페이지는 서버에서 각각 완전히
-렌더링되므로 클라이언트 사이드 언어 전환에 의존하지 않고 양쪽 URL이 독립적으로 색인된다.
+모든 도구는 KO·EN 페이지 쌍으로 존재하며, 각 언어 페이지는 언어별 canonical과 ko/en/x-default
+상호 참조를 가진다. x-default는 KO URL로 고정된다. 두 언어 페이지는 각각 서버에서 완전히
+렌더링되어 독립적으로 색인되며, 클라이언트 사이드 언어 전환에 의존하지 않는다.
 
 ### 구조화 데이터 정책
-도구 페이지는 `toolJsonLd()`가 생성하는 `WebApplication` JSON-LD를 갖는다.
-`applicationCategory`는 도구의 `cat` 값(dev/design/text)에 따라 `DeveloperApplication` /
-`DesignApplication` / `UtilitiesApplication`으로 매핑되고, `isAccessibleForFree: true`와
-`offers.price: "0"`으로 무료 도구임을 명시한다. 도구에 AEO 문단(`content.aeo`)이나 `faq`가 있으면
-두 세트를 합친 Q&A가 `FAQPage` JSON-LD로 함께 배열에 추가된다. AEO 질문 문구는 도구 이름을 포함하도록
-동적으로 생성되어(`aeoQA()`) "What is a Slack Timestamp Converter?" 형태의 AI 검색 질의와 직접
-매칭되게 한다. 허브 페이지는 `hubJsonLd()`가 `WebSite` + `ItemList`(ready 상태인 도구 전체를
-포함) JSON-LD를 생성한다.
+도구 페이지는 WebApplication 구조화 데이터를 가지며, 애플리케이션 분류는 도구가 속한 개발/디자인/
+텍스트 카테고리에 따라 DeveloperApplication / DesignApplication / UtilitiesApplication으로
+구분되고, 무료로 이용 가능함을 명시하는 가격 정보(0)가 포함된다. 도구에 AEO 문답이나 FAQ가 있으면
+두 콘텐츠를 합친 질문·답변이 FAQPage 구조화 데이터로 함께 노출된다. AEO 질문 문구에는 도구 이름이
+포함되어 "What is a Slack Timestamp Converter?"와 같은 AI 검색 질의와 직접 매칭되도록 구성된다.
+허브 페이지는 WebSite와, 공개된 도구 전체를 담은 ItemList 구조화 데이터를 갖는다.
 
 ### sitemap/robots 자동 생성 정책
-`app/sitemap.ts`는 `TOOLS` 중 `ready: true`인 항목과 약관 페이지(`LEGAL_SLUGS`), 허브 루트를
-대상으로 KO·EN 두 URL을 각각 엔트리로 생성하고, 각 엔트리에 `alternates.languages`(ko/en 상호
-참조)를 붙인다. `changeFrequency`/`priority`는 허브(`priority: 1`) > 일반 도구(`0.8`) > 약관
-페이지(`0.3`, `yearly`) 순으로 차등 부여된다. `app/robots.ts`는 전체 허용(`allow: "/"`)과
-sitemap 위치만 선언하는 최소 구성이다.
+사이트맵은 공개 상태인 도구 전체와 약관 페이지, 허브 루트를 대상으로 KO·EN URL을 각각 엔트리로
+생성하고, 각 엔트리에 ko/en 상호 참조를 붙인다. 갱신 빈도와 우선순위는 허브 > 일반 도구 > 약관
+페이지 순으로 차등 부여된다. robots 정책은 전체 크롤링을 허용하고 사이트맵 위치만 선언하는
+최소 구성이다.
 
 ## 페이지 정의
 
 ### 허브 페이지 (`/`, `/en`)
-`Hub` 컴포넌트가 렌더하며 다음 요소로 구성된다: 히어로 영역(타이틀·서브타이틀), 텍스트 검색 인풋(도구
-이름·카드 설명·키워드를 대상으로 클라이언트 사이드 필터링), 직군(target) 필터 칩 바(전체/PM/마케터/
-디자이너/개발자/구직자/직장인/소상공인, 데스크톱·모바일 두 형태로 렌더), 즐겨찾기 토글(선택 상태를
-`localStorage`의 `kitfolio-favs` 키에 저장), 필터링된 도구를 카드 그리드로 나열하는 카탈로그
-섹션. 카드에는 아이콘, 국문/영문 이름, 한 줄 설명, 타겟 태그, 즐겨찾기 버튼이 표시된다.
+허브 페이지는 다음 요소로 구성된다: 히어로 영역(타이틀·서브타이틀), 텍스트 검색 인풋(도구 이름·카드
+설명·키워드를 대상으로 하는 실시간 필터링), 직군별 필터 칩 바(전체/PM/마케터/디자이너/개발자/구직자/
+직장인/소상공인, 데스크톱·모바일 두 형태로 제공), 즐겨찾기 토글(선택 상태를 브라우저에 저장), 필터링된
+도구를 카드 그리드로 나열하는 카탈로그 섹션. 카드에는 아이콘, 국문/영문 이름, 한 줄 설명, 타겟 태그,
+즐겨찾기 버튼이 표시된다.
 
 ### 도구 페이지 (`/{slug}`, `/en/{slug}`)
-모든 도구는 KO/EN 각각 별도의 `page.tsx`를 가지는 얇은 래퍼로 구현된다. `page.tsx`는
-`buildToolMetadata(slug, lang)`로 메타데이터를 export하고, `toolJsonLd(slug, lang)`를 `JsonLd`
-컴포넌트에 주입한 뒤, 도구별 클라이언트 컴포넌트(`app/components/*.tsx`) 하나를 렌더하는 것이
-전부다. 도구 컴포넌트 내부는 공통 패턴을 따른다: `PageHead`(카테고리·테마 뱃지, h1, 리드 문단,
-3단계 How It Works) → 도구 UI(레이아웃 타입에 따라 좌우 분할 또는 카드형 입력·출력) →
-`Faq`(칩 탭으로 전환되는 아코디언 — "이 도구에 대하여" 탭은 AEO What/Who/How/Why를,
-"자주 묻는 질문" 탭은 FAQ를 노출하며 둘 다 동일한 컴포넌트) → `RelatedTools`(레지스트리의
-`relatedTools` slug 목록을 허브와 동일한 카드 스타일로 표시). 각 도구 라우트는 `opengraph-image.tsx`도
-함께 두어 `app/lib/og.tsx`의 공통 렌더러가 레지스트리의 `og.title`/`og.subtitle`을 읽어 1200×630
-OG 이미지를 빌드 시 정적 생성한다.
+모든 도구 페이지는 언어별 메타데이터와 구조화 데이터를 갖는 얇은 래퍼 위에 도구 UI를 얹는 구조다.
+화면 구성은 공통 패턴을 따른다: 상단에 카테고리·테마 뱃지, 제목, 리드 문단, 3단계 사용 가이드를
+배치하고, 그 아래 레이아웃 타입(좌우 분할 또는 카드형 입력·출력)에 따른 도구 UI를 두며, 하단에는
+AEO 문답("이 도구에 대하여")과 FAQ를 탭으로 전환하는 동일한 아코디언 구조, 이어서 관련 도구 추천
+섹션을 순서대로 배치한다. 각 도구는 레지스트리의 OG 타이틀/서브타이틀을 그대로 소비하는 1200×630
+OG 이미지를 빌드 시 정적으로 생성한다.
 
-**예외**: 광고 지표 계산기 계열(ROAS/CPA/CPC/CPM/CTR)은 각각 별도 컴포넌트를 두지 않고
-`app/components/marketing/AdMetricCalculator.tsx` 하나를 `metricKey` prop으로 구분해 재사용한다.
-레지스트리·메타데이터·JSON-LD·URL 구조는 다른 도구와 동일하게 슬러그 단위로 독립적이다.
+**예외**: 광고 지표 계산기 5종(ROAS/CPA/CPC/CPM/CTR)은 하나의 공용 계산기 구현을 지표별로 분기해
+재사용하며, URL·메타데이터·구조화 데이터는 다른 도구와 동일하게 슬러그 단위로 독립적이다.
 
 ## 기술 스택
 
-- **Next.js 15 (App Router) + React 19 + TypeScript** — 도구 페이지 단위로 `opengraph-image.tsx`,
-  `sitemap.ts`, `robots.ts` 같은 파일 기반 컨벤션을 활용해 메타데이터·정적 자산 생성을 라우트에
-  종속시키는 구조를 그대로 채택했다.
-- **Tailwind CSS v4** — `@theme` 블록에 디자인 토큰(컬러·폰트)을 정의해 컴포넌트 스타일과 토큰을
-  1:1로 매핑한다.
-- **Vercel** — GitHub 저장소(`joyfive/kitfolio`)와 연결해 push 시 자동 배포하며, apex 도메인
-  (`kitfolio.app`)의 SSL을 자동 발급·갱신한다.
-- **`@next/third-parties`의 `GoogleAnalytics`** — GTM 없이 GA4 스크립트를 직접 로드한다.
-- 도구별 계산 로직에 필요한 소규모 라이브러리(`culori`—색상 변환, `korean-lunar-calendar`/
-  `lunar-javascript`—음력 변환, `html-to-image`—OG 미리보기 렌더링, `dompurify`—사용자 입력
-  새니타이즈)만 의존성에 포함되어 있으며, 서버 API나 유료 API 의존성은 없다.
+- Next.js 15 (App Router) + React 19 + TypeScript
+- Tailwind CSS v4
+- Vercel — GitHub 저장소 연동으로 push 시 자동 배포되며, apex 도메인의 SSL을 자동 발급·갱신한다.
+- Google Analytics 4 — 별도 태그 매니저 없이 스크립트를 직접 로드하는 방식으로 연동되어 있다.
+- 도구별 계산 로직에 필요한 소규모 라이브러리(색상 변환, 음력 변환, OG 미리보기 렌더링, 사용자
+  입력 새니타이즈)만 의존성에 포함되어 있으며, 서버 API나 유료 API 의존성은 없다.
