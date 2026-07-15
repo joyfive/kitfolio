@@ -2869,3 +2869,7 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
 .type-seg.is-locked button:not(.is-active):disabled {
   color: var(--color-blue-gray-300); background: var(--color-blue-gray-50);
 }
+
+/* QR 감성 코드 — 자동 확인 실패(권고) 상태: 차단이 아니라 안내 */
+.qr-status-unconfirmed { color: #b3791f; }
+.qr-status-unconfirmed .qr-status-dot { background: #d9a23a; }

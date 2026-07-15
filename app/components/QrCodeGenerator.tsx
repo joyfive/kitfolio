@@ -34,10 +34,8 @@ const DICT: Dict = {
     "g.shape": "모양",
     "g.s.square": "사각형",
     "g.s.rounded": "둥근 사각형",
-    "g.s.circle": "원형",
     "g.s.arch": "아치형",
     "g.s.heart": "하트형",
-    "g.emotive": "감성 디자인",
     "g.ecFixed": "감성 코드는 인식 안정성을 위해 오류 복원 ‘최고’로 고정됩니다.",
     "g.printNote":
       "감성 코드는 온전한 QR에 장식을 더해 만들기 때문에 기본 코드보다 조금 크게(약 3cm 이상) 인쇄하는 것을 권장합니다.",
@@ -53,8 +51,8 @@ const DICT: Dict = {
     "g.st.ok": "이 브라우저에서 QR 코드 인식을 확인했습니다.",
     "g.st.fail":
       "현재 설정으로 QR 코드를 읽지 못했습니다. 색상 대비를 높이거나 인식 품질을 변경해 주세요.",
-    "g.st.failStyled":
-      "이 모양·URL 조합으로는 인식되지 않았습니다. URL을 짧게 하거나 다른 모양을 선택해 주세요.",
+    "g.st.unconfirmed":
+      "이 모양·URL 조합으로는 인식이 어려울 수 있습니다. 직접 모바일 카메라로 테스트 후 이용해 주세요.",
   },
   en: {
     "g.url": "URL",
@@ -67,10 +65,8 @@ const DICT: Dict = {
     "g.shape": "Shape",
     "g.s.square": "Square",
     "g.s.rounded": "Rounded",
-    "g.s.circle": "Circle",
     "g.s.arch": "Arch",
     "g.s.heart": "Heart",
-    "g.emotive": "Styled",
     "g.ecFixed": "Styled codes are fixed to maximum error correction for reliable scanning.",
     "g.printNote":
       "Styled codes add decoration around an intact QR, so print them a little larger (about 3cm/1.2in or more).",
@@ -86,15 +82,21 @@ const DICT: Dict = {
     "g.st.ok": "Verified readable in this browser.",
     "g.st.fail":
       "Couldn't read the QR code with the current settings. Increase color contrast or change the recognition quality.",
-    "g.st.failStyled":
-      "This shape and URL couldn't be read. Try a shorter URL or a different shape.",
+    "g.st.unconfirmed":
+      "This shape and URL may be hard to scan. Please test it with your phone camera before using it.",
   },
 };
 
 const LEVELS: QrErrorLevel[] = ["M", "Q", "H"];
 const RESOLUTIONS = [512, 1024, 2048] as const;
 
-type GenStatus = "empty" | "invalid" | "validating" | "ok" | "fail";
+type GenStatus =
+  | "empty"
+  | "invalid"
+  | "validating"
+  | "ok"
+  | "unconfirmed"
+  | "fail";
 
 /* 상대 휘도 기반 대비비 (WCAG) — 낮으면 경고 */
 function relLuminance(hex: string): number {
@@ -183,7 +185,9 @@ export default function QrCodeGenerator() {
         }
         const ok = await validateQrOutput(matrix, shape, opts, normalized);
         if (token !== runToken.current) return;
-        setStatus(ok ? "ok" : "fail");
+        // 감성 코드(장식)는 ZXing 이 보수적이라 오탐이 잦다 → 차단 대신 권고.
+        // 사각형·둥근 사각형은 ZXing 이 정확하므로 실패 시 하드 차단 유지.
+        setStatus(ok ? "ok" : ecFixed ? "unconfirmed" : "fail");
       } catch {
         if (token !== runToken.current) return;
         matrixRef.current = null;
@@ -193,7 +197,8 @@ export default function QrCodeGenerator() {
     return () => clearTimeout(timer);
   }, [url, ecLevel, shape, opts]);
 
-  const canDownload = status === "ok" && matrixRef.current !== null;
+  const canDownload =
+    (status === "ok" || status === "unconfirmed") && matrixRef.current !== null;
 
   const triggerDownload = useCallback((href: string, filename: string) => {
     const a = document.createElement("a");
@@ -206,7 +211,7 @@ export default function QrCodeGenerator() {
 
   const downloadPng = useCallback(() => {
     const matrix = matrixRef.current;
-    if (!matrix || status !== "ok") return;
+    if (!matrix || (status !== "ok" && status !== "unconfirmed")) return;
     const canvas = document.createElement("canvas");
     renderArtCanvas(canvas, matrix, shape, opts, resolution);
     canvas.toBlob((blob) => {
@@ -219,7 +224,7 @@ export default function QrCodeGenerator() {
 
   const downloadSvg = useCallback(() => {
     const matrix = matrixRef.current;
-    if (!matrix || status !== "ok") return;
+    if (!matrix || (status !== "ok" && status !== "unconfirmed")) return;
     const svg = renderArtSvg(matrix, shape, opts);
     const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
     const href = URL.createObjectURL(blob);
@@ -240,7 +245,11 @@ export default function QrCodeGenerator() {
     if (isHex6(next)) setBg(next);
   }
 
-  const showPreview = status === "ok" || status === "fail" || status === "validating";
+  const showPreview =
+    status === "ok" ||
+    status === "unconfirmed" ||
+    status === "fail" ||
+    status === "validating";
 
   return (
     <>
@@ -327,11 +336,6 @@ export default function QrCodeGenerator() {
                     aria-pressed={shape === sh}
                     onClick={() => setShape(sh)}
                   >
-                    {forcesHighEc(sh) && (
-                      <span className="qr-shape-tag" aria-hidden>
-                        {t("g.emotive")}
-                      </span>
-                    )}
                     <ShapeIcon shape={sh} />
                     <span>{t("g.s." + sh)}</span>
                   </button>
@@ -431,11 +435,7 @@ export default function QrCodeGenerator() {
             aria-live="polite"
           >
             <span className="qr-status-dot" aria-hidden />
-            <span>
-              {status === "fail" && ecFixed
-                ? t("g.st.failStyled")
-                : t("g.st." + status)}
-            </span>
+            <span>{t("g.st." + status)}</span>
           </p>
 
           <div className="qr-dl">

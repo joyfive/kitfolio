@@ -12,9 +12,15 @@ type QrReader = {
 let readerPromise: Promise<QrReader> | null = null;
 
 export async function getQrReader(): Promise<QrReader> {
-  readerPromise ??= import("@zxing/browser").then(
-    (m) => new m.BrowserQRCodeReader() as unknown as QrReader,
-  );
+  readerPromise ??= Promise.all([
+    import("@zxing/browser"),
+    import("@zxing/library"),
+  ]).then(([browser, lib]) => {
+    // TRY_HARDER: 회전·저품질·장식 인접 등 어려운 이미지도 끈질기게 시도
+    const hints = new Map();
+    hints.set(lib.DecodeHintType.TRY_HARDER, true);
+    return new browser.BrowserQRCodeReader(hints) as unknown as QrReader;
+  });
   return readerPromise;
 }
 

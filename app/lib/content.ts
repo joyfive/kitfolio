@@ -4262,7 +4262,7 @@ export const TOOLS: Tool[] = [
       ko: {
         title: "QR 코드 생성기 — 색상·모양 설정 및 PNG·SVG 다운로드",
         description:
-          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더해 만드는 감성 코드로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 생성 결과를 브라우저에서 다시 판독해 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
         keywords: [
           "QR 코드 생성기",
           "QR 만들기",
@@ -4270,7 +4270,11 @@ export const TOOLS: Tool[] = [
           "QR 코드 PNG",
           "QR 코드 SVG",
           "하트 QR 코드",
-          "감성 QR 코드",
+          "하트 QR",
+          "감성 QR 생성",
+          "디자인 QR 생성",
+          "QR 디자인",
+          "디자인 QR",
           "청첩장 QR 코드",
           "QR 코드 모양",
           "QR 코드 색상 변경",
@@ -4288,6 +4292,7 @@ export const TOOLS: Tool[] = [
           "colored QR code",
           "heart QR code",
           "styled QR code",
+          "design QR code",
           "heart shaped QR code",
           "QR code shape",
         ],
@@ -4297,7 +4302,7 @@ export const TOOLS: Tool[] = [
       ko: {
         card: "링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다.",
         description:
-          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더해 만드는 감성 코드로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 생성 결과를 브라우저에서 다시 판독해 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
         howItWorks: [
           "QR 코드로 만들 URL을 입력합니다.",
           "인식 품질, 색상, 셀 모양을 설정합니다.",
@@ -4340,9 +4345,9 @@ export const TOOLS: Tool[] = [
             "인식 품질은 QR 코드 일부가 가려지거나 손상되었을 때 내용을 복원할 수 있는 오류 복원 수준입니다. 모양과 색상을 변경할 때는 높음 또는 최고 설정을 권장합니다.",
         },
         {
-          question: "아치형·하트형 같은 감성 코드는 어떻게 만들어지나요?",
+          question: "하트형·아치형 QR은 무엇인가요?",
           answer:
-            "실제로 스캔되는 QR 코어는 온전한 형태로 유지하고, 그 위나 주위에 장식 셀을 더해 아치나 하트 모양을 만듭니다. 코어가 손상되지 않으므로 안정적으로 인식되며, 장식이 인식을 방해하지 않도록 오류 복원을 최고로 고정하고 생성 결과를 브라우저에서 다시 판독해 확인합니다. 인쇄 시에는 3cm 이상 조금 크게 사용하는 것을 권장합니다.",
+            "감성 디자인을 적용한 디자인 QR로, 인식 안정성을 위해 오류 복원률이 가장 높은 단계로만 생성됩니다. 실제로 스캔되는 QR 코어는 온전하게 유지하고 그 주위에 장식을 더해 모양을 만들지만, 입력한 링크와 생성된 QR의 형태에 따라 인식 오차가 생길 수 있습니다. 디자인 QR을 실제 인쇄물에 출력하기 전 반드시 모바일 카메라로 사전 테스트를 진행해 주세요.",
         },
         {
           question: "PNG와 SVG 중 어떤 형식을 사용해야 하나요?",
@@ -4367,9 +4372,9 @@ export const TOOLS: Tool[] = [
             "Recognition quality controls the error correction level, which helps recover data when part of the QR code is damaged or obscured. High or maximum quality is recommended for styled QR codes.",
         },
         {
-          question: "How are styled shapes like arch and heart made?",
+          question: "What are the heart and arch QR shapes?",
           answer:
-            "The scannable QR core is kept fully intact, and the arch or heart shape is formed by adding decorative cells around it. Because the core isn't damaged it scans reliably; error correction is locked to maximum and the result is re-decoded in your browser so decorations don't break scanning. Printing a bit larger (about 3cm / 1.2in) is recommended.",
+            "They are design QR codes with a styled shape, generated only at the highest error-correction level for stability. The scannable core stays intact and decoration is added around it, but depending on your link and the resulting shape, recognition can occasionally be off. Always test a design QR with your phone camera before printing it.",
         },
         {
           question: "Should I download PNG or SVG?",

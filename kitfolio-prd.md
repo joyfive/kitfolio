@@ -16,9 +16,9 @@ SEO 랜딩이 아니라 검색·필터를 통해 개별 도구를 찾아가는 �
 
 ## 2. 범위 (Scope)
 
-2026-07-07 기준 Kitfolio에는 KO·EN 양 언어로 공개된 도구 38종이 등록되어 있다.
+2026-07-15 기준 Kitfolio에는 KO·EN 양 언어로 공개된 도구 40종이 등록되어 있다.
 
-도구는 Developer(7종) · Design(3종) · Text(28종) 3개 카테고리로 구분한다. 카테고리는 URL 구조에
+도구는 Developer(7종) · Design(5종) · Text(28종) 3개 카테고리로 구분한다. 카테고리는 URL 구조에
 반영하지 않고, 허브 화면의 섹션 분류와 디자인 테마 분기에만 사용한다. 이와 별도로 각 도구는
 PM·디자이너·개발자·구직자·직장인·소상공인·마케터 중 해당 직군을 태그로 가지는데, 이는 URL이나
 카테고리가 아니라 허브의 직군 필터와 관련 도구 추천에 쓰이는 내부 메타데이터다.
@@ -28,7 +28,7 @@ PM·디자이너·개발자·구직자·직장인·소상공인·마케터 중 �
 | 카테고리 | 대표 도구 |
 |---|---|
 | Developer | JSON Formatter, Slack Timestamp Converter, CSS 단위 변환기(rem/em/vw/%/ms → px) |
-| Design | CSS Gradient, Tailwind Palette Generator, Open Graph Preview Tester |
+| Design | CSS Gradient, Tailwind Palette Generator, Open Graph Preview Tester, QR Code Generator, QR Code Reader |
 | Text | Salary Calculator, Flex Work Calculator, 성장률·퍼센트 계산기 15종, 광고 지표 계산기 7종 |
 
 | 포함 | 제외 |
@@ -53,7 +53,7 @@ Kitfolio는 단일 도메인과 1뎁스 플랫 라우트 구조로 운영한다.
 │   ├─ /json-formatter
 │   ├─ /slack-timestamp-converter
 │   ├─ /salary-calculator
-│   └─ /{slug}  (총 38종, 1뎁스 플랫 라우트)
+│   └─ /{slug}  (총 40종, 1뎁스 플랫 라우트)
 ├─ 약관
 │   ├─ /privacy-policy
 │   └─ /terms-of-service
@@ -107,8 +107,10 @@ Kitfolio는 콘텐츠 플랫폼이 아니라 도구 모음이며, 모든 도구�
 - **계산 로직의 재사용**: 같은 계산 패턴을 공유하는 도구 묶음은 하나의 계산 엔진을 공유하고
   도구별로 파라미터만 다르게 준다. 성장률·퍼센트 계열 계산기 15종(성장률, YoY/MoM/QoQ/WoW,
   CAGR, 복리, 역산 등)이 하나의 설정 기반 계산 엔진을 공유하고, 광고 지표 계산기 중 ROAS/CPA/
-  CPC/CPM/CTR 5종이 하나의 공용 계산기를 공유한다. 계산 로직은 공유되지만 각 도구의 URL·
-  메타데이터·구조화 데이터·SEO 문구는 슬러그 단위로 완전히 독립적으로 등록된다.
+  CPC/CPM/CTR 5종이 하나의 공용 계산기를 공유한다. QR 코드 생성기·읽기 2종도 QR 행렬
+  생성·렌더·판독 로직(`app/lib/qr`)과 상단 공통 탭을 공유하되 별도 페이지로 존재한다.
+  계산 로직은 공유되지만 각 도구의 URL·메타데이터·구조화 데이터·SEO 문구는 슬러그 단위로
+  완전히 독립적으로 등록된다.
 - **콘텐츠는 메타데이터**: 도구 자체가 제품이고 텍스트는 발견을 돕는 보조 수단이라는 원칙 아래,
   모든 설명·FAQ는 읽을거리가 아니라 검색엔진과 AI 검색이 소비할 메타데이터로 설계된다.
 
@@ -139,7 +141,7 @@ Google Analytics 4가 전 페이지에 연동되어 있다. Google AdSense 로�
 확인 메타태그가 삽입되어 있으나, 광고 단위는 현재 어떤 페이지에도 배치되어 있지 않아 실제 광고는
 노출되지 않는다.
 
-## 부록. 전체 도구 목록 (38종)
+## 부록. 전체 도구 목록 (40종)
 
 | 도구명 (KO/EN) | 경로 | 한 줄 요약 |
 |---|---|---|
@@ -181,6 +183,8 @@ Google Analytics 4가 전 페이지에 연동되어 있다. Google AdSense 로�
 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 사각형·둥근·아치·하트 감성 디자인 모양을 설정해 PNG·SVG로 다운로드. |
+| QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인. |
 
 EN 경로는 각 KO 경로에 `/en` 프리픽스를 붙인 동일 슬러그(예: `/en/json-formatter`)이며 표에서는
 생략한다.
