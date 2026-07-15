@@ -4246,6 +4246,298 @@ export const TOOLS: Tool[] = [
       en: { title: "Funnel Conversion Calculator", subtitle: "Stage-by-stage conversion analysis and required traffic planning" },
     },
   },
+
+  // ── Design ── QR 도구 2종 (생성기 ↔ 읽기 공통 탭)
+  {
+    slug: "qr-code-generator",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "designer", "developer", "small-business-owner"],
+    ico: "▦",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "QR 코드 생성기", en: "QR Code Generator" },
+    relatedTools: ["qr-code-reader", "css-gradient", "open-graph-preview"],
+    seo: {
+      ko: {
+        title: "QR 코드 생성기 — 색상·모양 설정 및 PNG·SVG 다운로드",
+        description:
+          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+        keywords: [
+          "QR 코드 생성기",
+          "QR 만들기",
+          "링크 QR 코드",
+          "QR 코드 PNG",
+          "QR 코드 SVG",
+          "하트 QR 코드",
+          "하트 QR",
+          "감성 QR 생성",
+          "디자인 QR 생성",
+          "QR 디자인",
+          "디자인 QR",
+          "청첩장 QR 코드",
+          "QR 코드 모양",
+          "QR 코드 색상 변경",
+        ],
+      },
+      en: {
+        title: "QR Code Generator — Custom Shapes, Colors, PNG and SVG",
+        description:
+          "Create a QR code from a URL and customize its color, recognition quality, and overall shape — square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
+        keywords: [
+          "QR code generator",
+          "custom QR code",
+          "QR code PNG",
+          "QR code SVG",
+          "colored QR code",
+          "heart QR code",
+          "styled QR code",
+          "design QR code",
+          "heart shaped QR code",
+          "QR code shape",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다.",
+        description:
+          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+        howItWorks: [
+          "QR 코드로 만들 URL을 입력합니다.",
+          "인식 품질, 색상, 셀 모양을 설정합니다.",
+          "판독 확인 후 PNG 또는 SVG로 다운로드합니다.",
+        ],
+        aeo: {
+          what: "QR 코드 생성기는 URL을 QR 코드로 변환하고 사각형·둥근 사각형·아치형·하트형 등 전체 모양과 색상을 설정할 수 있는 브라우저 도구입니다.",
+          who: "웹 링크를 인쇄물, 문서, 매장 안내, 청첩장·행사 자료 또는 온라인 콘텐츠에 넣어야 하는 사용자를 위한 도구입니다.",
+          how: "URL을 온전한 QR 코어로 만든 뒤, 아치·하트 같은 모양은 코어 주위에 장식 셀을 더해 구성하고, 결과를 브라우저에서 다시 판독해 인식을 확인합니다.",
+          why: "청첩장·인쇄물에 어울리는 감성 디자인 QR을 서버 전송 없이 만들고 PNG·SVG로 바로 내려받을 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Create a QR code from a URL, customize its shape and color, and download PNG or SVG.",
+        description:
+          "Create a QR code from a URL and customize its color, recognition quality, and overall shape — square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
+        howItWorks: [
+          "Enter the URL you want to encode.",
+          "Choose the recognition quality, colors, and module shape.",
+          "Verify the result and download it as PNG or SVG.",
+        ],
+        aeo: {
+          what: "The QR Code Generator is a browser tool that turns a URL into a QR code and lets you customize its color and overall shape — square, rounded, arch, or heart.",
+          who: "It is for people who need to place web links in documents, printed materials, store signage, invitations, event content, or digital media.",
+          how: "It builds an intact QR core from the URL, forms arch or heart shapes by adding decorative cells around that core, and re-decodes the result in your browser to confirm it scans.",
+          why: "It makes styled QR codes suited to invitations and print without sending the URL to a server, ready to download as PNG or SVG.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "QR 코드 생성기에 입력한 링크가 서버로 전송되나요?",
+          answer:
+            "아니요. QR 코드 생성과 판독 확인은 모두 사용자의 브라우저 안에서 이루어지며 입력한 링크를 서버에 저장하거나 전송하지 않습니다.",
+        },
+        {
+          question: "QR 코드의 인식 품질은 무엇인가요?",
+          answer:
+            "인식 품질은 QR 코드 일부가 가려지거나 손상되었을 때 내용을 복원할 수 있는 오류 복원 수준입니다. 모양과 색상을 변경할 때는 높음 또는 최고 설정을 권장합니다.",
+        },
+        {
+          question: "하트형·아치형 QR은 무엇인가요?",
+          answer:
+            "감성 디자인을 적용한 디자인 QR로, 인식 안정성을 위해 오류 복원률이 가장 높은 단계로만 생성됩니다. 실제로 스캔되는 QR 코어는 온전하게 유지하고 그 주위에 장식을 더해 모양을 만들지만, 입력한 링크와 생성된 QR의 형태에 따라 인식 오차가 생길 수 있습니다. 디자인 QR을 실제 인쇄물에 출력하기 전 반드시 모바일 카메라로 사전 테스트를 진행해 주세요.",
+        },
+        {
+          question: "PNG와 SVG 중 어떤 형식을 사용해야 하나요?",
+          answer:
+            "웹 게시나 일반 문서에는 PNG가 편리하며, 인쇄물이나 크기 조절이 필요한 디자인 작업에는 확대해도 선명한 SVG가 적합합니다.",
+        },
+        {
+          question: "만든 QR 코드가 다른 기기에서도 항상 인식되나요?",
+          answer:
+            "생성 결과는 현재 브라우저에서 다시 판독해 확인하지만 모든 카메라와 환경의 인식을 보장하지는 않습니다. 실제 사용 전 인쇄물이나 대상 기기에서 추가로 테스트해 주세요.",
+        },
+      ],
+      en: [
+        {
+          question: "Is the URL entered in the QR Code Generator sent to a server?",
+          answer:
+            "No. QR code generation and validation run entirely in your browser. The URL is not uploaded or stored.",
+        },
+        {
+          question: "What does QR code recognition quality mean?",
+          answer:
+            "Recognition quality controls the error correction level, which helps recover data when part of the QR code is damaged or obscured. High or maximum quality is recommended for styled QR codes.",
+        },
+        {
+          question: "What are the heart and arch QR shapes?",
+          answer:
+            "They are design QR codes with a styled shape, generated only at the highest error-correction level for stability. The scannable core stays intact and decoration is added around it, but depending on your link and the resulting shape, recognition can occasionally be off. Always test a design QR with your phone camera before printing it.",
+        },
+        {
+          question: "Should I download PNG or SVG?",
+          answer:
+            "PNG is convenient for websites and documents. SVG is better for print and design work because it remains sharp when resized.",
+        },
+        {
+          question: "Will the generated QR code work with every scanner?",
+          answer:
+            "The tool checks the result in the current browser, but it cannot guarantee recognition by every camera or scanner. Test the final QR code in its actual usage environment.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "QR 코드 생성기",
+        subtitle: "감성 모양과 색상을 설정해 PNG·SVG로 다운로드",
+      },
+      en: {
+        title: "QR Code Generator",
+        subtitle: "Styled shapes and colors, download as PNG or SVG",
+      },
+    },
+  },
+  {
+    slug: "qr-code-reader",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "designer", "developer", "small-business-owner"],
+    ico: "◲",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "QR 코드 읽기", en: "QR Code Reader" },
+    relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
+    seo: {
+      ko: {
+        title: "QR 코드 읽기 — 이미지 붙여넣기·업로드·카메라 스캔",
+        description:
+          "클립보드에 복사한 QR 이미지나 업로드한 사진, 모바일 또는 PC 카메라로 QR 코드를 읽으세요. URL이 포함된 경우 내용을 먼저 확인하고 안전하게 링크를 열거나 복사할 수 있으며 이미지와 카메라 영상은 서버로 전송되지 않습니다.",
+        keywords: [
+          "QR 코드 읽기",
+          "QR 코드 스캔",
+          "QR 이미지 인식",
+          "QR 코드 업로드",
+          "카메라 QR 코드",
+          "QR 링크 확인",
+        ],
+      },
+      en: {
+        title: "QR Code Reader — Paste, Upload, or Scan with Camera",
+        description:
+          "Read a QR code from a pasted image, uploaded file, or device camera. Review the decoded content before opening or copying a URL. Images and camera video are processed locally in your browser and are not sent to a server.",
+        keywords: [
+          "QR code reader",
+          "QR code scanner",
+          "scan QR from image",
+          "upload QR code",
+          "camera QR scanner",
+          "read QR code online",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다.",
+        description:
+          "클립보드에 복사한 QR 이미지나 업로드한 사진, 모바일 또는 PC 카메라로 QR 코드를 읽으세요. URL이 포함된 경우 내용을 먼저 확인하고 안전하게 링크를 열거나 복사할 수 있으며 이미지와 카메라 영상은 서버로 전송되지 않습니다.",
+        howItWorks: [
+          "QR 이미지를 붙여넣거나 업로드하거나 카메라를 실행합니다.",
+          "브라우저에서 QR 코드 내용을 판독합니다.",
+          "URL을 확인해 열거나 내용을 복사합니다.",
+        ],
+        aeo: {
+          what: "QR 코드 읽기는 이미지 또는 카메라 영상에 포함된 QR 코드를 판독하는 브라우저 도구입니다.",
+          who: "사진이나 캡처 이미지 속 QR 코드의 링크 또는 텍스트 내용을 확인해야 하는 사용자를 위한 도구입니다.",
+          how: "붙여넣은 이미지, 업로드 파일 또는 카메라 영상을 브라우저에서 분석하고 판독된 내용을 URL과 일반 텍스트로 구분합니다.",
+          why: "별도 앱을 설치하거나 이미지를 서버에 업로드하지 않고 QR 코드 내용을 확인하고 복사할 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Paste or upload a QR image, or scan it with your camera to view its link or text.",
+        description:
+          "Read a QR code from a pasted image, uploaded file, or device camera. Review the decoded content before opening or copying a URL. Images and camera video are processed locally in your browser and are not sent to a server.",
+        howItWorks: [
+          "Paste or upload a QR image, or start the camera.",
+          "Decode the QR code in your browser.",
+          "Review and open the URL or copy the decoded content.",
+        ],
+        aeo: {
+          what: "The QR Code Reader is a browser tool that decodes QR codes from images or camera video.",
+          who: "It is for people who need to inspect a link or text stored in a QR code from a photo, screenshot, or live camera.",
+          how: "It analyzes a pasted image, uploaded file, or camera stream in the browser and classifies the decoded result as a URL or plain text.",
+          why: "It reads QR codes without requiring an installed app or uploading images to a server.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "QR 코드 이미지나 카메라 영상이 서버로 전송되나요?",
+          answer:
+            "아니요. 이미지 판독과 카메라 스캔은 사용자의 브라우저 안에서 처리되며 파일이나 영상은 서버로 전송되지 않습니다.",
+        },
+        {
+          question: "클립보드에 복사한 QR 이미지를 어떻게 읽나요?",
+          answer:
+            "붙여넣기 영역을 선택한 뒤 Ctrl+V 또는 Cmd+V를 누르세요. 지원 브라우저에서는 클립보드에서 이미지 가져오기 버튼도 사용할 수 있습니다.",
+        },
+        {
+          question: "카메라가 실행되지 않는 이유는 무엇인가요?",
+          answer:
+            "카메라 사용에는 HTTPS 환경과 브라우저 권한이 필요합니다. 권한이 거부되었거나 카메라를 다른 앱에서 사용 중이면 실행되지 않을 수 있습니다.",
+        },
+        {
+          question: "QR 코드에 URL이 포함되어 있으면 자동으로 이동하나요?",
+          answer:
+            "아니요. 판독된 URL과 도메인을 먼저 표시하고 사용자가 링크 열기 버튼을 눌렀을 때만 새 탭으로 이동합니다.",
+        },
+        {
+          question: "URL이 아닌 QR 코드도 읽을 수 있나요?",
+          answer:
+            "네. 일반 텍스트, Wi-Fi 설정 문자열, 연락처 데이터 등의 내용도 원문으로 표시하고 복사할 수 있습니다. 자동 실행이나 설정 적용은 하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Are QR images or camera video sent to a server?",
+          answer:
+            "No. Image decoding and camera scanning run locally in your browser. Files and video are not uploaded.",
+        },
+        {
+          question: "How do I read a QR image copied to the clipboard?",
+          answer:
+            "Focus the paste area and press Ctrl+V or Cmd+V. Supported browsers may also provide a button to read an image directly from the clipboard.",
+        },
+        {
+          question: "Why does the camera not start?",
+          answer:
+            "Camera access requires HTTPS and browser permission. It may also fail if permission was denied or another application is currently using the camera.",
+        },
+        {
+          question: "Does the reader automatically open a decoded URL?",
+          answer:
+            "No. It displays the URL and domain first. The link opens in a new tab only after you select the open button.",
+        },
+        {
+          question: "Can the reader decode content other than URLs?",
+          answer:
+            "Yes. Plain text, Wi-Fi configuration strings, contact data, and other content are displayed as text and can be copied. The tool does not execute them automatically.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "QR 코드 읽기",
+        subtitle: "붙여넣기·업로드·카메라로 QR 코드를 판독",
+      },
+      en: {
+        title: "QR Code Reader",
+        subtitle: "Paste, upload, or scan a QR code with your camera",
+      },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
