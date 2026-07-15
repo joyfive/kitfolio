@@ -328,7 +328,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ---
 
-## 구현된 기능 목록 (2026-06-30 기준, 도구 38종)
+## 구현된 기능 목록 (2026-07-15 기준, 도구 40종)
 
 > 현재 `app/lib/content.ts` 레지스트리에 `ready: true`로 등록되어 KO(루트)·EN(`/en`)
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
@@ -374,6 +374,8 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 36 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
 | 37 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
 | 38 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
+| 39 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 40 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
 
 ---
 
