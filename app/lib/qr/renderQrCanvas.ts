@@ -4,12 +4,12 @@
    ============================================================ */
 import { buildQrPath } from "./buildQrPath";
 import type { QrMatrix } from "./createQrMatrix";
-import type { QrModuleShape } from "./qrShapes";
+import type { QrShape } from "./qrShapes";
 
 export const QUIET_ZONE = 4; // 고정 — 사용자가 축소/제거 불가
 
 export type QrRenderOptions = {
-  shape: QrModuleShape;
+  shape: QrShape;
   fg: string; // QR(전경) 색
   bg: string; // 배경 색
 };

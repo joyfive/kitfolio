@@ -7,7 +7,12 @@ import RelatedTools from "./RelatedTools";
 import QrToolTabs from "./QrToolTabs";
 import { useT, type Dict } from "../lib/i18n";
 import { createQrMatrix, type QrErrorLevel, type QrMatrix } from "../lib/qr/createQrMatrix";
-import { modulePath, SHAPE_ORDER, type QrModuleShape } from "../lib/qr/qrShapes";
+import {
+  forcesHighEc,
+  iconPath,
+  SHAPE_ORDER,
+  type QrShape,
+} from "../lib/qr/qrShapes";
 import {
   crispCanvasSize,
   renderQrCanvas,
@@ -27,12 +32,16 @@ const DICT: Dict = {
     "g.q.Q": "높음",
     "g.q.H": "최고",
     "g.res": "PNG 해상도",
-    "g.shape": "데이터 셀 모양",
+    "g.shape": "모양",
     "g.s.square": "사각형",
+    "g.s.rounded": "둥근 사각형",
     "g.s.circle": "원형",
-    "g.s.diamond": "마름모",
-    "g.s.heart": "하트",
     "g.s.arch": "아치형",
+    "g.s.heart": "하트형",
+    "g.emotive": "감성 디자인",
+    "g.ecFixed": "감성 코드는 인식 안정성을 위해 오류 복원 ‘최고’로 고정됩니다.",
+    "g.printNote":
+      "감성 코드는 일부 셀을 모양대로 비워 만들기 때문에 기본 코드보다 조금 크게(약 3cm 이상) 인쇄하는 것을 권장합니다.",
     "g.fg": "QR 색상",
     "g.bg": "배경 색상",
     "g.png": "PNG 다운로드",
@@ -54,12 +63,16 @@ const DICT: Dict = {
     "g.q.Q": "High",
     "g.q.H": "Maximum",
     "g.res": "PNG resolution",
-    "g.shape": "Data cell shape",
+    "g.shape": "Shape",
     "g.s.square": "Square",
+    "g.s.rounded": "Rounded",
     "g.s.circle": "Circle",
-    "g.s.diamond": "Diamond",
-    "g.s.heart": "Heart",
     "g.s.arch": "Arch",
+    "g.s.heart": "Heart",
+    "g.emotive": "Styled",
+    "g.ecFixed": "Styled codes are fixed to maximum error correction for reliable scanning.",
+    "g.printNote":
+      "Styled codes clear some cells to form the shape, so print them a little larger (about 3cm/1.2in or more).",
     "g.fg": "QR color",
     "g.bg": "Background color",
     "g.png": "Download PNG",
@@ -103,11 +116,11 @@ function isHex6(v: string): boolean {
   return /^#[0-9a-fA-F]{6}$/.test(v);
 }
 
-/** 모양 미리보기 아이콘 — 실제 shape 지오메트리 재사용 (아치형도 정확) */
-function ShapeIcon({ shape }: { shape: QrModuleShape }) {
+/** 모양 미리보기 아이콘 — 실루엣 지오메트리 재사용 (아치형·하트형도 정확) */
+function ShapeIcon({ shape }: { shape: QrShape }) {
   return (
     <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden focusable="false">
-      <path d={modulePath(shape, 3, 3, 14)} fill="currentColor" />
+      <path d={iconPath(shape, 3, 3, 14)} fill="currentColor" />
     </svg>
   );
 }
@@ -118,7 +131,7 @@ export default function QrCodeGenerator() {
   const [url, setUrl] = useState("");
   const [level, setLevel] = useState<QrErrorLevel>("Q");
   const [resolution, setResolution] = useState<(typeof RESOLUTIONS)[number]>(1024);
-  const [shape, setShape] = useState<QrModuleShape>("square");
+  const [shape, setShape] = useState<QrShape>("square");
   const [fg, setFg] = useState("#000000");
   const [bg, setBg] = useState("#FFFFFF");
   const [fgText, setFgText] = useState("#000000");
@@ -131,6 +144,9 @@ export default function QrCodeGenerator() {
   const runToken = useRef(0);
 
   const opts: QrRenderOptions = useMemo(() => ({ shape, fg, bg }), [shape, fg, bg]);
+
+  const ecFixed = forcesHighEc(shape);
+  const ecLevel: QrErrorLevel = ecFixed ? "H" : level;
 
   const lowContrast = useMemo(() => contrastRatio(fg, bg) < 3, [fg, bg]);
 
@@ -154,7 +170,7 @@ export default function QrCodeGenerator() {
       }
       setStatus("validating");
       try {
-        const matrix = await createQrMatrix(normalized, level);
+        const matrix = await createQrMatrix(normalized, ecLevel);
         if (token !== runToken.current) return;
         matrixRef.current = matrix;
         normalizedRef.current = normalized;
@@ -173,7 +189,7 @@ export default function QrCodeGenerator() {
       }
     }, 260);
     return () => clearTimeout(timer);
-  }, [url, level, opts]);
+  }, [url, ecLevel, opts]);
 
   const canDownload = status === "ok" && matrixRef.current !== null;
 
@@ -253,22 +269,31 @@ export default function QrCodeGenerator() {
               />
             </div>
 
-            {/* 인식 품질 */}
+            {/* 인식 품질 (감성 코드는 H 고정) */}
             <div className="field-group">
               <span className="field-label">{t("g.quality")}</span>
-              <div className="type-seg" role="group" aria-label={t("g.quality")}>
-                {LEVELS.map((lv) => (
-                  <button
-                    key={lv}
-                    type="button"
-                    className={level === lv ? "is-active" : ""}
-                    aria-pressed={level === lv}
-                    onClick={() => setLevel(lv)}
-                  >
-                    {t("g.q." + lv)}
-                  </button>
-                ))}
+              <div
+                className={"type-seg" + (ecFixed ? " is-locked" : "")}
+                role="group"
+                aria-label={t("g.quality")}
+              >
+                {LEVELS.map((lv) => {
+                  const active = ecFixed ? lv === "H" : level === lv;
+                  return (
+                    <button
+                      key={lv}
+                      type="button"
+                      className={active ? "is-active" : ""}
+                      aria-pressed={active}
+                      disabled={ecFixed}
+                      onClick={() => setLevel(lv)}
+                    >
+                      {t("g.q." + lv)}
+                    </button>
+                  );
+                })}
               </div>
+              {ecFixed && <p className="qr-note">{t("g.ecFixed")}</p>}
             </div>
 
             {/* PNG 해상도 */}
@@ -289,7 +314,7 @@ export default function QrCodeGenerator() {
               </div>
             </div>
 
-            {/* 데이터 셀 모양 */}
+            {/* QR 전체 모양 (실루엣) */}
             <div className="field-group">
               <span className="field-label">{t("g.shape")}</span>
               <div className="qr-shapes" role="group" aria-label={t("g.shape")}>
@@ -301,11 +326,17 @@ export default function QrCodeGenerator() {
                     aria-pressed={shape === sh}
                     onClick={() => setShape(sh)}
                   >
+                    {forcesHighEc(sh) && (
+                      <span className="qr-shape-tag" aria-hidden>
+                        {t("g.emotive")}
+                      </span>
+                    )}
                     <ShapeIcon shape={sh} />
                     <span>{t("g.s." + sh)}</span>
                   </button>
                 ))}
               </div>
+              {ecFixed && <p className="qr-note">{t("g.printNote")}</p>}
             </div>
 
             {/* 색상 */}

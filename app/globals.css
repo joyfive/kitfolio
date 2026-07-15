@@ -2853,3 +2853,19 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
   white-space: pre-wrap; word-break: break-all; max-height: 240px; overflow-y: auto;
 }
 .qr-result-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* QR 감성 코드 — 안내 문구 · 모양 태그 · 품질 고정 */
+.qr-note {
+  margin: 2px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--color-blue-gray-500);
+}
+.qr-shape { position: relative; }
+.qr-shape-tag {
+  position: absolute; top: 4px; right: 4px;
+  font-family: var(--font-inter); font-size: 8.5px; font-weight: 700; letter-spacing: .02em;
+  padding: 1px 4px; border-radius: 4px; line-height: 1.3;
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-700);
+}
+.type-seg.is-locked button:disabled { opacity: 1; cursor: default; }
+.type-seg.is-locked button:not(.is-active):disabled {
+  color: var(--color-blue-gray-300); background: var(--color-blue-gray-50);
+}
