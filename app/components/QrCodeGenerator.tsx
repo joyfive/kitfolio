@@ -14,11 +14,10 @@ import {
   type QrShape,
 } from "../lib/qr/qrShapes";
 import {
-  crispCanvasSize,
-  renderQrCanvas,
-  type QrRenderOptions,
-} from "../lib/qr/renderQrCanvas";
-import { renderQrSvg } from "../lib/qr/renderQrSvg";
+  renderArtCanvas,
+  renderArtSvg,
+  type ArtOptions,
+} from "../lib/qr/art";
 import { validateQrOutput } from "../lib/qr/validateQrOutput";
 import { normalizeUrl } from "../lib/qr/url";
 
@@ -41,7 +40,7 @@ const DICT: Dict = {
     "g.emotive": "감성 디자인",
     "g.ecFixed": "감성 코드는 인식 안정성을 위해 오류 복원 ‘최고’로 고정됩니다.",
     "g.printNote":
-      "감성 코드는 일부 셀을 모양대로 비워 만들기 때문에 기본 코드보다 조금 크게(약 3cm 이상) 인쇄하는 것을 권장합니다.",
+      "감성 코드는 온전한 QR에 장식을 더해 만들기 때문에 기본 코드보다 조금 크게(약 3cm 이상) 인쇄하는 것을 권장합니다.",
     "g.fg": "QR 색상",
     "g.bg": "배경 색상",
     "g.png": "PNG 다운로드",
@@ -54,6 +53,8 @@ const DICT: Dict = {
     "g.st.ok": "이 브라우저에서 QR 코드 인식을 확인했습니다.",
     "g.st.fail":
       "현재 설정으로 QR 코드를 읽지 못했습니다. 색상 대비를 높이거나 인식 품질을 변경해 주세요.",
+    "g.st.failStyled":
+      "이 모양·URL 조합으로는 인식되지 않았습니다. URL을 짧게 하거나 다른 모양을 선택해 주세요.",
   },
   en: {
     "g.url": "URL",
@@ -72,7 +73,7 @@ const DICT: Dict = {
     "g.emotive": "Styled",
     "g.ecFixed": "Styled codes are fixed to maximum error correction for reliable scanning.",
     "g.printNote":
-      "Styled codes clear some cells to form the shape, so print them a little larger (about 3cm/1.2in or more).",
+      "Styled codes add decoration around an intact QR, so print them a little larger (about 3cm/1.2in or more).",
     "g.fg": "QR color",
     "g.bg": "Background color",
     "g.png": "Download PNG",
@@ -85,6 +86,8 @@ const DICT: Dict = {
     "g.st.ok": "Verified readable in this browser.",
     "g.st.fail":
       "Couldn't read the QR code with the current settings. Increase color contrast or change the recognition quality.",
+    "g.st.failStyled":
+      "This shape and URL couldn't be read. Try a shorter URL or a different shape.",
   },
 };
 
@@ -143,7 +146,7 @@ export default function QrCodeGenerator() {
   const normalizedRef = useRef<string | null>(null);
   const runToken = useRef(0);
 
-  const opts: QrRenderOptions = useMemo(() => ({ shape, fg, bg }), [shape, fg, bg]);
+  const opts: ArtOptions = useMemo(() => ({ fg, bg }), [fg, bg]);
 
   const ecFixed = forcesHighEc(shape);
   const ecLevel: QrErrorLevel = ecFixed ? "H" : level;
@@ -174,12 +177,11 @@ export default function QrCodeGenerator() {
         if (token !== runToken.current) return;
         matrixRef.current = matrix;
         normalizedRef.current = normalized;
-        // 미리보기 렌더 (크리스프 크기 → CSS 로 축소)
+        // 미리보기 렌더 (CSS 로 축소)
         if (previewRef.current) {
-          const size = crispCanvasSize(matrix.size, 512);
-          renderQrCanvas(previewRef.current, matrix, opts, size);
+          renderArtCanvas(previewRef.current, matrix, shape, opts, 512);
         }
-        const ok = await validateQrOutput(matrix, opts, normalized);
+        const ok = await validateQrOutput(matrix, shape, opts, normalized);
         if (token !== runToken.current) return;
         setStatus(ok ? "ok" : "fail");
       } catch {
@@ -189,7 +191,7 @@ export default function QrCodeGenerator() {
       }
     }, 260);
     return () => clearTimeout(timer);
-  }, [url, ecLevel, opts]);
+  }, [url, ecLevel, shape, opts]);
 
   const canDownload = status === "ok" && matrixRef.current !== null;
 
@@ -205,26 +207,25 @@ export default function QrCodeGenerator() {
   const downloadPng = useCallback(() => {
     const matrix = matrixRef.current;
     if (!matrix || status !== "ok") return;
-    const size = crispCanvasSize(matrix.size, resolution);
     const canvas = document.createElement("canvas");
-    renderQrCanvas(canvas, matrix, opts, size);
+    renderArtCanvas(canvas, matrix, shape, opts, resolution);
     canvas.toBlob((blob) => {
       if (!blob) return;
       const href = URL.createObjectURL(blob);
       triggerDownload(href, "kitfolio-qr-code.png");
       setTimeout(() => URL.revokeObjectURL(href), 1000);
     }, "image/png");
-  }, [status, resolution, opts, triggerDownload]);
+  }, [status, resolution, shape, opts, triggerDownload]);
 
   const downloadSvg = useCallback(() => {
     const matrix = matrixRef.current;
     if (!matrix || status !== "ok") return;
-    const svg = renderQrSvg(matrix, opts);
+    const svg = renderArtSvg(matrix, shape, opts);
     const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
     const href = URL.createObjectURL(blob);
     triggerDownload(href, "kitfolio-qr-code.svg");
     setTimeout(() => URL.revokeObjectURL(href), 1000);
-  }, [status, opts, triggerDownload]);
+  }, [status, shape, opts, triggerDownload]);
 
   function onFgText(v: string) {
     let next = v.trim();
@@ -430,7 +431,11 @@ export default function QrCodeGenerator() {
             aria-live="polite"
           >
             <span className="qr-status-dot" aria-hidden />
-            <span>{t("g.st." + status)}</span>
+            <span>
+              {status === "fail" && ecFixed
+                ? t("g.st.failStyled")
+                : t("g.st." + status)}
+            </span>
           </p>
 
           <div className="qr-dl">

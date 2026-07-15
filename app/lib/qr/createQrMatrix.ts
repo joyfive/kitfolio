@@ -27,15 +27,3 @@ export async function createQrMatrix(
   for (let i = 0; i < modules.length; i++) modules[i] = data[i] === 1;
   return { size, modules, level };
 }
-
-/**
- * 세 개의 위치 탐지 패턴(finder pattern) 영역인지 판별한다.
- * 이 영역은 데이터 셀 모양 설정과 무관하게 기본 사각형으로 렌더해
- * 인식 안정성을 지킨다. (7×7 finder 블록 3개)
- */
-export function isFinderRegion(x: number, y: number, size: number): boolean {
-  const topLeft = x < 7 && y < 7;
-  const topRight = x >= size - 7 && y < 7;
-  const bottomLeft = x < 7 && y >= size - 7;
-  return topLeft || topRight || bottomLeft;
-}
