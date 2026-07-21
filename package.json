@@ -15,9 +15,12 @@
     "culori": "^4.0.2",
     "dompurify": "^3.4.11",
     "html-to-image": "^1.11.13",
+    "jszip": "^3.10.1",
     "korean-lunar-calendar": "^0.4.0",
     "lunar-javascript": "^1.7.7",
     "next": "^15.5.19",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.1.200",
     "qrcode": "^1.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"

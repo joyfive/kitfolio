@@ -2873,3 +2873,253 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
 /* QR 감성 코드 — 자동 확인 실패(권고) 상태: 차단이 아니라 안내 */
 .qr-status-unconfirmed { color: #b3791f; }
 .qr-status-unconfirmed .qr-status-dot { background: #d9a23a; }
+
+/* ============================================================
+   PDF 도구 (병합·분할·회전·페이지 삭제) — Canvas 테마
+   ============================================================ */
+
+/* 공통 상단 탭 (4종, 모바일 가로 스크롤) */
+.pdf-tabs {
+  display: flex; gap: 4px; margin: 0 0 20px; padding: 4px;
+  background: var(--color-blue-gray-100); border-radius: var(--radius-md);
+  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.pdf-tabs::-webkit-scrollbar { display: none; }
+.pdf-tab {
+  flex: 1 0 auto; white-space: nowrap; text-align: center;
+  padding: 9px 16px; border-radius: var(--radius-sm);
+  font-family: var(--font-inter); font-size: 13.5px; font-weight: 600;
+  color: var(--color-blue-gray-600); transition: background .12s ease, color .12s ease;
+}
+a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue-gray-50); }
+.pdf-tab.is-active {
+  background: #fff; color: var(--color-blue-primary-700);
+  box-shadow: var(--shadow-card); cursor: default;
+}
+
+/* 작업 영역 — 좌(설정) · 우(결과/썸네일) */
+.pdf-work {
+  display: grid; grid-template-columns: 1fr; gap: 0;
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);
+}
+@media (min-width: 960px) {
+  .pdf-work { grid-template-columns: 400px 1fr; align-items: stretch; }
+}
+.pdf-work-empty { display: block; padding: 28px; }
+
+.pdf-panel { background: #fff; min-width: 0; }
+@media (min-width: 960px) {
+  .pdf-panel { border-right: 1px solid var(--color-blue-gray-200); overflow-y: auto; }
+}
+.pdf-panel-inner { padding: 22px; display: flex; flex-direction: column; gap: 20px; }
+
+/* 결과 패널 (병합) */
+.pdf-result-panel { background: var(--color-blue-gray-50); min-width: 0; }
+.pdf-result-inner { padding: 22px; display: flex; flex-direction: column; gap: 16px; }
+
+/* 썸네일 캔버스 영역 (분할·회전·삭제) */
+.pdf-canvas {
+  background: var(--color-blue-gray-50); min-width: 0;
+  padding: 18px; overflow-y: auto;
+}
+@media (max-width: 959px) {
+  .pdf-canvas { border-top: 1px solid var(--color-blue-gray-200); }
+}
+@media (min-width: 960px) { .pdf-canvas { max-height: 760px; } }
+
+/* 드롭존 */
+.pdf-drop {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; text-align: center; cursor: pointer;
+  min-height: 200px; padding: 28px 20px;
+  border: 1.5px dashed var(--color-blue-gray-300); border-radius: var(--radius-lg, 14px);
+  background: var(--color-blue-gray-50); color: var(--color-blue-gray-600);
+  transition: border-color .12s ease, background .12s ease;
+}
+.pdf-work-empty .pdf-drop { min-height: 260px; max-width: 620px; margin: 0 auto; }
+.pdf-drop.is-compact { min-height: 150px; padding: 20px; }
+.pdf-drop:hover { border-color: var(--color-blue-primary-400); background: #fff; }
+.pdf-drop.is-over { border-color: var(--color-blue-primary-500); background: var(--color-blue-primary-50); }
+.pdf-drop.is-disabled { opacity: .55; pointer-events: none; }
+.pdf-drop svg { width: 34px; height: 34px; color: var(--color-blue-gray-400); }
+.pdf-drop-title { font-size: 14px; font-weight: 500; color: var(--color-blue-gray-800); }
+.pdf-drop-hint { font-size: 12px; color: var(--color-blue-gray-500); font-family: var(--font-inter); }
+
+/* 파일 요약 카드 (단일) */
+.pdf-file-summary {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md); background: #fff;
+}
+.pdf-file-ico {
+  flex: 0 0 auto; width: 38px; height: 38px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-700);
+  font-family: var(--font-inter); font-size: 10px; font-weight: 700; letter-spacing: .02em;
+}
+.pdf-file-meta { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pdf-file-name {
+  font-size: 13.5px; font-weight: 500; color: var(--color-blue-gray-900);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pdf-file-sub { font-size: 12px; color: var(--color-blue-gray-500); font-family: var(--font-inter); }
+.pdf-file-clear { flex: 0 0 auto; }
+
+/* 병합 파일 목록 */
+.pdf-list-head { display: flex; align-items: center; justify-content: space-between; }
+.pdf-file-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pdf-file-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md); background: #fff; cursor: grab;
+}
+.pdf-file-card:active { cursor: grabbing; }
+.pdf-file-order {
+  flex: 0 0 auto; width: 22px; height: 22px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-blue-gray-100); color: var(--color-blue-gray-700);
+  font-family: var(--font-inter); font-size: 12px; font-weight: 600;
+}
+.pdf-file-thumb {
+  flex: 0 0 auto; width: 40px; height: 52px; border-radius: 4px; overflow: hidden;
+  border: 1px solid var(--color-blue-gray-200); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.pdf-file-thumb .pdf-thumb-canvas-wrap { width: 100%; }
+.pdf-file-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pdf-file-actions { flex: 0 0 auto; display: flex; gap: 2px; }
+.pdf-icon-btn {
+  width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  color: var(--color-blue-gray-500); transition: background .12s ease, color .12s ease;
+}
+.pdf-icon-btn svg { width: 15px; height: 15px; }
+.pdf-icon-btn:hover:not(:disabled) { background: var(--color-blue-gray-100); color: var(--color-blue-gray-900); }
+.pdf-icon-btn:disabled { opacity: .3; cursor: not-allowed; }
+
+/* 요약 통계 */
+.pdf-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0; }
+.pdf-summary-inline { grid-template-columns: repeat(2, 1fr); }
+.pdf-summary > div {
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
+  background: #fff; padding: 12px; display: flex; flex-direction: column; gap: 4px;
+}
+.pdf-summary dt { font-size: 11px; font-weight: 600; color: var(--color-blue-gray-500); font-family: var(--font-inter); }
+.pdf-summary dd { margin: 0; font-family: var(--font-inter); font-size: 17px; font-weight: 500; color: var(--color-blue-gray-900); font-feature-settings: "tnum" 1; }
+.pdf-summary-hero { color: var(--color-blue-primary-700) !important; font-size: 24px !important; font-weight: 700 !important; }
+.pdf-summary-hero.is-danger { color: #c0504e !important; }
+
+/* 출력 파일명 입력 */
+.pdf-name-in {
+  width: 100%; border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
+  padding: 10px 12px; font-family: var(--font-inter); font-size: 13.5px;
+  color: var(--color-blue-gray-900); background: var(--color-blue-gray-50); outline: none;
+  transition: border-color .12s ease, background .12s ease;
+}
+.pdf-name-in:focus { border-color: var(--color-blue-primary-400); background: #fff; }
+
+/* 실행/다운로드 버튼 */
+.pdf-run { width: 100%; height: 44px; font-size: 14.5px; }
+.pdf-run-danger { background: #c0504e; }
+.pdf-download { width: 100%; }
+.pdf-memory-hint { font-size: 11.5px; color: var(--color-blue-gray-500); line-height: 1.5; }
+.pdf-hint { font-size: 12.5px; color: var(--color-blue-gray-600); line-height: 1.5; }
+.pdf-btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* 세그먼트 (분할 방식) */
+.pdf-seg {
+  display: inline-flex; padding: 3px; gap: 3px;
+  background: var(--color-blue-gray-100); border-radius: var(--radius-md);
+}
+.pdf-seg button {
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  font-family: var(--font-inter); font-size: 13px; font-weight: 500;
+  color: var(--color-blue-gray-600); transition: background .12s ease, color .12s ease;
+}
+.pdf-seg button.is-active { background: #fff; color: var(--color-blue-primary-700); box-shadow: var(--shadow-card); }
+
+/* 범위 입력 */
+.pdf-range { display: flex; flex-direction: column; gap: 8px; }
+.pdf-range-in {
+  width: 100%; border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
+  padding: 10px 12px; font-family: var(--font-mono); font-size: 13.5px;
+  color: var(--color-blue-gray-900); background: var(--color-blue-gray-50); outline: none;
+}
+.pdf-range-in:focus { border-color: var(--color-blue-primary-400); background: #fff; }
+.pdf-range-in.is-invalid { border-color: #c0504e; }
+.pdf-range-example { font-size: 12px; color: var(--color-blue-gray-500); font-family: var(--font-mono); }
+.pdf-range-msg { font-size: 12px; line-height: 1.45; }
+.pdf-range-msg.is-error { color: #c0504e; }
+.pdf-range-msg.is-warn { color: #b3791f; }
+.pdf-range-apply { display: flex; align-items: flex-end; gap: 8px; }
+.pdf-range-apply .pdf-range { flex: 1; }
+
+/* 상태 메시지 */
+.pdf-status {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: var(--radius-md); font-size: 13px; line-height: 1.45;
+}
+.pdf-status-busy { background: var(--color-blue-primary-50); color: var(--color-blue-primary-700); }
+.pdf-status-error { background: #fbeceb; color: #c0504e; }
+.pdf-status-warn { background: #fdf4e3; color: #b3791f; }
+.pdf-spinner {
+  width: 15px; height: 15px; flex: 0 0 auto; border-radius: 50%;
+  border: 2px solid var(--color-blue-primary-200); border-top-color: var(--color-blue-primary-700);
+  animation: pdf-spin .7s linear infinite;
+}
+@keyframes pdf-spin { to { transform: rotate(360deg); } }
+
+/* 회전 버튼 */
+.pdf-rotate-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.pdf-rotate-btns .btn { flex: 1; min-width: 92px; gap: 6px; }
+.pdf-rotate-btns svg { width: 15px; height: 15px; }
+
+/* 썸네일 그리드 */
+.pdf-thumb-grid {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 640px) { .pdf-thumb-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 960px) { .pdf-thumb-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1200px) { .pdf-thumb-grid { grid-template-columns: repeat(5, 1fr); } }
+
+.pdf-thumb {
+  position: relative; border: 1px solid var(--color-blue-gray-200); border-radius: 8px;
+  background: #fff; padding: 8px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.pdf-thumb.is-clickable { cursor: pointer; }
+.pdf-thumb.is-clickable:hover { border-color: var(--color-blue-primary-300); }
+.pdf-thumb.is-selected { border-color: var(--color-blue-primary-600); box-shadow: 0 0 0 1px var(--color-blue-primary-600); }
+.pdf-thumb.is-deleted { opacity: .5; border-color: #e3b3b1; background: #fdf3f2; }
+.pdf-thumb:focus-visible { outline: 2px solid var(--color-blue-primary-500); outline-offset: 2px; }
+
+.pdf-thumb-canvas-wrap {
+  position: relative; width: 100%; aspect-ratio: 3 / 4;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  background: var(--color-blue-gray-50); border-radius: 4px;
+}
+.pdf-thumb-canvas { max-width: 100%; max-height: 100%; opacity: 0; transition: opacity .2s ease; }
+.pdf-thumb-canvas.is-ready { opacity: 1; }
+.pdf-thumb-skel { position: absolute; inset: 0; background: linear-gradient(100deg, var(--color-blue-gray-50) 40%, var(--color-blue-gray-100) 50%, var(--color-blue-gray-50) 60%); background-size: 200% 100%; animation: pdf-shimmer 1.2s infinite; }
+@keyframes pdf-shimmer { to { background-position: -200% 0; } }
+
+.pdf-thumb-num { font-family: var(--font-inter); font-size: 11.5px; font-weight: 500; color: var(--color-blue-gray-600); }
+.pdf-thumb-check {
+  position: absolute; top: 6px; left: 6px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--color-blue-primary-700); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.pdf-thumb-check svg { width: 12px; height: 12px; }
+.pdf-thumb-trash {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(192, 80, 78, .92); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.pdf-thumb-trash svg { width: 17px; height: 17px; }
+.pdf-thumb-rot {
+  position: absolute; top: 6px; right: 6px; padding: 2px 6px; border-radius: 6px;
+  background: var(--color-blue-primary-700); color: #fff;
+  font-family: var(--font-inter); font-size: 10.5px; font-weight: 600;
+}

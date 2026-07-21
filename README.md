@@ -24,7 +24,7 @@
 - **구조화 데이터(JSON-LD)**: 도구=`WebApplication`, 허브=`WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
 
-## 구현된 기능 (도구 40종)
+## 구현된 기능 (도구 44종)
 
 각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ/AEO를
 `app/lib/content.ts` 레지스트리에서 단일 출처로 관리합니다. 허브(`/`, `/en`)는 전체 도구의
@@ -72,6 +72,10 @@
 | 38 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
 | 39 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
 | 40 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 41 | PDF 병합 / Merge PDF | `/pdf-merge` | `/en/pdf-merge` | 여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다. |
+| 42 | PDF 분할 / Split PDF | `/pdf-split` | `/en/pdf-split` | PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다. |
+| 43 | PDF 회전 / Rotate PDF | `/pdf-rotate` | `/en/pdf-rotate` | PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다. |
+| 44 | PDF 페이지 삭제 / Delete PDF Pages | `/pdf-page-delete` | `/en/pdf-page-delete` | 필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다. |
 
 ## 디렉토리 구조
 
