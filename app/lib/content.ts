@@ -4538,6 +4538,543 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+
+  // ── Design ── PDF 도구 4종 (병합·분할·회전·페이지 삭제, 공통 탭) ──
+  {
+    slug: "pdf-merge",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "pm", "small-business-owner", "designer"],
+    ico: "⊞",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "PDF 병합", en: "Merge PDF" },
+    relatedTools: ["pdf-split", "pdf-rotate", "pdf-page-delete"],
+    seo: {
+      ko: {
+        title: "PDF 병합 — 여러 PDF를 하나로 합치기",
+        description:
+          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+        keywords: [
+          "PDF 병합",
+          "PDF 합치기",
+          "PDF 합치기 무료",
+          "여러 PDF 하나로",
+          "PDF 파일 합치기",
+          "온라인 PDF 병합",
+        ],
+      },
+      en: {
+        title: "Merge PDF — Combine PDF Files in Order",
+        description:
+          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+        keywords: [
+          "merge PDF",
+          "combine PDF",
+          "merge PDF files",
+          "join PDF online",
+          "PDF merger free",
+          "combine PDF files",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다.",
+        description:
+          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+        howItWorks: [
+          "PDF 파일 여러 개를 업로드합니다.",
+          "드래그하거나 위아래로 이동해 병합 순서를 정합니다.",
+          "PDF 병합을 눌러 합쳐진 파일을 내려받습니다.",
+        ],
+        aeo: {
+          what: "PDF 병합은 여러 PDF 파일을 지정한 순서대로 하나의 PDF로 합치는 브라우저 도구입니다.",
+          who: "보고서·계약서·스캔본 등 나뉜 PDF를 한 파일로 정리해야 하는 사무직·PM·소상공인을 위한 도구입니다.",
+          how: "업로드한 PDF의 페이지를 순서대로 복사해 새 PDF를 만들며, 병합 순서는 드래그·이동·삭제로 조정합니다.",
+          why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 여러 PDF를 하나로 합칠 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
+        description:
+          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+        howItWorks: [
+          "Upload multiple PDF files.",
+          "Set the merge order by dragging or moving files up and down.",
+          "Press Merge PDF and download the combined file.",
+        ],
+        aeo: {
+          what: "Merge PDF is a browser tool that combines several PDF files into a single PDF in the order you choose.",
+          who: "It is for office workers, PMs, and small business owners who need to combine split reports, contracts, or scans into one file.",
+          how: "It copies the pages of each uploaded PDF in order into a new PDF, with the order controlled by drag, move, and remove actions.",
+          why: "It combines multiple PDFs into one directly in the browser, with no install, no login, and no file upload to a server.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "업로드한 PDF 파일이 서버로 전송되나요?",
+          answer:
+            "아니요. 병합은 사용자의 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+        },
+        {
+          question: "병합 순서를 어떻게 바꾸나요?",
+          answer:
+            "파일 카드를 드래그하거나 위·아래 이동 버튼으로 순서를 바꿀 수 있습니다. 목록의 위에서 아래 순서대로 병합됩니다.",
+        },
+        {
+          question: "몇 개의 파일까지 합칠 수 있나요?",
+          answer:
+            "최대 30개 파일, 총합 200MB, 파일당 100MB까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
+        },
+        {
+          question: "암호가 걸린 PDF도 합칠 수 있나요?",
+          answer:
+            "아니요. 암호로 보호된 PDF는 처리할 수 없습니다. 암호를 해제한 뒤 다시 시도해 주세요.",
+        },
+        {
+          question: "원본 파일이 바뀌나요?",
+          answer:
+            "아니요. 원본은 변경되지 않으며 병합 결과는 새 PDF 파일로 다운로드됩니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Are my uploaded PDF files sent to a server?",
+          answer:
+            "No. Merging happens entirely in your browser. Files are never uploaded or stored on a server.",
+        },
+        {
+          question: "How do I change the merge order?",
+          answer:
+            "Drag a file card or use the up and down buttons. Files are merged from top to bottom of the list.",
+        },
+        {
+          question: "How many files can I combine?",
+          answer:
+            "Up to 30 files, 200MB in total, and 100MB per file. Depending on browser memory, it may fail even below these limits.",
+        },
+        {
+          question: "Can I merge password-protected PDFs?",
+          answer:
+            "No. Encrypted PDFs cannot be processed. Remove the password first and try again.",
+        },
+        {
+          question: "Does merging change my original files?",
+          answer:
+            "No. Originals are left untouched; the merged result downloads as a new PDF file.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "PDF 병합", subtitle: "여러 PDF를 원하는 순서로 하나로 합치기" },
+      en: { title: "Merge PDF", subtitle: "Combine several PDFs into one, in your order" },
+    },
+  },
+
+  {
+    slug: "pdf-split",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "pm", "small-business-owner", "designer"],
+    ico: "⊟",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "PDF 분할", en: "Split PDF" },
+    relatedTools: ["pdf-merge", "pdf-page-delete", "pdf-rotate"],
+    seo: {
+      ko: {
+        title: "PDF 분할 — 페이지·범위별로 PDF 나누기",
+        description:
+          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
+        keywords: [
+          "PDF 분할",
+          "PDF 나누기",
+          "PDF 페이지 분할",
+          "PDF 범위 분할",
+          "PDF 쪼개기",
+          "온라인 PDF 분할",
+        ],
+      },
+      en: {
+        title: "Split PDF — Split by Page or Page Range",
+        description:
+          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
+        keywords: [
+          "split PDF",
+          "split PDF pages",
+          "split PDF by range",
+          "separate PDF pages",
+          "extract PDF pages",
+          "PDF splitter free",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다.",
+        description:
+          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
+        howItWorks: [
+          "PDF 파일 하나를 업로드합니다.",
+          "페이지별 분할 또는 범위(예: 1-3, 4-7)를 선택합니다.",
+          "PDF 분할을 눌러 결과 파일 또는 ZIP을 내려받습니다.",
+        ],
+        aeo: {
+          what: "PDF 분할은 하나의 PDF를 페이지별 또는 지정한 범위별로 여러 개의 PDF로 나누는 브라우저 도구입니다.",
+          who: "긴 PDF에서 특정 구간만 따로 저장하거나 페이지를 개별 파일로 분리해야 하는 사용자를 위한 도구입니다.",
+          how: "선택한 페이지 또는 범위를 각각 새 PDF로 추출하며, 결과가 2개 이상이면 ZIP으로 묶어 제공합니다.",
+          why: "설치나 업로드 없이 브라우저에서 바로 원하는 페이지 구간을 별도 PDF로 나눌 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Split a PDF into every page or into custom page ranges as new PDFs.",
+        description:
+          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
+        howItWorks: [
+          "Upload a single PDF file.",
+          "Choose split-every-page or enter ranges like 1-3, 4-7.",
+          "Press Split PDF and download the files or a ZIP.",
+        ],
+        aeo: {
+          what: "Split PDF is a browser tool that divides one PDF into several PDFs by page or by page range.",
+          who: "It is for people who need to save specific sections of a long PDF or separate its pages into individual files.",
+          how: "It extracts each selected page or range into its own new PDF, bundling the results into a ZIP when there is more than one.",
+          why: "It splits a PDF into the sections you want right in the browser, with no install and no upload.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "PDF 파일이 서버로 전송되나요?",
+          answer:
+            "아니요. 분할은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+        },
+        {
+          question: "페이지 범위는 어떻게 입력하나요?",
+          answer:
+            "쉼표와 하이픈을 사용해 1-3, 4-7, 8 처럼 입력합니다. 페이지는 1부터 시작하며 총 페이지 수를 넘을 수 없습니다.",
+        },
+        {
+          question: "결과 파일은 어떻게 받나요?",
+          answer:
+            "결과가 1개면 PDF로 바로 다운로드되고, 2개 이상이면 kitfolio-split-pdf.zip 파일로 묶여 다운로드됩니다.",
+        },
+        {
+          question: "페이지별 분할은 무엇인가요?",
+          answer:
+            "모든 페이지를 각각 한 페이지짜리 PDF로 만드는 방식입니다. 예를 들어 10페이지 PDF는 10개의 PDF로 나뉩니다.",
+        },
+        {
+          question: "몇 페이지까지 분할할 수 있나요?",
+          answer:
+            "PDF 1개당 최대 300페이지, 결과 최대 300개 파일까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Is my PDF sent to a server?",
+          answer:
+            "No. Splitting happens entirely in your browser. The file is never uploaded or stored on a server.",
+        },
+        {
+          question: "How do I enter page ranges?",
+          answer:
+            "Use commas and hyphens, for example 1-3, 4-7, 8. Pages start at 1 and cannot exceed the total page count.",
+        },
+        {
+          question: "How do I receive the result files?",
+          answer:
+            "A single result downloads directly as a PDF. Multiple results are bundled into kitfolio-split-pdf.zip.",
+        },
+        {
+          question: "What does splitting every page do?",
+          answer:
+            "It turns each page into its own single-page PDF. A 10-page PDF, for example, becomes 10 separate PDFs.",
+        },
+        {
+          question: "How many pages can I split?",
+          answer:
+            "Up to 300 pages per PDF and up to 300 result files. Depending on browser memory, it may fail even below these limits.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "PDF 분할", subtitle: "PDF를 페이지·범위별로 나누기" },
+      en: { title: "Split PDF", subtitle: "Split a PDF by page or by page range" },
+    },
+  },
+
+  {
+    slug: "pdf-rotate",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "pm", "small-business-owner", "designer"],
+    ico: "⟳",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "PDF 회전", en: "Rotate PDF" },
+    relatedTools: ["pdf-merge", "pdf-split", "pdf-page-delete"],
+    seo: {
+      ko: {
+        title: "PDF 회전 — 전체·선택 페이지 90도 회전",
+        description:
+          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
+        keywords: [
+          "PDF 회전",
+          "PDF 페이지 회전",
+          "PDF 돌리기",
+          "PDF 90도 회전",
+          "PDF 방향 변경",
+          "온라인 PDF 회전",
+        ],
+      },
+      en: {
+        title: "Rotate PDF — Rotate All or Selected Pages",
+        description:
+          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images — only the rotation attribute changes — so quality is preserved. Everything runs in your browser.",
+        keywords: [
+          "rotate PDF",
+          "rotate PDF pages",
+          "turn PDF pages",
+          "rotate PDF 90 degrees",
+          "change PDF orientation",
+          "rotate PDF online",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다.",
+        description:
+          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "PDF 파일 하나를 업로드합니다.",
+          "회전할 페이지를 선택하거나 전체를 대상으로 방향을 정합니다.",
+          "회전된 PDF 저장을 눌러 결과를 내려받습니다.",
+        ],
+        aeo: {
+          what: "PDF 회전은 PDF 전체 또는 선택한 페이지를 90도 단위로 회전하는 브라우저 도구입니다.",
+          who: "가로로 스캔되었거나 방향이 뒤집힌 페이지를 바로잡아야 하는 사용자를 위한 도구입니다.",
+          how: "페이지 콘텐츠를 이미지로 변환하지 않고 PDF 페이지의 회전 속성만 변경해 원본 품질을 유지합니다.",
+          why: "설치나 업로드 없이 브라우저에서 원하는 페이지의 방향만 손쉽게 바로잡을 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Rotate an entire PDF or only selected pages by 90 degrees and save a new PDF.",
+        description:
+          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images — only the rotation attribute changes — so quality is preserved. Everything runs in your browser.",
+        howItWorks: [
+          "Upload a single PDF file.",
+          "Select the pages to rotate, or target all pages, and pick a direction.",
+          "Press Save rotated PDF and download the result.",
+        ],
+        aeo: {
+          what: "Rotate PDF is a browser tool that rotates an entire PDF or selected pages in 90-degree steps.",
+          who: "It is for people who need to fix sideways scans or upside-down pages in a PDF.",
+          how: "It changes only the rotation attribute of each PDF page instead of converting content to images, so original quality is preserved.",
+          why: "It fixes the orientation of the pages you choose directly in the browser, with no install and no upload.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "PDF 파일이 서버로 전송되나요?",
+          answer:
+            "아니요. 회전은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+        },
+        {
+          question: "회전하면 화질이 떨어지나요?",
+          answer:
+            "아니요. 페이지를 이미지로 다시 그리지 않고 회전 속성만 바꾸기 때문에 원본 품질이 그대로 유지됩니다.",
+        },
+        {
+          question: "일부 페이지만 회전할 수 있나요?",
+          answer:
+            "네. 썸네일에서 페이지를 클릭해 선택하거나 범위로 선택한 뒤 회전할 수 있습니다. 선택이 없으면 전체 페이지에 적용됩니다.",
+        },
+        {
+          question: "임의 각도로 회전할 수 있나요?",
+          answer:
+            "아니요. 이 도구는 90도 단위(왼쪽 90도·오른쪽 90도·180도) 회전만 지원합니다. 기울기 보정은 제공하지 않습니다.",
+        },
+        {
+          question: "회전을 되돌릴 수 있나요?",
+          answer:
+            "네. 선택 원상 복구 또는 전체 원상 복구로 저장 전에 회전 상태를 초기화할 수 있으며, 원본 파일은 변경되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Is my PDF sent to a server?",
+          answer:
+            "No. Rotation happens entirely in your browser. The file is never uploaded or stored on a server.",
+        },
+        {
+          question: "Does rotating reduce quality?",
+          answer:
+            "No. Pages are not re-rendered as images; only the rotation attribute changes, so original quality is preserved.",
+        },
+        {
+          question: "Can I rotate only some pages?",
+          answer:
+            "Yes. Click page thumbnails to select them, or select by range, then rotate. With no selection, rotation applies to all pages.",
+        },
+        {
+          question: "Can I rotate by an arbitrary angle?",
+          answer:
+            "No. This tool rotates in 90-degree steps only (left 90, right 90, 180). It does not correct skew.",
+        },
+        {
+          question: "Can I undo a rotation?",
+          answer:
+            "Yes. Use Reset selected or Reset all to clear rotation before saving. The original file is never changed.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "PDF 회전", subtitle: "전체 또는 선택 페이지를 90도 단위로 회전" },
+      en: { title: "Rotate PDF", subtitle: "Rotate all or selected pages in 90° steps" },
+    },
+  },
+
+  {
+    slug: "pdf-page-delete",
+    layout: "canvas",
+    cat: "design",
+    targets: ["office-worker", "pm", "small-business-owner", "designer"],
+    ico: "⌦",
+    ready: true,
+    badge: "Canvas",
+    name: { ko: "PDF 페이지 삭제", en: "Delete PDF Pages" },
+    relatedTools: ["pdf-split", "pdf-merge", "pdf-rotate"],
+    seo: {
+      ko: {
+        title: "PDF 페이지 삭제 — 필요 없는 페이지 제거",
+        description:
+          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
+        keywords: [
+          "PDF 페이지 삭제",
+          "PDF 페이지 제거",
+          "PDF 특정 페이지 삭제",
+          "PDF 페이지 지우기",
+          "PDF 페이지 빼기",
+          "온라인 PDF 페이지 삭제",
+        ],
+      },
+      en: {
+        title: "Delete PDF Pages — Remove Unwanted Pages",
+        description:
+          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
+        keywords: [
+          "delete PDF pages",
+          "remove PDF pages",
+          "delete page from PDF",
+          "remove pages from PDF",
+          "PDF page remover",
+          "delete PDF pages online",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다.",
+        description:
+          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
+        howItWorks: [
+          "PDF 파일 하나를 업로드합니다.",
+          "썸네일에서 삭제할 페이지를 선택합니다.",
+          "선택 페이지 삭제를 눌러 남은 페이지로 만든 PDF를 내려받습니다.",
+        ],
+        aeo: {
+          what: "PDF 페이지 삭제는 PDF에서 선택한 페이지를 제거해 나머지 페이지로 새 PDF를 만드는 브라우저 도구입니다.",
+          who: "빈 페이지, 표지, 중복 페이지 등 불필요한 페이지를 빼고 문서를 정리해야 하는 사용자를 위한 도구입니다.",
+          how: "삭제로 표시한 페이지를 제외한 나머지 페이지를 복사해 새 PDF를 만들며, 최소 1페이지는 남아야 합니다.",
+          why: "설치나 업로드 없이 브라우저에서 원하지 않는 페이지만 제거해 깔끔한 PDF를 만들 수 있습니다.",
+        },
+      },
+      en: {
+        card: "Pick the pages you do not need and build a new PDF without them.",
+        description:
+          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
+        howItWorks: [
+          "Upload a single PDF file.",
+          "Select the pages to remove from the thumbnails.",
+          "Press Delete selected pages and download the trimmed PDF.",
+        ],
+        aeo: {
+          what: "Delete PDF Pages is a browser tool that removes selected pages from a PDF and builds a new PDF from the remaining pages.",
+          who: "It is for people who need to clean up a document by removing blank pages, cover sheets, or duplicates.",
+          how: "It copies every page except the ones marked for deletion into a new PDF, and at least one page must remain.",
+          why: "It removes only the pages you do not want, right in the browser, with no install and no upload.",
+        },
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "PDF 파일이 서버로 전송되나요?",
+          answer:
+            "아니요. 페이지 삭제는 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+        },
+        {
+          question: "원본 파일이 변경되나요?",
+          answer:
+            "아니요. 원본은 그대로 유지되며 선택한 페이지를 제외한 결과는 새 PDF 파일로 다운로드됩니다.",
+        },
+        {
+          question: "모든 페이지를 삭제할 수 있나요?",
+          answer:
+            "아니요. 최소 1페이지는 남아야 합니다. 남는 페이지가 없으면 실행이 차단됩니다.",
+        },
+        {
+          question: "삭제 선택을 되돌릴 수 있나요?",
+          answer:
+            "네. 실행 취소로 직전 선택을 되돌리거나 전체 원상 복구로 선택을 모두 초기화할 수 있습니다. 삭제 실행 전에는 확인 절차도 제공됩니다.",
+        },
+        {
+          question: "여러 페이지를 한 번에 선택할 수 있나요?",
+          answer:
+            "네. 썸네일을 개별 클릭하거나, 전체 선택·선택 반전·범위로 선택(예: 2, 5-7)을 사용해 여러 페이지를 한 번에 지정할 수 있습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Is my PDF sent to a server?",
+          answer:
+            "No. Page deletion happens entirely in your browser. The file is never uploaded or stored on a server.",
+        },
+        {
+          question: "Does this change my original file?",
+          answer:
+            "No. The original is kept intact; the result without the selected pages downloads as a new PDF file.",
+        },
+        {
+          question: "Can I delete every page?",
+          answer:
+            "No. At least one page must remain. If no page would be left, the action is blocked.",
+        },
+        {
+          question: "Can I undo a deletion selection?",
+          answer:
+            "Yes. Use Undo to revert the last change or Reset all to clear the selection. A confirmation step is shown before deleting.",
+        },
+        {
+          question: "Can I select multiple pages at once?",
+          answer:
+            "Yes. Click thumbnails individually, or use Select all, Invert selection, or select by range (e.g. 2, 5-7).",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "PDF 페이지 삭제", subtitle: "필요 없는 페이지를 제거한 새 PDF 만들기" },
+      en: { title: "Delete PDF Pages", subtitle: "Remove unwanted pages and save a new PDF" },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */
