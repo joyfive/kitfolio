@@ -217,6 +217,19 @@ export default function Hub() {
       </div>
 
       {visible.length === 0 && <div className="hub-empty">{t("empty")}</div>}
+
+      {/* 허브 하단 설명 콘텐츠 — 사이트 성격 소개 (SEO·AEO 본문) */}
+      <section className="hub-about" aria-label={HUB.about[lang].heading}>
+        <h2>{HUB.about[lang].heading}</h2>
+        <div className="hub-about-grid">
+          {HUB.about[lang].sections.map((s, i) => (
+            <div className="hub-about-card" key={i}>
+              <h3>{s.h}</h3>
+              <p>{s.p}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

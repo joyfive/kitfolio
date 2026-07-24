@@ -69,6 +69,10 @@ type ToolCopy = {
   /** AEO 명시 문단 — What is / Who is it for / How does it work / Why use it.
    *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출 — ready 도구만 */
   aeo?: { what: string; who: string; how: string; why: string };
+  /** 심화 가이드 — 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
+   *  사용 맥락·실전 예시·팁 등 고유 본문으로 페이지 가치를 보강한다.
+   *  ToolGuide 컴포넌트가 소비 (섹션 = heading + 문단 배열). */
+  guide?: { heading: string; body: string[] }[];
 };
 
 type ToolOg = { title: string; subtitle: string };
@@ -144,6 +148,43 @@ export const HUB = {
       subtitle:
         "Browser-based micro tools for modern knowledge workers — work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
       stat: " tools",
+    },
+  },
+  /** 허브 하단 설명 콘텐츠 — 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
+  about: {
+    ko: {
+      heading: "Kitfolio는 어떤 서비스인가요?",
+      sections: [
+        {
+          h: "일하는 사람을 위한 작은 도구 모음",
+          p: "Kitfolio는 기획자·디자이너·개발자·마케터·구직자·직장인·소상공인이 업무 중 반복해서 마주치는 작은 문제를 빠르게 푸는 브라우저 기반 도구 모음입니다. 글자 수를 세거나, JSON을 정리하거나, 연봉 실수령액을 계산하거나, QR 코드를 만들거나, PDF를 병합하는 것처럼 자주 필요하지만 매번 검색해서 찾기는 번거로운 작업들을 한 곳에 모았습니다. 무거운 프로그램을 설치할 필요도, 회원가입을 할 필요도 없이 페이지를 열면 바로 씁니다.",
+        },
+        {
+          h: "모든 처리는 브라우저 안에서",
+          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있고, 네트워크가 느린 환경에서도 빠르게 반응합니다.",
+        },
+        {
+          h: "필요한 도구를 빠르게 찾기",
+          p: "상단 검색창에 하려는 작업을 입력하거나 직군 필터로 좁혀서 원하는 도구를 바로 찾을 수 있습니다. 각 도구 페이지에는 사용법과 자주 묻는 질문이 함께 정리되어 있어 처음 쓰는 도구도 헤매지 않습니다. Kitfolio는 하나의 거대한 앱이 아니라, 각자 뚜렷한 목적을 가진 작고 실용적인 도구들이 계속 늘어나는 컬렉션입니다.",
+        },
+      ],
+    },
+    en: {
+      heading: "What is Kitfolio?",
+      sections: [
+        {
+          h: "Small tools for people who work",
+          p: "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they run into during the workday. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs — tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
+        },
+        {
+          h: "Everything runs in your browser",
+          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere — all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
+        },
+        {
+          h: "Find the right tool fast",
+          p: "Type what you're trying to do into the search box at the top, or narrow the list by role to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app — it's a growing library of small, focused, practical tools, each with a clear purpose.",
+        },
+      ],
     },
   },
 };
@@ -539,6 +580,29 @@ export const TOOLS: Tool[] = [
           how: "왼쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 오른쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
           why: "서버 전송 없이 브라우저에서만 동작해 민감한 데이터도 안전하고, 설치·가입 없이 바로 쓸 수 있어 디버깅 시간을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "JSON 포매터는 언제 쓰나요?",
+            body: [
+              "JSON은 API가 데이터를 주고받는 표준 형식이지만, 실제로 마주치는 JSON은 한 줄로 길게 압축돼 있거나 들여쓰기가 뒤죽박죽인 경우가 많습니다. 이런 문자열은 눈으로 구조를 파악하기 어렵고, 어디서 중괄호가 닫히는지, 어떤 키가 어떤 값에 속하는지 한눈에 들어오지 않습니다. JSON 포매터는 이렇게 뭉친 문자열을 계층에 맞춰 들여쓰고 키·값·문자열·숫자를 색으로 구분해, 데이터의 형태를 즉시 읽을 수 있게 정리합니다.",
+              "가장 흔한 사용 상황은 API 응답 확인입니다. 브라우저 개발자 도구나 서버 로그에서 복사한 응답을 붙여넣으면 어떤 필드가 비어 있는지, 배열에 항목이 몇 개인지, 중첩된 객체가 어떻게 구성됐는지 바로 확인할 수 있습니다. 설정 파일(package.json, tsconfig.json 등)을 손보기 전 구조를 파악하거나, 동료가 채팅으로 보낸 한 줄짜리 JSON을 읽기 좋게 펼칠 때도 유용합니다.",
+            ],
+          },
+          {
+            heading: "포맷팅과 유효성 검사는 다릅니다",
+            body: [
+              "이 도구는 두 가지 일을 동시에 합니다. 하나는 보기 좋게 정리하는 포맷팅이고, 다른 하나는 문법이 올바른지 확인하는 유효성 검사입니다. JSON은 마지막 항목 뒤에 쉼표를 붙이거나(trailing comma), 키를 큰따옴표 없이 쓰거나, 작은따옴표로 문자열을 감싸면 규칙 위반입니다. 사람 눈에는 사소해 보여도 파서는 이런 실수에서 멈춥니다.",
+              "유효하지 않은 JSON을 붙여넣으면 어느 줄, 어느 열에서 문제가 생겼는지 짚어주므로, 긴 페이로드에서 오타 하나를 찾느라 눈으로 훑을 필요가 없습니다. 반대로 데이터 용량을 줄여야 할 때는 압축(minify) 기능으로 모든 공백과 줄바꿈을 제거해 한 줄로 만들 수 있습니다. 코드에 JSON을 인라인으로 넣거나 네트워크 전송량을 아껴야 할 때 쓰입니다.",
+            ],
+          },
+          {
+            heading: "안심하고 쓰는 이유",
+            body: [
+              "JSON에는 종종 토큰, 개인정보, 내부 식별자 같은 민감한 값이 담깁니다. 온라인 포매터 중에는 입력을 서버로 보내 처리하는 곳도 있어, 무심코 붙여넣은 데이터가 외부에 남을 수 있습니다. Kitfolio의 JSON 포매터는 파싱·포맷·검증·압축을 전부 브라우저 안에서 처리하며, 입력한 내용을 어떤 서버로도 전송하지 않습니다.",
+              "따라서 사내 API 응답이나 인증 토큰이 포함된 데이터도 걱정 없이 붙여넣을 수 있고, 네트워크가 없는 환경에서도 동작합니다. 설치나 로그인 없이 페이지를 여는 순간 바로 쓸 수 있다는 점도 반복적인 디버깅 작업의 마찰을 크게 줄여줍니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Format JSON with indentation and syntax highlighting. Detects errors and validates.",
@@ -555,6 +619,29 @@ export const TOOLS: Tool[] = [
           how: "Paste JSON into the left pane and it is parsed instantly in your browser — the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
           why: "It runs entirely in your browser with no upload, so sensitive data stays safe — and with no install or sign-up, debugging gets faster.",
         },
+        guide: [
+          {
+            heading: "When do you use a JSON formatter?",
+            body: [
+              "JSON is the standard format APIs use to exchange data, but the JSON you actually encounter is often minified onto a single long line or indented inconsistently. Strings like that are hard to read: it's not obvious where a brace closes, which key owns which value, or how deeply objects are nested. A JSON formatter re-indents the string along its hierarchy and colors keys, values, strings, and numbers differently so the shape of the data becomes readable at a glance.",
+              "The most common situation is inspecting an API response. Paste a response copied from your browser's dev tools or a server log and you can immediately see which fields are empty, how many items an array holds, and how nested objects are structured. It's just as useful for understanding a config file (package.json, tsconfig.json) before editing it, or for expanding a one-line JSON blob a teammate dropped into chat.",
+            ],
+          },
+          {
+            heading: "Formatting and validation are different",
+            body: [
+              "This tool does two jobs at once: it pretty-prints the data, and it checks that the syntax is valid. JSON forbids a trailing comma after the last item, requires keys to be wrapped in double quotes, and rejects strings wrapped in single quotes. These look trivial to a human, but a parser stops dead on any of them.",
+              "When you paste invalid JSON, the tool points to the exact line and column where the problem is, so you don't have to scan a long payload hunting for a stray character. When you need to shrink the data instead, the minify function strips every space and line break into a single line — handy for inlining JSON in code or trimming what you send over the network.",
+            ],
+          },
+          {
+            heading: "Why it's safe to use",
+            body: [
+              "JSON frequently carries sensitive values: tokens, personal data, internal identifiers. Some online formatters send your input to a server to process it, which means data you pasted without thinking can end up stored elsewhere. Kitfolio's JSON formatter parses, formats, validates, and minifies entirely in your browser and never transmits your input to any server.",
+              "That means you can paste internal API responses or data containing auth tokens without worry, and it works even with no network connection. Because there's nothing to install and no login, the tool is ready the moment the page opens — which removes a lot of friction from repetitive debugging.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -757,6 +844,22 @@ export const TOOLS: Tool[] = [
           how: "rem 또는 px 값을 입력하고 루트 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. Swap으로 방향을 바꿀 수 있습니다.",
           why: "반응형 디자인에서 px와 rem을 오갈 때 매번 계산할 필요 없이 빠르게 정확한 값을 얻을 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "rem은 왜 접근성에 유리할까",
+            body: [
+              "rem(root em)은 항상 HTML 루트 요소의 폰트 크기를 기준으로 계산됩니다. 사용자가 브라우저 기본 글자 크기를 키우면 rem으로 잡은 글꼴·여백·레이아웃이 함께 확대되어, 시력이 낮은 사용자에게도 화면이 자연스럽게 커집니다. 반면 px로 고정한 값은 사용자가 글자를 키워도 그대로라 접근성이 떨어집니다. 그래서 폰트 크기와 간격을 rem으로 설계하는 팀이 많습니다.",
+              "디자인 시안은 보통 px로 전달되지만 구현은 rem으로 하는 경우가 많아, 둘 사이를 오가는 변환이 자주 필요합니다. 이 변환기는 그 왕복을 한 번에 처리합니다.",
+            ],
+          },
+          {
+            heading: "루트 폰트 크기를 프로젝트 값과 맞추세요",
+            body: [
+              "1rem은 루트 폰트 크기와 같습니다. 대부분의 브라우저 기본값은 16px이라 1rem = 16px, 1.5rem = 24px이 됩니다. 하지만 `html { font-size: 62.5% }`처럼 루트 크기를 바꾼 프로젝트에서는 1rem이 10px이 되기도 합니다. 정확한 변환을 위해 계산기의 루트 폰트 크기를 실제 프로젝트 설정과 동일하게 맞추세요.",
+              "em은 부모 요소 기준이라 중첩되면 값이 누적되지만, rem은 언제나 루트 기준이라 예측이 쉽습니다. 모든 변환은 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Convert rem ↔ px instantly. Supports custom root font size.",
@@ -769,6 +872,22 @@ export const TOOLS: Tool[] = [
           how: "Enter a rem or px value and set your root font size; the converted result appears instantly in your browser. Use Swap to flip the direction.",
           why: "It saves repeated manual calculations when switching between px and rem in responsive design workflows.",
         },
+        guide: [
+          {
+            heading: "Why rem is better for accessibility",
+            body: [
+              "rem (root em) is always calculated from the font size of the HTML root element. When a user increases their browser's default text size, everything sized in rem — fonts, spacing, layout — scales up with it, so the page grows naturally for people with low vision. Values fixed in px stay put no matter what the user does, which hurts accessibility. That's why many teams size typography and spacing in rem.",
+              "Designs usually arrive in px while implementation happens in rem, so you constantly move between the two. This converter handles that round trip in one step.",
+            ],
+          },
+          {
+            heading: "Match the root font size to your project",
+            body: [
+              "1rem equals the root font size. Most browsers default to 16px, making 1rem = 16px and 1.5rem = 24px. But a project that changes the root (e.g. `html { font-size: 62.5% }`) can make 1rem equal 10px. For an accurate result, set the converter's root font size to match your actual project setup.",
+              "Unlike em, which is relative to the parent and compounds when nested, rem is always relative to the root, so it stays predictable. All conversion runs in your browser and your input is never sent to a server.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -858,6 +977,22 @@ export const TOOLS: Tool[] = [
           how: "em 또는 px 값을 입력하고 부모 요소의 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
           why: "em 단위는 부모 요소 폰트 크기에 따라 달라지므로 매번 수동으로 계산하는 번거로움을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "em은 부모 폰트 크기를 기준으로 한다",
+            body: [
+              "em은 해당 요소가 상속받은 폰트 크기를 1로 보는 상대 단위입니다. 버튼의 padding을 0.75em으로 주면 글자 크기가 커질 때 여백도 함께 커져, 컴포넌트가 폰트 크기에 맞춰 통째로 스케일됩니다. 이렇게 '요소 하나가 자기 폰트 크기에 비례해 커지길' 원할 때 em이 rem보다 편리합니다.",
+              "이 상대성 때문에 시안의 px 값을 em으로 옮기거나 그 반대로 확인할 일이 잦고, 이 변환기가 그 계산을 대신합니다. 부모 폰트 크기를 실제 값으로 설정해야 정확합니다.",
+            ],
+          },
+          {
+            heading: "중첩되면 값이 누적되는 함정",
+            body: [
+              "em의 가장 흔한 함정은 중첩 누적입니다. em은 부모의 폰트 크기를 기준으로 하므로, em으로 폰트 크기를 지정한 요소 안에 또 em을 쓰면 조상들의 배율이 곱해져 예상보다 크거나 작아집니다. 예를 들어 1.2em이 세 단계 중첩되면 실제로는 1.2 × 1.2 × 1.2 ≈ 1.73배가 됩니다.",
+              "그래서 실제로 몇 px이 되는지 눈으로 확인하는 것이 중요합니다. 예측 가능한 값이 필요할 때는 루트 기준인 rem을 함께 고려하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Convert em ↔ px instantly. Supports custom parent font size.",
@@ -870,6 +1005,22 @@ export const TOOLS: Tool[] = [
           how: "Enter an em or px value and set the parent element's font size; the conversion result appears instantly in your browser.",
           why: "em values depend on the parent element's font size, making manual calculation tedious — this tool gives you the answer instantly.",
         },
+        guide: [
+          {
+            heading: "em is relative to the parent font size",
+            body: [
+              "em is a relative unit that treats the element's inherited font size as 1. Give a button 0.75em of padding and the spacing grows along with the text, so the whole component scales with its font size. When you want a single element to grow in proportion to its own font size, em is handier than rem.",
+              "Because of this relativity you frequently move a design's px value into em or check it the other way, and this converter does that math for you. Set the parent font size to your real value for an accurate result.",
+            ],
+          },
+          {
+            heading: "The nesting trap where values compound",
+            body: [
+              "em's most common pitfall is compounding when nested. Since em is based on the parent's font size, using em inside an element that itself sets its font size in em multiplies the ancestors' ratios, so it ends up larger or smaller than expected. For example, 1.2em nested three levels deep is actually 1.2 × 1.2 × 1.2 ≈ 1.73×.",
+              "That's why it helps to see the resulting px value directly. When you need predictable values, consider rem, which is relative to the root. All calculation runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -959,6 +1110,22 @@ export const TOOLS: Tool[] = [
           how: "vw 또는 px 값을 입력하고 뷰포트 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. 일반 반응형 뷰포트 크기 프리셋도 제공합니다.",
           why: "다양한 화면 크기에서 vw와 px를 오갈 때 계산 실수 없이 빠르게 정확한 값을 확인할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "vw는 뷰포트 너비의 1%",
+            body: [
+              "vw(viewport width)는 브라우저 표시 영역의 너비를 100으로 나눈 단위입니다. 100vw는 화면 전체 너비, 50vw는 그 절반입니다. 화면 크기에 따라 자동으로 값이 바뀌기 때문에 풀블리드 히어로 섹션이나 화면 폭에 비례해 커지는 반응형 타이포그래피에 자주 쓰입니다.",
+              "핵심은 같은 vw라도 기기마다 실제 픽셀이 달라진다는 점입니다. 10vw는 1440px 데스크톱에서 144px이지만 390px 모바일에서는 39px입니다. 그래서 특정 기기 기준의 실제 크기를 확인하려면 뷰포트 너비를 지정해 변환해야 하고, 이 계산기는 대표 기기 프리셋을 제공합니다.",
+            ],
+          },
+          {
+            heading: "clamp와 함께, 과도한 확대·축소 막기",
+            body: [
+              "vw만 단독으로 쓰면 큰 화면에서는 지나치게 커지고 작은 화면에서는 읽기 힘들 만큼 작아지기 쉽습니다. 그래서 실무에서는 min()·max()·clamp()로 하한과 상한을 함께 지정하는 경우가 많습니다. 이때 각 뷰포트에서 vw가 몇 px이 되는지 미리 확인하면 경계값을 합리적으로 잡을 수 있습니다.",
+              "이 변환기로 최소·최대 화면 폭에서의 px 값을 확인해 clamp 범위를 설계해 보세요. 모든 계산은 브라우저 안에서만 이루어지며 입력값은 서버로 전송되지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Convert vw ↔ px instantly. Includes responsive viewport width presets.",
@@ -971,6 +1138,22 @@ export const TOOLS: Tool[] = [
           how: "Enter a vw or px value and set the viewport width (or choose a preset like 1440); the result appears instantly in your browser.",
           why: "It eliminates manual vw-to-px math across different screen sizes, speeding up responsive design work.",
         },
+        guide: [
+          {
+            heading: "vw is 1% of the viewport width",
+            body: [
+              "vw (viewport width) divides the browser's visible width into 100 parts. 100vw is the full screen width and 50vw is half of it. Because the value changes automatically with the screen size, vw is popular for full-bleed hero sections and responsive typography that scales with the viewport.",
+              "The key point is that the same vw resolves to different pixels on different devices. 10vw is 144px on a 1440px desktop but 39px on a 390px phone. So to check the real size for a specific device you set the viewport width and convert — and this calculator ships common device presets.",
+            ],
+          },
+          {
+            heading: "Pair it with clamp to avoid extremes",
+            body: [
+              "Used alone, vw tends to get too large on wide screens and too small to read on narrow ones. That's why in practice people bound it with min(), max(), or clamp(). Checking how many pixels a vw value becomes at each viewport first lets you pick sensible boundaries.",
+              "Use this converter to read the px values at your minimum and maximum screen widths and design your clamp range around them. All calculation runs in your browser and your input is never sent to a server.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1060,6 +1243,22 @@ export const TOOLS: Tool[] = [
           how: "% 또는 px 값을 입력하고 부모 요소 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
           why: "퍼센트와 픽셀 단위 계산을 빠르게 처리해 반응형 레이아웃 설계 시간을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "CSS %는 '무엇의 100%'인지가 핵심",
+            body: [
+              "CSS 퍼센트는 속성마다 기준이 다릅니다. width는 부모 요소의 너비, height는 부모의 높이, font-size는 부모의 폰트 크기를 기준으로 하고, 흥미롭게도 padding과 margin은 세로 값이라도 부모의 '너비'를 기준으로 계산됩니다. 이 변환기는 가장 흔한 경우인 부모 요소 너비를 기준으로 % ↔ px를 변환합니다.",
+              "즉 50%는 언제나 '부모 너비의 절반'입니다. 부모가 800px이면 50% = 400px, 부모가 1200px이면 600px이 됩니다. 정확한 값을 얻으려면 부모 요소의 실제 너비를 입력해야 합니다.",
+            ],
+          },
+          {
+            heading: "% vs vw — 무엇을 기준으로 삼는가",
+            body: [
+              "퍼센트와 vw는 헷갈리기 쉽지만 기준이 다릅니다. %는 부모(컨테이너)를 기준으로 하고, vw는 화면(뷰포트) 전체를 기준으로 합니다. 그래서 컨테이너 안에서의 비율 배분에는 %가, 화면 폭에 직접 비례해야 할 때는 vw가 맞습니다. 중첩된 레이아웃에서 실제 픽셀이 얼마가 되는지 확인할 때 이 변환기가 유용합니다.",
+              "모든 계산은 브라우저 안에서만 이루어지며 입력한 값은 서버로 전송되지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Convert CSS % ↔ px instantly. Supports custom parent width.",
@@ -1072,6 +1271,22 @@ export const TOOLS: Tool[] = [
           how: "Enter a % or px value and set the parent element width; the converted result appears instantly in your browser.",
           why: "It handles the division and multiplication instantly so you can focus on the layout instead of the arithmetic.",
         },
+        guide: [
+          {
+            heading: "With CSS %, the question is '100% of what?'",
+            body: [
+              "CSS percentages are relative to different things depending on the property. width is relative to the parent's width, height to the parent's height, font-size to the parent's font size — and, notably, padding and margin are calculated from the parent's width even for vertical values. This converter handles the most common case, converting % ↔ px relative to the parent element's width.",
+              "So 50% is always 'half the parent's width': with an 800px parent, 50% = 400px; with a 1200px parent, 600px. Enter the parent's real width to get an accurate value.",
+            ],
+          },
+          {
+            heading: "% vs vw — what each is relative to",
+            body: [
+              "Percent and vw are easy to confuse, but their references differ: % is relative to the parent (container), while vw is relative to the whole viewport. Use % to divide space within a container and vw when something must scale directly with the screen width. This converter is handy for seeing the real pixel value inside a nested layout.",
+              "All calculation runs in your browser and your input is never sent to a server.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1161,6 +1376,22 @@ export const TOOLS: Tool[] = [
           how: "ms 또는 s 값을 입력하면 브라우저 안에서 즉시 상대 단위로 변환합니다. Swap 버튼으로 변환 방향을 바꿀 수 있습니다.",
           why: "1000ms = 1s 계산이 단순하지만 큰 값에서 자주 실수하므로, 빠르게 검증하고 복사하는 데 유용합니다.",
         },
+        guide: [
+          {
+            heading: "ms와 s, CSS·JS에서 언제 무엇을 쓰나",
+            body: [
+              "1초(s)는 1,000밀리초(ms)입니다. CSS의 transition·animation duration은 `0.3s`와 `300ms` 두 표기를 모두 허용하는데, 코드베이스마다 컨벤션이 달라 값을 오갈 일이 생깁니다. 일반적으로 짧은 시간은 ms(예: 150ms)가, 긴 시간은 s(예: 1.5s)가 읽기 편해 팀 단위로 표기를 통일하는 경우가 많습니다.",
+              "JavaScript의 setTimeout·setInterval은 항상 ms 단위를 받기 때문에, 디자이너가 'S' 단위로 정한 모션 스펙을 코드로 옮길 때 변환이 필요합니다. 이 변환기가 그 왕복을 즉시 처리합니다.",
+            ],
+          },
+          {
+            heading: "체감 속도의 감을 잡는 데도 유용",
+            body: [
+              "UI 인터랙션에서 트랜지션 시간은 체감 품질을 좌우합니다. 보통 150~300ms가 자연스러운 마이크로 인터랙션 구간으로 여겨지고, 500ms를 넘어가면 굼떠 보이기 쉽습니다. 값을 ms와 s로 오가며 보면 애니메이션이 실제로 얼마나 길지 감을 잡는 데 도움이 됩니다.",
+              "변환은 전부 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Convert ms ↔ s instantly. Useful for CSS animations and transitions.",
@@ -1173,6 +1404,22 @@ export const TOOLS: Tool[] = [
           how: "Enter an ms or s value and the result appears instantly in your browser. Use the Swap button to flip the conversion direction.",
           why: "While 1000ms = 1s seems simple, larger values are easy to miscalculate — this tool gives the answer instantly so you can copy and move on.",
         },
+        guide: [
+          {
+            heading: "ms vs s: when to use each in CSS and JS",
+            body: [
+              "One second (s) is 1,000 milliseconds (ms). CSS transition and animation durations accept both `0.3s` and `300ms`, and since conventions differ between codebases you often move between the two. As a rule, short durations read better in ms (e.g. 150ms) and longer ones in s (e.g. 1.5s), so teams tend to standardize on one style.",
+              "JavaScript's setTimeout and setInterval always take milliseconds, so when a designer specifies a motion spec in seconds you need to convert it for code. This tool handles that round trip instantly.",
+            ],
+          },
+          {
+            heading: "Also useful for gauging perceived speed",
+            body: [
+              "In UI interactions, transition timing drives how the experience feels. Roughly 150–300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
+              "All conversion happens in your browser and your input is never sent to a server.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1265,6 +1512,29 @@ export const TOOLS: Tool[] = [
           how: "타입과 각도를 고르고 트랙에서 색상 정지점을 드래그하면 미리보기가 실시간으로 갱신되고, 결과 CSS를 바로 복사할 수 있습니다.",
           why: "그라디언트 문법을 외울 필요 없이 눈으로 확인하며 만들 수 있어 시안 작업과 코드 작성이 모두 빨라집니다.",
         },
+        guide: [
+          {
+            heading: "세 가지 그라디언트 타입 이해하기",
+            body: [
+              "CSS 그라디언트는 크게 세 종류입니다. linear-gradient는 지정한 각도를 따라 색이 직선으로 번지는 가장 흔한 형태로, 버튼·배경·히어로 섹션에 두루 쓰입니다. radial-gradient는 한 점에서 바깥으로 퍼지는 원형으로 은은한 조명 효과나 스포트라이트 느낌을 낼 때 좋고, conic-gradient는 중심을 축으로 각도에 따라 색이 도는 원뿔형으로 파이 차트나 컬러 휠 같은 표현에 적합합니다.",
+              "이 도구에서는 타입을 바꿀 때마다 조절 가능한 옵션(각도, 중심 위치 등)이 함께 바뀌고, 미리보기가 실시간으로 갱신됩니다. 세 타입을 직접 전환해 보며 어떤 형태가 원하는 느낌에 가까운지 눈으로 비교하는 것이 가장 빠릅니다.",
+            ],
+          },
+          {
+            heading: "색상 정지점으로 분위기 만들기",
+            body: [
+              "그라디언트의 인상은 색상 정지점(color stop)의 개수와 위치에서 결정됩니다. 두 색만 부드럽게 잇는 2정지점 그라디언트는 차분하고 신뢰감 있는 느낌을 주고, 정지점을 여러 개 두면 화려하고 생동감 있는 배경을 만들 수 있습니다. 정지점 위치를 한쪽으로 몰면 색 전환이 급해지고, 고르게 벌리면 전환이 완만해집니다.",
+              "자연스러운 그라디언트를 만드는 요령은 명도뿐 아니라 색상(hue)도 함께 조금씩 옮기는 것입니다. 같은 색의 밝기만 바꾸면 칙칙해 보이기 쉬우므로, 인접한 색상으로 살짝 이동시키면 훨씬 생기 있는 결과가 나옵니다.",
+            ],
+          },
+          {
+            heading: "복사한 CSS를 바로 쓰기",
+            body: [
+              "완성된 그라디언트는 background 속성에 그대로 넣을 수 있는 CSS 코드로 복사됩니다. 별도의 이미지 파일이 아니라 코드이기 때문에 화면 크기에 따라 깨지지 않고, 용량 부담도 없으며, 나중에 색만 살짝 바꾸기도 쉽습니다.",
+              "linear·radial 그라디언트는 모든 모던 브라우저에서 동작하고 conic-gradient도 최신 브라우저에서 폭넓게 지원됩니다. 만든 그라디언트를 보관하고 싶다면 생성된 CSS 코드를 복사해 두면 됩니다. 같은 코드를 다시 붙여넣으면 언제든 동일한 결과를 재현할 수 있습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Edit linear, radial and conic gradients visually and copy the CSS instantly.",
@@ -1277,6 +1547,29 @@ export const TOOLS: Tool[] = [
           how: "Pick a type and angle, drag color stops on the track, watch the live preview update, then copy the resulting CSS.",
           why: "You can build gradients by eye without memorizing the syntax, speeding up both mockups and code.",
         },
+        guide: [
+          {
+            heading: "Understanding the three gradient types",
+            body: [
+              "CSS gradients come in three kinds. linear-gradient spreads color in a straight line along an angle you set — the most common form, used for buttons, backgrounds, and hero sections. radial-gradient radiates outward from a point, great for soft lighting or a spotlight effect, and conic-gradient rotates color around a center by angle, well suited to pie charts and color wheels.",
+              "In this tool, switching the type also switches the options you can adjust (angle, center position, and so on), and the preview updates live. The fastest way to choose is to flip between the three types and compare by eye which shape is closest to the feel you want.",
+            ],
+          },
+          {
+            heading: "Setting the mood with color stops",
+            body: [
+              "A gradient's character comes from the number and placement of its color stops. A two-stop gradient that eases between two colors feels calm and trustworthy, while several stops can build a vivid, energetic background. Bunching the stops to one side makes the color transition abrupt; spreading them evenly makes it gradual.",
+              "The trick to a natural-looking gradient is to shift the hue a little, not just the brightness. Changing only the lightness of a single color tends to look muddy, so nudging toward an adjacent hue gives a far livelier result.",
+            ],
+          },
+          {
+            heading: "Putting the copied CSS to work",
+            body: [
+              "The finished gradient copies out as CSS you can drop straight into a background property. Because it's code rather than an image file, it never pixelates at different screen sizes, adds no file weight, and is easy to re-tint later.",
+              "Linear and radial gradients work in every modern browser, and conic-gradient is widely supported in current ones. To keep a gradient you like, just copy the generated CSS — pasting the same code reproduces the exact result any time.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1632,6 +1925,29 @@ export const TOOLS: Tool[] = [
           how: "텍스트를 입력하거나 붙여넣으면 즉시 공백 포함·제외 글자 수와 예상 읽기 시간, 주요 SNS별 남은 글자 수를 보여줍니다.",
           why: "플랫폼별 글자 수 제한을 한 화면에서 확인할 수 있어, 글을 올리기 전에 따로 세어보거나 잘릴 걱정을 할 필요가 없습니다.",
         },
+        guide: [
+          {
+            heading: "글자 수는 왜 세어야 할까요",
+            body: [
+              "짧은 글일수록 길이 제한이 결과를 좌우합니다. 자기소개서 항목에는 '500자 이내'처럼 명확한 상한이 있고, SNS는 플랫폼마다 허용 글자 수가 다르며, 메타 설명이나 광고 문구는 일정 길이를 넘으면 뒤가 잘려 노출됩니다. 이런 글은 '대충 이 정도'로 쓰면 반드시 다시 손봐야 하므로, 쓰는 동안 실시간으로 길이를 보는 것이 가장 효율적입니다.",
+              "이 카운터는 텍스트를 입력하거나 붙여넣는 즉시 글자·단어·문장·줄·단락 수를 갱신합니다. 공백을 포함한 수와 제외한 수를 함께 보여주기 때문에, '공백 제외 300자'처럼 조건이 붙는 지원서나 과제에도 바로 맞출 수 있습니다.",
+            ],
+          },
+          {
+            heading: "한글·영어·이모지를 어떻게 세나요",
+            body: [
+              "글자 수 계산은 언어에 따라 헷갈리기 쉽습니다. 이 도구는 한글 한 글자, 영문 한 글자, 숫자, 문장 부호를 모두 1글자로 세고, 이모지처럼 여러 코드로 이루어진 문자도 눈에 보이는 대로 한 글자로 계산합니다. 단어 수는 공백과 줄바꿈을 기준으로 구분하므로, 영문 글쓰기에서 흔히 요구하는 '단어 수' 기준에도 그대로 활용할 수 있습니다.",
+              "발표 대본이나 영상 스크립트를 준비할 때는 예상 읽기·말하기 시간이 도움이 됩니다. 분당 읽기 속도와 발화 속도를 기준으로 대략적인 소요 시간을 알려주므로, 정해진 시간 안에 들어가는 분량인지 미리 가늠할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "안전하게, 그리고 바로",
+            body: [
+              "자기소개서 초안이나 미공개 공지처럼 남에게 보이고 싶지 않은 글을 다룰 때가 많습니다. 이 카운터는 모든 집계를 브라우저 안에서만 처리하고, 입력한 텍스트를 서버로 전송하거나 저장하지 않습니다. 탭을 닫으면 내용도 함께 사라지므로 흔적이 남지 않습니다.",
+              "설치나 로그인 없이 페이지를 열면 바로 쓸 수 있어, 글을 쓰다가 길이만 빠르게 확인하고 다시 작업으로 돌아오는 흐름을 끊지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Live counts of characters, words, sentences and lines. With social limits.",
@@ -1644,6 +1960,29 @@ export const TOOLS: Tool[] = [
           how: "Type or paste text and it instantly shows counts with and without spaces, estimated reading time, and remaining characters for major social platforms.",
           why: "You can check every platform's length limit on one screen, so nothing gets cut off after you post.",
         },
+        guide: [
+          {
+            heading: "Why count characters at all?",
+            body: [
+              "The shorter the text, the more a length limit shapes the outcome. Application fields cap you at something like 500 characters, social platforms each allow a different amount, and a meta description or ad headline gets truncated once it passes a certain length. Writing these by feel almost always means going back to trim, so watching the length live as you write is the efficient way.",
+              "This counter updates characters, words, sentences, lines, and paragraphs the moment you type or paste. It shows the count both with and without spaces, so you can hit requirements phrased as 'up to 300 characters excluding spaces' without guessing.",
+            ],
+          },
+          {
+            heading: "How it counts Latin, CJK, and emoji",
+            body: [
+              "Counting is easy to get wrong across languages. This tool counts each Korean or Chinese character, each Latin letter, digit, and punctuation mark as one character, and treats an emoji — even one built from several code points — as the single character you actually see. Words are split on spaces and line breaks, so it works for the word-count requirements common in English writing too.",
+              "When you're preparing a talk or a video script, the estimated reading and speaking time helps. Based on a per-minute reading and speaking rate, it gives you a rough duration so you can tell in advance whether your draft fits the time you have.",
+            ],
+          },
+          {
+            heading: "Private, and ready right away",
+            body: [
+              "You're often working with things you'd rather not share yet — a résumé draft, an unpublished announcement. This counter does all of its counting inside your browser and never uploads or stores the text you enter. Close the tab and the content is gone, leaving nothing behind.",
+              "With no install and no login, it's ready the moment the page opens, so you can glance at the length and get straight back to writing without breaking your flow.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1713,8 +2052,8 @@ export const TOOLS: Tool[] = [
     badge: "Clean SaaS",
     name: { ko: "연봉 실수령액 계산기", en: "Salary Net Pay Calculator" },
     relatedTools: [
-      "percentage-increase-calculator",
       "growth-rate-calculator",
+      "time-converter",
       "flex-work-calculator",
     ],
     seo: {
@@ -1762,6 +2101,29 @@ export const TOOLS: Tool[] = [
           how: "연봉 또는 월급을 입력하면 비과세액을 뺀 과세소득으로 국민연금·건강보험·장기요양·고용보험을 계산하고, 근로소득 간이세액표 방식을 근사해 근로소득세와 지방소득세를 산출한 뒤 모두 더해 실수령액을 구합니다. 부양가족 수, 20세 이하 자녀 수, 원천징수 선택비율을 반영합니다.",
           why: "광고가 많고 입력이 복잡한 다른 계산기 대신, 입력하면 바로 결과가 나오는 빠른 예상 계산기로 연봉협상·이직 비교를 몇 초 만에 끝낼 수 있기 때문입니다.",
         },
+        guide: [
+          {
+            heading: "세전 연봉과 실수령액은 왜 다를까",
+            body: [
+              "'연봉 4천만원'이라고 할 때의 금액은 세금과 보험료를 떼기 전의 세전 금액입니다. 실제로 통장에 들어오는 돈은 여기서 4대보험(국민연금·건강보험·장기요양보험·고용보험)과 근로소득세·지방소득세를 뺀 실수령액이며, 연봉 구간에 따라 세전 금액의 대략 8~18%가 공제됩니다. 그래서 같은 '연봉'이라도 세전으로 비교하느냐 실수령으로 비교하느냐에 따라 체감이 크게 달라집니다.",
+              "이 계산기는 세전 연봉이나 월급을 입력하면 각 항목이 얼마씩 빠지는지 표로 나눠 보여주고, 월 실수령액과 연 실수령액을 함께 계산합니다. 어떤 공제가 실수령액을 가장 많이 줄이는지 눈으로 확인할 수 있어, 급여명세서를 처음 받아보는 사회초년생이 구조를 이해하는 데도 도움이 됩니다.",
+            ],
+          },
+          {
+            heading: "결과를 바꾸는 입력 항목들",
+            body: [
+              "실수령액은 연봉 금액만으로 정해지지 않습니다. 식대 같은 비과세 금액은 세금과 보험료 계산에서 빠지므로 비과세액이 클수록 실수령액이 늘어납니다. 부양가족 수와 20세 이하 자녀 수는 근로소득세를 줄이는 방향으로 작용하고, 매월 떼는 세금 비율을 정하는 원천징수 선택비율(80·100·120%)도 월 실수령액에 영향을 줍니다.",
+              "특히 원천징수 비율은 오해하기 쉬운 항목입니다. 80%를 고르면 매달 세금을 덜 떼어 월 실수령액이 늘지만 연말정산에서 그만큼 더 낼 수 있고, 120%는 반대로 매달 더 떼는 대신 연말에 돌려받을 가능성이 커집니다. 연간 총 세액 자체는 같으므로, 매달 받는 금액과 연말 정산 시점 중 어느 쪽을 선호하는지의 문제입니다.",
+            ],
+          },
+          {
+            heading: "예상치로 현명하게 쓰는 법",
+            body: [
+              "이 계산기는 최신 4대보험 요율과 근로소득 간이세액표 방식을 근사한 예상값을 제공합니다. 회사별 비과세 항목, 상여·성과급, 중도 입퇴사, 각종 소득공제, 최종 연말정산 결과까지는 반영하지 않으므로 실제 급여명세서와는 차이가 있을 수 있습니다. 정확한 세액은 국세청 홈택스나 회사 급여 담당 부서를 통해 확인하는 것이 좋습니다.",
+              "그럼에도 이런 빠른 예상 계산이 유용한 이유는, 이직 제안을 비교하거나 연봉협상 목표를 잡을 때 '이 연봉이면 매달 대략 얼마가 들어오는지'를 몇 초 안에 감 잡을 수 있기 때문입니다. 여러 금액을 바꿔 넣어보며 협상 구간을 잡는 용도로 활용해 보세요.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Estimate monthly & yearly take-home pay from gross salary after Korea's insurances and taxes, with a full breakdown.",
@@ -1778,6 +2140,29 @@ export const TOOLS: Tool[] = [
           how: "Enter an annual or monthly amount; the calculator subtracts the non-taxable portion, computes National Pension, Health, Long-Term Care and Employment Insurance on the taxable base, and approximates income and local tax from Korea's simplified withholding tax table. It reflects the number of dependents, children under 20 and the chosen withholding rate.",
           why: "Unlike ad-heavy calculators with long forms, it returns a result the moment you type, so you can finish a salary comparison or negotiation check in seconds.",
         },
+        guide: [
+          {
+            heading: "Why gross salary and take-home pay differ",
+            body: [
+              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax — roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
+              "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure — useful especially for someone reading their first payslip.",
+            ],
+          },
+          {
+            heading: "The inputs that change the result",
+            body: [
+              "Take-home pay isn't set by the salary figure alone. A non-taxable amount such as a meal allowance is excluded from the tax and insurance base, so a larger non-taxable amount raises your net pay. The number of dependents and children under 20 lowers income tax, and the withholding rate you choose (80/100/120%) shifts how much tax is taken each month.",
+              "The withholding rate is the piece most people misread. Choosing 80% withholds less each month — raising monthly net pay — but you may owe more at year-end settlement; 120% does the opposite, withholding more monthly with a better chance of a refund. The total annual tax is the same either way, so it comes down to whether you'd rather have the money monthly or at settlement.",
+            ],
+          },
+          {
+            heading: "Using it wisely as an estimate",
+            body: [
+              "This calculator gives an estimate that approximates the latest insurance rates and Korea's simplified withholding tax table. It does not account for company-specific non-taxable items, bonuses, mid-year joining or leaving, various deductions, or your final year-end settlement, so it can differ from your actual payslip. For an exact figure, check Hometax or your payroll department.",
+              "It's still useful precisely because it's fast: when comparing job offers or setting a negotiation target, you can grasp roughly what a given salary means per month in seconds. Try several figures to map out your negotiation range.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -2352,271 +2737,128 @@ export const TOOLS: Tool[] = [
     slug: "growth-rate-calculator",
     layout: "card",
     cat: "text",
-    targets: ["pm", "office-worker", "small-business-owner", "developer"],
+    targets: ["pm", "marketer", "office-worker", "small-business-owner", "developer"],
     ico: "%↑",
     ready: true,
     badge: "Calculator",
     name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
-    relatedTools: ["cagr-calculator", "goal-growth-calculator", "mom-growth-calculator"],
+    relatedTools: ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"],
     seo: {
       ko: {
-        title: "성장률 계산기 — 시작값과 종료값으로 성장률 계산",
+        title: "성장률 계산기 — 퍼센트 증감률·MoM·YoY·QoQ·WoW 계산",
         description:
-          "시작 값과 종료 값을 입력하면 성장률(%), 차이, 배수를 즉시 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능. 브라우저 안에서만 동작합니다.",
-        keywords: ["성장률 계산기", "growth rate calculator", "성장률 계산", "퍼센트 변화"],
+          "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 MoM·YoY·QoQ·WoW 성장률까지 이 계산기 하나로 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
+        keywords: [
+          "성장률 계산기", "퍼센트 증감률 계산기", "변화율 계산기", "증가율 계산기", "감소율 계산기",
+          "MoM 계산기", "YoY 계산기", "QoQ 계산기", "WoW 계산기",
+          "MoM 성장률", "YoY 성장률", "QoQ 성장률", "WoW 성장률",
+          "growth rate calculator", "percentage change calculator",
+        ],
       },
       en: {
-        title: "Growth Rate Calculator — Calculate Growth Rate Instantly",
+        title: "Growth Rate Calculator — % Change, MoM, YoY, QoQ, WoW",
         description:
-          "Enter a start value and end value to instantly calculate growth rate (%), difference, and multiplier. Works for revenue, users, traffic, or any metric. Runs entirely in your browser.",
-        keywords: ["growth rate calculator", "calculate growth rate", "percentage growth", "growth percentage calculator"],
+          "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. One calculator covers percentage increase and decrease as well as MoM, YoY, QoQ, and WoW growth. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+        keywords: [
+          "growth rate calculator", "percentage change calculator", "percentage increase calculator",
+          "percentage decrease calculator", "MoM growth calculator", "YoY growth calculator",
+          "QoQ growth calculator", "WoW growth calculator", "percent change calculator",
+        ],
       },
     },
     content: {
       ko: {
-        card: "시작값·종료값으로 성장률·차이·배수 즉시 계산.",
+        card: "이전값·현재값으로 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 즉시 계산.",
         description:
-          "시작 값과 종료 값을 입력하면 성장률(%), 차이, 배수를 즉시 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["시작 값 입력", "종료 값 입력", "성장률·차이·배수 확인 및 복사"],
+          "이전 값과 현재 값을 입력하면 성장률(%), 퍼센트 증감률, 차이, 배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 지난달 대비(MoM)·전년 대비(YoY)·전분기 대비(QoQ)·전주 대비(WoW) 성장률까지 모두 같은 공식이라 이 계산기 하나로 구할 수 있습니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["비교 기준이 되는 이전(시작) 값 입력", "현재(종료) 값 입력", "성장률·증감률·차이·배수 확인 및 복사"],
         aeo: {
-          what: "성장률 계산기는 두 값 사이의 변화율을 퍼센트로 계산해주는 도구입니다. 시작 값과 종료 값을 입력하면 성장률, 차이, 배수를 즉시 보여줍니다.",
-          who: "매출·사용자 수·트래픽 등 수치 변화를 분석해야 하는 PM, 마케터, 비즈니스 담당자, 개발자를 위한 도구입니다.",
-          how: "시작 값과 종료 값을 입력하면 (종료−시작)÷시작×100 공식으로 성장률을 즉시 계산합니다.",
-          why: "수기 계산 없이 정확한 성장률을 빠르게 얻을 수 있어 보고서 작성이나 데이터 분석 시 시간을 절약할 수 있습니다.",
+          what: "성장률 계산기는 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 빠르게 계산하기 위한 통합 도구입니다. 성장률 계산기 · MoM 계산기 · YoY 계산기 · QoQ 계산기 · WoW 계산기 · 변화율(증가율·감소율) 계산기가 모두 동일한 (현재−이전)÷이전×100 공식을 쓰기 때문에, 이전 값과 현재 값만 입력하면 성장률과 증감률, 차이, 배수를 한 화면에서 보여줍니다.",
+          who: "매출·사용자 수·트래픽·지표 변화를 분석하는 PM, 마케터, 데이터 담당자, 소상공인, 개발자를 위한 도구입니다. 월간(MoM)·연간(YoY)·분기(QoQ)·주간(WoW) 성장률을 보고서에 담아야 하는 사람에게 특히 유용합니다.",
+          how: "이전 값과 현재 값을 입력하면 (현재−이전)÷이전×100 공식으로 성장률을 즉시 계산합니다. 결과가 양수면 증가율, 음수면 감소율이며, 비교 기간을 지난달·작년·지난 분기·지난주로 두면 각각 MoM·YoY·QoQ·WoW 성장률이 됩니다.",
+          why: "성장률·변화율·MoM·YoY·QoQ·WoW를 계산하려고 서로 다른 도구를 오갈 필요 없이, 수기 계산 없이 정확한 값을 한 번에 얻어 보고서 작성과 데이터 분석 시간을 줄일 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "하나의 공식, 여러 이름",
+            body: [
+              "성장률, 퍼센트 증감률, 변화율, 증가율, 감소율은 이름은 달라도 계산 방법이 같습니다. 모두 (현재 값 − 이전 값) ÷ 이전 값 × 100이라는 하나의 공식으로 구합니다. 결과가 양수면 흔히 '증가율', 음수면 '감소율'이라고 부를 뿐, 계산 자체는 동일합니다. 그래서 증가율 계산기와 감소율 계산기를 따로 찾을 필요 없이 이 성장률 계산기 하나로 두 경우를 모두 처리할 수 있습니다.",
+              "비교하는 두 값이 무엇이냐에 따라 부르는 이름만 달라집니다. 이전 값과 현재 값 자리에 어떤 숫자를 넣든 계산기는 같은 방식으로 증감률을 알려줍니다.",
+            ],
+          },
+          {
+            heading: "MoM · YoY · QoQ · WoW 성장률도 이 계산기로",
+            body: [
+              "비즈니스 지표에서 자주 쓰는 MoM·YoY·QoQ·WoW 성장률도 결국 같은 증감률 계산입니다. MoM(Month over Month) 성장률은 지난달 값과 이번달 값을, YoY(Year over Year) 성장률은 작년 값과 올해 값을, QoQ(Quarter over Quarter) 성장률은 지난 분기와 이번 분기를, WoW(Week over Week) 성장률은 지난주와 이번주 값을 비교하는 것뿐입니다.",
+              "예를 들어 지난달 매출 10,000, 이번달 매출 12,500이라면 이전 값에 10,000, 현재 값에 12,500을 넣어 MoM 성장률 +25%를 얻습니다. 같은 방식으로 작년/올해 숫자를 넣으면 YoY, 분기 숫자를 넣으면 QoQ, 주간 숫자를 넣으면 WoW 성장률이 됩니다. 별도의 MoM 계산기·YoY 계산기·QoQ 계산기·WoW 계산기를 오갈 필요가 없습니다.",
+            ],
+          },
+          {
+            heading: "성장률을 읽는 법과 활용",
+            body: [
+              "계산기는 증감률(%)과 함께 절대 차이, 배수를 같이 보여줍니다. 배수는 현재 값이 이전 값의 몇 배인지를 뜻하며(예: 1.25×), 증감률과 함께 보면 변화의 크기를 더 직관적으로 파악할 수 있습니다. 이전 값이 0이면 0으로 나누게 되어 성장률을 계산할 수 없으므로, 이 경우 시작점을 0이 아닌 값으로 잡아야 합니다.",
+              "매출·트래픽·구독자·전환 수 등 어떤 수치든 넣어 보고서의 성장 지표를 채우거나, 목표 대비 진척을 점검할 때 활용하세요. 모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
-        card: "Calculate growth rate, difference, and multiplier from two values.",
+        card: "Instantly calculate growth rate, % change, and MoM/YoY/QoQ/WoW from two values.",
         description:
-          "Enter a start value and end value to instantly calculate growth rate (%), difference, and multiplier. Works for revenue, users, traffic, or any metric. Runs entirely in your browser.",
-        howItWorks: ["Enter the start value", "Enter the end value", "Read or copy the growth rate, difference, and multiplier"],
+          "Enter a previous and current value to instantly calculate growth rate (%), percentage change, difference, and multiplier. Percentage increase and decrease, plus month-over-month (MoM), year-over-year (YoY), quarter-over-quarter (QoQ), and week-over-week (WoW) growth all share the same formula, so this one calculator covers them all. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+        howItWorks: ["Enter the previous (starting) value", "Enter the current (ending) value", "Read or copy the growth rate, change, difference, and multiplier"],
         aeo: {
-          what: "A Growth Rate Calculator computes the percentage change between two values. Enter a start and end value to instantly see the growth rate, difference, and multiplier.",
-          who: "It is for PMs, marketers, analysts, and business owners who need to measure the change in revenue, users, traffic, or any numeric metric.",
-          how: "Enter start and end values; the calculator applies (End − Start) / Start × 100 and returns the growth rate, signed difference, and multiplier instantly.",
-          why: "It eliminates manual calculation and speeds up reporting — paste the values, get the number, move on.",
+          what: "A Growth Rate Calculator is a unified tool for quickly calculating growth rate, percentage change, and MoM, YoY, QoQ, and WoW growth. A growth rate calculator, MoM calculator, YoY calculator, QoQ calculator, WoW calculator, and percentage increase/decrease calculator all use the same (Current − Previous) / Previous × 100 formula, so entering a previous and current value shows the growth rate, change, difference, and multiplier on one screen.",
+          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric — especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth.",
+          how: "Enter a previous and current value and it applies (Current − Previous) / Previous × 100. A positive result is a percentage increase and a negative one a decrease; set the comparison period to last month, last year, last quarter, or last week to read it as MoM, YoY, QoQ, or WoW growth.",
+          why: "Instead of hopping between separate tools for growth rate, percentage change, and MoM/YoY/QoQ/WoW, you get an accurate number in one place with no manual math — saving time on reports and analysis.",
         },
+        guide: [
+          {
+            heading: "One formula, many names",
+            body: [
+              "Growth rate, percentage change, percent increase, and percent decrease are different names for the same calculation. Each is (Current − Previous) / Previous × 100. A positive result is usually called an increase and a negative one a decrease, but the math is identical — so there's no need for a separate percentage increase calculator and percentage decrease calculator; this growth rate calculator handles both.",
+              "Only the label changes depending on which two values you compare. Whatever numbers you put in the previous and current fields, the calculator returns the change the same way.",
+            ],
+          },
+          {
+            heading: "MoM, YoY, QoQ, and WoW growth too",
+            body: [
+              "The MoM, YoY, QoQ, and WoW growth figures common in business reporting are the same percentage-change calculation. MoM (month over month) compares last month with this month, YoY (year over year) compares last year with this year, QoQ (quarter over quarter) compares consecutive quarters, and WoW (week over week) compares last week with this week.",
+              "For example, with last month's revenue at 10,000 and this month's at 12,500, enter 10,000 as the previous value and 12,500 as the current value to get a MoM growth of +25%. Use last-year/this-year numbers for YoY, quarterly numbers for QoQ, and weekly numbers for WoW — no need to switch between a separate MoM, YoY, QoQ, or WoW calculator.",
+            ],
+          },
+          {
+            heading: "Reading and using the result",
+            body: [
+              "Alongside the percentage change, the calculator shows the absolute difference and the multiplier. The multiplier tells you how many times the previous value the current value is (e.g. 1.25×), which makes the size of the change easier to grasp. If the previous value is zero, the growth rate is undefined because it would divide by zero, so pick a non-zero starting point.",
+              "Use it with any metric — revenue, traffic, subscribers, conversions — to fill in the growth figures in a report or to check progress toward a goal. Every calculation runs in your browser and the numbers you enter are never sent to a server.",
+            ],
+          },
+        ],
       },
     },
     faq: {
       ko: [
-        { question: "성장률이란 무엇인가요?", answer: "성장률은 두 시점 사이의 값 변화를 퍼센트로 나타낸 지표입니다. (종료−시작)÷시작×100으로 계산합니다." },
-        { question: "성장률이 음수가 될 수 있나요?", answer: "네. 종료 값이 시작 값보다 작으면 성장률은 음수(감소)로 표시됩니다." },
-        { question: "시작 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 성장률을 계산할 수 없습니다. 오류 메시지가 표시됩니다." },
+        { question: "성장률이란 무엇인가요?", answer: "성장률은 두 시점 사이의 값 변화를 퍼센트로 나타낸 지표입니다. (현재−이전)÷이전×100으로 계산하며, 퍼센트 증감률·변화율과 같은 계산입니다." },
+        { question: "MoM·YoY·QoQ·WoW 성장률도 이 계산기로 구하나요?", answer: "네. MoM(지난달 대비)·YoY(작년 대비)·QoQ(지난 분기 대비)·WoW(지난주 대비) 성장률은 모두 같은 증감률 공식을 씁니다. 비교할 두 기간의 값을 이전 값·현재 값에 넣으면 됩니다." },
+        { question: "증가율과 감소율은 어떻게 구분되나요?", answer: "계산 방법은 같습니다. 결과가 양수(+)면 증가율, 음수(−)면 감소율로 표시됩니다. 별도의 증가율·감소율 계산기가 필요 없습니다." },
+        { question: "퍼센트 증감률과 성장률은 다른가요?", answer: "부르는 이름만 다를 뿐 계산은 동일합니다. 두 값의 상대적 변화를 퍼센트로 나타낸 것으로, 상황에 따라 성장률·변화율·증감률로 불립니다." },
+        { question: "이전 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 성장률을 계산할 수 없습니다. 오류 메시지가 표시되며, 시작점을 0이 아닌 값으로 잡아야 합니다." },
+        { question: "입력한 숫자가 서버로 전송되나요?", answer: "아니요. 모든 계산은 브라우저 안에서 처리되며 입력값은 서버로 전송·저장되지 않습니다." },
       ],
       en: [
-        { question: "What is growth rate?", answer: "Growth rate measures the percentage change between two values over a period. It is calculated as (End − Start) / Start × 100." },
-        { question: "Can growth rate be negative?", answer: "Yes. If the end value is lower than the start value, the growth rate will be negative, indicating a decline." },
-        { question: "What happens if the start value is zero?", answer: "Division by zero is undefined, so growth rate cannot be calculated. An error message will appear." },
+        { question: "What is growth rate?", answer: "Growth rate is the percentage change between two values, calculated as (Current − Previous) / Previous × 100. It is the same calculation as percentage change." },
+        { question: "Can I calculate MoM, YoY, QoQ, and WoW growth here?", answer: "Yes. MoM (vs last month), YoY (vs last year), QoQ (vs last quarter), and WoW (vs last week) growth all use the same percentage-change formula. Just enter the two periods' values as previous and current." },
+        { question: "How are percentage increase and decrease different?", answer: "The calculation is identical. A positive result is a percentage increase and a negative result is a percentage decrease, so no separate increase or decrease calculator is needed." },
+        { question: "Are percentage change and growth rate different?", answer: "Only the name differs — the math is the same relative change between two values expressed as a percent, called growth rate, percentage change, or percent change depending on context." },
+        { question: "What happens if the previous value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message appears and you should choose a non-zero starting point." },
+        { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
     },
     og: {
-      ko: { title: "성장률 계산기", subtitle: "시작값·종료값으로 성장률·차이·배수 즉시 계산" },
-      en: { title: "Growth Rate Calculator", subtitle: "Calculate growth rate, difference & multiplier instantly" },
-    },
-  },
-
-  {
-    slug: "percentage-change-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "office-worker", "small-business-owner"],
-    ico: "Δ%",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "퍼센트 변화율 계산기", en: "Percentage Change Calculator" },
-    relatedTools: ["growth-rate-calculator", "cagr-calculator", "mom-growth-calculator"],
-    seo: {
-      ko: {
-        title: "퍼센트 변화율 계산기 — 증가·감소 자동 판단",
-        description:
-          "이전 값과 현재 값을 입력하면 변화율(%)을 자동으로 계산합니다. 증가·감소를 자동으로 판단하며, 차이와 배수도 함께 표시합니다.",
-        keywords: ["퍼센트 변화율 계산기", "percentage change calculator", "변화율 계산", "증가율 감소율"],
-      },
-      en: {
-        title: "Percentage Change Calculator — Auto-detect Increase or Decrease",
-        description:
-          "Enter an old value and new value to calculate the percentage change automatically. Detects increase or decrease, and also shows absolute difference and multiplier.",
-        keywords: ["percentage change calculator", "percent change calculator", "calculate percentage change", "increase decrease calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "이전 값과 현재 값으로 변화율·차이·배수 계산.",
-        description:
-          "이전 값과 현재 값을 입력하면 변화율(%)을 자동으로 계산합니다. 증가·감소를 자동으로 판단하며, 차이와 배수도 함께 표시합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["이전 값 입력", "현재 값 입력", "변화율·방향·차이 확인"],
-        aeo: {
-          what: "퍼센트 변화율 계산기는 두 값의 변화를 퍼센트로 계산하고 증가·감소를 자동으로 구분해주는 도구입니다.",
-          who: "수치 변화를 빠르게 확인해야 하는 비즈니스 담당자, PM, 마케터, 오피스 워커를 위한 도구입니다.",
-          how: "(새 값 − 이전 값) ÷ |이전 값| × 100 공식으로 변화율을 계산하고, 양수·음수에 따라 방향을 표시합니다.",
-          why: "증가인지 감소인지 별도로 계산할 필요 없이 하나의 계산기로 방향·비율·차이를 한눈에 확인할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate percentage change with automatic increase/decrease detection.",
-        description:
-          "Enter an old value and new value to calculate the percentage change automatically. Detects increase or decrease, and also shows absolute difference and multiplier.",
-        howItWorks: ["Enter the previous value", "Enter the current value", "Read the change rate, direction, and difference"],
-        aeo: {
-          what: "A Percentage Change Calculator computes the percentage difference between two values and automatically identifies whether it is an increase or decrease.",
-          who: "It is for business professionals, PMs, marketers, and office workers who need to quickly assess how a metric has changed.",
-          how: "The formula (New − Old) / |Old| × 100 is applied; the sign determines the direction, which the calculator labels as Increase or Decrease.",
-          why: "It saves you from mentally tracking the sign and handles both directions in one place — no need for separate increase/decrease calculators.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "퍼센트 변화율이란 무엇인가요?", answer: "두 값 사이의 변화를 퍼센트로 나타낸 수치입니다. (새 값 − 이전 값) ÷ 이전 값 × 100으로 계산합니다." },
-        { question: "성장률 계산기와 다른가요?", answer: "계산식은 동일합니다. 퍼센트 변화율은 증가와 감소를 모두 포함하는 일반 용어이고, 성장률은 주로 긍정적 변화에 사용됩니다." },
-        { question: "결과가 음수로 나오면 무엇을 의미하나요?", answer: "현재 값이 이전 값보다 작다는 의미로, 해당 지표가 감소했음을 나타냅니다." },
-      ],
-      en: [
-        { question: "What is percentage change?", answer: "Percentage change measures how much a value has changed relative to its original value, expressed as a percentage: (New − Old) / Old × 100." },
-        { question: "Is this different from a growth rate calculator?", answer: "The formula is identical. Percentage change is the general term covering both increases and decreases; growth rate is more commonly used for positive changes." },
-        { question: "What does a negative result mean?", answer: "A negative percentage change means the current value is lower than the previous value — the metric has declined." },
-      ],
-    },
-    og: {
-      ko: { title: "퍼센트 변화율 계산기", subtitle: "증가·감소 자동 판단, 변화율·차이·배수 즉시 계산" },
-      en: { title: "Percentage Change Calculator", subtitle: "Auto-detect increase or decrease — calculate % change instantly" },
-    },
-  },
-
-  {
-    slug: "percentage-increase-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "office-worker", "small-business-owner"],
-    ico: "+%",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "증가율 계산기", en: "Percentage Increase Calculator" },
-    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "goal-growth-calculator"],
-    seo: {
-      ko: {
-        title: "증가율 계산기 — 원래 값에서 얼마나 증가했나?",
-        description:
-          "원래 값과 증가된 값을 입력하면 증가율(%)을 즉시 계산합니다. 매출·가격·수량 등 숫자 증가율을 빠르게 확인하세요.",
-        keywords: ["증가율 계산기", "percentage increase calculator", "증가율 계산", "퍼센트 증가"],
-      },
-      en: {
-        title: "Percentage Increase Calculator — How Much Did It Increase?",
-        description:
-          "Enter the original value and the increased value to instantly calculate the percentage increase. Works for revenue, price, headcount, or any numeric metric.",
-        keywords: ["percentage increase calculator", "percent increase calculator", "calculate percentage increase", "how much did it increase"],
-      },
-    },
-    content: {
-      ko: {
-        card: "원래 값과 증가된 값으로 증가율 즉시 계산.",
-        description:
-          "원래 값과 증가된 값을 입력하면 증가율(%)을 즉시 계산합니다. 매출·가격·수량 등 숫자 증가율을 빠르게 확인하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["원래 값 입력", "증가된 값 입력", "증가율·차이·배수 확인"],
-        aeo: {
-          what: "증가율 계산기는 값이 얼마나 증가했는지 퍼센트로 계산해주는 도구입니다.",
-          who: "매출·수량·가격 등 수치 증가를 분석해야 하는 비즈니스 담당자와 오피스 워커를 위한 도구입니다.",
-          how: "(증가된 값 − 원래 값) ÷ 원래 값 × 100 공식으로 증가율을 즉시 계산합니다.",
-          why: "손으로 계산할 필요 없이 원래 값과 최종 값만 입력하면 즉시 증가율을 알 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate the percentage increase between two values instantly.",
-        description:
-          "Enter the original value and the increased value to instantly calculate the percentage increase. Works for revenue, price, headcount, or any numeric metric.",
-        howItWorks: ["Enter the original value", "Enter the increased value", "Read the percentage increase and multiplier"],
-        aeo: {
-          what: "A Percentage Increase Calculator tells you by what percentage a value has grown relative to its original amount.",
-          who: "It is for business owners, analysts, and office workers tracking revenue growth, price hikes, or headcount increases.",
-          how: "The formula (New − Original) / Original × 100 is applied; the result is the percentage increase along with the absolute difference and multiplier.",
-          why: "It removes manual calculation from reporting and lets you confirm an increase instantly with just two numbers.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "증가율과 성장률은 다른가요?", answer: "동일한 개념입니다. 증가율은 양의 변화에 초점을 맞춘 표현이고, 성장률은 비즈니스 지표에서 더 일반적으로 쓰입니다." },
-        { question: "결과가 음수로 나왔어요.", answer: "입력한 증가된 값이 원래 값보다 작은 경우입니다. 이 계산기는 증가율에 특화되어 있지만, 음수 결과도 그대로 표시합니다." },
-        { question: "배수(Multiplier)란 무엇인가요?", answer: "최종 값이 원래 값의 몇 배인지를 나타냅니다. 예를 들어 100이 150이 되면 배수는 1.5입니다." },
-      ],
-      en: [
-        { question: "Is percentage increase the same as growth rate?", answer: "They are the same calculation. Percentage increase focuses on positive changes, while growth rate is the more common business term." },
-        { question: "The result came out negative.", answer: "This means the entered 'increased' value is actually lower than the original. This calculator shows the result regardless of sign." },
-        { question: "What is the multiplier?", answer: "The multiplier shows how many times the final value is relative to the original. For example, if 100 becomes 150, the multiplier is 1.5." },
-      ],
-    },
-    og: {
-      ko: { title: "증가율 계산기", subtitle: "원래 값과 최종 값으로 증가율 즉시 계산" },
-      en: { title: "Percentage Increase Calculator", subtitle: "Calculate the % increase between two values instantly" },
-    },
-  },
-
-  {
-    slug: "percentage-decrease-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "office-worker", "small-business-owner"],
-    ico: "-%",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "감소율 계산기", en: "Percentage Decrease Calculator" },
-    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "required-growth-calculator"],
-    seo: {
-      ko: {
-        title: "감소율 계산기 — 얼마나 감소했나?",
-        description:
-          "원래 값과 감소된 값을 입력하면 감소율(%)을 즉시 계산합니다. 비용·재고·가격 감소 등을 분석할 때 바로 사용하세요.",
-        keywords: ["감소율 계산기", "percentage decrease calculator", "감소율 계산", "퍼센트 감소"],
-      },
-      en: {
-        title: "Percentage Decrease Calculator — How Much Did It Decrease?",
-        description:
-          "Enter the original value and the decreased value to instantly calculate the percentage decrease. Great for analyzing cost reductions, price drops, or inventory changes.",
-        keywords: ["percentage decrease calculator", "percent decrease calculator", "calculate percentage decrease", "how much did it decrease"],
-      },
-    },
-    content: {
-      ko: {
-        card: "원래 값과 감소된 값으로 감소율 즉시 계산.",
-        description:
-          "원래 값과 감소된 값을 입력하면 감소율(%)을 즉시 계산합니다. 비용·재고·가격 감소 등을 분석할 때 바로 사용하세요.",
-        howItWorks: ["원래 값 입력", "감소된 값 입력", "감소율·차이·배수 확인"],
-        aeo: {
-          what: "감소율 계산기는 값이 얼마나 줄었는지 퍼센트로 계산해주는 도구입니다.",
-          who: "비용 절감·가격 인하·재고 감소 등 수치 변화를 추적해야 하는 비즈니스 담당자와 오피스 워커를 위한 도구입니다.",
-          how: "(원래 값 − 새 값) ÷ 원래 값 × 100 공식으로 감소율을 즉시 계산합니다.",
-          why: "수기 계산 없이 두 값만 입력하면 즉시 감소율을 알 수 있어 보고서 작성 시간을 절약할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate the percentage decrease between two values instantly.",
-        description:
-          "Enter the original value and the decreased value to instantly calculate the percentage decrease. Great for analyzing cost reductions, price drops, or inventory changes.",
-        howItWorks: ["Enter the original value", "Enter the decreased value", "Read the percentage decrease and difference"],
-        aeo: {
-          what: "A Percentage Decrease Calculator tells you by what percentage a value has fallen relative to its original amount.",
-          who: "It is for business owners, analysts, and office workers tracking cost reductions, price cuts, or falling metrics.",
-          how: "The formula (Original − New) / Original × 100 is applied to return the percentage decrease, absolute difference, and multiplier.",
-          why: "It removes manual effort from analysis and gives you the exact decrease percentage instantly with just two inputs.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "감소율과 성장률(음수)은 같은가요?", answer: "동일한 계산식입니다. 감소율은 음의 변화에 초점을 맞춘 표현으로, 결과는 절댓값 또는 음수로 표시할 수 있습니다." },
-        { question: "결과가 양수로 나왔어요.", answer: "감소된 값이 원래 값보다 크면 실제로는 증가한 것입니다. 입력값을 다시 확인해주세요." },
-        { question: "배수가 1보다 작게 나오는 이유는 무엇인가요?", answer: "최종 값이 원래 값보다 작기 때문입니다. 배수 0.75는 원래 값의 75%만 남았다는 의미입니다." },
-      ],
-      en: [
-        { question: "Is percentage decrease the same as negative growth?", answer: "Yes, the formula is identical. Percentage decrease focuses on values that have fallen, while negative growth rate expresses the same thing in a business context." },
-        { question: "The result came out positive.", answer: "If the 'decreased' value is actually larger than the original, the result will be positive. Double-check which value goes in which field." },
-        { question: "Why is the multiplier less than 1?", answer: "A multiplier below 1 means the final value is a fraction of the original. A multiplier of 0.75 means 75% of the original value remains." },
-      ],
-    },
-    og: {
-      ko: { title: "감소율 계산기", subtitle: "원래 값과 최종 값으로 감소율 즉시 계산" },
-      en: { title: "Percentage Decrease Calculator", subtitle: "Calculate the % decrease between two values instantly" },
+      ko: { title: "성장률 계산기", subtitle: "성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 즉시 계산" },
+      en: { title: "Growth Rate Calculator", subtitle: "Growth rate, % change and MoM/YoY/QoQ/WoW instantly" },
     },
   },
 
@@ -2629,7 +2871,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Calculator",
     name: { ko: "퍼센트 차이 계산기", en: "Percent Difference Calculator" },
-    relatedTools: ["percentage-change-calculator", "growth-rate-calculator", "cagr-calculator"],
+    relatedTools: ["growth-rate-calculator", "cagr-calculator", "goal-growth-calculator"],
     seo: {
       ko: {
         title: "퍼센트 차이 계산기 — 두 값의 상대적 차이",
@@ -2685,278 +2927,6 @@ export const TOOLS: Tool[] = [
     og: {
       ko: { title: "퍼센트 차이 계산기", subtitle: "두 값의 방향 없는 상대적 차이를 퍼센트로 계산" },
       en: { title: "Percent Difference Calculator", subtitle: "Calculate the relative % difference between two values" },
-    },
-  },
-
-  {
-    slug: "mom-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "MoM",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "MoM 성장률 계산기", en: "MoM Growth Calculator" },
-    relatedTools: ["yoy-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "MoM 성장률 계산기 — 전월 대비 성장률 계산",
-        description:
-          "지난달 값과 이번달 값을 입력하면 전월 대비(MoM) 성장률을 즉시 계산합니다. 매출·유저 수·트래픽 등 월별 성과를 빠르게 확인하세요.",
-        keywords: ["MoM 성장률 계산기", "MoM growth calculator", "전월 대비 성장률", "month over month growth"],
-      },
-      en: {
-        title: "MoM Growth Calculator — Month Over Month Growth Rate",
-        description:
-          "Enter last month's value and this month's value to instantly calculate the month-over-month (MoM) growth rate. Track revenue, users, or traffic changes on a monthly basis.",
-        keywords: ["MoM growth calculator", "month over month growth calculator", "MoM growth rate", "monthly growth calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "지난달·이번달 값으로 MoM 성장률 즉시 계산.",
-        description:
-          "지난달 값과 이번달 값을 입력하면 전월 대비(MoM) 성장률을 즉시 계산합니다. 매출·유저 수·트래픽 등 월별 성과를 빠르게 확인하세요.",
-        howItWorks: ["지난달 값 입력", "이번달 값 입력", "MoM 성장률·차이·방향 확인"],
-        aeo: {
-          what: "MoM 성장률 계산기는 전월 대비 성장률을 퍼센트로 계산해주는 도구입니다. MoM은 Month over Month의 약자입니다.",
-          who: "월별 매출·유저·트래픽 등 비즈니스 지표를 추적하는 PM, 마케터, 스타트업 창업자를 위한 도구입니다.",
-          how: "(이번달 − 지난달) ÷ 지난달 × 100 공식으로 전월 대비 성장률을 즉시 계산합니다.",
-          why: "월별 성과 보고에서 매번 계산할 필요 없이 두 숫자만 입력하면 MoM 수치를 바로 얻을 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate month-over-month (MoM) growth rate from two monthly values.",
-        description:
-          "Enter last month's value and this month's value to instantly calculate the month-over-month (MoM) growth rate. Track revenue, users, or traffic changes on a monthly basis.",
-        howItWorks: ["Enter the previous month's value", "Enter this month's value", "Read the MoM growth rate and direction"],
-        aeo: {
-          what: "A MoM Growth Calculator computes the month-over-month growth rate, showing how much a metric changed from the previous month to the current month as a percentage.",
-          who: "It is for PMs, marketers, and startup founders who report monthly metrics like revenue, active users, or traffic.",
-          how: "The formula (Current − Previous) / Previous × 100 is applied; the result shows the MoM growth rate, absolute difference, and direction.",
-          why: "It speeds up monthly performance reviews by turning two numbers into a MoM percentage in one step.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "MoM이란 무엇인가요?", answer: "MoM은 Month over Month의 약자로, 이번 달 수치가 지난달 대비 얼마나 변했는지를 나타내는 지표입니다." },
-        { question: "MoM과 YoY의 차이는 무엇인가요?", answer: "MoM은 전월 대비, YoY는 전년 동월 대비 변화율입니다. MoM은 단기 트렌드, YoY는 계절성을 제거한 연간 성장을 확인할 때 사용합니다." },
-        { question: "지난달 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 계산할 수 없습니다. 오류 메시지가 표시됩니다." },
-      ],
-      en: [
-        { question: "What does MoM mean?", answer: "MoM stands for Month over Month. It measures how much a metric changed between the current month and the previous month." },
-        { question: "What is the difference between MoM and YoY?", answer: "MoM compares this month to last month; YoY compares this period to the same period last year. MoM tracks short-term trends; YoY removes seasonal variation." },
-        { question: "What if last month's value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message will appear." },
-      ],
-    },
-    og: {
-      ko: { title: "MoM 성장률 계산기", subtitle: "전월 대비(Month over Month) 성장률 즉시 계산" },
-      en: { title: "MoM Growth Calculator", subtitle: "Calculate month-over-month growth rate instantly" },
-    },
-  },
-
-  {
-    slug: "yoy-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "YoY",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "YoY 성장률 계산기", en: "YoY Growth Calculator" },
-    relatedTools: ["mom-growth-calculator", "qoq-growth-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "YoY 성장률 계산기 — 전년 대비 성장률 계산",
-        description:
-          "작년 값과 올해 값을 입력하면 전년 대비(YoY) 성장률을 즉시 계산합니다. 연간 매출·사용자·트래픽 등 연도별 성과 비교에 활용하세요.",
-        keywords: ["YoY 성장률 계산기", "YoY growth calculator", "전년 대비 성장률", "year over year growth"],
-      },
-      en: {
-        title: "YoY Growth Calculator — Year Over Year Growth Rate",
-        description:
-          "Enter last year's value and this year's value to instantly calculate the year-over-year (YoY) growth rate. Compare annual revenue, users, or any metric across two years.",
-        keywords: ["YoY growth calculator", "year over year growth calculator", "YoY growth rate", "annual growth calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "작년·올해 값으로 YoY 성장률 즉시 계산.",
-        description:
-          "작년 값과 올해 값을 입력하면 전년 대비(YoY) 성장률을 즉시 계산합니다. 연간 성과 보고에 바로 사용하세요.",
-        howItWorks: ["작년 값 입력", "올해 값 입력", "YoY 성장률·차이·방향 확인"],
-        aeo: {
-          what: "YoY 성장률 계산기는 올해 수치와 작년 수치를 비교해 연간 성장률을 퍼센트로 계산해주는 도구입니다. YoY는 Year over Year의 약자입니다.",
-          who: "연간 보고서를 작성하거나 연도별 비즈니스 성과를 비교해야 하는 PM, 경영진, 소상공인을 위한 도구입니다.",
-          how: "(올해 − 작년) ÷ 작년 × 100 공식으로 전년 대비 성장률을 즉시 계산합니다.",
-          why: "계절성을 제거한 연간 성장 추세를 단 두 숫자로 빠르게 확인할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate year-over-year (YoY) growth rate from two annual values.",
-        description:
-          "Enter last year's value and this year's value to instantly calculate the year-over-year (YoY) growth rate. Compare annual revenue, users, or any metric across two years.",
-        howItWorks: ["Enter last year's value", "Enter this year's value", "Read the YoY growth rate and direction"],
-        aeo: {
-          what: "A YoY Growth Calculator computes the year-over-year growth rate, comparing a current period to the same period a year ago to eliminate seasonal distortion.",
-          who: "It is for PMs, executives, and small business owners who prepare annual reports or track year-on-year business performance.",
-          how: "The formula (This Year − Last Year) / Last Year × 100 is applied; the result shows the YoY growth rate, absolute difference, and direction.",
-          why: "YoY removes seasonal noise, giving a cleaner view of whether the business is growing, and this calculator delivers that number instantly.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "YoY란 무엇인가요?", answer: "YoY는 Year over Year의 약자로, 이번 연도 수치가 전년도 대비 얼마나 변했는지를 나타내는 지표입니다." },
-        { question: "YoY와 CAGR의 차이는 무엇인가요?", answer: "YoY는 두 연도를 직접 비교한 단순 성장률입니다. CAGR은 여러 해에 걸친 연평균 성장률로, 복리 효과를 반영합니다." },
-        { question: "전년도 값이 음수일 수 있나요?", answer: "가능합니다. 예를 들어 손익이 음수일 때도 계산할 수 있습니다. 다만 해석 시 주의가 필요합니다." },
-      ],
-      en: [
-        { question: "What does YoY mean?", answer: "YoY stands for Year over Year. It measures how much a metric changed between this year and the same period last year." },
-        { question: "What is the difference between YoY and CAGR?", answer: "YoY is a simple growth rate between two specific years. CAGR (Compound Annual Growth Rate) smooths growth over multiple years by accounting for compounding." },
-        { question: "Can the previous year value be negative?", answer: "Yes, for example when comparing losses. However, interpret the result carefully as percentage change from a negative base can be counterintuitive." },
-      ],
-    },
-    og: {
-      ko: { title: "YoY 성장률 계산기", subtitle: "전년 대비(Year over Year) 성장률 즉시 계산" },
-      en: { title: "YoY Growth Calculator", subtitle: "Calculate year-over-year growth rate instantly" },
-    },
-  },
-
-  {
-    slug: "qoq-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "QoQ",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "QoQ 성장률 계산기", en: "QoQ Growth Calculator" },
-    relatedTools: ["mom-growth-calculator", "yoy-growth-calculator", "growth-rate-calculator"],
-    seo: {
-      ko: {
-        title: "QoQ 성장률 계산기 — 전분기 대비 성장률 계산",
-        description:
-          "지난 분기 값과 이번 분기 값을 입력하면 전분기 대비(QoQ) 성장률을 즉시 계산합니다. 분기별 실적 분석에 활용하세요.",
-        keywords: ["QoQ 성장률 계산기", "QoQ growth calculator", "전분기 대비", "quarter over quarter growth"],
-      },
-      en: {
-        title: "QoQ Growth Calculator — Quarter Over Quarter Growth Rate",
-        description:
-          "Enter the previous quarter's value and this quarter's value to instantly calculate the quarter-over-quarter (QoQ) growth rate for any business metric.",
-        keywords: ["QoQ growth calculator", "quarter over quarter growth calculator", "QoQ growth rate", "quarterly growth calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "지난 분기·이번 분기 값으로 QoQ 성장률 즉시 계산.",
-        description:
-          "지난 분기 값과 이번 분기 값을 입력하면 전분기 대비(QoQ) 성장률을 즉시 계산합니다. 분기별 실적 분석에 바로 활용하세요.",
-        howItWorks: ["지난 분기 값 입력", "이번 분기 값 입력", "QoQ 성장률·차이·방향 확인"],
-        aeo: {
-          what: "QoQ 성장률 계산기는 이번 분기 수치가 지난 분기 대비 얼마나 변했는지 퍼센트로 계산해주는 도구입니다. QoQ는 Quarter over Quarter의 약자입니다.",
-          who: "분기 실적 보고서를 작성하거나 분기별 비즈니스 성과를 비교하는 PM, 경영진, 재무 담당자를 위한 도구입니다.",
-          how: "(이번 분기 − 지난 분기) ÷ 지난 분기 × 100 공식으로 전분기 대비 성장률을 즉시 계산합니다.",
-          why: "분기별 실적 검토 시 매번 계산할 필요 없이 두 숫자만 입력하면 QoQ 수치를 즉시 얻을 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate quarter-over-quarter (QoQ) growth rate from two quarterly values.",
-        description:
-          "Enter the previous quarter's value and this quarter's value to instantly calculate the QoQ growth rate for any business metric.",
-        howItWorks: ["Enter the previous quarter's value", "Enter this quarter's value", "Read the QoQ growth rate and direction"],
-        aeo: {
-          what: "A QoQ Growth Calculator measures how much a metric changed from one quarter to the next, expressed as a percentage. QoQ stands for Quarter over Quarter.",
-          who: "It is for PMs, finance teams, and executives who prepare quarterly business reviews or earnings reports.",
-          how: "The formula (Current Quarter − Previous Quarter) / Previous Quarter × 100 is applied instantly.",
-          why: "Quarterly reporting requires the same calculation every cycle — this calculator removes the repetitive math.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "QoQ란 무엇인가요?", answer: "QoQ는 Quarter over Quarter의 약자로, 이번 분기 수치가 바로 전 분기 대비 얼마나 변했는지를 나타내는 지표입니다." },
-        { question: "QoQ와 YoY 중 어느 것을 사용해야 하나요?", answer: "단기 모멘텀을 보려면 QoQ, 계절성을 제거한 연간 성장을 보려면 YoY를 사용합니다. 두 지표를 함께 사용하는 것이 가장 효과적입니다." },
-        { question: "분기 기간은 어떻게 정의하나요?", answer: "일반적으로 Q1(1~3월), Q2(4~6월), Q3(7~9월), Q4(10~12월)로 나뉩니다. 이 계산기는 기간 정의 없이 두 값만 비교합니다." },
-      ],
-      en: [
-        { question: "What does QoQ mean?", answer: "QoQ stands for Quarter over Quarter. It measures how much a metric changed from the previous quarter to the current quarter." },
-        { question: "When should I use QoQ vs. YoY?", answer: "Use QoQ to track short-term momentum and sequential growth. Use YoY to compare the same quarter across years, removing seasonal effects. Both together give the best picture." },
-        { question: "How are quarters defined?", answer: "Typically Q1 (Jan–Mar), Q2 (Apr–Jun), Q3 (Jul–Sep), Q4 (Oct–Dec). This calculator compares any two values regardless of how you define the quarter." },
-      ],
-    },
-    og: {
-      ko: { title: "QoQ 성장률 계산기", subtitle: "전분기 대비(Quarter over Quarter) 성장률 즉시 계산" },
-      en: { title: "QoQ Growth Calculator", subtitle: "Calculate quarter-over-quarter growth rate instantly" },
-    },
-  },
-
-  {
-    slug: "wow-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "developer", "small-business-owner"],
-    ico: "WoW",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "WoW 성장률 계산기", en: "WoW Growth Calculator" },
-    relatedTools: ["mom-growth-calculator", "growth-rate-calculator", "growth-projection-calculator"],
-    seo: {
-      ko: {
-        title: "WoW 성장률 계산기 — 전주 대비 성장률 계산",
-        description:
-          "지난주 값과 이번주 값을 입력하면 전주 대비(WoW) 성장률을 즉시 계산합니다. 주간 DAU·트래픽·매출 추적에 활용하세요.",
-        keywords: ["WoW 성장률 계산기", "WoW growth calculator", "전주 대비", "week over week growth"],
-      },
-      en: {
-        title: "WoW Growth Calculator — Week Over Week Growth Rate",
-        description:
-          "Enter last week's value and this week's value to instantly calculate the week-over-week (WoW) growth rate. Track weekly DAU, traffic, revenue, or any short-cycle metric.",
-        keywords: ["WoW growth calculator", "week over week growth calculator", "WoW growth rate", "weekly growth calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "지난주·이번주 값으로 WoW 성장률 즉시 계산.",
-        description:
-          "지난주 값과 이번주 값을 입력하면 전주 대비(WoW) 성장률을 즉시 계산합니다. 주간 DAU·트래픽·매출 추적에 활용하세요.",
-        howItWorks: ["지난주 값 입력", "이번주 값 입력", "WoW 성장률·차이·방향 확인"],
-        aeo: {
-          what: "WoW 성장률 계산기는 이번 주 수치가 지난주 대비 얼마나 변했는지 퍼센트로 계산해주는 도구입니다. WoW는 Week over Week의 약자입니다.",
-          who: "주간 단위로 DAU·트래픽·매출을 추적하는 스타트업 PM, 성장 팀, 마케터를 위한 도구입니다.",
-          how: "(이번주 − 지난주) ÷ 지난주 × 100 공식으로 전주 대비 성장률을 즉시 계산합니다.",
-          why: "주간 스프린트 리뷰나 성장 보고에서 매번 계산할 필요 없이 두 숫자만 입력하면 WoW 수치를 즉시 얻을 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate week-over-week (WoW) growth rate from two weekly values.",
-        description:
-          "Enter last week's value and this week's value to instantly calculate the WoW growth rate. Track weekly DAU, traffic, revenue, or any short-cycle metric.",
-        howItWorks: ["Enter last week's value", "Enter this week's value", "Read the WoW growth rate and direction"],
-        aeo: {
-          what: "A WoW Growth Calculator measures how much a metric changed from last week to this week, expressed as a percentage. WoW stands for Week over Week.",
-          who: "It is for startup PMs, growth teams, and marketers who track weekly active users, traffic, or revenue in short sprint cycles.",
-          how: "The formula (Current Week − Previous Week) / Previous Week × 100 is applied instantly.",
-          why: "Weekly reviews happen fast — this calculator gives the WoW number in one step without spreadsheet formulas.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "WoW란 무엇인가요?", answer: "WoW는 Week over Week의 약자로, 이번 주 수치가 지난주 대비 얼마나 변했는지를 나타내는 지표입니다." },
-        { question: "WoW와 MoM 중 어느 것을 사용해야 하나요?", answer: "단기 모멘텀이나 스프린트 성과를 볼 때는 WoW, 월간 비즈니스 트렌드를 볼 때는 MoM이 적합합니다." },
-        { question: "주간 데이터가 불규칙할 수 있지 않나요?", answer: "네. 공휴일·캠페인 등으로 인해 주간 데이터는 변동이 클 수 있습니다. WoW는 단기 변동을 보여주므로, 트렌드 파악을 위해서는 이동 평균이나 YoY와 함께 활용하세요." },
-      ],
-      en: [
-        { question: "What does WoW mean?", answer: "WoW stands for Week over Week. It measures how much a metric changed from the previous week to the current week." },
-        { question: "When should I use WoW vs. MoM?", answer: "Use WoW for fast-moving metrics in sprint or growth contexts. Use MoM for broader monthly business trends where weekly noise is less relevant." },
-        { question: "Can weekly data be noisy?", answer: "Yes. Holidays, campaigns, and day-of-week effects can cause WoW to spike or drop. Pair it with a rolling average or YoY comparison for a cleaner trend view." },
-      ],
-    },
-    og: {
-      ko: { title: "WoW 성장률 계산기", subtitle: "전주 대비(Week over Week) 성장률 즉시 계산" },
-      en: { title: "WoW Growth Calculator", subtitle: "Calculate week-over-week growth rate instantly" },
     },
   },
 
@@ -3173,7 +3143,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
-    relatedTools: ["compound-growth-calculator", "growth-projection-calculator", "growth-rate-calculator"],
+    relatedTools: ["compound-growth-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "CAGR 계산기 — 연평균 성장률 계산",
@@ -3241,130 +3211,118 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Calculator",
     name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
-    relatedTools: ["cagr-calculator", "growth-projection-calculator", "goal-growth-calculator"],
+    relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "복리 성장 계산기 — 초기값·성장률·기간으로 최종값 계산",
+        title: "복리 성장 계산기 — 미래값 예측·성장 시나리오",
         description:
-          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
-        keywords: ["복리 성장 계산기", "compound growth calculator", "복리 계산기", "future value calculator"],
+          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 매출·사용자 수·트래픽의 미래값 예측과 성장 시나리오 플래닝에 활용하세요.",
+        keywords: [
+          "복리 성장 계산기", "복리 계산기", "성장 예측 계산기", "미래값 계산기", "성장 시나리오",
+          "compound growth calculator", "future value calculator", "growth projection calculator",
+        ],
       },
       en: {
-        title: "Compound Growth Calculator — Calculate Final Value with Compound Growth",
+        title: "Compound Growth Calculator — Future Value & Projection",
         description:
-          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth. Great for projecting revenue, investment, or any compounding metric.",
-        keywords: ["compound growth calculator", "compound growth rate calculator", "future value calculator", "compounding calculator"],
+          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. Great for projecting revenue, users, or investments and for growth scenario planning.",
+        keywords: [
+          "compound growth calculator", "compounding calculator", "future value calculator",
+          "growth projection calculator", "revenue projection calculator", "growth forecast calculator",
+        ],
       },
     },
     content: {
       ko: {
-        card: "초기값·성장률·기간으로 복리 최종값 즉시 계산.",
+        card: "초기(현재)값·성장률·기간으로 복리 최종값·미래 예측값 즉시 계산.",
         description:
-          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
-        howItWorks: ["초기 값 입력", "성장률(%) 입력", "기간(회차) 입력 후 최종값·총 성장률 확인"],
+          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 초기 투자금의 복리 성장은 물론, 현재 매출·사용자 수·트래픽이 일정 성장률로 커졌을 때의 미래값 예측(성장 시나리오)까지 같은 공식으로 구할 수 있습니다.",
+        howItWorks: ["초기(현재) 값 입력", "기간당 성장률(%) 입력", "기간(회차) 입력 후 최종값·미래 예측값·총 성장률 확인"],
         aeo: {
-          what: "복리 성장 계산기는 초기 값에 성장률을 복리로 적용해 일정 기간 후의 최종 값을 계산해주는 도구입니다.",
-          who: "매출·투자·사용자 수 등을 복리로 성장시켰을 때 최종 값을 예측하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
-          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다.",
-          why: "복리의 힘을 직관적으로 확인하고, 성장률과 기간에 따른 결과를 즉시 비교할 수 있습니다.",
+          what: "복리 성장 계산기는 초기(현재) 값에 성장률을 복리로 적용해 일정 기간 후의 최종값을 계산하는 도구입니다. 초기 투자금의 복리 최종값 계산과 현재 지표의 미래값 예측(성장 예측)이 모두 최종값 = 초기값 × (1 + 성장률/100)^기간이라는 동일한 공식이라, 이 계산기 하나로 처리합니다.",
+          who: "복리로 성장하는 매출·투자·사용자 수의 최종값이나 미래 예측값을 구하려는 PM, 스타트업 창업자, 투자자, 소상공인을 위한 도구입니다.",
+          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다. '초기 값'에 현재 지표를 넣으면 그대로 미래 예측값(성장 예측)이 됩니다.",
+          why: "복리의 힘을 직관적으로 확인하고, 성장률·기간을 바꿔가며 여러 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "복리 성장과 미래값 예측은 같은 계산",
+            body: [
+              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일합니다. 둘 다 최종값 = 초기값 × (1 + 성장률/100)^기간 공식을 씁니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
+              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산기가 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측 계산기가 됩니다.",
+            ],
+          },
+          {
+            heading: "복리와 단리의 차이",
+            body: [
+              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
+              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
+            ],
+          },
+          {
+            heading: "기간 단위와 활용",
+            body: [
+              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
+              "모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다. 참고로 미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요.",
+            ],
+          },
+        ],
       },
       en: {
-        card: "Calculate the final value after compound growth over multiple periods.",
+        card: "Compute compounded final value and future projection from a value, rate, and periods.",
         description:
-          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth.",
-        howItWorks: ["Enter the initial value", "Enter the growth rate (%)", "Enter the number of periods, then read the final value"],
+          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric — the same formula either way.",
+        howItWorks: ["Enter the initial (current) value", "Enter the growth rate per period (%)", "Enter the number of periods, then read the final / projected value"],
         aeo: {
-          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value, accounting for the compounding effect.",
-          who: "It is for investors, PMs, and business owners who want to project revenue, users, or investments using a constant periodic growth rate.",
-          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Each period's growth is applied to the running total, not the original.",
-          why: "Compound growth produces dramatically different results than simple growth at scale — this calculator makes that difference visible instantly.",
+          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value. Compounding an initial investment and projecting a current metric into the future both use Final Value = Initial × (1 + Rate / 100) ^ Periods, so this one calculator handles both.",
+          who: "It is for PMs, startup founders, investors, and business owners projecting revenue, users, or investments that grow at a constant periodic rate.",
+          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Put your current metric in the initial value field and the result is your future projection.",
+          why: "Compound growth diverges sharply from simple growth at scale — vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
         },
+        guide: [
+          {
+            heading: "Compound growth and future projection are the same math",
+            body: [
+              "'Compound growth' and 'growth projection (future value)' differ only in name and context — the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
+              "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric — revenue, users, traffic — makes it a growth projection calculator that looks into the future.",
+            ],
+          },
+          {
+            heading: "Compound vs. simple growth",
+            body: [
+              "The key is that each period's growth applies to the accumulated total so far, not the original value. Simple growth adds the same amount each period, but compounding applies the rate to the grown value, so the increase accelerates over time. The longer the horizon and the higher the rate, the more dramatically compound and simple growth diverge.",
+              "Enter a negative rate to model compound decline, where the value shrinks by a fixed percentage each period — useful for churn-driven user decline or depreciation scenarios.",
+            ],
+          },
+          {
+            heading: "Period units and how to use it",
+            body: [
+              "Any period unit works as long as it matches the rate: use months if your rate is monthly, years if it's annual. Because the same starting value can end up very differently with small changes to rate or periods, entering optimistic, base, and conservative scenarios side by side helps you size the range of outcomes.",
+              "Everything runs in your browser and your inputs are never sent to a server. Note that a projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each.",
+            ],
+          },
+        ],
       },
     },
     faq: {
       ko: [
-        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간의 누적 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
+        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간까지 누적된 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
+        { question: "성장 예측(미래값)도 이 계산기로 구하나요?", answer: "네. 미래값 예측은 복리 성장과 동일한 공식을 씁니다. '초기 값' 칸에 현재 매출·사용자 수 등을 넣으면 그대로 미래 예측값이 됩니다." },
+        { question: "성장률이 매 기간 동일하다고 가정하나요?", answer: "네. 모든 기간에 같은 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 구간을 나눠 각각 계산하세요." },
         { question: "기간(회차)을 0으로 설정하면 어떻게 되나요?", answer: "0 기간은 허용됩니다. 최종값은 초기값과 동일합니다." },
-        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 감소하는 복리 감소를 계산합니다." },
+        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 줄어드는 복리 감소를 계산합니다." },
       ],
       en: [
-        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value. This causes exponential growth over time." },
+        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value, causing exponential growth over time." },
+        { question: "Can I project a future value here too?", answer: "Yes. A future-value projection uses the same formula as compound growth. Put your current revenue, users, or metric in the initial value field and the result is your projection." },
+        { question: "Does it assume a constant growth rate each period?", answer: "Yes. It assumes the same rate every period. For variable rates, split the horizon into segments and calculate each separately." },
         { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value — no growth has occurred." },
         { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
       ],
     },
     og: {
-      ko: { title: "복리 성장 계산기", subtitle: "초기값·성장률·기간으로 복리 최종값 즉시 계산" },
-      en: { title: "Compound Growth Calculator", subtitle: "Calculate final value with compound growth rate instantly" },
-    },
-  },
-
-  {
-    slug: "growth-projection-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "f(n)",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "성장 예측 계산기", en: "Growth Projection Calculator" },
-    relatedTools: ["cagr-calculator", "compound-growth-calculator", "goal-growth-calculator"],
-    seo: {
-      ko: {
-        title: "성장 예측 계산기 — 현재값과 성장률로 미래값 예측",
-        description:
-          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
-        keywords: ["성장 예측 계산기", "growth projection calculator", "미래값 계산기", "성장 시나리오"],
-      },
-      en: {
-        title: "Growth Projection Calculator — Project Future Value with a Growth Rate",
-        description:
-          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth. Perfect for revenue forecasting, user growth planning, and scenario analysis.",
-        keywords: ["growth projection calculator", "future value calculator", "growth forecast calculator", "revenue projection calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측.",
-        description:
-          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
-        howItWorks: ["현재 값 입력", "성장률(%) 입력", "기간 입력 후 예측값·총 성장률 확인"],
-        aeo: {
-          what: "성장 예측 계산기는 현재 값에서 일정 성장률이 복리로 적용됐을 때 미래 값을 예측해주는 도구입니다.",
-          who: "매출·사용자 수·트래픽 등의 성장 시나리오를 계획하는 PM, 스타트업 창업자, 투자자를 위한 도구입니다.",
-          how: "예측값 = 현재값 × (1 + 성장률/100)^기간 공식으로 복리 기반 미래값을 계산합니다.",
-          why: "단순한 숫자 입력만으로 다양한 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Project future value using compound growth over multiple periods.",
-        description:
-          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth.",
-        howItWorks: ["Enter the current value", "Enter the growth rate (%)", "Enter the number of periods, then read the projected value"],
-        aeo: {
-          what: "A Growth Projection Calculator forecasts a future value by applying a compound growth rate to a current value over a specified number of periods.",
-          who: "It is for PMs, startup founders, and investors who need to model revenue forecasts, user growth scenarios, or investment projections.",
-          how: "Projected Value = Current Value × (1 + Rate / 100) ^ Periods. The result is the compounded future value after the given number of periods.",
-          why: "It turns a growth rate assumption into a concrete future number, making scenario planning faster and presentations more grounded.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "성장 예측 계산기와 복리 성장 계산기의 차이는 무엇인가요?", answer: "계산식은 동일합니다. 복리 성장 계산기는 초기 투자값을 기준으로, 성장 예측 계산기는 현재 비즈니스 지표를 기준으로 사용하는 관점의 차이입니다." },
-        { question: "성장률이 매 기간 동일하다고 가정하는 건가요?", answer: "네. 이 계산기는 모든 기간에 동일한 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 각 기간별로 수동 계산이 필요합니다." },
-        { question: "기간 단위는 무엇인가요?", answer: "기간 단위는 자유롭게 설정할 수 있습니다. 주·월·분기·연도 등 분석에 적합한 단위를 사용하세요." },
-      ],
-      en: [
-        { question: "How is this different from the Compound Growth Calculator?", answer: "The formula is identical. The difference is framing: Compound Growth Calculator focuses on growing an investment or initial amount; Growth Projection Calculator focuses on projecting a live business metric forward." },
-        { question: "Does this assume a constant growth rate each period?", answer: "Yes. This calculator assumes the same growth rate is applied every period. For variable growth rates, you would need to calculate each period separately." },
-        { question: "What unit should I use for periods?", answer: "Any unit works — weeks, months, quarters, or years. Just be consistent: if your growth rate is monthly, your periods should be months." },
-      ],
-    },
-    og: {
-      ko: { title: "성장 예측 계산기", subtitle: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측" },
-      en: { title: "Growth Projection Calculator", subtitle: "Project future value with compound growth rate instantly" },
+      ko: { title: "복리 성장 계산기", subtitle: "복리 최종값·미래 예측값·성장 시나리오 즉시 계산" },
+      en: { title: "Compound Growth Calculator", subtitle: "Compounded final value and future projection instantly" },
     },
   },
 
@@ -3555,6 +3513,22 @@ export const TOOLS: Tool[] = [
           how: "ROAS 계산 모드에서는 광고비와 광고 매출을 입력하면 ROAS(%)와 ROAS 배수를 즉시 계산합니다. 목표 매출·허용 광고비 모드에서는 목표값을 역산합니다. 매출총이익률을 추가로 입력하면 손익분기 ROAS도 계산됩니다.",
           why: "ROAS는 광고 효율을 가장 직관적으로 나타내는 지표입니다. 목표 ROAS를 설정하고 역산하면 광고 예산을 더 정확하게 계획할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "ROAS란 무엇이고 어떻게 읽나",
+            body: [
+              "ROAS(Return on Ad Spend)는 광고비 대비 매출을 나타내는 지표로, 매출 ÷ 광고비로 계산합니다. ROAS 400%(또는 4:1)는 광고에 1원을 써서 4원의 매출이 났다는 뜻입니다. 채널·캠페인·소재별로 ROAS를 비교하면 어디에 예산을 더 넣고 어디를 줄일지 판단할 수 있어, 퍼포먼스 마케팅에서 가장 먼저 보는 숫자입니다.",
+              "이 계산기는 광고비와 매출로 ROAS를 즉시 구하고, 목표 매출이나 허용 광고비를 거꾸로 역산하는 것도 지원합니다.",
+            ],
+          },
+          {
+            heading: "손익분기 ROAS를 알아야 진짜 수익이 보인다",
+            body: [
+              "ROAS가 높다고 무조건 이익은 아닙니다. 제품 마진을 고려해야 하기 때문입니다. 마진율이 25%라면 광고비를 회수하는 손익분기 ROAS는 400%이고, 그보다 높아야 비로소 이익이 남습니다. 즉 같은 ROAS 300%라도 마진이 높은 상품이면 흑자, 낮은 상품이면 적자일 수 있습니다.",
+              "그래서 목표 ROAS는 마진 구조 위에서 세워야 합니다. 목표 ROAS를 정하고 허용 광고비·필요 매출을 역산하면 예산을 감이 아니라 숫자로 계획할 수 있습니다. 모든 계산은 브라우저 안에서 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
@@ -3571,6 +3545,22 @@ export const TOOLS: Tool[] = [
           how: "In ROAS mode, enter ad spend and revenue to get ROAS (%) and ROAS multiple instantly. In target modes, enter the target value to reverse-calculate the missing number. Enter a gross margin percentage to see the break-even ROAS.",
           why: "ROAS is the most direct measure of advertising efficiency. Setting a target ROAS and reverse-calculating required inputs lets you plan budgets with precision rather than guesswork.",
         },
+        guide: [
+          {
+            heading: "What ROAS is and how to read it",
+            body: [
+              "ROAS (Return on Ad Spend) is revenue relative to ad spend, calculated as revenue ÷ ad spend. A ROAS of 400% (or 4:1) means every 1 spent on ads produced 4 in revenue. Comparing ROAS across channels, campaigns, and creatives shows where to add budget and where to cut, which is why it's the first number performance marketers look at.",
+              "This calculator turns ad spend and revenue into ROAS instantly, and also reverse-calculates the target revenue or allowable ad spend you'd need.",
+            ],
+          },
+          {
+            heading: "Know your break-even ROAS to see real profit",
+            body: [
+              "A high ROAS isn't automatically profitable, because you have to account for product margin. At a 25% margin, the break-even ROAS that just recovers ad cost is 400%, and you only profit above that. So the same ROAS of 300% can be profitable on a high-margin product and a loss on a low-margin one.",
+              "That means your target ROAS should be built on your margin structure. Setting a target and reverse-calculating allowable spend and required revenue lets you plan budgets by the numbers rather than by feel. Everything runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -3677,6 +3667,22 @@ export const TOOLS: Tool[] = [
           how: "CPA 계산 모드에서는 광고비와 전환 수를 입력하면 CPA를 즉시 계산합니다. 목표 CPA 역산 모드에서는 예산과 목표 CPA로 예상 전환 수를, 필요 예산 모드에서는 목표 전환 수와 CPA로 필요 예산을 계산합니다.",
           why: "CPA는 광고 효율을 전환 기준으로 측정하는 핵심 지표입니다. 목표 CPA를 설정하고 역산하면 광고 예산을 더 정밀하게 계획할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "CPA는 '성과 1건'의 비용",
+            body: [
+              "CPA(Cost per Acquisition)는 전환(구매·가입·문의 등) 1건을 얻는 데 든 광고비로, 광고비 ÷ 전환 수로 계산합니다. 클릭이나 노출이 아니라 실제로 원하는 행동이 일어난 건수를 기준으로 하기 때문에, 비즈니스 목표에 가장 가까운 효율 지표입니다. CPC·CTR이 좋아도 전환이 없으면 CPA는 나빠집니다.",
+              "이 계산기는 광고비와 전환 수로 CPA를 즉시 구하고, 목표 CPA에 맞춘 예상 전환 수나 필요 예산을 역산할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "CPA는 고객 가치(LTV·마진)와 비교해야 한다",
+            body: [
+              "CPA 자체의 높고 낮음보다 중요한 건 고객 한 명이 주는 가치와의 관계입니다. 고객 생애 가치(LTV)나 첫 구매 마진보다 CPA가 낮아야 광고가 지속 가능합니다. 예컨대 평균 마진이 3만원인데 CPA가 4만원이면, 전환이 늘수록 손해가 커집니다.",
+              "그래서 목표 CPA는 '고객 한 명에게 쓸 수 있는 최대 금액'에서 출발해 정합니다. 목표 CPA를 정하고 필요 전환·예산을 역산하면 캠페인을 실제 수익 구조 위에서 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
@@ -3693,6 +3699,22 @@ export const TOOLS: Tool[] = [
           how: "In CPA mode, enter ad spend and conversions to see CPA instantly. In reverse modes, enter a target CPA with a budget to get expected conversions, or a target conversion count with a CPA to get the required budget.",
           why: "CPA measures advertising efficiency in terms of outcomes rather than clicks or impressions. Setting a target CPA lets you plan budgets around actual business goals.",
         },
+        guide: [
+          {
+            heading: "CPA is the cost of one outcome",
+            body: [
+              "CPA (Cost per Acquisition) is the ad spend it takes to win one conversion — a purchase, sign-up, or lead — calculated as ad spend ÷ conversions. Because it's based on the action you actually want rather than clicks or impressions, it's the efficiency metric closest to your business goal. Even with a good CPC and CTR, no conversions means a bad CPA.",
+              "This calculator turns ad spend and conversions into CPA instantly, and reverse-calculates the expected conversions or budget needed to hit a target CPA.",
+            ],
+          },
+          {
+            heading: "Compare CPA against customer value (LTV, margin)",
+            body: [
+              "What matters isn't CPA on its own but its relationship to what a customer is worth. Your CPA needs to be lower than customer lifetime value (LTV) or first-purchase margin for advertising to be sustainable. If your average margin is 30 and CPA is 40, more conversions just mean bigger losses.",
+              "So a target CPA starts from 'the most you can spend to acquire one customer.' Setting that target and reverse-calculating the conversions and budget you need lets you plan the campaign on top of your real profit structure. All calculation runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -3800,6 +3822,22 @@ export const TOOLS: Tool[] = [
           how: "CPC 계산 모드에서는 광고비와 클릭 수를 입력하면 CPC를 즉시 계산합니다. 역산 모드에서는 목표값을 입력하면 예상 클릭 수 또는 필요 예산을 계산합니다.",
           why: "CPC를 파악하면 광고비 대비 트래픽 효율을 측정할 수 있습니다. 목표 CPC를 기준으로 예산과 클릭 수를 역산하면 SEM·PPC 캠페인 계획을 더 정확하게 세울 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "CPC는 클릭 1회의 비용",
+            body: [
+              "CPC(Cost per Click)는 광고 클릭 한 번에 든 비용으로, 광고비 ÷ 클릭 수로 계산합니다. 검색광고(SEM)와 클릭당 과금(PPC) 캠페인의 기본 단위이며, 키워드 경쟁 강도와 광고 품질점수(관련성·랜딩 경험)에 따라 오르내립니다. 같은 예산이라도 CPC가 낮으면 더 많은 방문을 살 수 있습니다.",
+              "이 계산기는 광고비와 클릭 수로 CPC를 즉시 구하고, 목표 CPC 기준의 예상 클릭 수나 필요 예산을 역산합니다.",
+            ],
+          },
+          {
+            heading: "낮은 CPC가 항상 좋은 건 아니다",
+            body: [
+              "CPC는 트래픽의 '단가'일 뿐, 그 트래픽이 전환으로 이어지는지는 별개입니다. CPC가 아무리 낮아도 방문자가 아무 행동도 하지 않으면 의미가 없고, 반대로 CPC가 다소 높아도 전환율(CVR)이 좋으면 최종 CPA는 낮아질 수 있습니다. 그래서 CPC는 CTR·CVR과 함께 봐야 합니다.",
+              "관계를 정리하면 CPC는 CPM ÷ (CTR×10)으로도 볼 수 있고, 목표 CPC × 필요 클릭 수로 예산을 잡을 수 있습니다. 목표 CPC를 정해 필요 예산·클릭을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
@@ -3816,6 +3854,22 @@ export const TOOLS: Tool[] = [
           how: "In CPC mode, enter ad spend and clicks to see CPC instantly. In reverse modes, enter a target CPC with a budget to get expected clicks, or a target click count with a CPC to get the required budget.",
           why: "Knowing your CPC lets you measure traffic efficiency per advertising dollar. Reverse-calculating from a target CPC helps you plan SEM and PPC budgets with precision.",
         },
+        guide: [
+          {
+            heading: "CPC is the cost of one click",
+            body: [
+              "CPC (Cost per Click) is what one ad click costs, calculated as ad spend ÷ clicks. It's the base unit of search (SEM) and pay-per-click (PPC) campaigns, rising and falling with keyword competition and quality score (relevance and landing experience). For the same budget, a lower CPC buys more visits.",
+              "This calculator turns ad spend and clicks into CPC instantly, and reverse-calculates the expected clicks or budget needed for a target CPC.",
+            ],
+          },
+          {
+            heading: "A low CPC isn't always good",
+            body: [
+              "CPC is only the 'unit price' of traffic; whether that traffic converts is a separate question. A very low CPC means nothing if visitors don't act, while a somewhat higher CPC can still yield a low final CPA if the conversion rate (CVR) is strong. That's why CPC should be read alongside CTR and CVR.",
+              "As a relationship, CPC can also be seen as CPM ÷ (CTR×10), and you can size budget as target CPC × clicks needed. Set a target CPC and reverse-calculate the budget and clicks you need. All calculation runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -3922,6 +3976,22 @@ export const TOOLS: Tool[] = [
           how: "CPM 계산 모드에서는 광고비와 노출 수를 입력하면 CPM을 즉시 계산합니다. 역산 모드에서는 목표 CPM과 예산으로 예상 노출 수를, 또는 목표 노출 수와 CPM으로 필요 예산을 계산합니다.",
           why: "CPM은 브랜드 인지도 캠페인에서 광고비 효율을 측정하는 핵심 지표입니다. 목표 CPM을 기준으로 역산하면 노출 기반 광고 예산을 더 정확하게 계획할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "CPM은 노출 1,000회당 비용",
+            body: [
+              "CPM(Cost per Mille)은 광고 노출 1,000회에 드는 비용으로, 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 뜻합니다. 클릭이나 전환이 아니라 '얼마나 많은 사람에게 보였는가(도달·노출)'를 기준으로 하기 때문에, 브랜드 인지도 캠페인의 효율을 가늠하는 기본 지표입니다.",
+              "이 계산기는 광고비와 노출 수로 CPM을 즉시 구하고, 목표 CPM 기준의 예상 노출 수나 필요 예산을 역산합니다.",
+            ],
+          },
+          {
+            heading: "CPM은 언제 보고, 무엇에 좌우되나",
+            body: [
+              "목표에 따라 봐야 할 지표가 다릅니다. 브랜드 인지·도달이 목적이면 CPM이, 성과가 목적이면 CPA·ROAS가 우선입니다. 같은 매체라도 타겟팅이 좁을수록, 경쟁이 치열한 시즌일수록 CPM이 올라가는 경향이 있어 매체·오디언스별로 비교하는 것이 좋습니다.",
+              "CPM은 CPC·CTR과도 연결됩니다. CPC ≈ CPM ÷ (CTR×10) 관계이므로, 같은 CPM에서 CTR이 높을수록 실질 클릭 단가는 낮아집니다. 목표 CPM으로 도달 목표별 예산을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
@@ -3938,6 +4008,22 @@ export const TOOLS: Tool[] = [
           how: "In CPM mode, enter ad spend and impressions to see CPM instantly. In reverse modes, enter a target CPM with a budget to get expected impressions, or a target impression count with a CPM to get the required budget.",
           why: "CPM is the standard metric for measuring cost efficiency in brand awareness campaigns. Reverse-calculating from a target CPM helps you plan impression-based budgets accurately.",
         },
+        guide: [
+          {
+            heading: "CPM is the cost per 1,000 impressions",
+            body: [
+              "CPM (Cost per Mille) is the cost of 1,000 ad impressions, calculated as ad spend ÷ impressions × 1,000 — 'mille' is Latin for thousand. Because it's based on how many people saw the ad (reach and impressions) rather than clicks or conversions, it's the go-to metric for gauging the efficiency of brand awareness campaigns.",
+              "This calculator turns ad spend and impressions into CPM instantly, and reverse-calculates the expected impressions or budget needed for a target CPM.",
+            ],
+          },
+          {
+            heading: "When to watch CPM, and what drives it",
+            body: [
+              "Different goals call for different metrics: when the aim is brand awareness and reach, CPM leads; when the aim is results, CPA and ROAS come first. Even on the same platform, CPM tends to rise as targeting narrows and during competitive seasons, so it's worth comparing across placements and audiences.",
+              "CPM also connects to CPC and CTR: since CPC ≈ CPM ÷ (CTR×10), a higher CTR at the same CPM means a lower effective cost per click. Use a target CPM to reverse-calculate budgets for each reach goal. All calculation runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -4044,6 +4130,22 @@ export const TOOLS: Tool[] = [
           how: "CTR 계산 모드에서는 클릭 수와 노출 수를 입력하면 CTR(%)을 즉시 계산합니다. 역산 모드에서는 목표 CTR을 기준으로 필요 클릭 수 또는 노출 수를 계산합니다.",
           why: "CTR은 광고·이메일·콘텐츠의 참여도를 측정하는 핵심 지표입니다. 목표 CTR을 기준으로 역산하면 도달 목표와 클릭 목표를 더 정확하게 계획할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "CTR은 노출 대비 클릭 비율",
+            body: [
+              "CTR(Click-Through Rate)은 노출된 광고·링크가 실제로 클릭된 비율로, 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고 배너, 검색 결과, 이메일 링크, 콘텐츠 썸네일이 사람들의 흥미를 얼마나 끌었는지를 보여주는 참여도 지표입니다. 같은 노출이라도 CTR이 높다는 건 소재와 메시지가 오디언스와 잘 맞았다는 신호입니다.",
+              "이 계산기는 클릭 수와 노출 수로 CTR을 즉시 구하고, 목표 CTR을 달성하는 데 필요한 클릭 수나 노출 수를 역산합니다.",
+            ],
+          },
+          {
+            heading: "CTR을 움직이는 것과 다른 지표와의 관계",
+            body: [
+              "CTR은 주로 소재(크리에이티브), 타겟팅, 카피, 노출 위치에 좌우됩니다. 관련성 높은 오디언스에게 매력적인 문구를 보여줄수록 올라갑니다. 다만 CTR이 높아도 랜딩 이후 전환이 약하면 최종 성과는 아쉬울 수 있어, 전환율(CVR)과 함께 봐야 합니다.",
+              "CTR은 비용 지표와도 얽혀 있습니다. 같은 CPM에서 CTR이 높으면 실질 CPC가 낮아집니다(CPC ≈ CPM ÷ (CTR×10)). 목표 CTR을 정해 필요 노출·클릭을 역산하면 도달·클릭 목표를 함께 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
@@ -4060,6 +4162,22 @@ export const TOOLS: Tool[] = [
           how: "In CTR mode, enter clicks and impressions to see CTR (%) instantly. In reverse modes, enter a target CTR with impressions to get required clicks, or with clicks to get required impressions.",
           why: "CTR measures audience engagement with your ads, emails, and content. Reverse-calculating from a target CTR lets you plan reach and click goals with precision.",
         },
+        guide: [
+          {
+            heading: "CTR is clicks as a share of impressions",
+            body: [
+              "CTR (Click-Through Rate) is the share of impressions that turned into clicks, calculated as clicks ÷ impressions × 100. It's an engagement metric that shows how well an ad banner, search result, email link, or content thumbnail captured people's interest. For the same impressions, a higher CTR signals that the creative and message resonated with the audience.",
+              "This calculator turns clicks and impressions into CTR instantly, and reverse-calculates the clicks or impressions you'd need to hit a target CTR.",
+            ],
+          },
+          {
+            heading: "What moves CTR, and how it relates to other metrics",
+            body: [
+              "CTR is driven mostly by creative, targeting, copy, and placement — the more relevant the audience and the more compelling the wording, the higher it climbs. But a high CTR with weak post-click conversion can still disappoint, so read it alongside conversion rate (CVR).",
+              "CTR is also tied to cost metrics: at the same CPM, a higher CTR means a lower effective CPC (CPC ≈ CPM ÷ (CTR×10)). Set a target CTR and reverse-calculate the impressions and clicks you need to plan reach and click goals together. All calculation runs in your browser.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -4314,6 +4432,29 @@ export const TOOLS: Tool[] = [
           how: "URL을 온전한 QR 코어로 만든 뒤, 아치·하트 같은 모양은 코어 주위에 장식 셀을 더해 구성하고, 결과를 브라우저에서 다시 판독해 인식을 확인합니다.",
           why: "청첩장·인쇄물에 어울리는 감성 디자인 QR을 서버 전송 없이 만들고 PNG·SVG로 바로 내려받을 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "QR 코드는 어디에 쓰나요",
+            body: [
+              "QR 코드는 긴 링크를 카메라로 한 번에 열 수 있게 바꿔주는 사각형 코드입니다. 명함이나 전단지에 웹사이트 주소를 적어두면 사람들이 일일이 타이핑해야 하지만, QR 코드를 넣으면 스마트폰 카메라를 갖다 대는 것만으로 바로 페이지가 열립니다. 그래서 매장 메뉴판, 행사 안내, 제품 포장, 청첩장, 발표 슬라이드처럼 종이와 화면을 잇는 자리에 널리 쓰입니다.",
+              "이 생성기는 URL을 입력하면 즉시 QR 코드를 만들고, 색상과 셀 모양, 인식 품질을 원하는 대로 조절할 수 있습니다. 완성한 코드는 인쇄에 적합한 PNG나, 크기를 키워도 깨지지 않는 벡터 형식인 SVG로 내려받을 수 있습니다.",
+            ],
+          },
+          {
+            heading: "디자인과 인식률의 균형",
+            body: [
+              "QR 코드는 색을 바꾸거나 모양을 꾸밀 수 있지만, 지나치게 손대면 스캔이 안 될 수 있습니다. 인식이 잘 되려면 코드의 어두운 부분과 밝은 배경 사이에 충분한 명암 대비가 있어야 하고, 코드 주변에 여백(콰이어트 존)이 남아 있어야 합니다. 배경색을 코드 색과 너무 비슷하게 두거나 여백을 없애면 카메라가 코드를 찾지 못합니다.",
+              "이 도구의 아치형·하트형 같은 감성 디자인 QR은 온전한 QR 코어는 그대로 두고 주변에만 장식을 더하는 방식이며, 인식 안정성을 위해 오류 복원 수준을 최고로 고정합니다. 오류 복원이 높을수록 코드 일부가 로고나 장식에 가려져도 내용을 복원할 수 있습니다. 그래도 인쇄 전에는 반드시 실제 스마트폰으로 스캔해 확인하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "링크는 서버로 가지 않습니다",
+            body: [
+              "QR 코드에는 개인 행사 초대 링크나 미공개 페이지 주소처럼 아직 알리고 싶지 않은 URL이 담기기도 합니다. 이 생성기는 코드 생성과 판독 확인을 모두 브라우저 안에서 처리하며, 입력한 링크를 서버에 전송하거나 저장하지 않습니다.",
+              "또한 여기서 만든 QR 코드는 입력한 주소를 직접 담는 정적 코드라, 중간에 다른 서비스를 거치지 않습니다. 즉 그 서비스가 사라져서 코드가 먹통이 될 걱정 없이, 코드가 인쇄된 종이가 남아 있는 한 계속 동작합니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Create a QR code from a URL, customize its shape and color, and download PNG or SVG.",
@@ -4330,6 +4471,29 @@ export const TOOLS: Tool[] = [
           how: "It builds an intact QR core from the URL, forms arch or heart shapes by adding decorative cells around that core, and re-decodes the result in your browser to confirm it scans.",
           why: "It makes styled QR codes suited to invitations and print without sending the URL to a server, ready to download as PNG or SVG.",
         },
+        guide: [
+          {
+            heading: "What QR codes are for",
+            body: [
+              "A QR code is a square pattern that turns a long link into something a camera can open in one step. Print a web address on a business card or flyer and people have to type it out; add a QR code and they just point their phone's camera at it to open the page. That's why they show up wherever paper meets screen — store menus, event signage, product packaging, wedding invitations, presentation slides.",
+              "This generator creates a QR code the moment you enter a URL, and lets you adjust the color, module shape, and recognition quality. You can download the finished code as a PNG suited to printing, or as an SVG — a vector format that stays crisp at any size.",
+            ],
+          },
+          {
+            heading: "Balancing design and scannability",
+            body: [
+              "You can recolor and decorate a QR code, but overdo it and it stops scanning. For reliable reads there needs to be enough contrast between the code's dark modules and the light background, and a margin of empty space (the quiet zone) around it. Make the background too close in color to the code, or crop away the margin, and a camera can't find it.",
+              "This tool's styled shapes like arch and heart keep the QR core intact and add decoration only around it, locking error correction to maximum for reliability. Higher error correction means the code can still be read even when part of it is covered by a logo or ornament. Even so, always scan the code with a real phone before printing.",
+            ],
+          },
+          {
+            heading: "Your link never leaves the browser",
+            body: [
+              "A QR code sometimes carries a URL you'd rather not publicize yet — a private event invite, an unlisted page. This generator does both the encoding and the scan verification inside your browser and never transmits or stores the link you enter.",
+              "The codes it makes are also static: they embed your address directly rather than routing through another service. That means there's no third party that could shut down and leave your code dead — as long as the printed code exists, it keeps working.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -4594,6 +4758,29 @@ export const TOOLS: Tool[] = [
           how: "업로드한 PDF의 페이지를 순서대로 복사해 새 PDF를 만들며, 병합 순서는 드래그·이동·삭제로 조정합니다.",
           why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 여러 PDF를 하나로 합칠 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "PDF를 합쳐야 하는 순간",
+            body: [
+              "업무 문서는 조각으로 흩어지기 쉽습니다. 각자 만든 슬라이드를 모아 하나의 발표 자료로 묶거나, 여러 장을 따로 스캔한 계약서를 한 파일로 정리하거나, 견적서·명세서·증빙을 붙여 한 번에 제출해야 할 때가 그렇습니다. 파일이 여러 개로 나뉘어 있으면 받는 사람이 순서를 맞춰 열어야 하고, 이메일 첨부도 번거로워집니다.",
+              "PDF 병합은 이렇게 나뉜 PDF들을 원하는 순서대로 이어 붙여 하나의 파일로 만들어 줍니다. 파일을 업로드한 뒤 드래그하거나 위아래로 옮겨 순서를 정하고, 필요 없는 파일은 목록에서 빼면 됩니다. 목록에 보이는 위에서 아래 순서 그대로 합쳐집니다.",
+            ],
+          },
+          {
+            heading: "합치기 전에 순서를 확인하세요",
+            body: [
+              "병합에서 가장 흔한 실수는 순서입니다. 계약서 뒤에 부록이 와야 하는데 뒤바뀌거나, 표지가 중간에 끼는 식이죠. 이 도구는 병합을 실행하기 전에 파일 목록을 눈으로 보며 순서를 조정할 수 있어, 합친 뒤 다시 만드는 수고를 덜어 줍니다.",
+              "여러 파일을 한 번에 올린 경우 이름순으로 정렬해 두면 순서를 맞추기 쉽습니다. 스캔 파일이라면 파일명에 01, 02처럼 번호를 붙여 두는 습관이 병합 순서를 자동으로 정리해 줍니다.",
+            ],
+          },
+          {
+            heading: "문서를 업로드하지 않고 처리합니다",
+            body: [
+              "계약서, 명세서, 신분증 스캔본처럼 PDF에는 민감한 문서가 담기는 경우가 많습니다. 파일을 서버에 올려 처리하는 온라인 도구를 쓰면, 그 문서가 외부 서버에 잠시라도 머물게 됩니다. Kitfolio의 PDF 병합은 모든 처리를 브라우저 안에서 수행하며, 업로드한 파일을 어떤 서버로도 전송하거나 저장하지 않습니다.",
+              "파일은 여러분의 기기를 벗어나지 않고, 병합이 끝난 결과물은 그 자리에서 바로 내려받습니다. 민감한 문서를 다룰 때도 안심할 수 있고, 인터넷이 불안정한 환경에서도 동작합니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
@@ -4610,6 +4797,29 @@ export const TOOLS: Tool[] = [
           how: "It copies the pages of each uploaded PDF in order into a new PDF, with the order controlled by drag, move, and remove actions.",
           why: "It combines multiple PDFs into one directly in the browser, with no install, no login, and no file upload to a server.",
         },
+        guide: [
+          {
+            heading: "When you need to merge PDFs",
+            body: [
+              "Work documents tend to arrive in pieces. Slides each person built need to be joined into one deck; a contract scanned a page at a time needs to become a single file; a quote, an invoice, and receipts have to be submitted together. When files stay separate, the recipient has to open them in the right order, and email attachments get unwieldy.",
+              "Merge PDF stitches these separate PDFs together into one file in the order you choose. Upload the files, set the order by dragging or moving them up and down, and drop any you don't need from the list. They combine top to bottom, exactly as the list shows.",
+            ],
+          },
+          {
+            heading: "Check the order before you merge",
+            body: [
+              "The most common merging mistake is order — an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
+              "If you uploaded many files at once, sorting them by name makes the order easy to set. For scans, getting into the habit of numbering filenames (01, 02, and so on) lines up the merge order automatically.",
+            ],
+          },
+          {
+            heading: "Nothing gets uploaded",
+            body: [
+              "PDFs often hold sensitive material — contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
+              "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
+            ],
+          },
+        ],
       },
     },
     faq: {

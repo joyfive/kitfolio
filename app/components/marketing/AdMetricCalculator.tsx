@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import PageHead from "../PageHead";
 import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
+import ToolGuide from "../ToolGuide";
 import AdMetricTabs from "./AdMetricTabs";
 import { useLang, useT, type Dict } from "../../lib/i18n";
 import type { Currency } from "../../lib/marketing/types";
@@ -454,6 +455,7 @@ export default function AdMetricCalculator({ metricKey }: Props) {
         </div>
       </div>
 
+      <ToolGuide slug={slug} />
       <Faq slug={slug} />
       <RelatedTools slug={slug} />
     </>

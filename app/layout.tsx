@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { LangProvider } from "./lib/i18n";
@@ -42,16 +41,14 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
           rel="stylesheet"
         />
-      </head>
-      <body>
-        {/* Google AdSense 로더 (모든 페이지 공통) */}
-        <Script
-          id="adsbygoogle-init"
+        {/* Google AdSense 로더 (모든 페이지 공통, head 삽입) */}
+        <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
+      </head>
+      <body>
         {/* 공통 레이아웃: 헤더 / 본문(max 1216px) / 푸터.
             헤더·푸터는 URL에서 언어를 스스로 도출한다. */}
         <SiteHeader />

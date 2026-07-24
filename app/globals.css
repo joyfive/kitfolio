@@ -306,6 +306,27 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
+   Shared Guide section — 대표 도구 심화 산문 콘텐츠 (ToolGuide)
+   본문 가독성 우선: 좁은 measure · 넉넉한 line-height
+   ============================================================ */
+.kf-guide { max-width: 760px; margin: 60px auto 0; }
+.kf-guide-sec { margin-top: 32px; }
+.kf-guide-sec:first-child { margin-top: 0; }
+.kf-guide-sec h2 {
+  margin: 0 0 12px; font-size: 20px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--color-blue-gray-950);
+}
+.kf-guide-sec p {
+  margin: 0 0 12px; font-size: 15px; line-height: 1.75;
+  color: var(--color-blue-gray-700);
+}
+.kf-guide-sec p:last-child { margin-bottom: 0; }
+@media (max-width: 640px) {
+  .kf-guide { margin-top: 44px; }
+  .kf-guide-sec h2 { font-size: 18px; }
+}
+
+/* ============================================================
    Shared FAQ section — 디자인 핸드오프(faq.html) 기준
    아코디언: 한 번에 하나만 열림 · 1번 기본 오픈 · 높이 애니메이션
    ============================================================ */
@@ -559,6 +580,32 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .soon-tag { font-family: var(--font-inter); font-size: 11px; font-weight: 600; color: var(--color-blue-gray-400); margin-left: auto; }
 
 .hub-empty { padding: 60px 0; text-align: center; color: var(--color-blue-gray-400); font-size: 15px; }
+
+/* Hub 하단 설명 콘텐츠 (사이트 소개 산문) */
+.hub-about { margin: 72px 0 8px; }
+.hub-about > h2 {
+  margin: 0 0 24px; font-size: 26px; font-weight: 700;
+  letter-spacing: -0.03em; color: var(--color-blue-gray-950); text-align: center;
+}
+.hub-about-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.hub-about-card {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: 12px; padding: 22px 20px;
+}
+.hub-about-card h3 {
+  margin: 0 0 10px; font-size: 16px; font-weight: 700;
+  letter-spacing: -0.02em; color: var(--color-blue-gray-900);
+}
+.hub-about-card p {
+  margin: 0; font-size: 14px; line-height: 1.75; color: var(--color-blue-gray-600);
+}
+@media (max-width: 860px) {
+  .hub-about-grid { grid-template-columns: 1fr; }
+  .hub-about { margin-top: 52px; }
+  .hub-about > h2 { font-size: 22px; margin-bottom: 18px; }
+}
 
 /* Mobile category chip bar (hidden on desktop) */
 .hub-mcats { display: none; }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import PageHead from "./PageHead";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
+import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { localizedHref } from "../lib/content";
 
@@ -363,6 +364,7 @@ export default function UnitConverter({ mode }: { mode: ConverterMode }) {
         </div>
       </div>
 
+      <ToolGuide slug={slug} />
       <Faq slug={slug} />
       <RelatedTools slug={slug} />
     </>
