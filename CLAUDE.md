@@ -328,7 +328,11 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ---
 
-## 구현된 기능 목록 (2026-07-21 기준, 도구 44종)
+## 구현된 기능 목록 (2026-07-24 기준, 도구 37종)
+
+> 2026-07-24: 동일 수식 계산기 통합 — 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
+> **성장률 계산기(`/growth-rate-calculator`) 한 페이지로 병합**. 구 URL은 next.config 308 영구 리다이렉트.
+> 통합 페이지 본문·FAQ·가이드에 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 키워드를 병기.
 
 > 현재 `app/lib/content.ts` 레지스트리에 `ready: true`로 등록되어 KO(루트)·EN(`/en`)
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
@@ -351,35 +355,28 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 13 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
 | 14 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
 | 15 | 음력 양력 변환기 / Lunar–Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
-| 16 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 시작값·종료값으로 성장률·차이·배수 즉시 계산. |
-| 17 | 퍼센트 변화율 계산기 / Percentage Change Calculator | `/percentage-change-calculator` | `/en/percentage-change-calculator` | 이전 값과 현재 값으로 변화율·차이·배수 계산. |
-| 18 | 증가율 계산기 / Percentage Increase Calculator | `/percentage-increase-calculator` | `/en/percentage-increase-calculator` | 원래 값과 증가된 값으로 증가율 즉시 계산. |
-| 19 | 감소율 계산기 / Percentage Decrease Calculator | `/percentage-decrease-calculator` | `/en/percentage-decrease-calculator` | 원래 값과 감소된 값으로 감소율 즉시 계산. |
-| 20 | 퍼센트 차이 계산기 / Percent Difference Calculator | `/percent-difference-calculator` | `/en/percent-difference-calculator` | 두 값 A·B의 상대적 퍼센트 차이 계산. |
-| 21 | MoM 성장률 계산기 / MoM Growth Calculator | `/mom-growth-calculator` | `/en/mom-growth-calculator` | 지난달·이번달 값으로 MoM 성장률 즉시 계산. |
-| 22 | YoY 성장률 계산기 / YoY Growth Calculator | `/yoy-growth-calculator` | `/en/yoy-growth-calculator` | 작년·올해 값으로 YoY 성장률 즉시 계산. |
-| 23 | QoQ 성장률 계산기 / QoQ Growth Calculator | `/qoq-growth-calculator` | `/en/qoq-growth-calculator` | 지난 분기·이번 분기 값으로 QoQ 성장률 즉시 계산. |
-| 24 | WoW 성장률 계산기 / WoW Growth Calculator | `/wow-growth-calculator` | `/en/wow-growth-calculator` | 지난주·이번주 값으로 WoW 성장률 즉시 계산. |
-| 25 | 목표 성장률 계산기 / Goal Growth Calculator | `/goal-growth-calculator` | `/en/goal-growth-calculator` | 현재 값과 목표 값으로 필요 성장률 즉시 계산. |
-| 26 | 필요 증가량 계산기 / Required Growth Calculator | `/required-growth-calculator` | `/en/required-growth-calculator` | 현재값·목표값으로 필요 증가량·달성률 즉시 계산. |
-| 27 | 역산 계산기 / Reverse Growth Calculator | `/reverse-growth-calculator` | `/en/reverse-growth-calculator` | 최종 값과 성장률로 원래 값 역산. |
-| 28 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. |
-| 29 | 복리 성장 계산기 / Compound Growth Calculator | `/compound-growth-calculator` | `/en/compound-growth-calculator` | 초기값·성장률·기간으로 복리 최종값 즉시 계산. |
-| 30 | 성장 예측 계산기 / Growth Projection Calculator | `/growth-projection-calculator` | `/en/growth-projection-calculator` | 현재값·성장률·기간으로 복리 기반 미래값 즉시 예측. |
-| 31 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
-| 32 | ROAS 계산기 / ROAS Calculator | `/roas-calculator` | `/en/roas-calculator` | 광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함. |
-| 33 | CPA 계산기 / CPA Calculator | `/cpa-calculator` | `/en/cpa-calculator` | 광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함. |
-| 34 | CPC 계산기 / CPC Calculator | `/cpc-calculator` | `/en/cpc-calculator` | 광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함. |
-| 35 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | `/en/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
-| 36 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
-| 37 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
-| 38 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
-| 39 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
-| 40 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
-| 41 | PDF 병합 / Merge PDF | `/pdf-merge` | `/en/pdf-merge` | 여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다. |
-| 42 | PDF 분할 / Split PDF | `/pdf-split` | `/en/pdf-split` | PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다. |
-| 43 | PDF 회전 / Rotate PDF | `/pdf-rotate` | `/en/pdf-rotate` | PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다. |
-| 44 | PDF 페이지 삭제 / Delete PDF Pages | `/pdf-page-delete` | `/en/pdf-page-delete` | 필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다. |
+| 16 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·퍼센트 증감률·차이·배수 즉시 계산. **변화율·증가율·감소율 및 MoM·YoY·QoQ·WoW 성장률 통합** (동일 수식). |
+| 17 | 퍼센트 차이 계산기 / Percent Difference Calculator | `/percent-difference-calculator` | `/en/percent-difference-calculator` | 두 값 A·B의 상대적 퍼센트 차이 계산. |
+| 18 | 목표 성장률 계산기 / Goal Growth Calculator | `/goal-growth-calculator` | `/en/goal-growth-calculator` | 현재 값과 목표 값으로 필요 성장률 즉시 계산. |
+| 19 | 필요 증가량 계산기 / Required Growth Calculator | `/required-growth-calculator` | `/en/required-growth-calculator` | 현재값·목표값으로 필요 증가량·달성률 즉시 계산. |
+| 20 | 역산 계산기 / Reverse Growth Calculator | `/reverse-growth-calculator` | `/en/reverse-growth-calculator` | 최종 값과 성장률로 원래 값 역산. |
+| 21 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. |
+| 22 | 복리 성장 계산기 / Compound Growth Calculator | `/compound-growth-calculator` | `/en/compound-growth-calculator` | 초기값·성장률·기간으로 복리 최종값 즉시 계산. |
+| 23 | 성장 예측 계산기 / Growth Projection Calculator | `/growth-projection-calculator` | `/en/growth-projection-calculator` | 현재값·성장률·기간으로 복리 기반 미래값 즉시 예측. |
+| 24 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 25 | ROAS 계산기 / ROAS Calculator | `/roas-calculator` | `/en/roas-calculator` | 광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함. |
+| 26 | CPA 계산기 / CPA Calculator | `/cpa-calculator` | `/en/cpa-calculator` | 광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함. |
+| 27 | CPC 계산기 / CPC Calculator | `/cpc-calculator` | `/en/cpc-calculator` | 광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함. |
+| 28 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | `/en/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
+| 29 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
+| 30 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| 31 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
+| 32 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 33 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 34 | PDF 병합 / Merge PDF | `/pdf-merge` | `/en/pdf-merge` | 여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다. |
+| 35 | PDF 분할 / Split PDF | `/pdf-split` | `/en/pdf-split` | PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다. |
+| 36 | PDF 회전 / Rotate PDF | `/pdf-rotate` | `/en/pdf-rotate` | PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다. |
+| 37 | PDF 페이지 삭제 / Delete PDF Pages | `/pdf-page-delete` | `/en/pdf-page-delete` | 필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다. |
 
 ---
 

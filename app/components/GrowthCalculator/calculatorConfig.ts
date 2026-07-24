@@ -48,19 +48,11 @@ export interface ModeConfig {
 
 // ── Tab groups ────────────────────────────────────────────
 
+// 성장률·변화율·증가율·감소율·MoM·YoY·QoQ·WoW는 동일 수식이라
+// 성장률 계산기(growth-rate) 한 페이지로 통합됨. 여기엔 남은 도구만 병기.
 const TABS_A: TabDef[] = [
-  { mode: "growth-rate",          slug: "growth-rate-calculator",         label: { ko: "성장률",    en: "Growth Rate" } },
-  { mode: "percentage-change",    slug: "percentage-change-calculator",   label: { ko: "변화율",    en: "% Change" } },
-  { mode: "percentage-increase",  slug: "percentage-increase-calculator", label: { ko: "증가율",    en: "% Increase" } },
-  { mode: "percentage-decrease",  slug: "percentage-decrease-calculator", label: { ko: "감소율",    en: "% Decrease" } },
-  { mode: "percent-difference",   slug: "percent-difference-calculator",  label: { ko: "퍼센트 차이", en: "% Difference" } },
-];
-
-const TABS_B: TabDef[] = [
-  { mode: "mom-growth", slug: "mom-growth-calculator", label: { ko: "MoM", en: "MoM" } },
-  { mode: "yoy-growth", slug: "yoy-growth-calculator", label: { ko: "YoY", en: "YoY" } },
-  { mode: "qoq-growth", slug: "qoq-growth-calculator", label: { ko: "QoQ", en: "QoQ" } },
-  { mode: "wow-growth", slug: "wow-growth-calculator", label: { ko: "WoW", en: "WoW" } },
+  { mode: "growth-rate",        slug: "growth-rate-calculator",        label: { ko: "성장률",     en: "Growth Rate" } },
+  { mode: "percent-difference", slug: "percent-difference-calculator", label: { ko: "퍼센트 차이", en: "% Difference" } },
 ];
 
 const TABS_C: TabDef[] = [
@@ -77,22 +69,14 @@ const TABS_D: TabDef[] = [
 
 // ── Related tools by group ────────────────────────────────
 
-const RELATED_A = ["cagr-calculator", "goal-growth-calculator", "mom-growth-calculator"];
-const RELATED_B = ["growth-rate-calculator", "percentage-change-calculator", "cagr-calculator", "growth-projection-calculator"];
-const RELATED_C = ["growth-rate-calculator", "percentage-change-calculator", "cagr-calculator", "compound-growth-calculator"];
-const RELATED_D = ["growth-rate-calculator", "goal-growth-calculator", "mom-growth-calculator", "percentage-change-calculator"];
+const RELATED_A = ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"];
+const RELATED_C = ["growth-rate-calculator", "percent-difference-calculator", "cagr-calculator", "compound-growth-calculator"];
+const RELATED_D = ["growth-rate-calculator", "goal-growth-calculator", "percent-difference-calculator", "reverse-growth-calculator"];
 
 // ── Shared output blocks ──────────────────────────────────
 
 const CHANGE_OUTPUTS: OutputDef[] = [
   { key: "changeRate",  label: { ko: "변화율",   en: "Change Rate" },  format: "pct-signed",  primary: true },
-  { key: "difference",  label: { ko: "차이",     en: "Difference" },   format: "num-signed" },
-  { key: "multiplier",  label: { ko: "배수",     en: "Multiplier" },   format: "multiplier" },
-  { key: "direction",   label: { ko: "방향",     en: "Direction" },    format: "direction" },
-];
-
-const PERIOD_OUTPUTS: OutputDef[] = [
-  { key: "changeRate",  label: { ko: "성장률",   en: "Growth Rate" },  format: "pct-signed",  primary: true },
   { key: "difference",  label: { ko: "차이",     en: "Difference" },   format: "num-signed" },
   { key: "multiplier",  label: { ko: "배수",     en: "Multiplier" },   format: "multiplier" },
   { key: "direction",   label: { ko: "방향",     en: "Direction" },    format: "direction" },
@@ -105,76 +89,19 @@ export const CONFIGS: Record<GrowthMode, ModeConfig> = {
     slug: "growth-rate-calculator",
     tabs: TABS_A,
     inputs: [
-      { key: "start", label: { ko: "시작 값",  en: "Start Value" }, allowNegative: true },
-      { key: "end",   label: { ko: "종료 값",  en: "End Value" },   allowNegative: true },
+      { key: "start", label: { ko: "이전 값",  en: "Previous Value" }, allowNegative: true },
+      { key: "end",   label: { ko: "현재 값",  en: "Current Value" },  allowNegative: true },
     ],
     outputs: CHANGE_OUTPUTS,
-    formulaEn: "Growth Rate = (End − Start) / Start × 100",
-    formulaKo: "성장률 = (종료 − 시작) / 시작 × 100",
+    formulaEn: "Growth Rate = (Current − Previous) / Previous × 100",
+    formulaKo: "성장률 = (현재 − 이전) / 이전 × 100",
     examples: [
-      { inputs: { start: 100, end: 125 },  label: { ko: "100 → 125",   en: "100 → 125" } },
-      { inputs: { start: 1200, end: 1860 }, label: { ko: "1,200 → 1,860", en: "1,200 → 1,860" } },
-      { inputs: { start: 80, end: 60 },    label: { ko: "80 → 60",     en: "80 → 60" } },
+      { inputs: { start: 10000, end: 12500 }, label: { ko: "MoM 10,000 → 12,500", en: "MoM 10,000 → 12,500" } },
+      { inputs: { start: 100, end: 125 },     label: { ko: "100 → 125",   en: "100 → 125" } },
+      { inputs: { start: 80, end: 60 },       label: { ko: "80 → 60 (감소)", en: "80 → 60 (down)" } },
     ],
     relatedSlugs: RELATED_A,
-    errorWhen: (inp) => inp.start === 0 ? { ko: "시작 값이 0이면 성장률을 계산할 수 없습니다.", en: "Start value cannot be zero." } : null,
-  },
-
-  "percentage-change": {
-    slug: "percentage-change-calculator",
-    tabs: TABS_A,
-    inputs: [
-      { key: "start", label: { ko: "이전 값", en: "Previous Value" }, allowNegative: true },
-      { key: "end",   label: { ko: "현재 값", en: "Current Value" },  allowNegative: true },
-    ],
-    outputs: CHANGE_OUTPUTS,
-    formulaEn: "% Change = (New − Old) / |Old| × 100",
-    formulaKo: "변화율 = (새 값 − 이전 값) / |이전 값| × 100",
-    examples: [
-      { inputs: { start: 50, end: 75 },   label: { ko: "50 → 75",  en: "50 → 75" } },
-      { inputs: { start: 200, end: 150 }, label: { ko: "200 → 150", en: "200 → 150" } },
-      { inputs: { start: 1000, end: 1350 }, label: { ko: "1,000 → 1,350", en: "1,000 → 1,350" } },
-    ],
-    relatedSlugs: RELATED_A,
-    errorWhen: (inp) => inp.start === 0 ? { ko: "이전 값이 0이면 변화율을 계산할 수 없습니다.", en: "Previous value cannot be zero." } : null,
-  },
-
-  "percentage-increase": {
-    slug: "percentage-increase-calculator",
-    tabs: TABS_A,
-    inputs: [
-      { key: "start", label: { ko: "원래 값",  en: "Original Value" } },
-      { key: "end",   label: { ko: "증가된 값", en: "Increased Value" } },
-    ],
-    outputs: CHANGE_OUTPUTS,
-    formulaEn: "% Increase = (New − Original) / Original × 100",
-    formulaKo: "증가율 = (새 값 − 원래 값) / 원래 값 × 100",
-    examples: [
-      { inputs: { start: 80, end: 100 },  label: { ko: "80 → 100", en: "80 → 100" } },
-      { inputs: { start: 500, end: 650 }, label: { ko: "500 → 650", en: "500 → 650" } },
-      { inputs: { start: 1000, end: 1200 }, label: { ko: "1,000 → 1,200", en: "1,000 → 1,200" } },
-    ],
-    relatedSlugs: RELATED_A,
-    errorWhen: (inp) => inp.start === 0 ? { ko: "원래 값이 0이면 계산할 수 없습니다.", en: "Original value cannot be zero." } : null,
-  },
-
-  "percentage-decrease": {
-    slug: "percentage-decrease-calculator",
-    tabs: TABS_A,
-    inputs: [
-      { key: "start", label: { ko: "원래 값",  en: "Original Value" } },
-      { key: "end",   label: { ko: "감소된 값", en: "Decreased Value" } },
-    ],
-    outputs: CHANGE_OUTPUTS,
-    formulaEn: "% Decrease = (Original − New) / Original × 100",
-    formulaKo: "감소율 = (원래 값 − 새 값) / 원래 값 × 100",
-    examples: [
-      { inputs: { start: 100, end: 75 },  label: { ko: "100 → 75", en: "100 → 75" } },
-      { inputs: { start: 200, end: 160 }, label: { ko: "200 → 160", en: "200 → 160" } },
-      { inputs: { start: 500, end: 375 }, label: { ko: "500 → 375", en: "500 → 375" } },
-    ],
-    relatedSlugs: RELATED_A,
-    errorWhen: (inp) => inp.start === 0 ? { ko: "원래 값이 0이면 계산할 수 없습니다.", en: "Original value cannot be zero." } : null,
+    errorWhen: (inp) => inp.start === 0 ? { ko: "이전 값이 0이면 성장률을 계산할 수 없습니다.", en: "Previous value cannot be zero." } : null,
   },
 
   "percent-difference": {
@@ -197,82 +124,6 @@ export const CONFIGS: Record<GrowthMode, ModeConfig> = {
     ],
     relatedSlugs: RELATED_A,
     errorWhen: (inp) => (inp.a + inp.b === 0) ? { ko: "두 값의 합이 0이면 계산할 수 없습니다.", en: "Values cannot both be zero." } : null,
-  },
-
-  "mom-growth": {
-    slug: "mom-growth-calculator",
-    tabs: TABS_B,
-    inputs: [
-      { key: "previous", label: { ko: "지난달 값",  en: "Previous Month Value" }, allowNegative: true },
-      { key: "current",  label: { ko: "이번달 값",  en: "Current Month Value" },  allowNegative: true },
-    ],
-    outputs: PERIOD_OUTPUTS,
-    formulaEn: "MoM Growth = (Current − Previous) / Previous × 100",
-    formulaKo: "MoM 성장률 = (이번달 − 지난달) / 지난달 × 100",
-    examples: [
-      { inputs: { previous: 10000, current: 12500 }, label: { ko: "10,000 → 12,500", en: "10,000 → 12,500" } },
-      { inputs: { previous: 5000, current: 4750 },   label: { ko: "5,000 → 4,750",   en: "5,000 → 4,750" } },
-      { inputs: { previous: 800, current: 1000 },    label: { ko: "800 → 1,000",      en: "800 → 1,000" } },
-    ],
-    relatedSlugs: RELATED_B,
-    errorWhen: (inp) => inp.previous === 0 ? { ko: "지난달 값이 0이면 계산할 수 없습니다.", en: "Previous month value cannot be zero." } : null,
-  },
-
-  "yoy-growth": {
-    slug: "yoy-growth-calculator",
-    tabs: TABS_B,
-    inputs: [
-      { key: "previous", label: { ko: "작년 값",   en: "Previous Year Value" }, allowNegative: true },
-      { key: "current",  label: { ko: "올해 값",   en: "Current Year Value" },  allowNegative: true },
-    ],
-    outputs: PERIOD_OUTPUTS,
-    formulaEn: "YoY Growth = (Current − Previous) / Previous × 100",
-    formulaKo: "YoY 성장률 = (올해 − 작년) / 작년 × 100",
-    examples: [
-      { inputs: { previous: 100000, current: 125000 }, label: { ko: "100,000 → 125,000", en: "100,000 → 125,000" } },
-      { inputs: { previous: 50000, current: 44000 },   label: { ko: "50,000 → 44,000",   en: "50,000 → 44,000" } },
-      { inputs: { previous: 8000, current: 11200 },    label: { ko: "8,000 → 11,200",     en: "8,000 → 11,200" } },
-    ],
-    relatedSlugs: RELATED_B,
-    errorWhen: (inp) => inp.previous === 0 ? { ko: "작년 값이 0이면 계산할 수 없습니다.", en: "Previous year value cannot be zero." } : null,
-  },
-
-  "qoq-growth": {
-    slug: "qoq-growth-calculator",
-    tabs: TABS_B,
-    inputs: [
-      { key: "previous", label: { ko: "지난 분기 값", en: "Previous Quarter Value" }, allowNegative: true },
-      { key: "current",  label: { ko: "이번 분기 값", en: "Current Quarter Value" },  allowNegative: true },
-    ],
-    outputs: PERIOD_OUTPUTS,
-    formulaEn: "QoQ Growth = (Current − Previous) / Previous × 100",
-    formulaKo: "QoQ 성장률 = (이번 분기 − 지난 분기) / 지난 분기 × 100",
-    examples: [
-      { inputs: { previous: 25000, current: 28500 }, label: { ko: "25,000 → 28,500", en: "25,000 → 28,500" } },
-      { inputs: { previous: 12000, current: 10800 }, label: { ko: "12,000 → 10,800", en: "12,000 → 10,800" } },
-      { inputs: { previous: 3000, current: 4200 },   label: { ko: "3,000 → 4,200",   en: "3,000 → 4,200" } },
-    ],
-    relatedSlugs: RELATED_B,
-    errorWhen: (inp) => inp.previous === 0 ? { ko: "지난 분기 값이 0이면 계산할 수 없습니다.", en: "Previous quarter value cannot be zero." } : null,
-  },
-
-  "wow-growth": {
-    slug: "wow-growth-calculator",
-    tabs: TABS_B,
-    inputs: [
-      { key: "previous", label: { ko: "지난주 값",  en: "Previous Week Value" }, allowNegative: true },
-      { key: "current",  label: { ko: "이번주 값",  en: "Current Week Value" },  allowNegative: true },
-    ],
-    outputs: PERIOD_OUTPUTS,
-    formulaEn: "WoW Growth = (Current − Previous) / Previous × 100",
-    formulaKo: "WoW 성장률 = (이번주 − 지난주) / 지난주 × 100",
-    examples: [
-      { inputs: { previous: 2000, current: 2400 }, label: { ko: "2,000 → 2,400", en: "2,000 → 2,400" } },
-      { inputs: { previous: 500, current: 475 },   label: { ko: "500 → 475",     en: "500 → 475" } },
-      { inputs: { previous: 150, current: 210 },   label: { ko: "150 → 210",     en: "150 → 210" } },
-    ],
-    relatedSlugs: RELATED_B,
-    errorWhen: (inp) => inp.previous === 0 ? { ko: "지난주 값이 0이면 계산할 수 없습니다.", en: "Previous week value cannot be zero." } : null,
   },
 
   "goal-growth": {

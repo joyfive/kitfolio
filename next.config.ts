@@ -2,6 +2,22 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
+    // 동일 수식 계산기 통합: 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW →
+    // 성장률 계산기(growth-rate-calculator) 한 페이지로 병합. 구 URL은 영구 리다이렉트.
+    const mergedIntoGrowthRate = [
+      "percentage-change-calculator",
+      "percentage-increase-calculator",
+      "percentage-decrease-calculator",
+      "mom-growth-calculator",
+      "yoy-growth-calculator",
+      "qoq-growth-calculator",
+      "wow-growth-calculator",
+    ];
+    const growthRedirects = mergedIntoGrowthRate.flatMap((slug) => [
+      { source: `/${slug}`, destination: "/growth-rate-calculator", permanent: true },
+      { source: `/en/${slug}`, destination: "/en/growth-rate-calculator", permanent: true },
+    ]);
+
     return [
       // 구 2뎁스 URL → 플랫 URL (제품 방향: 모든 도구는 1뎁스 라우트)
       {
@@ -14,6 +30,7 @@ const nextConfig: NextConfig = {
         destination: "/en/slack-timestamp-converter",
         permanent: true,
       },
+      ...growthRedirects,
     ];
   },
 };

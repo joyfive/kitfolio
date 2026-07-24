@@ -5,6 +5,7 @@ import Link from "next/link";
 import PageHead from "../PageHead";
 import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
+import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
 import { localizedHref } from "../../lib/content";
 import { compute } from "./growthMath";
@@ -312,6 +313,7 @@ export default function GrowthCalculator({ mode }: { mode: GrowthMode }) {
         </div>
       </div>
 
+      <ToolGuide slug={cfg.slug} />
       <Faq slug={cfg.slug} />
       <RelatedTools slug={cfg.slug} />
     </>

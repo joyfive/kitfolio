@@ -1,13 +1,6 @@
 export type GrowthMode =
   | "growth-rate"
-  | "percentage-change"
-  | "percentage-increase"
-  | "percentage-decrease"
   | "percent-difference"
-  | "mom-growth"
-  | "yoy-growth"
-  | "qoq-growth"
-  | "wow-growth"
   | "goal-growth"
   | "required-growth"
   | "reverse-growth"
@@ -49,10 +42,7 @@ function dir(rate: number): Direction {
 
 export function compute(mode: GrowthMode, inputs: Record<string, number>): GrowthResult | null {
   switch (mode) {
-    case "growth-rate":
-    case "percentage-change":
-    case "percentage-increase":
-    case "percentage-decrease": {
+    case "growth-rate": {
       const { start, end } = inputs;
       if (!ok(start, end) || start === 0) return null;
       const changeRate = ((end - start) / start) * 100;
@@ -71,20 +61,6 @@ export function compute(mode: GrowthMode, inputs: Record<string, number>): Growt
       return {
         changeRate: (Math.abs(a - b) / avg) * 100,
         difference: Math.abs(a - b),
-      };
-    }
-    case "mom-growth":
-    case "yoy-growth":
-    case "qoq-growth":
-    case "wow-growth": {
-      const { previous, current } = inputs;
-      if (!ok(previous, current) || previous === 0) return null;
-      const changeRate = ((current - previous) / previous) * 100;
-      return {
-        changeRate,
-        difference: current - previous,
-        multiplier: current / previous,
-        direction: dir(changeRate),
       };
     }
     case "goal-growth": {
