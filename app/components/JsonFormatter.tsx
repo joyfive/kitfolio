@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
+import ToolGuide from "./ToolGuide";
 import { useT, type Dict } from "../lib/i18n";
 
 // 컨트롤 마이크로카피(버튼·상태 라벨)만 로컬 dict.
@@ -297,6 +298,7 @@ export default function JsonFormatter() {
           </div>
       </div>
 
+      <ToolGuide slug="json-formatter" />
       <Faq slug="json-formatter" />
       <RelatedTools slug="json-formatter" />
     </>

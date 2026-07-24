@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PdfToolTabs from "./PdfToolTabs";
 import PdfDropzone from "./PdfDropzone";
@@ -367,6 +368,7 @@ export default function PdfMerge() {
         </div>
       </div>
 
+      <ToolGuide slug="pdf-merge" />
       <Faq slug="pdf-merge" />
       <RelatedTools slug="pdf-merge" />
     </>

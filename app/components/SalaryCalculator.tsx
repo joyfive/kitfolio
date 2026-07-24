@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -361,6 +362,7 @@ export default function SalaryCalculator() {
         </div>
       </div>
 
+      <ToolGuide slug="salary-calculator" />
       <Faq slug="salary-calculator" />
       <RelatedTools slug="salary-calculator" />
     </>

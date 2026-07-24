@@ -69,6 +69,10 @@ type ToolCopy = {
   /** AEO 명시 문단 — What is / Who is it for / How does it work / Why use it.
    *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출 — ready 도구만 */
   aeo?: { what: string; who: string; how: string; why: string };
+  /** 심화 가이드 — 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
+   *  사용 맥락·실전 예시·팁 등 고유 본문으로 페이지 가치를 보강한다.
+   *  ToolGuide 컴포넌트가 소비 (섹션 = heading + 문단 배열). */
+  guide?: { heading: string; body: string[] }[];
 };
 
 type ToolOg = { title: string; subtitle: string };
@@ -144,6 +148,43 @@ export const HUB = {
       subtitle:
         "Browser-based micro tools for modern knowledge workers — work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
       stat: " tools",
+    },
+  },
+  /** 허브 하단 설명 콘텐츠 — 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
+  about: {
+    ko: {
+      heading: "Kitfolio는 어떤 서비스인가요?",
+      sections: [
+        {
+          h: "일하는 사람을 위한 작은 도구 모음",
+          p: "Kitfolio는 기획자·디자이너·개발자·마케터·구직자·직장인·소상공인이 업무 중 반복해서 마주치는 작은 문제를 빠르게 푸는 브라우저 기반 도구 모음입니다. 글자 수를 세거나, JSON을 정리하거나, 연봉 실수령액을 계산하거나, QR 코드를 만들거나, PDF를 병합하는 것처럼 자주 필요하지만 매번 검색해서 찾기는 번거로운 작업들을 한 곳에 모았습니다. 무거운 프로그램을 설치할 필요도, 회원가입을 할 필요도 없이 페이지를 열면 바로 씁니다.",
+        },
+        {
+          h: "모든 처리는 브라우저 안에서",
+          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있고, 네트워크가 느린 환경에서도 빠르게 반응합니다.",
+        },
+        {
+          h: "필요한 도구를 빠르게 찾기",
+          p: "상단 검색창에 하려는 작업을 입력하거나 직군 필터로 좁혀서 원하는 도구를 바로 찾을 수 있습니다. 각 도구 페이지에는 사용법과 자주 묻는 질문이 함께 정리되어 있어 처음 쓰는 도구도 헤매지 않습니다. Kitfolio는 하나의 거대한 앱이 아니라, 각자 뚜렷한 목적을 가진 작고 실용적인 도구들이 계속 늘어나는 컬렉션입니다.",
+        },
+      ],
+    },
+    en: {
+      heading: "What is Kitfolio?",
+      sections: [
+        {
+          h: "Small tools for people who work",
+          p: "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they run into during the workday. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs — tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
+        },
+        {
+          h: "Everything runs in your browser",
+          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere — all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
+        },
+        {
+          h: "Find the right tool fast",
+          p: "Type what you're trying to do into the search box at the top, or narrow the list by role to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app — it's a growing library of small, focused, practical tools, each with a clear purpose.",
+        },
+      ],
     },
   },
 };
@@ -539,6 +580,29 @@ export const TOOLS: Tool[] = [
           how: "왼쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 오른쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
           why: "서버 전송 없이 브라우저에서만 동작해 민감한 데이터도 안전하고, 설치·가입 없이 바로 쓸 수 있어 디버깅 시간을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "JSON 포매터는 언제 쓰나요?",
+            body: [
+              "JSON은 API가 데이터를 주고받는 표준 형식이지만, 실제로 마주치는 JSON은 한 줄로 길게 압축돼 있거나 들여쓰기가 뒤죽박죽인 경우가 많습니다. 이런 문자열은 눈으로 구조를 파악하기 어렵고, 어디서 중괄호가 닫히는지, 어떤 키가 어떤 값에 속하는지 한눈에 들어오지 않습니다. JSON 포매터는 이렇게 뭉친 문자열을 계층에 맞춰 들여쓰고 키·값·문자열·숫자를 색으로 구분해, 데이터의 형태를 즉시 읽을 수 있게 정리합니다.",
+              "가장 흔한 사용 상황은 API 응답 확인입니다. 브라우저 개발자 도구나 서버 로그에서 복사한 응답을 붙여넣으면 어떤 필드가 비어 있는지, 배열에 항목이 몇 개인지, 중첩된 객체가 어떻게 구성됐는지 바로 확인할 수 있습니다. 설정 파일(package.json, tsconfig.json 등)을 손보기 전 구조를 파악하거나, 동료가 채팅으로 보낸 한 줄짜리 JSON을 읽기 좋게 펼칠 때도 유용합니다.",
+            ],
+          },
+          {
+            heading: "포맷팅과 유효성 검사는 다릅니다",
+            body: [
+              "이 도구는 두 가지 일을 동시에 합니다. 하나는 보기 좋게 정리하는 포맷팅이고, 다른 하나는 문법이 올바른지 확인하는 유효성 검사입니다. JSON은 마지막 항목 뒤에 쉼표를 붙이거나(trailing comma), 키를 큰따옴표 없이 쓰거나, 작은따옴표로 문자열을 감싸면 규칙 위반입니다. 사람 눈에는 사소해 보여도 파서는 이런 실수에서 멈춥니다.",
+              "유효하지 않은 JSON을 붙여넣으면 어느 줄, 어느 열에서 문제가 생겼는지 짚어주므로, 긴 페이로드에서 오타 하나를 찾느라 눈으로 훑을 필요가 없습니다. 반대로 데이터 용량을 줄여야 할 때는 압축(minify) 기능으로 모든 공백과 줄바꿈을 제거해 한 줄로 만들 수 있습니다. 코드에 JSON을 인라인으로 넣거나 네트워크 전송량을 아껴야 할 때 쓰입니다.",
+            ],
+          },
+          {
+            heading: "안심하고 쓰는 이유",
+            body: [
+              "JSON에는 종종 토큰, 개인정보, 내부 식별자 같은 민감한 값이 담깁니다. 온라인 포매터 중에는 입력을 서버로 보내 처리하는 곳도 있어, 무심코 붙여넣은 데이터가 외부에 남을 수 있습니다. Kitfolio의 JSON 포매터는 파싱·포맷·검증·압축을 전부 브라우저 안에서 처리하며, 입력한 내용을 어떤 서버로도 전송하지 않습니다.",
+              "따라서 사내 API 응답이나 인증 토큰이 포함된 데이터도 걱정 없이 붙여넣을 수 있고, 네트워크가 없는 환경에서도 동작합니다. 설치나 로그인 없이 페이지를 여는 순간 바로 쓸 수 있다는 점도 반복적인 디버깅 작업의 마찰을 크게 줄여줍니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Format JSON with indentation and syntax highlighting. Detects errors and validates.",
@@ -555,6 +619,29 @@ export const TOOLS: Tool[] = [
           how: "Paste JSON into the left pane and it is parsed instantly in your browser — the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
           why: "It runs entirely in your browser with no upload, so sensitive data stays safe — and with no install or sign-up, debugging gets faster.",
         },
+        guide: [
+          {
+            heading: "When do you use a JSON formatter?",
+            body: [
+              "JSON is the standard format APIs use to exchange data, but the JSON you actually encounter is often minified onto a single long line or indented inconsistently. Strings like that are hard to read: it's not obvious where a brace closes, which key owns which value, or how deeply objects are nested. A JSON formatter re-indents the string along its hierarchy and colors keys, values, strings, and numbers differently so the shape of the data becomes readable at a glance.",
+              "The most common situation is inspecting an API response. Paste a response copied from your browser's dev tools or a server log and you can immediately see which fields are empty, how many items an array holds, and how nested objects are structured. It's just as useful for understanding a config file (package.json, tsconfig.json) before editing it, or for expanding a one-line JSON blob a teammate dropped into chat.",
+            ],
+          },
+          {
+            heading: "Formatting and validation are different",
+            body: [
+              "This tool does two jobs at once: it pretty-prints the data, and it checks that the syntax is valid. JSON forbids a trailing comma after the last item, requires keys to be wrapped in double quotes, and rejects strings wrapped in single quotes. These look trivial to a human, but a parser stops dead on any of them.",
+              "When you paste invalid JSON, the tool points to the exact line and column where the problem is, so you don't have to scan a long payload hunting for a stray character. When you need to shrink the data instead, the minify function strips every space and line break into a single line — handy for inlining JSON in code or trimming what you send over the network.",
+            ],
+          },
+          {
+            heading: "Why it's safe to use",
+            body: [
+              "JSON frequently carries sensitive values: tokens, personal data, internal identifiers. Some online formatters send your input to a server to process it, which means data you pasted without thinking can end up stored elsewhere. Kitfolio's JSON formatter parses, formats, validates, and minifies entirely in your browser and never transmits your input to any server.",
+              "That means you can paste internal API responses or data containing auth tokens without worry, and it works even with no network connection. Because there's nothing to install and no login, the tool is ready the moment the page opens — which removes a lot of friction from repetitive debugging.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1265,6 +1352,29 @@ export const TOOLS: Tool[] = [
           how: "타입과 각도를 고르고 트랙에서 색상 정지점을 드래그하면 미리보기가 실시간으로 갱신되고, 결과 CSS를 바로 복사할 수 있습니다.",
           why: "그라디언트 문법을 외울 필요 없이 눈으로 확인하며 만들 수 있어 시안 작업과 코드 작성이 모두 빨라집니다.",
         },
+        guide: [
+          {
+            heading: "세 가지 그라디언트 타입 이해하기",
+            body: [
+              "CSS 그라디언트는 크게 세 종류입니다. linear-gradient는 지정한 각도를 따라 색이 직선으로 번지는 가장 흔한 형태로, 버튼·배경·히어로 섹션에 두루 쓰입니다. radial-gradient는 한 점에서 바깥으로 퍼지는 원형으로 은은한 조명 효과나 스포트라이트 느낌을 낼 때 좋고, conic-gradient는 중심을 축으로 각도에 따라 색이 도는 원뿔형으로 파이 차트나 컬러 휠 같은 표현에 적합합니다.",
+              "이 도구에서는 타입을 바꿀 때마다 조절 가능한 옵션(각도, 중심 위치 등)이 함께 바뀌고, 미리보기가 실시간으로 갱신됩니다. 세 타입을 직접 전환해 보며 어떤 형태가 원하는 느낌에 가까운지 눈으로 비교하는 것이 가장 빠릅니다.",
+            ],
+          },
+          {
+            heading: "색상 정지점으로 분위기 만들기",
+            body: [
+              "그라디언트의 인상은 색상 정지점(color stop)의 개수와 위치에서 결정됩니다. 두 색만 부드럽게 잇는 2정지점 그라디언트는 차분하고 신뢰감 있는 느낌을 주고, 정지점을 여러 개 두면 화려하고 생동감 있는 배경을 만들 수 있습니다. 정지점 위치를 한쪽으로 몰면 색 전환이 급해지고, 고르게 벌리면 전환이 완만해집니다.",
+              "자연스러운 그라디언트를 만드는 요령은 명도뿐 아니라 색상(hue)도 함께 조금씩 옮기는 것입니다. 같은 색의 밝기만 바꾸면 칙칙해 보이기 쉬우므로, 인접한 색상으로 살짝 이동시키면 훨씬 생기 있는 결과가 나옵니다.",
+            ],
+          },
+          {
+            heading: "복사한 CSS를 바로 쓰기",
+            body: [
+              "완성된 그라디언트는 background 속성에 그대로 넣을 수 있는 CSS 코드로 복사됩니다. 별도의 이미지 파일이 아니라 코드이기 때문에 화면 크기에 따라 깨지지 않고, 용량 부담도 없으며, 나중에 색만 살짝 바꾸기도 쉽습니다.",
+              "linear·radial 그라디언트는 모든 모던 브라우저에서 동작하고 conic-gradient도 최신 브라우저에서 폭넓게 지원됩니다. 만든 그라디언트를 보관하고 싶다면 생성된 CSS 코드를 복사해 두면 됩니다. 같은 코드를 다시 붙여넣으면 언제든 동일한 결과를 재현할 수 있습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Edit linear, radial and conic gradients visually and copy the CSS instantly.",
@@ -1277,6 +1387,29 @@ export const TOOLS: Tool[] = [
           how: "Pick a type and angle, drag color stops on the track, watch the live preview update, then copy the resulting CSS.",
           why: "You can build gradients by eye without memorizing the syntax, speeding up both mockups and code.",
         },
+        guide: [
+          {
+            heading: "Understanding the three gradient types",
+            body: [
+              "CSS gradients come in three kinds. linear-gradient spreads color in a straight line along an angle you set — the most common form, used for buttons, backgrounds, and hero sections. radial-gradient radiates outward from a point, great for soft lighting or a spotlight effect, and conic-gradient rotates color around a center by angle, well suited to pie charts and color wheels.",
+              "In this tool, switching the type also switches the options you can adjust (angle, center position, and so on), and the preview updates live. The fastest way to choose is to flip between the three types and compare by eye which shape is closest to the feel you want.",
+            ],
+          },
+          {
+            heading: "Setting the mood with color stops",
+            body: [
+              "A gradient's character comes from the number and placement of its color stops. A two-stop gradient that eases between two colors feels calm and trustworthy, while several stops can build a vivid, energetic background. Bunching the stops to one side makes the color transition abrupt; spreading them evenly makes it gradual.",
+              "The trick to a natural-looking gradient is to shift the hue a little, not just the brightness. Changing only the lightness of a single color tends to look muddy, so nudging toward an adjacent hue gives a far livelier result.",
+            ],
+          },
+          {
+            heading: "Putting the copied CSS to work",
+            body: [
+              "The finished gradient copies out as CSS you can drop straight into a background property. Because it's code rather than an image file, it never pixelates at different screen sizes, adds no file weight, and is easy to re-tint later.",
+              "Linear and radial gradients work in every modern browser, and conic-gradient is widely supported in current ones. To keep a gradient you like, just copy the generated CSS — pasting the same code reproduces the exact result any time.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1632,6 +1765,29 @@ export const TOOLS: Tool[] = [
           how: "텍스트를 입력하거나 붙여넣으면 즉시 공백 포함·제외 글자 수와 예상 읽기 시간, 주요 SNS별 남은 글자 수를 보여줍니다.",
           why: "플랫폼별 글자 수 제한을 한 화면에서 확인할 수 있어, 글을 올리기 전에 따로 세어보거나 잘릴 걱정을 할 필요가 없습니다.",
         },
+        guide: [
+          {
+            heading: "글자 수는 왜 세어야 할까요",
+            body: [
+              "짧은 글일수록 길이 제한이 결과를 좌우합니다. 자기소개서 항목에는 '500자 이내'처럼 명확한 상한이 있고, SNS는 플랫폼마다 허용 글자 수가 다르며, 메타 설명이나 광고 문구는 일정 길이를 넘으면 뒤가 잘려 노출됩니다. 이런 글은 '대충 이 정도'로 쓰면 반드시 다시 손봐야 하므로, 쓰는 동안 실시간으로 길이를 보는 것이 가장 효율적입니다.",
+              "이 카운터는 텍스트를 입력하거나 붙여넣는 즉시 글자·단어·문장·줄·단락 수를 갱신합니다. 공백을 포함한 수와 제외한 수를 함께 보여주기 때문에, '공백 제외 300자'처럼 조건이 붙는 지원서나 과제에도 바로 맞출 수 있습니다.",
+            ],
+          },
+          {
+            heading: "한글·영어·이모지를 어떻게 세나요",
+            body: [
+              "글자 수 계산은 언어에 따라 헷갈리기 쉽습니다. 이 도구는 한글 한 글자, 영문 한 글자, 숫자, 문장 부호를 모두 1글자로 세고, 이모지처럼 여러 코드로 이루어진 문자도 눈에 보이는 대로 한 글자로 계산합니다. 단어 수는 공백과 줄바꿈을 기준으로 구분하므로, 영문 글쓰기에서 흔히 요구하는 '단어 수' 기준에도 그대로 활용할 수 있습니다.",
+              "발표 대본이나 영상 스크립트를 준비할 때는 예상 읽기·말하기 시간이 도움이 됩니다. 분당 읽기 속도와 발화 속도를 기준으로 대략적인 소요 시간을 알려주므로, 정해진 시간 안에 들어가는 분량인지 미리 가늠할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "안전하게, 그리고 바로",
+            body: [
+              "자기소개서 초안이나 미공개 공지처럼 남에게 보이고 싶지 않은 글을 다룰 때가 많습니다. 이 카운터는 모든 집계를 브라우저 안에서만 처리하고, 입력한 텍스트를 서버로 전송하거나 저장하지 않습니다. 탭을 닫으면 내용도 함께 사라지므로 흔적이 남지 않습니다.",
+              "설치나 로그인 없이 페이지를 열면 바로 쓸 수 있어, 글을 쓰다가 길이만 빠르게 확인하고 다시 작업으로 돌아오는 흐름을 끊지 않습니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Live counts of characters, words, sentences and lines. With social limits.",
@@ -1644,6 +1800,29 @@ export const TOOLS: Tool[] = [
           how: "Type or paste text and it instantly shows counts with and without spaces, estimated reading time, and remaining characters for major social platforms.",
           why: "You can check every platform's length limit on one screen, so nothing gets cut off after you post.",
         },
+        guide: [
+          {
+            heading: "Why count characters at all?",
+            body: [
+              "The shorter the text, the more a length limit shapes the outcome. Application fields cap you at something like 500 characters, social platforms each allow a different amount, and a meta description or ad headline gets truncated once it passes a certain length. Writing these by feel almost always means going back to trim, so watching the length live as you write is the efficient way.",
+              "This counter updates characters, words, sentences, lines, and paragraphs the moment you type or paste. It shows the count both with and without spaces, so you can hit requirements phrased as 'up to 300 characters excluding spaces' without guessing.",
+            ],
+          },
+          {
+            heading: "How it counts Latin, CJK, and emoji",
+            body: [
+              "Counting is easy to get wrong across languages. This tool counts each Korean or Chinese character, each Latin letter, digit, and punctuation mark as one character, and treats an emoji — even one built from several code points — as the single character you actually see. Words are split on spaces and line breaks, so it works for the word-count requirements common in English writing too.",
+              "When you're preparing a talk or a video script, the estimated reading and speaking time helps. Based on a per-minute reading and speaking rate, it gives you a rough duration so you can tell in advance whether your draft fits the time you have.",
+            ],
+          },
+          {
+            heading: "Private, and ready right away",
+            body: [
+              "You're often working with things you'd rather not share yet — a résumé draft, an unpublished announcement. This counter does all of its counting inside your browser and never uploads or stores the text you enter. Close the tab and the content is gone, leaving nothing behind.",
+              "With no install and no login, it's ready the moment the page opens, so you can glance at the length and get straight back to writing without breaking your flow.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -1762,6 +1941,29 @@ export const TOOLS: Tool[] = [
           how: "연봉 또는 월급을 입력하면 비과세액을 뺀 과세소득으로 국민연금·건강보험·장기요양·고용보험을 계산하고, 근로소득 간이세액표 방식을 근사해 근로소득세와 지방소득세를 산출한 뒤 모두 더해 실수령액을 구합니다. 부양가족 수, 20세 이하 자녀 수, 원천징수 선택비율을 반영합니다.",
           why: "광고가 많고 입력이 복잡한 다른 계산기 대신, 입력하면 바로 결과가 나오는 빠른 예상 계산기로 연봉협상·이직 비교를 몇 초 만에 끝낼 수 있기 때문입니다.",
         },
+        guide: [
+          {
+            heading: "세전 연봉과 실수령액은 왜 다를까",
+            body: [
+              "'연봉 4천만원'이라고 할 때의 금액은 세금과 보험료를 떼기 전의 세전 금액입니다. 실제로 통장에 들어오는 돈은 여기서 4대보험(국민연금·건강보험·장기요양보험·고용보험)과 근로소득세·지방소득세를 뺀 실수령액이며, 연봉 구간에 따라 세전 금액의 대략 8~18%가 공제됩니다. 그래서 같은 '연봉'이라도 세전으로 비교하느냐 실수령으로 비교하느냐에 따라 체감이 크게 달라집니다.",
+              "이 계산기는 세전 연봉이나 월급을 입력하면 각 항목이 얼마씩 빠지는지 표로 나눠 보여주고, 월 실수령액과 연 실수령액을 함께 계산합니다. 어떤 공제가 실수령액을 가장 많이 줄이는지 눈으로 확인할 수 있어, 급여명세서를 처음 받아보는 사회초년생이 구조를 이해하는 데도 도움이 됩니다.",
+            ],
+          },
+          {
+            heading: "결과를 바꾸는 입력 항목들",
+            body: [
+              "실수령액은 연봉 금액만으로 정해지지 않습니다. 식대 같은 비과세 금액은 세금과 보험료 계산에서 빠지므로 비과세액이 클수록 실수령액이 늘어납니다. 부양가족 수와 20세 이하 자녀 수는 근로소득세를 줄이는 방향으로 작용하고, 매월 떼는 세금 비율을 정하는 원천징수 선택비율(80·100·120%)도 월 실수령액에 영향을 줍니다.",
+              "특히 원천징수 비율은 오해하기 쉬운 항목입니다. 80%를 고르면 매달 세금을 덜 떼어 월 실수령액이 늘지만 연말정산에서 그만큼 더 낼 수 있고, 120%는 반대로 매달 더 떼는 대신 연말에 돌려받을 가능성이 커집니다. 연간 총 세액 자체는 같으므로, 매달 받는 금액과 연말 정산 시점 중 어느 쪽을 선호하는지의 문제입니다.",
+            ],
+          },
+          {
+            heading: "예상치로 현명하게 쓰는 법",
+            body: [
+              "이 계산기는 최신 4대보험 요율과 근로소득 간이세액표 방식을 근사한 예상값을 제공합니다. 회사별 비과세 항목, 상여·성과급, 중도 입퇴사, 각종 소득공제, 최종 연말정산 결과까지는 반영하지 않으므로 실제 급여명세서와는 차이가 있을 수 있습니다. 정확한 세액은 국세청 홈택스나 회사 급여 담당 부서를 통해 확인하는 것이 좋습니다.",
+              "그럼에도 이런 빠른 예상 계산이 유용한 이유는, 이직 제안을 비교하거나 연봉협상 목표를 잡을 때 '이 연봉이면 매달 대략 얼마가 들어오는지'를 몇 초 안에 감 잡을 수 있기 때문입니다. 여러 금액을 바꿔 넣어보며 협상 구간을 잡는 용도로 활용해 보세요.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Estimate monthly & yearly take-home pay from gross salary after Korea's insurances and taxes, with a full breakdown.",
@@ -1778,6 +1980,29 @@ export const TOOLS: Tool[] = [
           how: "Enter an annual or monthly amount; the calculator subtracts the non-taxable portion, computes National Pension, Health, Long-Term Care and Employment Insurance on the taxable base, and approximates income and local tax from Korea's simplified withholding tax table. It reflects the number of dependents, children under 20 and the chosen withholding rate.",
           why: "Unlike ad-heavy calculators with long forms, it returns a result the moment you type, so you can finish a salary comparison or negotiation check in seconds.",
         },
+        guide: [
+          {
+            heading: "Why gross salary and take-home pay differ",
+            body: [
+              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax — roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
+              "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure — useful especially for someone reading their first payslip.",
+            ],
+          },
+          {
+            heading: "The inputs that change the result",
+            body: [
+              "Take-home pay isn't set by the salary figure alone. A non-taxable amount such as a meal allowance is excluded from the tax and insurance base, so a larger non-taxable amount raises your net pay. The number of dependents and children under 20 lowers income tax, and the withholding rate you choose (80/100/120%) shifts how much tax is taken each month.",
+              "The withholding rate is the piece most people misread. Choosing 80% withholds less each month — raising monthly net pay — but you may owe more at year-end settlement; 120% does the opposite, withholding more monthly with a better chance of a refund. The total annual tax is the same either way, so it comes down to whether you'd rather have the money monthly or at settlement.",
+            ],
+          },
+          {
+            heading: "Using it wisely as an estimate",
+            body: [
+              "This calculator gives an estimate that approximates the latest insurance rates and Korea's simplified withholding tax table. It does not account for company-specific non-taxable items, bonuses, mid-year joining or leaving, various deductions, or your final year-end settlement, so it can differ from your actual payslip. For an exact figure, check Hometax or your payroll department.",
+              "It's still useful precisely because it's fast: when comparing job offers or setting a negotiation target, you can grasp roughly what a given salary means per month in seconds. Try several figures to map out your negotiation range.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -4314,6 +4539,29 @@ export const TOOLS: Tool[] = [
           how: "URL을 온전한 QR 코어로 만든 뒤, 아치·하트 같은 모양은 코어 주위에 장식 셀을 더해 구성하고, 결과를 브라우저에서 다시 판독해 인식을 확인합니다.",
           why: "청첩장·인쇄물에 어울리는 감성 디자인 QR을 서버 전송 없이 만들고 PNG·SVG로 바로 내려받을 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "QR 코드는 어디에 쓰나요",
+            body: [
+              "QR 코드는 긴 링크를 카메라로 한 번에 열 수 있게 바꿔주는 사각형 코드입니다. 명함이나 전단지에 웹사이트 주소를 적어두면 사람들이 일일이 타이핑해야 하지만, QR 코드를 넣으면 스마트폰 카메라를 갖다 대는 것만으로 바로 페이지가 열립니다. 그래서 매장 메뉴판, 행사 안내, 제품 포장, 청첩장, 발표 슬라이드처럼 종이와 화면을 잇는 자리에 널리 쓰입니다.",
+              "이 생성기는 URL을 입력하면 즉시 QR 코드를 만들고, 색상과 셀 모양, 인식 품질을 원하는 대로 조절할 수 있습니다. 완성한 코드는 인쇄에 적합한 PNG나, 크기를 키워도 깨지지 않는 벡터 형식인 SVG로 내려받을 수 있습니다.",
+            ],
+          },
+          {
+            heading: "디자인과 인식률의 균형",
+            body: [
+              "QR 코드는 색을 바꾸거나 모양을 꾸밀 수 있지만, 지나치게 손대면 스캔이 안 될 수 있습니다. 인식이 잘 되려면 코드의 어두운 부분과 밝은 배경 사이에 충분한 명암 대비가 있어야 하고, 코드 주변에 여백(콰이어트 존)이 남아 있어야 합니다. 배경색을 코드 색과 너무 비슷하게 두거나 여백을 없애면 카메라가 코드를 찾지 못합니다.",
+              "이 도구의 아치형·하트형 같은 감성 디자인 QR은 온전한 QR 코어는 그대로 두고 주변에만 장식을 더하는 방식이며, 인식 안정성을 위해 오류 복원 수준을 최고로 고정합니다. 오류 복원이 높을수록 코드 일부가 로고나 장식에 가려져도 내용을 복원할 수 있습니다. 그래도 인쇄 전에는 반드시 실제 스마트폰으로 스캔해 확인하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "링크는 서버로 가지 않습니다",
+            body: [
+              "QR 코드에는 개인 행사 초대 링크나 미공개 페이지 주소처럼 아직 알리고 싶지 않은 URL이 담기기도 합니다. 이 생성기는 코드 생성과 판독 확인을 모두 브라우저 안에서 처리하며, 입력한 링크를 서버에 전송하거나 저장하지 않습니다.",
+              "또한 여기서 만든 QR 코드는 입력한 주소를 직접 담는 정적 코드라, 중간에 다른 서비스를 거치지 않습니다. 즉 그 서비스가 사라져서 코드가 먹통이 될 걱정 없이, 코드가 인쇄된 종이가 남아 있는 한 계속 동작합니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Create a QR code from a URL, customize its shape and color, and download PNG or SVG.",
@@ -4330,6 +4578,29 @@ export const TOOLS: Tool[] = [
           how: "It builds an intact QR core from the URL, forms arch or heart shapes by adding decorative cells around that core, and re-decodes the result in your browser to confirm it scans.",
           why: "It makes styled QR codes suited to invitations and print without sending the URL to a server, ready to download as PNG or SVG.",
         },
+        guide: [
+          {
+            heading: "What QR codes are for",
+            body: [
+              "A QR code is a square pattern that turns a long link into something a camera can open in one step. Print a web address on a business card or flyer and people have to type it out; add a QR code and they just point their phone's camera at it to open the page. That's why they show up wherever paper meets screen — store menus, event signage, product packaging, wedding invitations, presentation slides.",
+              "This generator creates a QR code the moment you enter a URL, and lets you adjust the color, module shape, and recognition quality. You can download the finished code as a PNG suited to printing, or as an SVG — a vector format that stays crisp at any size.",
+            ],
+          },
+          {
+            heading: "Balancing design and scannability",
+            body: [
+              "You can recolor and decorate a QR code, but overdo it and it stops scanning. For reliable reads there needs to be enough contrast between the code's dark modules and the light background, and a margin of empty space (the quiet zone) around it. Make the background too close in color to the code, or crop away the margin, and a camera can't find it.",
+              "This tool's styled shapes like arch and heart keep the QR core intact and add decoration only around it, locking error correction to maximum for reliability. Higher error correction means the code can still be read even when part of it is covered by a logo or ornament. Even so, always scan the code with a real phone before printing.",
+            ],
+          },
+          {
+            heading: "Your link never leaves the browser",
+            body: [
+              "A QR code sometimes carries a URL you'd rather not publicize yet — a private event invite, an unlisted page. This generator does both the encoding and the scan verification inside your browser and never transmits or stores the link you enter.",
+              "The codes it makes are also static: they embed your address directly rather than routing through another service. That means there's no third party that could shut down and leave your code dead — as long as the printed code exists, it keeps working.",
+            ],
+          },
+        ],
       },
     },
     faq: {
@@ -4594,6 +4865,29 @@ export const TOOLS: Tool[] = [
           how: "업로드한 PDF의 페이지를 순서대로 복사해 새 PDF를 만들며, 병합 순서는 드래그·이동·삭제로 조정합니다.",
           why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 여러 PDF를 하나로 합칠 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "PDF를 합쳐야 하는 순간",
+            body: [
+              "업무 문서는 조각으로 흩어지기 쉽습니다. 각자 만든 슬라이드를 모아 하나의 발표 자료로 묶거나, 여러 장을 따로 스캔한 계약서를 한 파일로 정리하거나, 견적서·명세서·증빙을 붙여 한 번에 제출해야 할 때가 그렇습니다. 파일이 여러 개로 나뉘어 있으면 받는 사람이 순서를 맞춰 열어야 하고, 이메일 첨부도 번거로워집니다.",
+              "PDF 병합은 이렇게 나뉜 PDF들을 원하는 순서대로 이어 붙여 하나의 파일로 만들어 줍니다. 파일을 업로드한 뒤 드래그하거나 위아래로 옮겨 순서를 정하고, 필요 없는 파일은 목록에서 빼면 됩니다. 목록에 보이는 위에서 아래 순서 그대로 합쳐집니다.",
+            ],
+          },
+          {
+            heading: "합치기 전에 순서를 확인하세요",
+            body: [
+              "병합에서 가장 흔한 실수는 순서입니다. 계약서 뒤에 부록이 와야 하는데 뒤바뀌거나, 표지가 중간에 끼는 식이죠. 이 도구는 병합을 실행하기 전에 파일 목록을 눈으로 보며 순서를 조정할 수 있어, 합친 뒤 다시 만드는 수고를 덜어 줍니다.",
+              "여러 파일을 한 번에 올린 경우 이름순으로 정렬해 두면 순서를 맞추기 쉽습니다. 스캔 파일이라면 파일명에 01, 02처럼 번호를 붙여 두는 습관이 병합 순서를 자동으로 정리해 줍니다.",
+            ],
+          },
+          {
+            heading: "문서를 업로드하지 않고 처리합니다",
+            body: [
+              "계약서, 명세서, 신분증 스캔본처럼 PDF에는 민감한 문서가 담기는 경우가 많습니다. 파일을 서버에 올려 처리하는 온라인 도구를 쓰면, 그 문서가 외부 서버에 잠시라도 머물게 됩니다. Kitfolio의 PDF 병합은 모든 처리를 브라우저 안에서 수행하며, 업로드한 파일을 어떤 서버로도 전송하거나 저장하지 않습니다.",
+              "파일은 여러분의 기기를 벗어나지 않고, 병합이 끝난 결과물은 그 자리에서 바로 내려받습니다. 민감한 문서를 다룰 때도 안심할 수 있고, 인터넷이 불안정한 환경에서도 동작합니다.",
+            ],
+          },
+        ],
       },
       en: {
         card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
@@ -4610,6 +4904,29 @@ export const TOOLS: Tool[] = [
           how: "It copies the pages of each uploaded PDF in order into a new PDF, with the order controlled by drag, move, and remove actions.",
           why: "It combines multiple PDFs into one directly in the browser, with no install, no login, and no file upload to a server.",
         },
+        guide: [
+          {
+            heading: "When you need to merge PDFs",
+            body: [
+              "Work documents tend to arrive in pieces. Slides each person built need to be joined into one deck; a contract scanned a page at a time needs to become a single file; a quote, an invoice, and receipts have to be submitted together. When files stay separate, the recipient has to open them in the right order, and email attachments get unwieldy.",
+              "Merge PDF stitches these separate PDFs together into one file in the order you choose. Upload the files, set the order by dragging or moving them up and down, and drop any you don't need from the list. They combine top to bottom, exactly as the list shows.",
+            ],
+          },
+          {
+            heading: "Check the order before you merge",
+            body: [
+              "The most common merging mistake is order — an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
+              "If you uploaded many files at once, sorting them by name makes the order easy to set. For scans, getting into the habit of numbering filenames (01, 02, and so on) lines up the merge order automatically.",
+            ],
+          },
+          {
+            heading: "Nothing gets uploaded",
+            body: [
+              "PDFs often hold sensitive material — contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
+              "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
+            ],
+          },
+        ],
       },
     },
     faq: {
