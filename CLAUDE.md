@@ -328,11 +328,12 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ---
 
-## 구현된 기능 목록 (2026-07-24 기준, 도구 37종)
+## 구현된 기능 목록 (2026-07-24 기준, 도구 36종)
 
-> 2026-07-24: 동일 수식 계산기 통합 — 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
-> **성장률 계산기(`/growth-rate-calculator`) 한 페이지로 병합**. 구 URL은 next.config 308 영구 리다이렉트.
-> 통합 페이지 본문·FAQ·가이드에 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 키워드를 병기.
+> 2026-07-24: 동일 수식 계산기 통합 — ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
+> **성장률 계산기(`/growth-rate-calculator`)**로, ② 성장 예측(성장 예측 ≡ 복리 성장 동일 수식)을
+> **복리 성장 계산기(`/compound-growth-calculator`)**로 병합. 구 URL은 next.config 308 영구 리다이렉트.
+> 각 통합 페이지 본문·FAQ·가이드에 병합된 키워드(성장률·증감률·MoM·YoY·QoQ·WoW · 미래값 예측·성장 시나리오)를 병기.
 
 > 현재 `app/lib/content.ts` 레지스트리에 `ready: true`로 등록되어 KO(루트)·EN(`/en`)
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
@@ -361,22 +362,21 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 19 | 필요 증가량 계산기 / Required Growth Calculator | `/required-growth-calculator` | `/en/required-growth-calculator` | 현재값·목표값으로 필요 증가량·달성률 즉시 계산. |
 | 20 | 역산 계산기 / Reverse Growth Calculator | `/reverse-growth-calculator` | `/en/reverse-growth-calculator` | 최종 값과 성장률로 원래 값 역산. |
 | 21 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. |
-| 22 | 복리 성장 계산기 / Compound Growth Calculator | `/compound-growth-calculator` | `/en/compound-growth-calculator` | 초기값·성장률·기간으로 복리 최종값 즉시 계산. |
-| 23 | 성장 예측 계산기 / Growth Projection Calculator | `/growth-projection-calculator` | `/en/growth-projection-calculator` | 현재값·성장률·기간으로 복리 기반 미래값 즉시 예측. |
-| 24 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
-| 25 | ROAS 계산기 / ROAS Calculator | `/roas-calculator` | `/en/roas-calculator` | 광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함. |
-| 26 | CPA 계산기 / CPA Calculator | `/cpa-calculator` | `/en/cpa-calculator` | 광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함. |
-| 27 | CPC 계산기 / CPC Calculator | `/cpc-calculator` | `/en/cpc-calculator` | 광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함. |
-| 28 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | `/en/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
-| 29 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
-| 30 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
-| 31 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
-| 32 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
-| 33 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
-| 34 | PDF 병합 / Merge PDF | `/pdf-merge` | `/en/pdf-merge` | 여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다. |
-| 35 | PDF 분할 / Split PDF | `/pdf-split` | `/en/pdf-split` | PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다. |
-| 36 | PDF 회전 / Rotate PDF | `/pdf-rotate` | `/en/pdf-rotate` | PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다. |
-| 37 | PDF 페이지 삭제 / Delete PDF Pages | `/pdf-page-delete` | `/en/pdf-page-delete` | 필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다. |
+| 22 | 복리 성장 계산기 / Compound Growth Calculator | `/compound-growth-calculator` | `/en/compound-growth-calculator` | 초기(현재)값·성장률·기간으로 복리 최종값·미래 예측값 즉시 계산. **성장 예측(미래값) 통합** (동일 수식). |
+| 23 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 24 | ROAS 계산기 / ROAS Calculator | `/roas-calculator` | `/en/roas-calculator` | 광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함. |
+| 25 | CPA 계산기 / CPA Calculator | `/cpa-calculator` | `/en/cpa-calculator` | 광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함. |
+| 26 | CPC 계산기 / CPC Calculator | `/cpc-calculator` | `/en/cpc-calculator` | 광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함. |
+| 27 | CPM 계산기 / CPM Calculator | `/cpm-calculator` | `/en/cpm-calculator` | 광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함. |
+| 28 | CTR 계산기 / CTR Calculator | `/ctr-calculator` | `/en/ctr-calculator` | 클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함. |
+| 29 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| 30 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
+| 31 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 32 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 33 | PDF 병합 / Merge PDF | `/pdf-merge` | `/en/pdf-merge` | 여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다. |
+| 34 | PDF 분할 / Split PDF | `/pdf-split` | `/en/pdf-split` | PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다. |
+| 35 | PDF 회전 / Rotate PDF | `/pdf-rotate` | `/en/pdf-rotate` | PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다. |
+| 36 | PDF 페이지 삭제 / Delete PDF Pages | `/pdf-page-delete` | `/en/pdf-page-delete` | 필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다. |
 
 ---
 

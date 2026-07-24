@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       { source: `/en/${slug}`, destination: "/en/growth-rate-calculator", permanent: true },
     ]);
 
+    // 복리 성장 ≡ 성장 예측(동일 수식) → 복리 성장 계산기로 병합.
+    const projectionRedirects = [
+      { source: "/growth-projection-calculator", destination: "/compound-growth-calculator", permanent: true },
+      { source: "/en/growth-projection-calculator", destination: "/en/compound-growth-calculator", permanent: true },
+    ];
+
     return [
       // 구 2뎁스 URL → 플랫 URL (제품 방향: 모든 도구는 1뎁스 라우트)
       {
@@ -31,6 +37,7 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       ...growthRedirects,
+      ...projectionRedirects,
     ];
   },
 };

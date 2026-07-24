@@ -2983,7 +2983,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
-    relatedTools: ["compound-growth-calculator", "growth-projection-calculator", "growth-rate-calculator"],
+    relatedTools: ["compound-growth-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "CAGR 계산기 — 연평균 성장률 계산",
@@ -3051,130 +3051,118 @@ export const TOOLS: Tool[] = [
     ready: true,
     badge: "Calculator",
     name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
-    relatedTools: ["cagr-calculator", "growth-projection-calculator", "goal-growth-calculator"],
+    relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "복리 성장 계산기 — 초기값·성장률·기간으로 최종값 계산",
+        title: "복리 성장 계산기 — 미래값 예측·성장 시나리오",
         description:
-          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
-        keywords: ["복리 성장 계산기", "compound growth calculator", "복리 계산기", "future value calculator"],
+          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 매출·사용자 수·트래픽의 미래값 예측과 성장 시나리오 플래닝에 활용하세요.",
+        keywords: [
+          "복리 성장 계산기", "복리 계산기", "성장 예측 계산기", "미래값 계산기", "성장 시나리오",
+          "compound growth calculator", "future value calculator", "growth projection calculator",
+        ],
       },
       en: {
-        title: "Compound Growth Calculator — Calculate Final Value with Compound Growth",
+        title: "Compound Growth Calculator — Future Value & Projection",
         description:
-          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth. Great for projecting revenue, investment, or any compounding metric.",
-        keywords: ["compound growth calculator", "compound growth rate calculator", "future value calculator", "compounding calculator"],
+          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. Great for projecting revenue, users, or investments and for growth scenario planning.",
+        keywords: [
+          "compound growth calculator", "compounding calculator", "future value calculator",
+          "growth projection calculator", "revenue projection calculator", "growth forecast calculator",
+        ],
       },
     },
     content: {
       ko: {
-        card: "초기값·성장률·기간으로 복리 최종값 즉시 계산.",
+        card: "초기(현재)값·성장률·기간으로 복리 최종값·미래 예측값 즉시 계산.",
         description:
-          "초기 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종 값과 총 성장률을 즉시 계산합니다.",
-        howItWorks: ["초기 값 입력", "성장률(%) 입력", "기간(회차) 입력 후 최종값·총 성장률 확인"],
+          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 초기 투자금의 복리 성장은 물론, 현재 매출·사용자 수·트래픽이 일정 성장률로 커졌을 때의 미래값 예측(성장 시나리오)까지 같은 공식으로 구할 수 있습니다.",
+        howItWorks: ["초기(현재) 값 입력", "기간당 성장률(%) 입력", "기간(회차) 입력 후 최종값·미래 예측값·총 성장률 확인"],
         aeo: {
-          what: "복리 성장 계산기는 초기 값에 성장률을 복리로 적용해 일정 기간 후의 최종 값을 계산해주는 도구입니다.",
-          who: "매출·투자·사용자 수 등을 복리로 성장시켰을 때 최종 값을 예측하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
-          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다.",
-          why: "복리의 힘을 직관적으로 확인하고, 성장률과 기간에 따른 결과를 즉시 비교할 수 있습니다.",
+          what: "복리 성장 계산기는 초기(현재) 값에 성장률을 복리로 적용해 일정 기간 후의 최종값을 계산하는 도구입니다. 초기 투자금의 복리 최종값 계산과 현재 지표의 미래값 예측(성장 예측)이 모두 최종값 = 초기값 × (1 + 성장률/100)^기간이라는 동일한 공식이라, 이 계산기 하나로 처리합니다.",
+          who: "복리로 성장하는 매출·투자·사용자 수의 최종값이나 미래 예측값을 구하려는 PM, 스타트업 창업자, 투자자, 소상공인을 위한 도구입니다.",
+          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다. '초기 값'에 현재 지표를 넣으면 그대로 미래 예측값(성장 예측)이 됩니다.",
+          why: "복리의 힘을 직관적으로 확인하고, 성장률·기간을 바꿔가며 여러 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "복리 성장과 미래값 예측은 같은 계산",
+            body: [
+              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일합니다. 둘 다 최종값 = 초기값 × (1 + 성장률/100)^기간 공식을 씁니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
+              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산기가 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측 계산기가 됩니다.",
+            ],
+          },
+          {
+            heading: "복리와 단리의 차이",
+            body: [
+              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
+              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
+            ],
+          },
+          {
+            heading: "기간 단위와 활용",
+            body: [
+              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
+              "모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다. 참고로 미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요.",
+            ],
+          },
+        ],
       },
       en: {
-        card: "Calculate the final value after compound growth over multiple periods.",
+        card: "Compute compounded final value and future projection from a value, rate, and periods.",
         description:
-          "Enter an initial value, growth rate, and number of periods to instantly calculate the final value using compound growth.",
-        howItWorks: ["Enter the initial value", "Enter the growth rate (%)", "Enter the number of periods, then read the final value"],
+          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric — the same formula either way.",
+        howItWorks: ["Enter the initial (current) value", "Enter the growth rate per period (%)", "Enter the number of periods, then read the final / projected value"],
         aeo: {
-          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value, accounting for the compounding effect.",
-          who: "It is for investors, PMs, and business owners who want to project revenue, users, or investments using a constant periodic growth rate.",
-          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Each period's growth is applied to the running total, not the original.",
-          why: "Compound growth produces dramatically different results than simple growth at scale — this calculator makes that difference visible instantly.",
+          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value. Compounding an initial investment and projecting a current metric into the future both use Final Value = Initial × (1 + Rate / 100) ^ Periods, so this one calculator handles both.",
+          who: "It is for PMs, startup founders, investors, and business owners projecting revenue, users, or investments that grow at a constant periodic rate.",
+          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Put your current metric in the initial value field and the result is your future projection.",
+          why: "Compound growth diverges sharply from simple growth at scale — vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
         },
+        guide: [
+          {
+            heading: "Compound growth and future projection are the same math",
+            body: [
+              "'Compound growth' and 'growth projection (future value)' differ only in name and context — the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
+              "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric — revenue, users, traffic — makes it a growth projection calculator that looks into the future.",
+            ],
+          },
+          {
+            heading: "Compound vs. simple growth",
+            body: [
+              "The key is that each period's growth applies to the accumulated total so far, not the original value. Simple growth adds the same amount each period, but compounding applies the rate to the grown value, so the increase accelerates over time. The longer the horizon and the higher the rate, the more dramatically compound and simple growth diverge.",
+              "Enter a negative rate to model compound decline, where the value shrinks by a fixed percentage each period — useful for churn-driven user decline or depreciation scenarios.",
+            ],
+          },
+          {
+            heading: "Period units and how to use it",
+            body: [
+              "Any period unit works as long as it matches the rate: use months if your rate is monthly, years if it's annual. Because the same starting value can end up very differently with small changes to rate or periods, entering optimistic, base, and conservative scenarios side by side helps you size the range of outcomes.",
+              "Everything runs in your browser and your inputs are never sent to a server. Note that a projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each.",
+            ],
+          },
+        ],
       },
     },
     faq: {
       ko: [
-        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간의 누적 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
+        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간까지 누적된 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
+        { question: "성장 예측(미래값)도 이 계산기로 구하나요?", answer: "네. 미래값 예측은 복리 성장과 동일한 공식을 씁니다. '초기 값' 칸에 현재 매출·사용자 수 등을 넣으면 그대로 미래 예측값이 됩니다." },
+        { question: "성장률이 매 기간 동일하다고 가정하나요?", answer: "네. 모든 기간에 같은 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 구간을 나눠 각각 계산하세요." },
         { question: "기간(회차)을 0으로 설정하면 어떻게 되나요?", answer: "0 기간은 허용됩니다. 최종값은 초기값과 동일합니다." },
-        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 감소하는 복리 감소를 계산합니다." },
+        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 줄어드는 복리 감소를 계산합니다." },
       ],
       en: [
-        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value. This causes exponential growth over time." },
+        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value, causing exponential growth over time." },
+        { question: "Can I project a future value here too?", answer: "Yes. A future-value projection uses the same formula as compound growth. Put your current revenue, users, or metric in the initial value field and the result is your projection." },
+        { question: "Does it assume a constant growth rate each period?", answer: "Yes. It assumes the same rate every period. For variable rates, split the horizon into segments and calculate each separately." },
         { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value — no growth has occurred." },
         { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
       ],
     },
     og: {
-      ko: { title: "복리 성장 계산기", subtitle: "초기값·성장률·기간으로 복리 최종값 즉시 계산" },
-      en: { title: "Compound Growth Calculator", subtitle: "Calculate final value with compound growth rate instantly" },
-    },
-  },
-
-  {
-    slug: "growth-projection-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "f(n)",
-    ready: true,
-    badge: "Calculator",
-    name: { ko: "성장 예측 계산기", en: "Growth Projection Calculator" },
-    relatedTools: ["cagr-calculator", "compound-growth-calculator", "goal-growth-calculator"],
-    seo: {
-      ko: {
-        title: "성장 예측 계산기 — 현재값과 성장률로 미래값 예측",
-        description:
-          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
-        keywords: ["성장 예측 계산기", "growth projection calculator", "미래값 계산기", "성장 시나리오"],
-      },
-      en: {
-        title: "Growth Projection Calculator — Project Future Value with a Growth Rate",
-        description:
-          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth. Perfect for revenue forecasting, user growth planning, and scenario analysis.",
-        keywords: ["growth projection calculator", "future value calculator", "growth forecast calculator", "revenue projection calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측.",
-        description:
-          "현재 값, 성장률(%), 기간을 입력하면 복리 기반의 미래 예측값을 즉시 계산합니다. 매출·사용자 수·트래픽 등 성장 시나리오 플래닝에 활용하세요.",
-        howItWorks: ["현재 값 입력", "성장률(%) 입력", "기간 입력 후 예측값·총 성장률 확인"],
-        aeo: {
-          what: "성장 예측 계산기는 현재 값에서 일정 성장률이 복리로 적용됐을 때 미래 값을 예측해주는 도구입니다.",
-          who: "매출·사용자 수·트래픽 등의 성장 시나리오를 계획하는 PM, 스타트업 창업자, 투자자를 위한 도구입니다.",
-          how: "예측값 = 현재값 × (1 + 성장률/100)^기간 공식으로 복리 기반 미래값을 계산합니다.",
-          why: "단순한 숫자 입력만으로 다양한 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Project future value using compound growth over multiple periods.",
-        description:
-          "Enter a current value, growth rate, and number of periods to instantly project the future value using compound growth.",
-        howItWorks: ["Enter the current value", "Enter the growth rate (%)", "Enter the number of periods, then read the projected value"],
-        aeo: {
-          what: "A Growth Projection Calculator forecasts a future value by applying a compound growth rate to a current value over a specified number of periods.",
-          who: "It is for PMs, startup founders, and investors who need to model revenue forecasts, user growth scenarios, or investment projections.",
-          how: "Projected Value = Current Value × (1 + Rate / 100) ^ Periods. The result is the compounded future value after the given number of periods.",
-          why: "It turns a growth rate assumption into a concrete future number, making scenario planning faster and presentations more grounded.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "성장 예측 계산기와 복리 성장 계산기의 차이는 무엇인가요?", answer: "계산식은 동일합니다. 복리 성장 계산기는 초기 투자값을 기준으로, 성장 예측 계산기는 현재 비즈니스 지표를 기준으로 사용하는 관점의 차이입니다." },
-        { question: "성장률이 매 기간 동일하다고 가정하는 건가요?", answer: "네. 이 계산기는 모든 기간에 동일한 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 각 기간별로 수동 계산이 필요합니다." },
-        { question: "기간 단위는 무엇인가요?", answer: "기간 단위는 자유롭게 설정할 수 있습니다. 주·월·분기·연도 등 분석에 적합한 단위를 사용하세요." },
-      ],
-      en: [
-        { question: "How is this different from the Compound Growth Calculator?", answer: "The formula is identical. The difference is framing: Compound Growth Calculator focuses on growing an investment or initial amount; Growth Projection Calculator focuses on projecting a live business metric forward." },
-        { question: "Does this assume a constant growth rate each period?", answer: "Yes. This calculator assumes the same growth rate is applied every period. For variable growth rates, you would need to calculate each period separately." },
-        { question: "What unit should I use for periods?", answer: "Any unit works — weeks, months, quarters, or years. Just be consistent: if your growth rate is monthly, your periods should be months." },
-      ],
-    },
-    og: {
-      ko: { title: "성장 예측 계산기", subtitle: "현재값·성장률·기간으로 복리 기반 미래값 즉시 예측" },
-      en: { title: "Growth Projection Calculator", subtitle: "Project future value with compound growth rate instantly" },
+      ko: { title: "복리 성장 계산기", subtitle: "복리 최종값·미래 예측값·성장 시나리오 즉시 계산" },
+      en: { title: "Compound Growth Calculator", subtitle: "Compounded final value and future projection instantly" },
     },
   },
 

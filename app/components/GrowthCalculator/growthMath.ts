@@ -5,8 +5,7 @@ export type GrowthMode =
   | "required-growth"
   | "reverse-growth"
   | "cagr"
-  | "compound-growth"
-  | "growth-projection";
+  | "compound-growth";
 
 export type Direction = "increase" | "decrease" | "no-change";
 
@@ -112,16 +111,6 @@ export function compute(mode: GrowthMode, inputs: Record<string, number>): Growt
         finalValue,
         totalDifference: finalValue - initial,
         totalGrowth: initial !== 0 ? ((finalValue - initial) / initial) * 100 : 0,
-      };
-    }
-    case "growth-projection": {
-      const { current, rate, periods } = inputs;
-      if (!ok(current, rate, periods) || periods < 0) return null;
-      const projectedValue = current * Math.pow(1 + rate / 100, periods);
-      return {
-        projectedValue,
-        totalDifference: projectedValue - current,
-        totalGrowth: current !== 0 ? ((projectedValue - current) / current) * 100 : 0,
       };
     }
   }

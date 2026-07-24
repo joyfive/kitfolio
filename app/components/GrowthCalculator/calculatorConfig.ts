@@ -61,10 +61,10 @@ const TABS_C: TabDef[] = [
   { mode: "reverse-growth",  slug: "reverse-growth-calculator",  label: { ko: "역산",         en: "Reverse Growth" } },
 ];
 
+// 복리 성장 ≡ 성장 예측(동일 수식)이라 복리 성장 계산기로 통합됨.
 const TABS_D: TabDef[] = [
-  { mode: "cagr",               slug: "cagr-calculator",               label: { ko: "CAGR",    en: "CAGR" } },
-  { mode: "compound-growth",    slug: "compound-growth-calculator",    label: { ko: "복리 성장", en: "Compound" } },
-  { mode: "growth-projection",  slug: "growth-projection-calculator",  label: { ko: "성장 예측", en: "Projection" } },
+  { mode: "cagr",            slug: "cagr-calculator",            label: { ko: "CAGR",    en: "CAGR" } },
+  { mode: "compound-growth", slug: "compound-growth-calculator", label: { ko: "복리 성장", en: "Compound" } },
 ];
 
 // ── Related tools by group ────────────────────────────────
@@ -247,30 +247,6 @@ export const CONFIGS: Record<GrowthMode, ModeConfig> = {
       { inputs: { initial: 1000, rate: 10, periods: 5 },  label: { ko: "1,000, 10%, 5회", en: "1,000, 10%, 5 periods" } },
       { inputs: { initial: 5000, rate: 5, periods: 10 },  label: { ko: "5,000, 5%, 10회", en: "5,000, 5%, 10 periods" } },
       { inputs: { initial: 100, rate: 20, periods: 3 },   label: { ko: "100, 20%, 3회",   en: "100, 20%, 3 periods" } },
-    ],
-    relatedSlugs: RELATED_D,
-    errorWhen: (inp) => inp.periods < 0 ? { ko: "기간은 0 이상이어야 합니다.", en: "Periods must be 0 or greater." } : null,
-  },
-
-  "growth-projection": {
-    slug: "growth-projection-calculator",
-    tabs: TABS_D,
-    inputs: [
-      { key: "current", label: { ko: "현재 값",   en: "Current Value" } },
-      { key: "rate",    label: { ko: "성장률 (%)", en: "Growth Rate (%)" }, unit: "%", allowNegative: true },
-      { key: "periods", label: { ko: "기간 (회차)", en: "Number of Periods" } },
-    ],
-    outputs: [
-      { key: "projectedValue",  label: { ko: "예측 값",   en: "Projected Value" },    format: "num",        primary: true },
-      { key: "totalGrowth",     label: { ko: "총 성장률", en: "Total Growth" },        format: "pct-signed" },
-      { key: "totalDifference", label: { ko: "총 증가량", en: "Total Difference" },    format: "num-signed" },
-    ],
-    formulaEn: "Projected Value = Current × (1 + Rate / 100) ^ Periods",
-    formulaKo: "예측 값 = 현재 값 × (1 + 성장률 / 100) ^ 기간",
-    examples: [
-      { inputs: { current: 10000, rate: 15, periods: 5 }, label: { ko: "10,000, 15%, 5회", en: "10,000, 15%, 5 periods" } },
-      { inputs: { current: 500, rate: 8, periods: 12 },   label: { ko: "500, 8%, 12회",     en: "500, 8%, 12 periods" } },
-      { inputs: { current: 2000, rate: 25, periods: 4 },  label: { ko: "2,000, 25%, 4회",   en: "2,000, 25%, 4 periods" } },
     ],
     relatedSlugs: RELATED_D,
     errorWhen: (inp) => inp.periods < 0 ? { ko: "기간은 0 이상이어야 합니다.", en: "Periods must be 0 or greater." } : null,
