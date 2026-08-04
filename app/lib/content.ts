@@ -291,7 +291,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
 export const LEGAL_EMAIL = "joy_five@kakao.com";
 export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
 
-export const LEGAL_SLUGS = ["privacy-policy", "terms-of-service"] as const;
+export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
 
 export type LegalSection = { heading: string; body: string[] };
@@ -317,6 +317,146 @@ type LegalEntry = {
 };
 
 export const LEGAL: Record<LegalSlug, LegalEntry> = {
+  about: {
+    navLabel: { ko: "소개", en: "About" },
+    seo: {
+      ko: {
+        title: "Kitfolio 소개 — 일하는 사람을 위한 작은 웹 도구",
+        description:
+          "Kitfolio는 모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 만드는 사람을 소개합니다.",
+      },
+      en: {
+        title: "About Kitfolio — Small Web Tools for People Who Work",
+        description:
+          "Kitfolio is a collection of browser-based micro tools for modern knowledge workers. Learn what the site is for, how it is run, its no-data-collection principle, and who builds it.",
+      },
+    },
+    doc: {
+      ko: {
+        title: "Kitfolio 소개",
+        intro:
+          "Kitfolio는 기획자·디자이너·개발자·마케터·구직자·직장인·소상공인이 업무 중 반복해서 마주치는 작은 문제를 빠르게 푸는 브라우저 기반 도구 모음입니다.",
+        sections: [
+          {
+            heading: "무엇을 하는 서비스인가요",
+            body: [
+              "Kitfolio는 계산기·생성기·변환기·포매터·유틸리티처럼 자주 필요하지만 매번 찾기는 번거로운 작은 도구들을 한곳에 모은 서비스입니다. 글자 수 세기, JSON 정리, 연봉 실수령액 계산, 성장률·광고 지표 계산, QR 코드 생성, PDF 병합처럼 서로 다른 업무 상황의 반복 작업을 다룹니다.",
+              "각 도구는 하나의 뚜렷한 목적을 가지며, 무거운 프로그램 설치나 회원가입 없이 페이지를 여는 즉시 사용할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "어떻게 동작하나요 (서버 전송 없음)",
+            body: [
+              "Kitfolio의 모든 도구는 서버가 아니라 이용자의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다.",
+              "회원가입이나 로그인이 없고, 개인정보를 수집하지 않습니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있습니다. 자세한 내용은 개인정보처리방침에서 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "왜 만드나요",
+            body: [
+              "좋은 도구는 작은 마찰을 없애 하루의 흐름을 지켜 줍니다. Kitfolio의 목표는 콘텐츠를 많이 발행하는 것이 아니라, 반복되는 업무 문제를 무료로·빠르게·프라이버시를 지키며 풀 수 있는 실용적인 도구를 하나씩 늘려가는 것입니다.",
+              "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다 — 문의 페이지를 통해 연락해 주세요.",
+            ],
+          },
+        ],
+        effectiveLabel: "최종 업데이트",
+        contactLabel: "문의 이메일",
+      },
+      en: {
+        title: "About Kitfolio",
+        intro:
+          "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they hit during the workday.",
+        sections: [
+          {
+            heading: "What the site does",
+            body: [
+              "Kitfolio gathers small tools — calculators, generators, converters, formatters, and utilities — that you need often but would rather not hunt for each time. It covers repetitive tasks across different work situations: counting characters, formatting JSON, calculating take-home pay, working out growth and ad metrics, generating QR codes, merging PDFs.",
+              "Each tool has one clear purpose and is ready the moment you open the page, with no heavy software to install and no account to create.",
+            ],
+          },
+          {
+            heading: "How it works (no server transmission)",
+            body: [
+              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere — all calculation and conversion happens on your device.",
+              "There is no sign-up or login, and we do not collect personal information, so you can work with sensitive documents and data without worrying about them leaving your machine. See the Privacy Policy for details.",
+            ],
+          },
+          {
+            heading: "Why we build it",
+            body: [
+              "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
+              "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome — please reach out via the Contact page.",
+            ],
+          },
+        ],
+        effectiveLabel: "Last updated",
+        contactLabel: "Contact email",
+      },
+    },
+  },
+  contact: {
+    navLabel: { ko: "문의", en: "Contact" },
+    seo: {
+      ko: {
+        title: "문의하기 — Kitfolio",
+        description:
+          "Kitfolio에 대한 도구 제안, 오류 신고, 제휴·광고 문의를 이메일로 보내주세요. 운영자가 직접 확인합니다.",
+      },
+      en: {
+        title: "Contact — Kitfolio",
+        description:
+          "Send tool suggestions, bug reports, or partnership and advertising inquiries about Kitfolio by email. Messages are read by the maker directly.",
+      },
+    },
+    doc: {
+      ko: {
+        title: "문의하기",
+        intro:
+          "Kitfolio에 대한 의견·제안·오류 신고·제휴 문의를 환영합니다. 아래 이메일로 연락해 주시면 운영자가 직접 확인하고 답변드립니다.",
+        sections: [
+          {
+            heading: "이런 내용을 보내주세요",
+            body: [
+              "**도구 제안:** 자주 반복하는 업무가 있는데 마땅한 도구가 없다면 알려주세요. 실제 필요가 도구 추가의 우선순위 기준입니다.",
+              "**오류·개선 신고:** 계산 결과가 이상하거나 화면이 깨지는 등 문제를 발견하면 어떤 도구에서 어떤 상황이었는지 함께 알려주시면 빠르게 확인합니다.",
+              "**제휴·광고 문의:** 협업이나 광고 관련 문의도 아래 이메일로 받습니다.",
+            ],
+          },
+          {
+            heading: "연락 방법",
+            body: [
+              "아래 이메일 주소로 메시지를 보내주세요. 개인이 운영하는 서비스라 답변에 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.",
+            ],
+          },
+        ],
+        effectiveLabel: "최종 업데이트",
+        contactLabel: "문의 이메일",
+      },
+      en: {
+        title: "Contact",
+        intro:
+          "We welcome your feedback, suggestions, bug reports, and partnership inquiries about Kitfolio. Email us at the address below and the maker will read and reply personally.",
+        sections: [
+          {
+            heading: "What to send",
+            body: [
+              "**Tool suggestions:** If you have a repetitive task with no good tool for it, let us know. Real need is how tool additions get prioritized.",
+              "**Bugs and improvements:** If a result looks wrong or something breaks, tell us which tool and what you were doing so we can check it quickly.",
+              "**Partnership and advertising:** Collaboration and advertising inquiries are welcome at the same address.",
+            ],
+          },
+          {
+            heading: "How to reach us",
+            body: [
+              "Please send a message to the email address below. As a service run by one person, replies may take a little time — thank you for your patience.",
+            ],
+          },
+        ],
+        effectiveLabel: "Last updated",
+        contactLabel: "Contact email",
+      },
+    },
+  },
   "privacy-policy": {
     navLabel: { ko: "개인정보처리방침", en: "Privacy Policy" },
     seo: {
