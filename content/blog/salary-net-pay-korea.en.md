@@ -1,6 +1,6 @@
 ---
-title: How Korean Take-Home Pay Is Calculated — Insurance and Tax, Explained
-description: Why gross salary and the amount that actually lands in your account differ, broken down through Korea's four major insurances and income tax — and how non-taxable amount, dependents, and withholding rate change your net pay.
+title: How Korean Take-Home Pay Is Calculated | Insurance and Tax, Explained
+description: Why gross salary and the amount that actually lands in your account differ, broken down through Korea's four major insurances and income tax, and how non-taxable amount, dependents, and withholding rate change your net pay.
 date: 2026-08-05
 cover: /blog/salary-net-pay-korea.png
 coverAlt: Illustration representing take-home pay calculation
@@ -18,19 +18,19 @@ The deductions that reduce take-home pay fall into two groups: **the four major 
 
 Social insurance shared between employee and employer. The employee's share is roughly:
 
-- **National Pension** — about 4.5% of the standard monthly income
-- **Health Insurance** — a set rate of monthly pay
-- **Long-Term Care** — a further rate applied to the health insurance premium
-- **Employment Insurance** — a set rate of monthly pay
+- **National Pension**: about 4.5% of the standard monthly income
+- **Health Insurance**: a set rate of monthly pay
+- **Long-Term Care**: a further rate applied to the health insurance premium
+- **Employment Insurance**: a set rate of monthly pay
 
 These rates are adjusted annually, and together they typically take around 9% of gross pay as the employee's share.
 
 ### Taxes
 
-- **Income tax** — withheld monthly based on the simplified withholding tax table.
-- **Local income tax** — 10% of the income tax.
+- **Income tax**: withheld monthly based on the simplified withholding tax table.
+- **Local income tax**: 10% of the income tax.
 
-Tax is progressive — the rate rises with income — so as salary grows, the take-home share edges down.
+Tax is progressive: the rate rises with income, so as salary grows, the take-home share edges down.
 
 ## Three variables that change take-home pay
 
@@ -48,8 +48,8 @@ The simplified tax table adjusts monthly withholding by the number of qualifying
 
 The most misread item. You can choose to withhold monthly income tax at 80%, 100%, or 120% of the table amount.
 
-- **80%** — less withheld monthly, so higher monthly net pay, but you may owe more at year-end settlement.
-- **120%** — more withheld monthly, with a better chance of a refund.
+- **80%**: less withheld monthly, so higher monthly net pay, but you may owe more at year-end settlement.
+- **120%**: more withheld monthly, with a better chance of a refund.
 
 The key point: **the total annual tax is the same either way.** It's only a choice of receiving more each month or more at settlement.
 
@@ -57,4 +57,4 @@ The key point: **the total annual tax is the same either way.** It's only a choi
 
 This kind of calculation is an **estimate** that approximates current rates and the simplified tax table. It doesn't account for company-specific non-taxable items, bonuses, mid-year joining or leaving, or your final year-end settlement, so it can differ from your actual payslip. For an exact figure, check Hometax or your payroll department.
 
-It's still useful because, when comparing offers or setting a negotiation target, you can grasp **roughly what a given salary means per month** in seconds. Try several figures to sketch your negotiation range — drop a gross annual or monthly amount into the [Salary Net Pay Calculator](/en/salary-calculator) and it returns the estimated take-home pay after insurance and taxes, with an itemized breakdown.
+It's still useful because, when comparing offers or setting a negotiation target, you can grasp **roughly what a given salary means per month** in seconds. Try several figures to sketch your negotiation range: drop a gross annual or monthly amount into the [Salary Net Pay Calculator](/en/salary-calculator) and it returns the estimated take-home pay after insurance and taxes, with an itemized breakdown.

@@ -1,6 +1,6 @@
 ---
-title: The Power of Compounding — Compound Growth and Future Value
-description: The difference between simple and compound growth, why compound growth and future-value projection are really the same calculation, and how rate and time change the outcome dramatically — with examples.
+title: The Power of Compounding | Compound Growth and Future Value
+description: The difference between simple and compound growth, why compound growth and future-value projection are really the same calculation, and how rate and time change the outcome dramatically: with examples.
 date: 2026-08-03
 cover: /blog/compound-growth-future-value.png
 coverAlt: Illustration of a compound growth curve
@@ -24,8 +24,8 @@ The longer the horizon and the higher the rate, the more dramatically simple and
 
 The two phrases differ only in context; the formula is identical.
 
-- **Compound growth** — an initial 10,000 growing 8% a year for 10 years is worth how much?
-- **Future value** — this month's 5,000 users growing 6% a month become how many in a year?
+- **Compound growth**: an initial 10,000 growing 8% a year for 10 years is worth how much?
+- **Future value**: this month's 5,000 users growing 6% a month become how many in a year?
 
 Both are solved by `initial × (1 + rate/100)^periods`. Put a principal in the initial-value field and you get a compound final value; put a current business metric there and it becomes a future projection (a growth scenario).
 
@@ -42,10 +42,10 @@ A 3-point difference, or an extra 10 years, multiplies the final value. So when 
 ## Things to watch
 
 - It assumes a **constant rate every period**. If real growth varies, split the horizon into segments and calculate each.
-- A negative rate models **compound decline**, shrinking by a fixed percentage each period — useful for churn-driven user decline or depreciation.
+- A negative rate models **compound decline**, shrinking by a fixed percentage each period: useful for churn-driven user decline or depreciation.
 - Match the period unit to the rate. A monthly rate needs periods in months.
 
-## CAGR — past growth as a single number
+## CAGR: past growth as a single number
 
 If the calculation above looks forward, sometimes you instead want to summarize **what average annual rate already-realized growth came out to**. That's CAGR (Compound Annual Growth Rate). It needs only a start value, end value, and number of periods, and it's the standard way to fairly compare the long-run growth of different investments or businesses.
 

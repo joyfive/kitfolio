@@ -115,7 +115,11 @@ export function getPost(slug: string, lang: Lang): Post | null {
   if (!fs.existsSync(file)) return null;
   const raw = fs.readFileSync(file, "utf8");
   const { data, body } = parseFrontmatter(raw);
-  const html = marked.parse(body) as string;
+  // 본문 하이퍼링크는 새 탭으로 열기 (chip 스타일은 globals.css)
+  const html = (marked.parse(body) as string).replace(
+    /<a /g,
+    '<a target="_blank" rel="noopener noreferrer" ',
+  );
   return { meta: metaFromData(slug, lang, data), html };
 }
 
@@ -145,8 +149,8 @@ export function formatDate(iso: string, lang: Lang): string {
 }
 
 const BLOG_LABEL = {
-  ko: { title: "블로그", tagline: "도구를 더 잘 쓰기 위한 이야기 — 계산·지표·CSS·업무 팁" },
-  en: { title: "Blog", tagline: "Notes for getting more out of the tools — calculations, metrics, CSS and work tips" },
+  ko: { title: "블로그", tagline: "도구를 더 잘 쓰기 위한 이야기 · 계산·지표·CSS·업무 팁" },
+  en: { title: "Blog", tagline: "Notes for getting more out of the tools · calculations, metrics, CSS and work tips" },
 };
 
 export function blogLabel(lang: Lang) {
@@ -164,7 +168,7 @@ export function buildBlogListMetadata(lang: Lang): Metadata {
   const koUrl = "/blog";
   const enUrl = "/en/blog";
   const url = lang === "ko" ? koUrl : enUrl;
-  const title = `${l.title} — ${SITE.name}`;
+  const title = `${l.title} | ${SITE.name}`;
   return {
     title: { absolute: title },
     description: l.tagline,
@@ -191,7 +195,7 @@ export function buildPostMetadata(slug: string, lang: Lang): Metadata {
   const enUrl = `/en/blog/${slug}`;
   const url = lang === "ko" ? koUrl : enUrl;
   return {
-    title: { absolute: `${meta.title} — ${SITE.name}` },
+    title: { absolute: `${meta.title} | ${SITE.name}` },
     description: meta.description,
     alternates: {
       canonical: url,

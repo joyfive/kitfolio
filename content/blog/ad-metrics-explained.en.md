@@ -1,6 +1,6 @@
 ---
-title: Ad Metrics Made Simple — ROAS, CPA, CPC, CPM, CTR
-description: What the five most-used performance marketing metrics — ROAS, CPA, CPC, CPM, and CTR — each measure, how they connect, and which to watch depending on your campaign goal.
+title: Ad Metrics Made Simple | ROAS, CPA, CPC, CPM, CTR
+description: What the five most-used performance marketing metrics: ROAS, CPA, CPC, CPM, and CTR: each measure, how they connect, and which to watch depending on your campaign goal.
 date: 2026-08-06
 cover: /blog/ad-metrics-explained.png
 coverAlt: Illustration representing advertising performance metrics
@@ -15,7 +15,7 @@ Open an ad report for the first time and acronyms pour out: ROAS, CPA, CPC, CPM,
 An ad first has to be **seen (impressions)**.
 
 - **CPM (Cost per Mille)** = ad spend ÷ impressions × 1,000. The cost per 1,000 impressions ("mille" is Latin for thousand). Based on how many times it was shown rather than clicks, so it's the go-to metric for **brand awareness campaigns**.
-- **CTR (Click-Through Rate)** = clicks ÷ impressions × 100. The share of impressions that got clicked — the **appeal of the creative**. For the same impressions, a higher CTR means the message landed.
+- **CTR (Click-Through Rate)** = clicks ÷ impressions × 100. The share of impressions that got clicked: the **appeal of the creative**. For the same impressions, a higher CTR means the message landed.
 
 ## Click stage: CPC
 
@@ -46,7 +46,7 @@ A common mistake is chasing a low CPC as the goal itself. However low the CPC, i
 
 ## ROAS must be read against margin
 
-A high ROAS isn't automatically profitable, because you have to account for margin. At a 25% margin, the **break-even ROAS that just recovers ad cost is 400%** — you only profit above that. So a target ROAS should always be built on your product's margin structure.
+A high ROAS isn't automatically profitable, because you have to account for margin. At a 25% margin, the **break-even ROAS that just recovers ad cost is 400%**: you only profit above that. So a target ROAS should always be built on your product's margin structure.
 
 ## Working budgets back from a goal
 

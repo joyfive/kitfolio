@@ -118,15 +118,15 @@ export const LAYOUT_LABEL: Record<Layout, string> = {
 export const HUB = {
   seo: {
     ko: {
-      title: "Kitfolio — 일하는 사람을 위한 작은 웹 도구 모음",
+      title: "Kitfolio | 일하는 사람을 위한 작은 웹 도구 모음",
       description:
         "글자 수 카운터, JSON 포매터, 연봉 계산기 등 업무용 계산기·생성기·유틸리티 모음. 설치·가입 없이 브라우저에서 무료로 사용하세요.",
       keywords: ["무료 웹 도구", "업무 계산기", "온라인 유틸리티"],
     },
     en: {
-      title: "Kitfolio — Small tools for modern knowledge workers",
+      title: "Kitfolio | Small tools for modern knowledge workers",
       description:
-        "Work calculators, generators and utilities that run entirely in your browser — character counter, JSON formatter, gradient generator and more. No login, no installation, no server-side processing.",
+        "Work calculators, generators and utilities that run entirely in your browser: character counter, JSON formatter, gradient generator and more. No login, no installation, no server-side processing.",
       keywords: ["free web tools", "work calculators", "online utilities"],
     },
   },
@@ -135,7 +135,7 @@ export const HUB = {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
       h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
       subtitle:
-        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티 — 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
+        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
       stat: "개 도구",
     },
     en: {
@@ -146,7 +146,7 @@ export const HUB = {
         post: " for modern\nknowledge workers.",
       },
       subtitle:
-        "Browser-based micro tools for modern knowledge workers — work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
+        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
       stat: " tools",
     },
   },
@@ -174,15 +174,15 @@ export const HUB = {
       sections: [
         {
           h: "Small tools for people who work",
-          p: "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they run into during the workday. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs — tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
+          p: "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they run into during the workday. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs: tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
         },
         {
           h: "Everything runs in your browser",
-          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere — all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
+          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
         },
         {
           h: "Find the right tool fast",
-          p: "Type what you're trying to do into the search box at the top, or narrow the list by role to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app — it's a growing library of small, focused, practical tools, each with a clear purpose.",
+          p: "Type what you're trying to do into the search box at the top, or narrow the list by role to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app: it's a growing library of small, focused, practical tools, each with a clear purpose.",
         },
       ],
     },
@@ -321,12 +321,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
     navLabel: { ko: "소개", en: "About" },
     seo: {
       ko: {
-        title: "Kitfolio 소개 — 일하는 사람을 위한 작은 웹 도구",
+        title: "Kitfolio 소개 | 일하는 사람을 위한 작은 웹 도구",
         description:
           "Kitfolio는 모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 만드는 사람을 소개합니다.",
       },
       en: {
-        title: "About Kitfolio — Small Web Tools for People Who Work",
+        title: "About Kitfolio | Small Web Tools for People Who Work",
         description:
           "Kitfolio is a collection of browser-based micro tools for modern knowledge workers. Learn what the site is for, how it is run, its no-data-collection principle, and who builds it.",
       },
@@ -355,7 +355,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "왜 만드나요",
             body: [
               "좋은 도구는 작은 마찰을 없애 하루의 흐름을 지켜 줍니다. Kitfolio의 목표는 콘텐츠를 많이 발행하는 것이 아니라, 반복되는 업무 문제를 무료로·빠르게·프라이버시를 지키며 풀 수 있는 실용적인 도구를 하나씩 늘려가는 것입니다.",
-              "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다 — 문의 페이지를 통해 연락해 주세요.",
+              "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.",
             ],
           },
         ],
@@ -370,14 +370,14 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "What the site does",
             body: [
-              "Kitfolio gathers small tools — calculators, generators, converters, formatters, and utilities — that you need often but would rather not hunt for each time. It covers repetitive tasks across different work situations: counting characters, formatting JSON, calculating take-home pay, working out growth and ad metrics, generating QR codes, merging PDFs.",
+              "Kitfolio gathers small tools: calculators, generators, converters, formatters, and utilities: that you need often but would rather not hunt for each time. It covers repetitive tasks across different work situations: counting characters, formatting JSON, calculating take-home pay, working out growth and ad metrics, generating QR codes, merging PDFs.",
               "Each tool has one clear purpose and is ready the moment you open the page, with no heavy software to install and no account to create.",
             ],
           },
           {
             heading: "How it works (no server transmission)",
             body: [
-              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere — all calculation and conversion happens on your device.",
+              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device.",
               "There is no sign-up or login, and we do not collect personal information, so you can work with sensitive documents and data without worrying about them leaving your machine. See the Privacy Policy for details.",
             ],
           },
@@ -385,7 +385,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "Why we build it",
             body: [
               "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
-              "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome — please reach out via the Contact page.",
+              "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.",
             ],
           },
         ],
@@ -398,12 +398,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
     navLabel: { ko: "문의", en: "Contact" },
     seo: {
       ko: {
-        title: "문의하기 — Kitfolio",
+        title: "문의하기 | Kitfolio",
         description:
           "Kitfolio에 대한 도구 제안, 오류 신고, 제휴·광고 문의를 이메일로 보내주세요. 운영자가 직접 확인합니다.",
       },
       en: {
-        title: "Contact — Kitfolio",
+        title: "Contact | Kitfolio",
         description:
           "Send tool suggestions, bug reports, or partnership and advertising inquiries about Kitfolio by email. Messages are read by the maker directly.",
       },
@@ -448,7 +448,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "How to reach us",
             body: [
-              "Please send a message to the email address below. As a service run by one person, replies may take a little time — thank you for your patience.",
+              "Please send a message to the email address below. As a service run by one person, replies may take a little time: thank you for your patience.",
             ],
           },
         ],
@@ -461,14 +461,14 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
     navLabel: { ko: "개인정보처리방침", en: "Privacy Policy" },
     seo: {
       ko: {
-        title: "개인정보처리방침 — Kitfolio",
+        title: "개인정보처리방침 | Kitfolio",
         description:
           "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 쿠키·광고 식별자(Google AdSense) 이용 안내를 확인하세요.",
       },
       en: {
-        title: "Privacy Policy — Kitfolio",
+        title: "Privacy Policy | Kitfolio",
         description:
-          "Kitfolio requires no account and never transmits the data you enter to any server — everything is processed in your browser. Learn how cookies and advertising identifiers (Google AdSense) are used.",
+          "Kitfolio requires no account and never transmits the data you enter to any server: everything is processed in your browser. Learn how cookies and advertising identifiers (Google AdSense) are used.",
       },
     },
     doc: {
@@ -552,14 +552,14 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
     navLabel: { ko: "이용약관", en: "Terms of Service" },
     seo: {
       ko: {
-        title: "이용약관 — Kitfolio",
+        title: "이용약관 | Kitfolio",
         description:
           "Kitfolio가 제공하는 무료 웹 도구 서비스의 이용 조건, 이용자의 의무, 계산·처리 결과에 대한 면책 조항과 지적재산권 안내입니다.",
       },
       en: {
-        title: "Terms of Service — Kitfolio",
+        title: "Terms of Service | Kitfolio",
         description:
-          "The terms of use for Kitfolio's free web tools — service provision, user obligations, disclaimer and limitation of liability for tool outputs, and intellectual property.",
+          "The terms of use for Kitfolio's free web tools: service provision, user obligations, disclaimer and limitation of liability for tool outputs, and intellectual property.",
       },
     },
     doc: {
@@ -756,8 +756,8 @@ export const TOOLS: Tool[] = [
         aeo: {
           what: "JSON Formatter is a tool that turns a minified or messy JSON string into a readable, indented and syntax-highlighted document while validating it.",
           who: "It is for developers working with API responses and config files, and for PMs or data workers who need to inspect JSON logs and payloads.",
-          how: "Paste JSON into the left pane and it is parsed instantly in your browser — the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
-          why: "It runs entirely in your browser with no upload, so sensitive data stays safe — and with no install or sign-up, debugging gets faster.",
+          how: "Paste JSON into the left pane and it is parsed instantly in your browser: the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
+          why: "It runs entirely in your browser with no upload, so sensitive data stays safe, and with no install or sign-up, debugging gets faster.",
         },
         guide: [
           {
@@ -771,14 +771,14 @@ export const TOOLS: Tool[] = [
             heading: "Formatting and validation are different",
             body: [
               "This tool does two jobs at once: it pretty-prints the data, and it checks that the syntax is valid. JSON forbids a trailing comma after the last item, requires keys to be wrapped in double quotes, and rejects strings wrapped in single quotes. These look trivial to a human, but a parser stops dead on any of them.",
-              "When you paste invalid JSON, the tool points to the exact line and column where the problem is, so you don't have to scan a long payload hunting for a stray character. When you need to shrink the data instead, the minify function strips every space and line break into a single line — handy for inlining JSON in code or trimming what you send over the network.",
+              "When you paste invalid JSON, the tool points to the exact line and column where the problem is, so you don't have to scan a long payload hunting for a stray character. When you need to shrink the data instead, the minify function strips every space and line break into a single line: handy for inlining JSON in code or trimming what you send over the network.",
             ],
           },
           {
             heading: "Why it's safe to use",
             body: [
               "JSON frequently carries sensitive values: tokens, personal data, internal identifiers. Some online formatters send your input to a server to process it, which means data you pasted without thinking can end up stored elsewhere. Kitfolio's JSON formatter parses, formats, validates, and minifies entirely in your browser and never transmits your input to any server.",
-              "That means you can paste internal API responses or data containing auth tokens without worry, and it works even with no network connection. Because there's nothing to install and no login, the tool is ready the moment the page opens — which removes a lot of friction from repetitive debugging.",
+              "That means you can paste internal API responses or data containing auth tokens without worry, and it works even with no network connection. Because there's nothing to install and no login, the tool is ready the moment the page opens: which removes a lot of friction from repetitive debugging.",
             ],
           },
         ],
@@ -853,13 +853,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
     seo: {
       ko: {
-        title: "슬랙 타임스탬프 변환기 — Unix 시간·날짜 변환기",
+        title: "슬랙 타임스탬프 변환기 | Unix 시간·날짜 변환기",
         description:
           "Slack에서 쓰는 Unix 타임스탬프를 읽기 쉬운 날짜·시간으로 변환합니다. UTC·로컬 타임존·상대 시간 표시와 Slack date 구문 생성을 지원합니다.",
         keywords: ["슬랙 타임스탬프", "유닉스 타임스탬프", "타임스탬프 변환", "슬랙 날짜", "unix time 변환"],
       },
       en: {
-        title: "Slack Timestamp Converter — Convert Unix Time to Date",
+        title: "Slack Timestamp Converter | Convert Unix Time to Date",
         description:
           "Convert Slack Unix timestamps into readable dates and times. Supports UTC, local timezone, relative time, and Slack date syntax generation.",
         keywords: ["slack timestamp", "unix timestamp", "timestamp converter", "slack date format", "unix time to date"],
@@ -922,7 +922,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What is the Slack date syntax for?",
           answer:
-            "Paste the generated Slack syntax into a message and Slack renders the date and time in each reader's own timezone and locale — handy for announcements across global teams.",
+            "Paste the generated Slack syntax into a message and Slack renders the date and time in each reader's own timezone and locale: handy for announcements across global teams.",
         },
         {
           question: "How are timezones handled?",
@@ -960,15 +960,15 @@ export const TOOLS: Tool[] = [
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
     seo: {
       ko: {
-        title: "Rem to Px 변환기 — CSS 단위 변환",
+        title: "Rem to Px 변환기 | CSS 단위 변환",
         description:
           "rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환합니다. 루트 폰트 크기를 직접 설정하고 자주 쓰는 예시값을 클릭해 바로 입력하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["rem to px", "rem px 변환", "rem 변환기", "css 단위 변환", "px to rem"],
       },
       en: {
-        title: "Rem to Px Converter — CSS Unit Converter",
+        title: "Rem to Px Converter | CSS Unit Converter",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser — no login, no installation.",
+          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
         keywords: ["rem to px", "rem to pixels", "px to rem", "css unit converter", "rem converter"],
       },
     },
@@ -1004,7 +1004,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert rem ↔ px instantly. Supports custom root font size.",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser — no login, no installation.",
+          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
         howItWorks: ["Enter a rem or px value", "Set root font size (default 16)", "Copy the converted result"],
         aeo: {
           what: "Rem to Px Converter is a tool that instantly converts CSS rem values to pixels (px) and back.",
@@ -1016,7 +1016,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Why rem is better for accessibility",
             body: [
-              "rem (root em) is always calculated from the font size of the HTML root element. When a user increases their browser's default text size, everything sized in rem — fonts, spacing, layout — scales up with it, so the page grows naturally for people with low vision. Values fixed in px stay put no matter what the user does, which hurts accessibility. That's why many teams size typography and spacing in rem.",
+              "rem (root em) is always calculated from the font size of the HTML root element. When a user increases their browser's default text size, everything sized in rem: fonts, spacing, layout: scales up with it, so the page grows naturally for people with low vision. Values fixed in px stay put no matter what the user does, which hurts accessibility. That's why many teams size typography and spacing in rem.",
               "Designs usually arrive in px while implementation happens in rem, so you constantly move between the two. This converter handles that round trip in one step.",
             ],
           },
@@ -1093,15 +1093,15 @@ export const TOOLS: Tool[] = [
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
     seo: {
       ko: {
-        title: "Em to Px 변환기 — CSS 단위 변환",
+        title: "Em to Px 변환기 | CSS 단위 변환",
         description:
           "em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환합니다. 부모 요소 폰트 크기를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["em to px", "em px 변환", "em 변환기", "css em 단위", "px to em"],
       },
       en: {
-        title: "Em to Px Converter — CSS Unit Converter",
+        title: "Em to Px Converter | CSS Unit Converter",
         description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser — no login, no installation.",
+          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
         keywords: ["em to px", "em to pixels", "px to em", "css em converter", "em unit converter"],
       },
     },
@@ -1137,13 +1137,13 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert em ↔ px instantly. Supports custom parent font size.",
         description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser — no login, no installation.",
+          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
         howItWorks: ["Enter an em or px value", "Set parent font size (default 16)", "Copy the converted result"],
         aeo: {
           what: "Em to Px Converter is a tool that instantly converts CSS em values to pixels (px) and back.",
           who: "It is for front-end developers working with nested font sizes and those who need to switch between em and pixel values in CSS.",
           how: "Enter an em or px value and set the parent element's font size; the conversion result appears instantly in your browser.",
-          why: "em values depend on the parent element's font size, making manual calculation tedious — this tool gives you the answer instantly.",
+          why: "em values depend on the parent element's font size, making manual calculation tedious: this tool gives you the answer instantly.",
         },
         guide: [
           {
@@ -1226,15 +1226,15 @@ export const TOOLS: Tool[] = [
     relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
     seo: {
       ko: {
-        title: "Vw to Px 변환기 — CSS 뷰포트 단위 변환",
+        title: "Vw to Px 변환기 | CSS 뷰포트 단위 변환",
         description:
           "vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환합니다. 뷰포트 너비를 직접 입력하거나 390, 768, 1024, 1440, 1920 프리셋으로 선택하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["vw to px", "vw px 변환", "viewport width 변환", "css vw 단위", "px to vw"],
       },
       en: {
-        title: "Vw to Px Converter — CSS Viewport Unit Converter",
+        title: "Vw to Px Converter | CSS Viewport Unit Converter",
         description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser — no login, no installation.",
+          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
         keywords: ["vw to px", "vw to pixels", "px to vw", "viewport width converter", "css vw unit"],
       },
     },
@@ -1270,7 +1270,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert vw ↔ px instantly. Includes responsive viewport width presets.",
         description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser — no login, no installation.",
+          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
         howItWorks: ["Enter a vw or px value", "Set viewport width or pick a preset", "Copy the converted result"],
         aeo: {
           what: "Vw to Px Converter is a tool that instantly converts CSS viewport width (vw) values to pixels and back.",
@@ -1283,7 +1283,7 @@ export const TOOLS: Tool[] = [
             heading: "vw is 1% of the viewport width",
             body: [
               "vw (viewport width) divides the browser's visible width into 100 parts. 100vw is the full screen width and 50vw is half of it. Because the value changes automatically with the screen size, vw is popular for full-bleed hero sections and responsive typography that scales with the viewport.",
-              "The key point is that the same vw resolves to different pixels on different devices. 10vw is 144px on a 1440px desktop but 39px on a 390px phone. So to check the real size for a specific device you set the viewport width and convert — and this calculator ships common device presets.",
+              "The key point is that the same vw resolves to different pixels on different devices. 10vw is 144px on a 1440px desktop but 39px on a 390px phone. So to check the real size for a specific device you set the viewport width and convert, and this calculator ships common device presets.",
             ],
           },
           {
@@ -1359,15 +1359,15 @@ export const TOOLS: Tool[] = [
     relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
     seo: {
       ko: {
-        title: "Percent to Px 변환기 — CSS % 단위 변환",
+        title: "Percent to Px 변환기 | CSS % 단위 변환",
         description:
           "CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환합니다. 부모 요소 너비를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["percent to px", "퍼센트 px 변환", "% to px", "css percent 단위", "px to percent"],
       },
       en: {
-        title: "Percent to Px Converter — CSS Unit Converter",
+        title: "Percent to Px Converter | CSS Unit Converter",
         description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser — no login, no installation.",
+          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
         keywords: ["percent to px", "% to pixels", "px to percent", "css percent converter", "percentage unit converter"],
       },
     },
@@ -1392,7 +1392,7 @@ export const TOOLS: Tool[] = [
             ],
           },
           {
-            heading: "% vs vw — 무엇을 기준으로 삼는가",
+            heading: "% vs vw: 무엇을 기준으로 삼는가",
             body: [
               "퍼센트와 vw는 헷갈리기 쉽지만 기준이 다릅니다. %는 부모(컨테이너)를 기준으로 하고, vw는 화면(뷰포트) 전체를 기준으로 합니다. 그래서 컨테이너 안에서의 비율 배분에는 %가, 화면 폭에 직접 비례해야 할 때는 vw가 맞습니다. 중첩된 레이아웃에서 실제 픽셀이 얼마가 되는지 확인할 때 이 변환기가 유용합니다.",
               "모든 계산은 브라우저 안에서만 이루어지며 입력한 값은 서버로 전송되지 않습니다.",
@@ -1403,7 +1403,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert CSS % ↔ px instantly. Supports custom parent width.",
         description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser — no login, no installation.",
+          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
         howItWorks: ["Enter a % or px value", "Set the parent element width", "Copy the converted result"],
         aeo: {
           what: "Percent to Px Converter is a tool that instantly converts CSS percentage (%) values to pixels and back.",
@@ -1415,12 +1415,12 @@ export const TOOLS: Tool[] = [
           {
             heading: "With CSS %, the question is '100% of what?'",
             body: [
-              "CSS percentages are relative to different things depending on the property. width is relative to the parent's width, height to the parent's height, font-size to the parent's font size — and, notably, padding and margin are calculated from the parent's width even for vertical values. This converter handles the most common case, converting % ↔ px relative to the parent element's width.",
+              "CSS percentages are relative to different things depending on the property. width is relative to the parent's width, height to the parent's height, font-size to the parent's font size, and, notably, padding and margin are calculated from the parent's width even for vertical values. This converter handles the most common case, converting % ↔ px relative to the parent element's width.",
               "So 50% is always 'half the parent's width': with an 800px parent, 50% = 400px; with a 1200px parent, 600px. Enter the parent's real width to get an accurate value.",
             ],
           },
           {
-            heading: "% vs vw — what each is relative to",
+            heading: "% vs vw: what each is relative to",
             body: [
               "Percent and vw are easy to confuse, but their references differ: % is relative to the parent (container), while vw is relative to the whole viewport. Use % to divide space within a container and vw when something must scale directly with the screen width. This converter is handy for seeing the real pixel value inside a nested layout.",
               "All calculation runs in your browser and your input is never sent to a server.",
@@ -1492,15 +1492,15 @@ export const TOOLS: Tool[] = [
     relatedTools: ["json-formatter", "slack-timestamp-converter", "time-converter"],
     seo: {
       ko: {
-        title: "Ms to S 변환기 — 밀리초·초 단위 변환",
+        title: "Ms to S 변환기 | 밀리초·초 단위 변환",
         description:
           "밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환합니다. CSS 애니메이션·트랜지션 작업 시 자주 쓰이는 단위를 빠르게 변환하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["ms to s", "밀리초 초 변환", "milliseconds to seconds", "css animation 시간", "ms 변환기"],
       },
       en: {
-        title: "Ms to S Converter — Milliseconds to Seconds",
+        title: "Ms to S Converter | Milliseconds to Seconds",
         description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser — no login, no installation.",
+          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
         keywords: ["ms to s", "milliseconds to seconds", "seconds to milliseconds", "css animation time", "ms converter"],
       },
     },
@@ -1536,13 +1536,13 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert ms ↔ s instantly. Useful for CSS animations and transitions.",
         description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser — no login, no installation.",
+          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
         howItWorks: ["Enter an ms or s value", "Flip direction with Swap", "Copy the converted result"],
         aeo: {
           what: "Ms to S Converter is a tool that instantly converts milliseconds (ms) to seconds (s) and back.",
           who: "It is for front-end developers calculating CSS animation and transition durations, or converting between ms and s for JavaScript setTimeout and setInterval.",
           how: "Enter an ms or s value and the result appears instantly in your browser. Use the Swap button to flip the conversion direction.",
-          why: "While 1000ms = 1s seems simple, larger values are easy to miscalculate — this tool gives the answer instantly so you can copy and move on.",
+          why: "While 1000ms = 1s seems simple, larger values are easy to miscalculate: this tool gives the answer instantly so you can copy and move on.",
         },
         guide: [
           {
@@ -1691,7 +1691,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Understanding the three gradient types",
             body: [
-              "CSS gradients come in three kinds. linear-gradient spreads color in a straight line along an angle you set — the most common form, used for buttons, backgrounds, and hero sections. radial-gradient radiates outward from a point, great for soft lighting or a spotlight effect, and conic-gradient rotates color around a center by angle, well suited to pie charts and color wheels.",
+              "CSS gradients come in three kinds. linear-gradient spreads color in a straight line along an angle you set: the most common form, used for buttons, backgrounds, and hero sections. radial-gradient radiates outward from a point, great for soft lighting or a spotlight effect, and conic-gradient rotates color around a center by angle, well suited to pie charts and color wheels.",
               "In this tool, switching the type also switches the options you can adjust (angle, center position, and so on), and the preview updates live. The fastest way to choose is to flip between the three types and compare by eye which shape is closest to the feel you want.",
             ],
           },
@@ -1706,7 +1706,7 @@ export const TOOLS: Tool[] = [
             heading: "Putting the copied CSS to work",
             body: [
               "The finished gradient copies out as CSS you can drop straight into a background property. Because it's code rather than an image file, it never pixelates at different screen sizes, adds no file weight, and is easy to re-tint later.",
-              "Linear and radial gradients work in every modern browser, and conic-gradient is widely supported in current ones. To keep a gradient you like, just copy the generated CSS — pasting the same code reproduces the exact result any time.",
+              "Linear and radial gradients work in every modern browser, and conic-gradient is widely supported in current ones. To keep a gradient you like, just copy the generated CSS: pasting the same code reproduces the exact result any time.",
             ],
           },
         ],
@@ -1754,7 +1754,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Can I save a gradient I made?",
           answer:
-            "Copy the generated CSS and keep it in your project or notes — pasting the same code reproduces the exact gradient any time.",
+            "Copy the generated CSS and keep it in your project or notes: pasting the same code reproduces the exact gradient any time.",
         },
       ],
     },
@@ -1781,13 +1781,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["css-gradient", "json-formatter", "character-counter"],
     seo: {
       ko: {
-        title: "Tailwind 팔레트 생성기 — HEX 하나로 11단계 색상",
+        title: "Tailwind 팔레트 생성기 | HEX 하나로 11단계 색상",
         description:
           "베이스 색상 하나(HEX)를 입력하면 Tailwind용 11단계 팔레트(50~950)를 자동으로 생성합니다. 각 색상을 클릭해 복사하거나, Tailwind v4 @theme · v3 config · CSS 변수 형태로 코드를 바로 복사하세요. 모든 처리는 브라우저 안에서 이루어집니다.",
         keywords: ["Tailwind 팔레트 생성기", "Tailwind 색상 생성", "11단계 색상 팔레트"],
       },
       en: {
-        title: "Tailwind Palette Generator — 11 shades from one HEX",
+        title: "Tailwind Palette Generator | 11 shades from one HEX",
         description:
           "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
         keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette"],
@@ -1888,7 +1888,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["css-gradient", "tailwind-palette-generator", "character-counter"],
     seo: {
       ko: {
-        title: "OG 미리보기 테스트 — 카카오톡·Facebook·X 공유 카드 확인",
+        title: "OG 미리보기 테스트 | 카카오톡·Facebook·X 공유 카드 확인",
         description:
           "OG 이미지 파일, 이미지 URL 또는 SVG·HTML/CSS 코드를 입력하고 제목과 설명이 카카오톡, Facebook, X, Threads, LinkedIn, 네이버 블로그, Notion에서 어떻게 보이는지 비교하세요. 모든 처리는 브라우저에서 진행되며 이미지 파일은 서버로 전송되지 않습니다.",
         keywords: [
@@ -1902,7 +1902,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Open Graph Preview Tester — Compare Social Link Cards",
+        title: "Open Graph Preview Tester | Compare Social Link Cards",
         description:
           "Preview an Open Graph image, title, and description across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Upload an image, enter an image URL, or render SVG and HTML/CSS code directly in your browser without sending files to a server.",
         keywords: [
@@ -1936,7 +1936,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Compare how an Open Graph image, title, and description appear across major platforms.",
         description:
-          "Upload an image, enter an image URL, or render SVG and HTML/CSS code to compare link card layouts across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Spot image cropping and truncated titles or descriptions before you publish — everything runs in your browser.",
+          "Upload an image, enter an image URL, or render SVG and HTML/CSS code to compare link card layouts across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Spot image cropping and truncated titles or descriptions before you publish: everything runs in your browser.",
         howItWorks: [
           "Upload an image, enter an image URL, or paste supported image source code.",
           "Enter the title, description, and display domain.",
@@ -2111,14 +2111,14 @@ export const TOOLS: Tool[] = [
           {
             heading: "How it counts Latin, CJK, and emoji",
             body: [
-              "Counting is easy to get wrong across languages. This tool counts each Korean or Chinese character, each Latin letter, digit, and punctuation mark as one character, and treats an emoji — even one built from several code points — as the single character you actually see. Words are split on spaces and line breaks, so it works for the word-count requirements common in English writing too.",
+              "Counting is easy to get wrong across languages. This tool counts each Korean or Chinese character, each Latin letter, digit, and punctuation mark as one character, and treats an emoji: even one built from several code points: as the single character you actually see. Words are split on spaces and line breaks, so it works for the word-count requirements common in English writing too.",
               "When you're preparing a talk or a video script, the estimated reading and speaking time helps. Based on a per-minute reading and speaking rate, it gives you a rough duration so you can tell in advance whether your draft fits the time you have.",
             ],
           },
           {
             heading: "Private, and ready right away",
             body: [
-              "You're often working with things you'd rather not share yet — a résumé draft, an unpublished announcement. This counter does all of its counting inside your browser and never uploads or stores the text you enter. Close the tab and the content is gone, leaving nothing behind.",
+              "You're often working with things you'd rather not share yet: a résumé draft, an unpublished announcement. This counter does all of its counting inside your browser and never uploads or stores the text you enter. Close the tab and the content is gone, leaving nothing behind.",
               "With no install and no login, it's ready the moment the page opens, so you can glance at the length and get straight back to writing without breaking your flow.",
             ],
           },
@@ -2167,7 +2167,7 @@ export const TOOLS: Tool[] = [
         {
           question: "How is the reading time estimated?",
           answer:
-            "It assumes a reading speed of 200 words per minute and a speaking speed of 130 words per minute — useful for sizing scripts and presentations.",
+            "It assumes a reading speed of 200 words per minute and a speaking speed of 130 words per minute: useful for sizing scripts and presentations.",
         },
       ],
     },
@@ -2198,7 +2198,7 @@ export const TOOLS: Tool[] = [
     ],
     seo: {
       ko: {
-        title: "연봉 실수령액 계산기 — 월급 실수령 계산",
+        title: "연봉 실수령액 계산기 | 월급 실수령 계산",
         description:
           "세전 연봉이나 월급을 입력하면 4대보험과 근로소득세·지방소득세를 빼고 예상 월 실수령액·연 실수령액과 공제 내역을 바로 보여줍니다. 비과세액, 부양가족 수, 20세 이하 자녀 수, 원천징수 비율(80·100·120%)을 반영합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: [
@@ -2212,7 +2212,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Salary Net Pay Calculator — Korea Take-Home Pay",
+        title: "Salary Net Pay Calculator | Korea Take-Home Pay",
         description:
           "Enter your gross annual salary or monthly pay and instantly see estimated monthly and yearly take-home pay after Korea's four major insurances and income & local taxes, with a full deduction breakdown. Adjust non-taxable amount, dependents, children and withholding rate. Everything runs in your browser.",
         keywords: [
@@ -2284,15 +2284,15 @@ export const TOOLS: Tool[] = [
           {
             heading: "Why gross salary and take-home pay differ",
             body: [
-              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax — roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
-              "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure — useful especially for someone reading their first payslip.",
+              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax: roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
+              "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure: useful especially for someone reading their first payslip.",
             ],
           },
           {
             heading: "The inputs that change the result",
             body: [
               "Take-home pay isn't set by the salary figure alone. A non-taxable amount such as a meal allowance is excluded from the tax and insurance base, so a larger non-taxable amount raises your net pay. The number of dependents and children under 20 lowers income tax, and the withholding rate you choose (80/100/120%) shifts how much tax is taken each month.",
-              "The withholding rate is the piece most people misread. Choosing 80% withholds less each month — raising monthly net pay — but you may owe more at year-end settlement; 120% does the opposite, withholding more monthly with a better chance of a refund. The total annual tax is the same either way, so it comes down to whether you'd rather have the money monthly or at settlement.",
+              "The withholding rate is the piece most people misread. Choosing 80% withholds less each month: raising monthly net pay, but you may owe more at year-end settlement; 120% does the opposite, withholding more monthly with a better chance of a refund. The total annual tax is the same either way, so it comes down to whether you'd rather have the money monthly or at settlement.",
             ],
           },
           {
@@ -2407,7 +2407,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Flex Work Calculator — Remaining Work Hours",
+        title: "Flex Work Calculator | Remaining Work Hours",
         description:
           "Calculate this month's target hours, remaining hours, remaining business days and the daily average you need under a flexible work schedule. It deducts annual, half-day and hourly leave, factors in public holidays, and shows whether you're ahead or behind. Everything runs in your browser.",
         keywords: [
@@ -2480,7 +2480,7 @@ export const TOOLS: Tool[] = [
         {
           question: "How are public holidays handled?",
           answer:
-            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays — say on Saturdays — turn it off to exclude weekends only. Holidays for 2025–2027 are currently supported.",
+            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays: say on Saturdays: turn it off to exclude weekends only. Holidays for 2025–2027 are currently supported.",
         },
         {
           question: "How is annual, half-day and hourly leave deducted?",
@@ -2522,13 +2522,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
     seo: {
       ko: {
-        title: "시간 더하기 빼기 계산기 — 근무시간 합산",
+        title: "시간 더하기 빼기 계산기 | 근무시간 합산",
         description:
           "여러 시간 블록을 더하거나 빼서 총 근무시간을 계산합니다. 타임시트 작성, 청구 시간 합산, 초과·조기퇴근 계산에 사용하세요. 결과를 시:분:초, 소수점 시간, 분, 초로 한 번에 확인할 수 있습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
         keywords: ["시간 더하기 계산기", "시간 빼기 계산기", "근무시간 합산", "타임시트 계산기", "시간 계산"],
       },
       en: {
-        title: "Time Calculator — Add and Subtract Hours Minutes",
+        title: "Time Calculator | Add and Subtract Hours Minutes",
         description:
           "Add or subtract multiple time blocks to calculate total work hours. Perfect for timesheets, billing hours, overtime and break calculations. Results shown in H:M:S, decimal hours, minutes and seconds all at once. Everything runs in your browser.",
         keywords: ["time calculator", "add subtract hours minutes", "timesheet calculator", "hours minutes calculator", "work hours calculator"],
@@ -2587,7 +2587,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What is the decimal hours format used for?",
           answer:
-            "Decimal hours are mainly used for billing calculations. For example, 1 hour 30 minutes is shown as 1.5h — handy for freelance invoices and hourly rate calculations.",
+            "Decimal hours are mainly used for billing calculations. For example, 1 hour 30 minutes is shown as 1.5h: handy for freelance invoices and hourly rate calculations.",
         },
         {
           question: "Can the total go negative?",
@@ -2629,13 +2629,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
     seo: {
       ko: {
-        title: "시간 단위 변환기 — 시간·일·주·월 변환",
+        title: "시간 단위 변환기 | 시간·일·주·월 변환",
         description:
           "시간·분·초·일·주·월·년 단위를 서로 변환합니다. 캘린더 기준(24시간/일)과 근무 기준(8시간/일, 5일/주)을 선택해 프로젝트 기간 산출, 근무시간 단위 환산에 사용하세요. 모든 변환은 브라우저 안에서 이루어집니다.",
         keywords: ["시간 단위 변환", "시간 일 주 변환기", "시간 변환기", "hours to days", "분 시간 변환"],
       },
       en: {
-        title: "Time Converter — Hours to Days, Weeks, Months",
+        title: "Time Converter | Hours to Days, Weeks, Months",
         description:
           "Convert between seconds, minutes, hours, days, weeks, months and years instantly. Choose calendar basis (24h/day) or work basis (8h/day, 5d/week) to calculate project durations and work hour conversions. Everything runs in your browser.",
         keywords: ["time converter", "hours to days converter", "hours to weeks", "time unit converter", "hours days weeks months calculator"],
@@ -2704,7 +2704,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Which units are supported?",
           answer:
-            "Seconds, minutes, hours, days, weeks, months and years — 7 units in total. You can pick any of them as the input unit.",
+            "Seconds, minutes, hours, days, weeks, months and years: 7 units in total. You can pick any of them as the input unit.",
         },
         {
           question: "Is anything I enter sent to a server?",
@@ -2720,7 +2720,7 @@ export const TOOLS: Tool[] = [
       },
       en: {
         title: "Time Converter",
-        subtitle: "Convert hours, days, weeks and months — with work basis",
+        subtitle: "Convert hours, days, weeks and months: with work basis",
       },
     },
   },
@@ -2736,7 +2736,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["slack-timestamp-converter", "time-calculator", "flex-work-calculator"],
     seo: {
       ko: {
-        title: "음력 양력 변환기 — 1901~2100년 날짜 변환",
+        title: "음력 양력 변환기 | 1901~2100년 날짜 변환",
         description:
           "양력 날짜를 음력으로, 음력 날짜를 양력으로 즉시 변환합니다. 1901년부터 2100년까지 지원하며 윤달 처리와 갑자·띠 정보도 함께 확인할 수 있습니다. 설치·가입 없이 브라우저에서 바로 사용하세요.",
         keywords: [
@@ -2750,9 +2750,9 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Lunar–Solar Date Converter — 1901 to 2100",
+        title: "Lunar–Solar Date Converter | 1901 to 2100",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         keywords: [
           "lunar solar converter",
           "korean lunar calendar",
@@ -2784,7 +2784,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901–2100 with leap months.",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser — no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         howItWorks: [
           "Choose conversion direction (solar → lunar or lunar → solar)",
           "Enter year, month and day (toggle intercalation if needed)",
@@ -2793,7 +2793,7 @@ export const TOOLS: Tool[] = [
         aeo: {
           what: "A Lunar–Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
           who: "It is for office workers and small business owners who need to look up lunar-calendar anniversaries, memorial days and traditional holidays in the Gregorian calendar, or the reverse.",
-          how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser — including the traditional Korean ganzhi year name and zodiac animal.",
+          how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser: including the traditional Korean ganzhi year name and zodiac animal.",
           why: "It saves the annual calendar-flipping or search needed to cross-reference lunar and solar dates for any date from 1901 to 2100.",
         },
       },
@@ -2885,7 +2885,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"],
     seo: {
       ko: {
-        title: "성장률 계산기 — 퍼센트 증감률·MoM·YoY·QoQ·WoW 계산",
+        title: "성장률 계산기 | 퍼센트 증감률·MoM·YoY·QoQ·WoW 계산",
         description:
           "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 MoM·YoY·QoQ·WoW 성장률까지 이 계산기 하나로 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
         keywords: [
@@ -2896,7 +2896,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Growth Rate Calculator — % Change, MoM, YoY, QoQ, WoW",
+        title: "Growth Rate Calculator | % Change, MoM, YoY, QoQ, WoW",
         description:
           "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. One calculator covers percentage increase and decrease as well as MoM, YoY, QoQ, and WoW growth. Works for revenue, users, traffic, or any metric, entirely in your browser.",
         keywords: [
@@ -2949,15 +2949,15 @@ export const TOOLS: Tool[] = [
         howItWorks: ["Enter the previous (starting) value", "Enter the current (ending) value", "Read or copy the growth rate, change, difference, and multiplier"],
         aeo: {
           what: "A Growth Rate Calculator is a unified tool for quickly calculating growth rate, percentage change, and MoM, YoY, QoQ, and WoW growth. A growth rate calculator, MoM calculator, YoY calculator, QoQ calculator, WoW calculator, and percentage increase/decrease calculator all use the same (Current − Previous) / Previous × 100 formula, so entering a previous and current value shows the growth rate, change, difference, and multiplier on one screen.",
-          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric — especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth.",
+          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric: especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth.",
           how: "Enter a previous and current value and it applies (Current − Previous) / Previous × 100. A positive result is a percentage increase and a negative one a decrease; set the comparison period to last month, last year, last quarter, or last week to read it as MoM, YoY, QoQ, or WoW growth.",
-          why: "Instead of hopping between separate tools for growth rate, percentage change, and MoM/YoY/QoQ/WoW, you get an accurate number in one place with no manual math — saving time on reports and analysis.",
+          why: "Instead of hopping between separate tools for growth rate, percentage change, and MoM/YoY/QoQ/WoW, you get an accurate number in one place with no manual math: saving time on reports and analysis.",
         },
         guide: [
           {
             heading: "One formula, many names",
             body: [
-              "Growth rate, percentage change, percent increase, and percent decrease are different names for the same calculation. Each is (Current − Previous) / Previous × 100. A positive result is usually called an increase and a negative one a decrease, but the math is identical — so there's no need for a separate percentage increase calculator and percentage decrease calculator; this growth rate calculator handles both.",
+              "Growth rate, percentage change, percent increase, and percent decrease are different names for the same calculation. Each is (Current − Previous) / Previous × 100. A positive result is usually called an increase and a negative one a decrease, but the math is identical, so there's no need for a separate percentage increase calculator and percentage decrease calculator; this growth rate calculator handles both.",
               "Only the label changes depending on which two values you compare. Whatever numbers you put in the previous and current fields, the calculator returns the change the same way.",
             ],
           },
@@ -2965,14 +2965,14 @@ export const TOOLS: Tool[] = [
             heading: "MoM, YoY, QoQ, and WoW growth too",
             body: [
               "The MoM, YoY, QoQ, and WoW growth figures common in business reporting are the same percentage-change calculation. MoM (month over month) compares last month with this month, YoY (year over year) compares last year with this year, QoQ (quarter over quarter) compares consecutive quarters, and WoW (week over week) compares last week with this week.",
-              "For example, with last month's revenue at 10,000 and this month's at 12,500, enter 10,000 as the previous value and 12,500 as the current value to get a MoM growth of +25%. Use last-year/this-year numbers for YoY, quarterly numbers for QoQ, and weekly numbers for WoW — no need to switch between a separate MoM, YoY, QoQ, or WoW calculator.",
+              "For example, with last month's revenue at 10,000 and this month's at 12,500, enter 10,000 as the previous value and 12,500 as the current value to get a MoM growth of +25%. Use last-year/this-year numbers for YoY, quarterly numbers for QoQ, and weekly numbers for WoW: no need to switch between a separate MoM, YoY, QoQ, or WoW calculator.",
             ],
           },
           {
             heading: "Reading and using the result",
             body: [
               "Alongside the percentage change, the calculator shows the absolute difference and the multiplier. The multiplier tells you how many times the previous value the current value is (e.g. 1.25×), which makes the size of the change easier to grasp. If the previous value is zero, the growth rate is undefined because it would divide by zero, so pick a non-zero starting point.",
-              "Use it with any metric — revenue, traffic, subscribers, conversions — to fill in the growth figures in a report or to check progress toward a goal. Every calculation runs in your browser and the numbers you enter are never sent to a server.",
+              "Use it with any metric: revenue, traffic, subscribers, conversions: to fill in the growth figures in a report or to check progress toward a goal. Every calculation runs in your browser and the numbers you enter are never sent to a server.",
             ],
           },
         ],
@@ -2991,7 +2991,7 @@ export const TOOLS: Tool[] = [
         { question: "What is growth rate?", answer: "Growth rate is the percentage change between two values, calculated as (Current − Previous) / Previous × 100. It is the same calculation as percentage change." },
         { question: "Can I calculate MoM, YoY, QoQ, and WoW growth here?", answer: "Yes. MoM (vs last month), YoY (vs last year), QoQ (vs last quarter), and WoW (vs last week) growth all use the same percentage-change formula. Just enter the two periods' values as previous and current." },
         { question: "How are percentage increase and decrease different?", answer: "The calculation is identical. A positive result is a percentage increase and a negative result is a percentage decrease, so no separate increase or decrease calculator is needed." },
-        { question: "Are percentage change and growth rate different?", answer: "Only the name differs — the math is the same relative change between two values expressed as a percent, called growth rate, percentage change, or percent change depending on context." },
+        { question: "Are percentage change and growth rate different?", answer: "Only the name differs: the math is the same relative change between two values expressed as a percent, called growth rate, percentage change, or percent change depending on context." },
         { question: "What happens if the previous value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message appears and you should choose a non-zero starting point." },
         { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
@@ -3014,13 +3014,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["growth-rate-calculator", "cagr-calculator", "goal-growth-calculator"],
     seo: {
       ko: {
-        title: "퍼센트 차이 계산기 — 두 값의 상대적 차이",
+        title: "퍼센트 차이 계산기 | 두 값의 상대적 차이",
         description:
           "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다.",
         keywords: ["퍼센트 차이 계산기", "percent difference calculator", "두 값 비교", "상대적 차이"],
       },
       en: {
-        title: "Percent Difference Calculator — Relative Difference Between Two Values",
+        title: "Percent Difference Calculator | Relative Difference Between Two Values",
         description:
           "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction (not increase or decrease).",
         keywords: ["percent difference calculator", "percentage difference calculator", "relative difference", "compare two values"],
@@ -3045,10 +3045,10 @@ export const TOOLS: Tool[] = [
           "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction.",
         howItWorks: ["Enter value A", "Enter value B", "Read the percent difference"],
         aeo: {
-          what: "A Percent Difference Calculator computes the relative difference between two values as a percentage of their average. It has no directional bias — neither value is 'before' or 'after'.",
+          what: "A Percent Difference Calculator computes the relative difference between two values as a percentage of their average. It has no directional bias: neither value is 'before' or 'after'.",
           who: "It is for researchers, analysts, and business users who need to compare two measurements, test results, or data points without implying which came first.",
           how: "The formula |A − B| / ((A + B) / 2) × 100 uses the average of the two values as the reference point, making the result symmetric.",
-          why: "Unlike percentage change, it does not require you to designate a 'before' and 'after' — ideal for comparing two independent measurements.",
+          why: "Unlike percentage change, it does not require you to designate a 'before' and 'after': ideal for comparing two independent measurements.",
         },
       },
     },
@@ -3082,13 +3082,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["required-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
     seo: {
       ko: {
-        title: "목표 성장률 계산기 — 목표 달성에 필요한 성장률",
+        title: "목표 성장률 계산기 | 목표 달성에 필요한 성장률",
         description:
           "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
         keywords: ["목표 성장률 계산기", "goal growth calculator", "필요 성장률", "target growth calculator"],
       },
       en: {
-        title: "Goal Growth Calculator — Growth Rate Needed to Hit Your Target",
+        title: "Goal Growth Calculator | Growth Rate Needed to Hit Your Target",
         description:
           "Enter your current value and target value to instantly calculate the growth rate required to reach your goal. Great for revenue targets, KPI planning, and business goals.",
         keywords: ["goal growth calculator", "target growth calculator", "required growth rate", "how much growth do I need"],
@@ -3150,13 +3150,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["goal-growth-calculator", "reverse-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "필요 증가량 계산기 — 목표 달성에 필요한 증가량",
+        title: "필요 증가량 계산기 | 목표 달성에 필요한 증가량",
         description:
           "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 달성률을 즉시 계산합니다.",
         keywords: ["필요 증가량 계산기", "required growth calculator", "목표 달성률", "growth target calculator"],
       },
       en: {
-        title: "Required Growth Calculator — How Much Do You Need to Grow?",
+        title: "Required Growth Calculator | How Much Do You Need to Grow?",
         description:
           "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
         keywords: ["required growth calculator", "growth target calculator", "how much do I need to grow", "target progress calculator"],
@@ -3184,7 +3184,7 @@ export const TOOLS: Tool[] = [
           what: "A Required Growth Calculator shows exactly how much a metric needs to increase to reach a target, along with the current progress percentage.",
           who: "It is for PMs, sales reps, and business owners who track targets and want to know the gap between where they are and where they need to be.",
           how: "Required Increase = Target − Current; Progress = Current / Target × 100; Required Growth Rate = (Target − Current) / Current × 100.",
-          why: "It quantifies the gap to goal in multiple ways — absolute increase, percentage growth, and progress — so you can plan and communicate clearly.",
+          why: "It quantifies the gap to goal in multiple ways: absolute increase, percentage growth, and progress, so you can plan and communicate clearly.",
         },
       },
     },
@@ -3218,13 +3218,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["goal-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
     seo: {
       ko: {
-        title: "역산 계산기 — 최종값과 성장률로 원래 값 역산",
+        title: "역산 계산기 | 최종값과 성장률로 원래 값 역산",
         description:
           "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
         keywords: ["역산 계산기", "reverse growth calculator", "원래 값 역산", "성장률 역산"],
       },
       en: {
-        title: "Reverse Growth Calculator — Find the Original Value from Final Value and Growth Rate",
+        title: "Reverse Growth Calculator | Find the Original Value from Final Value and Growth Rate",
         description:
           "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
         keywords: ["reverse growth calculator", "reverse percentage calculator", "find original value", "reverse percent change"],
@@ -3286,13 +3286,13 @@ export const TOOLS: Tool[] = [
     relatedTools: ["compound-growth-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "CAGR 계산기 — 연평균 성장률 계산",
+        title: "CAGR 계산기 | 연평균 성장률 계산",
         description:
           "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
         keywords: ["CAGR 계산기", "CAGR calculator", "연평균 성장률", "annual growth rate calculator"],
       },
       en: {
-        title: "CAGR Calculator — Compound Annual Growth Rate",
+        title: "CAGR Calculator | Compound Annual Growth Rate",
         description:
           "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Use it for investment returns, revenue growth analysis, and business planning.",
         keywords: ["CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator"],
@@ -3317,7 +3317,7 @@ export const TOOLS: Tool[] = [
           "Enter a start value, end value, and number of years to instantly calculate CAGR. Use it for investment returns, revenue growth analysis, and business planning.",
         howItWorks: ["Enter the start value", "Enter the end value", "Enter the number of years, then read CAGR and total growth"],
         aeo: {
-          what: "A CAGR Calculator computes the Compound Annual Growth Rate — the smoothed annual growth rate that describes how much a value grew each year on a compounded basis.",
+          what: "A CAGR Calculator computes the Compound Annual Growth Rate: the smoothed annual growth rate that describes how much a value grew each year on a compounded basis.",
           who: "It is for investors, PMs, and business owners who need to compare multi-year growth across different time periods or asset sizes.",
           how: "CAGR = (End / Start) ^ (1 / Years) − 1. The result is the annualized growth rate assuming constant compounding.",
           why: "CAGR normalizes growth across different time spans, making it the standard metric for comparing investment returns or business growth rates.",
@@ -3354,7 +3354,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "복리 성장 계산기 — 미래값 예측·성장 시나리오",
+        title: "복리 성장 계산기 | 미래값 예측·성장 시나리오",
         description:
           "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 매출·사용자 수·트래픽의 미래값 예측과 성장 시나리오 플래닝에 활용하세요.",
         keywords: [
@@ -3363,7 +3363,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Compound Growth Calculator — Future Value & Projection",
+        title: "Compound Growth Calculator | Future Value & Projection",
         description:
           "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. Great for projecting revenue, users, or investments and for growth scenario planning.",
         keywords: [
@@ -3411,27 +3411,27 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Compute compounded final value and future projection from a value, rate, and periods.",
         description:
-          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric — the same formula either way.",
+          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric: the same formula either way.",
         howItWorks: ["Enter the initial (current) value", "Enter the growth rate per period (%)", "Enter the number of periods, then read the final / projected value"],
         aeo: {
           what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value. Compounding an initial investment and projecting a current metric into the future both use Final Value = Initial × (1 + Rate / 100) ^ Periods, so this one calculator handles both.",
           who: "It is for PMs, startup founders, investors, and business owners projecting revenue, users, or investments that grow at a constant periodic rate.",
           how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Put your current metric in the initial value field and the result is your future projection.",
-          why: "Compound growth diverges sharply from simple growth at scale — vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
+          why: "Compound growth diverges sharply from simple growth at scale: vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
         },
         guide: [
           {
             heading: "Compound growth and future projection are the same math",
             body: [
-              "'Compound growth' and 'growth projection (future value)' differ only in name and context — the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
-              "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric — revenue, users, traffic — makes it a growth projection calculator that looks into the future.",
+              "'Compound growth' and 'growth projection (future value)' differ only in name and context: the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
+              "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric: revenue, users, traffic: makes it a growth projection calculator that looks into the future.",
             ],
           },
           {
             heading: "Compound vs. simple growth",
             body: [
               "The key is that each period's growth applies to the accumulated total so far, not the original value. Simple growth adds the same amount each period, but compounding applies the rate to the grown value, so the increase accelerates over time. The longer the horizon and the higher the rate, the more dramatically compound and simple growth diverge.",
-              "Enter a negative rate to model compound decline, where the value shrinks by a fixed percentage each period — useful for churn-driven user decline or depreciation scenarios.",
+              "Enter a negative rate to model compound decline, where the value shrinks by a fixed percentage each period: useful for churn-driven user decline or depreciation scenarios.",
             ],
           },
           {
@@ -3456,7 +3456,7 @@ export const TOOLS: Tool[] = [
         { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value, causing exponential growth over time." },
         { question: "Can I project a future value here too?", answer: "Yes. A future-value projection uses the same formula as compound growth. Put your current revenue, users, or metric in the initial value field and the result is your projection." },
         { question: "Does it assume a constant growth rate each period?", answer: "Yes. It assumes the same rate every period. For variable rates, split the horizon into segments and calculate each separately." },
-        { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value — no growth has occurred." },
+        { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value: no growth has occurred." },
         { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
       ],
     },
@@ -3479,7 +3479,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["roas-calculator", "cpa-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "광고 예산 페이싱 계산기 — 광고비 소진율·집행률 확인",
+        title: "광고 예산 페이싱 계산기 | 광고비 소진율·집행률 확인",
         description:
           "캠페인 기간 진행률과 예산 소진율을 비교해 광고비가 계획보다 빠르게 또는 느리게 집행되고 있는지 즉시 확인합니다. 남은 기간에 필요한 일평균 광고비와 예상 최종 지출액도 함께 계산합니다. 매일·평일 집행 기준 선택 가능. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -3492,7 +3492,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Ad Budget Pacing Calculator — Campaign Budget Burn Rate",
+        title: "Ad Budget Pacing Calculator | Campaign Budget Burn Rate",
         description:
           "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -3531,9 +3531,9 @@ export const TOOLS: Tool[] = [
           "See pacing status and required daily spend",
         ],
         aeo: {
-          what: "Ad Budget Pacing Calculator is a tool that compares your campaign's time elapsed with its budget consumed to tell you whether your ad spend is on track, ahead, or behind schedule — and calculates the daily spend needed for the remaining period.",
+          what: "Ad Budget Pacing Calculator is a tool that compares your campaign's time elapsed with its budget consumed to tell you whether your ad spend is on track, ahead, or behind schedule, and calculates the daily spend needed for the remaining period.",
           who: "It is for marketers managing ad budgets, small business owners running digital campaigns, and PMs tracking campaign ROI.",
-          how: "Enter your total budget, campaign start and end dates, the reference date, and spend to date. The calculator instantly computes time progress, budget burn rate, pacing gap, remaining budget, and required daily spend — all in your browser.",
+          how: "Enter your total budget, campaign start and end dates, the reference date, and spend to date. The calculator instantly computes time progress, budget burn rate, pacing gap, remaining budget, and required daily spend: all in your browser.",
           why: "If ad spend burns too fast, your campaign runs dry before it ends. Too slow, and you under-deliver. Daily pacing checks let you reallocate budget at the right moment.",
         },
       },
@@ -3611,7 +3611,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["cpa-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "ROAS 계산기 — 광고 수익률·목표 매출·허용 광고비 계산",
+        title: "ROAS 계산기 | 광고 수익률·목표 매출·허용 광고비 계산",
         description:
           "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -3624,7 +3624,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "ROAS Calculator — Return on Ad Spend, Target Revenue & Budget",
+        title: "ROAS Calculator | Return on Ad Spend, Target Revenue & Budget",
         description:
           "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -3735,7 +3735,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What is the difference between ROAS and ROI?",
           answer:
-            "ROAS only compares ad revenue to ad spend. ROI (Return on Investment) factors in all costs — cost of goods, operations, etc. — and measures net profit. Use ROAS for a quick read on ad efficiency; use ROI for overall profitability.",
+            "ROAS only compares ad revenue to ad spend. ROI (Return on Investment) factors in all costs: cost of goods, operations, etc., and measures net profit. Use ROAS for a quick read on ad efficiency; use ROI for overall profitability.",
         },
         {
           question: "How is break-even ROAS calculated?",
@@ -3766,7 +3766,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["roas-calculator", "cpc-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "CPA 계산기 — 전환당 광고비·예상 전환 수·필요 예산 계산",
+        title: "CPA 계산기 | 전환당 광고비·예상 전환 수·필요 예산 계산",
         description:
           "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -3779,7 +3779,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "CPA Calculator — Cost Per Acquisition, Conversions & Budget",
+        title: "CPA Calculator | Cost Per Acquisition, Conversions & Budget",
         description:
           "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -3843,7 +3843,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "CPA is the cost of one outcome",
             body: [
-              "CPA (Cost per Acquisition) is the ad spend it takes to win one conversion — a purchase, sign-up, or lead — calculated as ad spend ÷ conversions. Because it's based on the action you actually want rather than clicks or impressions, it's the efficiency metric closest to your business goal. Even with a good CPC and CTR, no conversions means a bad CPA.",
+              "CPA (Cost per Acquisition) is the ad spend it takes to win one conversion: a purchase, sign-up, or lead: calculated as ad spend ÷ conversions. Because it's based on the action you actually want rather than clicks or impressions, it's the efficiency metric closest to your business goal. Even with a good CPC and CTR, no conversions means a bad CPA.",
               "This calculator turns ad spend and conversions into CPA instantly, and reverse-calculates the expected conversions or budget needed to hit a target CPA.",
             ],
           },
@@ -3884,7 +3884,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What is CPA?",
           answer:
-            "CPA (Cost Per Acquisition or Cost Per Action) is the average cost of achieving one conversion. CPA = ad spend ÷ conversions. A conversion can be a purchase, sign-up, application, download — any goal action you define.",
+            "CPA (Cost Per Acquisition or Cost Per Action) is the average cost of achieving one conversion. CPA = ad spend ÷ conversions. A conversion can be a purchase, sign-up, application, download: any goal action you define.",
         },
         {
           question: "Why is the expected conversion count a whole number?",
@@ -3894,7 +3894,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What is the difference between CPA and CPC?",
           answer:
-            "CPC (Cost Per Click) measures the cost of each click on your ad. CPA (Cost Per Acquisition) measures the cost of each actual conversion — a purchase, sign-up, etc. CPC tracks traffic cost; CPA tracks outcome cost.",
+            "CPC (Cost Per Click) measures the cost of each click on your ad. CPA (Cost Per Acquisition) measures the cost of each actual conversion: a purchase, sign-up, etc. CPC tracks traffic cost; CPA tracks outcome cost.",
         },
         {
           question: "Is my data sent to a server?",
@@ -3920,7 +3920,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["ctr-calculator", "cpm-calculator", "cpa-calculator"],
     seo: {
       ko: {
-        title: "CPC 계산기 — 클릭당 광고비·예상 클릭 수·필요 예산 계산",
+        title: "CPC 계산기 | 클릭당 광고비·예상 클릭 수·필요 예산 계산",
         description:
           "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -3933,7 +3933,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "CPC Calculator — Cost Per Click, Expected Clicks & Budget",
+        title: "CPC Calculator | Cost Per Click, Expected Clicks & Budget",
         description:
           "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -4075,7 +4075,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["ctr-calculator", "cpc-calculator", "ad-budget-pacing-calculator"],
     seo: {
       ko: {
-        title: "CPM 계산기 — 천 회 노출당 광고비·예상 노출 수·필요 예산 계산",
+        title: "CPM 계산기 | 천 회 노출당 광고비·예상 노출 수·필요 예산 계산",
         description:
           "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -4088,7 +4088,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "CPM Calculator — Cost Per Mille, Impressions & Budget",
+        title: "CPM Calculator | Cost Per Mille, Impressions & Budget",
         description:
           "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -4152,7 +4152,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "CPM is the cost per 1,000 impressions",
             body: [
-              "CPM (Cost per Mille) is the cost of 1,000 ad impressions, calculated as ad spend ÷ impressions × 1,000 — 'mille' is Latin for thousand. Because it's based on how many people saw the ad (reach and impressions) rather than clicks or conversions, it's the go-to metric for gauging the efficiency of brand awareness campaigns.",
+              "CPM (Cost per Mille) is the cost of 1,000 ad impressions, calculated as ad spend ÷ impressions × 1,000: 'mille' is Latin for thousand. Because it's based on how many people saw the ad (reach and impressions) rather than clicks or conversions, it's the go-to metric for gauging the efficiency of brand awareness campaigns.",
               "This calculator turns ad spend and impressions into CPM instantly, and reverse-calculates the expected impressions or budget needed for a target CPM.",
             ],
           },
@@ -4229,7 +4229,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["cpc-calculator", "cpm-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "CTR 계산기 — 클릭률·필요 클릭 수·필요 노출 수 계산",
+        title: "CTR 계산기 | 클릭률·필요 클릭 수·필요 노출 수 계산",
         description:
           "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -4242,7 +4242,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "CTR Calculator — Click-Through Rate, Clicks & Impressions",
+        title: "CTR Calculator | Click-Through Rate, Clicks & Impressions",
         description:
           "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
         keywords: [
@@ -4313,7 +4313,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "What moves CTR, and how it relates to other metrics",
             body: [
-              "CTR is driven mostly by creative, targeting, copy, and placement — the more relevant the audience and the more compelling the wording, the higher it climbs. But a high CTR with weak post-click conversion can still disappoint, so read it alongside conversion rate (CVR).",
+              "CTR is driven mostly by creative, targeting, copy, and placement: the more relevant the audience and the more compelling the wording, the higher it climbs. But a high CTR with weak post-click conversion can still disappoint, so read it alongside conversion rate (CVR).",
               "CTR is also tied to cost metrics: at the same CPM, a higher CTR means a lower effective CPC (CPC ≈ CPM ÷ (CTR×10)). Set a target CTR and reverse-calculate the impressions and clicks you need to plan reach and click goals together. All calculation runs in your browser.",
             ],
           },
@@ -4383,7 +4383,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["ctr-calculator", "cpa-calculator", "ad-budget-pacing-calculator"],
     seo: {
       ko: {
-        title: "퍼널 전환율 계산기 — 마케팅 퍼널 분석·목표 역산",
+        title: "퍼널 전환율 계산기 | 마케팅 퍼널 분석·목표 역산",
         description:
           "마케팅 퍼널 단계별 전환율과 이탈률을 계산하고, 최종 목표 전환 수를 달성하기 위해 각 상위 단계에서 필요한 수량을 역산합니다. 광고·리드·커머스 퍼널 프리셋 포함. 단계 추가·삭제·이름 변경 가능. 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
@@ -4396,7 +4396,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Funnel Conversion Calculator — Marketing Funnel Analysis & Reverse Planning",
+        title: "Funnel Conversion Calculator | Marketing Funnel Analysis & Reverse Planning",
         description:
           "Calculate stage-by-stage conversion rates and drop-off rates for your marketing funnel, then reverse-calculate how many visitors you need at each stage to hit your final conversion target. Includes ad, lead, and commerce funnel presets. Add, remove, and rename stages freely. Everything runs in your browser.",
         keywords: [
@@ -4518,7 +4518,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["qr-code-reader", "css-gradient", "open-graph-preview"],
     seo: {
       ko: {
-        title: "QR 코드 생성기 — 색상·모양 설정 및 PNG·SVG 다운로드",
+        title: "QR 코드 생성기 | 색상·모양 설정 및 PNG·SVG 다운로드",
         description:
           "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
         keywords: [
@@ -4539,9 +4539,9 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "QR Code Generator — Custom Shapes, Colors, PNG and SVG",
+        title: "QR Code Generator | Custom Shapes, Colors, PNG and SVG",
         description:
-          "Create a QR code from a URL and customize its color, recognition quality, and overall shape — square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
+          "Create a QR code from a URL and customize its color, recognition quality, and overall shape: square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
         keywords: [
           "QR code generator",
           "custom QR code",
@@ -4599,14 +4599,14 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Create a QR code from a URL, customize its shape and color, and download PNG or SVG.",
         description:
-          "Create a QR code from a URL and customize its color, recognition quality, and overall shape — square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
+          "Create a QR code from a URL and customize its color, recognition quality, and overall shape: square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
         howItWorks: [
           "Enter the URL you want to encode.",
           "Choose the recognition quality, colors, and module shape.",
           "Verify the result and download it as PNG or SVG.",
         ],
         aeo: {
-          what: "The QR Code Generator is a browser tool that turns a URL into a QR code and lets you customize its color and overall shape — square, rounded, arch, or heart.",
+          what: "The QR Code Generator is a browser tool that turns a URL into a QR code and lets you customize its color and overall shape: square, rounded, arch, or heart.",
           who: "It is for people who need to place web links in documents, printed materials, store signage, invitations, event content, or digital media.",
           how: "It builds an intact QR core from the URL, forms arch or heart shapes by adding decorative cells around that core, and re-decodes the result in your browser to confirm it scans.",
           why: "It makes styled QR codes suited to invitations and print without sending the URL to a server, ready to download as PNG or SVG.",
@@ -4615,8 +4615,8 @@ export const TOOLS: Tool[] = [
           {
             heading: "What QR codes are for",
             body: [
-              "A QR code is a square pattern that turns a long link into something a camera can open in one step. Print a web address on a business card or flyer and people have to type it out; add a QR code and they just point their phone's camera at it to open the page. That's why they show up wherever paper meets screen — store menus, event signage, product packaging, wedding invitations, presentation slides.",
-              "This generator creates a QR code the moment you enter a URL, and lets you adjust the color, module shape, and recognition quality. You can download the finished code as a PNG suited to printing, or as an SVG — a vector format that stays crisp at any size.",
+              "A QR code is a square pattern that turns a long link into something a camera can open in one step. Print a web address on a business card or flyer and people have to type it out; add a QR code and they just point their phone's camera at it to open the page. That's why they show up wherever paper meets screen: store menus, event signage, product packaging, wedding invitations, presentation slides.",
+              "This generator creates a QR code the moment you enter a URL, and lets you adjust the color, module shape, and recognition quality. You can download the finished code as a PNG suited to printing, or as an SVG: a vector format that stays crisp at any size.",
             ],
           },
           {
@@ -4629,8 +4629,8 @@ export const TOOLS: Tool[] = [
           {
             heading: "Your link never leaves the browser",
             body: [
-              "A QR code sometimes carries a URL you'd rather not publicize yet — a private event invite, an unlisted page. This generator does both the encoding and the scan verification inside your browser and never transmits or stores the link you enter.",
-              "The codes it makes are also static: they embed your address directly rather than routing through another service. That means there's no third party that could shut down and leave your code dead — as long as the printed code exists, it keeps working.",
+              "A QR code sometimes carries a URL you'd rather not publicize yet: a private event invite, an unlisted page. This generator does both the encoding and the scan verification inside your browser and never transmits or stores the link you enter.",
+              "The codes it makes are also static: they embed your address directly rather than routing through another service. That means there's no third party that could shut down and leave your code dead: as long as the printed code exists, it keeps working.",
             ],
           },
         ],
@@ -4715,7 +4715,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
     seo: {
       ko: {
-        title: "QR 코드 읽기 — 이미지 붙여넣기·업로드·카메라 스캔",
+        title: "QR 코드 읽기 | 이미지 붙여넣기·업로드·카메라 스캔",
         description:
           "클립보드에 복사한 QR 이미지나 업로드한 사진, 모바일 또는 PC 카메라로 QR 코드를 읽으세요. URL이 포함된 경우 내용을 먼저 확인하고 안전하게 링크를 열거나 복사할 수 있으며 이미지와 카메라 영상은 서버로 전송되지 않습니다.",
         keywords: [
@@ -4728,7 +4728,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "QR Code Reader — Paste, Upload, or Scan with Camera",
+        title: "QR Code Reader | Paste, Upload, or Scan with Camera",
         description:
           "Read a QR code from a pasted image, uploaded file, or device camera. Review the decoded content before opening or copying a URL. Images and camera video are processed locally in your browser and are not sent to a server.",
         keywords: [
@@ -4856,7 +4856,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pdf-split", "pdf-rotate", "pdf-page-delete"],
     seo: {
       ko: {
-        title: "PDF 병합 — 여러 PDF를 하나로 합치기",
+        title: "PDF 병합 | 여러 PDF를 하나로 합치기",
         description:
           "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
         keywords: [
@@ -4869,7 +4869,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Merge PDF — Combine PDF Files in Order",
+        title: "Merge PDF | Combine PDF Files in Order",
         description:
           "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
         keywords: [
@@ -4948,14 +4948,14 @@ export const TOOLS: Tool[] = [
           {
             heading: "Check the order before you merge",
             body: [
-              "The most common merging mistake is order — an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
+              "The most common merging mistake is order: an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
               "If you uploaded many files at once, sorting them by name makes the order easy to set. For scans, getting into the habit of numbering filenames (01, 02, and so on) lines up the merge order automatically.",
             ],
           },
           {
             heading: "Nothing gets uploaded",
             body: [
-              "PDFs often hold sensitive material — contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
+              "PDFs often hold sensitive material: contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
               "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
             ],
           },
@@ -5036,7 +5036,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pdf-merge", "pdf-page-delete", "pdf-rotate"],
     seo: {
       ko: {
-        title: "PDF 분할 — 페이지·범위별로 PDF 나누기",
+        title: "PDF 분할 | 페이지·범위별로 PDF 나누기",
         description:
           "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
         keywords: [
@@ -5049,7 +5049,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Split PDF — Split by Page or Page Range",
+        title: "Split PDF | Split by Page or Page Range",
         description:
           "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
         keywords: [
@@ -5170,7 +5170,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pdf-merge", "pdf-split", "pdf-page-delete"],
     seo: {
       ko: {
-        title: "PDF 회전 — 전체·선택 페이지 90도 회전",
+        title: "PDF 회전 | 전체·선택 페이지 90도 회전",
         description:
           "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
         keywords: [
@@ -5183,9 +5183,9 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Rotate PDF — Rotate All or Selected Pages",
+        title: "Rotate PDF | Rotate All or Selected Pages",
         description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images — only the rotation attribute changes — so quality is preserved. Everything runs in your browser.",
+          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
         keywords: [
           "rotate PDF",
           "rotate PDF pages",
@@ -5216,7 +5216,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Rotate an entire PDF or only selected pages by 90 degrees and save a new PDF.",
         description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images — only the rotation attribute changes — so quality is preserved. Everything runs in your browser.",
+          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
         howItWorks: [
           "Upload a single PDF file.",
           "Select the pages to rotate, or target all pages, and pick a direction.",
@@ -5304,7 +5304,7 @@ export const TOOLS: Tool[] = [
     relatedTools: ["pdf-split", "pdf-merge", "pdf-rotate"],
     seo: {
       ko: {
-        title: "PDF 페이지 삭제 — 필요 없는 페이지 제거",
+        title: "PDF 페이지 삭제 | 필요 없는 페이지 제거",
         description:
           "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
         keywords: [
@@ -5317,7 +5317,7 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Delete PDF Pages — Remove Unwanted Pages",
+        title: "Delete PDF Pages | Remove Unwanted Pages",
         description:
           "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
         keywords: [
@@ -5497,7 +5497,7 @@ export function buildToolMetadata(slug: string, lang: Lang): Metadata {
       languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },
     },
     openGraph: {
-      title: `${t.og?.[lang].title ?? s.title!} — Kitfolio`,
+      title: `${t.og?.[lang].title ?? s.title!} | Kitfolio`,
       description: t.og?.[lang].subtitle ?? s.description!,
       url,
       siteName: SITE.name,

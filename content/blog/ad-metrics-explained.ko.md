@@ -1,5 +1,5 @@
 ---
-title: 광고 지표 한 번에 이해하기 — ROAS·CPA·CPC·CPM·CTR
+title: 광고 지표 한 번에 이해하기 | ROAS·CPA·CPC·CPM·CTR
 description: 퍼포먼스 마케팅에서 가장 자주 쓰는 다섯 지표 ROAS·CPA·CPC·CPM·CTR이 각각 무엇을 재고, 서로 어떻게 연결되며, 목표에 따라 무엇을 봐야 하는지 정리했습니다.
 date: 2026-08-06
 cover: /blog/ad-metrics-explained.png

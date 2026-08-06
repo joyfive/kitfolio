@@ -3273,16 +3273,31 @@ a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blu
 .kf-article-body p {
   margin: 0 0 16px; font-size: 16px; line-height: 1.8; color: var(--color-blue-gray-800);
 }
-.kf-article-body ul, .kf-article-body ol { margin: 0 0 16px; padding-left: 22px; }
-.kf-article-body li { font-size: 16px; line-height: 1.8; color: var(--color-blue-gray-800); margin-bottom: 6px; }
-.kf-article-body a { color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px; }
-.kf-article-body a:hover { color: var(--color-blue-primary-800); }
+.kf-article-body ul, .kf-article-body ol { margin: 0 0 16px; padding-left: 24px; }
+.kf-article-body ul { list-style: disc; }
+.kf-article-body ol { list-style: decimal; }
+.kf-article-body li { font-size: 16px; line-height: 1.8; color: var(--color-blue-gray-800); margin-bottom: 6px; padding-left: 4px; }
+.kf-article-body li::marker { color: var(--color-blue-primary-500); }
+.kf-article-body ul ul, .kf-article-body ul ol, .kf-article-body ol ul, .kf-article-body ol ol { margin: 6px 0; }
+/* 본문 하이퍼링크 = chip (밑줄 텍스트 아님). 새 탭 열기는 blog.ts 에서 target 부여 */
+.kf-article-body a {
+  display: inline-block; vertical-align: baseline;
+  background: var(--color-blue-primary-50); color: var(--color-blue-primary-700);
+  font-weight: 500; text-decoration: none; cursor: pointer;
+  padding: 1px 8px; border-radius: 6px; line-height: 1.5;
+  transition: background 0.15s;
+}
+.kf-article-body a:hover { background: var(--color-blue-primary-200); }
 .kf-article-body strong { font-weight: 700; color: var(--color-blue-gray-950); }
 .kf-article-body blockquote {
-  margin: 20px 0; padding: 4px 18px; border-left: 3px solid var(--color-blue-primary-300);
-  color: var(--color-blue-gray-700); background: var(--color-blue-gray-50); border-radius: 0 8px 8px 0;
+  margin: 24px 0; padding: 14px 20px; border-left: 4px solid var(--color-blue-primary-500);
+  color: var(--color-blue-gray-800); background: var(--color-blue-primary-50);
+  border-radius: 0 10px 10px 0;
 }
-.kf-article-body blockquote p { margin: 10px 0; }
+.kf-article-body blockquote p { margin: 6px 0; }
+.kf-article-body blockquote p:first-child { margin-top: 0; }
+.kf-article-body blockquote p:last-child { margin-bottom: 0; }
+.kf-article-body blockquote strong { color: var(--color-blue-primary-900); }
 .kf-article-body code {
   font-family: var(--font-mono); font-size: 0.88em;
   background: var(--color-blue-gray-100); padding: 1px 6px; border-radius: 5px;
