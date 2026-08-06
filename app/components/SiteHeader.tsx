@@ -29,6 +29,9 @@ function HeaderInner({ lang }: { lang: Lang }) {
       </Link>
       <div className="kf-header-spacer" />
       <div className="kf-header-actions">
+        <Link className="kf-header-nav" href={localizedHref(lang, "/blog")}>
+          {lang === "ko" ? "블로그" : "Blog"}
+        </Link>
         <LangToggle />
       </div>
     </header>
