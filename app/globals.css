@@ -672,7 +672,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .foot-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .foot-ext { justify-content: flex-start; }
   .foot-coupang { align-items: flex-start; }
-  .foot-coupang-notice { text-align: left; white-space: normal; max-width: 320px; }
+  .foot-coupang-notice { text-align: left; white-space: normal; }
 }
 
 /* ============================================================
