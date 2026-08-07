@@ -178,6 +178,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .foot-brandrow b { font-family: var(--font-inter); font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
 
 .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 14px 24px; flex-wrap: wrap; }
+/* 배너 행 — 태그라인을 배너 상단 기준으로 정렬 */
+.foot-row--top { align-items: flex-start; }
 /* 태그라인 — 크게 */
 .foot-tagline { margin: 0; font-family: var(--font-inter); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
 .foot-copy { margin: 0; font-size: 12.5px; color: var(--color-blue-gray-400); }
@@ -190,7 +192,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* 쿠팡 파트너스 배너 (태그라인 우측) */
 .foot-coupang { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .foot-coupang iframe { display: block; border: 0; max-width: 100%; }
-.foot-coupang-notice { margin: 0; font-size: 11px; line-height: 1.4; color: var(--color-blue-gray-400); text-align: right; max-width: 320px; }
+.foot-coupang-notice { margin: 0; font-size: 11px; line-height: 1.4; color: var(--color-blue-gray-400); text-align: right; white-space: nowrap; }
 
 /* ---------- Shared buttons ---------- */
 .btn {
@@ -670,7 +672,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .foot-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .foot-ext { justify-content: flex-start; }
   .foot-coupang { align-items: flex-start; }
-  .foot-coupang-notice { text-align: left; }
+  .foot-coupang-notice { text-align: left; white-space: normal; max-width: 320px; }
 }
 
 /* ============================================================

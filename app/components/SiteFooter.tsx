@@ -35,7 +35,7 @@ function FooterInner({ lang }: { lang: Lang }) {
         </div>
 
         {/* 1행: 태그라인(좌) ↔ 쿠팡 파트너스 배너(우) */}
-        <div className="foot-row">
+        <div className="foot-row foot-row--top">
           <p className="foot-tagline">
             Small tools for modern knowledge workers
           </p>
