@@ -23,6 +23,15 @@
 - **메타데이터**: 페이지별 title/description/keywords + `canonical` + `hreflang`(ko/en/x-default) + OpenGraph
 - **구조화 데이터(JSON-LD)**: 도구=`WebApplication`, 허브=`WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
+- **색인 정책 — `ready` 와 `indexable` 분리**:
+  `ready` 는 "도구를 쓸 수 있는가"(허브 목록·검색·관련 도구 노출),
+  `indexable` 은 "검색 랜딩 페이지로 낼 품질이 확보됐는가"(sitemap·robots·허브 ItemList).
+  `indexable=false` 도구도 **페이지는 정상 동작하고 UI에 그대로 노출되며**,
+  sitemap에서 빠지고 `robots: noindex, follow` 만 적용됩니다.
+  동일 컴포넌트·동일 구조의 파생 페이지는 계열별 대표 1개만 색인합니다.
+- **콘텐츠 품질 게이트**: `indexable=true` 는 `validateIndexableTools()` 의 조건
+  (guide 2섹션 · examples · limitations · faq · relatedTools · og, **ko/en 양쪽**)을
+  통과해야 합니다. 글자 수가 아니라 필수 콘텐츠 구조의 존재 여부로 판정합니다.
 
 ## 구현된 기능 (도구 44종)
 
@@ -111,7 +120,15 @@ app/
 npm install
 npm run dev      # http://localhost:3000
 npm run build    # 프로덕션 빌드
+
+npm test                  # 계산 로직 테스트 (node --test + tsx)
+npm run validate:content  # indexable 도구 콘텐츠 품질 게이트 (실패 시 exit 1)
 ```
+
+- 테스트는 `app/lib/**/__tests__/*.test.ts` 를 실행합니다. 계산 검증은 타 계산기와
+  총액을 비교하지 않고 **각 항목의 공식 산식**과 요율 상수·적용 기간 경계를 직접 확인합니다.
+- 요율·세율처럼 기준일에 따라 바뀌는 데이터는 연도가 아니라 **적용 기간
+  (`effectiveFrom`/`effectiveTo`)** 으로 관리합니다 (`app/lib/salary/insurance.ts`).
 
 ## 디자인 시스템 메모
 
