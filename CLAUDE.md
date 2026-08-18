@@ -567,7 +567,12 @@ npm test                   # node --test + tsx (app/lib/**/__tests__/*.test.ts)
    - [x] 블로그 author/reviewedAt/sources + BlogPosting author=Person 분리
    - [x] 기존 아티클 3종 개편 (salary-net-pay-korea · growth-rate-explained · ad-metrics-explained)
    - [x] About 운영·검증·수정 정책, 개인정보처리방침 제3자 서비스 정합성
-   - [x] `/en` 서브트리 SSR `lang="en"` (래퍼 + 헤더·푸터)
+   - [x] `/en` 언어 표기 **부분 대응** — EN 콘텐츠 래퍼(`display:contents`)와 헤더·푸터
+     엘리먼트의 `lang="en"` 을 SSR 로 제공. `document.documentElement.lang` 은
+     hydration 이후 `SetHtmlLang` effect 가 변경한다.
+     ⚠️ **루트 `<html lang>` 자체의 SSR 해결은 아직 아니다** — 초기 HTML 은 `<html lang="ko">`.
+     App Router 루트 레이아웃은 경로를 알 수 없어 route group 재구성
+     (`app/(ko)/...` · `app/(en)/en/...`)이 필요하며, 라우팅 대규모 변경이라 보류.
 
 1. **AdSense 재심사 신청** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
    - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단
@@ -579,5 +584,8 @@ npm test                   # node --test + tsx (app/lib/**/__tests__/*.test.ts)
    - `content.ts` 레지스트리 항목에 `seo(title·description)/content(description·howItWorks)/faq/og` 채우고 `ready: true` 전환
    - 컨트롤 마이크로카피는 컴포넌트 로컬 `DICT`로, 컴포넌트 끝에 `<Faq slug="..." />` 추가
    - 테마: dev=IDE / design=Canvas / text=Clean
-3. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
-4. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)
+3. (선택) 루트 `<html lang>` 의 SSR 해결 — `app/(ko)/...` · `app/(en)/en/...` route group
+   재구성으로 언어별 루트 레이아웃 분리. 현재는 서브트리 `lang` 만 SSR 로 제공된다.
+   전 라우트 이동이 필요하므로 다른 구조 변경과 묶어서 진행하는 편이 낫다.
+4. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
+5. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)

@@ -186,7 +186,7 @@ export const HUB = {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
       h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
       subtitle:
-        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
+        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않고 브라우저 안에서 처리됩니다.",
       stat: "개 도구",
     },
     en: {
@@ -197,7 +197,7 @@ export const HUB = {
         post: " for modern\nknowledge workers.",
       },
       subtitle:
-        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
+        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. The text, numbers and files you enter are processed in your browser and never uploaded to Kitfolio's servers.",
       stat: " tools",
     },
   },
@@ -212,7 +212,7 @@ export const HUB = {
         },
         {
           h: "모든 처리는 브라우저 안에서",
-          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있고, 네트워크가 느린 환경에서도 빠르게 반응합니다.",
+          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서를 다룰 때도 그 내용 자체는 기기 밖으로 나가지 않고, 네트워크가 느린 환경에서도 빠르게 반응합니다. 다만 이는 '도구에 입력한 내용'에 대한 이야기입니다. 사이트를 여는 과정에서는 웹 폰트·방문 통계·광고 같은 제3자 서비스로의 네트워크 요청이 별도로 발생할 수 있으며, 무엇이 전송되지 않고 무엇이 처리될 수 있는지는 개인정보처리방침에 구분해 두었습니다.",
         },
         {
           h: "필요한 도구를 빠르게 찾기",
@@ -229,7 +229,7 @@ export const HUB = {
         },
         {
           h: "Everything runs in your browser",
-          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
+          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never uploaded to Kitfolio's servers: all calculation and conversion happens on your device. That means the contents of a sensitive document stay on your machine, and the tools stay fast even on a slow connection. That promise is about what you enter into the tools. Loading the site itself still makes separate network requests to third-party services such as web fonts, analytics, and advertising, and the Privacy Policy sets out which is which.",
         },
         {
           h: "Find the right tool fast",
@@ -396,10 +396,10 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "어떻게 동작하나요 (서버 전송 없음)",
+            heading: "어떻게 동작하나요 (입력 데이터는 서버로 가지 않습니다)",
             body: [
-              "Kitfolio의 모든 도구는 서버가 아니라 이용자의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다.",
-              "회원가입이나 로그인이 없고, 개인정보를 수집하지 않습니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있습니다. 자세한 내용은 개인정보처리방침에서 확인할 수 있습니다.",
+              "Kitfolio의 모든 도구는 서버가 아니라 이용자의 브라우저 안에서 동작합니다. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다.",
+              "회원가입이나 로그인이 없고, 이름·이메일 같은 개인정보를 직접 수집하지 않습니다. 다만 사이트 운영을 위해 방문 통계·광고·웹 폰트 등 제3자 서비스를 이용하며, 이들 서비스는 접속 정보나 쿠키를 별도로 처리할 수 있습니다. 즉 도구에 입력한 내용은 전송되지 않지만, 사이트 이용 중 아무 통신도 일어나지 않는다는 뜻은 아닙니다. 무엇이 전송되지 않고 무엇이 처리될 수 있는지는 개인정보처리방침에 구분해 정리했습니다.",
             ],
           },
           {
@@ -457,10 +457,10 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "How it works (no server transmission)",
+            heading: "How it works (your input never leaves your browser)",
             body: [
-              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device.",
-              "There is no sign-up or login, and we do not collect personal information, so you can work with sensitive documents and data without worrying about them leaving your machine. See the Privacy Policy for details.",
+              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never uploaded to Kitfolio's servers: all calculation and conversion happens on your device.",
+              "There is no sign-up or login, and we do not directly collect personal information such as names or email addresses. The site does use third-party services for analytics, advertising and web fonts, and those may process connection information or cookies separately. In other words, what you enter into a tool is never transmitted, but that does not mean no network communication happens while you use the site. The Privacy Policy sets out exactly which is which.",
             ],
           },
           {
@@ -977,7 +977,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 JSON이 서버로 전송되나요?",
           answer:
-            "아니요. 포맷팅·검증·압축은 전부 브라우저 안에서 JavaScript로 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않으므로 민감한 데이터도 안심하고 사용할 수 있습니다.",
+            "아니요. 포맷팅·검증·압축은 전부 브라우저 안에서 JavaScript로 처리됩니다. 붙여넣은 JSON은 서버로 전송되거나 저장되지 않으므로 민감한 데이터도 안심하고 사용할 수 있습니다.",
         },
         {
           question: "JSON 문법 오류는 어떻게 찾아주나요?",
@@ -999,7 +999,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my JSON sent to a server?",
           answer:
-            "No. Formatting, validation and minification all happen in your browser with JavaScript. Nothing is uploaded or stored, so it is safe to use with sensitive data.",
+            "No. Formatting, validation and minification all happen in your browser with JavaScript. The JSON you paste is never uploaded or stored, so it is safe to use with sensitive data.",
         },
         {
           question: "How are syntax errors reported?",
@@ -1099,7 +1099,7 @@ export const TOOLS: Tool[] = [
         },
         {
           question: "입력한 값이 서버로 전송되나요?",
-          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되지 않습니다.",
+          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되지 않습니다.",
         },
       ],
       en: [
@@ -1120,7 +1120,7 @@ export const TOOLS: Tool[] = [
         },
         {
           question: "Is anything I enter sent to a server?",
-          answer: "No. Every conversion happens inside your browser and no data ever leaves it.",
+          answer: "No. Every conversion happens inside your browser and the values you enter are never uploaded.",
         },
       ],
     },
@@ -1292,7 +1292,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1314,7 +1314,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1426,7 +1426,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1448,7 +1448,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1560,7 +1560,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1582,7 +1582,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1694,7 +1694,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1716,7 +1716,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1828,7 +1828,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1850,7 +1850,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -2237,7 +2237,7 @@ export const TOOLS: Tool[] = [
         {
           question: "데이터가 서버로 전송되나요?",
           answer:
-            "아니요. 색 계산은 전부 브라우저 안에서 이루어지며, 어떤 색상값도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 색 계산은 전부 브라우저 안에서 이루어지며, 입력한 색상값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -2259,7 +2259,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is any data sent to a server?",
           answer:
-            "No. All color math runs in your browser; no color values are uploaded or stored anywhere.",
+            "No. All color math runs in your browser; the color values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -2690,7 +2690,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 글이 어딘가에 저장되나요?",
           answer:
-            "아니요. 집계는 전부 브라우저 안에서 처리되며 어떤 텍스트도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 내용도 사라집니다.",
+            "아니요. 집계는 전부 브라우저 안에서 처리되며 입력한 텍스트는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 내용도 사라집니다.",
         },
         {
           question: "예상 읽기 시간은 어떻게 계산하나요?",
@@ -2712,7 +2712,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my text stored anywhere?",
           answer:
-            "No. Counting happens entirely in your browser and nothing is uploaded or saved. Close the tab and the text is gone.",
+            "No. Counting happens entirely in your browser and the text you enter is never uploaded or saved. Close the tab and the text is gone.",
         },
         {
           question: "How is the reading time estimated?",
@@ -2945,7 +2945,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 급여 정보가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 연봉·월급 등 어떤 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 연봉·월급 등 입력한 정보는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
@@ -3184,7 +3184,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 근무시간이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 어떤 근무 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 입력한 근무 정보는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
@@ -3292,7 +3292,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 데이터가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 데이터는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
@@ -3314,7 +3314,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. Every calculation runs in your browser and no data is ever uploaded or stored. Close the tab and your inputs are gone.",
+            "No. Every calculation runs in your browser and the data you enter is never uploaded or stored. Close the tab and your inputs are gone.",
         },
       ],
     },
@@ -3400,7 +3400,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 숫자가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 숫자는 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -3422,7 +3422,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All conversions run in your browser and no data is ever uploaded or stored.",
+            "No. All conversions run in your browser and the numbers you enter are never uploaded or stored.",
         },
       ],
     },
@@ -3630,7 +3630,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 날짜가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 변환은 브라우저 안에서 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 변환은 브라우저 안에서 처리됩니다. 입력한 날짜는 서버로 전송되거나 저장되지 않습니다.",
         },
         {
           question: "갑자(干支)와 띠는 어떤 기준으로 계산되나요?",
@@ -3662,7 +3662,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. All conversions run entirely in your browser. No data is uploaded or stored.",
+            "No. All conversions run entirely in your browser. The dates you enter are never uploaded or stored.",
         },
         {
           question: "What standard does the Korean lunar calendar follow?",
@@ -4518,7 +4518,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Ad Budget Pacing Calculator | Campaign Budget Burn Rate",
         description:
-          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "ad budget pacing calculator",
           "campaign budget pacing",
@@ -4548,7 +4548,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Compare campaign time progress vs budget burn rate to spot overpacing or underpacing instantly.",
         description:
-          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Enter total budget, campaign dates and spend to date",
           "Compare time progress vs budget burn rate",
@@ -4614,7 +4614,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my budget data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4651,7 +4651,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "ROAS Calculator | Return on Ad Spend, Target Revenue & Budget",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "ROAS calculator",
           "return on ad spend calculator",
@@ -4724,7 +4724,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (ROAS, target revenue, or allowable budget)",
           "Enter ad spend, revenue, or target values",
@@ -4822,7 +4822,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my ad spend and revenue data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4859,7 +4859,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPA Calculator | Cost Per Acquisition, Conversions & Budget",
         description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPA calculator",
           "cost per acquisition calculator",
@@ -4905,7 +4905,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
         description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPA, expected conversions, or required budget)",
           "Enter ad spend, conversions, or target values",
@@ -4977,7 +4977,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -5014,7 +5014,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPC Calculator | Cost Per Click, Expected Clicks & Budget",
         description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPC calculator",
           "cost per click calculator",
@@ -5061,7 +5061,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
         description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPC, expected clicks, or required budget)",
           "Enter ad spend, clicks, or target values",
@@ -5133,7 +5133,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -5170,7 +5170,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPM Calculator | Cost Per Mille, Impressions & Budget",
         description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPM calculator",
           "cost per mille calculator",
@@ -5216,7 +5216,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
         description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPM, expected impressions, or required budget)",
           "Enter ad spend, impressions, or target values",
@@ -5288,7 +5288,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -5325,7 +5325,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CTR Calculator | Click-Through Rate, Clicks & Impressions",
         description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CTR calculator",
           "click through rate calculator",
@@ -5371,7 +5371,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
         description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CTR, required clicks, or required impressions)",
           "Enter clicks, impressions, or target values",
@@ -5443,7 +5443,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -5577,7 +5577,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -6136,7 +6136,7 @@ export const TOOLS: Tool[] = [
             title: "Submitting several scanned pages as one file",
             input: "Multiple PDFs scanned one page at a time",
             result: "A single PDF ready for submission",
-            note: "This is what you need when an online form accepts only one attachment. Nothing is uploaded to a server, so ID documents and contracts can be handled as-is.",
+            note: "This is what you need when an online form accepts only one attachment. Your files are never uploaded to a server, so ID documents and contracts can be handled as-is.",
           },
           {
             title: "Merging documents with different page sizes",

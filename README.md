@@ -109,7 +109,7 @@ app/
     ├── JsonFormatter.tsx · CssGradient.tsx · CharacterCounter.tsx
     ├── SiteHeader.tsx      # 도구 페이지 공통 헤더
     ├── LangToggle.tsx      # KO/EN 토글 (로케일 URL 이동)
-    ├── SetHtmlLang.tsx     # /en 에서 <html lang> 설정
+    ├── SetHtmlLang.tsx     # /en 에서 documentElement.lang 보정 (hydration 이후)
     ├── JsonLd.tsx          # 구조화 데이터 주입
     └── useBodyTheme.ts     # 페이지별 body 배경 테마
 ```
