@@ -409,6 +409,37 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
               "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.",
             ],
           },
+          {
+            heading: "누가 운영하나요",
+            body: [
+              "Kitfolio는 **joyfive**라는 이름으로 활동하는 한 사람이 기획·개발·운영·콘텐츠 작성을 모두 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영자 개인에게 있습니다.",
+              "소스코드는 [GitHub 저장소](https://github.com/joyfive/kitfolio)에서 공개되어 있어, 각 도구가 실제로 어떻게 계산하는지 직접 확인할 수 있습니다. 문의는 아래 이메일로 받으며 운영자가 직접 답변합니다.",
+            ],
+          },
+          {
+            heading: "도구를 만들고 검증하는 원칙",
+            body: [
+              "**직접 쓸 도구만 만듭니다.** 검색량이 높다는 이유만으로 도구를 늘리지 않고, 실제 업무에서 반복해서 겪은 문제를 우선합니다.",
+              "**계산 로직은 UI와 분리해 검증합니다.** 연봉 실수령액처럼 공식 기준이 있는 계산은 요율·정책 데이터를 별도 모듈로 분리하고, 각 항목의 공식 산식을 자동화된 테스트로 검증합니다. 다른 계산기 사이트의 결과와 총액을 맞추는 방식이 아니라, 기관이 고시한 산식 자체를 기준으로 삼습니다.",
+              "**외부 기준에 의존하는 도구에는 출처와 검증일을 표시합니다.** 세율·보험료율·플랫폼 정책처럼 바뀌는 값을 쓰는 도구는 어느 시점 기준인지, 마지막으로 언제 공식 자료와 대조했는지를 페이지에서 확인할 수 있게 합니다. 출처는 정부·공공기관 등 1차 자료만 사용하며 개인 블로그나 타사 계산기는 근거로 삼지 않습니다.",
+              "**한계를 함께 적습니다.** 각 도구 페이지에는 그 도구가 다루지 못하는 상황과 결과가 어긋날 수 있는 조건을 명시합니다. 예상 계산을 확정 금액처럼 쓰지 않도록 하기 위해서입니다.",
+            ],
+          },
+          {
+            heading: "최신성이 필요한 도구는 어떻게 갱신하나요",
+            body: [
+              "보험료율·세율처럼 기준일에 따라 값이 바뀌는 데이터는 연도 하나로 관리하지 않고 **적용 기간(시행일~종료일) 단위**로 관리합니다. 예를 들어 4대보험 요율은 매년 1월, 국민연금 기준소득월액 상·하한은 매년 7월에 개정되므로 두 기준을 별도의 기간 표로 나누어 두고, 계산기가 오늘 날짜에 해당하는 기준을 자동으로 선택합니다.",
+              "제도가 개정되면 공식 기관 자료를 확인해 새 기간을 추가하고, 검증일을 갱신한 뒤 관련 도구와 아티클을 함께 수정합니다. 과거 기간의 값은 지우지 않고 남겨 둡니다. 지난 시점 기준으로 확인해야 하는 경우가 있기 때문입니다.",
+            ],
+          },
+          {
+            heading: "오류 제보와 수정 정책",
+            body: [
+              "**오류 제보:** 계산 결과가 이상하거나 설명이 사실과 다르다면 아래 이메일 또는 [GitHub 이슈](https://github.com/joyfive/kitfolio/issues)로 알려주세요. 어떤 도구에서 어떤 값을 넣었을 때 어떤 결과가 나왔는지 함께 적어주시면 재현이 빨라집니다.",
+              "**수정 정책:** 계산 오류나 사실 오류는 확인되는 대로 우선 수정합니다. 내용이 실질적으로 바뀐 아티클에는 수정일을, 기준 데이터가 바뀐 도구에는 새 검증일을 표시해 언제 무엇이 달라졌는지 확인할 수 있게 합니다. 오탈자나 표현 다듬기처럼 내용에 영향이 없는 변경은 별도로 표시하지 않습니다.",
+              "**도구 중단:** 도구를 없애야 할 경우에는 URL을 그대로 두고 대체 도구로 연결하며, 기존 링크가 끊기지 않도록 합니다.",
+            ],
+          },
         ],
         effectiveLabel: "최종 업데이트",
         contactLabel: "문의 이메일",
@@ -437,6 +468,37 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             body: [
               "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
               "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.",
+            ],
+          },
+          {
+            heading: "Who runs Kitfolio",
+            body: [
+              "Kitfolio is planned, built, operated and written by one person, working under the name **joyfive**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the maker personally.",
+              "The source code is public in the [GitHub repository](https://github.com/joyfive/kitfolio), so you can check exactly how each tool calculates. Questions go to the email address below and are answered directly.",
+            ],
+          },
+          {
+            heading: "How tools are built and verified",
+            body: [
+              "**Only tools we would use ourselves.** Search volume alone is not a reason to add a tool; problems actually hit repeatedly in real work come first.",
+              "**Calculation logic is separated from the UI and tested.** Where an official standard exists, as with Korean take-home pay, the rate and policy data lives in its own module and each component of the calculation is checked against its official formula by automated tests. The benchmark is the formula published by the responsible authority, not matching totals with another calculator site.",
+              "**Tools that depend on external standards show their sources and verification date.** Anything built on tax rates, insurance rates or platform policies states which point in time it reflects and when it was last checked against official material. Only primary sources from government bodies and public institutions are used: never personal blogs or third-party calculators.",
+              "**Limitations are published alongside the tool.** Each tool page states what it cannot handle and the conditions under which its results diverge, so an estimate is not mistaken for a confirmed figure.",
+            ],
+          },
+          {
+            heading: "How time-sensitive tools are kept current",
+            body: [
+              "Data that changes by effective date, such as insurance and tax rates, is not filed under a single year but managed as **effective periods with a start and end date**. Korea's four major insurance rates change every January while the National Pension income ceiling and floor change every July, so the two live in separate period tables and the calculator picks whichever rules apply to today's date.",
+              "When a rule changes, the official source is checked, a new period is added, the verification date is updated, and the related tools and articles are revised together. Past periods are kept rather than deleted, because there are times you need to check a figure as it stood on an earlier date.",
+            ],
+          },
+          {
+            heading: "Reporting errors, and how corrections are handled",
+            body: [
+              "**Reporting an error:** if a result looks wrong or an explanation does not match the facts, email the address below or open a [GitHub issue](https://github.com/joyfive/kitfolio/issues). Including which tool, which inputs and what result you saw makes it much faster to reproduce.",
+              "**Correction policy:** calculation errors and factual errors are fixed as soon as they are confirmed. Articles whose substance changed carry an updated date, and tools whose underlying data changed carry a new verification date, so you can see when something changed. Typo fixes and wording changes that do not affect meaning are not separately marked.",
+              "**Retiring a tool:** if a tool has to be removed, its URL stays in place and points to a replacement so existing links do not break.",
             ],
           },
         ],
@@ -514,12 +576,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침 | Kitfolio",
         description:
-          "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 쿠키·광고 식별자(Google AdSense) 이용 안내를 확인하세요.",
+          "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 사이트 운영을 위해 이용하는 Google Analytics·Google AdSense 등 제3자 서비스와 쿠키 처리 안내를 확인하세요.",
       },
       en: {
         title: "Privacy Policy | Kitfolio",
         description:
-          "Kitfolio requires no account and never transmits the data you enter to any server: everything is processed in your browser. Learn how cookies and advertising identifiers (Google AdSense) are used.",
+          "Kitfolio requires no account and never transmits the data you enter to any server: everything is processed in your browser. Learn which third-party services (Google Analytics, Google AdSense) the site uses and how cookies are handled.",
       },
     },
     doc: {
@@ -529,29 +591,40 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           "Kitfolio(이하 '본 사이트')는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.",
         sections: [
           {
-            heading: "1. 개인정보의 수집 및 처리 (DB·서버 전송 없음)",
+            heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
             body: [
               "본 사이트는 모던 지식 노동자를 위한, 브라우저에서 단독으로 동작하는 웹 도구 모음 서비스입니다.",
-              "**비회원제 운영:** 본 사이트는 회원가입이나 로그인 절차가 없으며, 이용자의 이름·이메일·연락처 등 어떠한 개인정보도 요구하거나 수집하지 않습니다.",
-              "**데이터 서버 전송 없음:** 이용자가 각 도구에 입력하는 모든 데이터는 이용자의 브라우저 안에서만 처리되며, 본 사이트의 서버나 외부 데이터베이스(DB)로 전송되지 않습니다. 브라우저를 닫거나 새로고침하면 입력된 데이터는 즉시 소멸합니다.",
+              "**비회원제 운영:** 본 사이트는 회원가입이나 로그인 절차가 없으며, 이용자의 이름·이메일·연락처 등 개인정보를 직접 수집하지 않습니다.",
+              "**입력 데이터 비전송:** 이용자가 각 도구에 입력하는 텍스트·숫자·파일(PDF·이미지 포함)은 이용자의 브라우저 안에서만 처리되며, 본 사이트의 서버나 외부 데이터베이스로 전송되지 않습니다. 브라우저를 닫거나 새로고침하면 입력된 데이터는 즉시 소멸합니다.",
+              "**이 원칙의 범위:** 위 내용은 '이용자가 도구에 입력한 콘텐츠'에 한정됩니다. 사이트를 여는 것 자체는 웹 페이지를 내려받는 통신이므로, 아래 2항에 안내한 제3자 서비스가 접속 정보를 별도로 처리할 수 있습니다. 즉 **도구에 넣은 내용은 전송되지 않지만, 사이트 이용 과정에서 아무런 네트워크 통신도 일어나지 않는다는 뜻은 아닙니다.**",
             ],
           },
           {
-            heading: "2. 쿠키 및 광고 식별자",
+            heading: "2. 사이트 운영을 위해 이용하는 제3자 서비스",
             body: [
-              "본 사이트는 이용자에게 적합하고 유용한 서비스를 제공하기 위해 정보를 저장하고 수시로 불러오는 '쿠키(cookie)' 및 광고 식별자를 사용합니다.",
-              "**구글 애드센스(Google AdSense):** 본 사이트는 구글이 제공하는 웹 광고 서비스 '구글 애드센스'를 게재합니다. 구글은 이용자가 본 사이트 또는 다른 웹사이트를 방문한 기록을 바탕으로 맞춤형 광고를 제공하기 위해 쿠키를 사용합니다.",
-              "**쿠키 차단 및 설정 방법:** 맞춤형 광고를 원치 않을 경우 [구글 광고 설정](https://www.google.com/settings/ads) 페이지에서 맞춤형 광고를 차단할 수 있습니다. 또한 브라우저 설정을 통해 모든 쿠키의 저장을 거부하거나, 쿠키가 저장될 때마다 확인을 거치도록 설정할 수 있습니다. (쿠키 저장을 거부하면 일부 기능 이용에 불편이 있을 수 있습니다.)",
+              "본 사이트는 서비스 운영과 개선을 위해 아래의 외부 서비스를 이용하며, 이들 서비스는 각자의 개인정보처리방침에 따라 이용자의 브라우저·접속 정보 또는 쿠키를 처리할 수 있습니다.",
+              "**Google Analytics 4 (방문 통계):** 어떤 도구가 얼마나 이용되는지 파악하기 위해 방문 페이지, 대략적인 접속 지역, 기기·브라우저 종류 등 익명의 이용 통계를 수집합니다. 도구에 입력한 내용은 전송되지 않습니다. 수집을 원치 않으면 [Google 애널리틱스 차단 브라우저 부가기능](https://tools.google.com/dlpage/gaoptout)을 설치할 수 있습니다.",
+              "**Google AdSense (광고):** 본 사이트는 구글이 제공하는 광고를 게재합니다. 구글은 이용자가 본 사이트 또는 다른 웹사이트를 방문한 기록을 바탕으로 맞춤형 광고를 제공하기 위해 쿠키 및 광고 식별자를 사용할 수 있습니다. 맞춤형 광고를 원치 않으면 [Google 광고 설정](https://www.google.com/settings/ads)에서 차단할 수 있습니다.",
+              "**웹 폰트 (Google Fonts · jsDelivr):** 화면 글꼴을 불러오기 위해 외부 CDN에 요청이 발생하며, 이 과정에서 해당 사업자에게 IP 주소 등 표준적인 접속 정보가 전달될 수 있습니다.",
+              "**호스팅 (Vercel):** 사이트가 배포·제공되는 인프라로, 서비스 제공에 필요한 범위에서 접속 로그가 처리될 수 있습니다.",
+              "본 사이트는 위에 명시한 것 외의 광고·제휴·트래킹 서비스를 사용하지 않습니다.",
             ],
           },
           {
-            heading: "3. 제3자 제공 및 위탁",
+            heading: "3. 쿠키 설정 및 거부 방법",
             body: [
-              "본 사이트는 이용자의 개인정보를 수집하지 않으므로 제3자에게 제공하거나 외부에 위탁하지 않습니다. 다만 위에 명시된 구글 애드센스 등 서드파티 광고 플랫폼이 통계 및 광고 게재 목적으로 익명의 웹 트래픽 데이터를 처리할 수 있습니다.",
+              "이용자는 브라우저 설정을 통해 모든 쿠키의 저장을 거부하거나, 쿠키가 저장될 때마다 확인을 거치도록 설정할 수 있습니다. 쿠키 저장을 거부해도 본 사이트의 도구 기능은 정상적으로 동작합니다.",
+              "각 서비스별 개인정보 처리에 관한 자세한 내용은 [Google 개인정보처리방침](https://policies.google.com/privacy)에서 확인할 수 있습니다.",
             ],
           },
           {
-            heading: "4. 개인정보 보호책임자 및 문의처",
+            heading: "4. 제3자 제공 및 위탁",
+            body: [
+              "본 사이트는 이용자의 개인정보를 직접 수집하지 않으므로 이를 제3자에게 제공하거나 판매하지 않습니다. 다만 위 2항에 명시된 서비스들이 각자의 방침에 따라 익명의 이용 통계 및 광고 데이터를 처리할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "5. 개인정보 보호책임자 및 문의처",
             body: [
               "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.",
             ],
@@ -566,29 +639,40 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           "Kitfolio (\"we\", \"our\", or \"the Website\") values the privacy of our users and complies with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.",
         sections: [
           {
-            heading: "1. Collection and Processing of Data (No Server/DB Transmission)",
+            heading: "1. What You Enter Into the Tools Is Never Transmitted",
             body: [
               "Kitfolio is a collection of browser-based web tools for modern knowledge workers that operates entirely on the client side.",
-              "**No Registration Required:** We do not require any account or login, and we do not collect personal information such as names, email addresses, or contact details.",
-              "**No Server Transmission:** All data you type or process within our tools is executed entirely within your web browser. No data is ever transmitted to our servers or any external databases. Once you close or refresh the browser, all entered data is permanently cleared.",
+              "**No Registration Required:** There is no account or login, and we do not directly collect personal information such as names, email addresses, or contact details.",
+              "**Input Data Stays Local:** The text, numbers, and files (including PDFs and images) you enter into any tool are processed entirely within your browser. They are never transmitted to our servers or to any external database. Closing or refreshing the browser clears them immediately.",
+              "**Scope of this principle:** the statement above applies to *the content you enter into the tools*. Loading the site is itself a network request, and the third-party services listed in section 2 may process connection information separately. In other words, **what you put into a tool is not transmitted, but that does not mean no network communication occurs while you use the site.**",
             ],
           },
           {
-            heading: "2. Cookies and Advertising Identifiers",
+            heading: "2. Third-Party Services Used to Operate the Site",
             body: [
-              "We use cookies and advertising identifiers to store and retrieve information in order to provide a relevant and useful service.",
-              "**Google AdSense:** This Website displays advertisements served by Google AdSense. Google uses cookies to serve ads based on a user's prior visits to this Website or other websites, enabling Google and its partners to serve personalized advertising.",
-              "**Opting Out:** If you prefer not to receive personalized ads, you can opt out on the [Google Ads Settings](https://www.google.com/settings/ads) page. You may also refuse all cookies or set your browser to prompt before storing a cookie through its settings. (Blocking cookies may affect some website features.)",
+              "We use the following external services to operate and improve the site. Each may process browser or connection information, or cookies, under its own privacy policy.",
+              "**Google Analytics 4 (usage statistics):** collects anonymous usage data such as pages visited, approximate region, and device and browser type, so we can see which tools are actually used. Content entered into the tools is never sent. To opt out, you can install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout).",
+              "**Google AdSense (advertising):** this site displays advertisements served by Google. Google may use cookies and advertising identifiers to serve personalized ads based on your prior visits to this or other websites. You can opt out of personalized advertising on the [Google Ads Settings](https://www.google.com/settings/ads) page.",
+              "**Web fonts (Google Fonts and jsDelivr):** loading the site's typefaces makes requests to external CDNs, which may receive standard connection information such as your IP address.",
+              "**Hosting (Vercel):** the infrastructure the site is deployed on, which may process access logs as required to deliver the service.",
+              "We do not use any advertising, affiliate, or tracking service other than those listed above.",
             ],
           },
           {
-            heading: "3. Third-Party Data Sharing",
+            heading: "3. Managing and Refusing Cookies",
             body: [
-              "Since we do not collect or store personal data, we do not share or sell any personal information to third parties. Anonymous, non-personally identifiable traffic data may be processed by third-party services such as Google AdSense for analytics and ad-serving purposes.",
+              "You can refuse all cookies through your browser settings, or configure your browser to prompt before storing one. Refusing cookies does not prevent the site's tools from working normally.",
+              "For details on how each service handles data, see the [Google Privacy Policy](https://policies.google.com/privacy).",
             ],
           },
           {
-            heading: "4. Contact",
+            heading: "4. Third-Party Data Sharing",
+            body: [
+              "Because we do not directly collect personal data, we do not share or sell any personal information to third parties. The services named in section 2 may process anonymous usage and advertising data under their own policies.",
+            ],
+          },
+          {
+            heading: "5. Contact",
             body: [
               "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address below.",
             ],

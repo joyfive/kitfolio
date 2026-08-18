@@ -27,11 +27,43 @@ cover: /blog/<slug>.png     # (선택) 대표 이미지, public/blog/ 기준
 coverAlt: 이미지 대체 텍스트   # (선택)
 relatedTools: growth-rate-calculator, cagr-calculator   # (선택) 관련 도구 slug, 쉼표 구분
 tags: 성장률, 지표            # (선택) 태그, 쉼표 구분
+
+author: joyfive             # (선택) 생략 시 사이트 운영자(content.ts AUTHOR)
+authorRole: Kitfolio 운영자   # (선택) 생략 시 AUTHOR.role
+reviewedAt: 2026-08-18      # (선택) 내용을 마지막으로 사실 확인한 날짜
+sources: 국세청 — 근로소득 간이세액표|https://www.nts.go.kr/...   # (선택) 공식 출처
 ---
 ```
 
 - `title`·`description`·`date` 는 필수.
 - `relatedTools` 에 넣은 slug 는 글 하단 "관련 도구" 카드로 렌더됩니다 (레지스트리에 있는 도구만).
+
+## 신뢰 정보 필드 (author / reviewedAt / sources)
+
+AdSense·검색엔진은 "누가 썼고 누가 책임지는가"를 봅니다. 아래 필드가 화면과
+`BlogPosting` JSON-LD 에 함께 반영됩니다.
+
+| 필드 | 화면 표시 | JSON-LD |
+|---|---|---|
+| `author` / `authorRole` | 제목 아래 바이라인 | `author` → **Person** (publisher 는 Organization 으로 분리) |
+| `reviewedAt` | 바이라인의 "최근 검증" | `lastReviewed` · `reviewedBy` |
+| `sources` | 본문 하단 "참고한 공식 자료" | `citation` |
+
+- `author`·`authorRole` 은 생략해도 됩니다. 비우면 `app/lib/content.ts` 의 `AUTHOR`
+  (운영자명·역할)가 언어에 맞게 자동으로 들어갑니다. 대부분의 글은 생략이 정답입니다.
+- `sources` 형식은 `라벨|URL` 이며 여러 개는 쉼표로 구분합니다. URL 이 없는 항목은 무시됩니다.
+
+### sources 는 언제 붙이나
+
+**모든 글에 억지로 넣지 않습니다.** 외부 기준에 의존하는 글에만 붙이고,
+**정부·공공기관·표준 문서 등 1차 자료만** 사용합니다. 개인 블로그나 타사 계산기는
+근거로 쓰지 않습니다.
+
+- 붙여야 하는 글: 세금·보험료율, 법·제도 기준, 플랫폼 정책·제한값, 기술 명세(RFC·W3C 등)
+- 붙이지 않아도 되는 글: 도구 사용법, 업무 팁, 개념 설명처럼 외부 기준이 없는 내용
+
+`reviewedAt` 은 기준이 바뀔 수 있는 글(세율·플랫폼 제한 등)에 특히 중요합니다.
+내용을 다시 확인했다면 본문을 고치지 않았더라도 이 날짜를 갱신하세요.
 
 ## 대표 이미지
 

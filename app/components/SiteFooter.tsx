@@ -29,7 +29,8 @@ function FooterInner({ lang }: { lang: Lang }) {
   const t = useT();
 
   return (
-    <footer className="kf-footer">
+    // lang: 헤더와 같은 이유 — EN 라우트의 푸터에 언어를 직접 선언한다.
+    <footer className="kf-footer" lang={lang}>
       <div className="kf-footer-inner">
         {/* 상단: 브랜드 */}
         <div className="foot-brandrow">

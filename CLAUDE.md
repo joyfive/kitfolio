@@ -64,6 +64,38 @@ PM · Designer · Developer · Job Seeker · Office Worker · Small Business Own
   ④ How It Works ⑤ FAQ ⑥ Related Tools ⑦ 구조화 메타데이터 ⑧ 개별 OG 메타데이터
 - 도구 자체가 본질적 가치. SEO 콘텐츠는 발견성(discoverability) 보조.
 
+### 색인 정책 — `ready` 와 `indexable` 분리 (2026-08-18 확정)
+
+> AdSense "가치가 별로 없는 콘텐츠(Low-value content)" 반려 대응.
+> **기능 공개 여부와 검색 색인 여부는 별개다.**
+
+| 필드 | 의미 | 영향 |
+|---|---|---|
+| `ready` | 사용자가 도구를 실제로 쓸 수 있는가 | 허브 목록·검색·필터·Related Tools 노출 |
+| `indexable` | 독립 검색 랜딩 페이지로 낼 품질이 확보됐는가 | sitemap 포함 · robots · 허브 ItemList JSON-LD |
+
+- `indexable=false` 도구도 **페이지는 정상 동작하고 UI에 그대로 노출된다.**
+  sitemap에서 빠지고 `robots: { index: false, follow: true }` 가 붙을 뿐이다.
+  기능 삭제·redirect·robots.txt 차단은 하지 않는다.
+- **동일 컴포넌트·동일 구조·수식만 다른 파생 페이지는 계열별 대표 1개만 색인한다.**
+  (CSS 단위 → `rem-to-px` / 광고 지표 → `roas-calculator` / PDF → `pdf-merge`)
+- 현재 36종 ready 중 **15종 indexable**. 나머지는 콘텐츠를 차별화한 뒤 승격 검토.
+
+#### 콘텐츠 품질 게이트 (하드 게이트)
+
+`indexable=true` 는 AEO/FAQ만으로 얻을 수 없다. `validateIndexableTools()` 가
+**언어별로** 아래 구조의 존재를 검사하며, 하나라도 없으면 색인 대상이 될 수 없다.
+
+```
+npm run validate:content      # 실패 시 slug + 누락 필드 출력, exit 1
+```
+
+- `seo.title` · `seo.description` · `content.description` · `howItWorks` · `aeo`
+- `content.guide` 2섹션 이상 · `content.examples` 1개 이상 · `content.limitations` 2개 이상
+- `faq` 3개 이상 · `relatedTools` 1개 이상 · `og`
+- 글자 수가 아니라 **필수 콘텐츠 구조의 존재 여부**로 판정한다.
+- **ko/en 양쪽이 모두 완성된 경우에만** 색인한다.
+
 ### AEO 전략
 AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 도구 페이지는 다음 질문에 답해야 한다:
 - What is this tool? / Who is it for? / How does it work? / Why would someone use it?
@@ -96,12 +128,28 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
   slug: "slack-timestamp-converter",
   layout: "ide",                       // 레이아웃 타입
   targets: ["pm", "developer"],        // 내부 타겟 태그
+  ready: true,                         // 기능 공개
+  indexable: false,                    // 검색 색인 (ready 와 별개)
+  verifiedAt: "2026-08-18",            // 외부 기준 데이터에 의존하는 도구만
   seo:     { ko: { title, description, keywords }, en: {...} },
-  content: { ko: { title, description, howItWorks, relatedTools }, en: {...} },
+  content: {
+    ko: {
+      card, description, howItWorks, aeo,
+      guide:       [{ heading, body[] }],        // 심화 산문 — indexable 필수
+      examples:    [{ title, input, result, note }], // 실전 예제 — indexable 필수
+      limitations: ["엣지케이스·제약"],             // indexable 필수
+      sources:     [{ label, url }],             // 공식 출처 (외부 기준 의존 시)
+    },
+    en: {...},
+  },
   faq:     { ko: [{ question, answer }], en: [...] },
   og:      { ko: { title, subtitle }, en: {...} },
 }
 ```
+
+- `guide`/`examples`/`limitations`/`sources` 는 `ToolGuide` 컴포넌트가 렌더한다.
+- `sources` 는 **기관·표준 1차 자료만.** 개인 블로그·타사 계산기 금지.
+  `sources` 가 있으면 `verifiedAt` 도 필수 (품질 게이트가 검사).
 
 ### FAQ 정책
 - **모든 도구 페이지에 FAQ 필수.** 목적: SEO · AEO · 롱테일 검색 유입 · AI 답변 노출.
@@ -463,7 +511,36 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **AdSense**: pub `ca-pub-7537584957079478`. 로더 스크립트(layout) + 확인 메타태그 + `public/ads.txt` 적용.
   광고 단위 컴포넌트 `app/components/AdUnit.tsx` 준비됨 (슬롯 ID만 넣으면 동작, dev는 플레이스홀더).
   **단, AdSense 사이트 승인은 아직 안 받음 → 실제 광고 미노출 상태.**
+  (2026-08 "가치가 별로 없는 콘텐츠" 사유로 반려 → 색인 정책·콘텐츠 품질 게이트로 대응)
 - **GA4**: `G-BW26VT6W47`. `@next/third-parties` `<GoogleAnalytics>` 로 연동 (GTM 미사용).
+- **쿠팡 파트너스**: 전역 배너 렌더 **제거됨** (2026-08-18). AdSense 재심사 중에는
+  콘텐츠 가치 평가와 무관한 제휴 요소를 전 페이지에 노출하지 않는다.
+  `app/components/CoupangBanner.tsx` 는 승인 이후 선택적 재사용을 위해 파일만 보존.
+  ⚠️ 다시 켤 경우 **개인정보처리방침의 제3자 서비스 목록에 쿠팡 파트너스를 추가해야 한다.**
+- **개인정보처리방침 정합성 원칙**: 실제 사용하는 서비스만 기재한다. 현재 기재 대상은
+  Google Analytics · Google AdSense · 웹 폰트 CDN(Google Fonts·jsDelivr) · 호스팅(Vercel).
+  "도구에 입력한 콘텐츠는 서버로 전송되지 않는다"와 "사이트 이용 중 아무 통신도 없다"를
+  **혼동해서 쓰지 않는다.**
+
+### 데이터 최신성 (요율·세율 등 외부 기준)
+- 기준일에 따라 바뀌는 값은 **연도가 아니라 적용 기간(effectiveFrom/To)** 으로 관리한다.
+  4대보험 요율은 1월, 국민연금 기준소득월액은 7월에 개정되어 연도로는 표현 불가.
+- 구현: `app/lib/salary/insurance.ts` — `RATE_PERIODS` · `PENSION_BASE_PERIODS` 두 벌 +
+  `policyOn(date)`. 계산 엔진(`calculator.ts`)은 `asOf` 기준일만 받고 정책 선택은 위임한다.
+- `POLICY_VERIFIED_AT` · `OFFICIAL_SOURCES` 가 출처·검증일의 단일 출처이며,
+  `content.ts` 의 salary 레지스트리가 이를 import 해 화면에 표시한다 (중복 기재 금지).
+- 2026년 기준: 국민연금 4.75%(총 9.5%) · 건강보험 3.595%(총 7.19%) ·
+  장기요양 건강보험료의 13.14% · 고용보험 0.9% ·
+  기준소득월액 2026.07~2027.06 하한 41만 / 상한 659만.
+- 과거 기간은 지우지 않는다. 지난 시점 기준 확인이 필요할 수 있다.
+
+### 검증 · 테스트
+```
+npm run validate:content   # indexable 도구 콘텐츠 품질 게이트
+npm test                   # node --test + tsx (app/lib/**/__tests__/*.test.ts)
+```
+- 계산 테스트는 **타 계산기와 총액을 하드코딩 비교하지 않는다.**
+  각 항목의 공식 산식으로 검증하고, 요율 상수·기간 경계를 따로 검사한다.
 
 ---
 
@@ -480,9 +557,23 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
    - [x] 타겟 태그 기반 필터 1단계 — 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
      카테고리 섹션/네비는 유지 (완전 전환 여부는 추후 데이터 보고 결정)
 
-1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
+0-1. **AdSense Low-value content 대응 (2026-08-18 완료분)**
+   - [x] `ready` / `indexable` 분리 — sitemap·robots·허브 ItemList JSON-LD 반영 (URL 102 → 60)
+   - [x] 초기 indexable 15종 재분류 (중복 계열은 대표 1개만)
+   - [x] `validateIndexableTools()` 품질 게이트 + `npm run validate:content`
+   - [x] indexable 15종 ko/en 실전 예제·제약사항 작성, guide 없던 5종 가이드 신규 작성
+   - [x] 2026 4대보험 요율 수정 + 적용 기간 구조 + 테스트 38개 + 기준일·검증일 UI 표시
+   - [x] 전역 쿠팡 파트너스 배너 제거
+   - [x] 블로그 author/reviewedAt/sources + BlogPosting author=Person 분리
+   - [x] 기존 아티클 3종 개편 (salary-net-pay-korea · growth-rate-explained · ad-metrics-explained)
+   - [x] About 운영·검증·수정 정책, 개인정보처리방침 제3자 서비스 정합성
+   - [x] `/en` 서브트리 SSR `lang="en"` (래퍼 + 헤더·푸터)
+
+1. **AdSense 재심사 신청** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
    - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단
-   - 콘텐츠 분량이 승인 기준에 빠듯할 수 있음 → 도구를 더 채운 뒤 신청하는 편이 유리
+   - 재심사 전 확인: 색인 대상 15종이 모두 품질 게이트 통과 상태인지 (`npm run validate:content`)
+   - 남은 판단 항목: `indexable=false` 21종을 **콘텐츠 차별화 후 승격**할지,
+     **URL 통합(리다이렉트)** 할지 — 이번 작업에서는 통합하지 않았다
 2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
    - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
    - `content.ts` 레지스트리 항목에 `seo(title·description)/content(description·howItWorks)/faq/og` 채우고 `ready: true` 전환

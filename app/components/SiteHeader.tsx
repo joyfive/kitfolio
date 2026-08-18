@@ -22,7 +22,9 @@ export default function SiteHeader() {
 function HeaderInner({ lang }: { lang: Lang }) {
   const home = localizedHref(lang, "/");
   return (
-    <header className="kf-header">
+    // lang: 루트 레이아웃의 <html lang="ko"> 아래에서도 EN 라우트의 헤더가
+    // 영어로 읽히도록 자기 엘리먼트에 언어를 선언한다 (SSR 초기 HTML 포함).
+    <header className="kf-header" lang={lang}>
       <Link className="kf-brand" href={home}>
         <LogoMark title="Kitfolio" />
         <span className="kf-brand-name">Kitfolio</span>
