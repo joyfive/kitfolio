@@ -18,12 +18,21 @@
    coverAlt:     <대체 텍스트>          (선택)
    relatedTools: slug-a, slug-b        (선택, 쉼표 구분)
    tags:         태그1, 태그2           (선택, 쉼표 구분)
+
+   ── 신뢰 정보 필드 (선택) ────────────────────────────────
+   author:       <작성자명>             (생략 시 사이트 운영자 AUTHOR)
+   authorRole:   <역할>                 (생략 시 AUTHOR.role)
+   reviewedAt:   YYYY-MM-DD            (내용을 마지막으로 사실 확인한 날짜)
+   sources:      라벨|URL, 라벨|URL     (공식 출처, 쉼표 구분 / 라벨과 URL은 | 로 구분)
+
+   ⚠️ sources 는 모든 글에 강제하지 않는다. 세금·보험·플랫폼 정책·기술 명세처럼
+   외부 기준에 의존하는 글에만 붙이고, 기관·표준 1차 자료만 사용한다.
    ============================================================ */
 import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import type { Metadata } from "next";
-import { SITE, type Lang } from "./content";
+import { AUTHOR, SITE, type Lang } from "./content";
 
 marked.use({ gfm: true, breaks: false });
 
@@ -40,6 +49,14 @@ export type PostMeta = {
   coverAlt?: string;
   relatedTools: string[];
   tags: string[];
+  /** 작성자명 — 프론트매터 author 또는 사이트 운영자 */
+  author: string;
+  /** 작성자 역할 — 프론트매터 authorRole 또는 AUTHOR.role */
+  authorRole: string;
+  /** 내용을 마지막으로 사실 확인한 날짜 (선택) */
+  reviewedAt?: string;
+  /** 공식 출처 (선택) — 외부 기준에 의존하는 글에만 */
+  sources: { label: string; url: string }[];
 };
 
 export type Post = { meta: PostMeta; html: string };
@@ -64,6 +81,19 @@ function parseFrontmatter(raw: string): { data: Record<string, string>; body: st
     if (key) data[key] = val;
   }
   return { data, body: m[2] };
+}
+
+/** "라벨|URL, 라벨|URL" → [{label, url}]. URL 이 없는 항목은 버린다. */
+function toSources(v?: string): { label: string; url: string }[] {
+  return toList(v)
+    .map((item) => {
+      const i = item.indexOf("|");
+      if (i === -1) return null;
+      const label = item.slice(0, i).trim();
+      const url = item.slice(i + 1).trim();
+      return label && url ? { label, url } : null;
+    })
+    .filter((x): x is { label: string; url: string } => x !== null);
 }
 
 function toList(v?: string): string[] {
@@ -106,6 +136,10 @@ function metaFromData(
     coverAlt: data.coverAlt || undefined,
     relatedTools: toList(data.relatedTools),
     tags: toList(data.tags),
+    author: data.author?.trim() || AUTHOR.name,
+    authorRole: data.authorRole?.trim() || AUTHOR.role[lang],
+    reviewedAt: data.reviewedAt || undefined,
+    sources: toSources(data.sources),
   };
 }
 
@@ -197,6 +231,7 @@ export function buildPostMetadata(slug: string, lang: Lang): Metadata {
   return {
     title: { absolute: `${meta.title} | ${SITE.name}` },
     description: meta.description,
+    authors: [{ name: meta.author, url: abs(AUTHOR.path) }],
     alternates: {
       canonical: url,
       languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },
@@ -228,7 +263,24 @@ export function postJsonLd(meta: PostMeta) {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     image: meta.cover ? abs(meta.cover) : undefined,
-    author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    // 작성자(사람)와 발행자(조직)를 분리한다 — 둘 다 Organization 이면
+    // "누가 썼는가"가 드러나지 않는다.
+    author: {
+      "@type": "Person",
+      name: meta.author,
+      jobTitle: meta.authorRole,
+      url: abs(AUTHOR.path),
+    },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    // 사실 확인 날짜가 있으면 검토 기록으로 함께 노출
+    ...(meta.reviewedAt
+      ? {
+          lastReviewed: meta.reviewedAt,
+          reviewedBy: { "@type": "Person", name: meta.author },
+        }
+      : {}),
+    ...(meta.sources.length
+      ? { citation: meta.sources.map((x) => ({ "@type": "CreativeWork", name: x.label, url: x.url })) }
+      : {}),
   };
 }

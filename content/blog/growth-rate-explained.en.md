@@ -1,65 +1,73 @@
 ---
-title: Growth Rate, Fully Explained | Percentage Change, MoM, YoY, QoQ, WoW
-description: Why growth rate and percentage change are really the same calculation, how MoM, YoY, QoQ, and WoW differ, and how to read growth correctly while avoiding the common traps: with worked examples.
+title: Growth Rate, Fully Explained | Five Ways Reports Get It Wrong
+description: Why growth rate, percentage change, MoM, YoY, QoQ and WoW are all one calculation, shown with real numbers, plus the traps that keep appearing in reports: asymmetric percentages, percent versus percentage points, and tiny denominators.
 date: 2026-08-06
+updated: 2026-08-18
+reviewedAt: 2026-08-18
 cover: /blog/growth-rate-explained.png
 coverAlt: Illustration representing the concept of calculating a growth rate
 relatedTools: growth-rate-calculator, cagr-calculator, compound-growth-calculator
 tags: growth, metrics, data
 ---
 
-"How much did it grow since last month?" is a question that comes up several times a day at work. Revenue, visitors, sign-ups, conversions: anywhere there are numbers, we ask how much they changed. Yet the moment you try to calculate it, terms like growth rate, percentage change, MoM, and YoY start to blur together. This article shows that most of these are actually **one calculation**, and lays out how to read growth correctly in practice.
+You have probably sat through this slide. "Conversion rate up 20%." It looks good. Then you open the underlying data and find the rate moved from 0.5% to 0.6%. The 20% is arithmetically correct. It is also nowhere near enough information to decide anything.
 
-## Growth rate is really one formula
+Calculating a growth rate is one division. The hard part is never the calculation: it is **reading the resulting number and reporting it honestly**. Here are five failures that keep recurring, each with real numbers.
 
-Growth rate, percentage change, percent increase, percent decrease: the names differ, but the math is identical.
+## First: five names, one calculation
 
-> **Growth rate (%) = (Current − Previous) ÷ Previous × 100**
+Growth rate, percentage change, rate of change, MoM, YoY, QoQ, WoW. They get used interchangeably in meetings, and the formula behind all of them is identical.
 
-If last month's revenue was 10,000 and this month's is 12,500, then (12,500 − 10,000) ÷ 10,000 × 100 = **+25%**. A positive result is usually called an increase and a negative one a decrease, but the calculation is the same. That's why you don't need a separate "increase calculator" and "decrease calculator": one growth-rate calculation covers both.
+```
+Growth (%) = (Current − Previous) ÷ Previous × 100
+```
 
-The key is **what you use as the previous value**. Change the baseline and the same numbers can tell a completely different story.
+MoM (month over month), YoY (year over year), QoQ (quarter over quarter) and WoW (week over week) differ only in **what you put in as the previous value**. They are names for a comparison period, not separate formulas, which is why one [growth rate calculator](/en/growth-rate-calculator) covers all of them.
 
-## MoM, YoY, QoQ, and WoW only differ by period
+If MAU went from 1,250,000 to 1,437,500: (1,437,500 − 1,250,000) ÷ 1,250,000 = **+15%**, an absolute gain of **187,500 users**.
 
-These abbreviations sound technical, but they're all the same growth-rate calculation. The only difference is **which two points in time you compare**.
+## Trap 1 — A percentage with no absolute number attached
 
-- **MoM (Month over Month)**: this month vs. last month. For short-term trends and campaign effects.
-- **YoY (Year over Year)**: this year vs. the same period last year. Removes seasonality to show real growth.
-- **QoQ (Quarter over Quarter)**: this quarter vs. last quarter. Common in earnings reports.
-- **WoW (Week over Week)**: this week vs. last week. Early signal for fast-moving metrics.
+That "conversion up 20%" slide is this trap. When the denominator is small, percentages get large for free. If one conversion out of 200 visitors becomes two, that is +100% growth: and if it drops back to one next week, that is −50%. You would be reporting noise as performance.
 
-So if this month has 12,500 users and last month had 10,000, MoM growth is +25%. Use last year's number for YoY, quarterly numbers for QoQ. **One calculator is enough; you just attach the right label for the context.**
+**Always pair the percentage with the absolute change.** Written as "+15% (+187,500 users)", the reader can judge the scale for themselves. When the sample is in the dozens, showing the raw counts alone is the more honest choice.
 
-### Why YoY matters
+## Trap 2 — Assuming percentages are symmetric
 
-Many businesses are seasonal. Retail peaks at year-end; travel peaks in summer. Looking only at MoM, "up 30% in December!" doesn't tell you whether that's real growth or just the season. YoY compares the same month a year earlier, cancelling seasonality and revealing **the true direction of the trend**. That's why practitioners read MoM and YoY together.
+A value drops from 100 to 80. That is −20%. What increase brings it back to 100?
 
-## Traps when reading growth
+Not +20%, but **+25%**. Adding 20% to 80 gets you 96, not 100, because the base changed underneath you.
 
-### 1. The small-base illusion
+This one costs real money when setting targets. "We lost 15% last quarter, so let's recover 15% this quarter" does not return to the starting point: the recovery actually needs 17.6%. Recovery targets have to be worked backwards from the original value, not from the size of the decline.
 
-When the previous value is small, the growth rate inflates easily. Going from 2 users to 4 is +100%, but it doesn't mean much. Going from 1,000,000 to 1,010,000 is only +1%, yet the absolute change is far larger. **Early-stage growth rates can look huge simply because the base is small**, so always read the growth rate alongside the absolute number.
+## Trap 3 — Mixing percent (%) with percentage points (pp)
 
-### 2. You can't divide by zero
+Conversion moved from 2% to 3%. Both of these are valid descriptions:
 
-If the previous value is 0, the growth rate is undefined. "Went from 0 to 100" isn't infinite growth: it's better described as simply "new."
+- **+50%** — the relative increase (3 ÷ 2 − 1)
+- **+1pp** — the absolute difference (3 − 2)
 
-### 3. Percentages are asymmetric
+Both are true, and they leave completely different impressions. Choosing % when you want the result to look big and pp when you want it to look small is a real and common habit. **For rate metrics such as conversion, churn or market share, report the change in percentage points** and add the percentage in parentheses if it helps. The calculator will hand you +50%; deciding how to present it is your call, not the tool's.
 
-A 50% drop followed by a 50% rise does not return you to the start: 100 → 50 (−50%) → 75 (+50%). Consecutive percentage changes can't just be added or cancelled. To measure cumulative growth across periods, you need the compounding idea below.
+## Trap 4 — Watching MoM while ignoring seasonality
 
-## Across multiple periods: compounding and CAGR
+December revenue is 40% above November. Is that growth?
 
-When you deal with **growth across several periods** rather than a single change, things shift. Growing 10% a year for three years isn't a simple 30%: it's 1.1 × 1.1 × 1.1 ≈ 1.331, or **+33.1%**, because each period's growth stacks on the previous result. This is compound growth.
+For any business with a year-end peak, December beating November is what happens every single year. The question that carries information is how December compares with last December. If that is −5%, the +40% MoM slide is actively hiding the fact that things are getting worse.
 
-If you want to summarize multi-year growth as a single "average per year" figure, use **CAGR (Compound Annual Growth Rate)**. It needs only a start value, end value, and number of periods, and it's the standard way to compare investment returns or long-run revenue growth.
+**Where seasonality exists, YoY is the primary view and MoM is supporting detail.** The reverse holds for a young product with no seasonal pattern yet, where MoM and WoW say more about momentum.
 
-## A practical checklist
+## Trap 5 — Calling two data points a trend
 
-- Before quoting a growth rate, be clear about **what the baseline (previous value) is**.
-- For seasonal metrics, read **MoM and YoY together**.
-- Show the **growth rate and the absolute number side by side** to avoid the small-base illusion.
-- Compute cumulative multi-period growth as **compounding**, not a simple sum.
+A growth rate sees exactly two moments. Whether the path between them was a steady climb or a spike followed by a collapse is invisible in the number.
 
-To check a few numbers quickly, drop a previous and current value into the [Growth Rate Calculator](/en/growth-rate-calculator). It returns the growth rate along with the difference and multiplier, and for multi-year growth you can continue with the [CAGR Calculator](/en/cagr-calculator) or [Compound Growth Calculator](/en/compound-growth-calculator).
+To summarize three or more periods as a single figure, use the [CAGR calculator](/en/cagr-calculator) instead. With +100% in year one and −50% in year two, averaging the annual rates arithmetically gives +25%, while the value actually ended exactly where it started (CAGR 0%). Growth compounds; it does not add.
+
+## When not to use a growth rate at all
+
+- **When the previous value is 0** — it is undefined. Going from 0 to 100 is "+100", not infinite growth.
+- **When the previous value is negative** — a loss turning into a profit produces a percentage whose sign reads backwards and misleads. Report the absolute change.
+- **When the sample is tiny** — with a denominator in the double digits or lower, the percentage carries almost no statistical meaning.
+- **When you need a forecast** — growth rate summarizes the past. To project where that rate leads, move to the [compound growth calculator](/en/compound-growth-calculator).
+
+The time-consuming part of growth reporting was never the arithmetic. It is **choosing the right comparison period and attaching scale and context to the number**. Hand the division to a tool and spend your time on the rest.

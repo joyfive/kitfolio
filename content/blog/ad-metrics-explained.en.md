@@ -1,55 +1,76 @@
 ---
-title: Ad Metrics Made Simple | ROAS, CPA, CPC, CPM, CTR
-description: What the five most-used performance marketing metrics: ROAS, CPA, CPC, CPM, and CTR: each measure, how they connect, and which to watch depending on your campaign goal.
+title: Ad Metrics Made Simple | Following One Campaign All the Way Through
+description: Instead of defining ROAS, CPA, CPC, CPM and CTR one by one, this walks a single campaign from impressions to revenue with real numbers, showing where each metric comes from and which one points at the actual problem.
 date: 2026-08-06
+updated: 2026-08-18
+reviewedAt: 2026-08-18
 cover: /blog/ad-metrics-explained.png
 coverAlt: Illustration representing advertising performance metrics
-relatedTools: roas-calculator, cpa-calculator, cpc-calculator, cpm-calculator, ctr-calculator
+relatedTools: roas-calculator, cpa-calculator, ctr-calculator, funnel-conversion-calculator
 tags: marketing, advertising, metrics
 ---
 
-Open an ad report for the first time and acronyms pour out: ROAS, CPA, CPC, CPM, CTR. They seem to measure different things, but these five are really windows into different points of **one advertising flow**: impression → click → conversion → revenue. Let's walk the flow.
+Open an ad report and ROAS, CPA, CPC, CPM and CTR all arrive at once. Memorizing the definitions does not help much, because the question you actually face is "should we keep running this?" and it is not obvious which number answers it.
 
-## Impression stage: CPM and CTR
+These five are not independent measures. They are **five coordinates on a single flow**. Follow one campaign from impression to revenue and the relationships fall into place.
 
-An ad first has to be **seen (impressions)**.
+## One campaign, end to end
 
-- **CPM (Cost per Mille)** = ad spend ÷ impressions × 1,000. The cost per 1,000 impressions ("mille" is Latin for thousand). Based on how many times it was shown rather than clicks, so it's the go-to metric for **brand awareness campaigns**.
-- **CTR (Click-Through Rate)** = clicks ÷ impressions × 100. The share of impressions that got clicked: the **appeal of the creative**. For the same impressions, a higher CTR means the message landed.
+A campaign that spent 3,000,000 over a month.
 
-## Click stage: CPC
+| Stage | Result | Metric it produces |
+|---|---:|---|
+| Impressions | 500,000 | CPM 6,000 |
+| Clicks | 6,000 | CTR 1.2% · CPC 500 |
+| Conversions | 120 | CVR 2% · CPA 25,000 |
+| Revenue | 12,600,000 | ROAS 420% |
 
-- **CPC (Cost per Click)** = ad spend ÷ clicks. The cost of one click, the base unit of search (SEM) and pay-per-click (PPC).
+Every one of them is a division.
 
-Here the three metrics link up:
+- **CPM** = 3,000,000 ÷ 500,000 × 1,000 = **6,000** — cost per thousand impressions
+- **CTR** = 6,000 ÷ 500,000 = **1.2%** — share of viewers who clicked
+- **CPC** = 3,000,000 ÷ 6,000 = **500** — cost per click
+- **CPA** = 3,000,000 ÷ 120 = **25,000** — cost per conversion
+- **ROAS** = 12,600,000 ÷ 3,000,000 = **420%** — revenue per unit of spend
 
-> **CPC ≈ CPM ÷ (CTR × 10)**
+Each has its own tool: the [ROAS calculator](/en/roas-calculator), [CPA calculator](/en/cpa-calculator) and [CTR calculator](/en/ctr-calculator), with the [funnel conversion calculator](/en/funnel-conversion-calculator) for seeing drop-off stage by stage.
 
-So at the same CPM, a higher CTR lowers your effective CPC. Lift CTR with better creative and the same budget buys more visits.
+## Is this campaign actually profitable?
 
-## Conversion and revenue stage: CPA and ROAS
+At 420%, ROAS looks healthy. But ROAS is measured on **revenue**, before cost of goods, fees and shipping. Profitability needs the contribution margin.
 
-The final stage, where clicks become visits and visits become real outcomes.
+```
+Break-even ROAS = 1 ÷ contribution margin
+```
 
-- **CPA (Cost per Acquisition)** = ad spend ÷ conversions. The **cost per outcome** (a purchase, a sign-up). Based on the action you actually want, so it's closest to your business goal.
-- **ROAS (Return on Ad Spend)** = revenue ÷ ad spend. The revenue each unit of ad spend produced. A ROAS of 400% (4:1) means 1 spent returned 4.
+At a 25% margin, break-even ROAS is **400%**. This campaign's 420% is barely above the line. The same check in CPA terms is more intuitive: average order value is 105,000 (12,600,000 ÷ 120), a 25% margin leaves 26,250 of profit per conversion, and CPA is 25,000: so each conversion nets 1,250.
 
-## Different goals, different metrics
+**Reporting "we hit 400% ROAS" without knowing the margin can dress up a losing campaign as a win.** Derive the target ROAS from your margin before the campaign launches, not after.
 
-You can't optimize every metric at once. Priority depends on **what the campaign is for**.
+## When the numbers get worse, where do you look?
 
-- **Awareness / reach** → CPM, CTR
-- **Traffic** → CPC, CTR
-- **Conversions / revenue** → CPA, ROAS
+This is where treating the metrics as one flow earns its keep. If CPA rose, the cause sits somewhere upstream.
 
-A common mistake is chasing a low CPC as the goal itself. However low the CPC, if visitors don't convert, CPA suffers. Conversely, a slightly higher CPC with a strong conversion rate can produce excellent results. **Read metrics across the whole flow.**
+- **CPM rose** — competition increased or your targeting is too narrow. That is a bidding and audience problem, not a creative one.
+- **CTR fell** — the creative is fatigued from repeated exposure, or the message does not fit the audience. This is the signal to refresh creative.
+- **CTR and CPC held steady but conversion rate fell** — the problem is in the **landing page or the product**, not the ad. No amount of creative testing will fix it.
 
-## ROAS must be read against margin
+Watching CPA alone cannot distinguish these three cases, which is exactly why all five belong in the same report.
 
-A high ROAS isn't automatically profitable, because you have to account for margin. At a 25% margin, the **break-even ROAS that just recovers ad cost is 400%**: you only profit above that. So a target ROAS should always be built on your product's margin structure.
+## Common mistakes
 
-## Working budgets back from a goal
+**Adding up ROAS across channels.** The same order gets credited in multiple places, so summing channel ROAS inflates the total. Channel ROAS is for comparing channels, not for aggregating.
 
-In practice, **reverse-calculating** is as important as computing the metric. "If target revenue is 100,000 and target ROAS is 400%, what's the budget?" (Answer: 25,000.) Set a target for any of these metrics and you can work backward to the budget, clicks, or impressions you need.
+**Ignoring differences in the attribution window.** "Purchase within 7 days of a click" and "purchase within 1 day of an impression" produce entirely different numbers. Platform defaults differ, so comparing without aligning them can reverse which channel looks better.
 
-To plug in numbers quickly, use the [ROAS Calculator](/en/roas-calculator), [CPA Calculator](/en/cpa-calculator), [CPC Calculator](/en/cpc-calculator), [CPM Calculator](/en/cpm-calculator), and [CTR Calculator](/en/ctr-calculator). Each supports both the metric and target-based reverse calculation.
+**Judging prospecting campaigns on the first purchase.** Where customers buy again, new-customer campaigns show structurally low ROAS. They need to be evaluated against lifetime value as well.
+
+**Treating CTR as a performance metric.** CTR is a diagnostic for how compelling the creative is, not a measure of success. Pushing CTR up with sensational creative often raises clicks while conversion rate falls, leaving CPA worse than before.
+
+## What these metrics cannot tell you
+
+- **Incrementality** — revenue that would have happened anyway, such as branded search, is not filtered out of ROAS. Measuring true contribution requires an experiment that turns the campaign off.
+- **Early data** — a CPA computed on fewer than ten conversions is mostly chance. Waiting for 30 to 50 is far more reliable.
+- **Brand awareness campaigns** — if revenue is not the objective, ROAS is the wrong lens entirely. Set reach and frequency targets that match the actual goal.
+
+Connecting the metrics into one flow lasts much longer than memorizing them, because it tells you where to look the moment a number moves.

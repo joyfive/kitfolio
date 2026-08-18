@@ -5,13 +5,16 @@ import { usePathname } from "next/navigation";
 import { localizedHref } from "../lib/content";
 import { LangProvider, routeLang, useT, type Lang } from "../lib/i18n";
 import { LogoMark } from "./Logo";
-import CoupangBanner from "./CoupangBanner";
 
 const FEEDBACK_EMAIL = "joy_five@kakao.com";
 const GITHUB_URL = "https://github.com/joyfive/kitfolio";
 
 /** 전 페이지 공통 푸터 (루트 layout.tsx에서 렌더). 언어는 URL에서 도출.
- *  Header = Brand / Footer = 태그라인 + 쿠팡 파트너스 배너 + 외부 링크. */
+ *  Header = Brand / Footer = 태그라인 + 외부 링크.
+ *
+ *  ⚠️ 쿠팡 파트너스 배너(CoupangBanner)는 전역 렌더에서 제거된 상태다.
+ *  AdSense 사이트 심사 중에는 콘텐츠 가치 평가와 무관한 제휴 배너를 전 페이지에
+ *  노출하지 않는다. 컴포넌트 파일은 승인 이후 선택적으로 재사용하기 위해 남겨 둔다. */
 export default function SiteFooter() {
   const pathname = usePathname() || "/";
   const lang = routeLang(pathname);
@@ -34,12 +37,11 @@ function FooterInner({ lang }: { lang: Lang }) {
           <b>Kitfolio</b>
         </div>
 
-        {/* 1행: 태그라인(좌) ↔ 쿠팡 파트너스 배너(우) */}
+        {/* 1행: 태그라인 */}
         <div className="foot-row foot-row--top">
           <p className="foot-tagline">
             Small tools for modern knowledge workers
           </p>
-          <CoupangBanner lang={lang} />
         </div>
 
         {/* 2행: 카피라이트(좌) ↔ 외부 링크(우) */}

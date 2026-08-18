@@ -144,6 +144,18 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
+/** 사이트 운영자 — 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
+ *
+ *  실명을 공개하지 않되, **일관된 운영자명과 역할, 책임 주체**는 항상 확인되게 한다.
+ *  (AdSense 심사·E-E-A-T 관점에서 "누가 쓰고 누가 책임지는가"가 드러나야 한다) */
+export const AUTHOR = {
+  /** 일관된 운영자명 — 리포지토리·연락처와 동일한 식별자 */
+  name: "joyfive",
+  /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
+  path: "/about",
+  role: { ko: "Kitfolio 운영자", en: "Maker of Kitfolio" },
+} as const;
+
 /** 허브 카드 등에서 쓰는 레이아웃 표시 라벨 */
 export const LAYOUT_LABEL: Record<Layout, string> = {
   card: "Clean",

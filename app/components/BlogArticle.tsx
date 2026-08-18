@@ -43,6 +43,22 @@ export default function BlogArticle({
         </div>
         <h1>{meta.title}</h1>
         {meta.description && <p className="kf-article-lead">{meta.description}</p>}
+
+        {/* 작성자 · 역할 · 최근 사실 확인일 — 누가 쓰고 누가 책임지는지 밝힌다 */}
+        <div className="kf-article-byline">
+          <span className="kf-article-author">
+            <b>{meta.author}</b>
+            <span>{meta.authorRole}</span>
+          </span>
+          {meta.reviewedAt && (
+            <span className="kf-article-reviewed">
+              {lang === "ko" ? "최근 검증 " : "Last verified "}
+              <time dateTime={meta.reviewedAt}>
+                {formatDate(meta.reviewedAt, lang)}
+              </time>
+            </span>
+          )}
+        </div>
       </header>
 
       {meta.cover && (
@@ -56,6 +72,22 @@ export default function BlogArticle({
         className="kf-article-body"
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
+      {/* 공식 출처 — 외부 기준(세법·요율·플랫폼 정책)에 의존하는 글에만 붙는다 */}
+      {meta.sources.length > 0 && (
+        <section className="kf-article-sources">
+          <h2>{lang === "ko" ? "참고한 공식 자료" : "Official sources"}</h2>
+          <ul>
+            {meta.sources.map((s) => (
+              <li key={s.url}>
+                <a href={s.url} target="_blank" rel="noopener noreferrer nofollow">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {related.length > 0 && (
         <section className="kf-article-related">
