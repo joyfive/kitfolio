@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --import tsx --test \"app/lib/**/__tests__/*.test.ts\"",
+    "validate:content": "node --import tsx scripts/validate-content.ts"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.19",
@@ -34,6 +36,7 @@
     "@types/react-dom": "^19",
     "playwright-core": "^1.61.1",
     "tailwindcss": "^4.1.4",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

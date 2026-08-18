@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -471,6 +472,7 @@ export default function FlexWorkCalculator() {
         </div>
       </div>
 
+      <ToolGuide slug="flex-work-calculator" />
       <Faq slug="flex-work-calculator" />
       <RelatedTools slug="flex-work-calculator" />
     </>

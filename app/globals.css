@@ -328,9 +328,66 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--color-blue-gray-700);
 }
 .kf-guide-sec p:last-child { margin-bottom: 0; }
+
+/* 실전 예제 — 상황 / 입력 / 결과 / 해석 */
+.kf-guide-examples { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.kf-guide-examples > li {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg); padding: 16px 18px;
+}
+.kf-guide-examples h3 {
+  margin: 0 0 10px; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--color-blue-gray-950);
+}
+.kf-guide-examples dl { margin: 0; display: grid; gap: 6px; }
+.kf-guide-examples dl > div {
+  display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: baseline;
+}
+.kf-guide-examples dt {
+  font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  border-radius: 999px; padding: 2px 0; text-align: center;
+}
+.kf-guide-examples dd {
+  margin: 0; font-size: 15px; line-height: 1.7; color: var(--color-blue-gray-800);
+}
+.kf-guide-example-note {
+  margin: 10px 0 0 !important; padding-top: 10px;
+  border-top: 1px solid var(--color-blue-gray-100);
+  font-size: 14px !important; line-height: 1.7 !important;
+  color: var(--color-blue-gray-600) !important;
+}
+
+/* 제약 · 엣지케이스 */
+.kf-guide-limits { margin: 0; padding-left: 22px; list-style: disc; }
+.kf-guide-limits li {
+  font-size: 15px; line-height: 1.75; color: var(--color-blue-gray-700);
+  margin-bottom: 8px; padding-left: 4px;
+}
+.kf-guide-limits li:last-child { margin-bottom: 0; }
+.kf-guide-limits li::marker { color: var(--color-blue-primary-500); }
+
+/* 공식 출처 */
+.kf-guide-sources ul { margin: 0; padding-left: 22px; list-style: disc; }
+.kf-guide-sources li {
+  font-size: 15px; line-height: 1.75; color: var(--color-blue-gray-700);
+  margin-bottom: 6px; padding-left: 4px;
+}
+.kf-guide-sources li::marker { color: var(--color-blue-primary-500); }
+.kf-guide-sources a {
+  color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px;
+}
+.kf-guide-sources a:hover { color: var(--color-blue-primary-800); }
+.kf-guide-verified {
+  margin: 12px 0 0 !important; font-size: 13px !important;
+  color: var(--color-blue-gray-500) !important;
+}
+
 @media (max-width: 640px) {
   .kf-guide { margin-top: 44px; }
   .kf-guide-sec h2 { font-size: 18px; }
+  .kf-guide-examples dl > div { grid-template-columns: 1fr; gap: 2px; }
+  .kf-guide-examples dt { justify-self: start; padding: 2px 10px; }
 }
 
 /* ============================================================
@@ -1258,6 +1315,27 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 }
 .bd-row.total.sc-net-row { border-top: none; margin-top: 0; padding-top: 6px; }
 .bd-row.total.sc-net-row .v { color: var(--color-blue-primary-700); }
+
+/* 계산 기준 · 최근 검증일 — 최신성이 중요한 계산기의 신뢰 정보 */
+.sc-basis {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md); padding: 13px 15px;
+}
+.sc-basis h3 {
+  margin: 0 0 9px; font-size: 12px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--color-blue-gray-900);
+}
+.sc-basis dl { margin: 0; display: grid; gap: 5px; }
+.sc-basis dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sc-basis dt { font-size: 12px; color: var(--color-blue-gray-600); }
+.sc-basis dd {
+  margin: 0; font-size: 12px; font-weight: 500; color: var(--color-blue-gray-900);
+  text-align: right;
+}
+.sc-basis > p {
+  margin: 10px 0 0; padding-top: 9px; border-top: 1px solid var(--color-blue-gray-100);
+  font-size: 11.5px; line-height: 1.55; color: var(--color-blue-gray-500); text-wrap: pretty;
+}
 
 .sc-disclaimer {
   margin: 0; font-size: 11.5px; line-height: 1.5; color: var(--color-blue-gray-500);

@@ -6,6 +6,8 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // 테스트·스크립트가 node --import tsx 로 직접 실행되므로 .ts 확장자 import 허용
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
