@@ -96,6 +96,43 @@ function toSources(v?: string): { label: string; url: string }[] {
     .filter((x): x is { label: string; url: string } => x !== null);
 }
 
+/* ── 한국어 강조 보정 ──────────────────────────────────
+   CommonMark 는 닫는 `**` 가 "right-flanking delimiter run" 일 때만 강조로 인정한다.
+   그 조건 중 하나가 **앞이 문장부호라면 뒤는 공백이나 문장부호여야 한다**는 것이다.
+
+     **400%**입니다        → 앞 `%`(문장부호) + 뒤 `입`(글자)  ✗ 강조 안 됨, `**` 그대로 출력
+     **rem(root em)**은    → 앞 `)`           + 뒤 `은`        ✗
+     **굵게**입니다         → 앞 `게`(글자)                     ✓ 정상
+     **400%** 입니다       → 뒤가 공백                        ✓ 정상
+
+   영어는 강조 뒤에 공백이 오는 게 보통이라 거의 드러나지 않지만, 한국어는 조사가
+   곧바로 붙어 자주 걸린다. marked 의 버그가 아니라 사양대로 동작한 결과라
+   파서 설정으로는 해결되지 않는다.
+
+   그래서 "닫는 `**` 직전이 문장부호이고 직후가 글자·숫자"인 경우에 한해
+   미리 <strong> 으로 바꿔 준다. 글쓴이는 계속 평범하게 `**` 만 쓰면 된다.
+   코드 블록과 인라인 코드는 건드리지 않는다. */
+
+/** 코드 펜스(```/~~~)와 인라인 코드(`…`) — 이 안의 내용은 보정 대상에서 제외 */
+const CODE_SEGMENT = /(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`)/g;
+
+/** 닫는 `**` 앞이 문장부호/기호이고 뒤에 글자·숫자가 바로 붙는 강조 구간 */
+const CJK_STRONG = /\*\*(?=\S)([^*\n]*[\p{P}\p{S}])\*\*(?=[\p{L}\p{N}])/gu;
+
+/**
+ * CommonMark 규칙상 강조로 인정되지 않는 `**…**` 를 <strong> 으로 바꾼다.
+ * 정상적으로 파싱되는 강조는 그대로 두어 marked 가 처리하게 한다.
+ */
+export function fixCjkEmphasis(md: string): string {
+  // split 에 캡처 그룹이 있으면 구분자도 배열에 남는다 → 홀수 인덱스가 코드 구간
+  return md
+    .split(CODE_SEGMENT)
+    .map((seg, i) =>
+      i % 2 === 1 ? seg : seg.replace(CJK_STRONG, "<strong>$1</strong>"),
+    )
+    .join("");
+}
+
 function toList(v?: string): string[] {
   if (!v) return [];
   return v
@@ -150,7 +187,7 @@ export function getPost(slug: string, lang: Lang): Post | null {
   const raw = fs.readFileSync(file, "utf8");
   const { data, body } = parseFrontmatter(raw);
   // 본문 하이퍼링크는 새 탭으로 열기 (chip 스타일은 globals.css)
-  const html = (marked.parse(body) as string).replace(
+  const html = (marked.parse(fixCjkEmphasis(body)) as string).replace(
     /<a /g,
     '<a target="_blank" rel="noopener noreferrer" ',
   );
