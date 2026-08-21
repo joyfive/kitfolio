@@ -1,5 +1,5 @@
 /* ============================================================
-   실수령 계산 — 근로소득세 · 지방소득세 (예상 계산)
+   실수령 계산: 근로소득세 · 지방소득세 (예상 계산)
 
    국세청 근로소득 간이세액표 산출 방식을 근사한 "예상 계산"입니다.
    실제 급여명세서의 원천징수액과는 차이가 발생할 수 있습니다.
@@ -73,7 +73,7 @@ export type IncomeTaxInput = {
   childrenUnder20: number;
   /** 원천징수 선택비율 (80 · 100 · 120) */
   withholdingRate: number;
-  /** 연간 4대보험 근로자 부담분 합계 (소득공제 대상) — calculator.ts 가 단일 출처로 전달 */
+  /** 연간 4대보험 근로자 부담분 합계 (소득공제 대상): calculator.ts 가 단일 출처로 전달 */
   insuranceDeductionAnnual: number;
 };
 
@@ -101,11 +101,11 @@ export function estimateIncomeTax(input: IncomeTaxInput): IncomeTaxResult {
   // 근로소득금액
   const earnedIncome = annual - earnedIncomeDeduction(annual);
 
-  // 인적공제 — 간이세액표는 20세 이하 자녀 수를 공제대상 가족 수에 가산
+  // 인적공제: 간이세액표는 20세 이하 자녀 수를 공제대상 가족 수에 가산
   const personalCount = Math.max(1, dependents) + Math.max(0, childrenUnder20);
   const personalDeduction = personalCount * 1_500_000;
 
-  // 4대보험료 공제 (연금보험료공제 + 건강·고용 특별소득공제) — 단일 출처에서 전달
+  // 4대보험료 공제 (연금보험료공제 + 건강·고용 특별소득공제): 단일 출처에서 전달
   const insuranceDeduction = Math.max(0, insuranceDeductionAnnual);
 
   const taxBase = Math.max(

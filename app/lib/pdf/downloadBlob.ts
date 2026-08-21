@@ -27,7 +27,7 @@ export function baseName(name: string): string {
   return name.replace(/\.pdf$/i, "");
 }
 
-/** 다운로드 파일명 정규화 — 경로 구분자/제어문자 제거, .pdf 보장 */
+/** 다운로드 파일명 정규화: 경로 구분자/제어문자 제거, .pdf 보장 */
 export function safePdfName(name: string, fallback = "kitfolio.pdf"): string {
   let n = (name || "").trim().replace(/[\\/:*?"<>|]+/g, "-");
   if (!n) n = fallback;

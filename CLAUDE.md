@@ -11,18 +11,18 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 이 문서가 제품 방향의 단일 출처(SoT)다. 작업 유형에 따라 아래 스킬·문서를 함께 사용한다.
 
 **호출 가능한 Skill** (`.claude/skills/`): 작업 시 `/skill-name` 으로 호출
-- `/build-tool` — 신규 도구/페이지 end-to-end 구현 런북 (레지스트리·컴포넌트·라우트·OG·허브 카드·SEO/AEO 카피). "새로운 기능/페이지 추가" 요청 시 사용
-- `/new-tool` — 신규 도구 추가 체크리스트 + 필수 구조 (5개 평가 기준은 하드 게이트)
-- `/product-review` — 제품 방향·스코프 리뷰 (feature creep 방지)
-- `/branding` — 브랜딩·톤 가드레일
-- `/seo` — 도구 페이지 SEO 리뷰 체크리스트
-- `/aeo` — What/Who/How/Why + 구조화 데이터 AEO 리뷰
+- `/build-tool`: 신규 도구/페이지 end-to-end 구현 런북 (레지스트리·컴포넌트·라우트·OG·허브 카드·SEO/AEO 카피). "새로운 기능/페이지 추가" 요청 시 사용
+- `/new-tool`: 신규 도구 추가 체크리스트 + 필수 구조 (5개 평가 기준은 하드 게이트)
+- `/product-review`: 제품 방향·스코프 리뷰 (feature creep 방지)
+- `/branding`: 브랜딩·톤 가드레일
+- `/seo`: 도구 페이지 SEO 리뷰 체크리스트
+- `/aeo`: What/Who/How/Why + 구조화 데이터 AEO 리뷰
 
 **참고 컨텍스트 문서** (`docs/ai/`)
-- `PROJECT_CONTEXT.md` — 영문 요약 컨텍스트 (이 파일의 영문판)
-- `MONETIZATION.md` — 수익화 전략
-- `TOOL_SELECTION.md` — 도구 아이디어 25점 평가표
-- `CONTENT_POLICY.md` — 콘텐츠 운영 원칙
+- `PROJECT_CONTEXT.md`: 영문 요약 컨텍스트 (이 파일의 영문판)
+- `MONETIZATION.md`: 수익화 전략
+- `TOOL_SELECTION.md`: 도구 아이디어 25점 평가표
+- `CONTENT_POLICY.md`: 콘텐츠 운영 원칙
 
 ---
 
@@ -40,7 +40,7 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 - **Supporting Message (SEO/AEO)**: *Work calculators, generators and utilities*
 - **제품 정의**: 모던 지식 노동자를 위한 브라우저 기반 마이크로 SaaS 도구 모음.
   업무·일상 직업 활동에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·포매터·유틸리티.
-  전부 브라우저에서 실행 — **No login / No installation / No server-side processing.**
+  전부 브라우저에서 실행: **No login / No installation / No server-side processing.**
 
 ### 타겟 유저
 PM · Designer · Developer · Job Seeker · Office Worker · Small Business Owner
@@ -58,11 +58,43 @@ PM · Designer · Developer · Job Seeker · Office Worker · Small Business Own
   (검색 / 브라우즈 / 필터 / 디스커버리). **실제 SEO 랜딩은 각 도구 페이지.**
 
 ### SEO 전략
-- 각 도구 페이지가 구체적인 검색 의도 1개를 타겟. 사용자는 "Kitfolio"를 검색하지 않는다 —
+- 각 도구 페이지가 구체적인 검색 의도 1개를 타겟. 사용자는 "Kitfolio"를 검색하지 않는다.
   "Character Counter", "Flex Work Calculator", "Resume Bullet Generator"를 검색한다.
 - **도구 페이지 필수 구성**: ① Tool Title ② Tool Description ③ 동작하는 도구 UI
   ④ How It Works ⑤ FAQ ⑥ Related Tools ⑦ 구조화 메타데이터 ⑧ 개별 OG 메타데이터
 - 도구 자체가 본질적 가치. SEO 콘텐츠는 발견성(discoverability) 보조.
+
+### 색인 정책: `ready` 와 `indexable` 분리 (2026-08-18 확정)
+
+> AdSense "가치가 별로 없는 콘텐츠(Low-value content)" 반려 대응.
+> **기능 공개 여부와 검색 색인 여부는 별개다.**
+
+| 필드 | 의미 | 영향 |
+|---|---|---|
+| `ready` | 사용자가 도구를 실제로 쓸 수 있는가 | 허브 목록·검색·필터·Related Tools 노출 |
+| `indexable` | 독립 검색 랜딩 페이지로 낼 품질이 확보됐는가 | sitemap 포함 · robots · 허브 ItemList JSON-LD |
+
+- `indexable=false` 도구도 **페이지는 정상 동작하고 UI에 그대로 노출된다.**
+  sitemap에서 빠지고 `robots: { index: false, follow: true }` 가 붙을 뿐이다.
+  기능 삭제·redirect·robots.txt 차단은 하지 않는다.
+- **동일 컴포넌트·동일 구조·수식만 다른 파생 페이지는 계열별 대표 1개만 색인한다.**
+  (CSS 단위 → `rem-to-px` / 광고 지표 → `roas-calculator` / PDF → `pdf-merge`)
+- 현재 36종 ready 중 **15종 indexable**. 나머지는 콘텐츠를 차별화한 뒤 승격 검토.
+
+#### 콘텐츠 품질 게이트 (하드 게이트)
+
+`indexable=true` 는 AEO/FAQ만으로 얻을 수 없다. `validateIndexableTools()` 가
+**언어별로** 아래 구조의 존재를 검사하며, 하나라도 없으면 색인 대상이 될 수 없다.
+
+```
+npm run validate:content      # 실패 시 slug + 누락 필드 출력, exit 1
+```
+
+- `seo.title` · `seo.description` · `content.description` · `howItWorks` · `aeo`
+- `content.guide` 2섹션 이상 · `content.examples` 1개 이상 · `content.limitations` 2개 이상
+- `faq` 3개 이상 · `relatedTools` 1개 이상 · `og`
+- 글자 수가 아니라 **필수 콘텐츠 구조의 존재 여부**로 판정한다.
+- **ko/en 양쪽이 모두 완성된 경우에만** 색인한다.
 
 ### AEO 전략
 AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 도구 페이지는 다음 질문에 답해야 한다:
@@ -77,7 +109,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
   (현재 구현: `app/lib/content.ts`)
 - **다국어**: 모든 도구는 ko·en 양 언어 세트 필수 정의.
 
-#### 블로그(아티클) — 2026-08-06 추가된 편집 콘텐츠 레이어
+#### 블로그(아티클): 2026-08-06 추가된 편집 콘텐츠 레이어
 > AdSense "가치가 별로 없는 콘텐츠(thin content)" 반려가 반복되어, 도구 페이지만으로는
 > Google이 "발행자"로 인정하지 않는 문제를 해소하기 위해 **비정기 편집 아티클 레이어**를 도입.
 - **여전히 CMS 없음.** 아티클은 `content/blog/<slug>.{ko,en}.md` 마크다운 파일로 작성하고,
@@ -96,12 +128,28 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
   slug: "slack-timestamp-converter",
   layout: "ide",                       // 레이아웃 타입
   targets: ["pm", "developer"],        // 내부 타겟 태그
+  ready: true,                         // 기능 공개
+  indexable: false,                    // 검색 색인 (ready 와 별개)
+  verifiedAt: "2026-08-18",            // 외부 기준 데이터에 의존하는 도구만
   seo:     { ko: { title, description, keywords }, en: {...} },
-  content: { ko: { title, description, howItWorks, relatedTools }, en: {...} },
+  content: {
+    ko: {
+      card, description, howItWorks, aeo,
+      guide:       [{ heading, body[] }],        // 심화 산문 · indexable 필수
+      examples:    [{ title, input, result, note }], // 실전 예제 · indexable 필수
+      limitations: ["엣지케이스·제약"],             // indexable 필수
+      sources:     [{ label, url }],             // 공식 출처 (외부 기준 의존 시)
+    },
+    en: {...},
+  },
   faq:     { ko: [{ question, answer }], en: [...] },
   og:      { ko: { title, subtitle }, en: {...} },
 }
 ```
+
+- `guide`/`examples`/`limitations`/`sources` 는 `ToolGuide` 컴포넌트가 렌더한다.
+- `sources` 는 **기관·표준 1차 자료만.** 개인 블로그·타사 계산기 금지.
+  `sources` 가 있으면 `verifiedAt` 도 필수 (품질 게이트가 검사).
 
 ### FAQ 정책
 - **모든 도구 페이지에 FAQ 필수.** 목적: SEO · AEO · 롱테일 검색 유입 · AI 답변 노출.
@@ -116,7 +164,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 - 모든 도구는 **자기만의 OG 메타데이터**를 가진다. 전 도구 공용 OG 타이틀 금지.
 - OG는 레지스트리에서 생성. 향후 동적 OG 이미지 생성도 이 값을 소비.
 
-### 디자인 시스템 — 레이아웃 3종 (추가 금지)
+### 디자인 시스템: 레이아웃 3종 (추가 금지)
 | 타입 | 이름 | 패턴 | 예 |
 |------|------|------|-----|
 | **A** | Card | Input → Result | Character Counter, Flex Work Calculator, Meeting Cost Calculator, Salary Calculator |
@@ -134,7 +182,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 Kitfolio = **a searchable library of browser-based micro SaaS tools for modern knowledge workers.**
 해자(moat)는 단일 도구가 아니라, 강한 검색 의도 + 무마찰 접근으로 반복 업무 문제를 푸는
 **커지는 실용 도구 컬렉션**이다. 성공 요인: 유용한 도구 · 강한 검색 의도 · 빠른 접근 ·
-일관된 UX · 확장 가능한 메타데이터 관리 — 콘텐츠 생산이 아님.
+일관된 UX · 확장 가능한 메타데이터 관리: 콘텐츠 생산이 아님.
 
 ---
 
@@ -196,13 +244,13 @@ Kitfolio = **a searchable library of browser-based micro SaaS tools for modern k
 
 > 아래 규칙은 기존 테마별 가이드보다 우선한다.
 
-1. **배경**: 개발 / 디자인 / 텍스트 — 모든 테마의 페이지 배경은 `blue-gray-50`.
+1. **배경**: 개발 / 디자인 / 텍스트 · 모든 테마의 페이지 배경은 `blue-gray-50`.
    글로벌 CSS(`body`)에 공통 적용. (IDE 다크는 페이지 전체가 아니라 **출력 박스 내부에만** 적용)
-2. **콘텐츠 영역**: 모든 테마 공통 `max-width: 1216px` — 공통 레이아웃 컴포넌트(`.kf-main`)로 반영.
+2. **콘텐츠 영역**: 모든 테마 공통 `max-width: 1216px` · 공통 레이아웃 컴포넌트(`.kf-main`)로 반영.
 3. **공통 컴포넌트 구조**: 루트 `app/layout.tsx`가 헤더 / 본문 / 푸터를 공통 컴포넌트로 렌더.
    ```
    layout.tsx
-   ├ SiteHeader.tsx          (공통 헤더 — 언어·액티브 카테고리는 URL에서 도출)
+   ├ SiteHeader.tsx          (공통 헤더: 언어·액티브 카테고리는 URL에서 도출)
    ├ <main class="kf-main">{children}</main>
    └ SiteFooter.tsx          (공통 푸터)
    ```
@@ -212,7 +260,7 @@ Kitfolio = **a searchable library of browser-based micro SaaS tools for modern k
    - **텍스트 (Clean)**: 인풋과 출력 박스를 각각 별도로 배치. 출력은 카드 2열 그리드 또는
      1개 박스 내 요소 배치 등 유동적으로 적용. 인풋·출력 모두 화이트 박스(테두리로 구분),
      주요 메트릭 1개만 primary 컬러 강조.
-5. **페이지 헤더 / 뱃지 / 설명 영역**: 모든 테마 공통 스타일 — `PageHead` 컴포넌트(`.kf-pagehead`) 사용.
+5. **페이지 헤더 / 뱃지 / 설명 영역**: 모든 테마 공통 스타일 · `PageHead` 컴포넌트(`.kf-pagehead`) 사용.
 6. **페이지 구성**: 좌측 = 인풋 / 우측 = 출력 기준. 단, 디자인(Canvas) 도구는 기능에 따라
    유동적으로 적용. 모바일은 상하 배치 (인풋 위 → 출력 아래).
 7. **인풋 높이**: 모든 인풋은 모바일에서 height 최솟값 240px, 콘텐츠에 따라 유동적으로 늘어나되
@@ -224,7 +272,7 @@ Kitfolio = **a searchable library of browser-based micro SaaS tools for modern k
 
 Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
-#### Base — Blue Gray
+#### Base: Blue Gray
 ```css
 @theme {
   --color-blue-gray-50:  #F2F5FF;
@@ -241,7 +289,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 }
 ```
 
-#### Point — Blue Primary
+#### Point: Blue Primary
 ```css
 @theme {
   --color-blue-primary-50:  #f1f3fd;
@@ -268,9 +316,9 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - 출력 패널 헤더: `blue-gray-900` (#434650)
 - 라인 넘버 / 주석: `blue-gray-700` (#61646F)
 - 출력 일반 텍스트: `blue-gray-200` (#D4D9E5)
-- 신택스 — 키워드: `blue-primary-400` (#899ff3)
-- 신택스 — 함수: `blue-primary-500` (#6486ef)
-- 신택스 — 문자열: `blue-primary-300` (#a7b6f6)
+- 신택스: 키워드: `blue-primary-400` (#899ff3)
+- 신택스: 함수: `blue-primary-500` (#6486ef)
+- 신택스: 문자열: `blue-primary-300` (#a7b6f6)
 - 액티브 탭 / 포인트: `blue-primary-700` (#2d5dc8)
 - 상태 배지(라이트 영역): `blue-primary-100` bg + `blue-primary-700` text
 
@@ -319,7 +367,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 영문 UI, 숫자, 배지, 버튼 | Inter | 400 / 500 / 700 |
 | 국문 본문, 설명, 레이블 | Pretendard | 400 / 500 / 700 |
 | IDE 테마 전체, 코드 블록 | JetBrains Mono | 400 / 500 |
-| 기본 폰트 스택 | Pretendard → Inter fallback | — |
+| 기본 폰트 스택 | Pretendard → Inter fallback |: |
 
 - **700은 페이지 타이틀, 히어로 헤드라인에만** 사용. UI 컴포넌트 내부에서는 500까지.
 - 숫자 메트릭 (글자 수, 타임스탬프 등) 표시 시 Inter 500 사용 → 숫자 가독성 최적화.
@@ -341,7 +389,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ## 구현된 기능 목록 (2026-07-24 기준, 도구 36종)
 
-> 2026-07-24: 동일 수식 계산기 통합 — ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
+> 2026-07-24: 동일 수식 계산기 통합 · ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
 > **성장률 계산기(`/growth-rate-calculator`)**로, ② 성장 예측(성장 예측 ≡ 복리 성장 동일 수식)을
 > **복리 성장 계산기(`/compound-growth-calculator`)**로 병합. 구 URL은 next.config 308 영구 리다이렉트.
 > 각 통합 페이지 본문·FAQ·가이드에 병합된 키워드(성장률·증감률·MoM·YoY·QoQ·WoW · 미래값 예측·성장 시나리오)를 병기.
@@ -366,7 +414,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 12 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
 | 13 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
 | 14 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 15 | 음력 양력 변환기 / Lunar–Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 15 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
 | 16 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·퍼센트 증감률·차이·배수 즉시 계산. **변화율·증가율·감소율 및 MoM·YoY·QoQ·WoW 성장률 통합** (동일 수식). |
 | 17 | 퍼센트 차이 계산기 / Percent Difference Calculator | `/percent-difference-calculator` | `/en/percent-difference-calculator` | 두 값 A·B의 상대적 퍼센트 차이 계산. |
 | 18 | 목표 성장률 계산기 / Goal Growth Calculator | `/goal-growth-calculator` | `/en/goal-growth-calculator` | 현재 값과 목표 값으로 필요 성장률 즉시 계산. |
@@ -401,7 +449,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 4 | Unix Timestamp Converter | 유닉스 타임스탬프 변환기 | `/timestamp` | Unix timestamp ↔ 사람이 읽을 수 있는 날짜·시간 양방향 변환. 현재 시각 실시간 표시 | ⬜ |
 | 5 | Character / Word Counter | 글자 수·단어 수 카운터 | `/character-counter` | 텍스트 입력 시 글자 수·단어 수·문장 수·줄 수 실시간 집계. SNS 글자 수 제한 안내 포함 | ✅ |
 | 6 | CSS Gradient Generator | CSS 그라디언트 생성기 | `/css-gradient` | linear/radial/conic 그라디언트를 시각적으로 편집하고 CSS 코드 즉시 복사 | ✅ |
-| 7 | Color Picker / HEX–RGB Converter | 색상 변환기 | `/color-converter` | HEX·RGB·HSL·HSV 간 상호 변환. 컬러 피커 UI와 팔레트 저장 기능 | ⬜ |
+| 7 | Color Picker / HEX-RGB Converter | 색상 변환기 | `/color-converter` | HEX·RGB·HSL·HSV 간 상호 변환. 컬러 피커 UI와 팔레트 저장 기능 | ⬜ |
 | 8 | Cron Expression Generator | 크론 표현식 생성기 | `/cron-generator` | 크론 스케줄을 UI로 설정하면 표현식 자동 생성. 다음 실행 시각 미리보기 포함 | ⬜ |
 | 9 | Markdown to HTML | 마크다운 → HTML 변환기 | `/markdown-to-html` | 마크다운 텍스트를 실시간으로 HTML로 변환. 좌우 분할 미리보기 제공 | ⬜ |
 | 10 | Lorem Ipsum Generator | 로렘 입숨 생성기 | `/lorem-ipsum` | 단락·단어·문장 수를 지정해 더미 텍스트 생성. 한국어 더미 텍스트 옵션 포함 | ⬜ |
@@ -424,7 +472,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   (localStorage 토글 아님)
 - **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
   ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATS`(카테고리 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
-  ⑤ `TOOLS` — 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
+  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
   `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
   `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
   타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
@@ -434,7 +482,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   전역 공통(헤더 네비·푸터·복사/지우기 버튼)은 `lib/i18n.tsx`의 `COMMON`,
   도구별 컨트롤 라벨은 각 컴포넌트의 로컬 `DICT`.
 - **FAQ / About(AEO)**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`) 렌더.
-  **칩 탭으로 "이 도구에 대하여"(AEO: What/Who/How/Why) ↔ "자주 묻는 질문"(FAQ)** 전환 — 두 탭 모두
+  **칩 탭으로 "이 도구에 대하여"(AEO: What/Who/How/Why) ↔ "자주 묻는 질문"(FAQ)** 전환 · 두 탭 모두
   동일한 `.kf-faq` 아코디언(한 번에 하나만 열림, 1번 기본 오픈). 콘텐츠는 `content.ts`의 `content.aeo`(→`aeoQA()`)와
   `faq` 필드에서, `toolJsonLd()`가 두 세트를 합쳐 `FAQPage` JSON-LD로 함께 생성.
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
@@ -463,7 +511,49 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **AdSense**: pub `ca-pub-7537584957079478`. 로더 스크립트(layout) + 확인 메타태그 + `public/ads.txt` 적용.
   광고 단위 컴포넌트 `app/components/AdUnit.tsx` 준비됨 (슬롯 ID만 넣으면 동작, dev는 플레이스홀더).
   **단, AdSense 사이트 승인은 아직 안 받음 → 실제 광고 미노출 상태.**
+  (2026-08 "가치가 별로 없는 콘텐츠" 사유로 반려 → 색인 정책·콘텐츠 품질 게이트로 대응)
 - **GA4**: `G-BW26VT6W47`. `@next/third-parties` `<GoogleAnalytics>` 로 연동 (GTM 미사용).
+- **쿠팡 파트너스**: 전역 배너 렌더 **제거됨** (2026-08-18). AdSense 재심사 중에는
+  콘텐츠 가치 평가와 무관한 제휴 요소를 전 페이지에 노출하지 않는다.
+  `app/components/CoupangBanner.tsx` 는 승인 이후 선택적 재사용을 위해 파일만 보존.
+  ⚠️ 다시 켤 경우 **개인정보처리방침의 제3자 서비스 목록에 쿠팡 파트너스를 추가해야 한다.**
+- **개인정보처리방침 정합성 원칙**: 실제 사용하는 서비스만 기재한다. 현재 기재 대상은
+  Google Analytics · Google AdSense · 웹 폰트 CDN(Google Fonts·jsDelivr) · 호스팅(Vercel).
+  "도구에 입력한 콘텐츠는 서버로 전송되지 않는다"와 "사이트 이용 중 아무 통신도 없다"를
+  **혼동해서 쓰지 않는다.**
+
+### 데이터 최신성 (요율·세율 등 외부 기준)
+- 기준일에 따라 바뀌는 값은 **연도가 아니라 적용 기간(effectiveFrom/To)** 으로 관리한다.
+  4대보험 요율은 1월, 국민연금 기준소득월액은 7월에 개정되어 연도로는 표현 불가.
+- 구현: `app/lib/salary/insurance.ts` · `RATE_PERIODS` · `PENSION_BASE_PERIODS` 두 벌 +
+  `policyOn(date)`. 계산 엔진(`calculator.ts`)은 `asOf` 기준일만 받고 정책 선택은 위임한다.
+- `POLICY_VERIFIED_AT` · `OFFICIAL_SOURCES` 가 출처·검증일의 단일 출처이며,
+  `content.ts` 의 salary 레지스트리가 이를 import 해 화면에 표시한다 (중복 기재 금지).
+- 2026년 기준: 국민연금 4.75%(총 9.5%) · 건강보험 3.595%(총 7.19%) ·
+  장기요양 건강보험료의 13.14% · 고용보험 0.9% ·
+  기준소득월액 2026.07~2027.06 하한 41만 / 상한 659만.
+- 과거 기간은 지우지 않는다. 지난 시점 기준 확인이 필요할 수 있다.
+
+### 문장부호 규칙
+
+**엠대시(U+2014)와 엔대시(U+2013)는 쓰지 않는다.** 화면 카피·주석·문서 모두 해당.
+
+| 용도 | 사용 |
+|---|---|
+| 라벨과 설명을 이을 때 | 콜론 `:` |
+| 같은 층위 항목 나열 | 가운뎃점 `·` |
+| 숫자 범위 | 국문 물결 `1901~2100` · 영문 하이픈 `50-950` |
+| 페이지 타이틀 구분 | 파이프 `제목 | Kitfolio` |
+
+`npm test` 의 `typography.test.ts` 가 저장소 전체를 검사한다 (실패 시 파일:줄 출력).
+
+### 검증 · 테스트
+```
+npm run validate:content   # indexable 도구 콘텐츠 품질 게이트
+npm test                   # node --test + tsx (app/lib/**/__tests__/*.test.ts)
+```
+- 계산 테스트는 **타 계산기와 총액을 하드코딩 비교하지 않는다.**
+  각 항목의 공식 산식으로 검증하고, 요율 상수·기간 경계를 따로 검사한다.
 
 ---
 
@@ -472,21 +562,43 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 0. **제품 방향(2026-06-12)과 현행 코드의 갭 해소**
    - [x] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ next.config 308 영구 리다이렉트, sitemap 자동 갱신)
    - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
-   - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트 — 허브 카드 스타일 재사용)
-   - [x] AEO용 **What is / Who for / How / Why** 명시 문단 — 레지스트리 `content.aeo` 필드 + 탭형 `Faq` 섹션
-     ("이 도구에 대하여" 탭), 같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함 — AI 검색 질의 직접 매칭)
+   - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트: 허브 카드 스타일 재사용)
+   - [x] AEO용 **What is / Who for / How / Why** 명시 문단: 레지스트리 `content.aeo` 필드 + 탭형 `Faq` 섹션
+     ("이 도구에 대하여" 탭), 같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함: AI 검색 질의 직접 매칭)
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
-   - [x] 타겟 태그 기반 필터 1단계 — 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
+   - [x] 타겟 태그 기반 필터 1단계: 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
      카테고리 섹션/네비는 유지 (완전 전환 여부는 추후 데이터 보고 결정)
 
-1. **AdSense 승인 받기** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
+0-1. **AdSense Low-value content 대응 (2026-08-18 완료분)**
+   - [x] `ready` / `indexable` 분리: sitemap·robots·허브 ItemList JSON-LD 반영 (URL 102 → 60)
+   - [x] 초기 indexable 15종 재분류 (중복 계열은 대표 1개만)
+   - [x] `validateIndexableTools()` 품질 게이트 + `npm run validate:content`
+   - [x] indexable 15종 ko/en 실전 예제·제약사항 작성, guide 없던 5종 가이드 신규 작성
+   - [x] 2026 4대보험 요율 수정 + 적용 기간 구조 + 테스트 38개 + 기준일·검증일 UI 표시
+   - [x] 전역 쿠팡 파트너스 배너 제거
+   - [x] 블로그 author/reviewedAt/sources + BlogPosting author=Person 분리
+   - [x] 기존 아티클 3종 개편 (salary-net-pay-korea · growth-rate-explained · ad-metrics-explained)
+   - [x] About 운영·검증·수정 정책, 개인정보처리방침 제3자 서비스 정합성
+   - [x] `/en` 언어 표기 **부분 대응**: EN 콘텐츠 래퍼(`display:contents`)와 헤더·푸터
+     엘리먼트의 `lang="en"` 을 SSR 로 제공. `document.documentElement.lang` 은
+     hydration 이후 `SetHtmlLang` effect 가 변경한다.
+     ⚠️ **루트 `<html lang>` 자체의 SSR 해결은 아직 아니다**: 초기 HTML 은 `<html lang="ko">`.
+     App Router 루트 레이아웃은 경로를 알 수 없어 route group 재구성
+     (`app/(ko)/...` · `app/(en)/en/...`)이 필요하며, 라우팅 대규모 변경이라 보류.
+
+1. **AdSense 재심사 신청** → 승인 후 광고 단위(슬롯) 생성 → `<AdUnit slot="..." />` 를 실제 배치
    - 배치 후보: 허브 카테고리 섹션 사이 / 도구 페이지 페이지헤드 아래 / 결과 영역 하단
-   - 콘텐츠 분량이 승인 기준에 빠듯할 수 있음 → 도구를 더 채운 뒤 신청하는 편이 유리
+   - 재심사 전 확인: 색인 대상 15종이 모두 품질 게이트 통과 상태인지 (`npm run validate:content`)
+   - 남은 판단 항목: `indexable=false` 21종을 **콘텐츠 차별화 후 승격**할지,
+     **URL 통합(리다이렉트)** 할지: 이번 작업에서는 통합하지 않았다
 2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
    - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
    - `content.ts` 레지스트리 항목에 `seo(title·description)/content(description·howItWorks)/faq/og` 채우고 `ready: true` 전환
    - 컨트롤 마이크로카피는 컴포넌트 로컬 `DICT`로, 컴포넌트 끝에 `<Faq slug="..." />` 추가
    - 테마: dev=IDE / design=Canvas / text=Clean
-3. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
-4. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)
+3. (선택) 루트 `<html lang>` 의 SSR 해결: `app/(ko)/...` · `app/(en)/en/...` route group
+   재구성으로 언어별 루트 레이아웃 분리. 현재는 서브트리 `lang` 만 SSR 로 제공된다.
+   전 라우트 이동이 필요하므로 다른 구조 변경과 묶어서 진행하는 편이 낫다.
+4. (선택) GA4 ↔ AdSense 연결, 핵심 이벤트(복사·생성 클릭) GA4 커스텀 이벤트 추가
+5. (선택) 폰트 CDN → `next/font` 로컬화 (핸드오프 권고)

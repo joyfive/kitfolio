@@ -3,7 +3,7 @@
 import PdfPageThumbnail from "./PdfPageThumbnail";
 import type { PDFDocumentProxy } from "../lib/pdf/pdfjs";
 
-/** 페이지 썸네일 그리드 — 선택/삭제표시/회전 미리보기를 공용으로 처리. */
+/** 페이지 썸네일 그리드: 선택/삭제표시/회전 미리보기를 공용으로 처리. */
 export default function PdfThumbnailGrid({
   doc,
   pageCount,

@@ -28,7 +28,7 @@ export function usePdfjsDoc(
         setDoc(d);
       })
       .catch(() => {
-        /* 썸네일 실패는 무시 — 편집은 pdf-lib 로 계속 가능 */
+        /* 썸네일 실패는 무시: 편집은 pdf-lib 로 계속 가능 */
       });
 
     return () => {

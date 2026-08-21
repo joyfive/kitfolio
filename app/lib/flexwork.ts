@@ -1,5 +1,5 @@
 /* ============================================================
-   유연근무 잔여시간 계산 — 순수 계산 로직 (UI 비의존)
+   유연근무 잔여시간 계산: 순수 계산 로직 (UI 비의존)
 
    모든 계산은 브라우저 안에서만 이루어집니다. 서버 전송 없음.
    ============================================================ */
@@ -76,7 +76,7 @@ function monthState(
   return "future";
 }
 
-/** 남은 영업일 — 기준일 기준.
+/** 남은 영업일: 기준일 기준.
  *  과거 달이면 0, 미래 달이면 그 달 전체 영업일, 이번 달이면 오늘(포함 여부) 이후. */
 export function remainingBusinessDays(
   year: number,
@@ -108,7 +108,7 @@ export function calcFlexWork(input: FlexInput): FlexResult {
   );
   const baseTarget = businessDays * dailyHours;
 
-  // 휴가 차감 — 소정근로시간 기준으로 환산 (8시간 고정 아님)
+  // 휴가 차감: 소정근로시간 기준으로 환산 (8시간 고정 아님)
   const annualDeduction = fullLeave * dailyHours;
   const halfDeduction = halfLeave * (dailyHours / 2);
   const hourDeduction = hourLeave;

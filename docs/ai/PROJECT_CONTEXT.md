@@ -60,10 +60,10 @@ The tool itself is the product.
 Never optimize for content production. Always optimize for solving a real user problem.
 
 ## Related working skills
-- `/new-tool` — checklist + required structure for adding a tool
-- `/product-review` — product-direction / scope review
-- `/branding` — branding & tone guardrails
-- `/seo` — SEO review checklist
-- `/aeo` — AEO review checklist
+- `/new-tool`: checklist + required structure for adding a tool
+- `/product-review`: product-direction / scope review
+- `/branding`: branding & tone guardrails
+- `/seo`: SEO review checklist
+- `/aeo`: AEO review checklist
 
 The authoritative, detailed Korean spec lives in the root `CLAUDE.md`. This document is the concise English context for AI agents.

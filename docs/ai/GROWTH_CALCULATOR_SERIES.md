@@ -1,4 +1,4 @@
-# 작업 지시서 — Business Growth Calculator Series
+# 작업 지시서: Business Growth Calculator Series
 
 ## 0. 목표
 
@@ -455,8 +455,8 @@ type GrowthCalculatorMode =
 
 ## 13. 구현 우선순위
 
-1. `growthMath.ts` — 계산 로직
-2. `calculatorConfig.ts` — 전체 페이지 설정
+1. `growthMath.ts`: 계산 로직
+2. `calculatorConfig.ts`: 전체 페이지 설정
 3. `GrowthCalculator` 공통 UI
 4. Group A 페이지 생성
 5. Group B 페이지 생성

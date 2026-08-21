@@ -222,7 +222,7 @@ export default function CssGradient() {
       <PageHead slug="css-gradient" />
 
       <div className="cv-work">
-          {/* 인풋(컨트롤) — 좌측 화이트 패널 */}
+          {/* 인풋(컨트롤): 좌측 화이트 패널 */}
           <div className="cv-panel">
             <div className="panel-inner">
               {/* type */}
@@ -450,7 +450,7 @@ export default function CssGradient() {
             </div>
           </div>
 
-          {/* 출력(프리뷰) — 우측 그레이 영역 */}
+          {/* 출력(프리뷰): 우측 그레이 영역 */}
           <div className="cv-canvas">
             <div className="preview" style={{ background: g }} />
           </div>

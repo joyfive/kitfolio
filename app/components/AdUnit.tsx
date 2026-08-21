@@ -1,7 +1,7 @@
 "use client";
 
 /* ============================================================
-   Kitfolio — AdSense 광고 단위(슬롯) 컴포넌트
+   Kitfolio: AdSense 광고 단위(슬롯) 컴포넌트
 
    로더 스크립트는 app/layout.tsx 에서 이미 전 페이지에 로드됨.
    이 컴포넌트는 <ins class="adsbygoogle"> 를 렌더하고 mount 시 1회 push.

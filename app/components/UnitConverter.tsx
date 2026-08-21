@@ -205,13 +205,13 @@ export default function UnitConverter({ mode }: { mode: ConverterMode }) {
   const examples = useMemo(() => {
     return cfg.examples.map((v) => {
       const result = calcForward(mode, v, extra);
-      return { input: v, output: isFinite(result) ? fmt(result) : "—" };
+      return { input: v, output: isFinite(result) ? fmt(result) : "-" };
     });
   }, [mode, cfg.examples, extra]);
 
   return (
     <>
-      {/* Tab navigation — above PageHead */}
+      {/* Tab navigation: above PageHead */}
       <div className="uc-tabs">
         <div className="uc-tabs-inner">
           <span className="uc-tabs-label">{t("uc.tab.label")}</span>
@@ -264,7 +264,7 @@ export default function UnitConverter({ mode }: { mode: ConverterMode }) {
               <label className="uc-label">{t("uc.to")}</label>
               <div className="uc-output-row">
                 <span className="uc-output-value">
-                  {outputValue !== "" ? outputValue : "—"}
+                  {outputValue !== "" ? outputValue : "-"}
                 </span>
                 <span className="uc-input-unit">{toUnit}</span>
                 <button

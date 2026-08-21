@@ -1,5 +1,5 @@
 /* ============================================================
-   실수령 계산 — 메인 계산 엔진 (UI 비의존)
+   실수령 계산: 메인 계산 엔진 (UI 비의존)
 
    UI에서는 calculateSalary() 하나만 호출합니다.
    요율은 insurance.ts, 세금은 tax.ts, 반올림은 formatter.ts 가 담당합니다.
@@ -7,14 +7,14 @@
    모든 계산은 브라우저 안에서만 이루어집니다. 서버 전송 없음.
    ============================================================ */
 
-import { ratesFor, DEFAULT_YEAR } from "./insurance";
+import { policyOn, toIsoDate, type InsurancePolicy } from "./insurance";
 import { estimateIncomeTax } from "./tax";
 import { roundWon } from "./formatter";
 
 export type PayMode = "annual" | "monthly";
 
 export type SalaryInput = {
-  /** 급여 형태 — 연봉 / 월급 */
+  /** 급여 형태: 연봉 / 월급 */
   mode: PayMode;
   /** 세전 금액 (연봉 또는 월급) */
   amount: number;
@@ -26,8 +26,12 @@ export type SalaryInput = {
   childrenUnder20: number;
   /** 원천징수 선택비율 80 · 100 · 120 (기본 100) */
   withholdingRate: number;
-  /** 적용 연도 (기본 최신) */
-  year?: number;
+  /**
+   * 적용 기준일 (Date 또는 "YYYY-MM-DD"). 기본값은 "오늘".
+   * 보험 요율(1월 개정)과 국민연금 기준소득월액(7월 개정)의 적용 시점이
+   * 다르므로, 연도가 아니라 날짜로 정책을 선택한다.
+   */
+  asOf?: Date | string;
 };
 
 export type Deductions = {
@@ -54,8 +58,8 @@ export type SalaryResult = {
   netMonthly: number;
   /** 연 실수령액 (월 실수령 × 12) */
   netAnnual: number;
-  /** 적용 연도 */
-  year: number;
+  /** 계산에 실제 적용된 보험 정책 (요율·기준소득월액·기준일) */
+  policy: InsurancePolicy;
 };
 
 /**
@@ -63,12 +67,12 @@ export type SalaryResult = {
  * 금액이 0 이하이면 계산 불가로 보고 null 반환.
  */
 export function calculateSalary(input: SalaryInput): SalaryResult | null {
-  const year = input.year ?? DEFAULT_YEAR;
+  const asOf = toIsoDate(input.asOf ?? new Date());
   const amount = input.amount;
 
   if (!Number.isFinite(amount) || amount <= 0) return null;
 
-  const rates = ratesFor(year);
+  const policy = policyOn(asOf);
 
   const monthlyGross = input.mode === "annual" ? amount / 12 : amount;
   const annualGross = input.mode === "annual" ? amount : amount * 12;
@@ -78,16 +82,16 @@ export function calculateSalary(input: SalaryInput): SalaryResult | null {
 
   // ── 4대보험 (근로자 부담분) ──
   const pensionBase = Math.min(
-    Math.max(taxableMonthly, rates.pensionLowerLimit),
-    rates.pensionUpperLimit,
+    Math.max(taxableMonthly, policy.pensionLowerLimit),
+    policy.pensionUpperLimit,
   );
   // 과세소득이 0이면 연금도 0
   const nationalPension =
-    taxableMonthly <= 0 ? 0 : roundWon(pensionBase * rates.nationalPension);
-  const healthInsurance = roundWon(taxableMonthly * rates.healthInsurance);
-  const longTermCare = roundWon(healthInsurance * rates.longTermCare);
+    taxableMonthly <= 0 ? 0 : roundWon(pensionBase * policy.nationalPension);
+  const healthInsurance = roundWon(taxableMonthly * policy.healthInsurance);
+  const longTermCare = roundWon(healthInsurance * policy.longTermCare);
   const employmentInsurance = roundWon(
-    taxableMonthly * rates.employmentInsurance,
+    taxableMonthly * policy.employmentInsurance,
   );
 
   // ── 근로소득세 · 지방소득세 ──
@@ -131,6 +135,6 @@ export function calculateSalary(input: SalaryInput): SalaryResult | null {
     totalDeduction,
     netMonthly,
     netAnnual,
-    year,
+    policy,
   };
 }

@@ -55,9 +55,9 @@ const LIMITS = [
 ];
 
 const SAMPLE_KO =
-  "Kitfolio는 개발자와 디자이너를 위한 가볍고 빠른 웹 도구 모음입니다. 설치도, 가입도 필요 없습니다. 모든 처리는 브라우저 안에서 끝나고 어떤 데이터도 서버로 전송되지 않습니다.\n\n필요한 도구를 골라 바로 쓰세요.";
+  "Kitfolio는 개발자와 디자이너를 위한 가볍고 빠른 웹 도구 모음입니다. 설치도, 가입도 필요 없습니다. 모든 처리는 브라우저 안에서 끝나고, 입력한 내용은 서버로 전송되지 않습니다.\n\n필요한 도구를 골라 바로 쓰세요.";
 const SAMPLE_EN =
-  "Kitfolio is a fast, lightweight set of web tools for developers and designers. No install, no sign-up. Everything runs in your browser and no data is ever sent to a server.\n\nPick a tool and start right away.";
+  "Kitfolio is a fast, lightweight set of web tools for developers and designers. No install, no sign-up. Everything runs in your browser and what you type is never uploaded.\n\nPick a tool and start right away.";
 
 function fmt(n: number) {
   return n.toLocaleString();

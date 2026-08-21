@@ -241,7 +241,7 @@ export default function AdBudgetPacingCalculator() {
             </div>
 
             <BpField label={t("bp.expectedDaily")} hint={t("bp.expectedDailyHint")}>
-              <input type="text" inputMode="numeric" value={expectedDaily} onChange={(e) => setExpectedDaily(e.target.value)} placeholder="—" />
+              <input type="text" inputMode="numeric" value={expectedDaily} onChange={(e) => setExpectedDaily(e.target.value)} placeholder="-" />
             </BpField>
 
             {validationError && (
@@ -297,7 +297,7 @@ export default function AdBudgetPacingCalculator() {
                 />
                 <BpMetric
                   label={t("bp.projectedBurn")}
-                  value={result.projectedFinalBurnPct !== null ? fmtPct(result.projectedFinalBurnPct, 1) : "—"}
+                  value={result.projectedFinalBurnPct !== null ? fmtPct(result.projectedFinalBurnPct, 1) : "-"}
                 />
               </div>
 

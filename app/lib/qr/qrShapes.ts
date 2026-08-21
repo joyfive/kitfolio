@@ -1,5 +1,5 @@
 /* ============================================================
-   QR 전체 모양 (Approach A — 코어 QR + 장식 실루엣).
+   QR 전체 모양 (Approach A: 코어 QR + 장식 실루엣).
      - square  : 풀 스퀘어 QR (원형 그대로)
      - rounded : 풀 QR + 둥근 셀 + 바깥 테두리
      - arch    : 코어 사각형 + 상단 반원 돔 장식
@@ -12,7 +12,7 @@ export type QrShape = "square" | "rounded" | "arch" | "heart";
 /** UI 노출 순서 */
 export const SHAPE_ORDER: QrShape[] = ["square", "rounded", "arch", "heart"];
 
-/** 장식(감성 코드) 모양 — 오류 복원 H 강제 대상 */
+/** 장식(감성 코드) 모양: 오류 복원 H 강제 대상 */
 export function forcesHighEc(shape: QrShape): boolean {
   return shape === "arch" || shape === "heart";
 }
@@ -45,7 +45,7 @@ function roundedRectPath(x: number, y: number, s: number, r: number): string {
   );
 }
 
-/** 아치형 아이콘 — 상단 반원(돔), 좌우 수직, 하단 수평 (코어+돔 실루엣) */
+/** 아치형 아이콘: 상단 반원(돔), 좌우 수직, 하단 수평 (코어+돔 실루엣) */
 function archPath(x: number, y: number, s: number): string {
   const r = s / 2;
   const base = y + r; // 반원 바닥선
@@ -59,7 +59,7 @@ function archPath(x: number, y: number, s: number): string {
   );
 }
 
-/** 하트 아이콘 — 45° 사각형 + 위쪽 두 로브 실루엣 */
+/** 하트 아이콘: 45° 사각형 + 위쪽 두 로브 실루엣 */
 function heartPath(x: number, y: number, s: number): string {
   const p = (nx: number, ny: number) => `${n(x + nx * s)} ${n(y + ny * s)}`;
   const c = (

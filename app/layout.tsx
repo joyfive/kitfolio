@@ -28,6 +28,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // 모든 라우트의 초기 SSR HTML 은 lang="ko" 로 내려간다 (KO = 기본/x-default).
+  // 루트 레이아웃은 서버 컴포넌트라 경로를 알 수 없어 라우트별로 바꿀 수 없다.
+  // /en 은 app/en/layout.tsx 의 lang="en" 래퍼와 헤더·푸터 엘리먼트로 서브트리를
+  // 표기하고, documentElement.lang 은 hydration 이후 SetHtmlLang 이 보정한다.
+  // 루트까지 SSR 로 맞추려면 route group 재구성이 필요하다 (미적용).
   return (
     <html lang="ko">
       <head>

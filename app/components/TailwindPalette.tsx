@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { clampChroma, formatHex, oklch } from "culori";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
@@ -12,13 +13,13 @@ const DICT: Dict = {
   ko: {
     "pal.base": "베이스 색상",
     "pal.name": "색상 이름",
-    "pal.shades": "팔레트 (50–950)",
+    "pal.shades": "팔레트 (50~950)",
     "pal.code": "코드",
   },
   en: {
     "pal.base": "Base color",
     "pal.name": "Color name",
-    "pal.shades": "Palette (50–950)",
+    "pal.shades": "Palette (50-950)",
     "pal.code": "Code",
   },
 };
@@ -42,7 +43,7 @@ const L_SCALE: Record<number, number> = {
   950: 0.19,
 };
 
-// 채도 곡선 — 600 에서 최대, 밝은쪽·어두운쪽으로 갈수록 감쇠 (레퍼런스 정규화).
+// 채도 곡선: 600 에서 최대, 밝은쪽·어두운쪽으로 갈수록 감쇠 (레퍼런스 정규화).
 // 밝은 틴트는 옅게, 어두운 셰이드는 진하되 과채도를 피한다.
 const C_FACTOR: Record<number, number> = {
   50: 0.045,
@@ -93,7 +94,7 @@ function generatePalette(hex: string): Shade[] {
   });
 }
 
-/** 스와치 위 텍스트 대비 — 밝은 색엔 어두운 글씨, 어두운 색엔 흰 글씨 */
+/** 스와치 위 텍스트 대비: 밝은 색엔 어두운 글씨, 어두운 색엔 흰 글씨 */
 function readableText(l: number) {
   return l > 0.62 ? "#21242D" : "#ffffff";
 }
@@ -276,6 +277,7 @@ export default function TailwindPalette() {
         </div>
       </div>
 
+      <ToolGuide slug="tailwind-palette-generator" />
       <Faq slug="tailwind-palette-generator" />
       <RelatedTools slug="tailwind-palette-generator" />
     </>

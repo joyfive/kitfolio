@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import { useT, type Dict } from "../lib/i18n";
 import { PLATFORM_PRESETS } from "./open-graph-preview/platformPresets";
@@ -699,6 +700,7 @@ export default function OpenGraphPreview() {
         <p className="og-simulation-notice">{t("og.simNotice")}</p>
       </section>
 
+      <ToolGuide slug="open-graph-preview" />
       <Faq slug="open-graph-preview" />
       <RelatedTools slug="open-graph-preview" />
     </>

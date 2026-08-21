@@ -14,7 +14,7 @@ Each tool page must explicitly answer:
 ## Guidelines
 - Prefer concise, factual language. No marketing fluff.
 - Write content for AI retrieval, not for persuasion. The objective is to maximize answer quality in AI-powered search systems.
-- Phrase questions so they directly match likely AI queries — include the tool name, e.g. "What is a Slack Timestamp Converter?"
+- Phrase questions so they directly match likely AI queries: include the tool name, e.g. "What is a Slack Timestamp Converter?"
 - The same explanation must appear both in **visible body content** and in **structured data**.
 
 ## Structured data

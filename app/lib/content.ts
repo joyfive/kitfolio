@@ -1,23 +1,23 @@
 /* ============================================================
-   Kitfolio — 콘텐츠 레지스트리 (Single Source of Truth)
+   Kitfolio: 콘텐츠 레지스트리 (Single Source of Truth)
 
    "실제 렌더링되는 콘텐츠 텍스트(KO·EN)"를 이 파일 한곳에서 관리합니다.
    도구가 50개로 늘어나도 이 파일에 50개 × 2개 언어 세트를 추가하면 됩니다.
 
-   ⚠️ 범위: 콘텐츠 텍스트만. 기능/버튼/인풋 등 UI 마이크로카피는 제외 —
+   ⚠️ 범위: 콘텐츠 텍스트만. 기능/버튼/인풋 등 UI 마이크로카피는 제외:
    전역 공통 UI(헤더 네비·푸터·복사 버튼 등)는 lib/i18n.tsx 의 COMMON,
    도구별 컨트롤 라벨은 각 컴포넌트의 로컬 DICT 에서 관리합니다.
 
    ── 구조 ────────────────────────────────────────────────
    ① SITE        : 사이트 상수
-   ② HUB         : 허브 — seo(메타) + hero(히어로 카피)
+   ② HUB         : 허브 · seo(메타) + hero(히어로 카피)
    ③ CATS        : 카테고리 라벨 (허브 섹션 헤더 · 도구 뱃지)
    ④ FAQ_SECTION : FAQ 섹션 공통 카피 (인트로·푸터 링크)
-   ⑤ TOOLS       : 도구 레지스트리 — 항목 하나에 도구 완결 정의
+   ⑤ TOOLS       : 도구 레지스트리 · 항목 하나에 도구 완결 정의
        ├ slug          : 1뎁스 라우트 (플랫 URL)
        ├ layout        : 디자인 시스템 타입 (card=A · ide=B · canvas=C)
        ├ cat           : 허브 카테고리 (테마 분기 겸용)
-       ├ targets       : 내부 타겟 태그 (URL 아님 — 필터/분석용)
+       ├ targets       : 내부 타겟 태그 (URL 아님 · 필터/분석용)
        ├ badge         : 뱃지(eyebrow) 텍스트            ── 뱃지 영역
        ├ name          : h1 (en 메인 + ko 보조 병기)     ── 타이틀 영역
        ├ relatedTools  : 관련 도구 slug 목록
@@ -32,13 +32,16 @@
    + FAQPage / hubJsonLd) · 허브 검색 색인(keywords) 에 모두 재사용됩니다.
    ============================================================ */
 import type { Metadata } from "next";
+// 실수령 계산기의 공식 출처·검증일은 정책 데이터 레이어(lib/salary/insurance)가 단일 출처다.
+// 여기서 URL을 다시 적으면 요율 개정 때 한쪽만 갱신되어 어긋나므로 그대로 가져다 쓴다.
+import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 
 export type Lang = "ko" | "en";
 
-/** 디자인 시스템 레이아웃 3종 — Type A(Card) · B(IDE) · C(Canvas) */
+/** 디자인 시스템 레이아웃 3종: Type A(Card) · B(IDE) · C(Canvas) */
 export type Layout = "card" | "ide" | "canvas";
 
-/** 내부 타겟 태그 — URL 카테고리 아님, 필터링·디스커버리·분석용 */
+/** 내부 타겟 태그: URL 카테고리 아님, 필터링·디스커버리·분석용 */
 export type TargetTag =
   | "pm"
   | "designer"
@@ -51,28 +54,55 @@ export type TargetTag =
 export type QA = { question: string; answer: string };
 
 type ToolSeo = {
-  /** <title> (50~60자) — ready 도구만 */
+  /** <title> (50~60자): ready 도구만 */
   title?: string;
-  /** meta description — ready 도구만 */
+  /** meta description: ready 도구만 */
   description?: string;
   /** meta keywords + 허브 검색 색인 (전 도구) */
   keywords: string[];
 };
 
+/** 심화 가이드 한 섹션 */
+export type GuideSection = { heading: string; body: string[] };
+
+/** 실전 사용 예제: 상황 / 입력 / 결과 / 해석 */
+export type GuideExample = {
+  /** 상황 한 줄 (예: "연봉 5,200만원, 부양가족 1명") */
+  title: string;
+  /** 입력값 요약 */
+  input: string;
+  /** 결과 요약: 가능하면 구체 숫자 */
+  result: string;
+  /** 결과를 어떻게 읽어야 하는지 (선택) */
+  note?: string;
+};
+
+/** 공식 출처 링크 */
+export type SourceLink = { label: string; url: string };
+
 type ToolCopy = {
   /** 허브 카드 한 줄 설명 (전 도구) */
   card: string;
-  /** 페이지 리드 문단 (= meta description 겸용) — ready 도구만 */
+  /** 페이지 리드 문단 (= meta description 겸용): ready 도구만 */
   description?: string;
-  /** How It Works — 3단계 사용 가이드 — ready 도구만 */
+  /** How It Works: 3단계 사용 가이드 (ready 도구만) */
   howItWorks?: string[];
-  /** AEO 명시 문단 — What is / Who is it for / How does it work / Why use it.
-   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출 — ready 도구만 */
+  /** AEO 명시 문단: What is / Who is it for / How does it work / Why use it.
+   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출: ready 도구만 */
   aeo?: { what: string; who: string; how: string; why: string };
-  /** 심화 가이드 — 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
+  /** 심화 가이드: 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
    *  사용 맥락·실전 예시·팁 등 고유 본문으로 페이지 가치를 보강한다.
    *  ToolGuide 컴포넌트가 소비 (섹션 = heading + 문단 배열). */
-  guide?: { heading: string; body: string[] }[];
+  guide?: GuideSection[];
+  /** 실전 사용 예제: 구체적인 입력값과 결과 숫자가 있는 사례.
+   *  "이 도구를 실제로 어떻게 쓰는가"를 보여준다. indexable 도구 필수. */
+  examples?: GuideExample[];
+  /** 제약·엣지케이스: 이 도구가 다루지 못하는 것, 결과가 어긋날 수 있는 조건.
+   *  indexable 도구 필수. */
+  limitations?: string[];
+  /** 공식 출처: 세법·요율·플랫폼 정책·기술 명세처럼 외부 기준에 의존하는
+   *  도구에만. 기관·표준 1차 자료만 사용하고 블로그·타사 계산기는 쓰지 않는다. */
+  sources?: SourceLink[];
 };
 
 type ToolOg = { title: string; subtitle: string };
@@ -84,10 +114,19 @@ export type Tool = {
   targets: TargetTag[];
   ico: string;
   icoClass?: string;
+  /** 기능 공개: 사용자가 이 도구를 실제로 쓸 수 있는가.
+   *  허브 목록·검색·관련 도구 노출은 전부 이 값을 기준으로 한다. */
   ready: boolean;
+  /** 검색 색인: 독립적인 검색 랜딩 페이지로 제공할 콘텐츠 품질이 확보됐는가.
+   *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출되며,
+   *  sitemap 제외 + robots noindex,follow 만 적용된다.
+   *  true 로 올리려면 validateIndexableTools() 의 품질 조건을 통과해야 한다. */
+  indexable: boolean;
+  /** 외부 기준 데이터(요율·세법·플랫폼 정책)에 의존하는 도구의 최근 검증일 */
+  verifiedAt?: string;
   /** 뱃지(eyebrow) 보조 텍스트 */
   badge: string;
-  /** h1 — 영문 메인 + 국문 보조 병기 */
+  /** h1: 영문 메인 + 국문 보조 병기 */
   name: { ko: string; en: string };
   /** Related Tools 섹션용 slug 목록 */
   relatedTools?: string[];
@@ -105,6 +144,18 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
+/** 사이트 운영자: 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
+ *
+ *  실명을 공개하지 않되, **일관된 운영자명과 역할, 책임 주체**는 항상 확인되게 한다.
+ *  (AdSense 심사·E-E-A-T 관점에서 "누가 쓰고 누가 책임지는가"가 드러나야 한다) */
+export const AUTHOR = {
+  /** 일관된 운영자명: 리포지토리·연락처와 동일한 식별자 */
+  name: "joyfive",
+  /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
+  path: "/about",
+  role: { ko: "Kitfolio 운영자", en: "Maker of Kitfolio" },
+} as const;
+
 /** 허브 카드 등에서 쓰는 레이아웃 표시 라벨 */
 export const LAYOUT_LABEL: Record<Layout, string> = {
   card: "Clean",
@@ -113,7 +164,7 @@ export const LAYOUT_LABEL: Record<Layout, string> = {
 };
 
 /* ============================================================
-   ② HUB — 허브 페이지 (/ , /en)
+   ② HUB: 허브 페이지 (/ , /en)
    ============================================================ */
 export const HUB = {
   seo: {
@@ -135,7 +186,7 @@ export const HUB = {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
       h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
       subtitle:
-        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 모든 처리는 브라우저 안에서 끝나고, 어떤 데이터도 서버로 전송되지 않습니다.",
+        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않고 브라우저 안에서 처리됩니다.",
       stat: "개 도구",
     },
     en: {
@@ -146,11 +197,11 @@ export const HUB = {
         post: " for modern\nknowledge workers.",
       },
       subtitle:
-        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. Everything runs in your browser; no data ever leaves it.",
+        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. The text, numbers and files you enter are processed in your browser and never uploaded to Kitfolio's servers.",
       stat: " tools",
     },
   },
-  /** 허브 하단 설명 콘텐츠 — 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
+  /** 허브 하단 설명 콘텐츠: 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
   about: {
     ko: {
       heading: "Kitfolio는 어떤 서비스인가요?",
@@ -161,7 +212,7 @@ export const HUB = {
         },
         {
           h: "모든 처리는 브라우저 안에서",
-          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있고, 네트워크가 느린 환경에서도 빠르게 반응합니다.",
+          p: "Kitfolio의 모든 도구는 서버가 아니라 여러분의 브라우저 안에서 동작합니다. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다. 민감한 문서를 다룰 때도 그 내용 자체는 기기 밖으로 나가지 않고, 네트워크가 느린 환경에서도 빠르게 반응합니다. 다만 이는 '도구에 입력한 내용'에 대한 이야기입니다. 사이트를 여는 과정에서는 웹 폰트·방문 통계·광고 같은 제3자 서비스로의 네트워크 요청이 별도로 발생할 수 있으며, 무엇이 전송되지 않고 무엇이 처리될 수 있는지는 개인정보처리방침에 구분해 두었습니다.",
         },
         {
           h: "필요한 도구를 빠르게 찾기",
@@ -178,7 +229,7 @@ export const HUB = {
         },
         {
           h: "Everything runs in your browser",
-          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device. That means you can work with sensitive documents and data without worrying about them leaving your machine, and the tools stay fast even on a slow connection.",
+          p: "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never uploaded to Kitfolio's servers: all calculation and conversion happens on your device. That means the contents of a sensitive document stay on your machine, and the tools stay fast even on a slow connection. That promise is about what you enter into the tools. Loading the site itself still makes separate network requests to third-party services such as web fonts, analytics, and advertising, and the Privacy Policy sets out which is which.",
         },
         {
           h: "Find the right tool fast",
@@ -190,7 +241,7 @@ export const HUB = {
 };
 
 /* ============================================================
-   ③ CATS — 카테고리 라벨
+   ③ CATS: 카테고리 라벨
    ============================================================ */
 export const CATS: {
   id: "dev" | "design" | "text";
@@ -224,9 +275,9 @@ export const CATS: {
 ];
 
 /* ============================================================
-   ④ FAQ_SECTION — FAQ 섹션 공통 카피
+   ④ FAQ_SECTION: FAQ 섹션 공통 카피
    ============================================================ */
-/* FAQ / About 통합 섹션 — 탭(칩) 라벨 + 인트로 카피 */
+/* FAQ / About 통합 섹션: 탭(칩) 라벨 + 인트로 카피 */
 export const FAQ_SECTION = {
   ko: {
     tab: "자주 묻는 질문",
@@ -244,7 +295,7 @@ export const FAQ_SECTION = {
   },
 };
 
-/* AEO(About this tool) 섹션 — What is / Who for / How / Why */
+/* AEO(About this tool) 섹션: What is / Who for / How / Why */
 export const AEO_SECTION = {
   ko: {
     tab: "이 도구에 대하여",
@@ -270,7 +321,7 @@ export const OG_BADGE = {
   en: "Free · Runs in your browser",
 };
 
-/* 타겟 태그 표시 라벨 — 허브 직군 필터 칩 */
+/* 타겟 태그 표시 라벨: 허브 직군 필터 칩 */
 export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
   pm: { ko: "PM", en: "PM" },
   designer: { ko: "디자이너", en: "Designer" },
@@ -282,7 +333,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
 };
 
 /* ============================================================
-   ⑥ LEGAL — 약관/정책 페이지 (도구 아님, 별도 레지스트리)
+   ⑥ LEGAL: 약관/정책 페이지 (도구 아님, 별도 레지스트리)
 
    개인정보처리방침 · 이용약관. 도구가 아니므로 TOOLS(허브·검색·sitemap
    tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
@@ -345,10 +396,10 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "어떻게 동작하나요 (서버 전송 없음)",
+            heading: "어떻게 동작하나요 (입력 데이터는 서버로 가지 않습니다)",
             body: [
-              "Kitfolio의 모든 도구는 서버가 아니라 이용자의 브라우저 안에서 동작합니다. 입력한 텍스트·숫자·파일은 어떤 서버로도 전송되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다.",
-              "회원가입이나 로그인이 없고, 개인정보를 수집하지 않습니다. 민감한 문서나 데이터를 다룰 때도 외부로 새어 나갈 걱정 없이 사용할 수 있습니다. 자세한 내용은 개인정보처리방침에서 확인할 수 있습니다.",
+              "Kitfolio의 모든 도구는 서버가 아니라 이용자의 브라우저 안에서 동작합니다. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않으며, 계산과 변환은 전부 기기 내부에서 끝납니다.",
+              "회원가입이나 로그인이 없고, 이름·이메일 같은 개인정보를 직접 수집하지 않습니다. 다만 사이트 운영을 위해 방문 통계·광고·웹 폰트 등 제3자 서비스를 이용하며, 이들 서비스는 접속 정보나 쿠키를 별도로 처리할 수 있습니다. 즉 도구에 입력한 내용은 전송되지 않지만, 사이트 이용 중 아무 통신도 일어나지 않는다는 뜻은 아닙니다. 무엇이 전송되지 않고 무엇이 처리될 수 있는지는 개인정보처리방침에 구분해 정리했습니다.",
             ],
           },
           {
@@ -356,6 +407,37 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             body: [
               "좋은 도구는 작은 마찰을 없애 하루의 흐름을 지켜 줍니다. Kitfolio의 목표는 콘텐츠를 많이 발행하는 것이 아니라, 반복되는 업무 문제를 무료로·빠르게·프라이버시를 지키며 풀 수 있는 실용적인 도구를 하나씩 늘려가는 것입니다.",
               "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.",
+            ],
+          },
+          {
+            heading: "누가 운영하나요",
+            body: [
+              "Kitfolio는 **joyfive**라는 이름으로 활동하는 한 사람이 기획·개발·운영·콘텐츠 작성을 모두 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영자 개인에게 있습니다.",
+              "소스코드는 [GitHub 저장소](https://github.com/joyfive/kitfolio)에서 공개되어 있어, 각 도구가 실제로 어떻게 계산하는지 직접 확인할 수 있습니다. 문의는 아래 이메일로 받으며 운영자가 직접 답변합니다.",
+            ],
+          },
+          {
+            heading: "도구를 만들고 검증하는 원칙",
+            body: [
+              "**직접 쓸 도구만 만듭니다.** 검색량이 높다는 이유만으로 도구를 늘리지 않고, 실제 업무에서 반복해서 겪은 문제를 우선합니다.",
+              "**계산 로직은 UI와 분리해 검증합니다.** 연봉 실수령액처럼 공식 기준이 있는 계산은 요율·정책 데이터를 별도 모듈로 분리하고, 각 항목의 공식 산식을 자동화된 테스트로 검증합니다. 다른 계산기 사이트의 결과와 총액을 맞추는 방식이 아니라, 기관이 고시한 산식 자체를 기준으로 삼습니다.",
+              "**외부 기준에 의존하는 도구에는 출처와 검증일을 표시합니다.** 세율·보험료율·플랫폼 정책처럼 바뀌는 값을 쓰는 도구는 어느 시점 기준인지, 마지막으로 언제 공식 자료와 대조했는지를 페이지에서 확인할 수 있게 합니다. 출처는 정부·공공기관 등 1차 자료만 사용하며 개인 블로그나 타사 계산기는 근거로 삼지 않습니다.",
+              "**한계를 함께 적습니다.** 각 도구 페이지에는 그 도구가 다루지 못하는 상황과 결과가 어긋날 수 있는 조건을 명시합니다. 예상 계산을 확정 금액처럼 쓰지 않도록 하기 위해서입니다.",
+            ],
+          },
+          {
+            heading: "최신성이 필요한 도구는 어떻게 갱신하나요",
+            body: [
+              "보험료율·세율처럼 기준일에 따라 값이 바뀌는 데이터는 연도 하나로 관리하지 않고 **적용 기간(시행일~종료일) 단위**로 관리합니다. 예를 들어 4대보험 요율은 매년 1월, 국민연금 기준소득월액 상·하한은 매년 7월에 개정되므로 두 기준을 별도의 기간 표로 나누어 두고, 계산기가 오늘 날짜에 해당하는 기준을 자동으로 선택합니다.",
+              "제도가 개정되면 공식 기관 자료를 확인해 새 기간을 추가하고, 검증일을 갱신한 뒤 관련 도구와 아티클을 함께 수정합니다. 과거 기간의 값은 지우지 않고 남겨 둡니다. 지난 시점 기준으로 확인해야 하는 경우가 있기 때문입니다.",
+            ],
+          },
+          {
+            heading: "오류 제보와 수정 정책",
+            body: [
+              "**오류 제보:** 계산 결과가 이상하거나 설명이 사실과 다르다면 아래 이메일 또는 [GitHub 이슈](https://github.com/joyfive/kitfolio/issues)로 알려주세요. 어떤 도구에서 어떤 값을 넣었을 때 어떤 결과가 나왔는지 함께 적어주시면 재현이 빨라집니다.",
+              "**수정 정책:** 계산 오류나 사실 오류는 확인되는 대로 우선 수정합니다. 내용이 실질적으로 바뀐 아티클에는 수정일을, 기준 데이터가 바뀐 도구에는 새 검증일을 표시해 언제 무엇이 달라졌는지 확인할 수 있게 합니다. 오탈자나 표현 다듬기처럼 내용에 영향이 없는 변경은 별도로 표시하지 않습니다.",
+              "**도구 중단:** 도구를 없애야 할 경우에는 URL을 그대로 두고 대체 도구로 연결하며, 기존 링크가 끊기지 않도록 합니다.",
             ],
           },
         ],
@@ -375,10 +457,10 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "How it works (no server transmission)",
+            heading: "How it works (your input never leaves your browser)",
             body: [
-              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never transmitted anywhere: all calculation and conversion happens on your device.",
-              "There is no sign-up or login, and we do not collect personal information, so you can work with sensitive documents and data without worrying about them leaving your machine. See the Privacy Policy for details.",
+              "Every Kitfolio tool runs inside your browser, not on a server. The text, numbers, and files you enter are never uploaded to Kitfolio's servers: all calculation and conversion happens on your device.",
+              "There is no sign-up or login, and we do not directly collect personal information such as names or email addresses. The site does use third-party services for analytics, advertising and web fonts, and those may process connection information or cookies separately. In other words, what you enter into a tool is never transmitted, but that does not mean no network communication happens while you use the site. The Privacy Policy sets out exactly which is which.",
             ],
           },
           {
@@ -386,6 +468,37 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             body: [
               "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
               "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.",
+            ],
+          },
+          {
+            heading: "Who runs Kitfolio",
+            body: [
+              "Kitfolio is planned, built, operated and written by one person, working under the name **joyfive**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the maker personally.",
+              "The source code is public in the [GitHub repository](https://github.com/joyfive/kitfolio), so you can check exactly how each tool calculates. Questions go to the email address below and are answered directly.",
+            ],
+          },
+          {
+            heading: "How tools are built and verified",
+            body: [
+              "**Only tools we would use ourselves.** Search volume alone is not a reason to add a tool; problems actually hit repeatedly in real work come first.",
+              "**Calculation logic is separated from the UI and tested.** Where an official standard exists, as with Korean take-home pay, the rate and policy data lives in its own module and each component of the calculation is checked against its official formula by automated tests. The benchmark is the formula published by the responsible authority, not matching totals with another calculator site.",
+              "**Tools that depend on external standards show their sources and verification date.** Anything built on tax rates, insurance rates or platform policies states which point in time it reflects and when it was last checked against official material. Only primary sources from government bodies and public institutions are used: never personal blogs or third-party calculators.",
+              "**Limitations are published alongside the tool.** Each tool page states what it cannot handle and the conditions under which its results diverge, so an estimate is not mistaken for a confirmed figure.",
+            ],
+          },
+          {
+            heading: "How time-sensitive tools are kept current",
+            body: [
+              "Data that changes by effective date, such as insurance and tax rates, is not filed under a single year but managed as **effective periods with a start and end date**. Korea's four major insurance rates change every January while the National Pension income ceiling and floor change every July, so the two live in separate period tables and the calculator picks whichever rules apply to today's date.",
+              "When a rule changes, the official source is checked, a new period is added, the verification date is updated, and the related tools and articles are revised together. Past periods are kept rather than deleted, because there are times you need to check a figure as it stood on an earlier date.",
+            ],
+          },
+          {
+            heading: "Reporting errors, and how corrections are handled",
+            body: [
+              "**Reporting an error:** if a result looks wrong or an explanation does not match the facts, email the address below or open a [GitHub issue](https://github.com/joyfive/kitfolio/issues). Including which tool, which inputs and what result you saw makes it much faster to reproduce.",
+              "**Correction policy:** calculation errors and factual errors are fixed as soon as they are confirmed. Articles whose substance changed carry an updated date, and tools whose underlying data changed carry a new verification date, so you can see when something changed. Typo fixes and wording changes that do not affect meaning are not separately marked.",
+              "**Retiring a tool:** if a tool has to be removed, its URL stays in place and points to a replacement so existing links do not break.",
             ],
           },
         ],
@@ -463,12 +576,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침 | Kitfolio",
         description:
-          "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 쿠키·광고 식별자(Google AdSense) 이용 안내를 확인하세요.",
+          "Kitfolio는 회원가입·로그인이 없으며 도구에 입력한 데이터는 서버로 전송되지 않고 브라우저 안에서만 처리됩니다. 사이트 운영을 위해 이용하는 Google Analytics·Google AdSense 등 제3자 서비스와 쿠키 처리 안내를 확인하세요.",
       },
       en: {
         title: "Privacy Policy | Kitfolio",
         description:
-          "Kitfolio requires no account and never transmits the data you enter to any server: everything is processed in your browser. Learn how cookies and advertising identifiers (Google AdSense) are used.",
+          "Kitfolio requires no account and never transmits the data you enter to any server: everything is processed in your browser. Learn which third-party services (Google Analytics, Google AdSense) the site uses and how cookies are handled.",
       },
     },
     doc: {
@@ -478,29 +591,40 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           "Kitfolio(이하 '본 사이트')는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.",
         sections: [
           {
-            heading: "1. 개인정보의 수집 및 처리 (DB·서버 전송 없음)",
+            heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
             body: [
               "본 사이트는 모던 지식 노동자를 위한, 브라우저에서 단독으로 동작하는 웹 도구 모음 서비스입니다.",
-              "**비회원제 운영:** 본 사이트는 회원가입이나 로그인 절차가 없으며, 이용자의 이름·이메일·연락처 등 어떠한 개인정보도 요구하거나 수집하지 않습니다.",
-              "**데이터 서버 전송 없음:** 이용자가 각 도구에 입력하는 모든 데이터는 이용자의 브라우저 안에서만 처리되며, 본 사이트의 서버나 외부 데이터베이스(DB)로 전송되지 않습니다. 브라우저를 닫거나 새로고침하면 입력된 데이터는 즉시 소멸합니다.",
+              "**비회원제 운영:** 본 사이트는 회원가입이나 로그인 절차가 없으며, 이용자의 이름·이메일·연락처 등 개인정보를 직접 수집하지 않습니다.",
+              "**입력 데이터 비전송:** 이용자가 각 도구에 입력하는 텍스트·숫자·파일(PDF·이미지 포함)은 이용자의 브라우저 안에서만 처리되며, 본 사이트의 서버나 외부 데이터베이스로 전송되지 않습니다. 브라우저를 닫거나 새로고침하면 입력된 데이터는 즉시 소멸합니다.",
+              "**이 원칙의 범위:** 위 내용은 '이용자가 도구에 입력한 콘텐츠'에 한정됩니다. 사이트를 여는 것 자체는 웹 페이지를 내려받는 통신이므로, 아래 2항에 안내한 제3자 서비스가 접속 정보를 별도로 처리할 수 있습니다. 즉 **도구에 넣은 내용은 전송되지 않지만, 사이트 이용 과정에서 아무런 네트워크 통신도 일어나지 않는다는 뜻은 아닙니다.**",
             ],
           },
           {
-            heading: "2. 쿠키 및 광고 식별자",
+            heading: "2. 사이트 운영을 위해 이용하는 제3자 서비스",
             body: [
-              "본 사이트는 이용자에게 적합하고 유용한 서비스를 제공하기 위해 정보를 저장하고 수시로 불러오는 '쿠키(cookie)' 및 광고 식별자를 사용합니다.",
-              "**구글 애드센스(Google AdSense):** 본 사이트는 구글이 제공하는 웹 광고 서비스 '구글 애드센스'를 게재합니다. 구글은 이용자가 본 사이트 또는 다른 웹사이트를 방문한 기록을 바탕으로 맞춤형 광고를 제공하기 위해 쿠키를 사용합니다.",
-              "**쿠키 차단 및 설정 방법:** 맞춤형 광고를 원치 않을 경우 [구글 광고 설정](https://www.google.com/settings/ads) 페이지에서 맞춤형 광고를 차단할 수 있습니다. 또한 브라우저 설정을 통해 모든 쿠키의 저장을 거부하거나, 쿠키가 저장될 때마다 확인을 거치도록 설정할 수 있습니다. (쿠키 저장을 거부하면 일부 기능 이용에 불편이 있을 수 있습니다.)",
+              "본 사이트는 서비스 운영과 개선을 위해 아래의 외부 서비스를 이용하며, 이들 서비스는 각자의 개인정보처리방침에 따라 이용자의 브라우저·접속 정보 또는 쿠키를 처리할 수 있습니다.",
+              "**Google Analytics 4 (방문 통계):** 어떤 도구가 얼마나 이용되는지 파악하기 위해 방문 페이지, 대략적인 접속 지역, 기기·브라우저 종류 등 익명의 이용 통계를 수집합니다. 도구에 입력한 내용은 전송되지 않습니다. 수집을 원치 않으면 [Google 애널리틱스 차단 브라우저 부가기능](https://tools.google.com/dlpage/gaoptout)을 설치할 수 있습니다.",
+              "**Google AdSense (광고):** 본 사이트는 구글이 제공하는 광고를 게재합니다. 구글은 이용자가 본 사이트 또는 다른 웹사이트를 방문한 기록을 바탕으로 맞춤형 광고를 제공하기 위해 쿠키 및 광고 식별자를 사용할 수 있습니다. 맞춤형 광고를 원치 않으면 [Google 광고 설정](https://www.google.com/settings/ads)에서 차단할 수 있습니다.",
+              "**웹 폰트 (Google Fonts · jsDelivr):** 화면 글꼴을 불러오기 위해 외부 CDN에 요청이 발생하며, 이 과정에서 해당 사업자에게 IP 주소 등 표준적인 접속 정보가 전달될 수 있습니다.",
+              "**호스팅 (Vercel):** 사이트가 배포·제공되는 인프라로, 서비스 제공에 필요한 범위에서 접속 로그가 처리될 수 있습니다.",
+              "본 사이트는 위에 명시한 것 외의 광고·제휴·트래킹 서비스를 사용하지 않습니다.",
             ],
           },
           {
-            heading: "3. 제3자 제공 및 위탁",
+            heading: "3. 쿠키 설정 및 거부 방법",
             body: [
-              "본 사이트는 이용자의 개인정보를 수집하지 않으므로 제3자에게 제공하거나 외부에 위탁하지 않습니다. 다만 위에 명시된 구글 애드센스 등 서드파티 광고 플랫폼이 통계 및 광고 게재 목적으로 익명의 웹 트래픽 데이터를 처리할 수 있습니다.",
+              "이용자는 브라우저 설정을 통해 모든 쿠키의 저장을 거부하거나, 쿠키가 저장될 때마다 확인을 거치도록 설정할 수 있습니다. 쿠키 저장을 거부해도 본 사이트의 도구 기능은 정상적으로 동작합니다.",
+              "각 서비스별 개인정보 처리에 관한 자세한 내용은 [Google 개인정보처리방침](https://policies.google.com/privacy)에서 확인할 수 있습니다.",
             ],
           },
           {
-            heading: "4. 개인정보 보호책임자 및 문의처",
+            heading: "4. 제3자 제공 및 위탁",
+            body: [
+              "본 사이트는 이용자의 개인정보를 직접 수집하지 않으므로 이를 제3자에게 제공하거나 판매하지 않습니다. 다만 위 2항에 명시된 서비스들이 각자의 방침에 따라 익명의 이용 통계 및 광고 데이터를 처리할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "5. 개인정보 보호책임자 및 문의처",
             body: [
               "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.",
             ],
@@ -515,29 +639,40 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           "Kitfolio (\"we\", \"our\", or \"the Website\") values the privacy of our users and complies with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.",
         sections: [
           {
-            heading: "1. Collection and Processing of Data (No Server/DB Transmission)",
+            heading: "1. What You Enter Into the Tools Is Never Transmitted",
             body: [
               "Kitfolio is a collection of browser-based web tools for modern knowledge workers that operates entirely on the client side.",
-              "**No Registration Required:** We do not require any account or login, and we do not collect personal information such as names, email addresses, or contact details.",
-              "**No Server Transmission:** All data you type or process within our tools is executed entirely within your web browser. No data is ever transmitted to our servers or any external databases. Once you close or refresh the browser, all entered data is permanently cleared.",
+              "**No Registration Required:** There is no account or login, and we do not directly collect personal information such as names, email addresses, or contact details.",
+              "**Input Data Stays Local:** The text, numbers, and files (including PDFs and images) you enter into any tool are processed entirely within your browser. They are never transmitted to our servers or to any external database. Closing or refreshing the browser clears them immediately.",
+              "**Scope of this principle:** the statement above applies to *the content you enter into the tools*. Loading the site is itself a network request, and the third-party services listed in section 2 may process connection information separately. In other words, **what you put into a tool is not transmitted, but that does not mean no network communication occurs while you use the site.**",
             ],
           },
           {
-            heading: "2. Cookies and Advertising Identifiers",
+            heading: "2. Third-Party Services Used to Operate the Site",
             body: [
-              "We use cookies and advertising identifiers to store and retrieve information in order to provide a relevant and useful service.",
-              "**Google AdSense:** This Website displays advertisements served by Google AdSense. Google uses cookies to serve ads based on a user's prior visits to this Website or other websites, enabling Google and its partners to serve personalized advertising.",
-              "**Opting Out:** If you prefer not to receive personalized ads, you can opt out on the [Google Ads Settings](https://www.google.com/settings/ads) page. You may also refuse all cookies or set your browser to prompt before storing a cookie through its settings. (Blocking cookies may affect some website features.)",
+              "We use the following external services to operate and improve the site. Each may process browser or connection information, or cookies, under its own privacy policy.",
+              "**Google Analytics 4 (usage statistics):** collects anonymous usage data such as pages visited, approximate region, and device and browser type, so we can see which tools are actually used. Content entered into the tools is never sent. To opt out, you can install the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout).",
+              "**Google AdSense (advertising):** this site displays advertisements served by Google. Google may use cookies and advertising identifiers to serve personalized ads based on your prior visits to this or other websites. You can opt out of personalized advertising on the [Google Ads Settings](https://www.google.com/settings/ads) page.",
+              "**Web fonts (Google Fonts and jsDelivr):** loading the site's typefaces makes requests to external CDNs, which may receive standard connection information such as your IP address.",
+              "**Hosting (Vercel):** the infrastructure the site is deployed on, which may process access logs as required to deliver the service.",
+              "We do not use any advertising, affiliate, or tracking service other than those listed above.",
             ],
           },
           {
-            heading: "3. Third-Party Data Sharing",
+            heading: "3. Managing and Refusing Cookies",
             body: [
-              "Since we do not collect or store personal data, we do not share or sell any personal information to third parties. Anonymous, non-personally identifiable traffic data may be processed by third-party services such as Google AdSense for analytics and ad-serving purposes.",
+              "You can refuse all cookies through your browser settings, or configure your browser to prompt before storing one. Refusing cookies does not prevent the site's tools from working normally.",
+              "For details on how each service handles data, see the [Google Privacy Policy](https://policies.google.com/privacy).",
             ],
           },
           {
-            heading: "4. Contact",
+            heading: "4. Third-Party Data Sharing",
+            body: [
+              "Because we do not directly collect personal data, we do not share or sell any personal information to third parties. The services named in section 2 may process anonymous usage and advertising data under their own policies.",
+            ],
+          },
+          {
+            heading: "5. Contact",
             body: [
               "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address below.",
             ],
@@ -680,7 +815,7 @@ export function buildLegalMetadata(slug: LegalSlug, lang: Lang): Metadata {
 }
 
 /* ============================================================
-   ⑤ TOOLS — 도구 레지스트리
+   ⑤ TOOLS: 도구 레지스트리
    ============================================================ */
 export const TOOLS: Tool[] = [
   // ── Developer ─────────────────────────────
@@ -691,6 +826,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer"],
     ico: "{ }",
     ready: true,
+    indexable: true,
     badge: "IDE / Editor",
     name: { ko: "JSON 포매터", en: "JSON Formatter" },
     relatedTools: ["slack-timestamp-converter", "tailwind-palette-generator", "character-counter"],
@@ -743,6 +879,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "로그에서 복사한 한 줄짜리 API 응답 읽기",
+            input: "{\"id\":1042,\"user\":{\"name\":\"김서연\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}",
+            result: "2단 들여쓰기로 펼쳐지고 user 객체와 roles 배열이 각각 접을 수 있는 블록으로 표시됩니다.",
+            note: "터미널 로그나 브라우저 네트워크 탭에서 복사한 응답은 개행이 없어 눈으로 구조를 파악하기 어렵습니다. 붙여넣기만 하면 어떤 필드가 어느 깊이에 있는지 바로 보입니다.",
+          },
+          {
+            title: "파싱이 실패하는데 원인을 못 찾을 때",
+            input: "{\"name\":\"kitfolio\",\"tags\":[\"work\",\"tools\",]}",
+            result: "배열 마지막 쉼표 위치를 가리키는 오류 메시지가 표시됩니다.",
+            note: "마지막 요소 뒤의 쉼표(trailing comma)는 JavaScript 객체 리터럴에서는 허용되지만 JSON 표준에서는 오류입니다. 손으로 편집한 설정 파일에서 가장 자주 나오는 실수라, 오류 위치만 알아도 대부분 바로 고칠 수 있습니다.",
+          },
+          {
+            title: "커밋 전 설정 파일 들여쓰기 통일",
+            input: "탭과 공백이 섞여 들여쓰기가 어긋난 package.json 조각",
+            result: "전체가 동일한 들여쓰기 폭으로 다시 출력되고, 키 순서는 원본 그대로 유지됩니다.",
+            note: "포매터는 값이나 키 순서를 바꾸지 않으므로 diff에는 공백 변경만 남습니다.",
+          },
+        ],
+        limitations: [
+          "JSON5·JSONC 문법은 표준 JSON이 아니므로 오류로 처리됩니다. 주석(//, /* */), 따옴표 없는 키, 작은따옴표 문자열이 들어간 tsconfig.json 같은 파일은 해당 부분을 지운 뒤 넣어야 합니다.",
+          "숫자는 JavaScript 표준대로 배정밀도 부동소수점으로 해석됩니다. 2^53(약 9,007조)을 넘는 정수 ID를 다룬다면 표시된 값이 원본과 다를 수 있으니 원문 문자열을 함께 확인하세요.",
+          "전체 문서를 브라우저 메모리에서 한 번에 파싱합니다. 수십 MB 이상의 대용량 파일은 탭이 느려질 수 있어 필요한 부분만 잘라 넣는 편이 안전합니다.",
+          "포맷팅과 유효성 검사만 합니다. 키 정렬, JSONPath 질의, 스키마 검증, 값 변환 같은 기능은 제공하지 않습니다.",
+        ],
       },
       en: {
         card: "Format JSON with indentation and syntax highlighting. Detects errors and validates.",
@@ -782,6 +944,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "Reading a one-line API response copied from a log",
+            input: "{\"id\":1042,\"user\":{\"name\":\"Seoyeon Kim\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}",
+            result: "Expanded with two-space indentation; the user object and roles array each become a collapsible block.",
+            note: "Responses copied from a terminal log or the browser network tab have no line breaks, so the shape is hard to see. Pasting it shows immediately which field sits at which depth.",
+          },
+          {
+            title: "Parsing fails and you can't find the cause",
+            input: "{\"name\":\"kitfolio\",\"tags\":[\"work\",\"tools\",]}",
+            result: "An error message pointing at the position of the trailing comma in the array.",
+            note: "A trailing comma after the last element is legal in a JavaScript object literal but invalid in JSON. It is the most common mistake in hand-edited config files, and knowing the position is usually enough to fix it.",
+          },
+          {
+            title: "Normalizing indentation before a commit",
+            input: "A package.json fragment with mixed tabs and spaces",
+            result: "Re-emitted with a single consistent indent width, key order untouched.",
+            note: "The formatter never reorders keys or rewrites values, so the diff contains whitespace changes only.",
+          },
+        ],
+        limitations: [
+          "JSON5 and JSONC are not standard JSON and are reported as errors. Files like tsconfig.json that contain comments (// or /* */), unquoted keys, or single-quoted strings need those parts removed first.",
+          "Numbers are parsed as IEEE-754 doubles, exactly as JavaScript does. If you work with integer IDs above 2^53 (about 9.0 quadrillion), the displayed value may differ from the original, so check the raw string as well.",
+          "The whole document is parsed in browser memory at once. Files of tens of megabytes or more can make the tab sluggish, so it is safer to paste only the section you need.",
+          "It formats and validates only. There is no key sorting, JSONPath querying, schema validation, or value transformation.",
+        ],
       },
     },
     faq: {
@@ -789,7 +977,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 JSON이 서버로 전송되나요?",
           answer:
-            "아니요. 포맷팅·검증·압축은 전부 브라우저 안에서 JavaScript로 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않으므로 민감한 데이터도 안심하고 사용할 수 있습니다.",
+            "아니요. 포맷팅·검증·압축은 전부 브라우저 안에서 JavaScript로 처리됩니다. 붙여넣은 JSON은 서버로 전송되거나 저장되지 않으므로 민감한 데이터도 안심하고 사용할 수 있습니다.",
         },
         {
           question: "JSON 문법 오류는 어떻게 찾아주나요?",
@@ -811,7 +999,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my JSON sent to a server?",
           answer:
-            "No. Formatting, validation and minification all happen in your browser with JavaScript. Nothing is uploaded or stored, so it is safe to use with sensitive data.",
+            "No. Formatting, validation and minification all happen in your browser with JavaScript. The JSON you paste is never uploaded or stored, so it is safe to use with sensitive data.",
         },
         {
           question: "How are syntax errors reported?",
@@ -848,6 +1036,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "developer"],
     ico: "ts",
     ready: true,
+    indexable: false,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
     relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
@@ -910,7 +1099,7 @@ export const TOOLS: Tool[] = [
         },
         {
           question: "입력한 값이 서버로 전송되나요?",
-          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되지 않습니다.",
+          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되지 않습니다.",
         },
       ],
       en: [
@@ -931,7 +1120,7 @@ export const TOOLS: Tool[] = [
         },
         {
           question: "Is anything I enter sent to a server?",
-          answer: "No. Every conversion happens inside your browser and no data ever leaves it.",
+          answer: "No. Every conversion happens inside your browser and the values you enter are never uploaded.",
         },
       ],
     },
@@ -955,6 +1144,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer", "designer"],
     ico: "rem",
     ready: true,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "Rem → Px 변환기", en: "Rem to Px Converter" },
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
@@ -1000,6 +1190,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "디자인 시안의 px 값을 rem으로 옮기기",
+            input: "24px, 루트 폰트 크기 16px",
+            result: "1.5rem",
+            note: "디자인 도구는 px로 값을 주지만 접근성을 지키려면 폰트·여백을 rem으로 쓰는 편이 좋습니다. 16으로 나눈다는 규칙만 알면 되지만, 시안 하나에 수십 개 값이 있을 때는 계산기를 여는 편이 빠릅니다.",
+          },
+          {
+            title: "루트 폰트 크기를 바꾼 프로젝트에서 환산하기",
+            input: "24px, 루트 폰트 크기 10px",
+            result: "2.4rem",
+            note: "html에 font-size: 62.5%를 적용해 루트를 10px로 맞춘 코드베이스가 있습니다. 이때 16 기준으로 계산하면 값이 전부 어긋나므로, 루트 폰트 크기 입력을 실제 값으로 바꿔야 합니다.",
+          },
+          {
+            title: "사용자가 브라우저 기본 글꼴을 키웠을 때의 실제 크기 확인",
+            input: "1.5rem, 루트 폰트 크기 20px",
+            result: "30px",
+            note: "rem을 쓰는 이유가 여기 있습니다. 사용자가 브라우저 설정에서 기본 글꼴을 20px로 올리면 같은 1.5rem이 30px로 커집니다. px로 고정했다면 24px 그대로여서 확대가 반영되지 않습니다.",
+          },
+        ],
+        limitations: [
+          "rem은 항상 루트(html) 요소의 폰트 크기를 기준으로 합니다. 부모 요소 기준으로 커지는 값이 필요하다면 em을 써야 하며, 이때는 em → px 변환기를 사용하세요.",
+          "여기서 쓰는 루트 폰트 크기는 입력값일 뿐입니다. 실제 페이지에서는 사용자의 브라우저 글꼴 설정이 루트 크기를 바꾸므로, 변환 결과는 \"루트가 이 값일 때의 px\"로 읽어야 합니다.",
+          "미디어 쿼리 안의 rem은 루트 요소의 font-size가 아니라 브라우저 기본 글꼴을 기준으로 해석됩니다. html { font-size: 10px } 를 선언했더라도 @media (min-width: 40rem) 는 여전히 640px(16px 기준)입니다.",
+          "border-width처럼 소수점 px가 기기 픽셀에 정확히 떨어지지 않는 속성에서는 브라우저가 반올림해 렌더링합니다. 변환 결과와 개발자 도구에 찍히는 실제 값이 0.5px 정도 다를 수 있습니다.",
+        ],
       },
       en: {
         card: "Convert rem ↔ px instantly. Supports custom root font size.",
@@ -1028,6 +1244,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "Porting px values from a design file to rem",
+            input: "24px with a 16px root font size",
+            result: "1.5rem",
+            note: "Design tools hand you px, but font sizes and spacing are better expressed in rem for accessibility. The rule is just \"divide by 16\", yet with dozens of values in one screen it is faster to use the converter.",
+          },
+          {
+            title: "Converting in a project that changed the root font size",
+            input: "24px with a 10px root font size",
+            result: "2.4rem",
+            note: "Some codebases set html { font-size: 62.5% } to make the root 10px. Calculating against 16 there throws every value off, so set the root font size field to the real value.",
+          },
+          {
+            title: "Checking the real size when a visitor enlarges their default font",
+            input: "1.5rem with a 20px root font size",
+            result: "30px",
+            note: "This is the reason to use rem at all. If someone raises their browser's default font to 20px, the same 1.5rem grows to 30px. Hard-coded 24px would stay at 24px and ignore the preference.",
+          },
+        ],
+        limitations: [
+          "rem is always relative to the root (html) element's font size. If you need a value that scales with the parent element instead, use em and the em to px converter.",
+          "The root font size here is only an input. On a real page the visitor's browser font setting determines it, so read the output as \"the px value when the root is this size\".",
+          "Inside media queries, rem resolves against the browser's default font size, not the html element's font-size. Even with html { font-size: 10px }, @media (min-width: 40rem) still means 640px.",
+          "For properties like border-width, fractional px values do not always land on device pixels and the browser rounds when rendering. The converted value and what DevTools reports can differ by around half a pixel.",
+        ],
       },
     },
     faq: {
@@ -1050,7 +1292,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1072,7 +1314,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1088,6 +1330,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer", "designer"],
     ico: "em",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "Em → Px 변환기", en: "Em to Px Converter" },
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
@@ -1183,7 +1426,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1205,7 +1448,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1221,6 +1464,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer", "designer"],
     ico: "vw",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "Vw → Px 변환기", en: "Vw to Px Converter" },
     relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
@@ -1316,7 +1560,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1338,7 +1582,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1354,6 +1598,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer", "designer"],
     ico: "%px",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "% → Px 변환기", en: "Percent to Px Converter" },
     relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
@@ -1449,7 +1694,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1471,7 +1716,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1487,6 +1732,7 @@ export const TOOLS: Tool[] = [
     targets: ["developer", "designer"],
     ico: "ms",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "Ms → S 변환기", en: "Ms to S Converter" },
     relatedTools: ["json-formatter", "slack-timestamp-converter", "time-converter"],
@@ -1555,7 +1801,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Also useful for gauging perceived speed",
             body: [
-              "In UI interactions, transition timing drives how the experience feels. Roughly 150–300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
+              "In UI interactions, transition timing drives how the experience feels. Roughly 150-300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
               "All conversion happens in your browser and your input is never sent to a server.",
             ],
           },
@@ -1582,7 +1828,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 값이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1604,7 +1850,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All calculations happen in your browser and no data is ever uploaded or stored.",
+            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1623,6 +1869,7 @@ export const TOOLS: Tool[] = [
     ico: "",
     icoClass: "ico-grad",
     ready: true,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "그라디언트 생성기", en: "CSS Gradient" },
     relatedTools: ["tailwind-palette-generator", "character-counter", "json-formatter"],
@@ -1675,6 +1922,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "히어로 섹션 배경용 부드러운 대각선 그라디언트",
+            input: "linear · 135deg · #3A70EB → #6486EF, 정지점 2개",
+            result: "background: linear-gradient(135deg, #3A70EB 0%, #6486EF 100%);",
+            note: "두 색의 명도 차가 작을수록 배경으로 쓰기 편합니다. 명도 차가 크면 그 위에 올라가는 텍스트의 대비가 위치마다 달라져 가독성이 떨어집니다.",
+          },
+          {
+            title: "카드 위 이미지에 겹칠 어두운 오버레이",
+            input: "linear · 180deg · rgba(0,0,0,0) 40% → rgba(0,0,0,0.7) 100%",
+            result: "아래쪽으로 갈수록 어두워지는 투명 그라디언트 코드",
+            note: "이미지 위 흰 텍스트를 읽히게 하는 표준적인 방법입니다. 투명한 쪽을 검정 투명(rgba(0,0,0,0))으로 지정해야 하며, transparent 키워드를 쓰면 일부 브라우저에서 회색기가 도는 중간색이 생깁니다.",
+          },
+          {
+            title: "도넛 차트 느낌의 conic 그라디언트",
+            input: "conic · 중심 50% 50% · 정지점 3개를 각도 단위로 배치",
+            result: "background: conic-gradient(...); 코드와 실시간 미리보기",
+            note: "border-radius: 50% 와 함께 쓰면 라이브러리 없이 간단한 진행률 원형 그래프를 만들 수 있습니다.",
+          },
+        ],
+        limitations: [
+          "생성되는 코드는 표준 CSS 문법입니다. -webkit- 같은 벤더 프리픽스는 붙이지 않으므로, 아주 오래된 브라우저를 지원해야 한다면 별도로 추가하세요.",
+          "conic-gradient는 Internet Explorer와 구형 모바일 브라우저에서 동작하지 않습니다. 폴백이 필요하면 background-color를 먼저 선언한 뒤 그라디언트를 덮어쓰세요.",
+          "그라디언트는 sRGB 색공간에서 보간됩니다. 보색에 가까운 두 색을 이으면 중간에 탁한 회색 구간이 생길 수 있는데, 이때는 중간 정지점을 하나 추가해 경로를 지정하는 편이 낫습니다.",
+          "미리보기는 화면 표시용입니다. 인쇄물이나 색 프로파일이 다른 디스플레이에서는 같은 코드라도 다르게 보일 수 있습니다.",
+        ],
       },
       en: {
         card: "Edit linear, radial and conic gradients visually and copy the CSS instantly.",
@@ -1709,6 +1982,32 @@ export const TOOLS: Tool[] = [
               "Linear and radial gradients work in every modern browser, and conic-gradient is widely supported in current ones. To keep a gradient you like, just copy the generated CSS: pasting the same code reproduces the exact result any time.",
             ],
           },
+        ],
+              examples: [
+          {
+            title: "A soft diagonal gradient for a hero background",
+            input: "linear · 135deg · #3A70EB → #6486EF, two stops",
+            result: "background: linear-gradient(135deg, #3A70EB 0%, #6486EF 100%);",
+            note: "The smaller the lightness gap between the two colors, the easier the gradient is to use as a background. A large gap makes text contrast vary across the surface and hurts readability.",
+          },
+          {
+            title: "A dark overlay to sit on top of a card image",
+            input: "linear · 180deg · rgba(0,0,0,0) 40% → rgba(0,0,0,0.7) 100%",
+            result: "A transparent-to-dark gradient you can layer over the image",
+            note: "This is the standard way to keep white text legible over photos. Specify the transparent end as rgba(0,0,0,0): using the transparent keyword produces a washed-out grey midpoint in some browsers.",
+          },
+          {
+            title: "A conic gradient for a donut-chart look",
+            input: "conic · center 50% 50% · three stops placed by angle",
+            result: "background: conic-gradient(...) with a live preview",
+            note: "Combined with border-radius: 50% this gives you a simple circular progress graphic without pulling in a charting library.",
+          },
+        ],
+        limitations: [
+          "The generated code is standard CSS. Vendor prefixes such as -webkit- are not added, so add them yourself if you must support very old browsers.",
+          "conic-gradient does not work in Internet Explorer or older mobile browsers. If you need a fallback, declare a background-color first and let the gradient override it.",
+          "Gradients interpolate in the sRGB color space. Blending two near-complementary colors can produce a muddy grey band in the middle; adding an intermediate stop to steer the path usually fixes it.",
+          "The preview is for on-screen use. The same code can look different in print or on a display with a different color profile.",
         ],
       },
     },
@@ -1776,6 +2075,7 @@ export const TOOLS: Tool[] = [
     targets: ["designer", "developer"],
     ico: "◧",
     ready: true,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "Tailwind 팔레트 생성기", en: "Tailwind Palette" },
     relatedTools: ["css-gradient", "json-formatter", "character-counter"],
@@ -1789,7 +2089,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Tailwind Palette Generator | 11 shades from one HEX",
         description:
-          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50-950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
         keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette"],
       },
     },
@@ -1805,18 +2105,116 @@ export const TOOLS: Tool[] = [
           how: "베이스 HEX를 입력하면 OKLCH 명도 스케일을 따라 50부터 950까지 색이 생성되고, 결과를 스와치 클릭으로 복사하거나 Tailwind config·@theme·CSS 변수 코드로 복사합니다.",
           why: "색상 단계를 손으로 맞출 필요 없이 일관된 명암 스케일을 즉시 얻을 수 있어, 디자인 시스템과 테마 토큰 작업이 빨라집니다.",
         },
+              guide: [
+          {
+            heading: "브랜드 컬러 하나에서 11단계를 만들어야 하는 이유",
+            body: [
+              "Tailwind로 UI를 만들면 색 하나로는 부족합니다. 버튼 기본 상태에 600, 호버에 700, 눌린 상태에 800, 배경 강조에 50이나 100, 테두리에 200: 이런 식으로 같은 계열 안에서 최소 대여섯 단계가 필요합니다. 그런데 디자인 가이드에서 받는 건 대개 브랜드 컬러 HEX 하나뿐입니다.",
+              "손으로 만들려면 HSL의 명도만 균등하게 조정하는 방식을 쓰기 쉬운데, 이렇게 하면 노랑 계열은 중간 단계가 탁해지고 파랑 계열은 어두운 쪽이 뭉개집니다. 사람 눈이 색상마다 밝기를 다르게 느끼기 때문입니다.",
+            ],
+          },
+          {
+            heading: "OKLCH로 계산하는 이유",
+            body: [
+              "이 생성기는 입력한 HEX를 OKLCH 색공간으로 변환한 뒤 단계를 만듭니다. OKLCH는 밝기(L)가 사람이 실제로 느끼는 밝기와 거의 일치하도록 설계된 색공간이라, 같은 L 값이면 노랑이든 파랑이든 비슷한 밝기로 보입니다. 덕분에 색상 계열이 달라도 500은 500끼리, 700은 700끼리 대비가 비슷하게 맞습니다.",
+              "먼저 입력한 색의 밝기를 보고 11단계 중 어디에 해당하는지 찾아 그 자리에 고정합니다. 브랜드 컬러가 팔레트 어딘가에 원본 그대로 남아야 하기 때문입니다. 그다음 나머지 단계의 밝기와 채도를 채우되, 색역을 벗어나는 조합은 표현 가능한 범위 안으로 당겨 넣습니다.",
+            ],
+          },
+          {
+            heading: "만든 팔레트를 코드에 넣기",
+            body: [
+              "Tailwind v4는 CSS의 @theme 블록에 --color-{이름}-{단계} 형태로 토큰을 선언합니다. v3라면 tailwind.config.js의 theme.extend.colors에 객체로 넣습니다. 두 형식 모두 복사할 수 있으므로 프로젝트 버전에 맞는 쪽을 고르면 됩니다.",
+              "팔레트를 넣은 뒤에는 실제 조합으로 대비를 확인하세요. 본문 텍스트는 배경 대비 4.5:1, 큰 텍스트와 UI 요소는 3:1이 WCAG AA 기준입니다. 경험적으로 흰 배경에는 600 이상, 어두운 배경에는 300 이하가 안전한 출발점이지만, 노랑·연두 계열은 이보다 더 어두운 단계가 필요합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "브랜드 블루로 전체 팔레트 만들기",
+            input: "#3A70EB",
+            result: "50부터 950까지 11단계가 생성되고, 입력한 색은 명도가 가장 가까운 단계(여기서는 600 부근)에 원본 그대로 배치",
+            note: "생성 후 자기 브랜드 컬러가 팔레트 안에 그대로 있는지 확인하세요. 있어야 기존 디자인 자산과 색이 어긋나지 않습니다.",
+          },
+          {
+            title: "밝은 파스텔 색을 입력했을 때",
+            input: "#A7B6F6 (연한 라벤더)",
+            result: "입력 색이 300 부근에 배치되고, 600~950 구간이 새로 만들어짐",
+            note: "밝은 색을 넣으면 어두운 단계가 전부 새로 생성됩니다. 이 구간이 실제 텍스트·버튼에 쓰이므로 대비를 반드시 확인하세요.",
+          },
+          {
+            title: "Tailwind v4 프로젝트에 적용",
+            input: "팔레트 이름을 brand로 지정 후 CSS 형식 복사",
+            result: "--color-brand-50 … --color-brand-950 토큰 선언 블록",
+            note: "globals.css의 @theme 블록에 붙여 넣으면 bg-brand-600, text-brand-900 같은 클래스가 바로 동작합니다.",
+          },
+        ],
+        limitations: [
+          "생성된 팔레트는 출발점이지 최종안이 아닙니다. 실제 제품에서는 특정 단계만 미세 조정하는 경우가 많으므로, 접근성 대비를 확인한 뒤 손으로 다듬는 과정을 건너뛰지 마세요.",
+          "무채색(회색) 계열은 채도가 거의 0이라 단계별 차이가 밝기로만 나타납니다. 브랜드 톤이 살짝 섞인 중성 회색을 원한다면 채도가 아주 낮은 색을 입력해야 합니다.",
+          "OKLCH 계산 결과가 sRGB 색역을 벗어나면 표현 가능한 범위로 당겨집니다. 형광에 가까운 원색을 넣으면 일부 단계의 채도가 기대보다 낮게 나올 수 있습니다.",
+          "Tailwind 기본 팔레트와 정확히 같은 값을 재현하지는 않습니다. Tailwind의 기본 색상은 수작업으로 조정된 값이라 어떤 알고리즘으로도 그대로 나오지 않습니다.",
+        ],
       },
       en: {
-        card: "Generate an 11-shade Tailwind palette (50–950) from one base HEX and copy the code.",
+        card: "Generate an 11-shade Tailwind palette (50-950) from one base HEX and copy the code.",
         description:
-          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). It uses an OKLCH lightness scale to spread shades evenly from a light 50 to a dark 950, pinning your input color to its nearest step. Click any shade to copy its HEX, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables.",
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50-950). It uses an OKLCH lightness scale to spread shades evenly from a light 50 to a dark 950, pinning your input color to its nearest step. Click any shade to copy its HEX, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables.",
         howItWorks: ["Enter a base color (HEX)", "Get an 11-shade palette", "Click a swatch or copy the code"],
         aeo: {
-          what: "Tailwind Palette Generator is a tool that builds an 11-shade Tailwind CSS color palette (50–950) from a single base color.",
+          what: "Tailwind Palette Generator is a tool that builds an 11-shade Tailwind CSS color palette (50-950) from a single base color.",
           who: "It is for front-end developers working with Tailwind CSS and designers who need to define color scales and design tokens.",
           how: "Enter a base HEX and shades from 50 to 950 are generated along an OKLCH lightness scale; copy a shade by clicking it, or copy the palette as Tailwind config, an @theme block or CSS variables.",
           why: "You get a consistent light-to-dark scale instantly without hand-tuning each step, speeding up design systems and theme tokens.",
         },
+              guide: [
+          {
+            heading: "Why one brand color has to become eleven",
+            body: [
+              "Building UI in Tailwind, a single color is never enough. A button needs 600 at rest, 700 on hover, 800 when pressed, 50 or 100 for a tinted background, 200 for a border: at least half a dozen steps within the same family. What the design guide hands over, though, is usually one brand hex.",
+              "The tempting shortcut is to step the lightness evenly in HSL, but that muddies the middle of yellow ramps and crushes the dark end of blue ones, because the eye reads brightness differently at different hues.",
+            ],
+          },
+          {
+            heading: "Why the math runs in OKLCH",
+            body: [
+              "This generator converts your hex into the OKLCH color space before building the ramp. OKLCH is designed so that its lightness channel matches perceived brightness, which means the same L value looks about equally bright whether the hue is yellow or blue. As a result, 500 sits at a comparable contrast to 500 and 700 to 700 even across different hue families.",
+              "It first measures the lightness of your color to find which of the eleven steps it belongs to and pins the original there, so your brand color survives untouched somewhere in the palette. The remaining steps are then filled in, with any combination that falls outside the displayable gamut pulled back into range.",
+            ],
+          },
+          {
+            heading: "Getting the palette into your code",
+            body: [
+              "Tailwind v4 declares tokens in a CSS @theme block as --color-{name}-{step}. On v3 they go into theme.extend.colors in tailwind.config.js as an object. Both formats are available to copy, so pick the one matching your project.",
+              "Once it is in, check contrast with the combinations you actually ship. WCAG AA asks for 4.5:1 for body text and 3:1 for large text and UI components. As a rough starting point, 600 and above works on white and 300 and below works on dark backgrounds, though yellow and lime ramps need to go darker still.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Building a full ramp from a brand blue",
+            input: "#3A70EB",
+            result: "Eleven steps from 50 to 950, with your color placed unchanged at the step closest in lightness (around 600 here)",
+            note: "After generating, confirm your brand color is still present verbatim. That is what keeps the palette consistent with existing brand assets.",
+          },
+          {
+            title: "Starting from a light pastel",
+            input: "#A7B6F6, a pale lavender",
+            result: "The input lands near 300 and the entire 600-950 range is newly generated",
+            note: "A light input means every dark step is invented. Those are the steps used for text and buttons, so check their contrast carefully.",
+          },
+          {
+            title: "Applying it in a Tailwind v4 project",
+            input: "Name the palette brand and copy the CSS format",
+            result: "A block declaring --color-brand-50 through --color-brand-950",
+            note: "Paste it into the @theme block in globals.css and classes like bg-brand-600 and text-brand-900 work immediately.",
+          },
+        ],
+        limitations: [
+          "The generated palette is a starting point, not a finished system. Real products usually nudge individual steps, so do not skip the pass where you check accessible contrast and adjust by hand.",
+          "Near-grey inputs have almost no chroma, so the steps differ by lightness alone. For a neutral grey that carries a hint of the brand hue, feed in a color with very low but non-zero saturation.",
+          "Where the OKLCH result falls outside the sRGB gamut it is clamped back into range. Very vivid, near-fluorescent inputs can therefore produce steps less saturated than expected.",
+          "It does not reproduce Tailwind's built-in palettes exactly. Those default colors were hand-tuned, so no algorithm reconstructs them precisely.",
+        ],
       },
     },
     faq: {
@@ -1839,7 +2237,7 @@ export const TOOLS: Tool[] = [
         {
           question: "데이터가 서버로 전송되나요?",
           answer:
-            "아니요. 색 계산은 전부 브라우저 안에서 이루어지며, 어떤 색상값도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 색 계산은 전부 브라우저 안에서 이루어지며, 입력한 색상값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -1861,7 +2259,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is any data sent to a server?",
           answer:
-            "No. All color math runs in your browser; no color values are uploaded or stored anywhere.",
+            "No. All color math runs in your browser; the color values you enter are never uploaded or stored.",
         },
       ],
     },
@@ -1883,6 +2281,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "designer", "developer"],
     ico: "◧",
     ready: true,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "OG 미리보기 테스트", en: "Open Graph Preview Tester" },
     relatedTools: ["css-gradient", "tailwind-palette-generator", "character-counter"],
@@ -1932,6 +2331,55 @@ export const TOOLS: Tool[] = [
           how: "이미지 파일, 이미지 URL 또는 SVG·HTML/CSS 코드를 입력하고 제목과 설명을 추가하면 플랫폼별 프리뷰를 생성합니다.",
           why: "페이지를 배포하기 전에 이미지 크롭, 해상도, 제목과 설명의 잘림 가능성을 확인할 수 있습니다.",
         },
+              guide: [
+          {
+            heading: "링크 카드는 플랫폼마다 다르게 잘린다",
+            body: [
+              "같은 URL을 공유해도 카카오톡, X, LinkedIn, 네이버 블로그, Notion에서 보이는 모습은 제각각입니다. 이미지 비율이 다르고, 제목을 몇 줄까지 보여줄지가 다르고, 설명을 아예 한 줄만 남기거나 이미지를 오른쪽 작은 썸네일로 밀어 넣기도 합니다. 그래서 한 곳에서 예쁘게 보이도록 맞춘 OG 태그가 다른 곳에서는 제목이 중간에 잘려 의미가 깨지는 일이 흔합니다.",
+              "이 도구는 제목·설명·이미지·도메인을 넣고 플랫폼을 바꿔 가며 그 차이를 눈으로 비교하기 위한 것입니다. 실제 배포 전에 어느 플랫폼에서 무엇이 잘리는지 확인하면, 가장 빡빡한 곳을 기준으로 카피를 다듬을 수 있습니다.",
+            ],
+          },
+          {
+            heading: "안전하게 통하는 값의 범위",
+            body: [
+              "이미지는 1200×630(1.91:1)이 가장 무난합니다. X는 2:1에 가깝게, 네이버 블로그는 정사각형에 가깝게 잘라 쓰므로, 중요한 텍스트나 로고는 이미지 가장자리가 아니라 가운데 안전 영역에 두어야 어느 쪽으로 잘려도 살아남습니다.",
+              "제목은 대체로 두 줄까지 보이지만 카드 폭이 좁은 곳에서는 40자 안팎에서 끊깁니다. 설명은 X·Threads·LinkedIn처럼 한 줄만 보이는 곳이 있어, 첫 문장에 핵심을 담고 뒤에 부연을 붙이는 순서가 안전합니다. 앞부분에 브랜드명을 반복해서 넣으면 정작 내용이 잘려 나갑니다.",
+            ],
+          },
+          {
+            heading: "미리보기가 실제와 다를 때",
+            body: [
+              "이 도구는 각 플랫폼의 레이아웃 규칙을 재현한 시뮬레이션입니다. 실제 카드는 플랫폼이 URL을 크롤링해 만들기 때문에, 태그를 고쳤는데도 예전 이미지가 계속 뜨는 일이 자주 생깁니다. 대부분 플랫폼이 OG 정보를 캐시하기 때문입니다.",
+              "이럴 때는 각 플랫폼의 디버거(페이스북 공유 디버거, X 카드 밸리데이터, 카카오 개발자 도구 등)에서 캐시를 갱신해야 합니다. 또한 로그인이 필요한 페이지나 robots.txt로 크롤러를 막은 페이지는 아예 카드가 생성되지 않습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "가장 빡빡한 플랫폼 기준으로 제목 다듬기",
+            input: "제목 \"Kitfolio | 일하는 사람을 위한 작은 웹 도구 모음: 계산기·생성기·유틸리티\"",
+            result: "카카오톡·Facebook에서는 두 줄로 보이지만 좁은 카드에서는 뒷부분이 잘림",
+            note: "브랜드명을 앞에 두면 잘렸을 때 남는 것이 브랜드명뿐입니다. 페이지 내용을 앞에, 브랜드명을 뒤에 두는 순서가 더 안전합니다.",
+          },
+          {
+            title: "이미지 비율에 따른 잘림 확인",
+            input: "1200×630 이미지 · 플랫폼을 X와 네이버 블로그로 전환",
+            result: "X는 위아래가, 네이버 블로그는 좌우가 잘려 다른 영역이 보임",
+            note: "로고를 모서리에 배치했다면 한쪽 플랫폼에서는 사라집니다. 중요한 요소는 중앙 60% 안에 두세요.",
+          },
+          {
+            title: "설명 한 줄 플랫폼 대응",
+            input: "설명 \"설치 없이 브라우저에서 바로 쓰는 도구 모음입니다. 가입도 필요 없습니다.\"",
+            result: "X·LinkedIn에서는 첫 문장만 노출",
+            note: "두 번째 문장에 핵심 정보를 두면 주요 플랫폼에서 아예 보이지 않습니다.",
+          },
+        ],
+        limitations: [
+          "실제 플랫폼의 렌더링을 그대로 재현하지는 않습니다. 각 서비스는 디자인을 예고 없이 바꾸고 A/B 테스트도 하므로, 이 미리보기는 근사치로 보고 최종 확인은 해당 플랫폼에서 직접 하세요.",
+          "URL을 크롤링해 OG 태그를 읽어 오지 않습니다. 제목·설명·이미지를 직접 입력해 비교하는 도구이며, 이미 배포된 페이지의 태그가 무엇인지 조회하려면 각 플랫폼의 공식 디버거를 쓰세요.",
+          "플랫폼의 OG 캐시 갱신은 이 도구로 할 수 없습니다. 태그를 바꿨는데 옛 카드가 계속 보인다면 해당 플랫폼 디버거에서 다시 스크랩해야 합니다.",
+          "지원 플랫폼은 카카오톡·Facebook·X·Threads·LinkedIn·네이버 블로그·Notion 일곱 가지입니다. 슬랙·디스코드 등 다른 서비스의 카드 형태는 포함되어 있지 않습니다.",
+        ],
       },
       en: {
         card: "Compare how an Open Graph image, title, and description appear across major platforms.",
@@ -1948,6 +2396,55 @@ export const TOOLS: Tool[] = [
           how: "The tool accepts an uploaded image, a direct image URL, or SVG and HTML/CSS code, then applies the content to platform-specific preview layouts.",
           why: "It helps identify image cropping, low resolution, and truncated titles or descriptions before a page is published.",
         },
+              guide: [
+          {
+            heading: "Every platform crops link cards differently",
+            body: [
+              "Share the same URL and it looks different in KakaoTalk, X, LinkedIn, Naver Blog and Notion. Image ratios differ, the number of title lines differs, and some services cut the description to a single line or push the image into a small thumbnail on the right. So OG tags tuned to look good in one place routinely end up with a title truncated mid-phrase somewhere else.",
+              "This tool exists to put a title, description, image and domain in one place and flip between platforms to see those differences. Checking before you ship lets you tune the copy against the tightest layout rather than discovering it after the fact.",
+            ],
+          },
+          {
+            heading: "Values that hold up across platforms",
+            body: [
+              "For images, 1200×630 (1.91:1) is the safest default. X crops closer to 2:1 and Naver Blog closer to a square, so any critical text or logo belongs in a central safe area rather than near the edges, where it survives either crop.",
+              "Titles generally get two lines, but on narrow cards they break somewhere around 40 characters. Descriptions are cut to one line on X, Threads and LinkedIn, so lead with the point and put elaboration after it. Repeating the brand name up front means the actual content is what gets truncated.",
+            ],
+          },
+          {
+            heading: "When the preview and reality disagree",
+            body: [
+              "This is a simulation of each platform's layout rules. Real cards are built by the platform crawling your URL, which is why an old image often keeps appearing after you have already fixed the tags: most platforms cache OG data.",
+              "The fix is to refresh the cache in that platform's own debugger, such as the Facebook Sharing Debugger, the X Card Validator, or Kakao's developer tools. Pages behind a login, or blocked from crawlers in robots.txt, will not produce a card at all.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Tuning a title against the tightest layout",
+            input: "Title: \"Kitfolio | Small tools for modern knowledge workers: calculators, generators, utilities\"",
+            result: "Two lines on KakaoTalk and Facebook, with the tail cut off on narrower cards",
+            note: "Leading with the brand name means the brand name is all that survives truncation. Putting the page subject first and the brand last is safer.",
+          },
+          {
+            title: "Seeing how the image ratio crops",
+            input: "A 1200×630 image, switching between X and Naver Blog",
+            result: "X trims the top and bottom while Naver Blog trims the sides, exposing different regions",
+            note: "A logo tucked into a corner disappears on one of them. Keep anything important within the central 60%.",
+          },
+          {
+            title: "Writing for single-line description platforms",
+            input: "Description: \"A set of tools that run in your browser. No installation and no sign-up needed.\"",
+            result: "Only the first sentence appears on X and LinkedIn",
+            note: "Anything essential placed in the second sentence is invisible on major platforms.",
+          },
+        ],
+        limitations: [
+          "It does not reproduce each platform's rendering exactly. Services redesign without notice and run A/B tests, so treat the preview as an approximation and confirm on the platform itself.",
+          "It does not crawl a URL to read its OG tags. You enter the title, description and image yourself; to inspect tags on an already-published page, use the platform's official debugger.",
+          "It cannot refresh a platform's OG cache. If you changed the tags and the old card persists, re-scrape the URL in that platform's debugger.",
+          "Seven platforms are covered: KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog and Notion. Card layouts for other services such as Slack or Discord are not included.",
+        ],
       },
     },
     faq: {
@@ -2036,6 +2533,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "job-seeker"],
     ico: "¶",
     ready: true,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "글자 수·단어 수 카운터", en: "Character Counter" },
     relatedTools: ["json-formatter", "slack-timestamp-converter", "css-gradient"],
@@ -2088,6 +2586,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "메타 디스크립션을 검색 결과에서 잘리지 않게 맞추기",
+            input: "작성한 설명문 초안을 붙여넣기",
+            result: "글자 수·공백 제외 글자 수·단어 수·문장 수·줄 수·바이트가 동시에 갱신됩니다.",
+            note: "검색 결과 스니펫은 대략 150~160자 부근에서 잘립니다. 글자 수를 보면서 문장을 줄이면 중요한 문구가 잘려 나가는 일을 피할 수 있습니다.",
+          },
+          {
+            title: "X(트위터) 280자, Threads 500자 안에 맞추기",
+            input: "게시할 초안 텍스트",
+            result: "SNS 제한 카드에서 플랫폼별 남은 글자 수가 실시간으로 표시되고, 한도를 넘으면 표시가 바뀝니다.",
+            note: "여러 플랫폼에 같은 글을 올릴 때 가장 짧은 한도를 기준으로 먼저 줄이면 재작성을 한 번만 하면 됩니다.",
+          },
+          {
+            title: "자기소개서 글자 수 제한 확인",
+            input: "\"공백 포함 500자 이내\" 조건의 지원서 문항 답변",
+            result: "공백 포함 글자 수와 공백 제외 글자 수가 따로 표시됩니다.",
+            note: "채용 사이트마다 기준이 달라 같은 글이 한쪽에서는 통과하고 다른 쪽에서는 초과가 됩니다. 제출 전에 어느 기준인지 확인하고 해당 숫자를 보세요.",
+          },
+        ],
+        limitations: [
+          "글자 수는 유니코드 코드 포인트가 아니라 자바스크립트 문자열 길이 기준입니다. 이모지나 일부 결합 문자(예: 👨‍👩‍👧, 국기 이모지)는 화면에 한 글자로 보여도 2자 이상으로 집계될 수 있습니다.",
+          "SNS 제한 안내는 참고용 기준값입니다. 각 플랫폼은 링크를 고정 길이로 환산하거나 유료 플랜에 다른 한도를 적용하기도 하므로, 발행 전 해당 플랫폼에서 최종 확인하세요.",
+          "문장 수는 마침표·물음표·느낌표를 기준으로 셉니다. \"Dr.\", \"3.14\", \"등...\" 처럼 마침표가 문장 끝이 아닌 경우에는 실제보다 많게 집계될 수 있습니다.",
+          "바이트 수는 UTF-8 기준입니다. EUC-KR 등 다른 인코딩을 요구하는 레거시 시스템의 한도와는 값이 다릅니다.",
+        ],
       },
       en: {
         card: "Live counts of characters, words, sentences and lines. With social limits.",
@@ -2123,6 +2647,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "Fitting a meta description so it isn't truncated in search results",
+            input: "Paste your draft description",
+            result: "Characters, characters without spaces, words, sentences, lines and bytes all update at once.",
+            note: "Search snippets are typically cut around 150-160 characters. Trimming while watching the count keeps your key phrase from being clipped.",
+          },
+          {
+            title: "Staying under 280 characters on X and 500 on Threads",
+            input: "The draft post you want to publish",
+            result: "The social limits card shows the remaining characters per platform in real time and flags anything over the limit.",
+            note: "When cross-posting, trim to the tightest limit first so you only have to rewrite once.",
+          },
+          {
+            title: "Checking an application field with a character cap",
+            input: "An answer to a question capped at 500 characters including spaces",
+            result: "Counts with and without spaces are shown separately.",
+            note: "Different sites count differently, so the same text can pass one form and fail another. Check which rule applies before submitting and read the matching number.",
+          },
+        ],
+        limitations: [
+          "The character count uses JavaScript string length, not Unicode code points. Emoji and some combining sequences (family emoji, flags) can count as two or more characters even though they render as one glyph.",
+          "The social limit figures are reference values. Platforms may count links as a fixed length or apply different limits on paid tiers, so confirm on the platform itself before publishing.",
+          "Sentences are counted from periods, question marks and exclamation marks. Text containing \"Dr.\", \"3.14\" or ellipses can therefore report more sentences than it really has.",
+          "The byte count is UTF-8. Legacy systems that require another encoding, such as EUC-KR, will have different limits.",
+        ],
       },
     },
     faq: {
@@ -2140,7 +2690,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 글이 어딘가에 저장되나요?",
           answer:
-            "아니요. 집계는 전부 브라우저 안에서 처리되며 어떤 텍스트도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 내용도 사라집니다.",
+            "아니요. 집계는 전부 브라우저 안에서 처리되며 입력한 텍스트는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 내용도 사라집니다.",
         },
         {
           question: "예상 읽기 시간은 어떻게 계산하나요?",
@@ -2162,7 +2712,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my text stored anywhere?",
           answer:
-            "No. Counting happens entirely in your browser and nothing is uploaded or saved. Close the tab and the text is gone.",
+            "No. Counting happens entirely in your browser and the text you enter is never uploaded or saved. Close the tab and the text is gone.",
         },
         {
           question: "How is the reading time estimated?",
@@ -2189,6 +2739,8 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "job-seeker", "pm", "developer"],
     ico: "₩",
     ready: true,
+    indexable: true,
+    verifiedAt: POLICY_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "연봉 실수령액 계산기", en: "Salary Net Pay Calculator" },
     relatedTools: [
@@ -2264,6 +2816,35 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "연봉 5,200만원 직장인의 월 실수령액 (2026년 8월 기준)",
+            input: "연봉 52,000,000 · 비과세 200,000 · 부양가족 1명 · 원천징수 100%",
+            result: "세전 월 4,333,333원 → 총 공제 652,591원 → 월 실수령 3,680,742원",
+            note: "공제 내역은 국민연금 196,333 · 건강보험 148,593 · 장기요양 19,525 · 고용보험 37,200 · 근로소득세 228,127 · 지방소득세 22,813원입니다. 세전 대비 약 85%가 남습니다.",
+          },
+          {
+            title: "식대 비과세 20만원이 있고 없고의 차이",
+            input: "같은 연봉 52,000,000에 비과세 0원과 200,000원을 각각 입력",
+            result: "월 실수령 3,633,164원 vs 3,680,742원 (월 47,578원, 연 570,936원 차이)",
+            note: "비과세 금액은 4대보험과 세금 계산의 기준 소득 자체를 줄이기 때문에 세금만 줄이는 것보다 효과가 큽니다. 이직 제안을 비교할 때 세전 연봉이 같아도 비과세 구성이 다르면 실수령이 달라집니다.",
+          },
+          {
+            title: "국민연금 상한을 넘는 고소득 구간",
+            input: "월급 8,000,000 · 비과세 200,000",
+            result: "국민연금 313,025원에서 고정 (과세소득 7,800,000원이 상한 6,590,000원을 초과)",
+            note: "급여가 더 올라도 국민연금 보험료는 그대로입니다. 반면 건강보험료는 상한이 훨씬 높아 계속 늘어나므로, 고소득 구간에서는 공제 구성이 달라집니다.",
+          },
+        ],
+        sources: OFFICIAL_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "국세청 근로소득 간이세액표의 산출 방식을 근사한 예상값입니다. 실제 원천징수액은 국세청이 고시한 구간표에서 직접 찾은 금액이므로 수천 원 단위로 차이가 날 수 있습니다.",
+          "국민연금 기준소득월액은 전년도 소득을 바탕으로 매년 7월에 새로 정해집니다. 따라서 실제 고지되는 연금 보험료는 지금 받는 급여가 아니라 작년 소득 기준일 수 있으며, 특히 최근에 연봉이 크게 오른 경우 이 계산 결과보다 낮게 나옵니다.",
+          "매달 같은 급여를 받는다고 가정합니다. 상여금·성과급·연차수당, 중도 입사·퇴사에 따른 일할 계산은 반영되지 않습니다.",
+          "비과세는 입력한 금액을 그대로 적용합니다. 회사마다 식대(월 20만원 한도)·자가운전보조금·육아수당 등 비과세 항목 구성이 다르므로, 실제 급여명세서의 비과세 합계를 넣어야 정확합니다.",
+          "건강보험료 연말정산(전년도 보수총액 확정 후 이듬해 4월에 추가 납부하거나 환급받는 금액)과 연말정산에 따른 세금 정산은 계산에 포함되지 않습니다.",
+          "4대보험이 적용되는 근로자 기준입니다. 사업소득 3.3% 원천징수를 받는 프리랜서, 일용근로자, 대표이사 등 다른 신분에는 맞지 않습니다.",
+        ],
       },
       en: {
         card: "Estimate monthly & yearly take-home pay from gross salary after Korea's insurances and taxes, with a full breakdown.",
@@ -2284,7 +2865,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Why gross salary and take-home pay differ",
             body: [
-              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax: roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
+              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax: roughly 8-18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
               "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure: useful especially for someone reading their first payslip.",
             ],
           },
@@ -2302,6 +2883,35 @@ export const TOOLS: Tool[] = [
               "It's still useful precisely because it's fast: when comparing job offers or setting a negotiation target, you can grasp roughly what a given salary means per month in seconds. Try several figures to map out your negotiation range.",
             ],
           },
+        ],
+              examples: [
+          {
+            title: "Monthly take-home on a 52,000,000 KRW salary (as of August 2026)",
+            input: "Annual 52,000,000 · non-taxable 200,000 · 1 dependent · 100% withholding",
+            result: "Gross 4,333,333/month → deductions 652,591 → take-home 3,680,742",
+            note: "The breakdown is National Pension 196,333, Health Insurance 148,593, Long-Term Care 19,525, Employment Insurance 37,200, income tax 228,127 and local income tax 22,813. About 85% of gross survives.",
+          },
+          {
+            title: "What a 200,000 non-taxable meal allowance is worth",
+            input: "The same 52,000,000 salary entered with 0 and with 200,000 non-taxable",
+            result: "3,633,164 vs 3,680,742 a month (a difference of 47,578 monthly, 570,936 a year)",
+            note: "Non-taxable pay lowers the base for both insurance and tax, so it does more than a tax deduction alone. Two offers with identical gross salaries can pay differently once the non-taxable split differs.",
+          },
+          {
+            title: "Earnings above the National Pension ceiling",
+            input: "Monthly 8,000,000 · non-taxable 200,000",
+            result: "National Pension fixed at 313,025 (taxable income of 7,800,000 exceeds the 6,590,000 ceiling)",
+            note: "Further raises do not increase the pension contribution. Health insurance has a far higher cap and keeps rising, so the mix of deductions changes at higher salaries.",
+          },
+        ],
+        sources: OFFICIAL_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "This approximates the method behind the National Tax Service's simplified withholding tax table. Actual withholding is read from the published bracket table, so figures can differ by a few thousand won.",
+          "The National Pension standard monthly income is reset each July from the previous year's earnings. The pension contribution actually billed may therefore reflect last year's income rather than your current salary, and will come out lower than this estimate if you recently had a large raise.",
+          "It assumes the same pay every month. Bonuses, performance pay, unused-leave allowances and pro-rated pay for joining or leaving mid-month are not modelled.",
+          "Non-taxable pay is applied exactly as entered. Companies structure it differently across meal allowances (capped at 200,000 a month), car allowances and childcare allowances, so use the non-taxable total from your actual payslip.",
+          "The annual health insurance reconciliation (the extra payment or refund settled the following April once the prior year's total pay is finalized) and year-end tax settlement are not included.",
+          "It assumes an employee covered by the four major insurances. It does not fit freelancers withheld at 3.3% business income tax, daily workers, or company representatives.",
         ],
       },
     },
@@ -2335,7 +2945,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 급여 정보가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 연봉·월급 등 어떤 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 연봉·월급 등 입력한 정보는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
@@ -2389,9 +2999,10 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "developer", "designer"],
     ico: "Σh",
     ready: true,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "유연근무 잔여시간 계산기", en: "Flex Work Calculator" },
-    relatedTools: ["character-counter", "slack-timestamp-converter", "json-formatter"],
+    relatedTools: ["time-calculator", "time-converter", "salary-calculator"],
     seo: {
       ko: {
         title: "유연근무 잔여 근무시간 계산기",
@@ -2435,6 +3046,56 @@ export const TOOLS: Tool[] = [
           how: "연도·월·1일 소정근로시간을 입력하면 주말과 공휴일을 뺀 영업일로 월 목표시간을 구하고, 연차·반차·시간차를 차감해 실제 목표를 계산합니다. 현재 누적 근무시간을 넣으면 남은 목표를 남은 영업일로 나눠 하루 평균 필요시간과 여유·부족을 보여줍니다.",
           why: "매달 엑셀이나 수기로 반복하던 계산을 30초 만에 끝낼 수 있고, 공휴일과 휴가까지 반영해 '하루에 몇 시간씩 일해야 하는지'를 정확히 알려주기 때문입니다.",
         },
+              guide: [
+          {
+            heading: "유연근무에서 진짜 어려운 건 계산이 아니라 페이스 조절",
+            body: [
+              "선택적 근로시간제나 시차출퇴근제를 쓰면 하루 몇 시간을 일할지는 자유롭지만, 정산 단위(보통 한 달) 안에서 총 근무시간은 맞춰야 합니다. 문제는 이 총량이 매달 다르다는 점입니다. 영업일이 20일인 달과 22일인 달은 목표가 16시간이나 차이 나고, 여기에 공휴일과 연차가 겹치면 감으로 계산하기 어려워집니다.",
+              "그래서 대부분 월말에 가서야 시간이 모자란 걸 발견하고 며칠을 몰아서 일하게 됩니다. 이 계산기는 그 반대를 위한 도구입니다. 월 중간 아무 때나 열어서 \"남은 영업일 동안 하루 평균 몇 시간씩 일하면 되는가\"를 확인하면, 마지막 주에 몰아치는 상황을 미리 피할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "계산이 이루어지는 순서",
+            body: [
+              "먼저 선택한 연·월에서 주말을 빼고, 공휴일 제외 옵션이 켜져 있으면 대한민국 공휴일(설날·추석 연휴와 대체공휴일 포함)까지 뺀 영업일 수를 셉니다. 여기에 1일 소정근로시간을 곱한 값이 그 달의 기본 목표 시간입니다.",
+              "다음으로 사용한 휴가를 차감합니다. 연차는 소정근로시간 하루치, 반차는 그 절반, 시간차는 입력한 시간만큼 목표에서 빠집니다. 소정근로시간을 8시간이 아닌 값으로 바꾸면 연차·반차 차감량도 함께 조정되므로, 주 35시간제처럼 기준이 다른 회사도 그대로 쓸 수 있습니다.",
+              "마지막으로 현재까지 누적 근무시간을 넣으면 남은 목표를 남은 영업일로 나눠 하루 평균 필요시간을 냅니다. 남은 영업일은 오늘을 기준으로 세며, 오늘 근무분을 이미 누적에 넣었는지에 따라 '오늘 포함' 옵션을 켜고 끄면 됩니다.",
+            ],
+          },
+          {
+            heading: "결과를 읽는 법",
+            body: [
+              "하루 평균 필요시간이 소정근로시간보다 크면 남은 기간에 더 일해야 한다는 뜻이고, 작으면 여유가 있다는 뜻입니다. 이 숫자가 10시간을 넘기 시작하면 한 달 안에 만회하기 어려운 구간이므로, 남은 연차 사용 계획을 조정하거나 관리자와 정산 방식을 상의하는 편이 현실적입니다.",
+              "반대로 여유가 크게 남았다면 초과분이 이월되는지 확인하세요. 회사마다 정산 규정이 달라 초과 근무시간이 다음 달로 넘어가기도 하고, 그달에 소멸하기도 합니다. 이 계산기는 목표 대비 현재 위치만 보여줄 뿐 회사의 정산 규정까지는 알 수 없습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "월 중간에 페이스 점검",
+            input: "1일 소정근로 8시간 · 이번 달 영업일 21일 · 연차 1일 사용 · 현재까지 72시간 근무 · 남은 영업일 11일",
+            result: "목표 160시간(168 − 8), 남은 88시간, 하루 평균 8시간",
+            note: "정확히 소정근로시간과 같으면 지금 페이스를 유지하면 된다는 뜻입니다. 이 숫자가 8을 넘으면 이미 뒤처진 것이고, 밑돌면 여유가 있는 것입니다.",
+          },
+          {
+            title: "연휴가 낀 달의 목표 확인",
+            input: "추석 연휴가 포함된 달 · 공휴일 제외 옵션 켬",
+            result: "연휴 일수만큼 영업일이 줄어 목표 시간도 함께 감소",
+            note: "공휴일을 빼지 않으면 목표가 실제보다 20시간 넘게 부풀려집니다. 연휴가 있는 달에 \"이상하게 시간이 남는다\"고 느꼈다면 이 옵션을 확인해 보세요.",
+          },
+          {
+            title: "주 35시간제 회사에서 사용",
+            input: "1일 소정근로시간을 7시간으로 변경 · 반차 1회 사용",
+            result: "월 목표가 7시간 기준으로 재계산되고, 반차는 3.5시간만 차감",
+            note: "소정근로시간 입력 하나만 바꾸면 목표·연차·반차 계산이 모두 그 기준을 따릅니다.",
+          },
+        ],
+        limitations: [
+          "공휴일 데이터는 2025~2027년 대한민국 공휴일만 지원합니다. 그 밖의 연도나 다른 국가의 공휴일, 회사 창립기념일 같은 개별 휴무일은 반영되지 않으므로 직접 시간차로 차감해야 합니다.",
+          "연장·야간·휴일근로 가산(각각 통상임금의 50% 가산)은 계산하지 않습니다. 이 도구는 시간 총량만 다루며 임금 정산 도구가 아닙니다.",
+          "정산 단위를 한 달로 가정합니다. 3개월·6개월 단위 탄력근로제를 쓰는 회사라면 월별 결과를 그대로 적용할 수 없습니다.",
+          "회사의 실제 근태 기록과 대조하지 않습니다. 누적 근무시간은 직접 입력한 값이므로, 근태 시스템 수치와 다르면 결과도 함께 어긋납니다.",
+        ],
       },
       en: {
         card: "Target vs. remaining hours and the daily average you need under flex work. Leave & holidays included.",
@@ -2451,6 +3112,56 @@ export const TOOLS: Tool[] = [
           how: "Enter the year, month and your standard daily hours; it builds the monthly target from business days (weekends and public holidays removed), then deducts annual, half-day and hourly leave. Add your hours worked so far and it divides the remaining target by the remaining business days to show the daily average and your surplus or deficit.",
           why: "It replaces the spreadsheet math people redo every month, finishing in about 30 seconds while accounting for holidays and leave so you know exactly how many hours a day to work.",
         },
+              guide: [
+          {
+            heading: "The hard part of flex work is pacing, not arithmetic",
+            body: [
+              "Under a flexible or flextime schedule you choose how long to work each day, but the total still has to land within the settlement period, usually a month. The catch is that the total moves every month. A 20-business-day month and a 22-day month differ by 16 hours, and once holidays and leave overlap it stops being something you can hold in your head.",
+              "That is why people usually notice the shortfall at month end and cram several long days to catch up. This calculator exists for the opposite habit: open it mid-month, see how many hours a day you need across the remaining business days, and adjust before the last week turns into a scramble.",
+            ],
+          },
+          {
+            heading: "How the calculation runs",
+            body: [
+              "It starts by counting the business days in the selected month with weekends removed, and, if the holiday option is on, Korean public holidays too, including the Seollal and Chuseok periods and substitute holidays. Multiplying that by your standard daily hours gives the month's base target.",
+              "Leave is then deducted: annual leave as one full day of standard hours, half-day leave as half of that, and hourly leave by the hours you enter. Because the deductions scale with the standard daily hours field, a company on a 35-hour week can use the tool as-is.",
+              "Finally, entering the hours you have worked so far divides the remaining target by the remaining business days to produce the daily average. Remaining days are counted from today, and the \"count today\" option lets you match whether today's hours are already included in your total.",
+            ],
+          },
+          {
+            heading: "Reading the result",
+            body: [
+              "If the required daily average is higher than your standard daily hours, you are behind; lower means you have slack. Once that number climbs past ten hours it is rarely recoverable inside the month, so the practical move is to adjust remaining leave plans or talk to your manager about the settlement.",
+              "If you have a large surplus instead, check whether it carries over. Company rules differ: some roll excess hours into the next period, others let them expire. This tool shows only your position against the target; it does not know your employer's settlement policy.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A mid-month pace check",
+            input: "8 standard hours · 21 business days · 1 day of annual leave used · 72 hours worked · 11 business days left",
+            result: "Target 160 hours (168 − 8), 88 remaining, 8 hours per day",
+            note: "Landing exactly on your standard hours means the current pace is right. Above 8 you are already behind; below it you have room.",
+          },
+          {
+            title: "Checking the target in a month with a long holiday",
+            input: "A month containing the Chuseok holidays, with the holiday option on",
+            result: "Business days drop by the holiday length and the target falls with them",
+            note: "Leaving holidays in inflates the target by more than 20 hours. If a holiday month ever felt oddly easy to finish, this setting is usually why.",
+          },
+          {
+            title: "Using it at a company on a 35-hour week",
+            input: "Standard daily hours set to 7 · one half-day of leave",
+            result: "The monthly target is rebuilt on 7 hours and the half-day deducts only 3.5 hours",
+            note: "Changing that single field makes the target, annual leave and half-day maths all follow the same basis.",
+          },
+        ],
+        limitations: [
+          "Holiday data covers Korean public holidays for 2025-2027 only. Other years, other countries, and company-specific days off such as a founding anniversary are not included and have to be entered as hourly leave.",
+          "It does not calculate overtime, night or holiday premiums (each a 50% uplift on ordinary wages under Korean law). This tool deals in hours, not pay.",
+          "It assumes a one-month settlement period. Companies running three- or six-month flexible schemes cannot apply the monthly result directly.",
+          "It never checks your employer's attendance system. Hours worked is whatever you type, so if that differs from the official record the result differs too.",
+        ],
       },
     },
     faq: {
@@ -2473,14 +3184,14 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 근무시간이 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 어떤 근무 정보도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 입력한 근무 정보는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
         {
           question: "How are public holidays handled?",
           answer:
-            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays: say on Saturdays: turn it off to exclude weekends only. Holidays for 2025–2027 are currently supported.",
+            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays: say on Saturdays: turn it off to exclude weekends only. Holidays for 2025-2027 are currently supported.",
         },
         {
           question: "How is annual, half-day and hourly leave deducted?",
@@ -2517,6 +3228,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "developer"],
     ico: "±h",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "시간 더하기 빼기 계산기", en: "Time Calculator" },
     relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
@@ -2580,7 +3292,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 데이터가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 데이터는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
         },
       ],
       en: [
@@ -2602,7 +3314,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. Every calculation runs in your browser and no data is ever uploaded or stored. Close the tab and your inputs are gone.",
+            "No. Every calculation runs in your browser and the data you enter is never uploaded or stored. Close the tab and your inputs are gone.",
         },
       ],
     },
@@ -2624,6 +3336,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm"],
     ico: "h↔d",
     ready: true,
+    indexable: false,
     badge: "Clean SaaS",
     name: { ko: "시간 단위 변환기", en: "Time Converter" },
     relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
@@ -2687,7 +3400,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 숫자가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 변환은 브라우저 안에서 처리되며 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 숫자는 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
@@ -2709,7 +3422,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is anything I enter sent to a server?",
           answer:
-            "No. All conversions run in your browser and no data is ever uploaded or stored.",
+            "No. All conversions run in your browser and the numbers you enter are never uploaded or stored.",
         },
       ],
     },
@@ -2731,8 +3444,9 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "small-business-owner"],
     ico: "☽↔",
     ready: true,
+    indexable: true,
     badge: "Clean SaaS",
-    name: { ko: "음력 양력 변환기", en: "Lunar–Solar Converter" },
+    name: { ko: "음력 양력 변환기", en: "Lunar-Solar Converter" },
     relatedTools: ["slack-timestamp-converter", "time-calculator", "flex-work-calculator"],
     seo: {
       ko: {
@@ -2750,9 +3464,9 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Lunar–Solar Date Converter | 1901 to 2100",
+        title: "Lunar-Solar Date Converter | 1901 to 2100",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901-2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         keywords: [
           "lunar solar converter",
           "korean lunar calendar",
@@ -2780,22 +3494,120 @@ export const TOOLS: Tool[] = [
           how: "변환 방향을 선택한 뒤 연·월·일을 입력하면 브라우저 안에서 즉시 상대 역법의 날짜로 변환하고 갑자(干支)와 띠 정보를 함께 표시합니다.",
           why: "음력과 양력을 매년 달력을 뒤적이거나 검색하지 않고 1901~2100년 범위 어느 날짜든 한 번에 확인할 수 있기 때문입니다.",
         },
+              guide: [
+          {
+            heading: "음력 날짜가 매년 옮겨 다니는 이유",
+            body: [
+              "음력은 달이 차고 기우는 주기(약 29.53일)를 한 달로 삼습니다. 12달을 모으면 354일 정도라 태양력 1년보다 11일쯤 짧고, 그래서 같은 음력 생일이 양력으로는 매년 11일씩 앞당겨집니다. 그대로 두면 몇 년 만에 설날이 여름에 오게 되므로, 약 2~3년에 한 번 같은 달을 두 번 넣어 계절을 맞춥니다. 이렇게 끼워 넣은 달이 윤달입니다.",
+              "부모님 생신이나 제사를 음력으로 지내는 집이라면 매년 양력 날짜를 새로 확인해야 하는 이유가 여기 있습니다. 규칙이 단순한 나눗셈이 아니라 실제 천문 계산에 근거하기 때문에, 손으로 환산하는 것은 사실상 불가능합니다.",
+            ],
+          },
+          {
+            heading: "윤달을 만났을 때",
+            body: [
+              "윤달이 있는 해에는 예를 들어 6월이 두 번 나옵니다. 앞의 것이 평달 6월, 뒤의 것이 윤6월입니다. 음력 6월 15일이 생일인 사람은 윤6월이 든 해에 어느 쪽을 쇠는지 집안마다 다릅니다. 일반적으로는 평달을 따르지만, 제사는 윤달을 피해 평달에 지내는 관례가 넓게 쓰입니다.",
+              "이 변환기에서는 해당 월에 윤달이 존재할 때만 윤달 선택을 켤 수 있습니다. 선택할 수 없다면 그 해 그 달에는 윤달이 없다는 뜻이므로, 평달 날짜를 그대로 쓰면 됩니다.",
+            ],
+          },
+          {
+            heading: "간지와 띠는 언제 바뀌는가",
+            body: [
+              "변환 결과에는 그 날짜의 간지(갑자·을축 등 60갑자)와 띠가 함께 표시됩니다. 여기서 자주 생기는 혼동은 띠가 바뀌는 시점입니다. 이 도구는 음력 정월 초하루를 해의 경계로 삼습니다. 즉 양력 1월에 태어난 사람은 음력으로는 아직 전년도에 속해 앞 해의 띠가 됩니다.",
+              "다만 사주 명리에서는 입춘(양력 2월 4일경)을 해의 경계로 보는 관습도 있어, 1월~2월 초 출생자의 띠는 기준에 따라 달라질 수 있습니다. 공식적인 용도가 아니라면 음력설 기준을 쓰는 것이 일반적입니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "음력 생신을 올해 양력 날짜로 확인",
+            input: "음력 1958년 3월 12일 · 평달",
+            result: "해당 양력 날짜와 요일, 간지·띠가 함께 표시",
+            note: "매년 양력 날짜가 달라지므로, 캘린더에 반복 일정으로 넣어 두면 어긋납니다. 해마다 다시 확인하는 편이 안전합니다.",
+          },
+          {
+            title: "양력 날짜의 음력 확인",
+            input: "양력 2026년 8월 18일",
+            result: "대응하는 음력 연·월·일과 윤달 여부",
+            note: "양력 → 음력 방향은 제사나 명절이 음력 며칠인지 역으로 확인할 때 씁니다.",
+          },
+          {
+            title: "윤달이 든 해 확인",
+            input: "윤달이 있는 연·월 선택",
+            result: "윤달 선택이 활성화되고, 평달과 윤달의 양력 날짜가 서로 다르게 나옴",
+            note: "윤달 선택을 켤 수 없다면 그 해 그 달에는 윤달이 없습니다.",
+          },
+        ],
+        limitations: [
+          "지원 범위는 1901년부터 2100년까지입니다. 이 범위를 벗어난 날짜는 변환되지 않으며, 조선시대 문헌의 날짜 고증 같은 용도에는 쓸 수 없습니다.",
+          "한국 음력(대한민국 표준시 기준)을 따릅니다. 중국 농력이나 베트남 음력은 시차 때문에 삭(달이 완전히 어두워지는 순간)이 다른 날에 걸리는 경우가 있어, 하루 차이가 나거나 윤달 배치가 달라질 수 있습니다.",
+          "띠는 음력 정월 초하루를 기준으로 바뀝니다. 입춘을 해의 경계로 보는 사주 관습과는 결과가 다를 수 있어, 양력 1월~2월 초 출생자는 용도에 맞는 기준을 확인해야 합니다.",
+          "음력 날짜에는 시각 개념이 없습니다. 자시(밤 11시 이후)를 다음 날로 치는 전통 계산이 필요하다면 이 도구의 결과에 별도 보정이 필요합니다.",
+        ],
       },
       en: {
-        card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901–2100 with leap months.",
+        card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901-2100 with leap months.",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901-2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         howItWorks: [
           "Choose conversion direction (solar → lunar or lunar → solar)",
           "Enter year, month and day (toggle intercalation if needed)",
           "See the converted date with ganzhi year and zodiac",
         ],
         aeo: {
-          what: "A Lunar–Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
+          what: "A Lunar-Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
           who: "It is for office workers and small business owners who need to look up lunar-calendar anniversaries, memorial days and traditional holidays in the Gregorian calendar, or the reverse.",
           how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser: including the traditional Korean ganzhi year name and zodiac animal.",
           why: "It saves the annual calendar-flipping or search needed to cross-reference lunar and solar dates for any date from 1901 to 2100.",
         },
+              guide: [
+          {
+            heading: "Why lunar dates move around the solar calendar",
+            body: [
+              "The lunar calendar takes one month as a full cycle of moon phases, about 29.53 days. Twelve of those come to roughly 354 days, some eleven days short of a solar year, which is why the same lunar birthday lands about eleven days earlier on the solar calendar each year. Left alone that would drift Seollal into summer within a couple of decades, so roughly every two to three years an extra month is inserted to pull the calendar back in line. That inserted month is the intercalary, or leap, month.",
+              "If your family keeps birthdays or ancestral rites on the lunar calendar, this is why the solar date has to be looked up again every year. The rule rests on real astronomical calculation rather than simple division, so converting by hand is not practical.",
+            ],
+          },
+          {
+            heading: "What to do when there is a leap month",
+            body: [
+              "In a year with an intercalary month, the sixth month, say, occurs twice: the ordinary sixth month and then the leap sixth month. For someone born on the fifteenth of the sixth lunar month, which one to observe in such a year varies by family. The ordinary month is the usual choice, and ancestral rites in particular are widely kept in the ordinary month rather than the leap one.",
+              "In this converter the leap-month option can only be switched on for months that actually have one. If you cannot select it, that year and month simply has no leap month and the ordinary date applies.",
+            ],
+          },
+          {
+            heading: "When the sexagenary cycle and zodiac sign change",
+            body: [
+              "Each conversion also shows the date's ganzhi (the sixty-term sexagenary cycle) and its zodiac animal. The common confusion is when the animal changes. This tool uses the first day of the first lunar month as the boundary, so someone born in solar January still falls in the previous lunar year and takes the previous year's animal.",
+              "Some traditions in Chinese astrology instead place the boundary at Lichun, around 4 February, which means the animal for anyone born between January and early February can differ depending on the convention. For everyday use, the lunar new year boundary is the usual one.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Finding this year's solar date for a lunar birthday",
+            input: "Lunar 12th day of the 3rd month, 1958, ordinary month",
+            result: "The matching solar date and weekday, with ganzhi and zodiac sign",
+            note: "Because the solar date shifts each year, a repeating calendar entry will drift out of sync. It is safer to look it up annually.",
+          },
+          {
+            title: "Looking up the lunar date for a solar day",
+            input: "Solar 18 August 2026",
+            result: "The corresponding lunar year, month and day, and whether it is a leap month",
+            note: "The solar-to-lunar direction is what you use to work out which lunar day a holiday or memorial falls on.",
+          },
+          {
+            title: "Checking a year that has a leap month",
+            input: "Select a year and month that contains an intercalary month",
+            result: "The leap-month toggle becomes available, and the ordinary and leap months map to different solar dates",
+            note: "If the toggle stays disabled, that year and month has no leap month.",
+          },
+        ],
+        limitations: [
+          "The supported range is 1901 to 2100. Dates outside it are not converted, so it cannot be used for dating historical records.",
+          "It follows the Korean lunar calendar, based on Korea Standard Time. The Chinese and Vietnamese lunar calendars can place a new moon on a different day because of the time difference, giving a one-day shift or a different leap-month placement.",
+          "The zodiac animal changes at the first day of the first lunar month. Traditions that use Lichun as the boundary will disagree for anyone born in January or early February, so check which convention your purpose needs.",
+          "Lunar dates carry no time of day. If you need the traditional rule that counts the hours after 11pm as the next day, adjust the result yourself.",
+        ],
       },
     },
     faq: {
@@ -2818,7 +3630,7 @@ export const TOOLS: Tool[] = [
         {
           question: "입력한 날짜가 서버로 전송되나요?",
           answer:
-            "아니요. 모든 변환은 브라우저 안에서 처리됩니다. 어떤 데이터도 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 모든 변환은 브라우저 안에서 처리됩니다. 입력한 날짜는 서버로 전송되거나 저장되지 않습니다.",
         },
         {
           question: "갑자(干支)와 띠는 어떤 기준으로 계산되나요?",
@@ -2833,7 +3645,7 @@ export const TOOLS: Tool[] = [
       ],
       en: [
         {
-          question: "What is a Lunar–Solar Converter?",
+          question: "What is a Lunar-Solar Converter?",
           answer:
             "It is a tool that converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. Use it to find the Gregorian date of a lunar anniversary or memorial day, or to find the lunar date that corresponds to a given Gregorian date.",
         },
@@ -2850,7 +3662,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. All conversions run entirely in your browser. No data is uploaded or stored.",
+            "No. All conversions run entirely in your browser. The dates you enter are never uploaded or stored.",
         },
         {
           question: "What standard does the Korean lunar calendar follow?",
@@ -2865,7 +3677,7 @@ export const TOOLS: Tool[] = [
         subtitle: "양력 ↔ 음력 날짜 즉시 변환 · 1901~2100년 지원",
       },
       en: {
-        title: "Lunar–Solar Converter",
+        title: "Lunar-Solar Converter",
         subtitle: "Convert between Gregorian and Korean lunar dates instantly",
       },
     },
@@ -2880,6 +3692,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "marketer", "office-worker", "small-business-owner", "developer"],
     ico: "%↑",
     ready: true,
+    indexable: true,
     badge: "Calculator",
     name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
     relatedTools: ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"],
@@ -2941,6 +3754,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "월간 활성 사용자(MAU) 증가율 보고",
+            input: "이전 값 1,250,000 · 현재 값 1,437,500",
+            result: "성장률 +15%, 차이 +187,500, 배수 1.15배",
+            note: "주간 보고에 \"15% 성장\"이라고 쓰기 전에 절대 증가량(187,500)도 함께 보세요. 모수가 작을 때의 15%와 큰 모수에서의 15%는 의미가 전혀 다릅니다.",
+          },
+          {
+            title: "전년 동월 대비(YoY) 매출 비교",
+            input: "이전 값 84,000,000 · 현재 값 71,400,000",
+            result: "성장률 −15%, 차이 −12,600,000",
+            note: "MoM·YoY·QoQ·WoW는 모두 같은 수식이고 비교 대상 기간만 다릅니다. 계절성이 있는 사업이라면 직전 달(MoM)보다 전년 동월(YoY)이 실제 추세를 더 정확히 보여줍니다.",
+          },
+          {
+            title: "감소율을 되돌리는 데 필요한 증가율 확인",
+            input: "100에서 80으로 떨어진 뒤(−20%) 다시 100으로 회복",
+            result: "회복에 필요한 성장률은 +25% (20%가 아님)",
+            note: "퍼센트는 기준값이 바뀌면 대칭이 아닙니다. −20% 뒤의 +20%는 원래 값이 아니라 96이 됩니다. 목표 복귀 수치가 필요할 때 자주 틀리는 부분입니다.",
+          },
+        ],
+        limitations: [
+          "이전 값이 0이면 성장률을 정의할 수 없습니다. 0에서 100으로 늘어난 것은 \"무한대 성장\"이 아니라 증가량(+100)으로 표현해야 합니다.",
+          "이전 값이 음수인 경우(적자에서 흑자 전환 등) 퍼센트 성장률은 수학적으로는 계산되지만 해석이 뒤집혀 오해를 부릅니다. 이때는 퍼센트 대신 절대 금액 변화를 쓰세요.",
+          "두 시점만 비교하므로 그 사이의 등락은 보이지 않습니다. 3개월 이상 흐름을 하나의 연율로 요약하려면 CAGR 계산기를 쓰는 편이 정확합니다.",
+          "퍼센트포인트(%p)와 퍼센트(%)를 구분하지 않습니다. 전환율이 2%에서 3%가 된 경우 이 도구는 +50%로 계산하며, 이를 \"1%p 상승\"으로 표현할지는 보고 맥락에 따라 직접 선택해야 합니다.",
+        ],
       },
       en: {
         card: "Instantly calculate growth rate, % change, and MoM/YoY/QoQ/WoW from two values.",
@@ -2976,6 +3815,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "Reporting monthly active user growth",
+            input: "Previous 1,250,000 · Current 1,437,500",
+            result: "Growth +15%, difference +187,500, multiple 1.15x",
+            note: "Before writing \"15% growth\" in a weekly report, look at the absolute change (187,500) too. Fifteen percent off a small base and off a large base mean very different things.",
+          },
+          {
+            title: "Year-over-year revenue comparison",
+            input: "Previous 84,000,000 · Current 71,400,000",
+            result: "Growth −15%, difference −12,600,000",
+            note: "MoM, YoY, QoQ and WoW all use the same formula and differ only in the comparison period. For a seasonal business, YoY reflects the real trend far better than the previous month.",
+          },
+          {
+            title: "Finding the increase needed to undo a decline",
+            input: "A drop from 100 to 80 (−20%), then recovery back to 100",
+            result: "The recovery requires +25%, not +20%",
+            note: "Percentages are not symmetric because the base changes. Adding 20% after losing 20% lands at 96, not the original value. This trips people up whenever a recovery target is involved.",
+          },
+        ],
+        limitations: [
+          "Growth is undefined when the previous value is 0. Going from 0 to 100 is not \"infinite growth\"; report it as an absolute change of +100.",
+          "When the previous value is negative (for example a loss turning into a profit), a percentage is mathematically computable but reads backwards and misleads. Use the absolute change instead.",
+          "Only two points are compared, so anything that happened in between is invisible. To summarize three or more periods as a single annual figure, use the CAGR calculator.",
+          "The tool does not distinguish percentage points from percent. A conversion rate moving from 2% to 3% is reported as +50%; whether to describe that as \"up 1pp\" is a judgment call for your report.",
+        ],
       },
     },
     faq: {
@@ -3009,6 +3874,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "office-worker", "developer"],
     ico: "|Δ|",
     ready: true,
+    indexable: false,
     badge: "Calculator",
     name: { ko: "퍼센트 차이 계산기", en: "Percent Difference Calculator" },
     relatedTools: ["growth-rate-calculator", "cagr-calculator", "goal-growth-calculator"],
@@ -3077,6 +3943,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "small-business-owner", "office-worker"],
     ico: "→%",
     ready: true,
+    indexable: false,
     badge: "Calculator",
     name: { ko: "목표 성장률 계산기", en: "Goal Growth Calculator" },
     relatedTools: ["required-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
@@ -3145,6 +4012,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "small-business-owner", "office-worker"],
     ico: "req",
     ready: true,
+    indexable: false,
     badge: "Calculator",
     name: { ko: "필요 증가량 계산기", en: "Required Growth Calculator" },
     relatedTools: ["goal-growth-calculator", "reverse-growth-calculator", "growth-rate-calculator"],
@@ -3213,6 +4081,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "developer", "office-worker"],
     ico: "÷%",
     ready: true,
+    indexable: false,
     badge: "Calculator",
     name: { ko: "역산 계산기", en: "Reverse Growth Calculator" },
     relatedTools: ["goal-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
@@ -3281,9 +4150,10 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "small-business-owner", "office-worker"],
     ico: "cagr",
     ready: true,
+    indexable: true,
     badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
-    relatedTools: ["compound-growth-calculator", "goal-growth-calculator", "growth-rate-calculator"],
+    relatedTools: ["compound-growth-calculator", "growth-rate-calculator", "goal-growth-calculator"],
     seo: {
       ko: {
         title: "CAGR 계산기 | 연평균 성장률 계산",
@@ -3310,6 +4180,56 @@ export const TOOLS: Tool[] = [
           how: "CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다.",
           why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 용이합니다.",
         },
+              guide: [
+          {
+            heading: "CAGR이 필요한 순간",
+            body: [
+              "3년 동안 매출이 1.2억에서 2.1억이 됐다고 해봅시다. \"75% 성장\"은 사실이지만 다른 사업부와 비교할 수 없는 숫자입니다. 저쪽은 5년간 성장했을 수도, 2년간 성장했을 수도 있기 때문입니다. 기간이 다른 성장을 나란히 놓으려면 공통 단위가 필요하고, 그 단위가 연평균 성장률(CAGR)입니다.",
+              "CAGR은 \"매년 똑같은 비율로 성장했다면 몇 %였겠는가\"를 되묻는 계산입니다. 실제로는 첫해에 몰아서 성장하고 이듬해에 정체했더라도, CAGR은 그 경로를 평탄하게 펴서 하나의 연율로 보여줍니다. 투자 수익률 비교, 시장 규모 전망, 사업계획서의 성장 가정이 대부분 CAGR로 표현되는 이유입니다.",
+            ],
+          },
+          {
+            heading: "산술평균으로 계산하면 왜 틀리는가",
+            body: [
+              "가장 흔한 실수는 연도별 성장률을 더해서 연수로 나누는 것입니다. 1년 차에 +100%, 2년 차에 −50%였다면 산술평균은 +25%지만, 실제로는 100 → 200 → 100으로 제자리입니다. 진짜 연평균은 0%입니다.",
+              "CAGR = (종료값 ÷ 시작값)^(1 ÷ 기간) − 1 은 이 문제를 곱셈으로 풉니다. 성장은 더해지는 것이 아니라 곱해지며 쌓이기 때문에, 평균도 기하평균으로 내야 실제 도달점과 맞아떨어집니다. 이 계산기가 내는 CAGR로 시작값을 기간만큼 복리 성장시키면 정확히 종료값이 나옵니다.",
+              "반대 방향의 계산이 필요하다면, 즉 시작값과 성장률로 미래 값을 구하고 싶다면 복리 성장 계산기를 쓰세요. 같은 수식을 반대로 푸는 도구입니다.",
+            ],
+          },
+          {
+            heading: "결과를 어떻게 읽을 것인가",
+            body: [
+              "CAGR은 과거를 요약하는 지표이지 미래를 보장하는 값이 아닙니다. 지난 3년 CAGR이 20%라는 사실이 내년에도 20% 성장한다는 뜻은 아닙니다. 특히 시작 시점이 유난히 낮았던 해라면 CAGR이 부풀려지므로, 시작·종료 연도를 한 해씩 옮겨 보면서 숫자가 크게 흔들리는지 확인하는 습관이 좋습니다.",
+              "기간을 셀 때는 연도 개수가 아니라 구간 수를 넣어야 합니다. 2023년 말부터 2026년 말까지라면 연도는 네 개지만 기간은 3년입니다. 이 한 칸 차이로 CAGR이 눈에 띄게 달라집니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "3년간 매출 성장을 연율로 환산",
+            input: "시작 120,000,000 · 종료 210,000,000 · 기간 3년",
+            result: "CAGR 약 20.5% (총 성장률 75%)",
+            note: "\"3년간 75% 성장\"보다 \"연평균 20.5% 성장\"이 다른 기간의 사업과 비교하기 쉽습니다. 검산: 1.205를 세 번 곱하면 약 1.75가 됩니다.",
+          },
+          {
+            title: "요동친 성과의 실제 연평균 구하기",
+            input: "시작 100 · 종료 100 · 기간 2년 (1년 차 +100%, 2년 차 −50%)",
+            result: "CAGR 0%",
+            note: "연도별 성장률의 산술평균은 +25%로 나오지만, 실제로는 제자리입니다. 성장률을 평균 낼 때 CAGR을 써야 하는 이유가 이 차이입니다.",
+          },
+          {
+            title: "감소한 지표의 연평균 하락률",
+            input: "시작 50,000 · 종료 32,000 · 기간 2년",
+            result: "CAGR 약 −20%",
+            note: "감소도 같은 수식으로 계산되며 음수 CAGR로 표시됩니다. 이탈률·해지 건수처럼 줄어드는 것이 목표인 지표에도 그대로 쓸 수 있습니다.",
+          },
+        ],
+        limitations: [
+          "시작값은 반드시 0보다 커야 합니다. 시작값이 0이거나 음수면 (종료÷시작) 자체가 성립하지 않아 CAGR을 정의할 수 없습니다.",
+          "중간 경로를 전부 지운 값입니다. CAGR이 같은 두 사업도 하나는 꾸준히 성장했고 다른 하나는 한 해에 몰아서 성장했을 수 있으므로, 변동성 판단에는 쓸 수 없습니다.",
+          "기간은 연도 개수가 아니라 구간 수입니다. 2023년 말 → 2026년 말은 3년이며, 4를 넣으면 성장률이 실제보다 낮게 나옵니다.",
+          "물가상승률을 반영하지 않은 명목 성장률입니다. 장기간(5년 이상) 금액을 비교할 때는 실질 가치 기준으로 따로 보정해야 합니다.",
+        ],
       },
       en: {
         card: "Calculate CAGR (Compound Annual Growth Rate) from start, end, and years.",
@@ -3322,6 +4242,56 @@ export const TOOLS: Tool[] = [
           how: "CAGR = (End / Start) ^ (1 / Years) − 1. The result is the annualized growth rate assuming constant compounding.",
           why: "CAGR normalizes growth across different time spans, making it the standard metric for comparing investment returns or business growth rates.",
         },
+              guide: [
+          {
+            heading: "When you actually need CAGR",
+            body: [
+              "Say revenue went from 120M to 210M over three years. \"Grew 75%\" is true, but it cannot be compared with another business unit, because that one may have grown over five years or over two. Comparing growth across different time spans needs a common unit, and that unit is the compound annual growth rate.",
+              "CAGR answers a single question: if this had grown by the same percentage every year, what percentage would that be? Even if all the growth landed in year one and year two was flat, CAGR flattens the path into one annual figure. That is why investment returns, market-size forecasts and business-plan assumptions are almost always stated as CAGR.",
+            ],
+          },
+          {
+            heading: "Why averaging the yearly rates gives the wrong answer",
+            body: [
+              "The most common mistake is adding up the annual growth rates and dividing by the number of years. With +100% in year one and −50% in year two, the arithmetic mean is +25%, but the value went 100 → 200 → 100 and ended exactly where it started. The true annual average is 0%.",
+              "CAGR = (End ÷ Start) ^ (1 ÷ Years) − 1 solves this with multiplication. Growth compounds rather than adds, so the average has to be geometric to land on the real end value. Compounding the start value at this calculator's CAGR for the given number of years reproduces the end value exactly.",
+              "If you need the reverse: a future value from a start value and a rate: use the compound growth calculator, which solves the same equation in the other direction.",
+            ],
+          },
+          {
+            heading: "How to read the result",
+            body: [
+              "CAGR summarizes the past; it does not promise the future. A 20% CAGR over the last three years does not mean next year will be 20%. It is especially inflated when the starting year happened to be unusually low, so it is worth shifting the start and end years by one and checking whether the number moves a lot.",
+              "Count periods, not years. From the end of 2023 to the end of 2026 there are four calendar years but only three periods. That off-by-one changes the CAGR noticeably.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Turning three years of revenue growth into an annual rate",
+            input: "Start 120,000,000 · End 210,000,000 · 3 years",
+            result: "CAGR about 20.5% (total growth 75%)",
+            note: "\"20.5% a year\" compares across time spans in a way that \"75% over three years\" cannot. Check it: multiply 1.205 by itself three times and you get roughly 1.75.",
+          },
+          {
+            title: "Finding the real average behind a volatile run",
+            input: "Start 100 · End 100 · 2 years (+100% then −50%)",
+            result: "CAGR 0%",
+            note: "Averaging the yearly rates arithmetically gives +25%, yet nothing actually changed. That gap is exactly why growth rates should be averaged with CAGR.",
+          },
+          {
+            title: "The annual rate of a metric that is shrinking",
+            input: "Start 50,000 · End 32,000 · 2 years",
+            result: "CAGR about −20%",
+            note: "Declines use the same formula and come out as a negative CAGR, which works just as well for metrics like churn or cancellations where going down is the goal.",
+          },
+        ],
+        limitations: [
+          "The start value must be greater than zero. With a start of zero or a negative start, End ÷ Start breaks down and CAGR is undefined.",
+          "It erases the path in between. Two businesses with identical CAGR may have grown steadily or in a single burst, so it says nothing about volatility.",
+          "Years means the number of periods, not the number of calendar years. End of 2023 to end of 2026 is 3; entering 4 understates the growth rate.",
+          "It is a nominal rate with no inflation adjustment. When comparing money over five years or more, deflate to real terms separately.",
+        ],
       },
     },
     faq: {
@@ -3349,6 +4319,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "small-business-owner", "office-worker"],
     ico: "^n",
     ready: true,
+    indexable: true,
     badge: "Calculator",
     name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
     relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
@@ -3407,6 +4378,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "연 12% 성장 가정으로 5년 뒤 매출 예측",
+            input: "현재 값 50,000,000 · 성장률 12% · 기간 5년",
+            result: "약 88,117,000 (총 증가 약 76%)",
+            note: "단리로 계산하면 50,000,000 × (1 + 0.12 × 5) = 80,000,000입니다. 5년만 지나도 복리와 단리의 차이가 800만원 넘게 벌어집니다.",
+          },
+          {
+            title: "사업계획서의 성장 시나리오 비교",
+            input: "같은 현재 값에 성장률 8% / 12% / 20%를 각각 입력",
+            result: "5년 뒤 약 73,466,000 / 88,117,000 / 124,416,000",
+            note: "보수·기본·공격 세 가지 시나리오를 나란히 두면, 목표 숫자가 어느 가정에 기대고 있는지 한눈에 보입니다.",
+          },
+          {
+            title: "감소 시나리오(이탈) 예측",
+            input: "현재 값 12,000 · 성장률 −5% · 기간 8분기",
+            result: "약 7,963",
+            note: "성장률에 음수를 넣으면 복리 감소가 됩니다. 기간 단위는 연이 아니어도 되며, 분기 이탈률을 넣으면 분기 단위로 계산됩니다.",
+          },
+        ],
+        limitations: [
+          "성장률이 매 기간 동일하다고 가정합니다. 실제 사업은 시장 포화·경쟁 진입·계절성으로 성장률이 변하므로, 기간이 길어질수록 예측 오차가 급격히 커집니다.",
+          "5년을 넘는 예측은 참고용으로만 쓰세요. 연 20% 성장을 10년간 유지하면 6.2배가 되는데, 이 규모를 실제로 달성하는 사업은 드뭅니다.",
+          "기간 단위는 성장률의 단위와 반드시 같아야 합니다. 연 성장률에 기간 12를 넣으면 12개월이 아니라 12년이 계산됩니다.",
+          "물가상승률·환율·세금을 반영하지 않은 명목 값입니다. 투자 수익을 볼 때는 실질 수익률로 따로 환산해야 합니다.",
+        ],
       },
       en: {
         card: "Compute compounded final value and future projection from a value, rate, and periods.",
@@ -3442,6 +4439,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "Projecting revenue five years out at 12% a year",
+            input: "Current 50,000,000 · Rate 12% · 5 periods",
+            result: "About 88,117,000 (roughly 76% total growth)",
+            note: "Simple interest would give 50,000,000 × (1 + 0.12 × 5) = 80,000,000. Even at five years the compounding gap is over 8 million.",
+          },
+          {
+            title: "Comparing growth scenarios in a business plan",
+            input: "The same current value at 8% / 12% / 20%",
+            result: "About 73,466,000 / 88,117,000 / 124,416,000 after five periods",
+            note: "Lining up conservative, base and aggressive cases makes it obvious which assumption your target number is leaning on.",
+          },
+          {
+            title: "Modelling a decline instead of growth",
+            input: "Current 12,000 · Rate −5% · 8 quarters",
+            result: "About 7,963",
+            note: "A negative rate compounds downward. The period does not have to be a year: feed it a quarterly churn rate and the result is quarterly.",
+          },
+        ],
+        limitations: [
+          "It assumes the same rate every period. Real businesses see growth change with saturation, new competitors and seasonality, so the error grows sharply the further out you project.",
+          "Treat anything beyond five periods as illustrative. Sustaining 20% for ten years implies a 6.2x increase, which very few businesses actually achieve.",
+          "The period unit must match the rate unit. Entering 12 with an annual rate models twelve years, not twelve months.",
+          "Results are nominal, with no inflation, currency or tax effects. Convert to a real rate separately when evaluating investment returns.",
+        ],
       },
     },
     faq: {
@@ -3474,6 +4497,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "pace",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
     relatedTools: ["roas-calculator", "cpa-calculator", "funnel-conversion-calculator"],
@@ -3494,7 +4518,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Ad Budget Pacing Calculator | Campaign Budget Burn Rate",
         description:
-          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "ad budget pacing calculator",
           "campaign budget pacing",
@@ -3524,7 +4548,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Compare campaign time progress vs budget burn rate to spot overpacing or underpacing instantly.",
         description:
-          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Everything runs in your browser with no data sent to a server.",
+          "Compare your campaign's time progress with its budget burn rate to instantly see if your ad spend is ahead or behind schedule. Calculates the required daily budget for the remaining period and the projected final spend. Supports daily and weekday-only pacing. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Enter total budget, campaign dates and spend to date",
           "Compare time progress vs budget burn rate",
@@ -3590,7 +4614,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my budget data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -3606,6 +4630,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "ROAS",
     ready: true,
+    indexable: true,
     badge: "Marketing Calculator",
     name: { ko: "ROAS 계산기", en: "ROAS Calculator" },
     relatedTools: ["cpa-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
@@ -3626,7 +4651,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "ROAS Calculator | Return on Ad Spend, Target Revenue & Budget",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "ROAS calculator",
           "return on ad spend calculator",
@@ -3669,11 +4694,37 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "캠페인 ROAS 계산",
+            input: "광고비 3,000,000 · 광고 매출 12,600,000",
+            result: "ROAS 420%",
+            note: "광고비 1원당 매출 4.2원이라는 뜻입니다. ROAS는 매출 기준이라 원가와 수수료를 빼기 전 숫자이며, 이 값만으로는 흑자인지 알 수 없습니다.",
+          },
+          {
+            title: "손익분기 ROAS로 흑자 여부 판단",
+            input: "기여이익률 25%",
+            result: "손익분기 ROAS 400%",
+            note: "손익분기 ROAS = 1 ÷ 기여이익률입니다. 마진이 25%면 400%를 넘어야 본전이므로, 위 예시의 420%는 겨우 흑자 구간입니다. 마진율을 모른 채 \"ROAS 400% 달성\"을 성과로 보고하면 적자 캠페인을 성공으로 착각할 수 있습니다.",
+          },
+          {
+            title: "목표 매출에서 허용 광고비 역산",
+            input: "목표 매출 50,000,000 · 목표 ROAS 500%",
+            result: "허용 광고비 10,000,000",
+            note: "월 예산을 짤 때 쓰는 방향입니다. 목표 ROAS를 마진율에서 먼저 정하고, 거기서 쓸 수 있는 광고비를 도출하는 순서가 안전합니다.",
+          },
+        ],
+        limitations: [
+          "ROAS는 매출 기준 지표입니다. 원가·배송비·결제 수수료·반품을 반영하지 않으므로, 수익성 판단에는 반드시 기여이익률과 손익분기 ROAS를 함께 봐야 합니다.",
+          "광고 매출은 플랫폼이 자기 기여로 집계한 값입니다. 클릭 후 7일 이내 구매 같은 기여 기간(attribution window) 설정에 따라 같은 캠페인의 ROAS가 크게 달라지며, 여러 채널의 ROAS를 단순 합산하면 같은 주문이 중복 계상됩니다.",
+          "신규 고객 획득 캠페인은 첫 구매만으로 평가하면 ROAS가 낮게 나옵니다. 재구매가 있는 사업이라면 고객 생애 가치(LTV) 기준으로 함께 판단해야 합니다.",
+          "브랜드 검색처럼 광고가 없어도 발생했을 매출은 걷어내지 않습니다. 증분 효과를 보려면 캠페인을 끄고 비교하는 실험이 필요합니다.",
+        ],
       },
       en: {
         card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Everything runs in your browser with no data sent to a server.",
+          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (ROAS, target revenue, or allowable budget)",
           "Enter ad spend, revenue, or target values",
@@ -3700,6 +4751,32 @@ export const TOOLS: Tool[] = [
               "That means your target ROAS should be built on your margin structure. Setting a target and reverse-calculating allowable spend and required revenue lets you plan budgets by the numbers rather than by feel. Everything runs in your browser.",
             ],
           },
+        ],
+              examples: [
+          {
+            title: "Calculating campaign ROAS",
+            input: "Ad spend 3,000,000 · Attributed revenue 12,600,000",
+            result: "ROAS 420%",
+            note: "That is 4.2 in revenue per 1 spent. ROAS is a revenue figure taken before cost of goods and fees, so on its own it does not tell you whether the campaign made money.",
+          },
+          {
+            title: "Using break-even ROAS to judge profitability",
+            input: "Contribution margin 25%",
+            result: "Break-even ROAS 400%",
+            note: "Break-even ROAS = 1 ÷ contribution margin. At a 25% margin you need to clear 400% just to break even, so the 420% above is barely profitable. Reporting \"we hit 400% ROAS\" without knowing the margin can dress up a losing campaign as a win.",
+          },
+          {
+            title: "Working backwards from a revenue target to an allowable budget",
+            input: "Target revenue 50,000,000 · Target ROAS 500%",
+            result: "Allowable ad spend 10,000,000",
+            note: "This is the direction to use when planning a monthly budget: set the target ROAS from your margin first, then derive the spend it allows.",
+          },
+        ],
+        limitations: [
+          "ROAS is measured on revenue. It ignores cost of goods, shipping, payment fees and returns, so profitability decisions need contribution margin and break-even ROAS alongside it.",
+          "Attributed revenue is whatever the ad platform claims credit for. The attribution window (say, purchases within seven days of a click) can move the same campaign's ROAS substantially, and adding ROAS across channels double-counts the same orders.",
+          "Prospecting campaigns look weak when judged on the first purchase alone. If customers buy again, evaluate against lifetime value as well.",
+          "It does not strip out revenue that would have happened anyway, such as branded search. Measuring incrementality requires an experiment that turns the campaign off.",
         ],
       },
     },
@@ -3745,7 +4822,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my ad spend and revenue data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -3761,6 +4838,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "CPA",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "CPA 계산기", en: "CPA Calculator" },
     relatedTools: ["roas-calculator", "cpc-calculator", "funnel-conversion-calculator"],
@@ -3781,7 +4859,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPA Calculator | Cost Per Acquisition, Conversions & Budget",
         description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPA calculator",
           "cost per acquisition calculator",
@@ -3827,7 +4905,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
         description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPA, expected conversions, or required budget)",
           "Enter ad spend, conversions, or target values",
@@ -3899,7 +4977,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -3915,6 +4993,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "CPC",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "CPC 계산기", en: "CPC Calculator" },
     relatedTools: ["ctr-calculator", "cpm-calculator", "cpa-calculator"],
@@ -3935,7 +5014,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPC Calculator | Cost Per Click, Expected Clicks & Budget",
         description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPC calculator",
           "cost per click calculator",
@@ -3982,7 +5061,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
         description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPC, expected clicks, or required budget)",
           "Enter ad spend, clicks, or target values",
@@ -4054,7 +5133,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4070,6 +5149,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "CPM",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "CPM 계산기", en: "CPM Calculator" },
     relatedTools: ["ctr-calculator", "cpc-calculator", "ad-budget-pacing-calculator"],
@@ -4090,7 +5170,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CPM Calculator | Cost Per Mille, Impressions & Budget",
         description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CPM calculator",
           "cost per mille calculator",
@@ -4136,7 +5216,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
         description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Everything runs in your browser with no data sent to a server.",
+          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CPM, expected impressions, or required budget)",
           "Enter ad spend, impressions, or target values",
@@ -4208,7 +5288,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4224,6 +5304,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "CTR",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "CTR 계산기", en: "CTR Calculator" },
     relatedTools: ["cpc-calculator", "cpm-calculator", "funnel-conversion-calculator"],
@@ -4244,7 +5325,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "CTR Calculator | Click-Through Rate, Clicks & Impressions",
         description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         keywords: [
           "CTR calculator",
           "click through rate calculator",
@@ -4290,7 +5371,7 @@ export const TOOLS: Tool[] = [
       en: {
         card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
         description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Everything runs in your browser with no data sent to a server.",
+          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
         howItWorks: [
           "Choose a calculation mode (CTR, required clicks, or required impressions)",
           "Enter clicks, impressions, or target values",
@@ -4362,7 +5443,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4378,6 +5459,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "pm", "small-business-owner"],
     ico: "⇢%",
     ready: true,
+    indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
     relatedTools: ["ctr-calculator", "cpa-calculator", "ad-budget-pacing-calculator"],
@@ -4495,7 +5577,7 @@ export const TOOLS: Tool[] = [
         {
           question: "Is my data sent to a server?",
           answer:
-            "No. Every calculation runs entirely in your browser. Nothing is uploaded or stored on any server.",
+            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
         },
       ],
     },
@@ -4513,6 +5595,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "designer", "developer", "small-business-owner"],
     ico: "▦",
     ready: true,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "QR 코드 생성기", en: "QR Code Generator" },
     relatedTools: ["qr-code-reader", "css-gradient", "open-graph-preview"],
@@ -4595,6 +5678,33 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "매장 테이블용 메뉴 링크 QR",
+            input: "메뉴 페이지 URL · 오류 정정 레벨 H · SVG 다운로드",
+            result: "인쇄해도 깨지지 않는 벡터 QR 파일",
+            note: "인쇄물에는 반드시 SVG를 쓰세요. PNG는 확대하면 가장자리가 뭉개져 인식률이 떨어집니다. 오류 정정 레벨 H는 코드의 약 30%가 손상돼도 읽히므로, 지문이나 음식물이 묻기 쉬운 테이블 QR에 적합합니다.",
+          },
+          {
+            title: "명함에 넣을 작은 QR",
+            input: "짧은 URL · 여백(quiet zone) 유지 · 최소 2cm 크기로 배치",
+            result: "명함 크기에서도 인식되는 QR",
+            note: "URL이 길수록 모듈이 촘촘해져 작게 인쇄하면 읽히지 않습니다. 명함처럼 작은 지면에는 단축 URL을 먼저 만든 뒤 QR로 변환하세요.",
+          },
+          {
+            title: "브랜드 컬러를 적용한 QR",
+            input: "전경색 #22499F · 배경 흰색",
+            result: "브랜드 색이 적용되면서도 인식되는 QR",
+            note: "전경색은 배경보다 반드시 어두워야 합니다. 밝은 색을 전경에 쓰거나 명암 대비가 낮으면 카메라가 모듈을 구분하지 못합니다. 색을 바꾼 뒤에는 실제 휴대폰으로 반드시 스캔 테스트를 하세요.",
+          },
+        ],
+        limitations: [
+          "QR 코드에는 담긴 데이터가 그대로 들어갑니다. 만든 뒤에 링크를 바꿀 수 없으므로, 나중에 목적지를 변경할 가능성이 있다면 리다이렉트 가능한 단축 URL을 먼저 만들고 그 주소로 QR을 생성하세요.",
+          "전경색이 배경보다 밝거나 대비가 부족하면 스캔되지 않습니다. 그라디언트나 사진 위에 얹는 디자인도 인식률을 크게 떨어뜨립니다.",
+          "코드 주변 여백(quiet zone)을 잘라내면 인식이 실패합니다. 다른 그래픽과 붙여 배치할 때 여백을 침범하지 않도록 주의하세요.",
+          "데이터가 길수록 모듈 수가 늘어 같은 크기에서 인식이 어려워집니다. 긴 텍스트나 URL은 인쇄 크기를 키우거나 내용을 줄여야 합니다.",
+          "스캔 성공 여부는 기기 카메라·조명·인쇄 품질에 좌우됩니다. 대량 인쇄 전에 여러 기종으로 테스트하는 과정을 생략하지 마세요.",
+        ],
       },
       en: {
         card: "Create a QR code from a URL, customize its shape and color, and download PNG or SVG.",
@@ -4633,6 +5743,33 @@ export const TOOLS: Tool[] = [
               "The codes it makes are also static: they embed your address directly rather than routing through another service. That means there's no third party that could shut down and leave your code dead: as long as the printed code exists, it keeps working.",
             ],
           },
+        ],
+              examples: [
+          {
+            title: "A menu link QR for restaurant tables",
+            input: "Menu page URL · error correction level H · download as SVG",
+            result: "A vector QR file that stays crisp in print",
+            note: "Always use SVG for print; PNG softens at the edges when scaled up and scans less reliably. Level H stays readable with roughly 30% of the code damaged, which suits table codes that pick up fingerprints and spills.",
+          },
+          {
+            title: "A small QR for a business card",
+            input: "A short URL · quiet zone preserved · printed at least 2cm across",
+            result: "A code that still scans at business-card size",
+            note: "Longer URLs pack the modules more densely and fail at small print sizes. For tight layouts, shorten the URL first and then generate the code.",
+          },
+          {
+            title: "A QR in brand colors",
+            input: "Foreground #22499F on a white background",
+            result: "A branded code that still scans",
+            note: "The foreground must be darker than the background. Light foregrounds or low contrast stop the camera separating the modules. After any color change, test with a real phone.",
+          },
+        ],
+        limitations: [
+          "A QR code carries its data literally, so the destination cannot be changed after printing. If the target might move, generate the code against a redirectable short URL instead.",
+          "Codes fail to scan when the foreground is lighter than the background or the contrast is too low. Gradients and photo backdrops behind the modules hurt reliability badly.",
+          "Trimming the quiet zone around the code breaks scanning. Watch the margin when placing the code tight against other graphics.",
+          "More data means more modules, which makes the same physical size harder to read. Long text or URLs need a larger print size or shorter content.",
+          "Whether a scan succeeds depends on the camera, lighting and print quality. Do not skip testing on several devices before a large print run.",
         ],
       },
     },
@@ -4710,6 +5847,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "designer", "developer", "small-business-owner"],
     ico: "◲",
     ready: true,
+    indexable: false,
     badge: "Canvas",
     name: { ko: "QR 코드 읽기", en: "QR Code Reader" },
     relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
@@ -4851,6 +5989,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
     ico: "⊞",
     ready: true,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "PDF 병합", en: "Merge PDF" },
     relatedTools: ["pdf-split", "pdf-rotate", "pdf-page-delete"],
@@ -4921,6 +6060,32 @@ export const TOOLS: Tool[] = [
             ],
           },
         ],
+              examples: [
+          {
+            title: "견적서·계약서·부속서류를 한 파일로",
+            input: "PDF 3개 업로드 후 드래그로 순서 정렬",
+            result: "지정한 순서대로 이어 붙인 단일 PDF",
+            note: "업로드 순서가 아니라 목록에서 지정한 순서로 합쳐집니다. 파일명이 1, 2, 10처럼 되어 있으면 이름순 정렬이 의도와 다를 수 있으니 병합 전 순서를 눈으로 확인하세요.",
+          },
+          {
+            title: "스캔한 서류 여러 장을 하나로 제출",
+            input: "페이지별로 나뉘어 스캔된 PDF 여러 개",
+            result: "한 번에 제출할 수 있는 단일 PDF",
+            note: "온라인 제출 서식이 파일 1개만 허용할 때 쓰는 방식입니다. 파일이 서버로 올라가지 않으므로 신분증·계약서처럼 민감한 서류도 그대로 다룰 수 있습니다.",
+          },
+          {
+            title: "페이지 크기가 다른 문서 합치기",
+            input: "A4 문서와 가로 방향 슬라이드 PDF",
+            result: "각 페이지가 원래 크기와 방향을 유지한 채로 이어짐",
+            note: "PDF는 페이지마다 다른 크기를 가질 수 있어 강제로 통일되지 않습니다. 인쇄할 계획이라면 병합 전에 크기를 맞추는 편이 낫습니다.",
+          },
+        ],
+        limitations: [
+          "파일 1개당 100MB, 병합 총합 200MB, 최대 30개 파일까지 처리합니다. 브라우저 메모리 안에서 처리하므로 저사양 기기에서는 이 한도보다 낮은 용량에서도 실패할 수 있습니다.",
+          "열기 암호가 걸린 PDF는 병합할 수 없습니다. 암호를 먼저 해제한 뒤 업로드하세요.",
+          "북마크(목차)·양식 필드·전자서명은 병합 과정에서 유지되지 않을 수 있습니다. 전자서명은 문서가 변경되면 무효가 되는 것이 정상 동작입니다.",
+          "페이지 순서만 이어 붙입니다. 페이지 크기 통일, 여백 조정, 압축 같은 후처리는 하지 않습니다.",
+        ],
       },
       en: {
         card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
@@ -4959,6 +6124,32 @@ export const TOOLS: Tool[] = [
               "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
             ],
           },
+        ],
+              examples: [
+          {
+            title: "Combining a quote, a contract and appendices",
+            input: "Upload three PDFs, then drag to set the order",
+            result: "A single PDF joined in the order you specified",
+            note: "Files merge in list order, not upload order. Names like 1, 2 and 10 sort alphabetically in ways you may not expect, so check the order visually before merging.",
+          },
+          {
+            title: "Submitting several scanned pages as one file",
+            input: "Multiple PDFs scanned one page at a time",
+            result: "A single PDF ready for submission",
+            note: "This is what you need when an online form accepts only one attachment. Your files are never uploaded to a server, so ID documents and contracts can be handled as-is.",
+          },
+          {
+            title: "Merging documents with different page sizes",
+            input: "An A4 document and a landscape slide deck",
+            result: "Each page keeps its original size and orientation in the combined file",
+            note: "PDF allows per-page dimensions, so nothing is forced to match. If the result is going to print, normalize the sizes before merging.",
+          },
+        ],
+        limitations: [
+          "Limits are 100MB per file, 200MB combined, and 30 files. Processing happens in browser memory, so lower-spec devices can fail below those numbers.",
+          "Password-protected PDFs cannot be merged. Remove the open password before uploading.",
+          "Bookmarks, form fields and digital signatures may not survive the merge. A digital signature becoming invalid once the document changes is expected behavior, not a bug.",
+          "It concatenates pages only. There is no page-size normalization, margin adjustment or compression.",
         ],
       },
     },
@@ -5031,6 +6222,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
     ico: "⊟",
     ready: true,
+    indexable: false,
     badge: "Canvas",
     name: { ko: "PDF 분할", en: "Split PDF" },
     relatedTools: ["pdf-merge", "pdf-page-delete", "pdf-rotate"],
@@ -5165,6 +6357,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
     ico: "⟳",
     ready: true,
+    indexable: false,
     badge: "Canvas",
     name: { ko: "PDF 회전", en: "Rotate PDF" },
     relatedTools: ["pdf-merge", "pdf-split", "pdf-page-delete"],
@@ -5299,6 +6492,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
     ico: "⌦",
     ready: true,
+    indexable: false,
     badge: "Canvas",
     name: { ko: "PDF 페이지 삭제", en: "Delete PDF Pages" },
     relatedTools: ["pdf-split", "pdf-merge", "pdf-rotate"],
@@ -5447,7 +6641,7 @@ function hasJongseong(word: string): boolean {
   return (code - 0xac00) % 28 > 0;
 }
 
-/** AEO 명시 문단을 Q&A 목록으로 변환 — ToolAbout 섹션과 FAQPage JSON-LD가 공유.
+/** AEO 명시 문단을 Q&A 목록으로 변환: ToolAbout 섹션과 FAQPage JSON-LD가 공유.
  *  질문에 도구 이름을 포함해 AI 검색 질의("What is a …?")와 직접 매칭되게 한다. */
 export function aeoQA(slug: string, lang: Lang): QA[] {
   const t = getTool(slug);
@@ -5492,6 +6686,10 @@ export function buildToolMetadata(slug: string, lang: Lang): Metadata {
     title: s.title!,
     description: s.description!,
     keywords: s.keywords,
+    // 기능 공개(ready)와 검색 색인(indexable)은 별개다.
+    // indexable=false 도구는 페이지·기능은 그대로 두고 색인만 막는다.
+    // follow 는 유지: 관련 도구/허브로 이어지는 링크 가치는 그대로 흐르게 한다.
+    robots: t.indexable ? undefined : { index: false, follow: true },
     alternates: {
       canonical: url,
       languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },
@@ -5532,7 +6730,7 @@ export function buildHubMetadata(lang: Lang): Metadata {
   };
 }
 
-/** 도구 페이지 JSON-LD — WebApplication (+ FAQ가 있으면 FAQPage 포함 배열) */
+/** 도구 페이지 JSON-LD: WebApplication (+ FAQ가 있으면 FAQPage 포함 배열) */
 export function toolJsonLd(slug: string, lang: Lang) {
   const t = getTool(slug);
   const url = SITE.url + localizedHref(lang, "/" + t.slug);
@@ -5550,7 +6748,7 @@ export function toolJsonLd(slug: string, lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
   };
-  // AEO 명시 문단 + FAQ — 페이지에 보이는 Q&A 전부를 FAQPage로 노출
+  // AEO 명시 문단 + FAQ: 페이지에 보이는 Q&A 전부를 FAQPage로 노출
   const qa = [...aeoQA(slug, lang), ...(t.faq?.[lang] ?? [])];
   if (qa.length === 0) return app;
   return [
@@ -5582,7 +6780,8 @@ export function hubJsonLd(lang: Lang) {
     {
       "@context": "https://schema.org",
       "@type": "ItemList",
-      itemListElement: TOOLS.filter((t) => t.ready).map((t, i) => ({
+      // 검색엔진용 ItemList 는 색인 대상 도구만. (화면 목록은 ready 전체를 그대로 보여준다)
+      itemListElement: TOOLS.filter((t) => t.ready && t.indexable).map((t, i) => ({
         "@type": "ListItem",
         position: i + 1,
         name: t.seo[lang].title!,
@@ -5590,4 +6789,101 @@ export function hubJsonLd(lang: Lang) {
       })),
     },
   ];
+}
+
+
+/* ============================================================
+   ⑦ 콘텐츠 품질 게이트: indexable 도구 검증
+
+   "검색 랜딩 페이지로 내보내도 되는가"를 구조로 판정한다.
+   글자 수가 아니라 **필수 콘텐츠 구조의 존재 여부**를 본다:
+   단순 AEO/FAQ만 있는 페이지는 indexable 이 될 수 없다.
+
+   scripts/validate-content.ts 에서 실행 (npm run validate:content).
+   ============================================================ */
+
+/** indexable 도구가 갖춰야 하는 최소 구조 */
+const INDEXABLE_RULES = {
+  /** 심화 가이드 최소 섹션 수 */
+  minGuideSections: 2,
+  /** 실전 예제 최소 개수 */
+  minExamples: 1,
+  /** 제약·엣지케이스 최소 개수 */
+  minLimitations: 2,
+  /** FAQ 최소 개수 */
+  minFaq: 3,
+  /** 관련 도구 최소 개수 */
+  minRelated: 1,
+} as const;
+
+export type ValidationIssue = { slug: string; problems: string[] };
+
+/**
+ * indexable=true 인 모든 도구가 품질 조건을 만족하는지 검사한다.
+ * 위반 도구의 slug 와 누락 필드 목록을 반환 (빈 배열 = 통과).
+ *
+ * 언어별로 따로 검사한다: 한쪽 언어만 완성된 도구는 indexable 이 될 수 없다.
+ */
+export function validateIndexableTools(): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const langs: Lang[] = ["ko", "en"];
+
+  for (const t of TOOLS) {
+    if (!t.indexable) continue;
+    const problems: string[] = [];
+
+    if (!t.ready) problems.push("ready=false 인데 indexable=true (색인 대상은 동작하는 도구여야 함)");
+    if ((t.relatedTools?.length ?? 0) < INDEXABLE_RULES.minRelated) {
+      problems.push(`relatedTools: ${INDEXABLE_RULES.minRelated}개 이상 필요`);
+    }
+    for (const s of t.relatedTools ?? []) {
+      if (!TOOLS.some((x) => x.slug === s)) problems.push(`relatedTools: 알 수 없는 slug "${s}"`);
+    }
+
+    for (const lang of langs) {
+      const seo = t.seo[lang];
+      const c = t.content[lang];
+      const at = (msg: string) => problems.push(`[${lang}] ${msg}`);
+
+      if (!seo?.title?.trim()) at("seo.title 누락");
+      if (!seo?.description?.trim()) at("seo.description 누락");
+      if (!c?.description?.trim()) at("content.description 누락");
+      if (!c?.howItWorks?.length) at("content.howItWorks 누락");
+      if (!c?.aeo) at("content.aeo 누락 (What/Who/How/Why)");
+
+      const guide = c?.guide ?? [];
+      if (guide.length < INDEXABLE_RULES.minGuideSections) {
+        at(`content.guide: 섹션 ${INDEXABLE_RULES.minGuideSections}개 이상 필요 (현재 ${guide.length})`);
+      }
+      if (guide.some((g) => !g.heading?.trim() || !g.body?.length)) {
+        at("content.guide: heading 또는 body 가 빈 섹션이 있음");
+      }
+
+      const examples = c?.examples ?? [];
+      if (examples.length < INDEXABLE_RULES.minExamples) {
+        at(`content.examples: 실전 예제 ${INDEXABLE_RULES.minExamples}개 이상 필요 (현재 ${examples.length})`);
+      }
+      if (examples.some((e) => !e.title?.trim() || !e.input?.trim() || !e.result?.trim())) {
+        at("content.examples: title/input/result 가 빈 항목이 있음");
+      }
+
+      const limitations = c?.limitations ?? [];
+      if (limitations.length < INDEXABLE_RULES.minLimitations) {
+        at(`content.limitations: 엣지케이스·제약 ${INDEXABLE_RULES.minLimitations}개 이상 필요 (현재 ${limitations.length})`);
+      }
+
+      if ((t.faq?.[lang]?.length ?? 0) < INDEXABLE_RULES.minFaq) {
+        at(`faq: ${INDEXABLE_RULES.minFaq}개 이상 필요 (현재 ${t.faq?.[lang]?.length ?? 0})`);
+      }
+      if (!t.og?.[lang]) at("og 누락 (개별 OG 메타데이터 필수)");
+
+      // 외부 기준에 의존하는 도구는 출처와 검증일을 함께 요구한다.
+      if (c?.sources?.length && !t.verifiedAt) {
+        at("sources 가 있으면 verifiedAt(최근 검증일)도 필요");
+      }
+    }
+
+    if (problems.length) issues.push({ slug: t.slug, problems });
+  }
+  return issues;
 }

@@ -8,7 +8,7 @@ import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { calculateSalary, type PayMode } from "../lib/salary/calculator";
 import { formatNumber, formatWon } from "../lib/salary/formatter";
-import { DEFAULT_YEAR } from "../lib/salary/insurance";
+import { POLICY_VERIFIED_AT } from "../lib/salary/insurance";
 
 // 컨트롤 마이크로카피(레이블·단위)만 로컬 dict.
 // 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
@@ -45,6 +45,13 @@ const DICT: Dict = {
     "sc.disclaimer":
       "본 계산 결과는 대한민국 4대보험 및 근로소득 간이세액표를 기반으로 한 예상값입니다. 실제 급여명세서와 차이가 발생할 수 있습니다.",
     "sc.yearNote": "{y}년 요율 기준",
+    "sc.basisTitle": "계산 기준",
+    "sc.basisApplied": "적용 기준일",
+    "sc.basisRate": "보험 요율",
+    "sc.basisPension": "국민연금 기준소득월액",
+    "sc.basisVerified": "최근 검증",
+    "sc.basisNote":
+      "보험 요율은 매년 1월, 국민연금 기준소득월액 상·하한은 매년 7월에 개정됩니다. 계산기는 오늘 날짜에 해당하는 기준을 자동으로 적용합니다.",
     "sc.won": "원",
     "sc.people": "명",
   },
@@ -80,6 +87,13 @@ const DICT: Dict = {
     "sc.disclaimer":
       "This estimate is based on Korea's four major insurances and the simplified withholding tax table. It may differ from your actual payslip.",
     "sc.yearNote": "Based on {y} rates",
+    "sc.basisTitle": "Calculation basis",
+    "sc.basisApplied": "Applied as of",
+    "sc.basisRate": "Insurance rates",
+    "sc.basisPension": "Pension income base",
+    "sc.basisVerified": "Last verified",
+    "sc.basisNote":
+      "Contribution rates change every January and the National Pension income ceiling and floor change every July. The calculator automatically applies the rules in force on today's date.",
     "sc.won": "KRW",
     "sc.people": "",
   },
@@ -319,7 +333,7 @@ export default function SalaryCalculator() {
                   <div className="sc-bd-head">
                     <h3>{t("sc.breakdown")}</h3>
                     <span className="sc-year">
-                      {t("sc.yearNote").replace("{y}", String(DEFAULT_YEAR))}
+                      {t("sc.yearNote").replace("{y}", result.policy.rateLabel)}
                     </span>
                   </div>
                   {rows.map((row) => (
@@ -340,6 +354,29 @@ export default function SalaryCalculator() {
                       {formatWon(result.netMonthly)}
                     </span>
                   </div>
+                </div>
+
+                <div className="sc-basis">
+                  <h3>{t("sc.basisTitle")}</h3>
+                  <dl>
+                    <div>
+                      <dt>{t("sc.basisApplied")}</dt>
+                      <dd className="num">{result.policy.asOf}</dd>
+                    </div>
+                    <div>
+                      <dt>{t("sc.basisRate")}</dt>
+                      <dd className="num">{result.policy.rateLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>{t("sc.basisPension")}</dt>
+                      <dd className="num">{result.policy.pensionBaseLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>{t("sc.basisVerified")}</dt>
+                      <dd className="num">{POLICY_VERIFIED_AT}</dd>
+                    </div>
+                  </dl>
+                  <p>{t("sc.basisNote")}</p>
                 </div>
 
                 <p className="sc-disclaimer">{t("sc.disclaimer")}</p>

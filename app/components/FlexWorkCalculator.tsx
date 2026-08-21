@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -372,7 +373,7 @@ export default function FlexWorkCalculator() {
             <div className="fw-emph-card primary">
               <div className="ec-label">{t("fw.requiredDaily")}</div>
               <div className="ec-value num">
-                {r.requiredDaily === null ? "—" : fmtH(r.requiredDaily)}
+                {r.requiredDaily === null ? "-" : fmtH(r.requiredDaily)}
               </div>
               <div className="ec-sub">{t("fw.requiredSub")}</div>
             </div>
@@ -471,6 +472,7 @@ export default function FlexWorkCalculator() {
         </div>
       </div>
 
+      <ToolGuide slug="flex-work-calculator" />
       <Faq slug="flex-work-calculator" />
       <RelatedTools slug="flex-work-calculator" />
     </>

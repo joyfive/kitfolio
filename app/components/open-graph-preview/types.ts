@@ -1,4 +1,4 @@
-// OG 미리보기 테스트 — 공유 타입 정의
+// OG 미리보기 테스트: 공유 타입 정의
 
 export type ImageSourceMode = "upload" | "url" | "code";
 

@@ -13,7 +13,7 @@ export type OutputFormat =
   | "num-signed"   // ±1,250.00
   | "multiplier"   // 1.25×
   | "direction"    // Increase / Decrease / No change
-  | "progress";    // 75.00% (0–100 range)
+  | "progress";    // 75.00% (0-100 range)
 
 export interface OutputDef {
   key: keyof GrowthResult;

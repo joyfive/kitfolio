@@ -3,7 +3,7 @@
 import { CATS, getTool } from "../lib/content";
 import { useLang } from "../lib/i18n";
 
-/** 페이지 헤더(뱃지·제목·설명·How It Works) — 모든 테마 공통 스타일.
+/** 페이지 헤더(뱃지·제목·설명·How It Works): 모든 테마 공통 스타일.
  *  텍스트는 전부 content.ts 레지스트리에서 가져온다. */
 export default function PageHead({ slug }: { slug: string }) {
   const { lang } = useLang();

@@ -160,7 +160,7 @@ Google Analytics 4가 전 페이지에 연동되어 있다. Google AdSense 로�
 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
 | 시간 단위 변환기 / Time Converter | `/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 음력 양력 변환기 / Lunar–Solar Converter | `/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | 시작값·종료값으로 성장률·차이·배수 즉시 계산. |
 | 퍼센트 변화율 계산기 / Percentage Change Calculator | `/percentage-change-calculator` | 이전 값과 현재 값으로 변화율·차이·배수 계산. |
 | 증가율 계산기 / Percentage Increase Calculator | `/percentage-increase-calculator` | 원래 값과 증가된 값으로 증가율 즉시 계산. |
@@ -193,6 +193,6 @@ EN 경로는 각 KO 경로에 `/en` 프리픽스를 붙인 동일 슬러그(예:
 
 - Next.js 15 (App Router) + React 19 + TypeScript
 - Tailwind CSS v4
-- Vercel — GitHub 저장소 연동으로 push 시 자동 배포되며, apex 도메인의 SSL을 자동 발급·갱신한다.
+- Vercel: GitHub 저장소 연동으로 push 시 자동 배포되며, apex 도메인의 SSL을 자동 발급·갱신한다.
 - 도구별 계산 로직에 필요한 소규모 라이브러리(색상 변환, 음력 변환, OG 미리보기 렌더링, 사용자
   입력 새니타이즈)만 의존성에 포함되어 있으며, 서버 API나 유료 API 의존성은 없다.

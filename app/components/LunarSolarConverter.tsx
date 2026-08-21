@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Solar, Lunar } from "lunar-javascript";
 import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -11,7 +12,7 @@ const DICT: Dict = {
   ko: {
     "lc.modeSL": "양력 → 음력",
     "lc.modeLS": "음력 → 양력",
-    "lc.year": "연도 (1901–2100)",
+    "lc.year": "연도 (1901~2100)",
     "lc.month": "월",
     "lc.day": "일",
     "lc.leap": "윤달",
@@ -32,7 +33,7 @@ const DICT: Dict = {
   en: {
     "lc.modeSL": "Solar → Lunar",
     "lc.modeLS": "Lunar → Solar",
-    "lc.year": "Year (1901–2100)",
+    "lc.year": "Year (1901-2100)",
     "lc.month": "Month",
     "lc.day": "Day",
     "lc.leap": "Intercalation month",
@@ -47,7 +48,7 @@ const DICT: Dict = {
     "lc.copy": "Copy",
     "lc.copied": "Copied",
     "lc.invalidDate": "Invalid date.",
-    "lc.outOfRange": "Date is outside the 1901–2100 range.",
+    "lc.outOfRange": "Date is outside the 1901-2100 range.",
     "lc.leapHint": "No intercalation month",
   },
 };
@@ -287,7 +288,7 @@ export default function LunarSolarConverter() {
               <span className="lbl">{mode === "solar-to-lunar" ? t("lc.solarLabel") : t("lc.lunarLabel")}</span>
             </div>
             <div className="lc-fields">
-              {/* Year — number input, no 200-item dropdown */}
+              {/* Year: number input, no 200-item dropdown */}
               <div className="lc-field-group">
                 <label className="lc-field-label">{t("lc.year")}</label>
                 <input
@@ -321,7 +322,7 @@ export default function LunarSolarConverter() {
                 </select>
               </div>
 
-              {/* Day — max clamped to actual lunar month length */}
+              {/* Day: max clamped to actual lunar month length */}
               <div className="lc-field-group">
                 <label className="lc-field-label">{t("lc.day")}</label>
                 <select
@@ -335,7 +336,7 @@ export default function LunarSolarConverter() {
                 </select>
               </div>
 
-              {/* Intercalation toggle — lunar→solar only */}
+              {/* Intercalation toggle: lunar→solar only */}
               {mode === "lunar-to-solar" && (
                 <div className="lc-leap-row">
                   <label className={`lc-leap-toggle${!leapAvailable ? " disabled" : ""}`}>
@@ -444,6 +445,7 @@ export default function LunarSolarConverter() {
         </div>
       </div>
 
+      <ToolGuide slug="lunar-solar-converter" />
       <Faq slug="lunar-solar-converter" />
       <RelatedTools slug="lunar-solar-converter" />
     </>

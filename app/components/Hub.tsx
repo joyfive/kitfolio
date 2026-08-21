@@ -198,7 +198,7 @@ export default function Hub() {
           </span>
         </div>
 
-        {/* 데스크톱 직군 칩 — 선택 시 해당 타겟 도구만 필터링 */}
+        {/* 데스크톱 직군 칩: 선택 시 해당 타겟 도구만 필터링 */}
         <ChipBar className="hub-targets" />
       </section>
 
@@ -218,7 +218,7 @@ export default function Hub() {
 
       {visible.length === 0 && <div className="hub-empty">{t("empty")}</div>}
 
-      {/* 허브 하단 설명 콘텐츠 — 사이트 성격 소개 (SEO·AEO 본문) */}
+      {/* 허브 하단 설명 콘텐츠: 사이트 성격 소개 (SEO·AEO 본문) */}
       <section className="hub-about" aria-label={HUB.about[lang].heading}>
         <h2>{HUB.about[lang].heading}</h2>
         <div className="hub-about-grid">
