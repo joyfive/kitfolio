@@ -1,8 +1,8 @@
 /* ============================================================
-   Kitfolio — 블로그(아티클) 시스템
+   Kitfolio: 블로그(아티클) 시스템
 
    아티클은 소스의 마크다운 파일로 작성하고, 빌드 시 HTML로 렌더한다.
-   CMS·DB 없음 — 파일을 커밋하고 배포하면 게시된다.
+   CMS·DB 없음: 파일을 커밋하고 배포하면 게시된다.
 
    ── 파일 규칙 ────────────────────────────────────────────
    content/blog/<slug>.ko.md   (한국어)
@@ -49,19 +49,19 @@ export type PostMeta = {
   coverAlt?: string;
   relatedTools: string[];
   tags: string[];
-  /** 작성자명 — 프론트매터 author 또는 사이트 운영자 */
+  /** 작성자명: 프론트매터 author 또는 사이트 운영자 */
   author: string;
-  /** 작성자 역할 — 프론트매터 authorRole 또는 AUTHOR.role */
+  /** 작성자 역할: 프론트매터 authorRole 또는 AUTHOR.role */
   authorRole: string;
   /** 내용을 마지막으로 사실 확인한 날짜 (선택) */
   reviewedAt?: string;
-  /** 공식 출처 (선택) — 외부 기준에 의존하는 글에만 */
+  /** 공식 출처 (선택): 외부 기준에 의존하는 글에만 */
   sources: { label: string; url: string }[];
 };
 
 export type Post = { meta: PostMeta; html: string };
 
-/** 아주 단순한 프론트매터 파서 — key: value, 리스트는 쉼표 구분.
+/** 아주 단순한 프론트매터 파서: key: value, 리스트는 쉼표 구분.
  *  아티클은 신뢰된 소스(리포 커밋)이므로 최소 파서로 충분하다. */
 function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
   const m = /^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/.exec(raw);
@@ -113,7 +113,7 @@ function toSources(v?: string): { label: string; url: string }[] {
    미리 <strong> 으로 바꿔 준다. 글쓴이는 계속 평범하게 `**` 만 쓰면 된다.
    코드 블록과 인라인 코드는 건드리지 않는다. */
 
-/** 코드 펜스(```/~~~)와 인라인 코드(`…`) — 이 안의 내용은 보정 대상에서 제외 */
+/** 코드 펜스(```/~~~)와 인라인 코드(`…`): 이 안의 내용은 보정 대상에서 제외 */
 const CODE_SEGMENT = /(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`)/g;
 
 /** 닫는 `**` 앞이 문장부호/기호이고 뒤에 글자·숫자가 바로 붙는 강조 구간 */
@@ -300,7 +300,7 @@ export function postJsonLd(meta: PostMeta) {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     image: meta.cover ? abs(meta.cover) : undefined,
-    // 작성자(사람)와 발행자(조직)를 분리한다 — 둘 다 Organization 이면
+    // 작성자(사람)와 발행자(조직)를 분리한다: 둘 다 Organization 이면
     // "누가 썼는가"가 드러나지 않는다.
     author: {
       "@type": "Person",

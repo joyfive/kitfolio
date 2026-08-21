@@ -5,7 +5,7 @@ Operating principles for all user-facing text.
 - All text is managed in the central registry (`app/lib/content.ts`). Never hardcode copy in page components.
 - Every new tool must ship ko **and** en content sets together.
 - Include only SEO/AEO-purposed explanation. Avoid long blog-style content.
-- FAQ: 4–6 entries per tool by default.
+- FAQ: 4-6 entries per tool by default.
 - Keep `How it works`, `What`, `Who`, `Why` information in a consistent structure across all tools.
 
 ## Microcopy exception

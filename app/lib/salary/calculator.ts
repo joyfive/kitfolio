@@ -1,5 +1,5 @@
 /* ============================================================
-   실수령 계산 — 메인 계산 엔진 (UI 비의존)
+   실수령 계산: 메인 계산 엔진 (UI 비의존)
 
    UI에서는 calculateSalary() 하나만 호출합니다.
    요율은 insurance.ts, 세금은 tax.ts, 반올림은 formatter.ts 가 담당합니다.
@@ -14,7 +14,7 @@ import { roundWon } from "./formatter";
 export type PayMode = "annual" | "monthly";
 
 export type SalaryInput = {
-  /** 급여 형태 — 연봉 / 월급 */
+  /** 급여 형태: 연봉 / 월급 */
   mode: PayMode;
   /** 세전 금액 (연봉 또는 월급) */
   amount: number;

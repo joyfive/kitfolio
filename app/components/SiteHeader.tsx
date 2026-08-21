@@ -8,7 +8,7 @@ import LangToggle from "./LangToggle";
 import { LogoMark } from "./Logo";
 
 /** 전 페이지 공통 헤더 (루트 layout.tsx에서 렌더).
- *  브랜드 역할만 수행 — 로고(홈) + 언어 선택기. 탐색/필터는 홈에서 담당. */
+ *  브랜드 역할만 수행: 로고(홈) + 언어 선택기. 탐색/필터는 홈에서 담당. */
 export default function SiteHeader() {
   const pathname = usePathname() || "/";
   const lang = routeLang(pathname);

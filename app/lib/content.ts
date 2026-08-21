@@ -1,23 +1,23 @@
 /* ============================================================
-   Kitfolio — 콘텐츠 레지스트리 (Single Source of Truth)
+   Kitfolio: 콘텐츠 레지스트리 (Single Source of Truth)
 
    "실제 렌더링되는 콘텐츠 텍스트(KO·EN)"를 이 파일 한곳에서 관리합니다.
    도구가 50개로 늘어나도 이 파일에 50개 × 2개 언어 세트를 추가하면 됩니다.
 
-   ⚠️ 범위: 콘텐츠 텍스트만. 기능/버튼/인풋 등 UI 마이크로카피는 제외 —
+   ⚠️ 범위: 콘텐츠 텍스트만. 기능/버튼/인풋 등 UI 마이크로카피는 제외:
    전역 공통 UI(헤더 네비·푸터·복사 버튼 등)는 lib/i18n.tsx 의 COMMON,
    도구별 컨트롤 라벨은 각 컴포넌트의 로컬 DICT 에서 관리합니다.
 
    ── 구조 ────────────────────────────────────────────────
    ① SITE        : 사이트 상수
-   ② HUB         : 허브 — seo(메타) + hero(히어로 카피)
+   ② HUB         : 허브 · seo(메타) + hero(히어로 카피)
    ③ CATS        : 카테고리 라벨 (허브 섹션 헤더 · 도구 뱃지)
    ④ FAQ_SECTION : FAQ 섹션 공통 카피 (인트로·푸터 링크)
-   ⑤ TOOLS       : 도구 레지스트리 — 항목 하나에 도구 완결 정의
+   ⑤ TOOLS       : 도구 레지스트리 · 항목 하나에 도구 완결 정의
        ├ slug          : 1뎁스 라우트 (플랫 URL)
        ├ layout        : 디자인 시스템 타입 (card=A · ide=B · canvas=C)
        ├ cat           : 허브 카테고리 (테마 분기 겸용)
-       ├ targets       : 내부 타겟 태그 (URL 아님 — 필터/분석용)
+       ├ targets       : 내부 타겟 태그 (URL 아님 · 필터/분석용)
        ├ badge         : 뱃지(eyebrow) 텍스트            ── 뱃지 영역
        ├ name          : h1 (en 메인 + ko 보조 병기)     ── 타이틀 영역
        ├ relatedTools  : 관련 도구 slug 목록
@@ -38,10 +38,10 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 
 export type Lang = "ko" | "en";
 
-/** 디자인 시스템 레이아웃 3종 — Type A(Card) · B(IDE) · C(Canvas) */
+/** 디자인 시스템 레이아웃 3종: Type A(Card) · B(IDE) · C(Canvas) */
 export type Layout = "card" | "ide" | "canvas";
 
-/** 내부 타겟 태그 — URL 카테고리 아님, 필터링·디스커버리·분석용 */
+/** 내부 타겟 태그: URL 카테고리 아님, 필터링·디스커버리·분석용 */
 export type TargetTag =
   | "pm"
   | "designer"
@@ -54,9 +54,9 @@ export type TargetTag =
 export type QA = { question: string; answer: string };
 
 type ToolSeo = {
-  /** <title> (50~60자) — ready 도구만 */
+  /** <title> (50~60자): ready 도구만 */
   title?: string;
-  /** meta description — ready 도구만 */
+  /** meta description: ready 도구만 */
   description?: string;
   /** meta keywords + 허브 검색 색인 (전 도구) */
   keywords: string[];
@@ -65,13 +65,13 @@ type ToolSeo = {
 /** 심화 가이드 한 섹션 */
 export type GuideSection = { heading: string; body: string[] };
 
-/** 실전 사용 예제 — 상황 / 입력 / 결과 / 해석 */
+/** 실전 사용 예제: 상황 / 입력 / 결과 / 해석 */
 export type GuideExample = {
   /** 상황 한 줄 (예: "연봉 5,200만원, 부양가족 1명") */
   title: string;
   /** 입력값 요약 */
   input: string;
-  /** 결과 요약 — 가능하면 구체 숫자 */
+  /** 결과 요약: 가능하면 구체 숫자 */
   result: string;
   /** 결과를 어떻게 읽어야 하는지 (선택) */
   note?: string;
@@ -83,24 +83,24 @@ export type SourceLink = { label: string; url: string };
 type ToolCopy = {
   /** 허브 카드 한 줄 설명 (전 도구) */
   card: string;
-  /** 페이지 리드 문단 (= meta description 겸용) — ready 도구만 */
+  /** 페이지 리드 문단 (= meta description 겸용): ready 도구만 */
   description?: string;
-  /** How It Works — 3단계 사용 가이드 — ready 도구만 */
+  /** How It Works: 3단계 사용 가이드 (ready 도구만) */
   howItWorks?: string[];
-  /** AEO 명시 문단 — What is / Who is it for / How does it work / Why use it.
-   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출 — ready 도구만 */
+  /** AEO 명시 문단: What is / Who is it for / How does it work / Why use it.
+   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출: ready 도구만 */
   aeo?: { what: string; who: string; how: string; why: string };
-  /** 심화 가이드 — 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
+  /** 심화 가이드: 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
    *  사용 맥락·실전 예시·팁 등 고유 본문으로 페이지 가치를 보강한다.
    *  ToolGuide 컴포넌트가 소비 (섹션 = heading + 문단 배열). */
   guide?: GuideSection[];
-  /** 실전 사용 예제 — 구체적인 입력값과 결과 숫자가 있는 사례.
+  /** 실전 사용 예제: 구체적인 입력값과 결과 숫자가 있는 사례.
    *  "이 도구를 실제로 어떻게 쓰는가"를 보여준다. indexable 도구 필수. */
   examples?: GuideExample[];
-  /** 제약·엣지케이스 — 이 도구가 다루지 못하는 것, 결과가 어긋날 수 있는 조건.
+  /** 제약·엣지케이스: 이 도구가 다루지 못하는 것, 결과가 어긋날 수 있는 조건.
    *  indexable 도구 필수. */
   limitations?: string[];
-  /** 공식 출처 — 세법·요율·플랫폼 정책·기술 명세처럼 외부 기준에 의존하는
+  /** 공식 출처: 세법·요율·플랫폼 정책·기술 명세처럼 외부 기준에 의존하는
    *  도구에만. 기관·표준 1차 자료만 사용하고 블로그·타사 계산기는 쓰지 않는다. */
   sources?: SourceLink[];
 };
@@ -114,10 +114,10 @@ export type Tool = {
   targets: TargetTag[];
   ico: string;
   icoClass?: string;
-  /** 기능 공개 — 사용자가 이 도구를 실제로 쓸 수 있는가.
+  /** 기능 공개: 사용자가 이 도구를 실제로 쓸 수 있는가.
    *  허브 목록·검색·관련 도구 노출은 전부 이 값을 기준으로 한다. */
   ready: boolean;
-  /** 검색 색인 — 독립적인 검색 랜딩 페이지로 제공할 콘텐츠 품질이 확보됐는가.
+  /** 검색 색인: 독립적인 검색 랜딩 페이지로 제공할 콘텐츠 품질이 확보됐는가.
    *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출되며,
    *  sitemap 제외 + robots noindex,follow 만 적용된다.
    *  true 로 올리려면 validateIndexableTools() 의 품질 조건을 통과해야 한다. */
@@ -126,7 +126,7 @@ export type Tool = {
   verifiedAt?: string;
   /** 뱃지(eyebrow) 보조 텍스트 */
   badge: string;
-  /** h1 — 영문 메인 + 국문 보조 병기 */
+  /** h1: 영문 메인 + 국문 보조 병기 */
   name: { ko: string; en: string };
   /** Related Tools 섹션용 slug 목록 */
   relatedTools?: string[];
@@ -144,12 +144,12 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
-/** 사이트 운영자 — 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
+/** 사이트 운영자: 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
  *
  *  실명을 공개하지 않되, **일관된 운영자명과 역할, 책임 주체**는 항상 확인되게 한다.
  *  (AdSense 심사·E-E-A-T 관점에서 "누가 쓰고 누가 책임지는가"가 드러나야 한다) */
 export const AUTHOR = {
-  /** 일관된 운영자명 — 리포지토리·연락처와 동일한 식별자 */
+  /** 일관된 운영자명: 리포지토리·연락처와 동일한 식별자 */
   name: "joyfive",
   /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
   path: "/about",
@@ -164,7 +164,7 @@ export const LAYOUT_LABEL: Record<Layout, string> = {
 };
 
 /* ============================================================
-   ② HUB — 허브 페이지 (/ , /en)
+   ② HUB: 허브 페이지 (/ , /en)
    ============================================================ */
 export const HUB = {
   seo: {
@@ -201,7 +201,7 @@ export const HUB = {
       stat: " tools",
     },
   },
-  /** 허브 하단 설명 콘텐츠 — 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
+  /** 허브 하단 설명 콘텐츠: 사이트 성격을 산문으로 소개 (SEO·AEO·심사 첫인상 보강) */
   about: {
     ko: {
       heading: "Kitfolio는 어떤 서비스인가요?",
@@ -241,7 +241,7 @@ export const HUB = {
 };
 
 /* ============================================================
-   ③ CATS — 카테고리 라벨
+   ③ CATS: 카테고리 라벨
    ============================================================ */
 export const CATS: {
   id: "dev" | "design" | "text";
@@ -275,9 +275,9 @@ export const CATS: {
 ];
 
 /* ============================================================
-   ④ FAQ_SECTION — FAQ 섹션 공통 카피
+   ④ FAQ_SECTION: FAQ 섹션 공통 카피
    ============================================================ */
-/* FAQ / About 통합 섹션 — 탭(칩) 라벨 + 인트로 카피 */
+/* FAQ / About 통합 섹션: 탭(칩) 라벨 + 인트로 카피 */
 export const FAQ_SECTION = {
   ko: {
     tab: "자주 묻는 질문",
@@ -295,7 +295,7 @@ export const FAQ_SECTION = {
   },
 };
 
-/* AEO(About this tool) 섹션 — What is / Who for / How / Why */
+/* AEO(About this tool) 섹션: What is / Who for / How / Why */
 export const AEO_SECTION = {
   ko: {
     tab: "이 도구에 대하여",
@@ -321,7 +321,7 @@ export const OG_BADGE = {
   en: "Free · Runs in your browser",
 };
 
-/* 타겟 태그 표시 라벨 — 허브 직군 필터 칩 */
+/* 타겟 태그 표시 라벨: 허브 직군 필터 칩 */
 export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
   pm: { ko: "PM", en: "PM" },
   designer: { ko: "디자이너", en: "Designer" },
@@ -333,7 +333,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
 };
 
 /* ============================================================
-   ⑥ LEGAL — 약관/정책 페이지 (도구 아님, 별도 레지스트리)
+   ⑥ LEGAL: 약관/정책 페이지 (도구 아님, 별도 레지스트리)
 
    개인정보처리방침 · 이용약관. 도구가 아니므로 TOOLS(허브·검색·sitemap
    tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
@@ -815,7 +815,7 @@ export function buildLegalMetadata(slug: LegalSlug, lang: Lang): Metadata {
 }
 
 /* ============================================================
-   ⑤ TOOLS — 도구 레지스트리
+   ⑤ TOOLS: 도구 레지스트리
    ============================================================ */
 export const TOOLS: Tool[] = [
   // ── Developer ─────────────────────────────
@@ -1801,7 +1801,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Also useful for gauging perceived speed",
             body: [
-              "In UI interactions, transition timing drives how the experience feels. Roughly 150–300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
+              "In UI interactions, transition timing drives how the experience feels. Roughly 150-300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
               "All conversion happens in your browser and your input is never sent to a server.",
             ],
           },
@@ -2089,7 +2089,7 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Tailwind Palette Generator | 11 shades from one HEX",
         description:
-          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50-950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
         keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette"],
       },
     },
@@ -2109,7 +2109,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "브랜드 컬러 하나에서 11단계를 만들어야 하는 이유",
             body: [
-              "Tailwind로 UI를 만들면 색 하나로는 부족합니다. 버튼 기본 상태에 600, 호버에 700, 눌린 상태에 800, 배경 강조에 50이나 100, 테두리에 200 — 이런 식으로 같은 계열 안에서 최소 대여섯 단계가 필요합니다. 그런데 디자인 가이드에서 받는 건 대개 브랜드 컬러 HEX 하나뿐입니다.",
+              "Tailwind로 UI를 만들면 색 하나로는 부족합니다. 버튼 기본 상태에 600, 호버에 700, 눌린 상태에 800, 배경 강조에 50이나 100, 테두리에 200: 이런 식으로 같은 계열 안에서 최소 대여섯 단계가 필요합니다. 그런데 디자인 가이드에서 받는 건 대개 브랜드 컬러 HEX 하나뿐입니다.",
               "손으로 만들려면 HSL의 명도만 균등하게 조정하는 방식을 쓰기 쉬운데, 이렇게 하면 노랑 계열은 중간 단계가 탁해지고 파랑 계열은 어두운 쪽이 뭉개집니다. 사람 눈이 색상마다 밝기를 다르게 느끼기 때문입니다.",
             ],
           },
@@ -2156,12 +2156,12 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        card: "Generate an 11-shade Tailwind palette (50–950) from one base HEX and copy the code.",
+        card: "Generate an 11-shade Tailwind palette (50-950) from one base HEX and copy the code.",
         description:
-          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50–950). It uses an OKLCH lightness scale to spread shades evenly from a light 50 to a dark 950, pinning your input color to its nearest step. Click any shade to copy its HEX, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables.",
+          "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50-950). It uses an OKLCH lightness scale to spread shades evenly from a light 50 to a dark 950, pinning your input color to its nearest step. Click any shade to copy its HEX, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables.",
         howItWorks: ["Enter a base color (HEX)", "Get an 11-shade palette", "Click a swatch or copy the code"],
         aeo: {
-          what: "Tailwind Palette Generator is a tool that builds an 11-shade Tailwind CSS color palette (50–950) from a single base color.",
+          what: "Tailwind Palette Generator is a tool that builds an 11-shade Tailwind CSS color palette (50-950) from a single base color.",
           who: "It is for front-end developers working with Tailwind CSS and designers who need to define color scales and design tokens.",
           how: "Enter a base HEX and shades from 50 to 950 are generated along an OKLCH lightness scale; copy a shade by clicking it, or copy the palette as Tailwind config, an @theme block or CSS variables.",
           why: "You get a consistent light-to-dark scale instantly without hand-tuning each step, speeding up design systems and theme tokens.",
@@ -2199,7 +2199,7 @@ export const TOOLS: Tool[] = [
           {
             title: "Starting from a light pastel",
             input: "#A7B6F6, a pale lavender",
-            result: "The input lands near 300 and the entire 600–950 range is newly generated",
+            result: "The input lands near 300 and the entire 600-950 range is newly generated",
             note: "A light input means every dark step is invented. Those are the steps used for text and buttons, so check their contrast carefully.",
           },
           {
@@ -2357,7 +2357,7 @@ export const TOOLS: Tool[] = [
         examples: [
           {
             title: "가장 빡빡한 플랫폼 기준으로 제목 다듬기",
-            input: "제목 \"Kitfolio | 일하는 사람을 위한 작은 웹 도구 모음 — 계산기·생성기·유틸리티\"",
+            input: "제목 \"Kitfolio | 일하는 사람을 위한 작은 웹 도구 모음: 계산기·생성기·유틸리티\"",
             result: "카카오톡·Facebook에서는 두 줄로 보이지만 좁은 카드에서는 뒷부분이 잘림",
             note: "브랜드명을 앞에 두면 잘렸을 때 남는 것이 브랜드명뿐입니다. 페이지 내용을 앞에, 브랜드명을 뒤에 두는 순서가 더 안전합니다.",
           },
@@ -2422,7 +2422,7 @@ export const TOOLS: Tool[] = [
         examples: [
           {
             title: "Tuning a title against the tightest layout",
-            input: "Title: \"Kitfolio | Small tools for modern knowledge workers — calculators, generators, utilities\"",
+            input: "Title: \"Kitfolio | Small tools for modern knowledge workers: calculators, generators, utilities\"",
             result: "Two lines on KakaoTalk and Facebook, with the tail cut off on narrower cards",
             note: "Leading with the brand name means the brand name is all that survives truncation. Putting the page subject first and the brand last is safer.",
           },
@@ -2652,7 +2652,7 @@ export const TOOLS: Tool[] = [
             title: "Fitting a meta description so it isn't truncated in search results",
             input: "Paste your draft description",
             result: "Characters, characters without spaces, words, sentences, lines and bytes all update at once.",
-            note: "Search snippets are typically cut around 150–160 characters. Trimming while watching the count keeps your key phrase from being clipped.",
+            note: "Search snippets are typically cut around 150-160 characters. Trimming while watching the count keeps your key phrase from being clipped.",
           },
           {
             title: "Staying under 280 characters on X and 500 on Threads",
@@ -2826,7 +2826,7 @@ export const TOOLS: Tool[] = [
           {
             title: "식대 비과세 20만원이 있고 없고의 차이",
             input: "같은 연봉 52,000,000에 비과세 0원과 200,000원을 각각 입력",
-            result: "월 실수령 3,633,164원 vs 3,680,742원 — 월 47,578원, 연 570,936원 차이",
+            result: "월 실수령 3,633,164원 vs 3,680,742원 (월 47,578원, 연 570,936원 차이)",
             note: "비과세 금액은 4대보험과 세금 계산의 기준 소득 자체를 줄이기 때문에 세금만 줄이는 것보다 효과가 큽니다. 이직 제안을 비교할 때 세전 연봉이 같아도 비과세 구성이 다르면 실수령이 달라집니다.",
           },
           {
@@ -2865,7 +2865,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "Why gross salary and take-home pay differ",
             body: [
-              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax: roughly 8–18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
+              "The figure people mean by an annual salary is the gross amount, before taxes and insurance are withheld. What actually lands in your account is the take-home pay left after Korea's four major insurances (National Pension, Health Insurance, Long-Term Care, Employment Insurance) and income and local income tax: roughly 8-18% of the gross depending on the salary band. So the same 'salary' can feel very different depending on whether you compare it gross or net.",
               "Enter a gross annual or monthly figure and this calculator breaks out how much each item takes, and computes both monthly and yearly take-home pay. Seeing which deduction reduces your net pay the most makes it easier to understand the structure: useful especially for someone reading their first payslip.",
             ],
           },
@@ -2894,7 +2894,7 @@ export const TOOLS: Tool[] = [
           {
             title: "What a 200,000 non-taxable meal allowance is worth",
             input: "The same 52,000,000 salary entered with 0 and with 200,000 non-taxable",
-            result: "3,633,164 vs 3,680,742 a month — a difference of 47,578 monthly, 570,936 a year",
+            result: "3,633,164 vs 3,680,742 a month (a difference of 47,578 monthly, 570,936 a year)",
             note: "Non-taxable pay lowers the base for both insurance and tax, so it does more than a tax deduction alone. Two offers with identical gross salaries can pay differently once the non-taxable split differs.",
           },
           {
@@ -3157,7 +3157,7 @@ export const TOOLS: Tool[] = [
           },
         ],
         limitations: [
-          "Holiday data covers Korean public holidays for 2025–2027 only. Other years, other countries, and company-specific days off such as a founding anniversary are not included and have to be entered as hourly leave.",
+          "Holiday data covers Korean public holidays for 2025-2027 only. Other years, other countries, and company-specific days off such as a founding anniversary are not included and have to be entered as hourly leave.",
           "It does not calculate overtime, night or holiday premiums (each a 50% uplift on ordinary wages under Korean law). This tool deals in hours, not pay.",
           "It assumes a one-month settlement period. Companies running three- or six-month flexible schemes cannot apply the monthly result directly.",
           "It never checks your employer's attendance system. Hours worked is whatever you type, so if that differs from the official record the result differs too.",
@@ -3191,7 +3191,7 @@ export const TOOLS: Tool[] = [
         {
           question: "How are public holidays handled?",
           answer:
-            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays: say on Saturdays: turn it off to exclude weekends only. Holidays for 2025–2027 are currently supported.",
+            "With “Exclude public holidays” on, Korean public holidays (including Seollal, Chuseok and substitute holidays) are removed from the business days automatically. If you work on holidays: say on Saturdays: turn it off to exclude weekends only. Holidays for 2025-2027 are currently supported.",
         },
         {
           question: "How is annual, half-day and hourly leave deducted?",
@@ -3446,7 +3446,7 @@ export const TOOLS: Tool[] = [
     ready: true,
     indexable: true,
     badge: "Clean SaaS",
-    name: { ko: "음력 양력 변환기", en: "Lunar–Solar Converter" },
+    name: { ko: "음력 양력 변환기", en: "Lunar-Solar Converter" },
     relatedTools: ["slack-timestamp-converter", "time-calculator", "flex-work-calculator"],
     seo: {
       ko: {
@@ -3464,9 +3464,9 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Lunar–Solar Date Converter | 1901 to 2100",
+        title: "Lunar-Solar Date Converter | 1901 to 2100",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901-2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         keywords: [
           "lunar solar converter",
           "korean lunar calendar",
@@ -3545,16 +3545,16 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901–2100 with leap months.",
+        card: "Convert Gregorian dates to Korean lunar dates and back. Covers 1901-2100 with leap months.",
         description:
-          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901–2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
+          "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901-2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
         howItWorks: [
           "Choose conversion direction (solar → lunar or lunar → solar)",
           "Enter year, month and day (toggle intercalation if needed)",
           "See the converted date with ganzhi year and zodiac",
         ],
         aeo: {
-          what: "A Lunar–Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
+          what: "A Lunar-Solar Converter converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. It covers 1901 to 2100 and correctly handles intercalation (leap) months.",
           who: "It is for office workers and small business owners who need to look up lunar-calendar anniversaries, memorial days and traditional holidays in the Gregorian calendar, or the reverse.",
           how: "Select a conversion direction, enter a year, month and day, and the result is calculated instantly in your browser: including the traditional Korean ganzhi year name and zodiac animal.",
           why: "It saves the annual calendar-flipping or search needed to cross-reference lunar and solar dates for any date from 1901 to 2100.",
@@ -3645,7 +3645,7 @@ export const TOOLS: Tool[] = [
       ],
       en: [
         {
-          question: "What is a Lunar–Solar Converter?",
+          question: "What is a Lunar-Solar Converter?",
           answer:
             "It is a tool that converts dates between the Gregorian (solar) calendar and the Korean lunisolar calendar in both directions. Use it to find the Gregorian date of a lunar anniversary or memorial day, or to find the lunar date that corresponds to a given Gregorian date.",
         },
@@ -3677,7 +3677,7 @@ export const TOOLS: Tool[] = [
         subtitle: "양력 ↔ 음력 날짜 즉시 변환 · 1901~2100년 지원",
       },
       en: {
-        title: "Lunar–Solar Converter",
+        title: "Lunar-Solar Converter",
         subtitle: "Convert between Gregorian and Korean lunar dates instantly",
       },
     },
@@ -6641,7 +6641,7 @@ function hasJongseong(word: string): boolean {
   return (code - 0xac00) % 28 > 0;
 }
 
-/** AEO 명시 문단을 Q&A 목록으로 변환 — ToolAbout 섹션과 FAQPage JSON-LD가 공유.
+/** AEO 명시 문단을 Q&A 목록으로 변환: ToolAbout 섹션과 FAQPage JSON-LD가 공유.
  *  질문에 도구 이름을 포함해 AI 검색 질의("What is a …?")와 직접 매칭되게 한다. */
 export function aeoQA(slug: string, lang: Lang): QA[] {
   const t = getTool(slug);
@@ -6688,7 +6688,7 @@ export function buildToolMetadata(slug: string, lang: Lang): Metadata {
     keywords: s.keywords,
     // 기능 공개(ready)와 검색 색인(indexable)은 별개다.
     // indexable=false 도구는 페이지·기능은 그대로 두고 색인만 막는다.
-    // follow 는 유지 — 관련 도구/허브로 이어지는 링크 가치는 그대로 흐르게 한다.
+    // follow 는 유지: 관련 도구/허브로 이어지는 링크 가치는 그대로 흐르게 한다.
     robots: t.indexable ? undefined : { index: false, follow: true },
     alternates: {
       canonical: url,
@@ -6730,7 +6730,7 @@ export function buildHubMetadata(lang: Lang): Metadata {
   };
 }
 
-/** 도구 페이지 JSON-LD — WebApplication (+ FAQ가 있으면 FAQPage 포함 배열) */
+/** 도구 페이지 JSON-LD: WebApplication (+ FAQ가 있으면 FAQPage 포함 배열) */
 export function toolJsonLd(slug: string, lang: Lang) {
   const t = getTool(slug);
   const url = SITE.url + localizedHref(lang, "/" + t.slug);
@@ -6748,7 +6748,7 @@ export function toolJsonLd(slug: string, lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
   };
-  // AEO 명시 문단 + FAQ — 페이지에 보이는 Q&A 전부를 FAQPage로 노출
+  // AEO 명시 문단 + FAQ: 페이지에 보이는 Q&A 전부를 FAQPage로 노출
   const qa = [...aeoQA(slug, lang), ...(t.faq?.[lang] ?? [])];
   if (qa.length === 0) return app;
   return [
@@ -6793,7 +6793,7 @@ export function hubJsonLd(lang: Lang) {
 
 
 /* ============================================================
-   ⑦ 콘텐츠 품질 게이트 — indexable 도구 검증
+   ⑦ 콘텐츠 품질 게이트: indexable 도구 검증
 
    "검색 랜딩 페이지로 내보내도 되는가"를 구조로 판정한다.
    글자 수가 아니라 **필수 콘텐츠 구조의 존재 여부**를 본다:
@@ -6822,7 +6822,7 @@ export type ValidationIssue = { slug: string; problems: string[] };
  * indexable=true 인 모든 도구가 품질 조건을 만족하는지 검사한다.
  * 위반 도구의 slug 와 누락 필드 목록을 반환 (빈 배열 = 통과).
  *
- * 언어별로 따로 검사한다 — 한쪽 언어만 완성된 도구는 indexable 이 될 수 없다.
+ * 언어별로 따로 검사한다: 한쪽 언어만 완성된 도구는 indexable 이 될 수 없다.
  */
 export function validateIndexableTools(): ValidationIssue[] {
   const issues: ValidationIssue[] = [];

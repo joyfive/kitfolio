@@ -38,7 +38,7 @@ describe("2026년 공식 요율 상수", () => {
     assert.equal(Number((incomeRate * 100).toFixed(4)), 0.9448);
   });
 
-  test("고용보험(실업급여) 근로자 부담 0.9% — 2025년과 동일", () => {
+  test("고용보험(실업급여) 근로자 부담 0.9%: 2025년과 동일", () => {
     assert.equal(ratesOn("2026-08-18").employmentInsurance, 0.009);
     assert.equal(ratesOn("2025-06-01").employmentInsurance, 0.009);
   });
@@ -76,7 +76,7 @@ describe("국민연금 기준소득월액 기간 경계 (7월 1일 개정)", () 
     assert.equal(p.pensionUpperLimit, 6_590_000);
     assert.equal(p.pensionLowerLimit, 410_000);
     assert.equal(p.rateLabel, "2026");
-    assert.equal(p.pensionBaseLabel, "2026.07–2027.06");
+    assert.equal(p.pensionBaseLabel, "2026.07-2027.06");
   });
 });
 

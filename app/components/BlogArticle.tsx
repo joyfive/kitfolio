@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTool, localizedHref, type Lang } from "../lib/content";
 import { getPost, formatDate, blogLabel } from "../lib/blog";
 
-/** 단일 아티클 렌더. 서버 컴포넌트 — md → HTML 은 blog.ts(marked)에서. */
+/** 단일 아티클 렌더. 서버 컴포넌트: md → HTML 은 blog.ts(marked)에서. */
 export default function BlogArticle({
   slug,
   lang,
@@ -32,7 +32,7 @@ export default function BlogArticle({
       </nav>
 
       <header className="kf-article-head">
-        {/* 날짜 · 작성자 — 누가 썼는지는 여기 한 줄로만 밝힌다.
+        {/* 날짜 · 작성자: 누가 썼는지는 여기 한 줄로만 밝힌다.
             역할(authorRole)과 최근 검증일(reviewedAt)은 화면에 노출하지 않고
             BlogPosting JSON-LD 에만 남긴다. */}
         <div className="kf-article-meta">
@@ -61,7 +61,7 @@ export default function BlogArticle({
         dangerouslySetInnerHTML={{ __html: html }}
       />
 
-      {/* 공식 출처 — 외부 기준(세법·요율·플랫폼 정책)에 의존하는 글에만 붙는다 */}
+      {/* 공식 출처: 외부 기준(세법·요율·플랫폼 정책)에 의존하는 글에만 붙는다 */}
       {meta.sources.length > 0 && (
         <section className="kf-article-sources">
           <h2>{lang === "ko" ? "참고한 공식 자료" : "Official sources"}</h2>

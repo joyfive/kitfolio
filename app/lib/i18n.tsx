@@ -1,7 +1,7 @@
 "use client";
 
 /* ============================================================
-   Kitfolio — i18n (KO / EN), route-driven.
+   Kitfolio: i18n (KO / EN), route-driven.
 
    언어는 URL로 결정됩니다 (KO=루트, EN=/en). 각 서브트리의 레이아웃이
    <LangProvider lang="..."> 로 고정 언어를 주입하고, 컴포넌트는 useLang()/
@@ -10,7 +10,7 @@
 
    역할 분담:
    - 렌더링 콘텐츠 텍스트(페이지 카피·FAQ·메타) → lib/content.ts (단일 출처)
-   - UI 마이크로카피 — 전역 공통(헤더 네비·푸터·공용 버튼)은 여기 COMMON,
+   - UI 마이크로카피: 전역 공통(헤더 네비·푸터·공용 버튼)은 여기 COMMON,
      도구별 컨트롤 라벨은 각 컴포넌트의 로컬 DICT.
    ============================================================ */
 import { createContext, useCallback, useContext } from "react";
@@ -18,7 +18,7 @@ import { createContext, useCallback, useContext } from "react";
 export type Lang = "ko" | "en";
 export type Dict = Partial<Record<Lang, Record<string, string>>>;
 
-/** 전역 공통 UI 마이크로카피 — t() 의 fallback 사전 */
+/** 전역 공통 UI 마이크로카피: t() 의 fallback 사전 */
 const COMMON: Record<Lang, Record<string, string>> = {
   en: {
     "nav.all": "All tools",

@@ -5,14 +5,14 @@ import { join } from "node:path";
 import { HUB, OG_BADGE, SITE, getTool, type Lang } from "./content";
 
 /* ============================================================
-   동적 OG 이미지 (1200×630) — 레지스트리의 og.title / og.subtitle 소비.
+   동적 OG 이미지 (1200×630): 레지스트리의 og.title / og.subtitle 소비.
    각 라우트의 opengraph-image.tsx 가 toolOgImage()/hubOgImage() 호출.
    폰트는 빌드 시 로컬 파일에서 로드 (한글 글리프 필요 → Noto Sans KR).
    ============================================================ */
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
-/* 브랜드 심볼 (app/icon.svg 와 동일) — Satori 는 SVG 데이터 URI 이미지를 렌더 */
+/* 브랜드 심볼 (app/icon.svg 와 동일): Satori 는 SVG 데이터 URI 이미지를 렌더 */
 const LOGO_SVG =
   '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">' +
   '<path d="M1 7V1H2.76471V3.15858H3.58824L5.02353 1H6.92941L5.14118 3.78698L7 7H5.07059L3.6 4.55385H2.76471V7H1Z" fill="#50535E"/>' +

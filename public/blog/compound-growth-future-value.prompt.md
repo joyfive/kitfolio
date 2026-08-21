@@ -10,7 +10,7 @@
 - **Primary colors:** `#2D5DC8`, `#6486EF`
 - **Supporting colors:** `#D4D9E5`, `#61646F`
 - **Optional highlight:** A tiny amount of muted amber, under 5% of the image
-- **Composition:** Low-to-medium density, centered visual balance, 15–20% outer negative space
+- **Composition:** Low-to-medium density, centered visual balance, 15-20% outer negative space
 - **Shape language:** Soft rounded rectangles, circles, thin connector lines, subtle nodes
 - **Rendering:** Flat or semi-flat, front-facing orthographic view, minimal soft shadow
 - **Consistency rule:** Use the same palette, line weight, corner treatment, background tone, and object density across the full nine-image series

@@ -1,6 +1,6 @@
 ---
 name: branding
-description: Branding and visual-identity guardrails for KitFolio. Use when making branding, naming, tone-of-voice, copywriting, or homepage-messaging decisions, or when reviewing UI for brand fit. Reinforces "Small tools for modern knowledge workers" — speed, usefulness, clarity, professionalism.
+description: Branding and visual-identity guardrails for KitFolio. Use when making branding, naming, tone-of-voice, copywriting, or homepage-messaging decisions, or when reviewing UI for brand fit. Reinforces "Small tools for modern knowledge workers" · speed, usefulness, clarity, professionalism.
 ---
 
 # Branding Skill

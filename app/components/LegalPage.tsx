@@ -7,7 +7,7 @@ import {
   type LegalSlug,
 } from "../lib/content";
 
-/** 최소 인라인 마크업 렌더러 — **굵게** 와 [라벨](url) 만 지원. */
+/** 최소 인라인 마크업 렌더러: **굵게** 와 [라벨](url) 만 지원. */
 function renderInline(text: string, keyBase: string) {
   const tokens = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g);
   return tokens.map((tok, i) => {
@@ -26,7 +26,7 @@ function renderInline(text: string, keyBase: string) {
   });
 }
 
-/** 약관/정책 페이지 — 서버 컴포넌트. 콘텐츠는 content.ts LEGAL 레지스트리에서. */
+/** 약관/정책 페이지: 서버 컴포넌트. 콘텐츠는 content.ts LEGAL 레지스트리에서. */
 export default function LegalPage({
   slug,
   lang,

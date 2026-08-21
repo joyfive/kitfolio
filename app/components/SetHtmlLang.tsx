@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** EN 서브트리에서만 렌더 — document.documentElement.lang 을 'en'으로 바꾸고,
+/** EN 서브트리에서만 렌더: document.documentElement.lang 을 'en'으로 바꾸고,
  *  벗어나면 'ko'로 복원한다.
  *
  *  ⚠️ 이것은 **hydration 이후에 실행되는 클라이언트 effect** 다.

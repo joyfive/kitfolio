@@ -1,5 +1,5 @@
 /* ============================================================
-   QR 아트 렌더러 (Approach A — 코어 QR + 장식 실루엣)
+   QR 아트 렌더러 (Approach A: 코어 QR + 장식 실루엣)
 
    핵심 원칙: 진짜로 스캔되는 QR "코어"는 온전한 정사각형으로 유지한다.
    모양(아치·하트)은 코어 옆/위에 "장식 크럼(가짜 모듈)"을 얹어 만든다.
@@ -13,7 +13,7 @@
 import type { QrMatrix } from "./createQrMatrix";
 import type { QrShape } from "./qrShapes";
 
-export const QUIET = 4; // 코어 주변 Quiet Zone(모듈) — 항상 유지
+export const QUIET = 4; // 코어 주변 Quiet Zone(모듈): 항상 유지
 
 export type ArtOptions = { fg: string; bg: string };
 
@@ -340,7 +340,7 @@ export function renderArtSvg(
   );
 }
 
-/** 흐림 방지용 — 정수 배율에 가까운 캔버스 변 계산(대략치). */
+/** 흐림 방지용: 정수 배율에 가까운 캔버스 변 계산(대략치). */
 export function artCanvasSize(matrixSize: number, target: number): number {
   return target; // fit 단계에서 스케일하므로 목표 크기 그대로 사용
 }

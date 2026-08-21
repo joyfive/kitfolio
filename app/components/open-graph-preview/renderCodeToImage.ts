@@ -64,7 +64,7 @@ async function renderHtml(code: string): Promise<RenderResult> {
   });
   if (!clean.trim()) return { ok: false, error: "unsupported" };
 
-  // 외부 이미지 포함 여부 — 변환 실패 시 원인 분기에 사용
+  // 외부 이미지 포함 여부: 변환 실패 시 원인 분기에 사용
   const hasExternalImage = /<img[^>]+src=["']https?:/i.test(clean);
 
   const host = document.createElement("div");

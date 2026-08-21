@@ -8,10 +8,10 @@
 
 ## 기술 스택
 
-- **Next.js 15** (App Router) — 폴더명이 곧 URL 서브패스 (`app/json-formatter` → `/json-formatter`)
+- **Next.js 15** (App Router): 폴더명이 곧 URL 서브패스 (`app/json-formatter` → `/json-formatter`)
 - **TypeScript**
-- **Tailwind CSS v4** — `app/globals.css`의 `@theme` 블록에 디자인 토큰을 1:1 매핑
-- **URL 기반 다국어(i18n)** — KO는 루트, EN은 `/en` 프리픽스. 각 URL이 서버에서 해당
+- **Tailwind CSS v4**: `app/globals.css`의 `@theme` 블록에 디자인 토큰을 1:1 매핑
+- **URL 기반 다국어(i18n)**: KO는 루트, EN은 `/en` 프리픽스. 각 URL이 서버에서 해당
   언어로 렌더되어 양국어 모두 색인됨 + `hreflang` 연결
 - Vercel 배포 대상
 
@@ -23,7 +23,7 @@
 - **메타데이터**: 페이지별 title/description/keywords + `canonical` + `hreflang`(ko/en/x-default) + OpenGraph
 - **구조화 데이터(JSON-LD)**: 도구=`WebApplication`, 허브=`WebSite`+`ItemList`
 - `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
-- **색인 정책 — `ready` 와 `indexable` 분리**:
+- **색인 정책: `ready` 와 `indexable` 분리**:
   `ready` 는 "도구를 쓸 수 있는가"(허브 목록·검색·관련 도구 노출),
   `indexable` 은 "검색 랜딩 페이지로 낼 품질이 확보됐는가"(sitemap·robots·허브 ItemList).
   `indexable=false` 도구도 **페이지는 정상 동작하고 UI에 그대로 노출되며**,
@@ -55,7 +55,7 @@
 | 12 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
 | 13 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
 | 14 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 15 | 음력 양력 변환기 / Lunar–Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 15 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
 | 16 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 시작값·종료값으로 성장률·차이·배수 즉시 계산. |
 | 17 | 퍼센트 변화율 계산기 / Percentage Change Calculator | `/percentage-change-calculator` | `/en/percentage-change-calculator` | 이전 값과 현재 값으로 변화율·차이·배수 계산. |
 | 18 | 증가율 계산기 / Percentage Increase Calculator | `/percentage-increase-calculator` | `/en/percentage-increase-calculator` | 원래 값과 증가된 값으로 증가율 즉시 계산. |
@@ -133,7 +133,7 @@ npm run validate:content  # indexable 도구 콘텐츠 품질 게이트 (실패 
 ## 디자인 시스템 메모
 
 - 컬러/폰트 토큰은 스펙의 `@theme` 토큰명(`--color-blue-primary-700` 등)을 그대로 사용
-- 레이아웃은 **960px 기준 자동 반응형** (이상 좌우분할 · 미만 상하분할) — 토글 없이 시스템 판단
-- 모든 도구 페이지에 공통 타이틀+설명+사용 가이드(`.kf-pagehead`) — 개별 인입 대비
-- 폰트(Pretendard·Inter·JetBrains Mono)는 현재 CDN 로드 — 핸드오프 권고대로 추후 로컬 폰트
+- 레이아웃은 **960px 기준 자동 반응형** (이상 좌우분할 · 미만 상하분할): 토글 없이 시스템 판단
+- 모든 도구 페이지에 공통 타이틀+설명+사용 가이드(`.kf-pagehead`): 개별 인입 대비
+- 폰트(Pretendard·Inter·JetBrains Mono)는 현재 CDN 로드: 핸드오프 권고대로 추후 로컬 폰트
   (`next/font`)로 교체 권장

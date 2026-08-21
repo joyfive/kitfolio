@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Kitfolio — Design Tokens (Tailwind v4 @theme)
+   Kitfolio: Design Tokens (Tailwind v4 @theme)
    Mirrors the spec's @theme block. Token names map 1:1 to
    Tailwind color/font utilities AND are exposed as CSS vars.
    ============================================================ */
 @theme {
-  /* Base — Blue Gray */
+  /* Base: Blue Gray */
   --color-blue-gray-50:  #F2F5FF;
   --color-blue-gray-100: #E5EAF6;
   --color-blue-gray-200: #D4D9E5;
@@ -19,7 +19,7 @@
   --color-blue-gray-900: #434650;
   --color-blue-gray-950: #21242D;
 
-  /* Point — Blue Primary */
+  /* Point: Blue Primary */
   --color-blue-primary-50:  #f1f3fd;
   --color-blue-primary-100: #e3e7fc;
   --color-blue-primary-200: #c4cdf9;
@@ -48,7 +48,7 @@
   --header-h: 48px;
   --content-max: 1216px;
 
-  /* Elevation — soft, Flex-style */
+  /* Elevation: soft, Flex-style */
   --shadow-card: 0 1px 2px rgba(27, 29, 33, 0.04), 0 1px 3px rgba(27, 29, 33, 0.06);
   --shadow-card-hover: 0 4px 12px rgba(27, 29, 33, 0.08), 0 2px 4px rgba(27, 29, 33, 0.05);
   --shadow-pop: 0 8px 28px rgba(27, 29, 33, 0.14);
@@ -62,7 +62,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   color: var(--color-blue-gray-900);
-  /* 모든 테마 공통 배경 — blue-gray-50 (2026-06-12 스타일 가이드) */
+  /* 모든 테마 공통 배경: blue-gray-50 (2026-06-12 스타일 가이드) */
   background: var(--color-blue-gray-50);
   min-height: 100vh;
   display: flex;
@@ -76,7 +76,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .num, .metric, .badge, .btn { font-family: var(--font-inter); font-feature-settings: "tnum" 1; }
 
 /* ============================================================
-   Common layout — header / main / footer  (app/layout.tsx)
+   Common layout: header / main / footer  (app/layout.tsx)
    ============================================================ */
 .kf-main {
   flex: 1;
@@ -168,7 +168,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: #fff;
   border-top: 0.5px solid var(--color-blue-gray-100);
 }
-/* 컴팩트 — 상단 브랜드 / 1행: 태그라인(좌)↔타겟(우) / 2행: 카피(좌)↔외부링크(우) */
+/* 컴팩트: 상단 브랜드 / 1행: 태그라인(좌)↔타겟(우) / 2행: 카피(좌)↔외부링크(우) */
 .kf-footer-inner {
   max-width: var(--content-max); margin: 0 auto;
   display: flex; flex-direction: column; gap: 12px; padding: 26px 24px 24px;
@@ -178,9 +178,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .foot-brandrow b { font-family: var(--font-inter); font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
 
 .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 14px 24px; flex-wrap: wrap; }
-/* 배너 행 — 태그라인을 배너 상단 기준으로 정렬 */
+/* 배너 행: 태그라인을 배너 상단 기준으로 정렬 */
 .foot-row--top { align-items: flex-start; }
-/* 태그라인 — 크게 */
+/* 태그라인: 크게 */
 .foot-tagline { margin: 0; font-family: var(--font-inter); font-size: 17px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-blue-gray-900); }
 .foot-copy { margin: 0; font-size: 12.5px; color: var(--color-blue-gray-400); }
 
@@ -235,7 +235,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .badge-dot::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
 /* ============================================================
-   Shared page intro — PageHead (badge + title + description)
+   Shared page intro: PageHead (badge + title + description)
    모든 테마 공통 스타일
    ============================================================ */
 .kf-pagehead { padding: 36px 0 24px; }
@@ -272,7 +272,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
-   Legal pages — 개인정보처리방침 / 이용약관 (Clean, 텍스트 본문)
+   Legal pages: 개인정보처리방침 / 이용약관 (Clean, 텍스트 본문)
    ============================================================ */
 .kf-legal { max-width: 760px; margin: 0 auto; padding: 40px 0 24px; }
 .kf-legal h1 {
@@ -313,7 +313,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
-   Shared Guide section — 대표 도구 심화 산문 콘텐츠 (ToolGuide)
+   Shared Guide section: 대표 도구 심화 산문 콘텐츠 (ToolGuide)
    본문 가독성 우선: 좁은 measure · 넉넉한 line-height
    ============================================================ */
 .kf-guide { max-width: 760px; margin: 60px auto 0; }
@@ -329,7 +329,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .kf-guide-sec p:last-child { margin-bottom: 0; }
 
-/* 실전 예제 — 상황 / 입력 / 결과 / 해석 */
+/* 실전 예제: 상황 / 입력 / 결과 / 해석 */
 .kf-guide-examples { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
 .kf-guide-examples > li {
   background: #fff; border: 1px solid var(--color-blue-gray-200);
@@ -391,7 +391,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
-   Shared FAQ section — 디자인 핸드오프(faq.html) 기준
+   Shared FAQ section: 디자인 핸드오프(faq.html) 기준
    아코디언: 한 번에 하나만 열림 · 1번 기본 오픈 · 높이 애니메이션
    ============================================================ */
 .kf-faq { max-width: 760px; margin: 64px auto 0; }
@@ -407,7 +407,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .kf-faq-intro h2 { margin: 0 0 10px; font-size: 26px; font-weight: 700; letter-spacing: -0.03em; color: var(--color-blue-gray-950); }
 .kf-faq-intro p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--color-blue-gray-500); }
 
-/* 탭(칩) — 이 도구에 대하여 ↔ 자주 묻는 질문 */
+/* 탭(칩): 이 도구에 대하여 ↔ 자주 묻는 질문 */
 .kf-faq-tabs {
   display: flex; justify-content: center; gap: 8px;
   margin: 0 0 20px;
@@ -468,7 +468,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .kf-faq-icon svg { width: 15px; height: 15px; }
 
-/* answer — animated height via grid-rows trick */
+/* answer: animated height via grid-rows trick */
 .kf-faq-a {
   display: grid;
   grid-template-rows: 0fr;
@@ -501,7 +501,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ============================================================
-   Related Tools section — 도구 상세 하단, 허브 카드 스타일 재사용
+   Related Tools section: 도구 상세 하단, 허브 카드 스타일 재사용
    ============================================================ */
 .kf-related { margin-top: 56px; }
 .kf-related h2 {
@@ -631,7 +631,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: var(--color-blue-gray-50); border: 1px solid var(--color-blue-gray-100);
 }
 .tool.is-soon .theme-tag { background: #fff; }
-/* 카드 타겟(직군) 태그 — 여러 개 가능 */
+/* 카드 타겟(직군) 태그: 여러 개 가능 */
 .tool-tags { display: flex; flex-wrap: wrap; gap: 5px; min-width: 0; }
 .target-tag {
   font-family: var(--font-inter); font-size: 10.5px; font-weight: 600; letter-spacing: 0.01em;
@@ -724,7 +724,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .tool.is-ready .tool-go { opacity: 1; transform: none; margin-left: auto; }
   .tool-foot { margin-top: 13px; }
 
-  /* footer: 모바일 — 스택 + 좌측 정렬 */
+  /* footer: 모바일 · 스택 + 좌측 정렬 */
   .kf-footer-inner { padding: 24px 16px 20px; }
   .foot-row { flex-direction: column; align-items: flex-start; gap: 10px; }
   .foot-ext { justify-content: flex-start; }
@@ -734,7 +734,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ============================================================
    IDE / Editor theme (개발 도구)
-   1개의 화이트 박스가 좌우 2열로 분할 — 인풋(화이트) → 출력(IDE 다크)
+   1개의 화이트 박스가 좌우 2열로 분할: 인풋(화이트) → 출력(IDE 다크)
    ============================================================ */
 .ide {
   display: flex; flex-direction: column; min-height: 0; height: 600px;
@@ -775,7 +775,7 @@ select.ide-select {
 
 .pane-body { flex: 1; position: relative; min-height: 0; overflow: hidden; }
 
-/* — input pane (white) — */
+/* input pane (white) */
 textarea.code-in {
   position: absolute; inset: 0; width: 100%; height: 100%;
   border: none; outline: none; resize: none; background: transparent; color: var(--color-blue-gray-900);
@@ -791,7 +791,7 @@ textarea.code-in::placeholder { color: var(--color-blue-gray-300); }
   color: var(--color-blue-gray-300); overflow: hidden; background: #fff; white-space: pre;
 }
 
-/* — output pane (IDE dark) — */
+/* output pane (IDE dark) */
 .pane-out { background: var(--color-blue-gray-950); }
 .pane-out .pane-head { background: var(--color-blue-gray-900); border-bottom: 0.5px solid var(--color-blue-gray-800); }
 .pane-out .pane-tab { color: var(--color-blue-gray-400); }
@@ -835,7 +835,7 @@ pre.code-pre { margin: 0; padding: 14px 16px 14px 10px; flex: 1; font-family: va
 .ide-status .err-detail { color: #c0504e; }
 .copied-flash { color: #5fd6a0 !important; }
 
-/* 모바일: 상하 배치 — 인풋은 min 240px, 콘텐츠 따라 확장, max 600px */
+/* 모바일: 상하 배치 · 인풋은 min 240px, 콘텐츠 따라 확장, max 600px */
 @media (max-width: 959px) {
   .ide { height: auto; }
   .pane-in textarea.code-in {
@@ -848,7 +848,7 @@ pre.code-pre { margin: 0; padding: 14px 16px 14px 10px; flex: 1; font-family: va
 
 /* ============================================================
    Canvas theme (디자인 도구)
-   1개의 화이트 박스가 좌우 2열로 분할 — 인풋(화이트) → 출력(그레이)
+   1개의 화이트 박스가 좌우 2열로 분할: 인풋(화이트) → 출력(그레이)
    ============================================================ */
 .cv-work {
   display: grid; min-height: 0; background: #fff;
@@ -857,11 +857,11 @@ pre.code-pre { margin: 0; padding: 14px 16px 14px 10px; flex: 1; font-family: va
 }
 @media (min-width: 960px){ .cv-work { grid-template-rows: none; grid-template-columns: 380px 1fr; height: 640px; } }
 
-/* 인풋(컨트롤) 패널 — 화이트 */
+/* 인풋(컨트롤) 패널: 화이트 */
 .cv-panel { background: #fff; display: flex; flex-direction: column; }
 @media (min-width: 960px){ .cv-panel { border-right: 1px solid var(--color-blue-gray-200); overflow-y: auto; } }
 
-/* 출력(프리뷰) 영역 — 그레이 체커보드 */
+/* 출력(프리뷰) 영역: 그레이 체커보드 */
 .cv-canvas {
   position: relative; min-height: 0; min-width: 0; display: grid; place-items: center; padding: 24px;
   background:
@@ -940,7 +940,7 @@ input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 .cc-work { display: grid; gap: 20px; grid-template-columns: 1fr; }
 @media (min-width: 960px){ .cc-work { grid-template-columns: 1.45fr 1fr; align-items: start; } }
 
-/* 인풋 — 화이트 박스 */
+/* 인풋: 화이트 박스 */
 .editor-card { background: #fff; border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card); }
 .editor-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--color-blue-gray-100); }
 .editor-head .lbl { font-size: 13px; font-weight: 600; color: var(--color-blue-gray-600); }
@@ -956,7 +956,7 @@ textarea#text {
 @media (min-width: 960px){ textarea#text { min-height: 360px; } }
 textarea#text::placeholder { color: var(--color-blue-gray-300); }
 
-/* 출력 — 그레이 카드들 */
+/* 출력: 그레이 카드들 */
 .stats-col { display: flex; flex-direction: column; gap: 18px; }
 
 .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -1020,7 +1020,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
   background: var(--color-blue-primary-100); color: var(--color-blue-primary-700);
 }
 
-/* Input textarea — no line gutter */
+/* Input textarea: no line gutter */
 .ts-textarea {
   padding: 16px !important;
   font-size: 14px !important;
@@ -1128,7 +1128,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .fw-work { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 960px) { .fw-work { grid-template-columns: 1fr 1.15fr; } }
 
-/* 인풋 — 화이트 박스 */
+/* 인풋: 화이트 박스 */
 .fw-inputs {
   background: #fff; border: 1px solid var(--color-blue-gray-200);
   border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);
@@ -1184,7 +1184,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 /* 결과 영역 */
 .fw-results { display: flex; flex-direction: column; gap: 16px; }
 
-/* 강조 카드 2개 — 필요 평균(primary) / 정시 기준 여유·부족 */
+/* 강조 카드 2개: 필요 평균(primary) / 정시 기준 여유·부족 */
 .fw-emph { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 @media (max-width: 460px) { .fw-emph { grid-template-columns: 1fr; } }
 .fw-emph-card {
@@ -1258,7 +1258,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 
 /* ============================================================
    Salary Net Pay Calculator (Clean SaaS theme)
-   인풋(화이트 박스 — 급여 정보) + 결과(KPI 3카드 · 공제 상세 표)
+   인풋(화이트 박스: 급여 정보) + 결과(KPI 3카드 · 공제 상세 표)
    ============================================================ */
 .sc-work { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 960px) { .sc-work { grid-template-columns: 1fr 1.1fr; } }
@@ -1268,7 +1268,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 
 .sc-lbl-sub { font-weight: 500; color: var(--color-blue-gray-400); }
 
-/* Stepper — 부양가족 / 자녀 수 */
+/* Stepper: 부양가족 / 자녀 수 */
 .sc-stepper {
   display: flex; align-items: center; gap: 6px;
   border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md);
@@ -1298,7 +1298,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 }
 .sc-stepper-suffix { flex-shrink: 0; font-size: 12px; color: var(--color-blue-gray-400); }
 
-/* KPI 3카드 — 월 실수령(primary) · 총 공제 · 연 실수령 */
+/* KPI 3카드: 월 실수령(primary) · 총 공제 · 연 실수령 */
 .sc-kpis { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 520px) { .sc-kpis { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 520px) { .sc-kpis .fw-emph-card.primary { grid-column: 1 / -1; } }
@@ -1316,7 +1316,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .bd-row.total.sc-net-row { border-top: none; margin-top: 0; padding-top: 6px; }
 .bd-row.total.sc-net-row .v { color: var(--color-blue-primary-700); }
 
-/* 계산 기준 · 최근 검증일 — 최신성이 중요한 계산기의 신뢰 정보 */
+/* 계산 기준 · 최근 검증일: 최신성이 중요한 계산기의 신뢰 정보 */
 .sc-basis {
   background: #fff; border: 1px solid var(--color-blue-gray-200);
   border-radius: var(--radius-md); padding: 13px 15px;
@@ -1359,7 +1359,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 
 /* ============================================================
    Time Calculator (Clean SaaS theme)
-   인풋(화이트 박스 — 동적 시간 행) + 결과(강조 카드 · 세부 형식)
+   인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */
 .tc-work { display: grid; gap: 20px; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 960px) { .tc-work { grid-template-columns: 1.1fr 1fr; } }
@@ -1554,7 +1554,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .tv-basis-note svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--color-blue-gray-400); }
 
 /* ============================================================
-   Lunar–Solar Converter (Clean SaaS theme)
+   Lunar-Solar Converter (Clean SaaS theme)
    인풋(모드 토글 + 날짜 선택) + 결과(변환 날짜 + 메타 정보)
    ============================================================ */
 .lc-work { display: flex; flex-direction: column; gap: 20px; }
@@ -2768,7 +2768,7 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 }
 .og-card-title.is-empty, .og-card-desc.is-empty { color: var(--color-blue-gray-300); }
 
-/* 가로형(네이버 블로그·Notion) — 썸네일 + 텍스트 */
+/* 가로형(네이버 블로그·Notion): 썸네일 + 텍스트 */
 .og-platform-card--horizontal-left .og-card-body,
 .og-platform-card--horizontal-right .og-card-body { flex-direction: row; align-items: center; }
 .og-platform-card--horizontal-left .og-card-media,
@@ -2782,10 +2782,10 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 }
 
 /* ============================================================
-   QR 도구 (생성기 · 읽기) — Canvas 계열, 기존 토큰 재사용
+   QR 도구 (생성기 · 읽기): Canvas 계열, 기존 토큰 재사용
    ============================================================ */
 
-/* 공통 페이지 탭 (생성기 ↔ 읽기) — PageHead 아래, 작업 영역 위 */
+/* 공통 페이지 탭 (생성기 ↔ 읽기): PageHead 아래, 작업 영역 위 */
 .qr-tabs {
   display: flex; width: 100%; max-width: 420px; gap: 4px;
   margin: 0 0 20px; padding: 4px;
@@ -2802,7 +2802,7 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
   box-shadow: var(--shadow-card); cursor: default;
 }
 
-/* 작업 영역 — 좌(설정/입력) · 우(미리보기/결과) */
+/* 작업 영역: 좌(설정/입력) · 우(미리보기/결과) */
 .qr-gen-work, .qr-read-work {
   display: grid; grid-template-columns: 1fr; gap: 0;
   background: #fff; border: 1px solid var(--color-blue-gray-200);
@@ -2988,7 +2988,7 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
 }
 .qr-result-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* QR 감성 코드 — 안내 문구 · 모양 태그 · 품질 고정 */
+/* QR 감성 코드: 안내 문구 · 모양 태그 · 품질 고정 */
 .qr-note {
   margin: 2px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--color-blue-gray-500);
 }
@@ -3004,12 +3004,12 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
   color: var(--color-blue-gray-300); background: var(--color-blue-gray-50);
 }
 
-/* QR 감성 코드 — 자동 확인 실패(권고) 상태: 차단이 아니라 안내 */
+/* QR 감성 코드: 자동 확인 실패(권고) 상태: 차단이 아니라 안내 */
 .qr-status-unconfirmed { color: #b3791f; }
 .qr-status-unconfirmed .qr-status-dot { background: #d9a23a; }
 
 /* ============================================================
-   PDF 도구 (병합·분할·회전·페이지 삭제) — Canvas 테마
+   PDF 도구 (병합·분할·회전·페이지 삭제): Canvas 테마
    ============================================================ */
 
 /* 공통 상단 탭 (4종, 모바일 가로 스크롤) */
@@ -3031,7 +3031,7 @@ a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blu
   box-shadow: var(--shadow-card); cursor: default;
 }
 
-/* 작업 영역 — 좌(설정) · 우(결과/썸네일) */
+/* 작업 영역: 좌(설정) · 우(결과/썸네일) */
 .pdf-work {
   display: grid; grid-template-columns: 1fr; gap: 0;
   background: #fff; border: 1px solid var(--color-blue-gray-200);
@@ -3259,7 +3259,7 @@ a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blu
 }
 
 /* ============================================================
-   Blog — 아티클 목록(갤러리) + 개별 아티클
+   Blog: 아티클 목록(갤러리) + 개별 아티클
    ============================================================ */
 
 /* 헤더 블로그 링크 */
@@ -3340,7 +3340,7 @@ a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blu
 .kf-article-lead {
   margin: 0; font-size: 17px; line-height: 1.6; color: var(--color-blue-gray-600); text-wrap: pretty;
 }
-/* 작성자 — 날짜 줄에 이어 붙는 핸들 (@joyfive) */
+/* 작성자: 날짜 줄에 이어 붙는 핸들 (@joyfive) */
 .kf-article-author { margin-left: 12px; font-weight: 500; color: var(--color-blue-gray-600); }
 
 /* 공식 출처 */

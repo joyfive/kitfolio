@@ -3,7 +3,7 @@
 import { getTool } from "../lib/content";
 import { useLang } from "../lib/i18n";
 
-/** 가이드 섹션 공통 카피 — 예제·제약·출처 블록 헤딩 */
+/** 가이드 섹션 공통 카피: 예제·제약·출처 블록 헤딩 */
 const LABEL = {
   ko: {
     examples: "실전 사용 예",
@@ -23,7 +23,7 @@ const LABEL = {
   },
 } as const;
 
-/** 심화 가이드 섹션 — 검색 랜딩(indexable) 도구의 고유 본문.
+/** 심화 가이드 섹션: 검색 랜딩(indexable) 도구의 고유 본문.
  *  content.ts 레지스트리의 content[lang] 에서
  *  guide(산문) · examples(실전 예제) · limitations(제약) · sources(출처) 를 소비한다.
  *  넷 다 없으면 아무것도 렌더하지 않는다. */

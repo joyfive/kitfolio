@@ -1,4 +1,4 @@
-/** Pure conversion functions — no side effects, safe for server and client. */
+/** Pure conversion functions: no side effects, safe for server and client. */
 
 export type InputKind =
   | "unix-s"
@@ -26,18 +26,18 @@ export function parseInput(raw: string): ParseResult {
     return { kind: "slack", unixSeconds: parseInt(slackMatch[1], 10) };
   }
 
-  // Pure numeric (9–16 digits, optional decimal)
+  // Pure numeric (9-16 digits, optional decimal)
   if (/^\d{9,16}(\.\d+)?$/.test(s)) {
     const n = parseFloat(s);
     if (s.includes(".")) {
-      // e.g. 1718071200.123456 — seconds with sub-second fraction
+      // e.g. 1718071200.123456: seconds with sub-second fraction
       return { kind: "unix-us", unixSeconds: Math.floor(n) };
     }
     if (n > 1e12) {
       // 13+ digits → milliseconds
       return { kind: "unix-ms", unixSeconds: Math.floor(n / 1000) };
     }
-    // 9–10 digits → seconds
+    // 9-10 digits → seconds
     return { kind: "unix-s", unixSeconds: Math.floor(n) };
   }
 
@@ -63,7 +63,7 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-/** UTC formatted string — safe for server render. */
+/** UTC formatted string: safe for server render. */
 export function toUTC(unixS: number): string {
   const d = new Date(unixS * 1000);
   const yyyy = d.getUTCFullYear();
@@ -76,7 +76,7 @@ export function toUTC(unixS: number): string {
 }
 
 /**
- * Local timezone formatted string — CLIENT-ONLY.
+ * Local timezone formatted string: CLIENT-ONLY.
  * Never call on the server; wrap in useEffect.
  */
 export function toLocalTz(unixS: number): string {
@@ -105,14 +105,14 @@ export function toLocalTz(unixS: number): string {
   return `${get("year")}-${get("month")}-${get("day")} ${get("hour")}:${get("minute")}:${get("second")} ${tzAbbr}`;
 }
 
-/** Long readable date — UTC-based, safe for server render. */
+/** Long readable date: UTC-based, safe for server render. */
 export function toReadable(unixS: number): string {
   const d = new Date(unixS * 1000);
   return `${DAYS[d.getUTCDay()]}, ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
 }
 
 /**
- * Relative time — CLIENT-ONLY (depends on Date.now()).
+ * Relative time: CLIENT-ONLY (depends on Date.now()).
  * Never call on the server; wrap in useEffect.
  */
 export function toRelative(unixS: number): string {

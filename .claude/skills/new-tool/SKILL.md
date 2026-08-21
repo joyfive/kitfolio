@@ -21,16 +21,16 @@ Each tool must include:
 - `slug` (flat 1-depth route, e.g. `/aspect-ratio`)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
-- FAQ (4–6 questions, see `docs/ai/CONTENT_POLICY.md`)
+- FAQ (4-6 questions, see `docs/ai/CONTENT_POLICY.md`)
 - AEO block: What / Who / How / Why
 - Related tools
 - OG metadata (unique per tool)
 - JSON-LD (WebApplication + FAQPage)
 
-## Layout — choose exactly one
-- **Card** — Input → Result
-- **IDE** — Input → Transform → Output
-- **Canvas** — Controls → Live Visual Output
+## Layout: choose exactly one
+- **Card**: Input → Result
+- **IDE**: Input → Transform → Output
+- **Canvas**: Controls → Live Visual Output
 
 Do not invent new layout types.
 

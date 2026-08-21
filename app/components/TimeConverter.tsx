@@ -82,7 +82,7 @@ function convert(value: number, fromUnit: Unit, basis: Basis): Record<Unit, numb
 }
 
 function fmt(n: number): string {
-  if (!isFinite(n)) return "—";
+  if (!isFinite(n)) return "-";
   if (n === 0) return "0";
   if (Math.abs(n) >= 1e9) return n.toExponential(2);
   if (Math.abs(n) >= 1000) return n.toLocaleString("en-US", { maximumFractionDigits: 2 });

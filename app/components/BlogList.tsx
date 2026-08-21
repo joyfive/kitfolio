@@ -2,7 +2,7 @@ import Link from "next/link";
 import { localizedHref, type Lang } from "../lib/content";
 import { getAllPostsMeta, blogLabel, formatDate } from "../lib/blog";
 
-/** 블로그 목록 (갤러리형 카드). 서버 컴포넌트 — 빌드 시 md 파일에서 생성. */
+/** 블로그 목록 (갤러리형 카드). 서버 컴포넌트: 빌드 시 md 파일에서 생성. */
 export default function BlogList({ lang }: { lang: Lang }) {
   const posts = getAllPostsMeta(lang);
   const l = blogLabel(lang);

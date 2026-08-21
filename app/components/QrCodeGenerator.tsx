@@ -99,7 +99,7 @@ type GenStatus =
   | "unconfirmed"
   | "fail";
 
-/* 상대 휘도 기반 대비비 (WCAG) — 낮으면 경고 */
+/* 상대 휘도 기반 대비비 (WCAG): 낮으면 경고 */
 function relLuminance(hex: string): number {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return 0;
@@ -122,7 +122,7 @@ function isHex6(v: string): boolean {
   return /^#[0-9a-fA-F]{6}$/.test(v);
 }
 
-/** 모양 미리보기 아이콘 — 실루엣 지오메트리 재사용 (아치형·하트형도 정확) */
+/** 모양 미리보기 아이콘: 실루엣 지오메트리 재사용 (아치형·하트형도 정확) */
 function ShapeIcon({ shape }: { shape: QrShape }) {
   return (
     <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden focusable="false">

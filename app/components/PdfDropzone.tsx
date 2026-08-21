@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-/** PDF 업로드 드롭존 — 클릭/드래그 앤 드롭. 라벨 문구는 부모(도구 DICT)에서 주입. */
+/** PDF 업로드 드롭존: 클릭/드래그 앤 드롭. 라벨 문구는 부모(도구 DICT)에서 주입. */
 export default function PdfDropzone({
   onFiles,
   multiple = false,

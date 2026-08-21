@@ -5,7 +5,7 @@ import { pdfErrorMessage, type PdfErrorType } from "../lib/pdf/pdfErrors";
 
 export type PdfProcessState = "idle" | "processing" | "error";
 
-/** 처리 상태 알림 — 진행 스피너 또는 정규화된 오류 메시지. */
+/** 처리 상태 알림: 진행 스피너 또는 정규화된 오류 메시지. */
 export default function PdfProcessingStatus({
   state,
   error,

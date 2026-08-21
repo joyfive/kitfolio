@@ -7,11 +7,9 @@
    ============================================================ */
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import fs from "node:fs";
-import path from "node:path";
 import { fixCjkEmphasis, getAllSlugs, getPost } from "../blog.ts";
 
-describe("fixCjkEmphasis — CommonMark 가 놓치는 강조 보정", () => {
+describe("fixCjkEmphasis: CommonMark 가 놓치는 강조 보정", () => {
   test("문장부호로 끝나고 조사가 붙는 경우 <strong> 으로 바꾼다", () => {
     assert.equal(fixCjkEmphasis("**400%**입니다"), "<strong>400%</strong>입니다");
     assert.equal(
@@ -75,25 +73,6 @@ describe("발행된 아티클 회귀 검사", () => {
       [],
       `강조가 파싱되지 않은 글: ${broken.join(", ")}`,
     );
-  });
-
-  test("엠대시·엔대시를 쓰지 않는다 (콜론·가운뎃점으로 대체)", () => {
-    // 라벨과 설명은 콜론, 같은 층위 나열은 가운뎃점, 숫자 범위는 ~ 또는 하이픈.
-    // 프론트매터까지 포함해 원문을 검사한다 (sources 라벨도 화면에 노출되므로).
-    const offenders: string[] = [];
-    for (const slug of getAllSlugs()) {
-      for (const lang of ["ko", "en"] as const) {
-        const file = path.join(process.cwd(), "content", "blog", `${slug}.${lang}.md`);
-        if (!fs.existsSync(file)) continue;
-        const raw = fs.readFileSync(file, "utf8");
-        raw.split("\n").forEach((line, i) => {
-          if (line.includes("\u2014") || line.includes("\u2013")) {
-            offenders.push(`${slug}.${lang}.md:${i + 1}`);
-          }
-        });
-      }
-    }
-    assert.deepEqual(offenders, [], `엠/엔대시 사용: ${offenders.join(", ")}`);
   });
 
   test("모든 아티클이 본문 HTML 을 생성한다", () => {

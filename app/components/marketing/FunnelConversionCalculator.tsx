@@ -460,10 +460,10 @@ export default function FunnelConversionCalculator() {
                     <div key={stage.id} className="fn-detail-row">
                       <span className="fn-detail-name">{stage.name || `Stage ${i + 1}`}</span>
                       <span className={`fn-detail-val num${i === analyzeResult.worstConversionIdx ? " worst" : ""}`}>
-                        {stage.conversionRate !== null ? fmtPct(stage.conversionRate, 1) : "—"}
+                        {stage.conversionRate !== null ? fmtPct(stage.conversionRate, 1) : "-"}
                       </span>
                       <span className={`fn-detail-val num${i === analyzeResult.worstDropOffRateIdx ? " worst" : ""}`}>
-                        {stage.dropOffRate !== null ? fmtPct(stage.dropOffRate, 1) : "—"}
+                        {stage.dropOffRate !== null ? fmtPct(stage.dropOffRate, 1) : "-"}
                       </span>
                       <span className="fn-detail-val num">{fmtPct(stage.cumulativeRate, 1)}</span>
                     </div>

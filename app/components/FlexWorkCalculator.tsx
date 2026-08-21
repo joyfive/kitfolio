@@ -373,7 +373,7 @@ export default function FlexWorkCalculator() {
             <div className="fw-emph-card primary">
               <div className="ec-label">{t("fw.requiredDaily")}</div>
               <div className="ec-value num">
-                {r.requiredDaily === null ? "—" : fmtH(r.requiredDaily)}
+                {r.requiredDaily === null ? "-" : fmtH(r.requiredDaily)}
               </div>
               <div className="ec-sub">{t("fw.requiredSub")}</div>
             </div>
