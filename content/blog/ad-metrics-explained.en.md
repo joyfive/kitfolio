@@ -27,11 +27,11 @@ A campaign that spent 3,000,000 over a month.
 
 Every one of them is a division.
 
-- **CPM** = 3,000,000 ÷ 500,000 × 1,000 = **6,000** — cost per thousand impressions
-- **CTR** = 6,000 ÷ 500,000 = **1.2%** — share of viewers who clicked
-- **CPC** = 3,000,000 ÷ 6,000 = **500** — cost per click
-- **CPA** = 3,000,000 ÷ 120 = **25,000** — cost per conversion
-- **ROAS** = 12,600,000 ÷ 3,000,000 = **420%** — revenue per unit of spend
+- **CPM** = 3,000,000 ÷ 500,000 × 1,000 = **6,000**: cost per thousand impressions
+- **CTR** = 6,000 ÷ 500,000 = **1.2%**: share of viewers who clicked
+- **CPC** = 3,000,000 ÷ 6,000 = **500**: cost per click
+- **CPA** = 3,000,000 ÷ 120 = **25,000**: cost per conversion
+- **ROAS** = 12,600,000 ÷ 3,000,000 = **420%**: revenue per unit of spend
 
 Each has its own tool: the [ROAS calculator](/en/roas-calculator), [CPA calculator](/en/cpa-calculator) and [CTR calculator](/en/ctr-calculator), with the [funnel conversion calculator](/en/funnel-conversion-calculator) for seeing drop-off stage by stage.
 
@@ -51,9 +51,9 @@ At a 25% margin, break-even ROAS is **400%**. This campaign's 420% is barely abo
 
 This is where treating the metrics as one flow earns its keep. If CPA rose, the cause sits somewhere upstream.
 
-- **CPM rose** — competition increased or your targeting is too narrow. That is a bidding and audience problem, not a creative one.
-- **CTR fell** — the creative is fatigued from repeated exposure, or the message does not fit the audience. This is the signal to refresh creative.
-- **CTR and CPC held steady but conversion rate fell** — the problem is in the **landing page or the product**, not the ad. No amount of creative testing will fix it.
+- **CPM rose**: competition increased or your targeting is too narrow. That is a bidding and audience problem, not a creative one.
+- **CTR fell**: the creative is fatigued from repeated exposure, or the message does not fit the audience. This is the signal to refresh creative.
+- **CTR and CPC held steady but conversion rate fell**: the problem is in the **landing page or the product**, not the ad. No amount of creative testing will fix it.
 
 Watching CPA alone cannot distinguish these three cases, which is exactly why all five belong in the same report.
 
@@ -69,8 +69,8 @@ Watching CPA alone cannot distinguish these three cases, which is exactly why al
 
 ## What these metrics cannot tell you
 
-- **Incrementality** — revenue that would have happened anyway, such as branded search, is not filtered out of ROAS. Measuring true contribution requires an experiment that turns the campaign off.
-- **Early data** — a CPA computed on fewer than ten conversions is mostly chance. Waiting for 30 to 50 is far more reliable.
-- **Brand awareness campaigns** — if revenue is not the objective, ROAS is the wrong lens entirely. Set reach and frequency targets that match the actual goal.
+- **Incrementality**: revenue that would have happened anyway, such as branded search, is not filtered out of ROAS. Measuring true contribution requires an experiment that turns the campaign off.
+- **Early data**: a CPA computed on fewer than ten conversions is mostly chance. Waiting for 30 to 50 is far more reliable.
+- **Brand awareness campaigns**: if revenue is not the objective, ROAS is the wrong lens entirely. Set reach and frequency targets that match the actual goal.
 
 Connecting the metrics into one flow lasts much longer than memorizing them, because it tells you where to look the moment a number moves.

@@ -32,6 +32,9 @@ export default function BlogArticle({
       </nav>
 
       <header className="kf-article-head">
+        {/* 날짜 · 작성자 — 누가 썼는지는 여기 한 줄로만 밝힌다.
+            역할(authorRole)과 최근 검증일(reviewedAt)은 화면에 노출하지 않고
+            BlogPosting JSON-LD 에만 남긴다. */}
         <div className="kf-article-meta">
           <time dateTime={meta.date}>{formatDate(meta.date, lang)}</time>
           {meta.updated && meta.updated !== meta.date && (
@@ -40,25 +43,10 @@ export default function BlogArticle({
               {formatDate(meta.updated, lang)}
             </span>
           )}
+          <span className="kf-article-author">@{meta.author}</span>
         </div>
         <h1>{meta.title}</h1>
         {meta.description && <p className="kf-article-lead">{meta.description}</p>}
-
-        {/* 작성자 · 역할 · 최근 사실 확인일 — 누가 쓰고 누가 책임지는지 밝힌다 */}
-        <div className="kf-article-byline">
-          <span className="kf-article-author">
-            <b>{meta.author}</b>
-            <span>{meta.authorRole}</span>
-          </span>
-          {meta.reviewedAt && (
-            <span className="kf-article-reviewed">
-              {lang === "ko" ? "최근 검증 " : "Last verified "}
-              <time dateTime={meta.reviewedAt}>
-                {formatDate(meta.reviewedAt, lang)}
-              </time>
-            </span>
-          )}
-        </div>
       </header>
 
       {meta.cover && (

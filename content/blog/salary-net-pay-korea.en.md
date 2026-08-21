@@ -8,7 +8,7 @@ cover: /blog/salary-net-pay-korea.png
 coverAlt: Illustration representing take-home pay calculation
 relatedTools: salary-calculator, time-calculator
 tags: pay, tax, work
-sources: National Pension Service — contribution rate and standard monthly income|https://www.nps.or.kr/jsppage/info/easy/easy_04_01.jsp, National Health Insurance Service — contribution rates|https://www.nhis.or.kr/nhis/policy/wbhadc00701m01.do, National Tax Service — simplified withholding tax table|https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2233&cntntsId=7666
+sources: National Pension Service · contribution rate and standard monthly income|https://www.nps.or.kr/jsppage/info/easy/easy_04_01.jsp, National Health Insurance Service · contribution rates|https://www.nhis.or.kr/nhis/policy/wbhadc00701m01.do, National Tax Service · simplified withholding tax table|https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2233&cntntsId=7666
 ---
 
 You have an offer on the table. The gross salary is 8 million won higher than what you earn now. How much more actually reaches your account each month?
@@ -39,10 +39,10 @@ Back to that offer: a gross increase of 8 million works out to a little over 500
 
 **The four major insurances** are split between employee and employer. The 2026 employee shares are:
 
-- **National Pension 4.75%** — the combined rate rose from 9% to 9.5% in January 2026, split evenly between employee and employer. This is the first year of the phased increase under Korea's pension reform.
-- **Health Insurance 3.595%** — half of the combined 7.19%.
-- **Long-Term Care = Health Insurance premium × 13.14%** — note that it multiplies the health premium, not your income. Expressed against income it works out to 0.9448%.
-- **Employment Insurance 0.9%** — the unemployment benefit portion, unchanged since July 2022.
+- **National Pension 4.75%**: the combined rate rose from 9% to 9.5% in January 2026, split evenly between employee and employer. This is the first year of the phased increase under Korea's pension reform.
+- **Health Insurance 3.595%**: half of the combined 7.19%.
+- **Long-Term Care = Health Insurance premium × 13.14%**: note that it multiplies the health premium, not your income. Expressed against income it works out to 0.9448%.
+- **Employment Insurance 0.9%**: the unemployment benefit portion, unchanged since July 2022.
 
 Only the National Pension has a ceiling and a floor. From July 2026 through June 2027 the standard monthly income ceiling is 6,590,000 and the floor is 410,000. Once monthly taxable income passes the ceiling, the pension contribution stops rising at 313,025.
 
@@ -62,10 +62,10 @@ Running the numbers takes one input in the [salary net pay calculator](/en/salar
 
 An estimate is good enough for **framing a negotiation range and comparing offers**. These situations are different:
 
-- **When bonuses or performance pay are a large share of the package** — the assumption of equal monthly pay breaks down, and deductions shift sharply in months when a bonus lands.
-- **Months when you join or leave mid-period** — pro-rated pay and separate premium assessment rules apply.
-- **Predicting your year-end settlement** — this covers monthly withholding only. Medical expenses, donations and housing deductions are not modelled, so it says nothing about a refund or additional payment.
-- **Freelancers, daily workers and company representatives** — either outside the four major insurances or assessed differently. The 3.3% business income withholding structure is a different calculation entirely.
-- **When you need an exact figure** — for a loan application or a tax filing, get the confirmed number from your payroll department or Hometax.
+- **When bonuses or performance pay are a large share of the package**: the assumption of equal monthly pay breaks down, and deductions shift sharply in months when a bonus lands.
+- **Months when you join or leave mid-period**: pro-rated pay and separate premium assessment rules apply.
+- **Predicting your year-end settlement**: this covers monthly withholding only. Medical expenses, donations and housing deductions are not modelled, so it says nothing about a refund or additional payment.
+- **Freelancers, daily workers and company representatives**: either outside the four major insurances or assessed differently. The 3.3% business income withholding structure is a different calculation entirely.
+- **When you need an exact figure**: for a loan application or a tax filing, get the confirmed number from your payroll department or Hometax.
 
 In short, an estimate is a tool for **getting your bearings before a decision**, not a substitute for a payslip. Keep that line clear and you can answer "what does that offer actually pay?" in a few seconds, mid-conversation.

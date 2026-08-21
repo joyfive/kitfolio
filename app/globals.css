@@ -3340,16 +3340,8 @@ a.pdf-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blu
 .kf-article-lead {
   margin: 0; font-size: 17px; line-height: 1.6; color: var(--color-blue-gray-600); text-wrap: pretty;
 }
-/* 작성자 · 역할 · 최근 검증일 */
-.kf-article-byline {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
-  margin-top: 16px; padding-top: 14px;
-  border-top: 1px solid var(--color-blue-gray-100);
-}
-.kf-article-author { display: flex; align-items: baseline; gap: 7px; }
-.kf-article-author b { font-size: 14px; font-weight: 700; color: var(--color-blue-gray-900); }
-.kf-article-author > span { font-size: 13px; color: var(--color-blue-gray-500); }
-.kf-article-reviewed { font-size: 13px; color: var(--color-blue-gray-500); }
+/* 작성자 — 날짜 줄에 이어 붙는 핸들 (@joyfive) */
+.kf-article-author { margin-left: 12px; font-weight: 500; color: var(--color-blue-gray-600); }
 
 /* 공식 출처 */
 .kf-article-sources {

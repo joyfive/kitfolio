@@ -32,12 +32,12 @@ JSON is a way of writing data as text, and it has very few rules. **Break even o
 }
 ```
 
-- `{ }` **object** — a bundle of labelled values, written as `"key": value` pairs separated by commas.
-- `[ ]` **array** — an ordered list of values.
+- `{ }` **object**: a bundle of labelled values, written as `"key": value` pairs separated by commas.
+- `[ ]` **array**: an ordered list of values.
 
 A value can be a string (`"..."`), a number, `true`/`false`, `null`, or another object or array. That is the whole vocabulary. Files get deeper: an object holding an array holding more objects: but the rules never grow.
 
-## Error 1 — A comma after the last item
+## Error 1: A comma after the last item
 
 By far the most common.
 
@@ -49,7 +49,7 @@ By far the most common.
 
 The comma after `"tools"` is the problem. **JSON does not allow a trailing comma after the final item.** JavaScript does, so the habit carries over, and commas are frequently left behind when deleting an entry. When an error message points at a `]` or `}`, look at the comma just before it.
 
-## Error 2 — Unquoted keys
+## Error 2: Unquoted keys
 
 ```json
 { name: "kitfolio" }
@@ -57,7 +57,7 @@ The comma after `"tools"` is the problem. **JSON does not allow a trailing comma
 
 `name` has no quotes. **Every JSON key must be wrapped in double quotes.** JavaScript object literals let you omit them, which is where the confusion starts.
 
-## Error 3 — Single quotes
+## Error 3: Single quotes
 
 ```json
 { 'name': 'kitfolio' }
@@ -65,7 +65,7 @@ The comma after `"tools"` is the problem. **JSON does not allow a trailing comma
 
 Python and JavaScript accept single-quoted strings; **JSON accepts double quotes only.** This shows up constantly when data is copied over from another language.
 
-## Error 4 — Comments
+## Error 4: Comments
 
 ```json
 {
@@ -76,7 +76,7 @@ Python and JavaScript accept single-quoted strings; **JSON accepts double quotes
 
 **Standard JSON has no comments.** If you have seen them in `tsconfig.json` or `.vscode/settings.json`, those files are JSONC, an extended format understood by specific tools. A normal JSON parser treats a comment as an error.
 
-## Error 5 — Unbalanced brackets
+## Error 5: Unbalanced brackets
 
 If it is none of the above, it is usually this. Once nesting gets deep, a single missing `}` is genuinely hard to spot by reading.
 
@@ -92,8 +92,8 @@ If it parses and the data still looks off, suspect one of these two.
 
 ## When not to use JSON
 
-- **Config files humans edit often** — with no comments, there is nowhere to record why a value is set the way it is. YAML or TOML suit that job better.
-- **Very large datasets** — the format expects to be read whole, which does not work at hundreds of megabytes. JSON Lines or CSV process record by record instead.
-- **Values needing exact decimal arithmetic** — for money and anything where rounding is unacceptable, send the value as a string rather than a number.
+- **Config files humans edit often**: with no comments, there is nowhere to record why a value is set the way it is. YAML or TOML suit that job better.
+- **Very large datasets**: the format expects to be read whole, which does not work at hundreds of megabytes. JSON Lines or CSV process record by record instead.
+- **Values needing exact decimal arithmetic**: for money and anything where rounding is unacceptable, send the value as a string rather than a number.
 
 That is genuinely all you need to work with JSON. Remember that it trades a small rule set for zero tolerance, and an error message becomes something you can act on in seconds.

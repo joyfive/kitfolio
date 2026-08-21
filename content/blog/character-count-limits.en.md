@@ -48,7 +48,7 @@ Three different values. Most forms never say which rule they use, which is why i
 
 If the same post is going to several places, **write to the tightest limit first.** Drafting at 280 for X and then expanding for Threads produces better sentences than writing 500 and hacking it down.
 
-Some limits are not limits at all but truncation points. A search result snippet gets cut around 150–160 characters; exceeding it throws no error, the tail simply disappears. That makes **putting the important phrase first** more useful than shortening the text.
+Some limits are not limits at all but truncation points. A search result snippet gets cut around 150-160 characters; exceeding it throws no error, the tail simply disappears. That makes **putting the important phrase first** more useful than shortening the text.
 
 ## The right order for hitting a length
 
@@ -63,8 +63,8 @@ For an application answer, aim to **use at least 90% of the allowance**. Submitt
 
 ## When counting characters is beside the point
 
-- **Text nobody is counting** — emails and internal docs have no limit. Whether the conclusion is in the first paragraph matters far more than length.
-- **Systems that state a byte limit** — count bytes, not characters. For non-Latin text the two are nowhere near each other.
-- **Platforms that count links separately** — some convert any URL to a fixed length regardless of its real size. Confirm on the platform itself before publishing anything with a link.
+- **Text nobody is counting**: emails and internal docs have no limit. Whether the conclusion is in the first paragraph matters far more than length.
+- **Systems that state a byte limit**: count bytes, not characters. For non-Latin text the two are nowhere near each other.
+- **Platforms that count links separately**: some convert any URL to a fixed length regardless of its real size. Confirm on the platform itself before publishing anything with a link.
 
 Limits are a small thing until they bite you at a deadline. **Checking which rule applies before you start** avoids almost all of it.
