@@ -35,6 +35,8 @@ import type { Metadata } from "next";
 // 실수령 계산기의 공식 출처·검증일은 정책 데이터 레이어(lib/salary/insurance)가 단일 출처다.
 // 여기서 URL을 다시 적으면 요율 개정 때 한쪽만 갱신되어 어긋나므로 그대로 가져다 쓴다.
 import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
+// 퇴직금 계산기도 같은 이유로 출처·검증일을 정책 데이터 레이어에서 가져온다.
+import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 
 export type Lang = "ko" | "en";
 
@@ -2989,6 +2991,361 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Salary Net Pay Calculator",
         subtitle: "Gross salary to monthly & yearly take-home pay, instantly",
+      },
+    },
+  },
+  {
+    slug: "severance-pay-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "job-seeker", "small-business-owner"],
+    ico: "₩30",
+    ready: true,
+    indexable: true,
+    verifiedAt: SEVERANCE_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "퇴직금 계산기", en: "Severance Pay Calculator" },
+    relatedTools: ["salary-calculator", "flex-work-calculator"],
+    seo: {
+      ko: {
+        title: "퇴직금 계산기 | 평균임금으로 예상 퇴직금 계산",
+        description:
+          "입사일, 마지막 근무일과 퇴직 전 3개월의 세전 임금을 입력해 예상 퇴직금을 계산하세요. 1일 평균임금과 계속근로일수를 기준으로 계산 과정을 그대로 보여주고, DB·DC 퇴직연금과 개인형 IRP 계좌, 퇴직금 수령 시 세금과 연금 절세 방법도 함께 정리했습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "퇴직금 계산기",
+          "퇴직금 계산",
+          "예상 퇴직금",
+          "퇴직금 계산법",
+          "평균임금 계산",
+          "퇴직금 지급기준",
+          "IRP 퇴직금",
+        ],
+      },
+      en: {
+        title: "Severance Pay Calculator | Korea Statutory Severance",
+        description:
+          "Enter your start date, last working day and the gross wages from your final three months to estimate statutory severance pay in Korea. The calculator shows the average daily wage, the days of continuous service and the full formula behind the result, and the guide explains DB and DC retirement plans, IRP accounts and how retirement income is taxed. Everything runs in your browser.",
+        keywords: [
+          "severance pay calculator",
+          "korea severance pay",
+          "retirement pay calculator korea",
+          "average wage calculator korea",
+          "statutory severance korea",
+          "korean severance formula",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산.",
+        description:
+          "입사일과 마지막 근무일, 퇴직 전 3개월의 세전 임금을 입력하면 1일 평균임금과 계속근로일수를 계산해 예상 법정 퇴직금(세전)을 보여줍니다. 상여금과 연차수당은 3개월분이 반영되고, 통상임금이 평균임금보다 높으면 통상임금을 기준으로 계산합니다. 산정기간과 대입한 숫자까지 그대로 보여주므로 결과를 직접 검산할 수 있습니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "입사일·마지막 근무일과 주 소정근로시간 입력",
+          "퇴직 전 3개월 임금과 상여금·연차수당 입력",
+          "1일 평균임금과 예상 퇴직금(세전) 확인",
+        ],
+        aeo: {
+          what: "퇴직금 계산기는 입사일과 마지막 근무일, 퇴직 전 3개월의 임금을 입력하면 1일 평균임금과 계속근로일수를 계산해 예상 법정 퇴직금(세전)을 보여주는 도구입니다.",
+          who: "퇴사를 준비하는 직장인, 이직 시점을 저울질하는 사람, 계약직·단시간 근로자, 그리고 직원의 퇴직급여를 미리 가늠해야 하는 소규모 사업주를 위한 도구입니다.",
+          how: "마지막 근무일의 다음 날을 퇴직일로 잡아 계속근로일수를 세고, 퇴직일 직전 3개월의 임금에 연간 상여금과 연차수당의 3개월분을 더해 산정기간 일수로 나눠 1일 평균임금을 구합니다. 통상임금이 더 높으면 통상임금을 적용한 뒤, 적용 1일 임금 × 30 × 계속근로일수 ÷ 365 로 퇴직금을 계산합니다.",
+          why: "퇴직금은 근속연수가 아니라 마지막 3개월의 임금과 하루 단위 근속일수로 정해지기 때문에, 퇴사 시점을 며칠만 옮겨도 금액이 달라집니다. 숫자를 바꿔가며 몇 초 안에 비교해 볼 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "퇴직금은 어떻게 계산하나요",
+            body: [
+              "일반적인 법정 퇴직금은 1일 평균임금 × 30일 × 계속근로일수 ÷ 365로 계산합니다. 여기서 계속근로일수는 입사일부터 퇴직일까지의 날수이고, 퇴직일은 마지막으로 근무한 날의 다음 날입니다. 이 계산기에서 마지막 근무일만 입력받는 이유가 여기에 있습니다: 퇴직일 환산은 도구가 대신합니다.",
+              "평균임금은 퇴직 직전 3개월 동안 지급받은 임금을 그 기간의 총일수로 나눈 금액입니다. 이때 총일수는 실제 출근한 날만 세는 것이 아니라 주말과 휴일을 포함한 달력상의 날짜입니다. 그래서 같은 임금을 받아도 산정기간이 89일인 달과 92일인 달의 평균임금이 조금씩 달라집니다.",
+              "상여금이나 연차수당처럼 일정 기간에 걸쳐 발생한 임금은 3개월분만 평균임금에 반영합니다. 이 계산기도 연간 상여금과 연차수당에 각각 3/12를 곱해 더합니다. 또한 계산된 평균임금이 통상임금보다 낮다면 통상임금을 기준으로 퇴직금을 산정하므로, 1일 통상임금을 알고 있다면 함께 입력하는 편이 정확합니다.",
+              "다만 육아휴직, 출산전후휴가, 업무상 재해로 인한 휴업 등 평균임금 산정에서 제외되는 기간이 있다면 계산 방식이 달라집니다. 이 경우 제외기간과 그 기간의 임금을 빼고 계산해야 하므로, 결과를 그대로 쓰기보다 회사 담당 부서에 확인하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "퇴직금, DB형, DC형은 무엇이 다른가요",
+            body: [
+              "직장에서 말하는 '퇴직금'은 실제로 여러 형태의 퇴직급여제도를 함께 가리킵니다. 퇴직금제도는 근로자가 퇴직할 때 계속근로기간과 평균임금을 기준으로 회사가 퇴직금을 지급하는 방식입니다.",
+              "DB형(확정급여형) 퇴직연금은 근로자가 퇴직할 때 받을 급여 수준이 미리 정해져 있습니다. 회사가 금융기관에 퇴직급여 재원을 적립하고 운용하며, 운용 성과에 대한 책임도 회사가 부담합니다. 받을 금액의 계산 구조가 퇴직금제도와 같기 때문에, 이 계산기의 결과를 참고하기에 적합합니다.",
+              "DC형(확정기여형) 퇴직연금은 회사가 매년 근로자의 연간 임금총액의 일정 금액을 근로자의 퇴직연금 계좌에 납입하는 방식입니다. 적립된 자금은 근로자가 직접 운용하므로, 실제 퇴직 시점의 금액은 납입된 부담금과 투자수익 또는 손실에 따라 달라집니다.",
+              "따라서 회사가 DC형을 운영한다면 마지막 3개월의 평균임금만으로 받을 돈이 정해지지 않습니다. 이 계산기의 결과는 대략의 규모를 가늠하는 용도로만 쓰고, 실제 금액은 본인의 퇴직연금 계좌 잔액으로 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "IRP는 무엇이고, 퇴직할 때 왜 필요한가요",
+            body: [
+              "IRP는 개인형퇴직연금계좌(Individual Retirement Pension)의 약자로, 퇴직급여를 받아 보관하거나 여러 직장에서 발생한 퇴직급여를 하나의 계좌에서 관리할 수 있는 연금계좌입니다.",
+              "2022년 4월 14일부터 원칙적으로 근로자가 퇴직할 때 회사는 퇴직급여를 근로자가 지정한 IRP 계좌로 지급합니다. 퇴사를 앞두고 회사에서 IRP 계좌번호 제출을 요청받는 이유가 이것입니다. 다만 55세 이후에 퇴직하는 경우, 퇴직급여가 300만원 이하인 경우 등 법에서 정한 일부 사유에는 IRP로 지급하지 않아도 되는 예외가 있습니다.",
+              "IRP로 퇴직금을 받았다고 해서 반드시 장기간 묶어 두어야 하는 것은 아닙니다. 이후 일시금으로 인출할 수도 있고, 요건을 충족하면 연금 형태로 나누어 받을 수도 있습니다. 다만 어떤 방식으로 수령하느냐에 따라 세금이 달라집니다.",
+            ],
+          },
+          {
+            heading: "퇴직금을 IRP에 두면 어떤 세금 차이가 있나요",
+            body: [
+              "퇴직금을 IRP로 이전하면 퇴직 시점에 바로 퇴직소득세를 내는 대신, 실제로 계좌에서 돈을 인출할 때까지 과세를 미룰 수 있습니다. 이것을 과세이연이라고 합니다.",
+              "퇴직금을 곧바로 일시금으로 인출하면 퇴직소득에 대한 세금이 부과됩니다. 반대로 일정 요건을 갖춰 연금으로 나누어 받으면 이연된 퇴직소득에 대해 일시금보다 낮은 세율을 적용받을 수 있습니다. 2026년 기준으로 이연퇴직소득을 연금으로 받는 경우, 연금 실제 수령기간에 따라 연금 외 수령 시 세율의 70%(10년 이하), 60%(10년 초과 20년 이하), 50%(20년 초과) 수준이 적용됩니다.",
+              "즉 장기간에 걸쳐 연금으로 받을수록 퇴직소득에 대한 세 부담이 낮아지는 구조입니다. 당장 퇴직금을 쓸 계획이 없다면 IRP에서 연금으로 수령하는 방법과 일시금으로 인출하는 방법의 세금 차이를 비교해 볼 필요가 있습니다.",
+            ],
+          },
+          {
+            heading: "IRP에 돈을 추가로 넣으면 세액공제도 받을 수 있나요",
+            body: [
+              "퇴직하면서 회사에서 IRP로 이전된 퇴직금 자체는 연금계좌 세액공제 대상이 아닙니다. 이미 퇴직소득세의 과세가 이연된 금액이기 때문입니다.",
+              "대신 본인이 IRP나 연금저축에 별도로 추가 납입한 금액은 일정 한도 안에서 연금계좌 세액공제를 받을 수 있습니다. 연금저축은 연간 600만원, 연금저축과 IRP 등 퇴직연금계좌를 합한 세액공제 대상 한도는 연간 900만원입니다. 세액공제율은 소득 수준에 따라 달라져, 총급여 5,500만원 이하(종합소득금액 4,500만원 이하)는 소득세 기준 15%, 초과자는 12%가 적용됩니다.",
+              "정리하면 IRP에는 두 가지 기능이 함께 있습니다. 하나는 퇴직금을 받아 과세를 미루고 노후자금으로 운용하는 기능이고, 다른 하나는 본인 자금을 추가 납입해 연말정산이나 종합소득세에서 세액공제를 받는 기능입니다. 두 금액은 세금 처리 방식이 다르므로 구분해서 이해해야 합니다.",
+            ],
+          },
+          {
+            heading: "계산 결과와 실제 퇴직금이 다른 경우",
+            body: [
+              "이 계산기는 일반적인 법정 산식을 적용한 예상 금액입니다. 실제 퇴직금은 임금에 포함되는 수당의 범위, 상여금과 연차수당의 반영 여부, 평균임금 산정 제외기간, 회사의 퇴직급여제도에 따라 달라질 수 있습니다.",
+              "특히 회사가 DC형 퇴직연금을 운영한다면 퇴직 시 받을 금액이 마지막 3개월의 평균임금으로 결정되지 않습니다. 퇴직연금 계좌에 실제로 적립된 부담금과 운용 성과를 확인해야 합니다.",
+              "또한 이 계산기는 퇴직소득세를 계산하지 않습니다. 세후 실수령액은 근속연수와 퇴직급여액에 따라 산출되는 퇴직소득세, 그리고 IRP 수령 방식에 따라 달라집니다. 정확한 금액은 회사 급여 담당 부서나 고용노동부·국세청의 공식 안내로 확인하세요.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "5년 5개월 근무하고 2026년 8월 27일에 퇴사하는 경우",
+            input:
+              "입사 2021-03-02 · 마지막 근무 2026-08-27 · 주 40시간 · 3개월 임금 12,000,000 · 연간 상여 3,000,000 · 연차수당 500,000",
+            result:
+              "1일 평균임금 139,946원 → 예상 퇴직금 23,062,334원 (세전)",
+            note: "산정기간은 2026-05-28 ~ 2026-08-27로 92일이고, 상여금 750,000원과 연차수당 125,000원이 3개월분으로 반영되어 임금 총액은 12,875,000원입니다. 계속근로일수는 2,005일입니다.",
+          },
+          {
+            title: "상여금·연차수당을 빼고 계산했을 때의 차이",
+            input: "같은 조건에서 상여금과 연차수당을 0원으로 입력",
+            result:
+              "1일 평균임금 130,435원 → 예상 퇴직금 21,494,973원 (약 157만원 감소)",
+            note: "연간 상여금 300만원의 3개월분인 75만원이 92일에 나뉘어 하루 8,152원을 올리고, 그 차이가 근속 2,005일에 곱해지면서 최종 금액이 크게 벌어집니다. 상여금 항목을 빠뜨리지 않는 것이 중요합니다.",
+          },
+          {
+            title: "통상임금이 평균임금보다 높은 경우",
+            input:
+              "입사 2023-04-03 · 마지막 근무 2026-03-31 · 3개월 임금 10,500,000 · 1일 통상임금 125,000",
+            result:
+              "1일 평균임금 116,667원이지만 통상임금 125,000원이 적용되어 예상 퇴직금 11,239,726원",
+            note: "연말·연초처럼 상여나 수당이 적은 달이 산정기간에 몰리면 평균임금이 통상임금보다 낮아질 수 있습니다. 이때는 통상임금이 기준이 되므로, 아는 경우 반드시 입력하세요.",
+          },
+          {
+            title: "지급 요건을 채우지 못한 단시간 근로",
+            input: "입사 2025-11-03 · 마지막 근무 2026-08-27 · 주 12시간",
+            result: "계속근로 298일 · 주 15시간 미만으로 법정 퇴직금 지급 요건 미충족",
+            note: "계속근로기간 1년 이상과 4주 평균 주 15시간 이상을 모두 충족해야 법정 퇴직금 대상입니다. 두 요건 중 어느 쪽이 걸렸는지 결과 화면에 함께 표시됩니다.",
+          },
+        ],
+        sources: SEVERANCE_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "예상 법정 퇴직금(세전)까지만 계산합니다. 퇴직소득세와 IRP 운용수익은 계산하지 않으므로, 실제 손에 쥐는 금액은 이 결과보다 적습니다.",
+          "육아휴직, 출산전후휴가, 육아기 근로시간 단축, 업무상 재해로 인한 휴업 등 평균임금 산정에서 제외되는 기간은 반영하지 않습니다. 이런 기간이 산정기간에 걸쳐 있으면 실제 평균임금과 달라집니다.",
+          "DC형(확정기여형) 퇴직연금에는 맞지 않습니다. DC형은 회사가 납입한 부담금과 근로자의 운용 성과로 금액이 정해지므로, 퇴직연금 계좌 잔액을 직접 확인해야 합니다.",
+          "상여금과 연차수당은 입력한 금액의 3개월분(3/12)을 그대로 반영합니다. 실제로 평균임금에 포함되는지는 지급 시점과 발생 사유, 취업규칙에 따라 달라질 수 있습니다.",
+          "임금에 어떤 수당이 포함되는지는 판단하지 않습니다. 입력한 3개월 임금 총액을 그대로 사용하므로, 급여명세서에서 임금에 해당하는 항목을 골라 넣어야 합니다.",
+          "계속근로일수는 입사일부터 퇴직일까지 달력 기준으로 셉니다. 휴직·정직 등으로 계속근로기간 산정이 달라지는 경우는 반영하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Estimate Korean statutory severance pay from your start date and the wages of your final three months.",
+        description:
+          "Enter your start date, last working day and the gross wages from your final three months, and this calculator works out the average daily wage and the days of continuous service to estimate statutory severance pay in Korea before tax. Bonuses and unused-leave pay are counted at three months' worth, and a higher ordinary wage replaces the average wage when you provide it. The calculation period and every number used are shown so you can check the result yourself. Everything runs in your browser.",
+        howItWorks: [
+          "Enter your dates and weekly contracted hours",
+          "Enter the last 3 months of pay, bonuses and leave pay",
+          "See the average daily wage and pre-tax severance estimate",
+        ],
+        aeo: {
+          what: "A Severance Pay Calculator takes a start date, a last working day and the wages from the final three months of employment and returns the average daily wage, the days of continuous service and an estimate of Korean statutory severance pay before tax.",
+          who: "It is for employees planning to resign, people weighing when to change jobs, fixed-term and part-time workers, and small business owners who need to budget an employee's retirement payout.",
+          how: "The day after your last working day is treated as the retirement date, and continuous service is counted in days from your start date. The wages of the three calendar months before that date, plus three months' worth of annual bonuses and leave pay, are divided by the number of days in the period to give the average daily wage. If a daily ordinary wage is higher, it is used instead, and severance is the applied daily wage multiplied by 30, multiplied by days of service, divided by 365.",
+          why: "Severance in Korea depends on the wages of your final three months and on service counted by the day, not by whole years, so moving a resignation date by a few days changes the amount. This lets you compare scenarios in seconds.",
+        },
+        guide: [
+          {
+            heading: "How severance pay is calculated in Korea",
+            body: [
+              "Statutory severance is the average daily wage multiplied by 30 days, multiplied by the days of continuous service, divided by 365. Continuous service runs from your start date to your retirement date, and the retirement date is the day after your last working day. That is why this calculator only asks for the last working day: it converts the retirement date for you.",
+              "The average wage is the pay you received in the three months before leaving, divided by the total number of days in that period. Those days are calendar days including weekends and holidays, not the days you actually worked. So the same pay produces a slightly different average wage in a period of 89 days than in one of 92 days.",
+              "Pay that accrues over a longer span, such as an annual bonus or unused-leave allowance, counts toward the average wage at three months' worth. This calculator multiplies each by 3/12 and adds it to the period's wages. If the resulting average wage is lower than your ordinary wage, severance is calculated on the ordinary wage instead, so enter your daily ordinary wage when you know it.",
+              "Certain periods are excluded from the average wage calculation, including parental leave, maternity leave and absence from a work injury. When such a period overlaps your final three months, the excluded days and the pay for them are removed before the average is taken, so check with your payroll team rather than relying on this estimate.",
+            ],
+          },
+          {
+            heading: "Severance pay, DB plans and DC plans",
+            body: [
+              "What people call severance in Korea covers several different retirement benefit schemes. Under the classic severance scheme, the employer pays out at the end of employment based on continuous service and the average wage.",
+              "A defined benefit (DB) plan fixes the level of benefit the employee will receive in advance. The employer sets aside and invests the funds with a financial institution and bears the investment risk. Because the payout is worked out the same way as classic severance, the result from this calculator is a reasonable reference for a DB plan.",
+              "A defined contribution (DC) plan works the other way round: each year the employer pays a set amount, based on the employee's total annual wages, into the employee's retirement account. The employee invests those funds, so the amount available at retirement depends on the contributions made and on investment gains or losses.",
+              "If your employer runs a DC plan, the wages of your last three months do not determine what you receive. Use this calculator only to get a sense of scale, and check the actual balance of your retirement pension account.",
+            ],
+          },
+          {
+            heading: "What an IRP is, and why it matters when you leave",
+            body: [
+              "IRP stands for Individual Retirement Pension, a pension account that receives retirement benefits and lets you keep benefits from several employers in one place.",
+              "Since 14 April 2022, employers in Korea have as a rule been required to pay retirement benefits into an IRP account nominated by the employee. That is why companies ask departing staff for an IRP account number. There are statutory exceptions, including retirement at or after age 55 and a retirement benefit of 3 million won or less.",
+              "Receiving severance into an IRP does not lock the money away for good. You can withdraw it as a lump sum later, or, if you meet the conditions, draw it as a pension in instalments. Which route you take changes the tax.",
+            ],
+          },
+          {
+            heading: "How keeping severance in an IRP changes the tax",
+            body: [
+              "Transferring severance into an IRP defers the retirement income tax: instead of paying at the moment you leave, tax is charged when you actually withdraw from the account.",
+              "Withdrawing the money as a lump sum triggers retirement income tax. Drawing it as a pension, once the conditions are met, applies a lower rate to the deferred retirement income. As of 2026, deferred retirement income drawn as a pension is taxed at roughly 70% of the non-pension rate for the first 10 years of actual pension receipt, 60% beyond 10 years and up to 20 years, and 50% beyond 20 years.",
+              "In other words, the longer you draw it as a pension, the lighter the tax on the retirement income. If you do not need the money immediately, it is worth comparing the tax on pension withdrawals against a lump sum.",
+            ],
+          },
+          {
+            heading: "Do extra IRP contributions qualify for a tax credit",
+            body: [
+              "The severance transferred into your IRP by your employer does not qualify for the pension account tax credit, because the retirement income tax on it has already been deferred.",
+              "Money you pay into an IRP or a pension savings account yourself does qualify, up to a limit. Pension savings are capped at 6 million won a year, and the combined cap across pension savings and retirement pension accounts such as an IRP is 9 million won a year. The credit rate depends on income: 15% for total salary of 55 million won or less (global income of 45 million won or less) and 12% above that.",
+              "So an IRP does two jobs at once: it holds retirement benefits with the tax deferred while the money is invested for later, and it accepts your own contributions for a tax credit at year-end settlement or on your income tax return. The two amounts are taxed differently, so it helps to keep them apart in your head.",
+            ],
+          },
+          {
+            heading: "When the estimate and your actual severance differ",
+            body: [
+              "This is an estimate produced with the standard statutory formula. Actual severance depends on which allowances count as wages, on whether bonuses and leave pay are included, on periods excluded from the average wage, and on your employer's retirement benefit scheme.",
+              "If your employer runs a DC plan in particular, the payout is not set by your last three months of average wage at all. You need the contributions actually paid into the account and the investment result.",
+              "This calculator also does not compute retirement income tax. What you finally receive depends on that tax, which is based on years of service and the size of the benefit, and on how you draw the money from an IRP. For an exact figure, check with your payroll department or the official guidance from the Ministry of Employment and Labor and the National Tax Service.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Leaving on 27 August 2026 after five years and five months",
+            input:
+              "Started 2021-03-02 · last day 2026-08-27 · 40 hrs a week · 3-month pay 12,000,000 · annual bonus 3,000,000 · leave pay 500,000",
+            result: "Average daily wage 139,946 → estimated severance 23,062,334 (pre-tax)",
+            note: "The calculation period runs 2026-05-28 to 2026-08-27, which is 92 days, and three months' worth of the bonus (750,000) and leave pay (125,000) bring total wages in the period to 12,875,000. Continuous service is 2,005 days.",
+          },
+          {
+            title: "What leaving out bonuses and leave pay costs",
+            input: "The same case with bonus and leave pay entered as 0",
+            result:
+              "Average daily wage 130,435 → estimated severance 21,494,973 (about 1.57 million lower)",
+            note: "Three months' worth of a 3,000,000 bonus is 750,000, which spread over 92 days adds 8,152 to the daily wage. Multiplied across 2,005 days of service, that small daily difference moves the final figure a long way, so do not omit the bonus.",
+          },
+          {
+            title: "When the ordinary wage is higher than the average wage",
+            input:
+              "Started 2023-04-03 · last day 2026-03-31 · 3-month pay 10,500,000 · daily ordinary wage 125,000",
+            result:
+              "The average daily wage is 116,667, but the ordinary wage of 125,000 is applied, giving 11,239,726",
+            note: "If months with few bonuses or allowances fall inside the calculation period, the average wage can drop below the ordinary wage. The ordinary wage then becomes the basis, so enter it whenever you know it.",
+          },
+          {
+            title: "Part-time work that misses the statutory threshold",
+            input: "Started 2025-11-03 · last day 2026-08-27 · 12 hrs a week",
+            result: "298 days of service and under 15 hours a week, so statutory severance does not apply",
+            note: "Both conditions must hold: one year or more of continuous service, and an average of at least 15 hours a week over four weeks. The result panel names whichever condition failed.",
+          },
+        ],
+        sources: SEVERANCE_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "It stops at estimated statutory severance before tax. Retirement income tax and IRP investment returns are not calculated, so what reaches your account will be less than this figure.",
+          "Periods excluded from the average wage calculation, such as parental leave, maternity leave, reduced hours for childcare and absence from a work injury, are not modelled. If one overlaps your final three months, the real average wage will differ.",
+          "It does not fit a defined contribution (DC) plan, where the payout comes from the contributions paid in and the employee's investment results. Check the balance of the retirement pension account instead.",
+          "Bonuses and unused-leave pay are applied at exactly three months' worth (3/12) of what you enter. Whether they truly count toward the average wage depends on when and why they were paid and on your employment rules.",
+          "It does not judge which allowances count as wages. The three-month total is used exactly as entered, so pick the qualifying items off your payslips yourself.",
+          "Continuous service is counted in calendar days from the start date to the retirement date. Cases where leave of absence or suspension changes how continuous service is counted are not reflected.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "퇴직금은 몇 년 근무해야 받을 수 있나요?",
+          answer:
+            "원칙적으로 4주 평균 1주 소정근로시간이 15시간 이상이면서 계속근로기간이 1년 이상인 근로자가 법정 퇴직금 지급 대상입니다. 두 요건 중 하나라도 채우지 못하면 법정 퇴직금 대상이 아니며, 이 계산기도 어느 요건이 미달인지 결과에 표시합니다.",
+        },
+        {
+          question: "퇴직금 계산에서 평균임금은 무엇인가요?",
+          answer:
+            "퇴직 사유가 발생하기 전 3개월 동안 지급된 임금총액을 같은 기간의 총일수로 나눈 금액입니다. 총일수는 실제 근무일이 아니라 주말과 휴일을 포함한 달력상의 날짜를 사용합니다. 산정기간이 89일인지 92일인지에 따라 1일 평균임금이 조금씩 달라집니다.",
+        },
+        {
+          question: "퇴직일은 마지막 근무일과 같은가요?",
+          answer:
+            "다릅니다. 퇴직일은 마지막으로 근무한 날의 다음 날입니다. 헷갈리기 쉬운 부분이라 이 계산기는 마지막 근무일만 입력받고 퇴직일은 내부에서 자동으로 계산합니다. 계속근로일수와 평균임금 산정기간 모두 이 퇴직일을 기준으로 잡습니다.",
+        },
+        {
+          question: "상여금도 퇴직금에 포함되나요?",
+          answer:
+            "상여금이 임금에 해당하는 경우 평균임금에 반영될 수 있으며, 이때 연간 상여금의 3개월분(3/12)을 산정기간 임금에 더합니다. 고용노동부 퇴직금 계산기도 같은 방식으로 반영합니다. 다만 실제 포함 여부는 지급 시점과 취업규칙에 따라 달라질 수 있습니다.",
+        },
+        {
+          question: "퇴직금을 꼭 IRP로 받아야 하나요?",
+          answer:
+            "2022년 4월 14일 이후 원칙적으로 회사는 퇴직급여를 근로자가 지정한 IRP 등의 계좌로 지급해야 합니다. 다만 55세 이후에 퇴직하거나 퇴직급여가 300만원 이하인 경우 등 법에서 정한 예외가 있습니다.",
+        },
+        {
+          question: "DC형 퇴직연금도 이 계산기로 계산할 수 있나요?",
+          answer:
+            "정확한 실제 수령액 계산에는 적합하지 않습니다. DC형은 회사가 납입한 부담금과 근로자의 운용 성과에 따라 퇴직급여가 결정되므로, 마지막 3개월의 평균임금만으로는 금액이 정해지지 않습니다. 실제 퇴직연금 계좌 잔액을 확인해야 합니다.",
+        },
+        {
+          question: "계산 결과는 세후 금액인가요?",
+          answer:
+            "아닙니다. 결과는 세전 예상 퇴직금입니다. 퇴직소득세는 근속연수공제와 환산급여공제 등을 순차적으로 적용해 별도로 산정되며, IRP로 받아 연금으로 수령하면 세 부담이 달라집니다. 이 계산기는 퇴직소득세를 계산하지 않습니다.",
+        },
+        {
+          question: "입력한 급여 정보가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서 JavaScript로 처리되며, 입사일·임금 등 입력한 정보는 서버로 전송되거나 저장되지 않습니다. 탭을 닫으면 입력값도 사라집니다.",
+        },
+      ],
+      en: [
+        {
+          question: "How long do I have to work to receive severance pay in Korea?",
+          answer:
+            "As a rule, statutory severance applies to employees with at least one year of continuous service who work an average of at least 15 hours a week over four weeks. If either condition fails, statutory severance does not apply, and this calculator names the condition that failed.",
+        },
+        {
+          question: "What is the average wage used for severance pay?",
+          answer:
+            "It is the total pay received in the three months before leaving, divided by the total number of days in that period. Those are calendar days including weekends and holidays, not days actually worked, so a period of 89 days and one of 92 days give slightly different daily averages.",
+        },
+        {
+          question: "Is the retirement date the same as my last working day?",
+          answer:
+            "No. The retirement date is the day after your last working day. Because that trips people up, this calculator asks only for the last working day and derives the retirement date itself. Both the days of continuous service and the average wage period are anchored to that retirement date.",
+        },
+        {
+          question: "Do bonuses count toward severance pay?",
+          answer:
+            "When a bonus qualifies as wages it can count toward the average wage, and three months' worth (3/12) of the annual bonus is added to the wages in the calculation period. The official Ministry of Employment and Labor calculator applies bonuses the same way, though whether a given bonus qualifies depends on when it was paid and on your employment rules.",
+        },
+        {
+          question: "Must severance be paid into an IRP?",
+          answer:
+            "Since 14 April 2022, employers must as a rule pay retirement benefits into an IRP account nominated by the employee. Statutory exceptions include retiring at or after age 55 and a retirement benefit of 3 million won or less.",
+        },
+        {
+          question: "Can I use this calculator for a DC retirement pension plan?",
+          answer:
+            "Not for an accurate payout. Under a DC plan the benefit comes from the contributions the employer paid in and the employee's investment results, so the last three months of average wage do not determine it. Check the balance of the retirement pension account instead.",
+        },
+        {
+          question: "Is the result after tax?",
+          answer:
+            "No, the result is severance pay before tax. Retirement income tax is calculated separately, applying the service-year deduction and the converted-income deduction in sequence, and drawing the money as a pension from an IRP changes the burden again. This calculator does not compute that tax.",
+        },
+        {
+          question: "Is the pay information I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser with JavaScript, and dates or wages you enter are never uploaded or stored. Close the tab and your inputs are gone.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "퇴직금 계산기",
+        subtitle: "평균임금으로 예상 퇴직금을 바로 계산",
+      },
+      en: {
+        title: "Severance Pay Calculator",
+        subtitle: "Average daily wage to estimated severance, instantly",
       },
     },
   },
