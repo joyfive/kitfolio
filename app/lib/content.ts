@@ -1038,7 +1038,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "developer"],
     ico: "ts",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
     relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
@@ -1068,6 +1068,55 @@ export const TOOLS: Tool[] = [
           how: "타임스탬프나 날짜를 입력하면 형식을 자동으로 감지해 UTC·로컬 시간·상대 시간과 Slack <!date> 구문으로 한 번에 변환합니다.",
           why: "타임존 계산 실수를 막아주고, 받는 사람의 시간대에 맞춰 표시되는 Slack 구문을 클릭 한 번으로 만들 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "Slack이 Unix 타임스탬프를 쓰는 이유",
+            body: [
+              "Slack API와 웹훅 응답의 `ts` 필드는 사람이 읽는 날짜가 아니라 1970년 1월 1일 자정(UTC)부터 흐른 초를 나타내는 Unix 타임스탬프입니다. 예를 들어 메시지 객체의 `\"ts\": \"1718071200.123456\"`처럼 소수부에 마이크로초까지 붙어 나오기도 합니다. 서버·로그·API 사이에서는 타임존 표기 없이 값을 주고받을 수 있어 이 형식을 쓰지만, 로그를 눈으로 확인하거나 디버깅할 때는 바로 읽을 수가 없습니다.",
+              "이 변환기는 이런 원시 타임스탬프를 붙여넣으면 UTC·로컬 시간·상대 시간(예: 3시간 전)으로 동시에 보여줘, 로그에 찍힌 시각이 실제로 언제인지 바로 확인할 수 있게 합니다.",
+            ],
+          },
+          {
+            heading: "Slack date 구문으로 타임존 문제를 없애는 법",
+            body: [
+              "여러 시간대에 흩어진 팀에 회의나 배포 시각을 공지할 때, 고정된 텍스트로 \"오후 3시\"라고 쓰면 어느 타임존 기준인지 매번 오해가 생깁니다. Slack의 `<!date^...>` 구문은 다릅니다: 메시지 안에 Unix 타임스탬프와 표시 형식을 심어두면, Slack이 그 메시지를 읽는 사람의 로컬 타임존에 맞춰 자동으로 다시 표시합니다.",
+              "이 도구는 같은 시각을 `{date_short_pretty} at {time}`, `{date_long_pretty} at {time_secs}`처럼 자주 쓰는 형식별로 미리 만들어 보여주므로, 원하는 형식을 그대로 복사해 메시지에 붙여넣기만 하면 됩니다.",
+            ],
+          },
+          {
+            heading: "입력 형식을 자동으로 구분합니다",
+            body: [
+              "Unix 초·밀리초·마이크로초 타임스탬프는 자릿수만 다를 뿐 겉보기엔 비슷한 숫자라 헷갈리기 쉽습니다(10자리 vs 13자리 vs 16자리). 이 도구는 입력값의 자릿수를 보고 세 형식을 자동으로 구분하며, ISO 8601 같은 일반 날짜·시간 문자열이나 이미 만들어진 `<!date^...>` Slack 구문을 붙여넣어도 그대로 인식합니다.",
+              "그래서 Slack 메시지에 이미 박혀 있는 구문을 역으로 붙여넣어 원래 시각이 언제였는지 확인하는 용도로도 쓸 수 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Slack API 응답의 ts 필드 해석",
+            input: "1718071200.123456 (Slack 메시지 객체의 ts 필드)",
+            result: "2024-06-11 06:00:00 UTC · 소수부는 마이크로초",
+            note: "Slack API 응답을 로그로 찍어보면 ts 필드가 이런 형식으로 나옵니다. 소수점 아래 자리는 초 미만 정밀도이며, 그대로 붙여넣으면 자동으로 인식됩니다.",
+          },
+          {
+            title: "글로벌 팀 공지에 쓸 Slack 구문 만들기",
+            input: "2026-06-11T15:00:00 (한국 시간 기준 회의 시각)",
+            result: "<!date^1749621600^{date_short_pretty} at {time}|Jun 11, 2026 3:00 PM> 형식의 구문",
+            note: "이 구문을 메시지에 붙여넣으면, 뉴욕에 있는 동료에게는 뉴욕 시간으로, 서울에 있는 동료에게는 서울 시간으로 각자 다르게 표시됩니다.",
+          },
+          {
+            title: "초 단위와 밀리초 단위 타임스탬프 구분하기",
+            input: "1718071200 (10자리, 초) vs 1718071200000 (13자리, 밀리초)",
+            result: "둘 다 같은 시각(2024-06-11 06:00:00 UTC)으로 변환",
+            note: "JavaScript의 Date.now()는 밀리초를, 대부분의 서버 로그는 초를 씁니다. 자릿수를 세지 않아도 도구가 자동으로 구분해 같은 결과를 냅니다.",
+          },
+        ],
+        limitations: [
+          "Slack 구문 미리보기는 근사치입니다. 실제 렌더링 결과(요일 표기, 12/24시간제 등)는 메시지를 읽는 사람의 Slack 클라이언트 언어·지역 설정에 따라 달라지며, 최종 확인은 실제 Slack에서 해야 합니다.",
+          "초·밀리초·마이크로초 판별은 입력값의 자릿수를 보는 휴리스틱입니다. 극단적으로 과거이거나 미래인 날짜의 초 단위 타임스탬프는 밀리초로 잘못 판별될 수 있습니다.",
+          "상대 시간(예: 3시간 전)은 이 페이지를 보는 기기의 시스템 시계를 기준으로 계산됩니다. 기기 시간이 실제 시간과 어긋나 있으면 상대 시간도 함께 어긋납니다.",
+          "로컬 시간은 브라우저에 설정된 타임존만 보여줍니다. UTC 외에 제3의 타임존을 지정해 미리 보는 기능은 제공하지 않습니다.",
+        ],
       },
       en: {
         card: "Convert Unix timestamps to dates and Slack date syntax. Live current timestamp.",
@@ -1080,6 +1129,55 @@ export const TOOLS: Tool[] = [
           how: "Enter a timestamp or date and the format is auto-detected, then converted to UTC, your local time, relative time and Slack date syntax all at once.",
           why: "It prevents timezone mistakes and produces Slack syntax that renders in each reader's own timezone with a single click.",
         },
+        guide: [
+          {
+            heading: "Why Slack uses Unix timestamps",
+            body: [
+              "The `ts` field in Slack API and webhook responses isn't a human-readable date: it's a Unix timestamp, the number of seconds since midnight UTC on January 1, 1970. A message object might show `\"ts\": \"1718071200.123456\"`, with microsecond precision after the decimal point. Servers, logs, and APIs pass this format around because it needs no timezone notation, but you can't read it at a glance when you're staring at a log or debugging.",
+              "Paste a raw timestamp like that into this converter and it shows UTC, your local time, and relative time (like \"3 hours ago\") side by side, so you can immediately tell what a logged moment actually was.",
+            ],
+          },
+          {
+            heading: "Eliminating timezone confusion with Slack date syntax",
+            body: [
+              "When you announce a meeting or deploy time to a team spread across timezones, writing a fixed \"3 PM\" invites confusion about whose 3 PM you mean. Slack's `<!date^...>` syntax solves this differently: embed a Unix timestamp and a display format in the message, and Slack re-renders it in each reader's own local timezone automatically.",
+              "This tool pre-builds the same instant in commonly used formats, like `{date_short_pretty} at {time}` and `{date_long_pretty} at {time_secs}`, so you can copy whichever one you need straight into your message.",
+            ],
+          },
+          {
+            heading: "It auto-detects the input format",
+            body: [
+              "Unix timestamps in seconds, milliseconds, and microseconds look like similar numbers at a glance and are easy to mix up (10 digits vs. 13 vs. 16). This tool reads the digit count and tells the three apart automatically, and it also recognizes plain date-time strings like ISO 8601 or an already-built `<!date^...>` Slack syntax pasted back in.",
+              "That means you can paste a syntax already embedded in a Slack message to check exactly what moment it originally referred to.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Reading the ts field from a Slack API response",
+            input: "1718071200.123456 (the ts field of a Slack message object)",
+            result: "2024-06-11 06:00:00 UTC, with sub-second precision",
+            note: "Logging a Slack API response shows the ts field in this shape. The digits after the decimal are sub-second precision, and pasting the value as-is is recognized automatically.",
+          },
+          {
+            title: "Building Slack syntax for a global team announcement",
+            input: "2026-06-11T15:00:00 (a meeting time in Korea Standard Time)",
+            result: "A syntax like <!date^1749621600^{date_short_pretty} at {time}|Jun 11, 2026 3:00 PM>",
+            note: "Paste this into a message and a colleague in New York sees New York time while one in Seoul sees Seoul time, each rendered locally.",
+          },
+          {
+            title: "Telling second and millisecond timestamps apart",
+            input: "1718071200 (10 digits, seconds) vs. 1718071200000 (13 digits, milliseconds)",
+            result: "Both convert to the same instant (2024-06-11 06:00:00 UTC)",
+            note: "JavaScript's Date.now() returns milliseconds while most server logs use seconds. You don't have to count digits yourself; the tool tells them apart and lands on the same result.",
+          },
+        ],
+        limitations: [
+          "The Slack syntax preview is an approximation. The actual rendering (weekday format, 12- vs 24-hour clock, and so on) depends on each reader's Slack client language and locale settings, so verify the final look inside Slack itself.",
+          "Detecting seconds vs. milliseconds vs. microseconds is a heuristic based on digit count. A seconds-based timestamp for an extremely distant past or future date can be misread as milliseconds.",
+          "Relative time (like \"3 hours ago\") is computed from the system clock of the device viewing this page. If that clock is off, the relative time will be off too.",
+          "Local time only reflects the timezone set in your browser. There is no way to preview an arbitrary third timezone.",
+        ],
       },
     },
     faq: {
@@ -3149,7 +3247,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "developer"],
     ico: "±h",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "시간 더하기 빼기 계산기", en: "Time Calculator" },
     relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
@@ -3179,6 +3277,55 @@ export const TOOLS: Tool[] = [
           how: "시간 블록(시·분·초)을 입력하고 각 항목에 더하기(+) 또는 빼기(-) 연산자를 선택하면, 실시간으로 총 합계를 계산해 여러 형식으로 보여줍니다. 항목을 자유롭게 추가하거나 삭제할 수 있습니다.",
           why: "머릿속에서 시간을 계산하다 실수하는 일 없이, 여러 근무 블록의 합계를 정확하게 구할 수 있고 청구 시간이나 타임시트 작성 시간을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "시:분:초는 60진법이라 암산이 자주 틀립니다",
+            body: [
+              "시간은 10진법이 아니라 60진법입니다. 1시간 45분에 40분을 더하면 1시간 85분이 아니라 2시간 25분이어야 하는데, 여러 블록을 손으로 더하다 보면 이런 자리올림을 놓치기 쉽습니다. 특히 오전·오후 근무를 나눠 기록했거나 휴게시간을 뺀 실근무시간을 따로 계산해야 할 때, 블록이 3~4개만 넘어가도 암산 오류가 잦아집니다.",
+              "이 계산기는 각 시간 블록에 +/- 부호만 정해주면 60진법 자리올림을 자동으로 처리해 정확한 합계를 냅니다.",
+            ],
+          },
+          {
+            heading: "형식을 바꿔가며 결과를 확인하는 이유",
+            body: [
+              "같은 합계를 시:분:초, 소수점 시간, 총 분, 총 초로 동시에 보여주는 이유는 쓰임새가 다르기 때문입니다. 타임시트에는 시:분:초가, 시급 계산이나 인보이스에는 1시간 30분 = 1.5h처럼 소수점 시간이 필요합니다. 회의 시간을 분 단위로 예약 시스템에 입력해야 할 때는 총 분이 바로 쓰기 편합니다.",
+              "매번 단위를 손으로 환산하는 대신, 필요한 형식을 그 자리에서 골라 복사하면 됩니다.",
+            ],
+          },
+          {
+            heading: "빼기 항목으로 초과·부족 근무를 확인하는 법",
+            body: [
+              "더하기(+) 항목만 쓰면 단순 합산 계산기지만, 빼기(-) 항목을 섞으면 목표 시간 대비 초과·부족분을 계산하는 용도로도 쓸 수 있습니다. 예를 들어 하루 8시간을 더하기로 넣고 실제 근무를 마친 시각까지의 시간을 빼기로 넣으면, 남은 근무 시간(또는 이미 초과한 시간)이 바로 나옵니다.",
+              "뺄 항목이 더할 항목보다 크면 합계가 음수로 표시되어, 조기 퇴근인지 초과 근무인지도 부호로 바로 구분됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "오전·오후로 나눠 기록한 근무시간 합산",
+            input: "오전 4시간 15분(+) · 오후 3시간 50분(+)",
+            result: "8시간 5분 (8.083h · 485분)",
+            note: "분 단위가 60을 넘는 자리올림(15+50=65분 → 1시간 5분)을 자동으로 처리합니다. 손으로 더하면 놓치기 쉬운 부분입니다.",
+          },
+          {
+            title: "휴게시간을 뺀 실근무시간 계산",
+            input: "출근~퇴근 9시간(+) · 점심 휴게 1시간(-)",
+            result: "8시간 (8.0h)",
+            note: "전체 재실 시간에서 휴게시간을 빼는 방식으로, 급여 계산 기준이 되는 실근무시간을 구합니다.",
+          },
+          {
+            title: "목표 근무시간 대비 초과분 확인",
+            input: "목표 8시간(+) · 실제 근무 9시간 20분(-)",
+            result: "−1시간 20분",
+            note: "결과가 음수면 목표보다 더 일했다는 뜻입니다. 부호만 보면 초과인지 부족인지 바로 판단할 수 있어 주간 근무시간 정산에 씁니다.",
+          },
+        ],
+        limitations: [
+          "이 도구는 시간의 '길이'(duration)를 더하고 빼는 계산기입니다. 특정 시각(예: 오후 3시)에 몇 시간을 더해 몇 시가 되는지 구하는 시각 계산과는 다릅니다.",
+          "날짜 경계를 넘는 계산(예: 자정을 넘겨 다음 날까지 근무)은 시·분·초 값만으로 처리하므로, 날짜가 바뀌는 지점을 직접 반영해 입력해야 합니다.",
+          "표준 근무 정책(연장·야간·휴일 근로수당 배율 등)은 계산하지 않습니다. 이 도구는 시간의 합계만 구하며, 급여 산정이 필요하면 연봉 실수령액 계산기를 함께 사용하세요.",
+          "입력한 항목은 새로고침하거나 탭을 닫으면 저장되지 않습니다. 여러 날짜의 근무시간을 누적 기록하려면 결과를 별도로 옮겨 적어야 합니다.",
+        ],
       },
       en: {
         card: "Add and subtract time blocks to total up work hours. Built for timesheets and billing.",
@@ -3191,6 +3338,55 @@ export const TOOLS: Tool[] = [
           how: "Enter each time block in hours, minutes and seconds, choose + or − for each row, and the running total updates instantly in multiple formats. Add or remove rows as needed.",
           why: "It eliminates mental arithmetic errors when summing multiple time blocks, making timesheet entry and billing calculations faster and more accurate.",
         },
+        guide: [
+          {
+            heading: "H:M:S is base 60, and mental math slips on it",
+            body: [
+              "Time isn't base 10; it's base 60. Adding 40 minutes to 1 hour 45 minutes should give 2 hours 25 minutes, not 1 hour 85 minutes, but that carry is easy to miss once you're adding several blocks by hand. Once you're past three or four rows, splitting morning and afternoon shifts or subtracting a break from total time on-site, mental math errors creep in fast.",
+              "This calculator only needs a + or − sign per block; it handles the base-60 carrying automatically and lands on an exact total.",
+            ],
+          },
+          {
+            heading: "Why the same total is shown in several formats",
+            body: [
+              "The same total appears as H:M:S, decimal hours, total minutes, and total seconds because each suits a different use. A timesheet wants H:M:S; an hourly rate calculation or invoice wants decimal hours, where 1 hour 30 minutes becomes 1.5h. Entering a meeting length into a booking system in minutes is easiest with the total-minutes figure.",
+              "Instead of converting units by hand each time, pick whichever format you need and copy it straight from the result.",
+            ],
+          },
+          {
+            heading: "Using subtraction to check overtime or a shortfall",
+            body: [
+              "With only + rows, this is a plain adder, but mixing in − rows turns it into a way to check actual time against a target. Add your target (say, 8 hours) as a + row and subtract the time you actually worked, and what's left (or how much you went over) comes out directly.",
+              "When the subtracted rows outweigh the added ones, the total goes negative, so the sign alone tells you whether you left early or worked overtime.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Totaling a shift logged as morning and afternoon blocks",
+            input: "Morning 4h 15m (+), afternoon 3h 50m (+)",
+            result: "8h 5m (8.083h, 485 minutes)",
+            note: "The carry when minutes pass 60 (15 + 50 = 65 minutes, i.e. 1h 5m) is handled automatically: exactly the kind of thing that's easy to miss adding by hand.",
+          },
+          {
+            title: "Calculating actual worked time minus a break",
+            input: "Clock-in to clock-out 9h (+), lunch break 1h (−)",
+            result: "8h (8.0h)",
+            note: "Subtracting the break from total time on-site gives the actual worked time that pay is usually based on.",
+          },
+          {
+            title: "Checking overtime against a target shift length",
+            input: "Target 8h (+), actual worked 9h 20m (−)",
+            result: "−1h 20m",
+            note: "A negative result means more was worked than the target. The sign alone tells you overtime from a shortfall, handy for a weekly hours reconciliation.",
+          },
+        ],
+        limitations: [
+          "This tool adds and subtracts durations (lengths of time). It is not a clock-time calculator that answers \"what time is it 5 hours after 3 PM\".",
+          "Calculations that cross a date boundary (a shift that runs past midnight into the next day) are handled purely as hour/minute/second values, so you need to account for the date change yourself in what you enter.",
+          "It does not apply labor policy multipliers (overtime, night-shift, or holiday pay rates). This tool only totals durations; pair it with the Salary Calculator if you need an actual pay figure.",
+          "Entries are not saved across a page reload or a closed tab. To track hours across multiple days, copy each result out somewhere else.",
+        ],
       },
     },
     faq: {
@@ -3257,7 +3453,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm"],
     ico: "h↔d",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "시간 단위 변환기", en: "Time Converter" },
     relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
@@ -3287,6 +3483,48 @@ export const TOOLS: Tool[] = [
           how: "숫자와 단위를 입력하면 모든 단위(초·분·시간·일·주·월·년)로 변환된 결과를 한 화면에 보여줍니다. 캘린더 기준과 근무 기준 중 계산 방식을 선택할 수 있습니다.",
           why: "프로젝트 견적에서 '200시간이 몇 주인지', 온보딩에서 '2주가 몇 시간인지' 같은 계산을 매번 직접 하지 않고 즉시 확인할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "캘린더 기준과 근무 기준, 같은 '일'이 다른 시간이 되는 이유",
+            body: [
+              "\"3일\"이라는 말은 맥락에 따라 완전히 다른 시간을 뜻합니다. 캘린더 기준으로는 1일 = 24시간이라 3일은 72시간이지만, 업무 공수로 말하는 3일(맨데이)은 보통 1일 = 8시간 근무를 뜻해 24시간에 불과합니다. 이 차이를 모르고 프로젝트 견적에 캘린더 기준 일수를 그대로 쓰면 공수를 3배 과대 산정하게 됩니다.",
+              "이 변환기는 두 기준을 나란히 계산해, 지금 다루는 숫자가 '흘러가는 시간'인지 '업무 공수'인지에 맞는 쪽을 바로 골라 쓸 수 있게 합니다.",
+            ],
+          },
+          {
+            heading: "월(month) 변환이 근사값인 이유",
+            body: [
+              "1개월은 28일부터 31일까지 달마다 길이가 다르기 때문에, 다른 단위처럼 고정된 환산 비율이 없습니다. 이 도구는 캘린더 기준에서 1개월 = 30.44일(365.25일 ÷ 12), 근무 기준에서 1개월 = 21.75 근무일(연 261 근무일 ÷ 12)이라는 평균값을 씁니다. 특정 달(예: 2월 28일)의 정확한 일수가 아니라 연간 평균에 기반한 근사치입니다.",
+              "분기·반기 단위로 대략적인 기간을 추산할 때는 충분히 쓸 만하지만, 특정 월의 정확한 날짜 수가 필요하면 캘린더를 직접 확인해야 합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "프로젝트 견적의 시간을 근무일로 환산",
+            input: "200시간 (근무 기준)",
+            result: "25근무일 (5주)",
+            note: "8시간/일, 5일/주 기준으로 나눈 값입니다. 캘린더 기준으로 잘못 계산하면 200시간이 8.3일(24시간/일)로 나와 공수를 크게 과소평가하게 됩니다.",
+          },
+          {
+            title: "온보딩 기간을 시간 단위로 확인",
+            input: "2주 (근무 기준)",
+            result: "80시간 (10근무일)",
+            note: "신규 입사자 온보딩 프로그램이나 교육 일정을 시간 단위 커리큘럼으로 짤 때, 몇 주가 총 몇 시간인지 바로 확인할 수 있습니다.",
+          },
+          {
+            title: "분기 프로젝트 기간을 개월로 추산",
+            input: "90일 (캘린더 기준)",
+            result: "약 2.96개월",
+            note: "정확히 3개월이 아닌 이유는 1개월을 30.44일 평균으로 계산하기 때문입니다. 분기 단위 로드맵을 대략적인 개월 수로 표현할 때 씁니다.",
+          },
+        ],
+        limitations: [
+          "월(month) 단위는 실제 달력의 날짜 수가 아니라 연간 평균(캘린더 30.44일, 근무 21.75일)에 기반한 근사값입니다. 2월처럼 짧은 달이나 31일까지 있는 달의 실제 일수와는 차이가 납니다.",
+          "근무 기준은 1일 8시간·1주 5일·연 261 근무일이라는 일반적인 값을 고정으로 씁니다. 실제 회사의 소정근로시간이나 주 4일제처럼 다른 근무 형태는 반영하지 않습니다.",
+          "공휴일·연차·재량근무처럼 개별 일정에 따라 달라지는 변수는 계산하지 않습니다. 실제 근무일을 정확히 따지려면 유연근무 잔여시간 계산기를 함께 사용하세요.",
+          "단순 단위 환산기입니다. 특정 날짜에서 특정 날짜까지의 실제 캘린더 일수를 세는 기능은 제공하지 않습니다.",
+        ],
       },
       en: {
         card: "Convert hours, days, weeks and months instantly. Switch between calendar and work basis.",
@@ -3299,6 +3537,48 @@ export const TOOLS: Tool[] = [
           how: "Enter a number and select a unit; the result appears in every other unit simultaneously. Toggle between calendar basis and work basis to match your context.",
           why: "It saves the mental calculation of questions like 'how many weeks is 200 hours?' or 'how many hours is 2 weeks?' that come up repeatedly in project planning and scheduling.",
         },
+        guide: [
+          {
+            heading: "Why the same 'day' means different amounts of time",
+            body: [
+              "\"Three days\" means very different things depending on context. On a calendar basis, 1 day = 24 hours, so three days is 72 hours; but three person-days of work usually means 8-hour workdays, just 24 hours total. Applying calendar-basis day counts to a project estimate without noticing this triples the effort you think you have.",
+              "This converter computes both bases side by side, so you can pick whichever matches whether you're dealing with elapsed time or work effort.",
+            ],
+          },
+          {
+            heading: "Why month conversions are approximate",
+            body: [
+              "A month runs anywhere from 28 to 31 days, so unlike the other units, there's no fixed ratio to convert with. This tool uses annual averages: 1 month = 30.44 days on a calendar basis (365.25 / 12), and 1 month = 21.75 working days on a work basis (261 working days / 12). That's an approximation based on the yearly average, not the exact day count of any specific month (like February's 28).",
+              "It's accurate enough for rough quarter- or half-year estimates, but check an actual calendar if you need the precise day count of a particular month.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Converting a project estimate's hours to working days",
+            input: "200 hours (work basis)",
+            result: "25 working days (5 weeks)",
+            note: "Divided at 8 hours/day and 5 days/week. Using calendar basis by mistake would give 8.3 days (24 hours/day), badly underestimating the effort.",
+          },
+          {
+            title: "Checking an onboarding period in hours",
+            input: "2 weeks (work basis)",
+            result: "80 hours (10 working days)",
+            note: "Useful for turning a new-hire onboarding program or training schedule into an hour-based curriculum.",
+          },
+          {
+            title: "Estimating a quarterly project length in months",
+            input: "90 days (calendar basis)",
+            result: "About 2.96 months",
+            note: "It isn't exactly 3 months because a month is computed as the 30.44-day average. Handy for expressing a quarterly roadmap as an approximate month count.",
+          },
+        ],
+        limitations: [
+          "The month unit is an approximation based on the annual average (30.44 calendar days, 21.75 working days), not the actual number of days in a real calendar month. It differs from a short month like February or a 31-day month.",
+          "Work basis uses fixed, generic figures: 8 hours a day, 5 days a week, 261 working days a year. It does not reflect a specific company's contracted hours or a 4-day workweek.",
+          "It does not account for schedule-specific variables like public holidays, vacation days, or discretionary work arrangements. For an exact working-day count, pair it with the Flex Work Calculator.",
+          "This is a plain unit converter. It does not count the actual calendar days between two specific dates.",
+        ],
       },
     },
     faq: {
@@ -4161,7 +4441,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "pace",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Marketing Calculator",
     name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
     relatedTools: ["ad-metrics-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
@@ -4208,6 +4488,48 @@ export const TOOLS: Tool[] = [
           how: "총예산·시작일·종료일·기준일·누적 지출액을 입력하면 브라우저에서 즉시 기간 진행률, 예산 소진율, 페이싱 차이, 남은 예산, 필요 일평균 광고비를 계산합니다.",
           why: "광고비가 계획보다 빠르게 소진되면 캠페인 후반에 예산이 부족해지고, 너무 느리면 집행 효율이 떨어집니다. 페이싱 계산기로 매일 현황을 파악하면 예산을 최적으로 배분할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "페이싱이 어긋났다는 걸 왜 중간에 알아야 하는가",
+            body: [
+              "한 달짜리 캠페인에서 15일째(진행률 50%)에 예산의 70%를 이미 썼다면, 이 상태를 캠페인이 끝난 뒤에야 정산 리포트로 확인하면 손쓸 방법이 없습니다. 페이싱 계산기는 '기간이 얼마나 지났는가'와 '예산을 얼마나 썼는가'라는 서로 다른 두 비율을 매일 비교해, 과다 집행이나 부족 집행을 캠페인이 진행되는 도중에 바로 알 수 있게 합니다.",
+              "두 비율의 차이(페이싱 갭)가 크면 클수록 조정이 급합니다. 작은 차이는 자연스러운 요일별 변동일 수 있지만, 두 자릿수 퍼센트 차이는 입찰가나 타겟팅을 바로 점검해야 하는 신호입니다.",
+            ],
+          },
+          {
+            heading: "남은 기간의 일평균 광고비를 미리 계산하는 이유",
+            body: [
+              "과다 집행 상태를 발견했다면 다음 질문은 '남은 기간 동안 하루에 얼마씩 써야 예산을 맞출 수 있는가'입니다. 이 계산기는 남은 예산을 남은 집행일 수로 나눠 그 값을 바로 보여주므로, 캠페인 매니저가 입찰가를 낮추거나 타겟을 좁혀야 하는 정도를 감이 아니라 숫자로 판단할 수 있습니다.",
+              "예상 일평균 광고비를 직접 입력하면(예: 프로모션 기간 지출이 늘어날 것을 미리 반영), 그 값을 기준으로 예상 최종 지출액도 함께 계산됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "캠페인 중반에 과다 집행 확인",
+            input: "총예산 10,000,000 · 30일 캠페인 · 15일째 · 누적 지출 7,000,000",
+            result: "기간 진행률 50%, 소진율 70%, 페이싱 갭 +20%p (과다 집행)",
+            note: "이 시점에 개입하지 않으면 남은 15일 안에 예산이 소진돼 캠페인 후반부 노출이 끊길 수 있습니다. 입찰가를 낮추거나 일예산 상한을 걸어야 하는 신호입니다.",
+          },
+          {
+            title: "남은 기간에 맞춰 하루 예산 재조정",
+            input: "남은 예산 3,000,000 · 남은 집행일 15일",
+            result: "필요 일평균 광고비 200,000",
+            note: "지금까지의 실제 일평균(7,000,000÷15≈467,000)보다 훨씬 낮은 금액입니다. 이 페이스를 유지하도록 캠페인 관리자에서 일예산을 낮춰야 합니다.",
+          },
+          {
+            title: "평일만 집행하는 B2B 캠페인 페이싱",
+            input: "30일 캠페인을 평일 집행 기준으로 계산",
+            result: "실제 집행일은 30일이 아닌 약 21~22일(평일만)",
+            note: "주말에는 노출이 없는 B2B 캠페인처럼 평일만 집행할 때는 이 기준을 선택해야 기간 진행률이 실제 집행 상황과 맞아떨어집니다.",
+          },
+        ],
+        limitations: [
+          "평일만 집행 기준을 선택해도 공휴일은 자동으로 제외되지 않습니다. 공휴일에 집행을 멈추는 캠페인이라면 시작일·종료일을 수동으로 조정하거나 결과를 참고치로만 써야 합니다.",
+          "예상 최종 지출액은 남은 기간에도 지금까지와 비슷한 페이스로 집행된다는 가정에 기반합니다. 실제로는 요일별·주차별 변동, 예산 소진으로 인한 자동 중단 등으로 달라질 수 있습니다.",
+          "이 도구는 예산 소진 속도만 봅니다. ROAS·CPA 같은 성과 효율은 반영하지 않으므로, 예산을 다 썼다고 캠페인이 잘 되고 있다는 뜻은 아닙니다. 성과는 광고 지표 계산기로 별도 확인하세요.",
+          "플랫폼(구글 광고·메타 광고 등)이 자체적으로 적용하는 일예산 변동 허용치(하루 최대 2배까지 집행 가능한 정책 등)는 반영하지 않습니다. 실제 플랫폼 리포트의 소진액과 다를 수 있습니다.",
+        ],
       },
       en: {
         card: "Compare campaign time progress vs budget burn rate to spot overpacing or underpacing instantly.",
@@ -4224,6 +4546,48 @@ export const TOOLS: Tool[] = [
           how: "Enter your total budget, campaign start and end dates, the reference date, and spend to date. The calculator instantly computes time progress, budget burn rate, pacing gap, remaining budget, and required daily spend: all in your browser.",
           why: "If ad spend burns too fast, your campaign runs dry before it ends. Too slow, and you under-deliver. Daily pacing checks let you reallocate budget at the right moment.",
         },
+        guide: [
+          {
+            heading: "Why you need to catch a pacing problem mid-flight",
+            body: [
+              "If a month-long campaign has burned 70% of its budget by day 15 (50% time progress), finding out from an end-of-campaign report is too late to do anything about it. A pacing calculator compares two different ratios, time elapsed and budget consumed, every day, so you catch overpacing or underpacing while the campaign is still running.",
+              "The bigger the gap between the two ratios, the more urgent the fix. A small gap can just be normal day-of-week variance, but a double-digit percentage-point gap is a signal to check bids or targeting right away.",
+            ],
+          },
+          {
+            heading: "Why it works out the daily budget needed for what's left",
+            body: [
+              "Once you've spotted overpacing, the next question is: how much can you spend per day for the rest of the campaign and still land on budget? This calculator divides the remaining budget by the remaining days and shows that number directly, so a campaign manager knows exactly how much to lower bids or narrow targeting instead of guessing.",
+              "Enter a custom expected daily spend (say, to account for a promotion period that will spend more), and the projected final spend is calculated against that instead.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Catching overpacing mid-campaign",
+            input: "Total budget 10,000,000 · 30-day campaign · day 15 · spend to date 7,000,000",
+            result: "Time progress 50%, burn rate 70%, pacing gap +20pp (overpacing)",
+            note: "Without intervention here, the budget runs out well before the remaining 15 days end, cutting off impressions late in the campaign. This is the signal to lower bids or cap the daily budget.",
+          },
+          {
+            title: "Rebalancing the daily budget for what's left",
+            input: "Remaining budget 3,000,000 · 15 days remaining",
+            result: "Required daily spend 200,000",
+            note: "That's well below the actual daily average so far (7,000,000 / 15 ≈ 467,000). The daily budget in the ad platform needs to come down to hold this new pace.",
+          },
+          {
+            title: "Pacing a weekday-only B2B campaign",
+            input: "A 30-day campaign calculated on weekday-only pacing",
+            result: "Actual running days are about 21-22, not 30 (weekdays only)",
+            note: "For a B2B campaign with no weekend delivery, selecting this basis is what makes time progress line up with how the campaign actually runs.",
+          },
+        ],
+        limitations: [
+          "Selecting weekday-only pacing does not automatically exclude public holidays. If a campaign pauses on holidays too, adjust the dates manually or treat the result as a rough guide.",
+          "Projected final spend assumes the remaining period runs at a similar pace to what's happened so far. Day-of-week or week-to-week variance and automatic pauses from exhausted budgets can change the actual outcome.",
+          "This tool only looks at spend velocity. It does not factor in performance metrics like ROAS or CPA, so spending on pace doesn't mean the campaign is performing well. Check performance separately with the Ad Metrics Calculator.",
+          "It does not account for a platform's own daily-budget overspend allowance (policies that let Google Ads or Meta Ads spend up to double a daily budget on a given day). Actual platform reports may differ from this result.",
+        ],
       },
     },
     faq: {
@@ -4630,7 +4994,7 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "pm", "small-business-owner"],
     ico: "⇢%",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Marketing Calculator",
     name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
     relatedTools: ["ad-metrics-calculator", "ad-budget-pacing-calculator", "growth-rate-calculator"],
@@ -4678,6 +5042,54 @@ export const TOOLS: Tool[] = [
           how: "퍼널 단계 이름과 각 단계 수량을 입력하면 단계별 전환율·이탈률과 전체 전환율이 즉시 계산됩니다. 목표 역산 모드에서는 최종 목표 수량과 단계별 예상 전환율을 입력하면 각 상위 단계에서 필요한 수량을 계산합니다.",
           why: "퍼널 분석으로 가장 많은 이탈이 발생하는 구간을 파악하면 개선 우선순위를 정할 수 있습니다. 목표 역산으로 필요 트래픽을 미리 계획하면 광고 예산도 더 정확하게 설정할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "전체 전환율 하나만 보면 놓치는 것",
+            body: [
+              "\"방문자의 2%가 구매로 이어진다\"는 전체 전환율은 어디를 고쳐야 할지 알려주지 않습니다. 방문 → 장바구니 → 결제 시작 → 구매 4단계 퍼널에서 전체가 2%인 이유가 방문에서 장바구니로 넘어가는 첫 단계 때문인지, 결제 시작 직전 이탈 때문인지에 따라 손봐야 할 지점이 완전히 다릅니다.",
+              "이 계산기는 인접한 두 단계 사이의 전환율·이탈률을 각각 계산해 보여주므로, 전체 숫자 하나가 아니라 어느 구간에서 사람이 가장 많이 빠져나가는지 바로 짚어낼 수 있습니다.",
+            ],
+          },
+          {
+            heading: "목표 역산: 결과에서 거꾸로 필요한 트래픽을 구하기",
+            body: [
+              "일반 모드가 '지금 수치로 전환율이 얼마인가'를 계산한다면, 목표 역산 모드는 반대 방향입니다. '이번 달 구매 100건을 만들려면 방문자가 몇 명 필요한가'처럼, 각 단계의 예상 전환율을 알고 있을 때 최종 목표에서 거슬러 올라가며 상위 단계마다 필요한 수량을 계산합니다.",
+              "이전 단계 필요 수량 = ceil(다음 단계 목표 수량 ÷ 전환율)로, 목표에 못 미치는 일이 없도록 항상 올림 처리합니다. 캠페인을 시작하기 전에 필요한 트래픽 규모를 먼저 가늠하고, 여기서 나온 방문자 수를 광고 예산 계획의 출발점으로 쓸 수 있습니다.",
+            ],
+          },
+          {
+            heading: "퍼널 프리셋과 단계 커스터마이징",
+            body: [
+              "광고·리드·커머스처럼 자주 쓰는 퍼널 구조는 프리셋으로 바로 불러올 수 있고, 단계 이름과 개수(최소 2~최대 10단계)는 자유롭게 바꿀 수 있어 실제 사업 구조에 맞춰 조정할 수 있습니다. 다음 단계 수가 이전 단계보다 많이 나오는 경우(리타겟팅 유입, 중복 이벤트 등)에는 경고를 표시하되 계산 자체는 막지 않습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "이커머스 퍼널에서 이탈 구간 찾기",
+            input: "방문 10,000 → 장바구니 2,000 → 결제시작 800 → 구매 500",
+            result: "방문→장바구니 20%, 장바구니→결제시작 40%, 결제시작→구매 62.5%, 전체 5%",
+            note: "가장 큰 이탈은 방문에서 장바구니로 넘어가는 첫 구간(80% 이탈)입니다. 결제 단계보다 상품 페이지나 첫인상 개선이 우선순위임을 알 수 있습니다.",
+          },
+          {
+            title: "이번 달 리드 100건 목표에서 필요 방문자 역산",
+            input: "목표 리드 100건, 방문→리드폼 조회 30%, 리드폼 조회→제출 25%",
+            result: "리드폼 조회 필요 334명, 방문 필요 1,113명",
+            note: "역산 모드로 캠페인 시작 전에 필요한 트래픽 규모를 먼저 파악해, 이 방문자 수를 만들려면 광고 예산이 얼마나 필요한지 역으로 계획할 수 있습니다.",
+          },
+          {
+            title: "리타겟팅 유입으로 다음 단계가 더 많아진 경우",
+            input: "1단계 방문 500 → 2단계 재방문(리타겟팅 포함) 620",
+            result: "전환율 124%, 경고 표시",
+            note: "정상적인 퍼널이라면 하위 단계로 갈수록 줄어들지만, 리타겟팅 광고로 재유입된 사용자가 섞이면 이런 역전이 나타날 수 있습니다. 계산은 그대로 진행되고 경고만 표시됩니다.",
+          },
+        ],
+        limitations: [
+          "입력한 각 단계 수치를 그대로 신뢰합니다. 서로 다른 도구(광고 플랫폼·GA4·자체 DB)에서 가져온 숫자를 섞으면 집계 기준 차이로 전환율이 왜곡될 수 있습니다.",
+          "목표 역산은 각 단계 전환율이 앞으로도 동일하게 유지된다는 가정입니다. 실제로는 트래픽 규모가 커지면 전환율이 낮아지는 경우가 많아(예: 리타겟팅 풀 소진), 역산 결과는 상한선이 아니라 참고치로 봐야 합니다.",
+          "기간 개념이 없습니다. 이번 달 100건 목표처럼 기간 안에 트래픽을 어떻게 배분할지는 계산하지 않고, 전체 필요 수량만 보여줍니다.",
+          "단계 정의(예: '리드'가 폼 제출인지 상담 신청인지)는 직접 일관되게 유지해야 합니다. 도구가 단계 이름의 의미를 검증하지는 않습니다.",
+        ],
       },
       en: {
         card: "Analyze stage-by-stage conversion and drop-off rates for your funnel, then reverse-calculate required traffic.",
@@ -4694,6 +5106,54 @@ export const TOOLS: Tool[] = [
           how: "Enter stage names and counts. The calculator instantly shows conversion rate, drop-off rate, and drop-off count for each step, plus the overall conversion rate. Switch to reverse mode, enter a final target and stage conversion rates, and it calculates how many visitors you need at every stage.",
           why: "Funnel analysis pinpoints where most visitors drop off, letting you prioritize improvements. Reverse-calculating required traffic helps you set realistic ad budgets before a campaign launches.",
         },
+        guide: [
+          {
+            heading: "What a single overall conversion rate hides",
+            body: [
+              "\"2% of visitors convert to a purchase\" doesn't tell you what to fix. In a 4-stage funnel (visit, cart, checkout start, purchase), that 2% overall figure could come from a weak first step (visit to cart) or from people abandoning right before checkout, and the fix is completely different depending on which.",
+              "This calculator computes the conversion and drop-off rate between each pair of adjacent stages, so instead of one aggregate number, you can point directly at where the most people are actually leaving.",
+            ],
+          },
+          {
+            heading: "Reverse mode: working backward from a result to required traffic",
+            body: [
+              "Where the normal mode answers \"what's my conversion rate right now,\" reverse mode runs the other direction. Given expected conversion rates at each stage, it answers something like \"how many visitors do I need to land 100 purchases this month,\" walking backward from the final target to the count needed at every stage above it.",
+              "Required count at the previous stage = ceil(next stage's target / conversion rate), always rounded up so you never fall short of the target. Use it before a campaign launches to gauge the traffic scale you'll need, and treat that visitor count as the starting point for an ad budget plan.",
+            ],
+          },
+          {
+            heading: "Funnel presets and customizing stages",
+            body: [
+              "Common funnel shapes, ad, lead, and commerce, load instantly as presets, and stage names and count (2 to 10 stages) are fully editable to match how your business actually works. If a later stage comes out higher than the one before it (retargeting inflow, duplicate events, and so on), the calculator shows a warning but still runs the calculation.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Finding the drop-off point in an e-commerce funnel",
+            input: "Visit 10,000 → Cart 2,000 → Checkout start 800 → Purchase 500",
+            result: "Visit→Cart 20%, Cart→Checkout 40%, Checkout→Purchase 62.5%, overall 5%",
+            note: "The biggest drop-off is the first step, visit to cart (80% lost). That means the product page or first impression needs attention before the checkout flow does.",
+          },
+          {
+            title: "Reverse-calculating visitors needed for 100 leads this month",
+            input: "Target 100 leads, visit→form view 30%, form view→submit 25%",
+            result: "334 form views needed, 1,113 visits needed",
+            note: "Reverse mode surfaces the traffic scale you need before a campaign starts, letting you plan an ad budget backward from that visitor count.",
+          },
+          {
+            title: "A later stage coming out higher due to retargeting inflow",
+            input: "Stage 1 visits 500 → Stage 2 return visits (including retargeting) 620",
+            result: "Conversion rate 124%, flagged with a warning",
+            note: "A normal funnel shrinks at each stage, but mixing in users who returned via a retargeting ad can invert that. The calculation still runs; it's just flagged.",
+          },
+        ],
+        limitations: [
+          "It trusts the numbers you enter at each stage as-is. Mixing figures pulled from different tools (an ad platform, GA4, an internal database) can distort the rates if their counting definitions differ.",
+          "Reverse calculation assumes each stage's conversion rate stays constant going forward. In practice, rates often drop as traffic scales up (a retargeting pool running dry, for example), so treat the result as a reference, not a hard ceiling.",
+          "There is no concept of a time period. It shows the total traffic needed, not how to spread that traffic across a period like \"this month.\"",
+          "You are responsible for keeping stage definitions consistent (whether \"lead\" means a form submission or a consultation request, for instance). The tool does not validate what a stage name actually means.",
+        ],
       },
     },
     faq: {
@@ -5018,7 +5478,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "designer", "developer", "small-business-owner"],
     ico: "◲",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "QR 코드 읽기", en: "QR Code Reader" },
     relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
@@ -5066,6 +5526,54 @@ export const TOOLS: Tool[] = [
           how: "붙여넣은 이미지, 업로드 파일 또는 카메라 영상을 브라우저에서 분석하고 판독된 내용을 URL과 일반 텍스트로 구분합니다.",
           why: "별도 앱을 설치하거나 이미지를 서버에 업로드하지 않고 QR 코드 내용을 확인하고 복사할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "QR 코드를 열기 전에 내용을 먼저 확인해야 하는 이유",
+            body: [
+              "스마트폰 카메라 앱은 QR을 인식하자마자 바로 링크를 열도록 유도하는 경우가 많아, 실제로 어떤 도메인으로 이동하는지 보지 못한 채 클릭하게 됩니다. 길거리 포스터나 출처가 불분명한 전단지의 QR처럼 신뢰할 수 없는 곳에서 발견한 코드는 특히 위험합니다.",
+              "이 도구는 판독한 URL과 도메인을 화면에 먼저 보여주고, 사용자가 '링크 열기' 버튼을 직접 눌러야만 새 탭이 열립니다. 의심스러운 도메인이면 열지 않고 그대로 복사만 해서 별도로 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "세 가지 입력 방법: 붙여넣기·업로드·카메라",
+            body: [
+              "이미 캡처했거나 클립보드에 복사된 QR 이미지는 Ctrl+V(Cmd+V)로 바로 붙여넣어 읽을 수 있고, 저장된 이미지 파일은 업로드로 판독합니다. 인쇄물이나 화면에 떠 있는 QR을 그 자리에서 읽어야 한다면 카메라를 켜서 실시간으로 스캔합니다. 카메라가 여러 개인 기기에서는 전면·후면 카메라를 전환할 수 있습니다.",
+              "세 방법 모두 브라우저 안에서만 이미지를 분석하며, 어떤 경우에도 이미지나 카메라 영상을 서버로 전송하지 않습니다.",
+            ],
+          },
+          {
+            heading: "URL이 아닌 QR도 읽을 수 있습니다",
+            body: [
+              "QR 코드에는 URL 말고도 Wi-Fi 접속 정보, 연락처(vCard), 일반 텍스트 같은 다양한 데이터가 담길 수 있습니다. 이 도구는 판독된 내용을 원문 그대로 보여주고 복사만 지원하며, Wi-Fi에 자동 접속하거나 연락처를 자동으로 저장하는 것 같은 동작은 하지 않습니다. 내용을 확인한 뒤 어떻게 쓸지는 사용자가 직접 판단합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "출처가 불분명한 포스터의 QR 안전하게 확인",
+            input: "길거리 포스터를 카메라로 스캔",
+            result: "판독된 도메인 표시, 자동으로 열리지 않음",
+            note: "도메인이 낯설거나 단축 URL이면 열지 않고 그대로 두거나, 텍스트를 복사해 별도로 검색해서 실제 목적지를 확인한 뒤 판단합니다.",
+          },
+          {
+            title: "스크린샷 속 QR 코드 판독",
+            input: "회의 자료 스크린샷에 포함된 QR 이미지 업로드",
+            result: "이미지 안의 QR을 찾아 링크 또는 텍스트로 판독",
+            note: "카메라로 다시 촬영할 필요 없이, 이미 찍어둔 스크린샷이나 저장된 이미지 파일을 그대로 업로드해 판독합니다.",
+          },
+          {
+            title: "Wi-Fi 공유 QR에서 비밀번호 확인",
+            input: "카페나 사무실에 붙어 있는 Wi-Fi QR 스캔",
+            result: "SSID·비밀번호가 포함된 원문 텍스트 표시",
+            note: "휴대폰의 QR 자동 연결 기능 없이도 비밀번호만 텍스트로 확인해 다른 기기에 수동으로 입력할 때 유용합니다.",
+          },
+        ],
+        limitations: [
+          "판독된 URL의 실제 안전성(악성 사이트 여부 등)은 검사하지 않습니다. 도메인과 원문을 보여줄 뿐이며, 열기 전 최종 판단은 사용자가 해야 합니다.",
+          "심하게 훼손되거나 초점이 맞지 않는 이미지, 해상도가 너무 낮은 QR은 판독에 실패할 수 있습니다. 이 경우 더 선명한 사진을 다시 촬영하거나 업로드해야 합니다.",
+          "이미지 한 장에 QR 코드가 여러 개 있으면 그중 하나만 판독될 수 있습니다. 여러 QR을 각각 확인하려면 코드별로 잘라서 따로 스캔하는 편이 안전합니다.",
+          "카메라 스캔은 HTTPS 환경과 브라우저의 카메라 권한 허용이 필요합니다. 권한을 거부했거나 다른 앱이 카메라를 점유 중이면 실행되지 않습니다.",
+        ],
       },
       en: {
         card: "Paste or upload a QR image, or scan it with your camera to view its link or text.",
@@ -5082,6 +5590,54 @@ export const TOOLS: Tool[] = [
           how: "It analyzes a pasted image, uploaded file, or camera stream in the browser and classifies the decoded result as a URL or plain text.",
           why: "It reads QR codes without requiring an installed app or uploading images to a server.",
         },
+        guide: [
+          {
+            heading: "Why you should check a QR's content before opening it",
+            body: [
+              "A phone's camera app often nudges you to open the link the instant it recognizes a QR code, so you end up tapping through without ever seeing which domain you're actually going to. A code found somewhere untrustworthy, a street poster or an unmarked flyer, is exactly where that matters most.",
+              "This tool shows the decoded URL and domain on screen first, and a new tab only opens when you press \"Open link\" yourself. If the domain looks suspicious, you can leave it unopened and just copy the text to check it separately.",
+            ],
+          },
+          {
+            heading: "Three ways in: paste, upload, or camera",
+            body: [
+              "A QR image you've already captured or copied to the clipboard reads instantly with Ctrl+V (Cmd+V); a saved image file decodes through upload. When you need to read a QR that's printed or displayed live in front of you, turn on the camera and scan it in real time. On a device with more than one camera, you can switch between front and back.",
+              "All three methods analyze the image entirely in your browser; none of them ever sends the image or camera video to a server.",
+            ],
+          },
+          {
+            heading: "It reads QR codes that aren't URLs too",
+            body: [
+              "A QR code can hold more than a URL: Wi-Fi credentials, a contact card (vCard), or plain text. This tool shows the decoded content exactly as-is and supports copying it, but it does not auto-connect to Wi-Fi or auto-save a contact. What to do with the content once you've seen it is up to you.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Safely checking a QR from an unfamiliar poster",
+            input: "Scanning a street poster with the camera",
+            result: "The decoded domain is shown; nothing opens automatically",
+            note: "If the domain looks unfamiliar or is a shortened URL, leave it unopened, or copy the text and search for it separately to confirm the real destination before deciding.",
+          },
+          {
+            title: "Decoding a QR code inside a screenshot",
+            input: "Uploading a screenshot of meeting slides that contains a QR image",
+            result: "Finds the QR within the image and decodes it as a link or text",
+            note: "No need to re-capture with a camera: upload an existing screenshot or saved image file and it decodes directly.",
+          },
+          {
+            title: "Reading a password from a Wi-Fi sharing QR",
+            input: "Scanning a Wi-Fi QR posted at a café or office",
+            result: "The raw text containing the SSID and password is shown",
+            note: "Useful for reading just the password as text and typing it into another device manually, without relying on a phone's auto-connect feature.",
+          },
+        ],
+        limitations: [
+          "It does not check whether a decoded URL is actually safe (malicious sites and so on). It only shows the domain and raw content; the final call on whether to open it is yours.",
+          "A badly damaged, out-of-focus, or very low-resolution QR code may fail to decode. Retake a clearer photo or upload a better image in that case.",
+          "If one image contains several QR codes, only one of them may get decoded. To check multiple codes, it's safer to crop and scan each one separately.",
+          "Camera scanning requires HTTPS and the browser's camera permission. It will not start if permission was denied or another application is currently using the camera.",
+        ],
       },
     },
     faq: {
