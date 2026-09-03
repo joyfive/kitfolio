@@ -8,7 +8,7 @@
 
    사용 예:
      import AdUnit from "@/app/components/AdUnit";
-     <AdUnit slot="1234567890" indexable={isToolIndexable("rem-to-px")} />
+     <AdUnit slot="1234567890" indexable={isToolIndexable("css-unit-converter")} />
      <AdUnit slot="1234567890" format="rectangle" responsive={false} indexable />
 
    슬롯 ID는 AdSense 승인 후 "광고 단위 만들기"에서 발급됩니다.

@@ -1,23 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import { useState, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import PageHead from "./PageHead";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
-import { localizedHref } from "../lib/content";
 
 export type ConverterMode = "rem-px" | "em-px" | "vw-px" | "percent-px" | "ms-s";
 
-const MODE_SLUG: Record<ConverterMode, string> = {
-  "rem-px": "rem-to-px",
-  "em-px": "em-to-px",
-  "vw-px": "vw-to-px",
-  "percent-px": "percent-to-px",
-  "ms-s": "ms-to-s",
-};
+const SLUG = "css-unit-converter";
+const MODES: ConverterMode[] = ["rem-px", "em-px", "vw-px", "percent-px", "ms-s"];
+const DEFAULT_MODE: ConverterMode = "rem-px";
 
 const TABS: { mode: ConverterMode; labelKo: string; labelEn: string }[] = [
   { mode: "rem-px",     labelKo: "rem ↔ px",  labelEn: "rem ↔ px" },
@@ -147,16 +142,41 @@ function calcBackward(mode: ConverterMode, b: number, extra: number): number {
   }
 }
 
-export default function UnitConverter({ mode }: { mode: ConverterMode }) {
+export default function UnitConverter() {
   const { lang } = useLang();
   const t = useT(DICT);
+  const pathname = usePathname();
+  const [mode, setMode] = useState<ConverterMode>(DEFAULT_MODE);
   const cfg = CONFIGS[mode];
-  const slug = MODE_SLUG[mode];
+  const slug = SLUG;
 
   const [rawInput, setRawInput] = useState(String(cfg.defaultInput));
   const [isSwapped, setIsSwapped] = useState(false);
   const [extra, setExtra] = useState(cfg.extraDefault ?? 0);
   const [copied, setCopied] = useState(false);
+
+  // 쿼리스트링(?mode=)에서 초기 모드를 읽는다. canonical은 항상 쿼리 없는 base URL이라
+  // 서버 렌더링에는 영향이 없고, 클라이언트에서만 마운트 후 한 번 반영한다.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("mode");
+    if (q && (MODES as string[]).includes(q)) applyMode(q as ConverterMode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function applyMode(m: ConverterMode) {
+    const next = CONFIGS[m];
+    setMode(m);
+    setRawInput(String(next.defaultInput));
+    setIsSwapped(false);
+    setExtra(next.extraDefault ?? 0);
+    setCopied(false);
+  }
+
+  function switchMode(m: ConverterMode) {
+    if (m === mode) return;
+    applyMode(m);
+    window.history.replaceState(null, "", `${pathname}?mode=${m}`);
+  }
 
   const inputNum = parseFloat(rawInput);
   const validInput = isFinite(inputNum) && !isNaN(inputNum);
@@ -216,14 +236,15 @@ export default function UnitConverter({ mode }: { mode: ConverterMode }) {
         <div className="uc-tabs-inner">
           <span className="uc-tabs-label">{t("uc.tab.label")}</span>
           {TABS.map((tab) => (
-            <Link
+            <button
               key={tab.mode}
-              href={localizedHref(lang, "/" + MODE_SLUG[tab.mode])}
+              type="button"
+              onClick={() => switchMode(tab.mode)}
               className={`uc-tab${tab.mode === mode ? " is-active" : ""}`}
-              prefetch={true}
+              aria-current={tab.mode === mode ? "true" : undefined}
             >
               {lang === "ko" ? tab.labelKo : tab.labelEn}
-            </Link>
+            </button>
           ))}
         </div>
       </div>

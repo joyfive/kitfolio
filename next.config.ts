@@ -24,6 +24,19 @@ const nextConfig: NextConfig = {
       { source: "/en/growth-projection-calculator", destination: "/en/compound-growth-calculator", permanent: true },
     ];
 
+    // 2026-09 URL 통합: CSS 단위 변환기 5종 → css-unit-converter 한 페이지(?mode=)로 병합.
+    const cssUnitModes: Record<string, string> = {
+      "rem-to-px": "rem-px",
+      "em-to-px": "em-px",
+      "vw-to-px": "vw-px",
+      "percent-to-px": "percent-px",
+      "ms-to-s": "ms-s",
+    };
+    const cssUnitRedirects = Object.entries(cssUnitModes).flatMap(([slug, mode]) => [
+      { source: `/${slug}`, destination: `/css-unit-converter?mode=${mode}`, permanent: true },
+      { source: `/en/${slug}`, destination: `/en/css-unit-converter?mode=${mode}`, permanent: true },
+    ]);
+
     return [
       // 구 2뎁스 URL → 플랫 URL (제품 방향: 모든 도구는 1뎁스 라우트)
       {
@@ -38,6 +51,7 @@ const nextConfig: NextConfig = {
       },
       ...growthRedirects,
       ...projectionRedirects,
+      ...cssUnitRedirects,
     ];
   },
 };

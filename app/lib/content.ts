@@ -1139,726 +1139,290 @@ export const TOOLS: Tool[] = [
   },
 
   // ── CSS Unit Converters (Developer) ───────────────────────────
+  // 2026-09: rem/em/vw/percent/ms 다섯 개 단위 변환기를 이 한 엔트리로 통합.
+  // 구 URL(각 /*-to-px, /ms-to-s)은 next.config.js 301로 이 URL의 ?mode=로 연결한다.
   {
-    slug: "rem-to-px",
+    slug: "css-unit-converter",
     layout: "card",
     cat: "dev",
     targets: ["developer", "designer"],
-    ico: "rem",
+    ico: "px",
     ready: true,
     indexable: true,
     badge: "Clean SaaS",
-    name: { ko: "Rem → Px 변환기", en: "Rem to Px Converter" },
+    name: { ko: "CSS 단위 변환기", en: "CSS Unit Converter" },
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
     seo: {
       ko: {
-        title: "Rem to Px 변환기 | CSS 단위 변환",
+        title: "CSS 단위 변환기 | rem·em·vw·%·ms → px 변환",
         description:
-          "rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환합니다. 루트 폰트 크기를 직접 설정하고 자주 쓰는 예시값을 클릭해 바로 입력하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["rem to px", "rem px 변환", "rem 변환기", "css 단위 변환", "px to rem"],
+          "rem·em·vw·퍼센트·ms, 자주 쓰는 CSS 상대 단위 다섯 가지를 px(또는 초)로 즉시 변환합니다. 루트 폰트 크기·부모 폰트 크기·뷰포트 너비 같은 기준값을 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: ["css 단위 변환기", "rem to px", "em to px", "vw to px", "ms to s", "px to rem"],
       },
       en: {
-        title: "Rem to Px Converter | CSS Unit Converter",
+        title: "CSS Unit Converter | rem, em, vw, %, ms to px",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
-        keywords: ["rem to px", "rem to pixels", "px to rem", "css unit converter", "rem converter"],
+          "Convert five common CSS relative units, rem, em, vw, percent and ms, to pixels (or seconds) instantly. Set the base value each unit depends on (root font size, parent font size, viewport width) and copy the result in one click. Everything runs entirely in your browser.",
+        keywords: ["css unit converter", "rem to px", "em to px", "vw to px", "ms to s", "px to rem"],
       },
     },
     content: {
       ko: {
-        card: "rem ↔ px 즉시 변환. 루트 폰트 크기 설정 지원.",
+        card: "rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서.",
         description:
-          "rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환합니다. 루트 폰트 크기를 직접 설정하고 자주 쓰는 예시값을 클릭해 바로 입력하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["rem 또는 px 값 입력", "루트 폰트 크기 설정 (기본값 16)", "변환 결과 확인 및 복사"],
+          "rem·em·vw·퍼센트·ms, 자주 쓰는 CSS 상대 단위 다섯 가지를 px(또는 초)로 즉시 변환합니다. 루트 폰트 크기·부모 폰트 크기·뷰포트 너비 같은 기준값을 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "상단 탭에서 변환할 단위 선택",
+          "값과 기준값(루트·부모 폰트, 뷰포트 너비 등) 입력",
+          "변환 결과 확인 및 복사",
+        ],
         aeo: {
-          what: "Rem to Px 변환기는 CSS 상대 단위 rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환해주는 도구입니다.",
-          who: "CSS 레이아웃에서 rem과 픽셀 단위를 함께 쓰는 프론트엔드 개발자와 UI 디자이너를 위한 도구입니다.",
-          how: "rem 또는 px 값을 입력하고 루트 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. Swap으로 방향을 바꿀 수 있습니다.",
-          why: "반응형 디자인에서 px와 rem을 오갈 때 매번 계산할 필요 없이 빠르게 정확한 값을 얻을 수 있습니다.",
+          what: "CSS 단위 변환기는 rem·em·vw·퍼센트·ms 다섯 가지 CSS 상대 단위를 픽셀(px) 또는 초(s)로, 혹은 그 반대로 즉시 변환해주는 도구입니다.",
+          who: "반응형 레이아웃과 애니메이션을 다루며 상대 단위와 절대 단위를 자주 오가는 프론트엔드 개발자와 UI 디자이너를 위한 도구입니다.",
+          how: "상단 탭에서 변환할 단위를 고르고 값과 기준값(루트 폰트 크기, 부모 폰트 크기, 뷰포트 너비 등)을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. Swap으로 방향을 바꿀 수 있습니다.",
+          why: "단위마다 따로 계산기를 찾아다니지 않고 한 페이지에서 다섯 가지 CSS 단위를 전부 변환할 수 있어 반응형 작업의 반복 계산을 줄여줍니다.",
         },
         guide: [
           {
-            heading: "rem은 왜 접근성에 유리할까",
+            heading: "다섯 개 CSS 단위를 왜 한 곳에 모았나",
             body: [
-              "rem(root em)은 항상 HTML 루트 요소의 폰트 크기를 기준으로 계산됩니다. 사용자가 브라우저 기본 글자 크기를 키우면 rem으로 잡은 글꼴·여백·레이아웃이 함께 확대되어, 시력이 낮은 사용자에게도 화면이 자연스럽게 커집니다. 반면 px로 고정한 값은 사용자가 글자를 키워도 그대로라 접근성이 떨어집니다. 그래서 폰트 크기와 간격을 rem으로 설계하는 팀이 많습니다.",
-              "디자인 시안은 보통 px로 전달되지만 구현은 rem으로 하는 경우가 많아, 둘 사이를 오가는 변환이 자주 필요합니다. 이 변환기는 그 왕복을 한 번에 처리합니다.",
+              "CSS에는 화면 크기·부모 요소·루트 요소에 따라 실제 크기가 달라지는 상대 단위가 여러 개 있습니다. rem과 em은 폰트 크기를, vw는 뷰포트 너비를, 퍼센트는 부모 요소의 너비를, ms는 애니메이션·트랜지션의 지속 시간을 기준으로 합니다. 다섯 단위 모두 '기준값 × 배율 = 절대값(px 또는 초)'이라는 같은 형태의 계산이지만, 기준값이 무엇인지는 매번 다릅니다.",
+              "실무에서는 디자인 시안이 px로 오고 구현은 상대 단위로 하는 경우가 많아, 이 다섯 단위와 px 사이를 하루에도 여러 번 오가게 됩니다. 단위마다 다른 페이지를 열어 계산하는 대신, 탭을 눌러 같은 화면에서 바로 전환할 수 있게 모았습니다.",
             ],
           },
           {
-            heading: "루트 폰트 크기를 프로젝트 값과 맞추세요",
+            heading: "rem ↔ px: 루트 폰트 크기가 기준",
             body: [
-              "1rem은 루트 폰트 크기와 같습니다. 대부분의 브라우저 기본값은 16px이라 1rem = 16px, 1.5rem = 24px이 됩니다. 하지만 `html { font-size: 62.5% }`처럼 루트 크기를 바꾼 프로젝트에서는 1rem이 10px이 되기도 합니다. 정확한 변환을 위해 계산기의 루트 폰트 크기를 실제 프로젝트 설정과 동일하게 맞추세요.",
-              "em은 부모 요소 기준이라 중첩되면 값이 누적되지만, rem은 언제나 루트 기준이라 예측이 쉽습니다. 모든 변환은 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
+              "rem(root em)은 HTML 루트 요소의 폰트 크기를 기준으로 합니다. 계산식은 px = rem × 루트 폰트 크기입니다. 기본값 16px 기준으로 1rem = 16px이지만, html { font-size: 62.5% }처럼 루트를 바꾼 프로젝트에서는 값이 달라지므로 루트 폰트 크기 입력을 실제 프로젝트 값과 맞춰야 합니다.",
+              "사용자가 브라우저 기본 글자 크기를 키우면 rem으로 잡은 값도 함께 커져 접근성에 유리합니다. 폰트 크기·여백처럼 화면 전체와 함께 스케일되어야 하는 값에 주로 씁니다.",
+            ],
+          },
+          {
+            heading: "em ↔ px: 부모 폰트 크기가 기준, 중첩되면 누적",
+            body: [
+              "em의 계산식은 rem과 같은 px = em × 부모 폰트 크기지만, 기준이 루트가 아니라 해당 요소가 상속받은 부모의 폰트 크기입니다. em으로 폰트 크기를 지정한 요소 안에 또 em을 쓰면 배율이 곱해져 누적되므로, 여러 단계 중첩된 값을 확인할 때는 실제 부모 크기를 정확히 입력해야 합니다.",
+              "버튼 padding처럼 '이 요소가 자기 폰트 크기에 비례해 커지길' 원할 때는 em이, 화면 전체 기준의 예측 가능한 값이 필요할 때는 rem이 더 적합합니다.",
+            ],
+          },
+          {
+            heading: "vw ↔ px: 뷰포트 너비가 기준",
+            body: [
+              "vw(viewport width)는 계산식이 px = vw × 뷰포트 너비 ÷ 100으로, 브라우저 창(뷰포트) 전체 너비의 1%를 1vw로 봅니다. 반응형 히어로 타이틀이나 화면 너비에 정비례해 커지는 요소에 자주 쓰입니다.",
+              "뷰포트 너비 입력값을 실제 확인하려는 화면 크기(모바일 390px, 데스크톱 1440px 등)로 바꾸면 그 브레이크포인트에서 몇 px이 되는지 바로 알 수 있습니다.",
+            ],
+          },
+          {
+            heading: "% ↔ px: 부모 요소의 계산된 너비가 기준",
+            body: [
+              "퍼센트는 px = % × 부모 너비 ÷ 100으로 계산되며, 여기서 부모 너비는 CSS 선언값이 아니라 브라우저가 실제로 계산한(computed) 값입니다. 부모가 유동적인 레이아웃(flex·grid)에 속해 있다면 이 값 자체가 화면 크기에 따라 달라진다는 점을 기억하세요.",
+              "고정폭 컨테이너 안에서 요소 너비를 퍼센트로 설계할 때, 특정 화면 크기에서 실제 몇 px이 되는지 미리 확인하는 용도로 씁니다.",
+            ],
+          },
+          {
+            heading: "ms ↔ s: 애니메이션·트랜지션 지속 시간",
+            body: [
+              "ms와 s는 단순 비례식(1s = 1000ms)이라 기준값 입력이 필요 없습니다. CSS의 transition-duration, animation-duration은 두 단위 모두 허용하므로, 디자인 스펙에 적힌 밀리초 값을 코드에 초 단위로 옮기거나 그 반대로 확인할 때 씁니다.",
+              "단위 변환일 뿐이며, 실제 체감 속도는 easing 함수와 애니메이션 대상에 따라 달라진다는 점은 별도로 고려해야 합니다.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "디자인 시안의 px 값을 rem으로 옮기기",
             input: "24px, 루트 폰트 크기 16px",
             result: "1.5rem",
-            note: "디자인 도구는 px로 값을 주지만 접근성을 지키려면 폰트·여백을 rem으로 쓰는 편이 좋습니다. 16으로 나눈다는 규칙만 알면 되지만, 시안 하나에 수십 개 값이 있을 때는 계산기를 여는 편이 빠릅니다.",
+            note: "디자인 도구는 보통 px 값을 주지만 접근성을 지키려면 폰트·여백은 rem으로 구현하는 편이 좋습니다. 시안 하나에 수십 개 값이 있을 때는 계산기로 한 번에 확인하는 편이 빠릅니다.",
           },
           {
-            title: "루트 폰트 크기를 바꾼 프로젝트에서 환산하기",
-            input: "24px, 루트 폰트 크기 10px",
-            result: "2.4rem",
-            note: "html에 font-size: 62.5%를 적용해 루트를 10px로 맞춘 코드베이스가 있습니다. 이때 16 기준으로 계산하면 값이 전부 어긋나므로, 루트 폰트 크기 입력을 실제 값으로 바꿔야 합니다.",
+            title: "중첩된 요소의 em 값을 실제 px로 확인하기",
+            input: "0.75em, 부모 폰트 크기 20px",
+            result: "15px",
+            note: "부모 요소의 font-size가 이미 확대·축소된 상태라면 em 값만 보고는 실제 크기를 가늠하기 어렵습니다. 부모의 계산된 폰트 크기를 입력해야 정확한 px 값이 나옵니다.",
           },
           {
-            title: "사용자가 브라우저 기본 글꼴을 키웠을 때의 실제 크기 확인",
-            input: "1.5rem, 루트 폰트 크기 20px",
-            result: "30px",
-            note: "rem을 쓰는 이유가 여기 있습니다. 사용자가 브라우저 설정에서 기본 글꼴을 20px로 올리면 같은 1.5rem이 30px로 커집니다. px로 고정했다면 24px 그대로여서 확대가 반영되지 않습니다.",
+            title: "반응형 히어로 타이틀이 화면별로 몇 px인지 확인하기",
+            input: "5vw, 뷰포트 너비 1440px",
+            result: "72px",
+            note: "뷰포트 너비를 390px(모바일)로 바꾸면 같은 5vw가 19.5px이 됩니다. vw로 폰트 크기를 스케일할 때 최소·최대 크기를 벗어나지 않는지 여러 화면 너비에서 확인하는 용도로 씁니다.",
+          },
+          {
+            title: "고정폭 컨테이너 안에서 퍼센트 너비를 px로 환산하기",
+            input: "75%, 부모 너비 1200px",
+            result: "900px",
+            note: "그리드 컬럼이나 사이드바 너비를 퍼센트로 설계했을 때, 특정 브레이크포인트에서 실제 몇 px이 되는지 미리 확인해 다른 고정폭 요소와 나란히 배치할 수 있는지 가늠할 수 있습니다.",
+          },
+          {
+            title: "디자인 스펙의 트랜지션 시간을 CSS 값으로 옮기기",
+            input: "300ms",
+            result: "0.3s",
+            note: "디자인 스펙 문서는 밀리초로, 코드베이스는 초 단위 관례를 쓰는 경우가 섞여 있습니다. transition-duration에 어느 쪽을 적어도 동작은 같으므로 팀 컨벤션에 맞는 쪽으로 바꿔 적으면 됩니다.",
           },
         ],
         limitations: [
-          "rem은 항상 루트(html) 요소의 폰트 크기를 기준으로 합니다. 부모 요소 기준으로 커지는 값이 필요하다면 em을 써야 하며, 이때는 em → px 변환기를 사용하세요.",
-          "여기서 쓰는 루트 폰트 크기는 입력값일 뿐입니다. 실제 페이지에서는 사용자의 브라우저 글꼴 설정이 루트 크기를 바꾸므로, 변환 결과는 \"루트가 이 값일 때의 px\"로 읽어야 합니다.",
-          "미디어 쿼리 안의 rem은 루트 요소의 font-size가 아니라 브라우저 기본 글꼴을 기준으로 해석됩니다. html { font-size: 10px } 를 선언했더라도 @media (min-width: 40rem) 는 여전히 640px(16px 기준)입니다.",
-          "border-width처럼 소수점 px가 기기 픽셀에 정확히 떨어지지 않는 속성에서는 브라우저가 반올림해 렌더링합니다. 변환 결과와 개발자 도구에 찍히는 실제 값이 0.5px 정도 다를 수 있습니다.",
+          "rem은 루트(html) 요소, em은 부모 요소의 폰트 크기를 기준으로 합니다. em이 여러 단계 중첩되면 배율이 곱해져 누적되므로, 중첩이 깊은 경우 실제 계산값을 개발자 도구에서 함께 확인하세요.",
+          "미디어 쿼리 안의 rem·em은 요소의 font-size가 아니라 브라우저 기본 글꼴 크기를 기준으로 해석됩니다. html에 font-size: 10px를 선언했더라도 @media (min-width: 40rem)은 여전히 16px 기준(640px)에 가깝게 동작합니다.",
+          "100vw는 스크롤바 너비를 포함하지 않는 뷰포트 전체 너비를 기준으로 하므로, 세로 스크롤바가 있는 페이지에서는 100vw 요소가 뷰포트보다 살짝 넓어져 가로 스크롤이 생길 수 있습니다.",
+          "퍼센트 변환에 쓰는 부모 너비는 CSS 선언값이 아니라 실제 렌더링된 계산값입니다. 유동적인 flex·grid 레이아웃에서는 이 값 자체가 화면 크기·형제 요소 수에 따라 달라지므로, 입력한 부모 너비는 그 순간의 스냅샷으로만 보세요.",
+          "border-width처럼 소수점 px가 기기 픽셀에 정확히 떨어지지 않는 속성은 브라우저가 렌더링 시 반올림합니다. 계산기의 값과 개발자 도구에 찍히는 실제 값이 0.5px 정도 다를 수 있습니다.",
         ],
       },
       en: {
-        card: "Convert rem ↔ px instantly. Supports custom root font size.",
+        card: "Convert rem, em, vw, % and ms to px (or seconds) instantly. Five CSS unit converters in one place.",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a rem or px value", "Set root font size (default 16)", "Copy the converted result"],
+          "Convert five common CSS relative units, rem, em, vw, percent and ms, to pixels (or seconds) instantly. Set the base value each unit depends on (root font size, parent font size, viewport width) and copy the result in one click. Everything runs entirely in your browser.",
+        howItWorks: [
+          "Pick a unit pair from the tabs above",
+          "Enter the value and its base (root/parent font size, viewport width, etc.)",
+          "Copy the converted result",
+        ],
         aeo: {
-          what: "Rem to Px Converter is a tool that instantly converts CSS rem values to pixels (px) and back.",
-          who: "It is for front-end developers and UI designers who work with both rem and pixel units in CSS layouts.",
-          how: "Enter a rem or px value and set your root font size; the converted result appears instantly in your browser. Use Swap to flip the direction.",
-          why: "It saves repeated manual calculations when switching between px and rem in responsive design workflows.",
+          what: "CSS Unit Converter instantly converts five common CSS relative units, rem, em, vw, percent, and ms, into pixels (or seconds) and back.",
+          who: "It is for front-end developers and UI designers who work with responsive layouts and animations and constantly move between relative and absolute units.",
+          how: "Pick a unit pair from the tabs above, enter a value and its base (root font size, parent font size, viewport width, and so on), and the result appears instantly in your browser. Use Swap to flip direction.",
+          why: "Instead of hunting down a separate converter for each unit, you get all five CSS unit conversions on one page, cutting down the repeated math in responsive work.",
         },
         guide: [
           {
-            heading: "Why rem is better for accessibility",
+            heading: "Why five CSS units live on one page",
             body: [
-              "rem (root em) is always calculated from the font size of the HTML root element. When a user increases their browser's default text size, everything sized in rem: fonts, spacing, layout: scales up with it, so the page grows naturally for people with low vision. Values fixed in px stay put no matter what the user does, which hurts accessibility. That's why many teams size typography and spacing in rem.",
-              "Designs usually arrive in px while implementation happens in rem, so you constantly move between the two. This converter handles that round trip in one step.",
+              "CSS has several relative units whose actual size depends on the screen, the parent element, or the root element. rem and em are relative to a font size, vw to the viewport width, percent to the parent's width, and ms to how long an animation or transition runs. All five reduce to the same shape of math, base value times a multiplier equals an absolute value (px or seconds), but what counts as the base changes every time.",
+              "In practice, designs arrive in px while implementation uses relative units, so you move between these five units and px many times a day. Instead of opening a different page for each unit, this page keeps them one tab-click away on the same screen.",
             ],
           },
           {
-            heading: "Match the root font size to your project",
+            heading: "rem to px: relative to the root font size",
             body: [
-              "1rem equals the root font size. Most browsers default to 16px, making 1rem = 16px and 1.5rem = 24px. But a project that changes the root (e.g. `html { font-size: 62.5% }`) can make 1rem equal 10px. For an accurate result, set the converter's root font size to match your actual project setup.",
-              "Unlike em, which is relative to the parent and compounds when nested, rem is always relative to the root, so it stays predictable. All conversion runs in your browser and your input is never sent to a server.",
+              "rem (root em) is relative to the HTML root element's font size. The formula is px = rem x root font size. At the default 16px, 1rem = 16px, but a project that changes the root (e.g. html { font-size: 62.5% }) shifts that, so set the root font size input to match your actual project.",
+              "When a visitor increases their browser's default text size, values sized in rem grow with it, which helps accessibility. rem is the usual choice for font sizes and spacing that should scale with the whole page.",
+            ],
+          },
+          {
+            heading: "em to px: relative to the parent font size, and it compounds when nested",
+            body: [
+              "em uses the same formula as rem, px = em x parent font size, but the base is the font size the element inherits from its parent, not the root. Using em inside an element that already sets its own font size in em multiplies the ratios together, so when you check a value nested several levels deep, enter the real parent size for an accurate result.",
+              "em suits a single element that should scale in proportion to its own font size, like button padding; rem suits values that need to scale predictably against the whole page.",
+            ],
+          },
+          {
+            heading: "vw to px: relative to the viewport width",
+            body: [
+              "vw (viewport width) uses px = vw x viewport width / 100: 1vw is 1% of the browser window's full width. It shows up often in responsive hero titles and elements meant to scale directly with screen width.",
+              "Set the viewport width input to the screen size you actually want to check, mobile at 390px, desktop at 1440px, and so on, to see how many pixels that value becomes at that breakpoint.",
+            ],
+          },
+          {
+            heading: "Percent to px: relative to the parent's computed width",
+            body: [
+              "Percent uses px = % x parent width / 100, where the parent width is the browser's actual computed value, not whatever the CSS declares. If the parent sits in a fluid layout (flex or grid), remember that this base value itself changes with the screen size.",
+              "It is useful for checking, ahead of time, how many pixels a percentage-based width becomes inside a fixed-width container at a specific screen size.",
+            ],
+          },
+          {
+            heading: "Ms to s: animation and transition duration",
+            body: [
+              "ms and s are a plain ratio (1s = 1000ms), so no base value is needed. CSS's transition-duration and animation-duration both accept either unit, so this is for moving a millisecond value from a design spec into seconds in code, or checking it the other way.",
+              "This only converts the unit; how fast an animation actually feels still depends on its easing function and what it's animating, which is a separate consideration.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
-            title: "Porting px values from a design file to rem",
+            title: "Porting a px value from a design file to rem",
             input: "24px with a 16px root font size",
             result: "1.5rem",
-            note: "Design tools hand you px, but font sizes and spacing are better expressed in rem for accessibility. The rule is just \"divide by 16\", yet with dozens of values in one screen it is faster to use the converter.",
+            note: "Design tools usually hand you px, but font sizes and spacing are better implemented in rem for accessibility. With dozens of values in one screen, it's faster to check them with the converter than to divide by 16 by hand each time.",
           },
           {
-            title: "Converting in a project that changed the root font size",
-            input: "24px with a 10px root font size",
-            result: "2.4rem",
-            note: "Some codebases set html { font-size: 62.5% } to make the root 10px. Calculating against 16 there throws every value off, so set the root font size field to the real value.",
+            title: "Checking the real px value of a nested em",
+            input: "0.75em with a 20px parent font size",
+            result: "15px",
+            note: "If the parent element's font-size has already been scaled up or down, the em value alone doesn't tell you the real size. Enter the parent's computed font size to get an accurate px value.",
           },
           {
-            title: "Checking the real size when a visitor enlarges their default font",
-            input: "1.5rem with a 20px root font size",
-            result: "30px",
-            note: "This is the reason to use rem at all. If someone raises their browser's default font to 20px, the same 1.5rem grows to 30px. Hard-coded 24px would stay at 24px and ignore the preference.",
+            title: "Checking how many px a responsive hero title becomes at different sizes",
+            input: "5vw with a 1440px viewport",
+            result: "72px",
+            note: "Change the viewport width to 390px (mobile) and the same 5vw becomes 19.5px. This is for checking, across several screen widths, that a font size scaled with vw stays within its intended min and max.",
+          },
+          {
+            title: "Converting a percentage width to px inside a fixed-width container",
+            input: "75% with a 1200px parent",
+            result: "900px",
+            note: "When a grid column or sidebar width is designed as a percentage, this checks how many pixels it becomes at a specific breakpoint, so you can tell whether it will line up with other fixed-width elements.",
+          },
+          {
+            title: "Moving a spec's transition duration into a CSS value",
+            input: "300ms",
+            result: "0.3s",
+            note: "Design specs are often written in milliseconds while a codebase's convention is seconds, or the reverse. transition-duration behaves the same either way, so use whichever matches your team's convention.",
           },
         ],
         limitations: [
-          "rem is always relative to the root (html) element's font size. If you need a value that scales with the parent element instead, use em and the em to px converter.",
-          "The root font size here is only an input. On a real page the visitor's browser font setting determines it, so read the output as \"the px value when the root is this size\".",
-          "Inside media queries, rem resolves against the browser's default font size, not the html element's font-size. Even with html { font-size: 10px }, @media (min-width: 40rem) still means 640px.",
-          "For properties like border-width, fractional px values do not always land on device pixels and the browser rounds when rendering. The converted value and what DevTools reports can differ by around half a pixel.",
+          "rem is relative to the root (html) element's font size, em to the parent's. When em is nested several levels deep, the ratios multiply and compound, so for deeply nested cases check the actual computed value in DevTools too.",
+          "Inside media queries, rem and em resolve against the browser's default font size, not an element's font-size. Even with html { font-size: 10px } declared, @media (min-width: 40rem) still behaves close to the 16px-based value (640px).",
+          "100vw is relative to the full viewport width and does not subtract the scrollbar's width, so on a page with a vertical scrollbar, a 100vw element can end up slightly wider than the viewport and cause horizontal scrolling.",
+          "The parent width used for percent conversion is the actual rendered, computed value, not whatever the CSS declares. In a fluid flex or grid layout that value itself shifts with screen size and sibling count, so treat the parent width you enter as a snapshot of one moment.",
+          "For properties like border-width, where a fractional px doesn't land evenly on a device pixel, the browser rounds it when rendering. The converter's value and what DevTools reports can differ by around half a pixel.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "rem이란 무엇인가요?",
+          question: "다섯 개 단위를 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "rem(root em)은 HTML 루트 요소(<html>)의 폰트 크기를 기준으로 계산되는 CSS 상대 단위입니다. 루트 폰트 크기가 16px일 때 1rem = 16px, 2rem = 32px이 됩니다.",
+            "아니요. 상단 탭에서 rem·em·vw·%·ms 중 원하는 단위를 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 단위를 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /css-unit-converter 하나입니다.",
         },
         {
-          question: "루트 폰트 크기 기본값이 16인 이유는 무엇인가요?",
+          question: "탭을 누르면 입력했던 값이 사라지나요?",
           answer:
-            "대부분의 브라우저는 기본 폰트 크기를 16px로 설정합니다. CSS에서 html { font-size } 를 따로 지정하지 않으면 이 값이 적용됩니다.",
+            "네, 단위를 바꾸면 그 단위의 기본값으로 초기화됩니다. 단위마다 기준값의 의미(루트 폰트 크기, 부모 폰트 크기, 뷰포트 너비 등)가 달라 이전 값을 그대로 이어 쓰면 오히려 혼동을 줄 수 있기 때문입니다.",
         },
         {
-          question: "Swap을 누르면 URL이 바뀌나요?",
+          question: "rem과 em 중 어떤 걸 써야 하나요?",
           answer:
-            "아니요. Swap은 변환 방향만 바꾸고 URL은 /rem-to-px 그대로 유지됩니다. 검색 의도는 유지하면서 양방향 변환을 지원합니다.",
+            "화면 전체 기준으로 예측 가능하게 스케일되길 원하면 rem을, 버튼처럼 특정 요소가 자기 폰트 크기에 비례해 커지길 원하면 em을 쓰는 경우가 많습니다. 다만 이는 관례일 뿐 정해진 규칙은 아닙니다.",
+        },
+        {
+          question: "100vw인데 왜 페이지에 가로 스크롤이 생기나요?",
+          answer:
+            "세로 스크롤바가 있는 브라우저에서 100vw는 스크롤바 너비를 포함한 값이라, 실제 콘텐츠 영역보다 넓어질 수 있습니다. 요소 너비를 100%로 바꾸거나 box-sizing과 overflow 설정을 함께 확인하세요.",
         },
         {
           question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
+          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
         {
-          question: "What is a rem unit?",
+          question: "Do I need to visit a different page for each of the five units?",
           answer:
-            "rem (root em) is a CSS relative unit based on the font size of the root HTML element. When the root font size is 16px, 1rem = 16px, 2rem = 32px, and so on.",
+            "No. Click rem, em, vw, %, or ms in the tabs above and it switches instantly on the same page. The URL reflects the current unit via a ?mode= query, but the canonical URL used for search indexing is always the single /en/css-unit-converter.",
         },
         {
-          question: "Why is the default root font size 16?",
+          question: "Does switching tabs clear the value I entered?",
           answer:
-            "Most browsers default to a 16px base font size. Unless you set a custom html { font-size } in your CSS, this is the value browsers use.",
+            "Yes, switching units resets the fields to that unit's default. Each unit's base value means something different (root font size, parent font size, viewport width, and so on), so carrying over the previous value would likely cause confusion instead of helping.",
         },
         {
-          question: "Does pressing Swap change the URL?",
+          question: "Should I use rem or em?",
           answer:
-            "No. Swap only flips the conversion direction while keeping the URL at /rem-to-px. It preserves the search intent while supporting bidirectional conversion.",
+            "rem is common when you want predictable scaling relative to the whole page; em is common when a specific element, like button padding, should scale in proportion to its own font size. These are conventions, not hard rules.",
+        },
+        {
+          question: "Why does my page get horizontal scroll even though I used 100vw?",
+          answer:
+            "In a browser with a vertical scrollbar, 100vw includes the scrollbar's width, so it can end up wider than the actual content area. Try width: 100% instead, or check your box-sizing and overflow settings.",
         },
         {
           question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
+          answer: "No. All conversion happens in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
     og: {
-      ko: { title: "Rem to Px 변환기", subtitle: "rem ↔ px 즉시 변환, 루트 폰트 크기 설정 지원" },
-      en: { title: "Rem to Px Converter", subtitle: "Convert rem to pixels instantly with custom root size" },
-    },
-  },
-  {
-    slug: "em-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "em",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Em → Px 변환기", en: "Em to Px Converter" },
-    relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Em to Px 변환기 | CSS 단위 변환",
-        description:
-          "em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환합니다. 부모 요소 폰트 크기를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["em to px", "em px 변환", "em 변환기", "css em 단위", "px to em"],
-      },
-      en: {
-        title: "Em to Px Converter | CSS Unit Converter",
-        description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        keywords: ["em to px", "em to pixels", "px to em", "css em converter", "em unit converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "em ↔ px 즉시 변환. 부모 폰트 크기 설정 지원.",
-        description:
-          "em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환합니다. 부모 요소 폰트 크기를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["em 또는 px 값 입력", "부모 폰트 크기 설정 (기본값 16)", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Em to Px 변환기는 CSS 상대 단위 em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환해주는 도구입니다.",
-          who: "중첩된 요소의 폰트 크기를 계산하거나 em 단위와 픽셀 단위를 함께 쓰는 프론트엔드 개발자를 위한 도구입니다.",
-          how: "em 또는 px 값을 입력하고 부모 요소의 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
-          why: "em 단위는 부모 요소 폰트 크기에 따라 달라지므로 매번 수동으로 계산하는 번거로움을 줄여줍니다.",
-        },
-        guide: [
-          {
-            heading: "em은 부모 폰트 크기를 기준으로 한다",
-            body: [
-              "em은 해당 요소가 상속받은 폰트 크기를 1로 보는 상대 단위입니다. 버튼의 padding을 0.75em으로 주면 글자 크기가 커질 때 여백도 함께 커져, 컴포넌트가 폰트 크기에 맞춰 통째로 스케일됩니다. 이렇게 '요소 하나가 자기 폰트 크기에 비례해 커지길' 원할 때 em이 rem보다 편리합니다.",
-              "이 상대성 때문에 시안의 px 값을 em으로 옮기거나 그 반대로 확인할 일이 잦고, 이 변환기가 그 계산을 대신합니다. 부모 폰트 크기를 실제 값으로 설정해야 정확합니다.",
-            ],
-          },
-          {
-            heading: "중첩되면 값이 누적되는 함정",
-            body: [
-              "em의 가장 흔한 함정은 중첩 누적입니다. em은 부모의 폰트 크기를 기준으로 하므로, em으로 폰트 크기를 지정한 요소 안에 또 em을 쓰면 조상들의 배율이 곱해져 예상보다 크거나 작아집니다. 예를 들어 1.2em이 세 단계 중첩되면 실제로는 1.2 × 1.2 × 1.2 ≈ 1.73배가 됩니다.",
-              "그래서 실제로 몇 px이 되는지 눈으로 확인하는 것이 중요합니다. 예측 가능한 값이 필요할 때는 루트 기준인 rem을 함께 고려하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert em ↔ px instantly. Supports custom parent font size.",
-        description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter an em or px value", "Set parent font size (default 16)", "Copy the converted result"],
-        aeo: {
-          what: "Em to Px Converter is a tool that instantly converts CSS em values to pixels (px) and back.",
-          who: "It is for front-end developers working with nested font sizes and those who need to switch between em and pixel values in CSS.",
-          how: "Enter an em or px value and set the parent element's font size; the conversion result appears instantly in your browser.",
-          why: "em values depend on the parent element's font size, making manual calculation tedious: this tool gives you the answer instantly.",
-        },
-        guide: [
-          {
-            heading: "em is relative to the parent font size",
-            body: [
-              "em is a relative unit that treats the element's inherited font size as 1. Give a button 0.75em of padding and the spacing grows along with the text, so the whole component scales with its font size. When you want a single element to grow in proportion to its own font size, em is handier than rem.",
-              "Because of this relativity you frequently move a design's px value into em or check it the other way, and this converter does that math for you. Set the parent font size to your real value for an accurate result.",
-            ],
-          },
-          {
-            heading: "The nesting trap where values compound",
-            body: [
-              "em's most common pitfall is compounding when nested. Since em is based on the parent's font size, using em inside an element that itself sets its font size in em multiplies the ancestors' ratios, so it ends up larger or smaller than expected. For example, 1.2em nested three levels deep is actually 1.2 × 1.2 × 1.2 ≈ 1.73×.",
-              "That's why it helps to see the resulting px value directly. When you need predictable values, consider rem, which is relative to the root. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "em과 rem의 차이는 무엇인가요?",
-          answer:
-            "em은 해당 요소의 부모 요소 폰트 크기를 기준으로 계산됩니다. rem은 항상 루트(<html>) 요소의 폰트 크기를 기준으로 계산됩니다. 중첩된 요소에서 em은 값이 누적될 수 있어, 예측 가능한 rem이 선호되는 경우가 많습니다.",
-        },
-        {
-          question: "font-size 외 다른 속성에도 em을 쓸 수 있나요?",
-          answer:
-            "네. em은 margin, padding, width, line-height 등 다양한 속성에 사용할 수 있습니다. font-size에 em을 쓸 때는 부모 폰트 크기가 기준이 되고, 다른 속성에서는 같은 요소의 font-size가 기준이 됩니다.",
-        },
-        {
-          question: "Swap을 누르면 URL이 바뀌나요?",
-          answer:
-            "아니요. Swap은 변환 방향만 바꾸고 URL은 /em-to-px 그대로 유지됩니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is the difference between em and rem?",
-          answer:
-            "em is relative to the parent element's font size, while rem is always relative to the root (<html>) font size. In nested elements, em values can compound, which is why rem is often preferred for predictability.",
-        },
-        {
-          question: "Can em be used for properties other than font-size?",
-          answer:
-            "Yes. em can be used for margin, padding, width, line-height and more. When used on font-size, it refers to the parent font size; on other properties, it refers to the element's own computed font-size.",
-        },
-        {
-          question: "Does pressing Swap change the URL?",
-          answer:
-            "No. Swap only flips the conversion direction while keeping the URL at /em-to-px.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Em to Px 변환기", subtitle: "em ↔ px 즉시 변환, 부모 폰트 크기 설정 지원" },
-      en: { title: "Em to Px Converter", subtitle: "Convert em to pixels instantly with custom parent size" },
-    },
-  },
-  {
-    slug: "vw-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "vw",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Vw → Px 변환기", en: "Vw to Px Converter" },
-    relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Vw to Px 변환기 | CSS 뷰포트 단위 변환",
-        description:
-          "vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환합니다. 뷰포트 너비를 직접 입력하거나 390, 768, 1024, 1440, 1920 프리셋으로 선택하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["vw to px", "vw px 변환", "viewport width 변환", "css vw 단위", "px to vw"],
-      },
-      en: {
-        title: "Vw to Px Converter | CSS Viewport Unit Converter",
-        description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
-        keywords: ["vw to px", "vw to pixels", "px to vw", "viewport width converter", "css vw unit"],
-      },
-    },
-    content: {
-      ko: {
-        card: "vw ↔ px 즉시 변환. 반응형 뷰포트 너비 프리셋 지원.",
-        description:
-          "vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환합니다. 뷰포트 너비를 직접 입력하거나 390, 768, 1024, 1440, 1920 프리셋으로 선택하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["vw 또는 px 값 입력", "뷰포트 너비 설정 또는 프리셋 선택", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Vw to Px 변환기는 CSS 뷰포트 너비 단위 vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환해주는 도구입니다.",
-          who: "반응형 레이아웃을 설계하는 프론트엔드 개발자와 뷰포트 기반 크기를 계산해야 하는 디자이너를 위한 도구입니다.",
-          how: "vw 또는 px 값을 입력하고 뷰포트 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. 일반 반응형 뷰포트 크기 프리셋도 제공합니다.",
-          why: "다양한 화면 크기에서 vw와 px를 오갈 때 계산 실수 없이 빠르게 정확한 값을 확인할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "vw는 뷰포트 너비의 1%",
-            body: [
-              "vw(viewport width)는 브라우저 표시 영역의 너비를 100으로 나눈 단위입니다. 100vw는 화면 전체 너비, 50vw는 그 절반입니다. 화면 크기에 따라 자동으로 값이 바뀌기 때문에 풀블리드 히어로 섹션이나 화면 폭에 비례해 커지는 반응형 타이포그래피에 자주 쓰입니다.",
-              "핵심은 같은 vw라도 기기마다 실제 픽셀이 달라진다는 점입니다. 10vw는 1440px 데스크톱에서 144px이지만 390px 모바일에서는 39px입니다. 그래서 특정 기기 기준의 실제 크기를 확인하려면 뷰포트 너비를 지정해 변환해야 하고, 이 계산기는 대표 기기 프리셋을 제공합니다.",
-            ],
-          },
-          {
-            heading: "clamp와 함께, 과도한 확대·축소 막기",
-            body: [
-              "vw만 단독으로 쓰면 큰 화면에서는 지나치게 커지고 작은 화면에서는 읽기 힘들 만큼 작아지기 쉽습니다. 그래서 실무에서는 min()·max()·clamp()로 하한과 상한을 함께 지정하는 경우가 많습니다. 이때 각 뷰포트에서 vw가 몇 px이 되는지 미리 확인하면 경계값을 합리적으로 잡을 수 있습니다.",
-              "이 변환기로 최소·최대 화면 폭에서의 px 값을 확인해 clamp 범위를 설계해 보세요. 모든 계산은 브라우저 안에서만 이루어지며 입력값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert vw ↔ px instantly. Includes responsive viewport width presets.",
-        description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a vw or px value", "Set viewport width or pick a preset", "Copy the converted result"],
-        aeo: {
-          what: "Vw to Px Converter is a tool that instantly converts CSS viewport width (vw) values to pixels and back.",
-          who: "It is for front-end developers designing responsive layouts and designers who need to calculate viewport-based sizes.",
-          how: "Enter a vw or px value and set the viewport width (or choose a preset like 1440); the result appears instantly in your browser.",
-          why: "It eliminates manual vw-to-px math across different screen sizes, speeding up responsive design work.",
-        },
-        guide: [
-          {
-            heading: "vw is 1% of the viewport width",
-            body: [
-              "vw (viewport width) divides the browser's visible width into 100 parts. 100vw is the full screen width and 50vw is half of it. Because the value changes automatically with the screen size, vw is popular for full-bleed hero sections and responsive typography that scales with the viewport.",
-              "The key point is that the same vw resolves to different pixels on different devices. 10vw is 144px on a 1440px desktop but 39px on a 390px phone. So to check the real size for a specific device you set the viewport width and convert, and this calculator ships common device presets.",
-            ],
-          },
-          {
-            heading: "Pair it with clamp to avoid extremes",
-            body: [
-              "Used alone, vw tends to get too large on wide screens and too small to read on narrow ones. That's why in practice people bound it with min(), max(), or clamp(). Checking how many pixels a vw value becomes at each viewport first lets you pick sensible boundaries.",
-              "Use this converter to read the px values at your minimum and maximum screen widths and design your clamp range around them. All calculation runs in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "1vw는 몇 픽셀인가요?",
-          answer:
-            "1vw는 뷰포트(브라우저 화면) 너비의 1%입니다. 뷰포트 너비가 1440px이면 1vw = 14.4px, 1024px이면 1vw = 10.24px이 됩니다.",
-        },
-        {
-          question: "vw와 %의 차이는 무엇인가요?",
-          answer:
-            "vw는 브라우저 뷰포트 전체 너비를 기준으로 하고, %는 부모 요소의 너비를 기준으로 합니다. 루트 요소(<html>)에서는 동일하지만 중첩 요소 안에서는 다른 값이 나올 수 있습니다.",
-        },
-        {
-          question: "모바일 화면 크기도 확인할 수 있나요?",
-          answer:
-            "네. 390px(iPhone), 768px(태블릿) 등 모바일 뷰포트 프리셋을 선택해 빠르게 확인할 수 있습니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is 1vw in pixels?",
-          answer:
-            "1vw is 1% of the viewport (browser window) width. At a viewport width of 1440px, 1vw = 14.4px. At 1024px, 1vw = 10.24px.",
-        },
-        {
-          question: "What is the difference between vw and %?",
-          answer:
-            "vw is relative to the full browser viewport width, while % is relative to the parent element's width. On the root element they are equal, but inside nested elements they can differ.",
-        },
-        {
-          question: "Can I check mobile screen sizes?",
-          answer:
-            "Yes. Select the 390px (iPhone) or 768px (tablet) preset to quickly check vw values at common mobile viewport sizes.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Vw to Px 변환기", subtitle: "vw ↔ px 즉시 변환, 반응형 뷰포트 프리셋 지원" },
-      en: { title: "Vw to Px Converter", subtitle: "Convert vw to pixels instantly with viewport presets" },
-    },
-  },
-  {
-    slug: "percent-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "%px",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "% → Px 변환기", en: "Percent to Px Converter" },
-    relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Percent to Px 변환기 | CSS % 단위 변환",
-        description:
-          "CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환합니다. 부모 요소 너비를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["percent to px", "퍼센트 px 변환", "% to px", "css percent 단위", "px to percent"],
-      },
-      en: {
-        title: "Percent to Px Converter | CSS Unit Converter",
-        description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        keywords: ["percent to px", "% to pixels", "px to percent", "css percent converter", "percentage unit converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "CSS % ↔ px 즉시 변환. 부모 요소 너비 설정 지원.",
-        description:
-          "CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환합니다. 부모 요소 너비를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["% 또는 px 값 입력", "부모 요소 너비 설정", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Percent to Px 변환기는 CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환해주는 도구입니다.",
-          who: "반응형 레이아웃에서 퍼센트 기반 크기와 픽셀 크기를 오가야 하는 프론트엔드 개발자와 디자이너를 위한 도구입니다.",
-          how: "% 또는 px 값을 입력하고 부모 요소 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
-          why: "퍼센트와 픽셀 단위 계산을 빠르게 처리해 반응형 레이아웃 설계 시간을 줄여줍니다.",
-        },
-        guide: [
-          {
-            heading: "CSS %는 '무엇의 100%'인지가 핵심",
-            body: [
-              "CSS 퍼센트는 속성마다 기준이 다릅니다. width는 부모 요소의 너비, height는 부모의 높이, font-size는 부모의 폰트 크기를 기준으로 하고, 흥미롭게도 padding과 margin은 세로 값이라도 부모의 '너비'를 기준으로 계산됩니다. 이 변환기는 가장 흔한 경우인 부모 요소 너비를 기준으로 % ↔ px를 변환합니다.",
-              "즉 50%는 언제나 '부모 너비의 절반'입니다. 부모가 800px이면 50% = 400px, 부모가 1200px이면 600px이 됩니다. 정확한 값을 얻으려면 부모 요소의 실제 너비를 입력해야 합니다.",
-            ],
-          },
-          {
-            heading: "% vs vw: 무엇을 기준으로 삼는가",
-            body: [
-              "퍼센트와 vw는 헷갈리기 쉽지만 기준이 다릅니다. %는 부모(컨테이너)를 기준으로 하고, vw는 화면(뷰포트) 전체를 기준으로 합니다. 그래서 컨테이너 안에서의 비율 배분에는 %가, 화면 폭에 직접 비례해야 할 때는 vw가 맞습니다. 중첩된 레이아웃에서 실제 픽셀이 얼마가 되는지 확인할 때 이 변환기가 유용합니다.",
-              "모든 계산은 브라우저 안에서만 이루어지며 입력한 값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert CSS % ↔ px instantly. Supports custom parent width.",
-        description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a % or px value", "Set the parent element width", "Copy the converted result"],
-        aeo: {
-          what: "Percent to Px Converter is a tool that instantly converts CSS percentage (%) values to pixels and back.",
-          who: "It is for front-end developers and designers working with percentage-based and pixel-based sizes in responsive layouts.",
-          how: "Enter a % or px value and set the parent element width; the converted result appears instantly in your browser.",
-          why: "It handles the division and multiplication instantly so you can focus on the layout instead of the arithmetic.",
-        },
-        guide: [
-          {
-            heading: "With CSS %, the question is '100% of what?'",
-            body: [
-              "CSS percentages are relative to different things depending on the property. width is relative to the parent's width, height to the parent's height, font-size to the parent's font size, and, notably, padding and margin are calculated from the parent's width even for vertical values. This converter handles the most common case, converting % ↔ px relative to the parent element's width.",
-              "So 50% is always 'half the parent's width': with an 800px parent, 50% = 400px; with a 1200px parent, 600px. Enter the parent's real width to get an accurate value.",
-            ],
-          },
-          {
-            heading: "% vs vw: what each is relative to",
-            body: [
-              "Percent and vw are easy to confuse, but their references differ: % is relative to the parent (container), while vw is relative to the whole viewport. Use % to divide space within a container and vw when something must scale directly with the screen width. This converter is handy for seeing the real pixel value inside a nested layout.",
-              "All calculation runs in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CSS에서 퍼센트(%)는 무엇을 기준으로 하나요?",
-          answer:
-            "속성에 따라 기준이 다릅니다. width에 쓴 %는 부모 요소의 width 기준이고, height의 %는 부모 요소의 height 기준입니다. margin, padding의 %는 부모 요소의 width를 기준으로 합니다.",
-        },
-        {
-          question: "퍼센트와 vw의 차이는 무엇인가요?",
-          answer:
-            "퍼센트(%)는 부모 요소를 기준으로 하고, vw는 브라우저 전체 뷰포트 너비를 기준으로 합니다. 루트 요소에서는 동일하지만, 중첩된 요소 안에서는 값이 달라집니다.",
-        },
-        {
-          question: "음수 값도 입력할 수 있나요?",
-          answer:
-            "네. 음수 px 또는 % 값을 입력할 수 있습니다. CSS에서 margin 같은 속성은 음수 값을 허용합니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What does percent (%) refer to in CSS?",
-          answer:
-            "It depends on the property. For width, % is relative to the parent's width. For height, it is relative to the parent's height. For margin and padding, % is always relative to the parent's width.",
-        },
-        {
-          question: "What is the difference between % and vw?",
-          answer:
-            "Percent (%) is relative to the parent element's size, while vw is relative to the entire browser viewport width. They are equal on the root element but differ inside nested elements.",
-        },
-        {
-          question: "Can I enter negative values?",
-          answer:
-            "Yes. Negative px or % values are accepted. Some CSS properties such as margin allow negative values.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Percent to Px 변환기", subtitle: "CSS % ↔ px 즉시 변환, 부모 너비 설정 지원" },
-      en: { title: "Percent to Px Converter", subtitle: "Convert CSS percentages to pixels instantly" },
-    },
-  },
-  {
-    slug: "ms-to-s",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "ms",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Ms → S 변환기", en: "Ms to S Converter" },
-    relatedTools: ["json-formatter", "slack-timestamp-converter", "time-converter"],
-    seo: {
-      ko: {
-        title: "Ms to S 변환기 | 밀리초·초 단위 변환",
-        description:
-          "밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환합니다. CSS 애니메이션·트랜지션 작업 시 자주 쓰이는 단위를 빠르게 변환하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["ms to s", "밀리초 초 변환", "milliseconds to seconds", "css animation 시간", "ms 변환기"],
-      },
-      en: {
-        title: "Ms to S Converter | Milliseconds to Seconds",
-        description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
-        keywords: ["ms to s", "milliseconds to seconds", "seconds to milliseconds", "css animation time", "ms converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "ms ↔ s 즉시 변환. CSS 애니메이션·트랜지션 시간 계산에 유용.",
-        description:
-          "밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환합니다. CSS 애니메이션·트랜지션 작업 시 자주 쓰이는 단위를 빠르게 변환하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["ms 또는 s 값 입력", "Swap으로 변환 방향 전환", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Ms to S 변환기는 밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환해주는 도구입니다.",
-          who: "CSS 애니메이션·트랜지션 지속 시간을 계산하거나 JavaScript setTimeout/setInterval 값을 ms와 s 단위로 오가야 하는 프론트엔드 개발자를 위한 도구입니다.",
-          how: "ms 또는 s 값을 입력하면 브라우저 안에서 즉시 상대 단위로 변환합니다. Swap 버튼으로 변환 방향을 바꿀 수 있습니다.",
-          why: "1000ms = 1s 계산이 단순하지만 큰 값에서 자주 실수하므로, 빠르게 검증하고 복사하는 데 유용합니다.",
-        },
-        guide: [
-          {
-            heading: "ms와 s, CSS·JS에서 언제 무엇을 쓰나",
-            body: [
-              "1초(s)는 1,000밀리초(ms)입니다. CSS의 transition·animation duration은 `0.3s`와 `300ms` 두 표기를 모두 허용하는데, 코드베이스마다 컨벤션이 달라 값을 오갈 일이 생깁니다. 일반적으로 짧은 시간은 ms(예: 150ms)가, 긴 시간은 s(예: 1.5s)가 읽기 편해 팀 단위로 표기를 통일하는 경우가 많습니다.",
-              "JavaScript의 setTimeout·setInterval은 항상 ms 단위를 받기 때문에, 디자이너가 'S' 단위로 정한 모션 스펙을 코드로 옮길 때 변환이 필요합니다. 이 변환기가 그 왕복을 즉시 처리합니다.",
-            ],
-          },
-          {
-            heading: "체감 속도의 감을 잡는 데도 유용",
-            body: [
-              "UI 인터랙션에서 트랜지션 시간은 체감 품질을 좌우합니다. 보통 150~300ms가 자연스러운 마이크로 인터랙션 구간으로 여겨지고, 500ms를 넘어가면 굼떠 보이기 쉽습니다. 값을 ms와 s로 오가며 보면 애니메이션이 실제로 얼마나 길지 감을 잡는 데 도움이 됩니다.",
-              "변환은 전부 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert ms ↔ s instantly. Useful for CSS animations and transitions.",
-        description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter an ms or s value", "Flip direction with Swap", "Copy the converted result"],
-        aeo: {
-          what: "Ms to S Converter is a tool that instantly converts milliseconds (ms) to seconds (s) and back.",
-          who: "It is for front-end developers calculating CSS animation and transition durations, or converting between ms and s for JavaScript setTimeout and setInterval.",
-          how: "Enter an ms or s value and the result appears instantly in your browser. Use the Swap button to flip the conversion direction.",
-          why: "While 1000ms = 1s seems simple, larger values are easy to miscalculate: this tool gives the answer instantly so you can copy and move on.",
-        },
-        guide: [
-          {
-            heading: "ms vs s: when to use each in CSS and JS",
-            body: [
-              "One second (s) is 1,000 milliseconds (ms). CSS transition and animation durations accept both `0.3s` and `300ms`, and since conventions differ between codebases you often move between the two. As a rule, short durations read better in ms (e.g. 150ms) and longer ones in s (e.g. 1.5s), so teams tend to standardize on one style.",
-              "JavaScript's setTimeout and setInterval always take milliseconds, so when a designer specifies a motion spec in seconds you need to convert it for code. This tool handles that round trip instantly.",
-            ],
-          },
-          {
-            heading: "Also useful for gauging perceived speed",
-            body: [
-              "In UI interactions, transition timing drives how the experience feels. Roughly 150-300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
-              "All conversion happens in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CSS animation-duration에 ms와 s 중 어느 단위가 좋은가요?",
-          answer:
-            "둘 다 유효합니다. CSS 명세에서 s와 ms 단위를 모두 지원합니다. 0.3s처럼 1초 미만의 짧은 시간은 s로 쓰는 것이 더 읽기 쉽고, 길고 정밀한 타이밍은 ms로 관리하는 편이 유리합니다.",
-        },
-        {
-          question: "음수 값(animation-delay)도 처리할 수 있나요?",
-          answer:
-            "네. 음수 ms 또는 s 값을 입력할 수 있습니다. CSS animation-delay에 음수 값을 사용하면 애니메이션이 도중부터 시작됩니다.",
-        },
-        {
-          question: "소수점은 몇 자리까지 지원하나요?",
-          answer:
-            "최대 4자리 소수점까지 지원하며 불필요한 소수점은 자동으로 제거합니다. 예: 1000ms → 1s, 150ms → 0.15s.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Should I use ms or s for CSS animation-duration?",
-          answer:
-            "Both are valid CSS units. For values under 1 second, s is more readable (e.g., 0.3s). For larger or more precise timing, ms is easier to work with. Most developers use both interchangeably.",
-        },
-        {
-          question: "Can I use negative values for animation-delay?",
-          answer:
-            "Yes. Negative ms or s values are accepted. A negative CSS animation-delay starts the animation partway through its cycle.",
-        },
-        {
-          question: "How many decimal places are supported?",
-          answer:
-            "Up to 4 decimal places are shown, with trailing zeros removed automatically. For example: 1000ms → 1s, 150ms → 0.15s.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Ms to S 변환기", subtitle: "밀리초 ↔ 초 즉시 변환" },
-      en: { title: "Ms to S Converter", subtitle: "Convert milliseconds to seconds instantly" },
+      ko: { title: "CSS 단위 변환기", subtitle: "rem·em·vw·%·ms를 px로 한 번에 변환" },
+      en: { title: "CSS Unit Converter", subtitle: "Convert rem, em, vw, % and ms to px in one place" },
     },
   },
 
