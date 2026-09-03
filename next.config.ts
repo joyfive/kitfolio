@@ -52,6 +52,13 @@ const nextConfig: NextConfig = {
       { source: `/en/${m}-calculator`, destination: `/en/ad-metrics-calculator?mode=${m}`, permanent: true },
     ]);
 
+    // 2026-09 URL 통합: PDF 도구 4종(병합/분할/회전/페이지 삭제) → pdf-tools
+    // 한 페이지(?mode=)로 병합.
+    const pdfToolRedirects = ["merge", "split", "rotate", "page-delete"].flatMap((m) => [
+      { source: `/pdf-${m}`, destination: `/pdf-tools?mode=${m}`, permanent: true },
+      { source: `/en/pdf-${m}`, destination: `/en/pdf-tools?mode=${m}`, permanent: true },
+    ]);
+
     // 2026-09 URL 통합: CSS 단위 변환기 5종 → css-unit-converter 한 페이지(?mode=)로 병합.
     const cssUnitModes: Record<string, string> = {
       "rem-to-px": "rem-px",
@@ -82,6 +89,7 @@ const nextConfig: NextConfig = {
       ...growthFamilyRedirects,
       ...cagrFamilyRedirects,
       ...adMetricRedirects,
+      ...pdfToolRedirects,
       ...cssUnitRedirects,
     ];
   },

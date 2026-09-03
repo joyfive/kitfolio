@@ -5154,479 +5154,280 @@ export const TOOLS: Tool[] = [
 
   // ── Design ── PDF 도구 4종 (병합·분할·회전·페이지 삭제, 공통 탭) ──
   {
-    slug: "pdf-merge",
+    slug: "pdf-tools",
     layout: "canvas",
     cat: "design",
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⊞",
+    ico: "PDF",
     ready: true,
     indexable: true,
     badge: "Canvas",
-    name: { ko: "PDF 병합", en: "Merge PDF" },
-    relatedTools: ["pdf-split", "pdf-rotate", "pdf-page-delete"],
+    name: { ko: "PDF 도구", en: "PDF Tools" },
+    relatedTools: ["qr-code-generator", "qr-code-reader", "open-graph-preview"],
     seo: {
       ko: {
-        title: "PDF 병합 | 여러 PDF를 하나로 합치기",
+        title: "PDF 도구 | 병합·분할·회전·페이지 삭제",
         description:
-          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+          "탭을 전환해 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리합니다. 여러 PDF를 원하는 순서로 합치거나, 페이지·범위별로 나누거나, 90도 단위로 회전하거나, 필요 없는 페이지를 제거할 수 있습니다. 모든 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
         keywords: [
-          "PDF 병합",
-          "PDF 합치기",
-          "PDF 합치기 무료",
-          "여러 PDF 하나로",
-          "PDF 파일 합치기",
-          "온라인 PDF 병합",
+          "PDF 도구", "PDF 병합", "PDF 분할", "PDF 회전", "PDF 페이지 삭제",
+          "PDF 합치기", "PDF 나누기", "온라인 PDF 편집",
         ],
       },
       en: {
-        title: "Merge PDF | Combine PDF Files in Order",
+        title: "PDF Tools | Merge, Split, Rotate, Delete Pages",
         description:
-          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+          "Switch tabs to merge, split, rotate, or delete pages from a PDF, all on one page. Combine several PDFs in your order, split by page or range, rotate in 90-degree steps, or remove pages you don't need. Every file is processed entirely in your browser and never uploaded to a server.",
         keywords: [
-          "merge PDF",
-          "combine PDF",
-          "merge PDF files",
-          "join PDF online",
-          "PDF merger free",
-          "combine PDF files",
+          "PDF tools", "merge PDF", "split PDF", "rotate PDF", "delete PDF pages",
+          "combine PDF", "PDF editor online",
         ],
       },
     },
     content: {
       ko: {
-        card: "여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다.",
+        card: "PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서.",
         description:
-          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+          "탭을 전환해 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리합니다. 여러 PDF를 원하는 순서로 합치거나, 페이지·범위별로 나누거나, 90도 단위로 회전하거나, 필요 없는 페이지를 제거할 수 있습니다. 모든 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
         howItWorks: [
-          "PDF 파일 여러 개를 업로드합니다.",
-          "드래그하거나 위아래로 이동해 병합 순서를 정합니다.",
-          "PDF 병합을 눌러 합쳐진 파일을 내려받습니다.",
+          "상단 탭에서 작업(병합·분할·회전·페이지 삭제) 선택",
+          "PDF 파일 업로드",
+          "결과를 확인하고 새 PDF로 다운로드",
         ],
         aeo: {
-          what: "PDF 병합은 여러 PDF 파일을 지정한 순서대로 하나의 PDF로 합치는 브라우저 도구입니다.",
-          who: "보고서·계약서·스캔본 등 나뉜 PDF를 한 파일로 정리해야 하는 사무직·PM·소상공인을 위한 도구입니다.",
-          how: "업로드한 PDF의 페이지를 순서대로 복사해 새 PDF를 만들며, 병합 순서는 드래그·이동·삭제로 조정합니다.",
-          why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 여러 PDF를 하나로 합칠 수 있습니다.",
+          what: "PDF 도구는 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리하는 통합 브라우저 도구입니다.",
+          who: "보고서·계약서·스캔본을 정리해야 하는 사무직·PM·소상공인·디자이너를 위한 도구입니다.",
+          how: "상단 탭에서 작업을 고르고 PDF를 업로드하면 브라우저 안에서 처리되어 새 PDF로 다운로드됩니다. 작업마다 업로드하는 파일 수와 조작 방식이 다릅니다.",
+          why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 PDF를 다룰 수 있어 민감한 문서도 안심하고 처리할 수 있습니다.",
         },
         guide: [
           {
-            heading: "PDF를 합쳐야 하는 순간",
+            heading: "PDF 작업 네 가지를 한 곳에 모은 이유",
             body: [
-              "업무 문서는 조각으로 흩어지기 쉽습니다. 각자 만든 슬라이드를 모아 하나의 발표 자료로 묶거나, 여러 장을 따로 스캔한 계약서를 한 파일로 정리하거나, 견적서·명세서·증빙을 붙여 한 번에 제출해야 할 때가 그렇습니다. 파일이 여러 개로 나뉘어 있으면 받는 사람이 순서를 맞춰 열어야 하고, 이메일 첨부도 번거로워집니다.",
-              "PDF 병합은 이렇게 나뉜 PDF들을 원하는 순서대로 이어 붙여 하나의 파일로 만들어 줍니다. 파일을 업로드한 뒤 드래그하거나 위아래로 옮겨 순서를 정하고, 필요 없는 파일은 목록에서 빼면 됩니다. 목록에 보이는 위에서 아래 순서 그대로 합쳐집니다.",
+              "PDF 병합·분할·회전·페이지 삭제는 서로 다른 결과물을 만들지만, '업로드한 PDF를 브라우저 안에서 재구성해 새 PDF로 내려받는다'는 처리 방식은 같습니다. 계약서, 신분증 스캔본, 내부 보고서처럼 PDF에는 민감한 문서가 자주 담기는데, 이 네 가지 작업 모두 파일을 어떤 서버로도 전송하거나 저장하지 않고 기기 안에서만 처리합니다.",
+              "네 작업을 각각 다른 페이지로 흩어 두는 대신 탭으로 묶어, 예를 들어 스캔한 페이지 방향을 회전으로 바로잡은 뒤 필요 없는 페이지를 삭제하는 식의 연속 작업도 다시 도구를 찾아 이동할 필요 없이 처리할 수 있습니다.",
             ],
           },
           {
-            heading: "합치기 전에 순서를 확인하세요",
+            heading: "PDF 병합: 여러 파일을 순서대로 하나로",
             body: [
-              "병합에서 가장 흔한 실수는 순서입니다. 계약서 뒤에 부록이 와야 하는데 뒤바뀌거나, 표지가 중간에 끼는 식이죠. 이 도구는 병합을 실행하기 전에 파일 목록을 눈으로 보며 순서를 조정할 수 있어, 합친 뒤 다시 만드는 수고를 덜어 줍니다.",
-              "여러 파일을 한 번에 올린 경우 이름순으로 정렬해 두면 순서를 맞추기 쉽습니다. 스캔 파일이라면 파일명에 01, 02처럼 번호를 붙여 두는 습관이 병합 순서를 자동으로 정리해 줍니다.",
+              "여러 PDF 파일을 업로드하고 드래그하거나 위아래로 이동해 순서를 정하면, 목록의 위에서 아래 순서 그대로 이어 붙인 하나의 PDF를 만듭니다. 파일 1개당 100MB, 병합 총합 200MB, 최대 30개 파일까지 지원합니다.",
+              "열기 암호가 걸린 PDF는 병합할 수 없어 먼저 암호를 해제해야 하며, 북마크(목차)·양식 필드·전자서명은 병합 과정에서 유지되지 않을 수 있습니다. 페이지 순서만 이어 붙일 뿐 페이지 크기 통일이나 압축 같은 후처리는 하지 않습니다.",
             ],
           },
           {
-            heading: "문서를 업로드하지 않고 처리합니다",
+            heading: "PDF 분할: 페이지별 또는 범위별로",
             body: [
-              "계약서, 명세서, 신분증 스캔본처럼 PDF에는 민감한 문서가 담기는 경우가 많습니다. 파일을 서버에 올려 처리하는 온라인 도구를 쓰면, 그 문서가 외부 서버에 잠시라도 머물게 됩니다. Kitfolio의 PDF 병합은 모든 처리를 브라우저 안에서 수행하며, 업로드한 파일을 어떤 서버로도 전송하거나 저장하지 않습니다.",
-              "파일은 여러분의 기기를 벗어나지 않고, 병합이 끝난 결과물은 그 자리에서 바로 내려받습니다. 민감한 문서를 다룰 때도 안심할 수 있고, 인터넷이 불안정한 환경에서도 동작합니다.",
+              "PDF 1개를 업로드해 모든 페이지를 한 장씩 나누거나, 1-3, 4-7처럼 범위를 지정해 구간별로 나눕니다. PDF 1개당 최대 300페이지, 결과 최대 300개 파일까지 지원하며, 결과가 2개 이상이면 ZIP 파일로 한 번에 다운로드됩니다.",
+              "계약서에서 서명 페이지만 따로 저장하거나, 긴 보고서를 장별로 쪼갤 때 씁니다. 범위는 쉼표와 하이픈으로 입력하며 페이지는 1부터 시작하고 총 페이지 수를 넘을 수 없습니다.",
+            ],
+          },
+          {
+            heading: "PDF 회전: 90도 단위로 방향 바로잡기",
+            body: [
+              "PDF 전체 또는 썸네일에서 선택한 페이지만 왼쪽 90도·오른쪽 90도·180도로 회전합니다. 페이지 콘텐츠를 이미지로 다시 그리지 않고 회전 속성만 바꾸므로 원본 화질이 그대로 유지됩니다.",
+              "가로로 스캔되었거나 방향이 뒤집힌 페이지를 바로잡을 때 씁니다. 90도 단위 회전만 지원하며, 스캔이 살짝 기울어진 경우의 미세 각도 보정(기울기 보정)은 지원하지 않습니다.",
+            ],
+          },
+          {
+            heading: "PDF 페이지 삭제: 필요 없는 페이지만 제거",
+            body: [
+              "썸네일에서 삭제할 페이지를 선택(개별 클릭·전체 선택·선택 반전·범위 입력)하면 남는 페이지 수가 바로 표시되고, 선택한 페이지를 뺀 나머지로 새 PDF를 만듭니다. 최소 1페이지는 남아야 실행할 수 있습니다.",
+              "빈 페이지, 표지, 중복 스캔 페이지처럼 최종본에 필요 없는 페이지를 골라낼 때 씁니다. 실행 취소와 전체 원상 복구를 지원해 삭제 전 선택을 다시 조정할 수 있습니다.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "견적서·계약서·부속서류를 한 파일로",
-            input: "PDF 3개 업로드 후 드래그로 순서 정렬",
+            input: "PDF 3개 업로드 후 드래그로 순서 정렬 (병합 탭)",
             result: "지정한 순서대로 이어 붙인 단일 PDF",
             note: "업로드 순서가 아니라 목록에서 지정한 순서로 합쳐집니다. 파일명이 1, 2, 10처럼 되어 있으면 이름순 정렬이 의도와 다를 수 있으니 병합 전 순서를 눈으로 확인하세요.",
           },
           {
             title: "스캔한 서류 여러 장을 하나로 제출",
-            input: "페이지별로 나뉘어 스캔된 PDF 여러 개",
+            input: "페이지별로 나뉘어 스캔된 PDF 여러 개 (병합 탭)",
             result: "한 번에 제출할 수 있는 단일 PDF",
             note: "온라인 제출 서식이 파일 1개만 허용할 때 쓰는 방식입니다. 파일이 서버로 올라가지 않으므로 신분증·계약서처럼 민감한 서류도 그대로 다룰 수 있습니다.",
           },
           {
-            title: "페이지 크기가 다른 문서 합치기",
-            input: "A4 문서와 가로 방향 슬라이드 PDF",
-            result: "각 페이지가 원래 크기와 방향을 유지한 채로 이어짐",
-            note: "PDF는 페이지마다 다른 크기를 가질 수 있어 강제로 통일되지 않습니다. 인쇄할 계획이라면 병합 전에 크기를 맞추는 편이 낫습니다.",
+            title: "긴 계약서에서 서명 페이지만 따로 저장",
+            input: "12페이지 PDF에서 범위 10-12 지정 (분할 탭)",
+            result: "10~12페이지만 담은 별도 PDF",
+            note: "전체를 다시 스캔하거나 인쇄할 필요 없이, 필요한 구간만 빠르게 추려 서명본만 따로 보관하거나 공유할 때 씁니다.",
+          },
+          {
+            title: "가로로 스캔된 페이지 방향 바로잡기",
+            input: "5페이지 중 2, 4페이지가 옆으로 누워 스캔됨 (회전 탭)",
+            result: "2, 4페이지만 오른쪽 90도 회전, 나머지는 그대로",
+            note: "선택한 페이지에만 회전이 적용되므로 문서 전체를 다시 정렬할 필요가 없습니다.",
+          },
+          {
+            title: "불필요한 표지·빈 페이지 제거",
+            input: "10페이지 중 표지 1페이지·빈 페이지 1페이지 선택 (페이지 삭제 탭)",
+            result: "8페이지로 줄어든 새 PDF",
+            note: "스캔 과정에서 섞여 들어간 빈 페이지나 사내용 표지처럼 최종 배포본에는 필요 없는 페이지를 정리할 때 씁니다.",
           },
         ],
         limitations: [
-          "파일 1개당 100MB, 병합 총합 200MB, 최대 30개 파일까지 처리합니다. 브라우저 메모리 안에서 처리하므로 저사양 기기에서는 이 한도보다 낮은 용량에서도 실패할 수 있습니다.",
-          "열기 암호가 걸린 PDF는 병합할 수 없습니다. 암호를 먼저 해제한 뒤 업로드하세요.",
-          "북마크(목차)·양식 필드·전자서명은 병합 과정에서 유지되지 않을 수 있습니다. 전자서명은 문서가 변경되면 무효가 되는 것이 정상 동작입니다.",
-          "페이지 순서만 이어 붙입니다. 페이지 크기 통일, 여백 조정, 압축 같은 후처리는 하지 않습니다.",
+          "병합은 파일 1개당 100MB, 총합 200MB, 최대 30개까지 지원합니다. 분할·회전·페이지 삭제는 PDF 1개당 최대 300페이지까지 지원합니다. 브라우저 메모리 안에서 처리하므로 저사양 기기에서는 이 한도보다 낮은 용량에서도 실패할 수 있습니다.",
+          "열기 암호가 걸린 PDF는 네 작업 모두 처리할 수 없습니다. 암호를 먼저 해제한 뒤 업로드하세요.",
+          "병합 과정에서 북마크(목차)·양식 필드·전자서명은 유지되지 않을 수 있습니다. 전자서명은 문서가 변경되면 무효가 되는 것이 정상 동작입니다.",
+          "회전은 90도 단위(왼쪽·오른쪽 90도, 180도)만 지원하며, 스캔이 살짝 기울어진 경우의 미세 각도 보정은 제공하지 않습니다.",
+          "페이지 삭제는 최소 1페이지가 남아야 실행됩니다. 네 작업 모두 페이지 내용 자체를 편집하거나 텍스트를 수정하는 기능은 제공하지 않습니다.",
         ],
       },
       en: {
-        card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
+        card: "Merge, split, rotate, or delete PDF pages by tab. Everything runs in your browser.",
         description:
-          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+          "Switch tabs to merge, split, rotate, or delete pages from a PDF, all on one page. Combine several PDFs in your order, split by page or range, rotate in 90-degree steps, or remove pages you don't need. Every file is processed entirely in your browser and never uploaded to a server.",
         howItWorks: [
-          "Upload multiple PDF files.",
-          "Set the merge order by dragging or moving files up and down.",
-          "Press Merge PDF and download the combined file.",
+          "Pick a task from the tabs (merge, split, rotate, delete pages)",
+          "Upload your PDF file(s)",
+          "Review the result and download the new PDF",
         ],
         aeo: {
-          what: "Merge PDF is a browser tool that combines several PDF files into a single PDF in the order you choose.",
-          who: "It is for office workers, PMs, and small business owners who need to combine split reports, contracts, or scans into one file.",
-          how: "It copies the pages of each uploaded PDF in order into a new PDF, with the order controlled by drag, move, and remove actions.",
-          why: "It combines multiple PDFs into one directly in the browser, with no install, no login, and no file upload to a server.",
+          what: "PDF Tools is a unified browser tool that handles four PDF tasks on one page: merge, split, rotate, and delete pages.",
+          who: "It is for office workers, PMs, small business owners, and designers who need to clean up reports, contracts, or scans.",
+          how: "Pick a task from the tabs, upload your PDF, and it's processed in your browser and downloads as a new PDF. Each task takes a different number of files and works differently.",
+          why: "No install, no login, and no file upload to a server, so even sensitive documents can be handled safely, right in your browser.",
         },
         guide: [
           {
-            heading: "When you need to merge PDFs",
+            heading: "Why four PDF tasks live on one page",
             body: [
-              "Work documents tend to arrive in pieces. Slides each person built need to be joined into one deck; a contract scanned a page at a time needs to become a single file; a quote, an invoice, and receipts have to be submitted together. When files stay separate, the recipient has to open them in the right order, and email attachments get unwieldy.",
-              "Merge PDF stitches these separate PDFs together into one file in the order you choose. Upload the files, set the order by dragging or moving them up and down, and drop any you don't need from the list. They combine top to bottom, exactly as the list shows.",
+              "Merge, split, rotate, and delete pages produce different results, but they share the same processing model: reconstruct the uploaded PDF inside the browser and download a new one. PDFs often carry sensitive material: contracts, ID scans, internal reports: and all four tasks process files on-device, never transmitting or storing them on a server.",
+              "Grouping the four under tabs instead of scattering them across separate pages means a sequence like rotating a scanned page upright and then deleting pages you don't need can happen without hunting down a different tool in between.",
             ],
           },
           {
-            heading: "Check the order before you merge",
+            heading: "Merge: combine several files in your order",
             body: [
-              "The most common merging mistake is order: an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
-              "If you uploaded many files at once, sorting them by name makes the order easy to set. For scans, getting into the habit of numbering filenames (01, 02, and so on) lines up the merge order automatically.",
+              "Upload several PDF files and set the order by dragging or moving them up and down; they combine top to bottom exactly as the list shows. Limits are 100MB per file, 200MB combined, and up to 30 files.",
+              "Password-protected PDFs cannot be merged, so remove the open password first. Bookmarks, form fields, and digital signatures may not survive the merge. It concatenates pages only, with no page-size normalization or compression.",
             ],
           },
           {
-            heading: "Nothing gets uploaded",
+            heading: "Split: by every page or by range",
             body: [
-              "PDFs often hold sensitive material: contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
-              "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
+              "Upload one PDF and either split it into every single page or into custom ranges like 1-3, 4-7. Limits are 300 pages per PDF and 300 result files; when there is more than one result, they download together as a ZIP.",
+              "Use it to pull out just the signature page of a contract, or to break a long report into chapters. Ranges use commas and hyphens; pages start at 1 and cannot exceed the total page count.",
+            ],
+          },
+          {
+            heading: "Rotate: fix orientation in 90-degree steps",
+            body: [
+              "Rotate an entire PDF or only the pages you select from thumbnails, left 90, right 90, or 180 degrees. Only the rotation attribute changes, not a re-render of the content, so original quality is preserved.",
+              "Use it to fix sideways scans or upside-down pages. It supports 90-degree steps only; it does not correct a slight skew from an imperfectly aligned scan.",
+            ],
+          },
+          {
+            heading: "Delete pages: remove only what you don't need",
+            body: [
+              "Select pages to remove from thumbnails (individually, select all, invert, or by range), see the remaining page count update instantly, and build a new PDF from what's left. At least one page must remain to run it.",
+              "Use it to clean up blank pages, cover sheets, or duplicate scans before sharing a final version. Undo and Reset all let you adjust the selection before deleting.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "Combining a quote, a contract and appendices",
-            input: "Upload three PDFs, then drag to set the order",
+            input: "Upload three PDFs, then drag to set the order (Merge tab)",
             result: "A single PDF joined in the order you specified",
             note: "Files merge in list order, not upload order. Names like 1, 2 and 10 sort alphabetically in ways you may not expect, so check the order visually before merging.",
           },
           {
             title: "Submitting several scanned pages as one file",
-            input: "Multiple PDFs scanned one page at a time",
+            input: "Multiple PDFs scanned one page at a time (Merge tab)",
             result: "A single PDF ready for submission",
             note: "This is what you need when an online form accepts only one attachment. Your files are never uploaded to a server, so ID documents and contracts can be handled as-is.",
           },
           {
-            title: "Merging documents with different page sizes",
-            input: "An A4 document and a landscape slide deck",
-            result: "Each page keeps its original size and orientation in the combined file",
-            note: "PDF allows per-page dimensions, so nothing is forced to match. If the result is going to print, normalize the sizes before merging.",
+            title: "Saving just the signature page of a long contract",
+            input: "A 12-page PDF with range 10-12 (Split tab)",
+            result: "A separate PDF containing only pages 10-12",
+            note: "No need to rescan or reprint the whole document: pull out just the section you need to file or share the signed page on its own.",
+          },
+          {
+            title: "Fixing pages that were scanned sideways",
+            input: "Pages 2 and 4 of a 5-page PDF came out sideways (Rotate tab)",
+            result: "Pages 2 and 4 rotated 90° right; the rest untouched",
+            note: "Rotation only applies to the pages you select, so you don't have to realign the whole document.",
+          },
+          {
+            title: "Removing an unneeded cover sheet and a blank page",
+            input: "A cover sheet and one blank page selected out of 10 (Delete Pages tab)",
+            result: "A new 8-page PDF",
+            note: "Use it to clean up blank pages that snuck in during scanning, or internal cover sheets that shouldn't be in the final distributed version.",
           },
         ],
         limitations: [
-          "Limits are 100MB per file, 200MB combined, and 30 files. Processing happens in browser memory, so lower-spec devices can fail below those numbers.",
-          "Password-protected PDFs cannot be merged. Remove the open password before uploading.",
-          "Bookmarks, form fields and digital signatures may not survive the merge. A digital signature becoming invalid once the document changes is expected behavior, not a bug.",
-          "It concatenates pages only. There is no page-size normalization, margin adjustment or compression.",
+          "Merge supports up to 100MB per file, 200MB combined, and 30 files. Split, rotate, and delete pages support up to 300 pages per PDF. Processing happens in browser memory, so lower-spec devices can fail below those numbers.",
+          "Password-protected PDFs cannot be processed by any of the four tasks. Remove the password before uploading.",
+          "Bookmarks, form fields, and digital signatures may not survive a merge. A digital signature becoming invalid once the document changes is expected behavior, not a bug.",
+          "Rotation supports 90-degree steps only (left, right, 180); it does not correct a slight skew from an imperfectly aligned scan.",
+          "Deleting pages requires at least one page to remain. None of the four tasks edit page content or text directly.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "업로드한 PDF 파일이 서버로 전송되나요?",
+          question: "네 가지 작업을 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "아니요. 병합은 사용자의 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 상단 탭에서 병합·분할·회전·페이지 삭제 중 원하는 작업을 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 작업을 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /pdf-tools 하나입니다.",
         },
         {
-          question: "병합 순서를 어떻게 바꾸나요?",
+          question: "업로드한 PDF가 서버로 전송되나요?",
           answer:
-            "파일 카드를 드래그하거나 위·아래 이동 버튼으로 순서를 바꿀 수 있습니다. 목록의 위에서 아래 순서대로 병합됩니다.",
+            "아니요. 병합·분할·회전·페이지 삭제 모두 브라우저 안에서만 처리되며, 업로드한 파일은 어떤 서버로도 전송되거나 저장되지 않습니다.",
         },
         {
-          question: "몇 개의 파일까지 합칠 수 있나요?",
+          question: "탭을 바꾸면 업로드했던 파일이 사라지나요?",
           answer:
-            "최대 30개 파일, 총합 200MB, 파일당 100MB까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
+            "네. 각 작업은 파일 상태를 독립적으로 관리하므로, 예를 들어 회전 탭에서 업로드한 파일은 분할 탭으로 넘어가면 유지되지 않습니다. 작업을 마친 뒤 다음 작업으로 넘어가려면 결과를 다운로드한 파일을 다시 업로드하세요.",
         },
         {
-          question: "암호가 걸린 PDF도 합칠 수 있나요?",
+          question: "암호가 걸린 PDF도 처리할 수 있나요?",
           answer:
-            "아니요. 암호로 보호된 PDF는 처리할 수 없습니다. 암호를 해제한 뒤 다시 시도해 주세요.",
+            "아니요. 네 작업 모두 열기 암호가 걸린 PDF는 처리할 수 없습니다. 암호를 해제한 뒤 다시 시도해 주세요.",
         },
         {
-          question: "원본 파일이 바뀌나요?",
-          answer:
-            "아니요. 원본은 변경되지 않으며 병합 결과는 새 PDF 파일로 다운로드됩니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Are my uploaded PDF files sent to a server?",
-          answer:
-            "No. Merging happens entirely in your browser. Files are never uploaded or stored on a server.",
-        },
-        {
-          question: "How do I change the merge order?",
-          answer:
-            "Drag a file card or use the up and down buttons. Files are merged from top to bottom of the list.",
-        },
-        {
-          question: "How many files can I combine?",
-          answer:
-            "Up to 30 files, 200MB in total, and 100MB per file. Depending on browser memory, it may fail even below these limits.",
-        },
-        {
-          question: "Can I merge password-protected PDFs?",
-          answer:
-            "No. Encrypted PDFs cannot be processed. Remove the password first and try again.",
-        },
-        {
-          question: "Does merging change my original files?",
-          answer:
-            "No. Originals are left untouched; the merged result downloads as a new PDF file.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 병합", subtitle: "여러 PDF를 원하는 순서로 하나로 합치기" },
-      en: { title: "Merge PDF", subtitle: "Combine several PDFs into one, in your order" },
-    },
-  },
-
-  {
-    slug: "pdf-split",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⊟",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 분할", en: "Split PDF" },
-    relatedTools: ["pdf-merge", "pdf-page-delete", "pdf-rotate"],
-    seo: {
-      ko: {
-        title: "PDF 분할 | 페이지·범위별로 PDF 나누기",
-        description:
-          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
-        keywords: [
-          "PDF 분할",
-          "PDF 나누기",
-          "PDF 페이지 분할",
-          "PDF 범위 분할",
-          "PDF 쪼개기",
-          "온라인 PDF 분할",
-        ],
-      },
-      en: {
-        title: "Split PDF | Split by Page or Page Range",
-        description:
-          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
-        keywords: [
-          "split PDF",
-          "split PDF pages",
-          "split PDF by range",
-          "separate PDF pages",
-          "extract PDF pages",
-          "PDF splitter free",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다.",
-        description:
-          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "페이지별 분할 또는 범위(예: 1-3, 4-7)를 선택합니다.",
-          "PDF 분할을 눌러 결과 파일 또는 ZIP을 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 분할은 하나의 PDF를 페이지별 또는 지정한 범위별로 여러 개의 PDF로 나누는 브라우저 도구입니다.",
-          who: "긴 PDF에서 특정 구간만 따로 저장하거나 페이지를 개별 파일로 분리해야 하는 사용자를 위한 도구입니다.",
-          how: "선택한 페이지 또는 범위를 각각 새 PDF로 추출하며, 결과가 2개 이상이면 ZIP으로 묶어 제공합니다.",
-          why: "설치나 업로드 없이 브라우저에서 바로 원하는 페이지 구간을 별도 PDF로 나눌 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Split a PDF into every page or into custom page ranges as new PDFs.",
-        description:
-          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Choose split-every-page or enter ranges like 1-3, 4-7.",
-          "Press Split PDF and download the files or a ZIP.",
-        ],
-        aeo: {
-          what: "Split PDF is a browser tool that divides one PDF into several PDFs by page or by page range.",
-          who: "It is for people who need to save specific sections of a long PDF or separate its pages into individual files.",
-          how: "It extracts each selected page or range into its own new PDF, bundling the results into a ZIP when there is more than one.",
-          why: "It splits a PDF into the sections you want right in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 분할은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "페이지 범위는 어떻게 입력하나요?",
-          answer:
-            "쉼표와 하이픈을 사용해 1-3, 4-7, 8 처럼 입력합니다. 페이지는 1부터 시작하며 총 페이지 수를 넘을 수 없습니다.",
-        },
-        {
-          question: "결과 파일은 어떻게 받나요?",
-          answer:
-            "결과가 1개면 PDF로 바로 다운로드되고, 2개 이상이면 kitfolio-split-pdf.zip 파일로 묶여 다운로드됩니다.",
-        },
-        {
-          question: "페이지별 분할은 무엇인가요?",
-          answer:
-            "모든 페이지를 각각 한 페이지짜리 PDF로 만드는 방식입니다. 예를 들어 10페이지 PDF는 10개의 PDF로 나뉩니다.",
-        },
-        {
-          question: "몇 페이지까지 분할할 수 있나요?",
-          answer:
-            "PDF 1개당 최대 300페이지, 결과 최대 300개 파일까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Is my PDF sent to a server?",
-          answer:
-            "No. Splitting happens entirely in your browser. The file is never uploaded or stored on a server.",
-        },
-        {
-          question: "How do I enter page ranges?",
-          answer:
-            "Use commas and hyphens, for example 1-3, 4-7, 8. Pages start at 1 and cannot exceed the total page count.",
-        },
-        {
-          question: "How do I receive the result files?",
-          answer:
-            "A single result downloads directly as a PDF. Multiple results are bundled into kitfolio-split-pdf.zip.",
-        },
-        {
-          question: "What does splitting every page do?",
-          answer:
-            "It turns each page into its own single-page PDF. A 10-page PDF, for example, becomes 10 separate PDFs.",
-        },
-        {
-          question: "How many pages can I split?",
-          answer:
-            "Up to 300 pages per PDF and up to 300 result files. Depending on browser memory, it may fail even below these limits.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 분할", subtitle: "PDF를 페이지·범위별로 나누기" },
-      en: { title: "Split PDF", subtitle: "Split a PDF by page or by page range" },
-    },
-  },
-
-  {
-    slug: "pdf-rotate",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⟳",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 회전", en: "Rotate PDF" },
-    relatedTools: ["pdf-merge", "pdf-split", "pdf-page-delete"],
-    seo: {
-      ko: {
-        title: "PDF 회전 | 전체·선택 페이지 90도 회전",
-        description:
-          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
-        keywords: [
-          "PDF 회전",
-          "PDF 페이지 회전",
-          "PDF 돌리기",
-          "PDF 90도 회전",
-          "PDF 방향 변경",
-          "온라인 PDF 회전",
-        ],
-      },
-      en: {
-        title: "Rotate PDF | Rotate All or Selected Pages",
-        description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
-        keywords: [
-          "rotate PDF",
-          "rotate PDF pages",
-          "turn PDF pages",
-          "rotate PDF 90 degrees",
-          "change PDF orientation",
-          "rotate PDF online",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다.",
-        description:
-          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "회전할 페이지를 선택하거나 전체를 대상으로 방향을 정합니다.",
-          "회전된 PDF 저장을 눌러 결과를 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 회전은 PDF 전체 또는 선택한 페이지를 90도 단위로 회전하는 브라우저 도구입니다.",
-          who: "가로로 스캔되었거나 방향이 뒤집힌 페이지를 바로잡아야 하는 사용자를 위한 도구입니다.",
-          how: "페이지 콘텐츠를 이미지로 변환하지 않고 PDF 페이지의 회전 속성만 변경해 원본 품질을 유지합니다.",
-          why: "설치나 업로드 없이 브라우저에서 원하는 페이지의 방향만 손쉽게 바로잡을 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Rotate an entire PDF or only selected pages by 90 degrees and save a new PDF.",
-        description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Select the pages to rotate, or target all pages, and pick a direction.",
-          "Press Save rotated PDF and download the result.",
-        ],
-        aeo: {
-          what: "Rotate PDF is a browser tool that rotates an entire PDF or selected pages in 90-degree steps.",
-          who: "It is for people who need to fix sideways scans or upside-down pages in a PDF.",
-          how: "It changes only the rotation attribute of each PDF page instead of converting content to images, so original quality is preserved.",
-          why: "It fixes the orientation of the pages you choose directly in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 회전은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "회전하면 화질이 떨어지나요?",
+          question: "회전은 화질에 영향을 주나요?",
           answer:
             "아니요. 페이지를 이미지로 다시 그리지 않고 회전 속성만 바꾸기 때문에 원본 품질이 그대로 유지됩니다.",
         },
         {
-          question: "일부 페이지만 회전할 수 있나요?",
+          question: "분할 결과는 어떻게 받나요?",
           answer:
-            "네. 썸네일에서 페이지를 클릭해 선택하거나 범위로 선택한 뒤 회전할 수 있습니다. 선택이 없으면 전체 페이지에 적용됩니다.",
+            "결과가 1개면 PDF로 바로 다운로드되고, 2개 이상이면 ZIP 파일로 묶여 다운로드됩니다.",
         },
         {
-          question: "임의 각도로 회전할 수 있나요?",
+          question: "페이지 삭제에서 모든 페이지를 삭제할 수 있나요?",
           answer:
-            "아니요. 이 도구는 90도 단위(왼쪽 90도·오른쪽 90도·180도) 회전만 지원합니다. 기울기 보정은 제공하지 않습니다.",
-        },
-        {
-          question: "회전을 되돌릴 수 있나요?",
-          answer:
-            "네. 선택 원상 복구 또는 전체 원상 복구로 저장 전에 회전 상태를 초기화할 수 있으며, 원본 파일은 변경되지 않습니다.",
+            "아니요. 최소 1페이지는 남아야 합니다. 남는 페이지가 없으면 실행이 차단됩니다.",
         },
       ],
       en: [
         {
-          question: "Is my PDF sent to a server?",
+          question: "Do I need to visit a different page for each of the four tasks?",
           answer:
-            "No. Rotation happens entirely in your browser. The file is never uploaded or stored on a server.",
+            "No. Click Merge, Split, Rotate, or Delete Pages in the tabs above and it switches instantly on the same page. The URL reflects the current task via a ?mode= query, but the canonical URL used for search indexing is always the single /pdf-tools.",
+        },
+        {
+          question: "Are my uploaded PDFs sent to a server?",
+          answer:
+            "No. Merge, split, rotate, and delete pages all run entirely in your browser. Uploaded files are never transmitted or stored on a server.",
+        },
+        {
+          question: "Does switching tabs clear the file I uploaded?",
+          answer:
+            "Yes. Each task manages its own file state independently, so a file uploaded on the Rotate tab, for example, is not carried over to the Split tab. To chain tasks, download the result of one and upload it again for the next.",
+        },
+        {
+          question: "Can any of these handle password-protected PDFs?",
+          answer:
+            "No. None of the four tasks can process a PDF with an open password. Remove the password and try again.",
         },
         {
           question: "Does rotating reduce quality?",
@@ -5634,160 +5435,20 @@ export const TOOLS: Tool[] = [
             "No. Pages are not re-rendered as images; only the rotation attribute changes, so original quality is preserved.",
         },
         {
-          question: "Can I rotate only some pages?",
+          question: "How do I receive the split result files?",
           answer:
-            "Yes. Click page thumbnails to select them, or select by range, then rotate. With no selection, rotation applies to all pages.",
-        },
-        {
-          question: "Can I rotate by an arbitrary angle?",
-          answer:
-            "No. This tool rotates in 90-degree steps only (left 90, right 90, 180). It does not correct skew.",
-        },
-        {
-          question: "Can I undo a rotation?",
-          answer:
-            "Yes. Use Reset selected or Reset all to clear rotation before saving. The original file is never changed.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 회전", subtitle: "전체 또는 선택 페이지를 90도 단위로 회전" },
-      en: { title: "Rotate PDF", subtitle: "Rotate all or selected pages in 90° steps" },
-    },
-  },
-
-  {
-    slug: "pdf-page-delete",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⌦",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 페이지 삭제", en: "Delete PDF Pages" },
-    relatedTools: ["pdf-split", "pdf-merge", "pdf-rotate"],
-    seo: {
-      ko: {
-        title: "PDF 페이지 삭제 | 필요 없는 페이지 제거",
-        description:
-          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
-        keywords: [
-          "PDF 페이지 삭제",
-          "PDF 페이지 제거",
-          "PDF 특정 페이지 삭제",
-          "PDF 페이지 지우기",
-          "PDF 페이지 빼기",
-          "온라인 PDF 페이지 삭제",
-        ],
-      },
-      en: {
-        title: "Delete PDF Pages | Remove Unwanted Pages",
-        description:
-          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
-        keywords: [
-          "delete PDF pages",
-          "remove PDF pages",
-          "delete page from PDF",
-          "remove pages from PDF",
-          "PDF page remover",
-          "delete PDF pages online",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다.",
-        description:
-          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "썸네일에서 삭제할 페이지를 선택합니다.",
-          "선택 페이지 삭제를 눌러 남은 페이지로 만든 PDF를 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 페이지 삭제는 PDF에서 선택한 페이지를 제거해 나머지 페이지로 새 PDF를 만드는 브라우저 도구입니다.",
-          who: "빈 페이지, 표지, 중복 페이지 등 불필요한 페이지를 빼고 문서를 정리해야 하는 사용자를 위한 도구입니다.",
-          how: "삭제로 표시한 페이지를 제외한 나머지 페이지를 복사해 새 PDF를 만들며, 최소 1페이지는 남아야 합니다.",
-          why: "설치나 업로드 없이 브라우저에서 원하지 않는 페이지만 제거해 깔끔한 PDF를 만들 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Pick the pages you do not need and build a new PDF without them.",
-        description:
-          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Select the pages to remove from the thumbnails.",
-          "Press Delete selected pages and download the trimmed PDF.",
-        ],
-        aeo: {
-          what: "Delete PDF Pages is a browser tool that removes selected pages from a PDF and builds a new PDF from the remaining pages.",
-          who: "It is for people who need to clean up a document by removing blank pages, cover sheets, or duplicates.",
-          how: "It copies every page except the ones marked for deletion into a new PDF, and at least one page must remain.",
-          why: "It removes only the pages you do not want, right in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 페이지 삭제는 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "원본 파일이 변경되나요?",
-          answer:
-            "아니요. 원본은 그대로 유지되며 선택한 페이지를 제외한 결과는 새 PDF 파일로 다운로드됩니다.",
-        },
-        {
-          question: "모든 페이지를 삭제할 수 있나요?",
-          answer:
-            "아니요. 최소 1페이지는 남아야 합니다. 남는 페이지가 없으면 실행이 차단됩니다.",
-        },
-        {
-          question: "삭제 선택을 되돌릴 수 있나요?",
-          answer:
-            "네. 실행 취소로 직전 선택을 되돌리거나 전체 원상 복구로 선택을 모두 초기화할 수 있습니다. 삭제 실행 전에는 확인 절차도 제공됩니다.",
-        },
-        {
-          question: "여러 페이지를 한 번에 선택할 수 있나요?",
-          answer:
-            "네. 썸네일을 개별 클릭하거나, 전체 선택·선택 반전·범위로 선택(예: 2, 5-7)을 사용해 여러 페이지를 한 번에 지정할 수 있습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Is my PDF sent to a server?",
-          answer:
-            "No. Page deletion happens entirely in your browser. The file is never uploaded or stored on a server.",
-        },
-        {
-          question: "Does this change my original file?",
-          answer:
-            "No. The original is kept intact; the result without the selected pages downloads as a new PDF file.",
+            "A single result downloads directly as a PDF. Multiple results are bundled into a ZIP file.",
         },
         {
           question: "Can I delete every page?",
           answer:
             "No. At least one page must remain. If no page would be left, the action is blocked.",
         },
-        {
-          question: "Can I undo a deletion selection?",
-          answer:
-            "Yes. Use Undo to revert the last change or Reset all to clear the selection. A confirmation step is shown before deleting.",
-        },
-        {
-          question: "Can I select multiple pages at once?",
-          answer:
-            "Yes. Click thumbnails individually, or use Select all, Invert selection, or select by range (e.g. 2, 5-7).",
-        },
       ],
     },
     og: {
-      ko: { title: "PDF 페이지 삭제", subtitle: "필요 없는 페이지를 제거한 새 PDF 만들기" },
-      en: { title: "Delete PDF Pages", subtitle: "Remove unwanted pages and save a new PDF" },
+      ko: { title: "PDF 도구", subtitle: "PDF 병합·분할·회전·페이지 삭제를 한 페이지에서" },
+      en: { title: "PDF Tools", subtitle: "Merge, split, rotate and delete PDF pages in one place" },
     },
   },
 ];

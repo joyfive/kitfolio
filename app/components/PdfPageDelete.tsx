@@ -1,10 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
-import PageHead from "./PageHead";
-import Faq from "./Faq";
-import RelatedTools from "./RelatedTools";
-import PdfToolTabs from "./PdfToolTabs";
 import PdfDropzone from "./PdfDropzone";
 import PdfFileSummary from "./PdfFileSummary";
 import PdfThumbnailGrid from "./PdfThumbnailGrid";
@@ -232,9 +228,6 @@ export default function PdfPageDelete() {
 
   return (
     <>
-      <PageHead slug="pdf-page-delete" />
-      <PdfToolTabs active="page-delete" />
-
       {!pdf ? (
         <div className="pdf-work pdf-work-empty">
           <PdfDropzone onFiles={loadFile} title={t("d.drop")} hint={t("d.dropHint")} />
@@ -366,9 +359,6 @@ export default function PdfPageDelete() {
           </div>
         </div>
       )}
-
-      <Faq slug="pdf-page-delete" />
-      <RelatedTools slug="pdf-page-delete" />
     </>
   );
 }

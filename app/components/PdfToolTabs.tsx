@@ -1,12 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { localizedHref } from "../lib/content";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 
-// PDF 4종 도구 공통 상단 탭. 탭은 실제 URL 로 이동하며, 같은 언어의
-// 상대 도구 경로를 유지한다 (KO=루트, EN=/en). 모바일은 가로 스크롤.
+// PDF 4종 도구 공통 상단 탭. pdf-tools 한 페이지 안에서 ?mode= 쿼리로 작업을
+// 전환한다 (다른 통합 도구와 동일 패턴). 모바일은 가로 스크롤.
 const DICT: Dict = {
   ko: {
     merge: "PDF 병합",
@@ -22,19 +20,19 @@ const DICT: Dict = {
   },
 };
 
-type PdfTab = "merge" | "split" | "rotate" | "page-delete";
+export type PdfTab = "merge" | "split" | "rotate" | "page-delete";
 
-const TABS: { key: PdfTab; slug: string }[] = [
-  { key: "merge", slug: "/pdf-merge" },
-  { key: "split", slug: "/pdf-split" },
-  { key: "rotate", slug: "/pdf-rotate" },
-  { key: "page-delete", slug: "/pdf-page-delete" },
-];
+const TABS: PdfTab[] = ["merge", "split", "rotate", "page-delete"];
 
-export default function PdfToolTabs({ active }: { active: PdfTab }) {
-  const { lang } = useLang();
+export default function PdfToolTabs({
+  active,
+  onChange,
+}: {
+  active: PdfTab;
+  onChange: (tab: PdfTab) => void;
+}) {
   const t = useT(DICT);
-  const activeRef = useRef<HTMLSpanElement>(null);
+  const activeRef = useRef<HTMLButtonElement>(null);
 
   // 모바일에서 현재 탭이 보이도록 스크롤 위치 조정
   useEffect(() => {
@@ -43,30 +41,22 @@ export default function PdfToolTabs({ active }: { active: PdfTab }) {
       block: "nearest",
       behavior: "auto",
     });
-  }, []);
+  }, [active]);
 
   return (
     <nav className="pdf-tabs" aria-label="PDF tools">
-      {TABS.map((tb) =>
-        tb.key === active ? (
-          <span
-            key={tb.key}
-            ref={activeRef}
-            className="pdf-tab is-active"
-            aria-current="page"
-          >
-            {t(tb.key)}
-          </span>
-        ) : (
-          <Link
-            key={tb.key}
-            className="pdf-tab"
-            href={localizedHref(lang, tb.slug)}
-          >
-            {t(tb.key)}
-          </Link>
-        ),
-      )}
+      {TABS.map((tab) => (
+        <button
+          key={tab}
+          type="button"
+          ref={tab === active ? activeRef : undefined}
+          className={`pdf-tab${tab === active ? " is-active" : ""}`}
+          aria-current={tab === active ? "page" : undefined}
+          onClick={() => onChange(tab)}
+        >
+          {t(tab)}
+        </button>
+      ))}
     </nav>
   );
 }

@@ -2,8 +2,8 @@ import { OG_SIZE, toolOgImage } from "../../lib/og";
 
 export const size = OG_SIZE;
 export const contentType = "image/png";
-export const alt = "Split PDF | Kitfolio";
+export const alt = "PDF Tools | Kitfolio";
 
 export default function Image() {
-  return toolOgImage("pdf-split", "en");
+  return toolOgImage("pdf-tools", "en");
 }
