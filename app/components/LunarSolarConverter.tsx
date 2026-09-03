@@ -411,7 +411,8 @@ export default function LunarSolarConverter() {
                   <div className="lc-meta-row">
                     <span className="lc-meta-label">{t("lc.ganzhi")}</span>
                     <span className="lc-meta-value num">
-                      {translateGanzhi(result.ganzhiYear, lang)}년
+                      {translateGanzhi(result.ganzhiYear, lang)}
+                      {lang === "ko" && "년"}
                       <span className="lc-meta-chinese"> ({result.ganzhiYear})</span>
                     </span>
                   </div>
