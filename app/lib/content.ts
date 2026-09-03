@@ -120,9 +120,12 @@ export type Tool = {
    *  허브 목록·검색·관련 도구 노출은 전부 이 값을 기준으로 한다. */
   ready: boolean;
   /** 검색 색인: 독립적인 검색 랜딩 페이지로 제공할 콘텐츠 품질이 확보됐는가.
-   *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출되며,
-   *  sitemap 제외 + robots noindex,follow 만 적용된다.
-   *  true 로 올리려면 validateIndexableTools() 의 품질 조건을 통과해야 한다. */
+   *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출된다.
+   *  2026-09부터 robots noindex는 전면 폐기(URL 통합 작업지시서 결정 G)했으므로
+   *  false 라도 검색엔진 색인 자체는 막지 않는다: 대신 sitemap·허브 ItemList
+   *  JSON-LD에서 빠지고, AdUnit 광고 가드(isToolIndexable)가 광고를 렌더링하지
+   *  않는 안전장치로만 쓰인다. true 로 올리려면 validateIndexableTools() 의
+   *  품질 조건을 통과해야 한다. */
   indexable: boolean;
   /** 외부 기준 데이터(요율·세법·플랫폼 정책)에 의존하는 도구의 최근 검증일 */
   verifiedAt?: string;
@@ -6079,10 +6082,10 @@ export function buildToolMetadata(slug: string, lang: Lang): Metadata {
     title: s.title!,
     description: s.description!,
     keywords: s.keywords,
-    // 기능 공개(ready)와 검색 색인(indexable)은 별개다.
-    // indexable=false 도구는 페이지·기능은 그대로 두고 색인만 막는다.
-    // follow 는 유지: 관련 도구/허브로 이어지는 링크 가치는 그대로 흐르게 한다.
-    robots: t.indexable ? undefined : { index: false, follow: true },
+    // 2026-09: noindex 정책 전면 폐기, 전 페이지 색인 허용 (URL 통합 작업지시서 결정 G).
+    // indexable 필드 자체는 남겨둔다: sitemap 포함 여부·허브 ItemList JSON-LD·
+    // AdUnit 광고 가드(isToolIndexable)가 여전히 이 값을 참조하므로, 앞으로
+    // 콘텐츠가 덜 갖춰진 새 도구를 추가할 때도 안전장치로 계속 쓴다.
     alternates: {
       canonical: url,
       languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },
