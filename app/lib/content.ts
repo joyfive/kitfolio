@@ -3616,41 +3616,41 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "Calculator",
     name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
-    relatedTools: ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"],
+    relatedTools: ["cagr-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "성장률 계산기 | 퍼센트 증감률·MoM·YoY·QoQ·WoW 계산",
+        title: "성장률 계산기 | MoM·YoY·목표·역산·퍼센트 차이 계산",
         description:
-          "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 MoM·YoY·QoQ·WoW 성장률까지 이 계산기 하나로 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
+          "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. MoM·YoY·QoQ·WoW 성장률은 물론, 목표까지 필요한 성장률·필요 증가량·역산·퍼센트 차이까지 탭 전환만으로 한 페이지에서 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
         keywords: [
           "성장률 계산기", "퍼센트 증감률 계산기", "변화율 계산기", "증가율 계산기", "감소율 계산기",
           "MoM 계산기", "YoY 계산기", "QoQ 계산기", "WoW 계산기",
-          "MoM 성장률", "YoY 성장률", "QoQ 성장률", "WoW 성장률",
+          "목표 성장률 계산기", "필요 증가량 계산기", "역산 계산기", "퍼센트 차이 계산기",
           "growth rate calculator", "percentage change calculator",
         ],
       },
       en: {
-        title: "Growth Rate Calculator | % Change, MoM, YoY, QoQ, WoW",
+        title: "Growth Rate Calculator | MoM, YoY, Goal, Reverse, % Diff",
         description:
-          "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. One calculator covers percentage increase and decrease as well as MoM, YoY, QoQ, and WoW growth. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+          "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. Beyond MoM, YoY, QoQ, and WoW growth, switch tabs on the same page to find the growth rate needed to hit a goal, the required increase, the reverse-calculated original value, or a plain percent difference. Works for revenue, users, traffic, or any metric, entirely in your browser.",
         keywords: [
           "growth rate calculator", "percentage change calculator", "percentage increase calculator",
           "percentage decrease calculator", "MoM growth calculator", "YoY growth calculator",
-          "QoQ growth calculator", "WoW growth calculator", "percent change calculator",
+          "goal growth calculator", "required growth calculator", "reverse growth calculator", "percent difference calculator",
         ],
       },
     },
     content: {
       ko: {
-        card: "이전값·현재값으로 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 즉시 계산.",
+        card: "이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로.",
         description:
-          "이전 값과 현재 값을 입력하면 성장률(%), 퍼센트 증감률, 차이, 배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 지난달 대비(MoM)·전년 대비(YoY)·전분기 대비(QoQ)·전주 대비(WoW) 성장률까지 모두 같은 공식이라 이 계산기 하나로 구할 수 있습니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["비교 기준이 되는 이전(시작) 값 입력", "현재(종료) 값 입력", "성장률·증감률·차이·배수 확인 및 복사"],
+          "이전 값과 현재 값을 입력하면 성장률(%), 퍼센트 증감률, 차이, 배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 지난달 대비(MoM)·전년 대비(YoY)·전분기 대비(QoQ)·전주 대비(WoW) 성장률까지 모두 같은 공식이라 이 계산기 하나로 구할 수 있습니다. 목표까지 필요한 성장률·필요 증가량과 달성률·최종값에서 원래 값을 역산·방향 없는 퍼센트 차이까지, 상단 탭으로 전환해 같은 페이지에서 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["상단 탭에서 원하는 계산(성장률·목표·필요 증가량·역산·퍼센트 차이) 선택", "필요한 값 입력", "결과 확인 및 복사"],
         aeo: {
-          what: "성장률 계산기는 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 빠르게 계산하기 위한 통합 도구입니다. 성장률 계산기 · MoM 계산기 · YoY 계산기 · QoQ 계산기 · WoW 계산기 · 변화율(증가율·감소율) 계산기가 모두 동일한 (현재−이전)÷이전×100 공식을 쓰기 때문에, 이전 값과 현재 값만 입력하면 성장률과 증감률, 차이, 배수를 한 화면에서 보여줍니다.",
-          who: "매출·사용자 수·트래픽·지표 변화를 분석하는 PM, 마케터, 데이터 담당자, 소상공인, 개발자를 위한 도구입니다. 월간(MoM)·연간(YoY)·분기(QoQ)·주간(WoW) 성장률을 보고서에 담아야 하는 사람에게 특히 유용합니다.",
-          how: "이전 값과 현재 값을 입력하면 (현재−이전)÷이전×100 공식으로 성장률을 즉시 계산합니다. 결과가 양수면 증가율, 음수면 감소율이며, 비교 기간을 지난달·작년·지난 분기·지난주로 두면 각각 MoM·YoY·QoQ·WoW 성장률이 됩니다.",
-          why: "성장률·변화율·MoM·YoY·QoQ·WoW를 계산하려고 서로 다른 도구를 오갈 필요 없이, 수기 계산 없이 정확한 값을 한 번에 얻어 보고서 작성과 데이터 분석 시간을 줄일 수 있습니다.",
+          what: "성장률 계산기는 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 계산부터 목표 성장률·필요 증가량·역산·퍼센트 차이까지, 두 값 사이의 변화를 다루는 다섯 가지 계산을 한 페이지에 모은 통합 도구입니다. 성장률·MoM·YoY·QoQ·WoW·증가율·감소율은 모두 동일한 (현재−이전)÷이전×100 공식을 쓰고, 목표 성장률·필요 증가량·역산은 같은 관계식을 목표 값·최종 값 기준으로 다시 푼 것입니다.",
+          who: "매출·사용자 수·트래픽·지표 변화를 분석하는 PM, 마케터, 데이터 담당자, 소상공인, 개발자를 위한 도구입니다. 월간(MoM)·연간(YoY)·분기(QoQ)·주간(WoW) 성장률 보고, 목표 대비 진척 확인, 역산이 필요한 사람에게 특히 유용합니다.",
+          how: "상단 탭에서 계산하려는 항목(성장률·목표 성장률·필요 증가량·역산·퍼센트 차이)을 고르고 값을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. 탭마다 필요한 입력 필드와 공식이 달라집니다.",
+          why: "성장률·변화율·목표 성장률·필요 증가량·역산·퍼센트 차이를 계산하려고 서로 다른 도구를 오갈 필요 없이, 수기 계산 없이 정확한 값을 한 번에 얻어 보고서 작성과 목표 관리 시간을 줄일 수 있습니다.",
         },
         guide: [
           {
@@ -3674,6 +3674,34 @@ export const TOOLS: Tool[] = [
               "매출·트래픽·구독자·전환 수 등 어떤 수치든 넣어 보고서의 성장 지표를 채우거나, 목표 대비 진척을 점검할 때 활용하세요. 모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다.",
             ],
           },
+          {
+            heading: "퍼센트 차이: 방향 없이 두 값의 격차만 볼 때",
+            body: [
+              "성장률은 '무엇에서 무엇으로'라는 방향이 있는 계산이라 이전 값과 현재 값을 바꿔 넣으면 결과가 달라집니다. 반면 퍼센트 차이는 |A − B| ÷ ((A + B) / 2) × 100으로, 두 값 중 어느 쪽이 기준인지 정하지 않고 격차의 크기만 대칭적으로 나타냅니다. A와 B의 자리를 바꿔도 결과는 같습니다.",
+              "두 캠페인의 성과, 두 그룹의 평균처럼 '어느 쪽이 먼저인지'가 의미 없는 비교에는 성장률 탭 대신 퍼센트 차이 탭을 쓰는 편이 맞습니다.",
+            ],
+          },
+          {
+            heading: "목표 성장률: 목표까지 필요한 증가율 역산",
+            body: [
+              "목표 성장률 탭은 현재 값과 목표 값을 넣으면 (목표 − 현재) ÷ 현재 × 100으로 그 목표에 도달하는 데 필요한 성장률을 계산합니다. '다음 분기에 몇 % 성장해야 목표를 채우는가' 같은 역방향 질문에 씁니다.",
+              "일반 성장률 계산과 입력값은 비슷해 보이지만 목적이 다릅니다. 성장률 탭은 이미 일어난 변화를 측정하고, 목표 성장률 탭은 앞으로 필요한 변화를 구합니다.",
+            ],
+          },
+          {
+            heading: "필요 증가량과 달성률: 목표까지 남은 거리",
+            body: [
+              "필요 증가량 탭은 목표 성장률과 같은 두 입력(현재 값·목표 값)을 쓰지만 결과를 퍼센트가 아니라 절대적인 크기로 보여줍니다: 목표까지 남은 증가량, 현재까지의 달성률(현재 ÷ 목표 × 100), 남은 갭(목표 − 현재)입니다. 팀 대시보드에 '목표 대비 몇 %를 채웠는가'를 표시할 때 달성률을 바로 씁니다.",
+              "목표 성장률 탭이 '몇 % 성장해야 하는가'에 답한다면, 이 탭은 '지금 얼마나 왔고 얼마나 남았는가'에 답합니다.",
+            ],
+          },
+          {
+            heading: "역산: 최종 값과 성장률로 원래 값 구하기",
+            body: [
+              "역산 탭은 반대 방향 계산입니다. 최종 값과 그 값에 적용된 성장률(%)을 알 때, 원래 값 = 최종 값 ÷ (1 + 성장률 / 100)으로 변화 이전의 값을 구합니다. '이번 달 매출이 지난달보다 25% 늘어 12,500이 됐다는데, 지난달 매출은 얼마였나'처럼 결과만 알고 출발점을 모를 때 씁니다.",
+              "성장률이 −100%면 분모가 0이 되어 계산할 수 없습니다. 이 경우는 값이 완전히 0으로 사라졌다는 뜻이라 역산으로 원래 값을 복원할 수 없습니다.",
+            ],
+          },
         ],
               examples: [
           {
@@ -3694,24 +3722,50 @@ export const TOOLS: Tool[] = [
             result: "회복에 필요한 성장률은 +25% (20%가 아님)",
             note: "퍼센트는 기준값이 바뀌면 대칭이 아닙니다. −20% 뒤의 +20%는 원래 값이 아니라 96이 됩니다. 목표 복귀 수치가 필요할 때 자주 틀리는 부분입니다.",
           },
+          {
+            title: "두 광고 캠페인의 전환율 격차 비교",
+            input: "캠페인 A 전환율 4%, 캠페인 B 전환율 5% (퍼센트 차이 탭)",
+            result: "퍼센트 차이 약 22.2%",
+            note: "어느 캠페인이 '기준'인지 정할 이유가 없는 비교라 성장률 대신 퍼센트 차이를 씁니다. A와 B 순서를 바꿔 넣어도 결과는 같습니다.",
+          },
+          {
+            title: "다음 분기 목표를 채우려면 필요한 성장률",
+            input: "현재 값 8,000 · 목표 값 10,000 (목표 성장률 탭)",
+            result: "필요 성장률 +25%",
+            note: "이번 분기 실적(8,000)에서 다음 분기 목표(10,000)까지 얼마나 성장해야 하는지를 미리 계산해 팀 목표로 공유할 때 씁니다.",
+          },
+          {
+            title: "목표 대비 현재 진척률 확인",
+            input: "현재 값 7,000 · 목표 값 10,000 (필요 증가량 탭)",
+            result: "달성률 70%, 남은 갭 3,000",
+            note: "분기 중간 점검에서 '목표의 몇 %를 채웠는가'를 바로 보여주므로, 목표 성장률 탭의 퍼센트보다 진행 상황 보고에 적합합니다.",
+          },
+          {
+            title: "이번 달 결과에서 지난달 값을 역산",
+            input: "최종 값 12,500 · 성장률 +25% (역산 탭)",
+            result: "원래 값 10,000",
+            note: "이번 달 수치와 알려진 성장률만 있고 지난달 원본 수치를 따로 기록하지 않았을 때, 역으로 계산해 복원합니다.",
+          },
         ],
         limitations: [
           "이전 값이 0이면 성장률을 정의할 수 없습니다. 0에서 100으로 늘어난 것은 \"무한대 성장\"이 아니라 증가량(+100)으로 표현해야 합니다.",
           "이전 값이 음수인 경우(적자에서 흑자 전환 등) 퍼센트 성장률은 수학적으로는 계산되지만 해석이 뒤집혀 오해를 부릅니다. 이때는 퍼센트 대신 절대 금액 변화를 쓰세요.",
           "두 시점만 비교하므로 그 사이의 등락은 보이지 않습니다. 3개월 이상 흐름을 하나의 연율로 요약하려면 CAGR 계산기를 쓰는 편이 정확합니다.",
           "퍼센트포인트(%p)와 퍼센트(%)를 구분하지 않습니다. 전환율이 2%에서 3%가 된 경우 이 도구는 +50%로 계산하며, 이를 \"1%p 상승\"으로 표현할지는 보고 맥락에 따라 직접 선택해야 합니다.",
+          "성장률 탭은 방향이 있고(A→B), 퍼센트 차이 탭은 방향이 없습니다(A와 B의 격차). 같은 두 숫자를 넣어도 두 탭의 결과 값 자체가 다르므로 어느 탭을 쓸지는 질문의 성격에 따라 먼저 정해야 합니다.",
+          "역산 탭은 성장률이 −100%일 때 계산할 수 없습니다(분모가 0). 값이 완전히 사라진 경우이므로 원래 값을 복원할 수 없다는 의미로 해석해야 합니다.",
         ],
       },
       en: {
-        card: "Instantly calculate growth rate, % change, and MoM/YoY/QoQ/WoW from two values.",
+        card: "Growth rate, MoM, YoY from two values. Goal growth, required increase, reverse, and % difference too, via tabs.",
         description:
-          "Enter a previous and current value to instantly calculate growth rate (%), percentage change, difference, and multiplier. Percentage increase and decrease, plus month-over-month (MoM), year-over-year (YoY), quarter-over-quarter (QoQ), and week-over-week (WoW) growth all share the same formula, so this one calculator covers them all. Works for revenue, users, traffic, or any metric, entirely in your browser.",
-        howItWorks: ["Enter the previous (starting) value", "Enter the current (ending) value", "Read or copy the growth rate, change, difference, and multiplier"],
+          "Enter a previous and current value to instantly calculate growth rate (%), percentage change, difference, and multiplier. Percentage increase and decrease, plus month-over-month (MoM), year-over-year (YoY), quarter-over-quarter (QoQ), and week-over-week (WoW) growth all share the same formula, so this one calculator covers them all. Switch tabs on the same page to find the growth rate needed to hit a goal, the required increase and progress toward it, the original value behind a known result, or a plain percent difference. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+        howItWorks: ["Pick a calculation from the tabs (growth rate, goal, required increase, reverse, % difference)", "Enter the values it needs", "Read or copy the result"],
         aeo: {
-          what: "A Growth Rate Calculator is a unified tool for quickly calculating growth rate, percentage change, and MoM, YoY, QoQ, and WoW growth. A growth rate calculator, MoM calculator, YoY calculator, QoQ calculator, WoW calculator, and percentage increase/decrease calculator all use the same (Current − Previous) / Previous × 100 formula, so entering a previous and current value shows the growth rate, change, difference, and multiplier on one screen.",
-          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric: especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth.",
-          how: "Enter a previous and current value and it applies (Current − Previous) / Previous × 100. A positive result is a percentage increase and a negative one a decrease; set the comparison period to last month, last year, last quarter, or last week to read it as MoM, YoY, QoQ, or WoW growth.",
-          why: "Instead of hopping between separate tools for growth rate, percentage change, and MoM/YoY/QoQ/WoW, you get an accurate number in one place with no manual math: saving time on reports and analysis.",
+          what: "A Growth Rate Calculator is a unified tool covering five calculations about the change between two values: growth rate, percentage change, MoM, YoY, QoQ, and WoW growth, plus goal growth rate, required increase, reverse calculation, and percent difference. Growth rate, MoM, YoY, QoQ, WoW, and percentage increase/decrease all use the same (Current − Previous) / Previous × 100 formula; goal growth, required increase, and reverse calculation solve that same relationship for a target value or a final value instead.",
+          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric: especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth, checking progress toward a goal, or working backward from a known result.",
+          how: "Pick what you want to calculate from the tabs (growth rate, goal growth, required increase, reverse, percent difference), enter the values it needs, and the result appears instantly in your browser. Each tab has its own inputs and formula.",
+          why: "Instead of hopping between separate tools for growth rate, percentage change, goal growth, required increase, reverse calculation, and percent difference, you get an accurate number in one place with no manual math: saving time on reports and goal tracking.",
         },
         guide: [
           {
@@ -3735,6 +3789,34 @@ export const TOOLS: Tool[] = [
               "Use it with any metric: revenue, traffic, subscribers, conversions: to fill in the growth figures in a report or to check progress toward a goal. Every calculation runs in your browser and the numbers you enter are never sent to a server.",
             ],
           },
+          {
+            heading: "Percent difference: comparing two values with no direction",
+            body: [
+              "Growth rate is directional (it goes from one value to another), so swapping the previous and current values changes the result. Percent difference instead computes |A − B| / ((A + B) / 2) × 100: it doesn't designate either value as the baseline, and reports the size of the gap symmetrically. Swapping A and B gives the same result.",
+              "Use the percent difference tab instead of the growth rate tab when neither value is naturally \"first\": comparing two campaigns' performance, or two groups' averages, for example.",
+            ],
+          },
+          {
+            heading: "Goal growth: the rate needed to hit a target",
+            body: [
+              "The goal growth tab takes a current value and a target value and computes (Target − Current) / Current × 100: the growth rate required to reach that target. It answers a forward-looking question like \"how much do we need to grow next quarter to hit the goal?\"",
+              "The inputs look similar to a plain growth rate calculation, but the purpose differs. The growth rate tab measures a change that already happened; the goal growth tab computes a change that still needs to happen.",
+            ],
+          },
+          {
+            heading: "Required increase and progress: how far is left to the goal",
+            body: [
+              "The required increase tab uses the same two inputs (current, target) as goal growth, but reports the answer as absolute amounts instead of a percentage: how much more is needed, the progress made so far (Current / Target × 100), and the remaining gap (Target − Current). Use the progress figure directly when a dashboard needs to show \"how much of the goal is filled.\"",
+              "Where the goal growth tab answers \"what growth rate do we need,\" this tab answers \"how far have we come, and how far is left.\"",
+            ],
+          },
+          {
+            heading: "Reverse: finding the original value from a final value and a rate",
+            body: [
+              "The reverse tab runs the calculation backward. Given a final value and the growth rate that produced it, Original Value = Final Value / (1 + Growth Rate / 100) recovers the value before the change. Use it when you know this month's revenue grew 25% to reach 12,500 but didn't record last month's figure separately.",
+              "When the growth rate is −100%, the denominator becomes zero and the calculation is undefined: the value dropped to nothing, so there is no original value to recover.",
+            ],
+          },
         ],
               examples: [
           {
@@ -3755,12 +3837,38 @@ export const TOOLS: Tool[] = [
             result: "The recovery requires +25%, not +20%",
             note: "Percentages are not symmetric because the base changes. Adding 20% after losing 20% lands at 96, not the original value. This trips people up whenever a recovery target is involved.",
           },
+          {
+            title: "Comparing the conversion rate gap between two ad campaigns",
+            input: "Campaign A converts at 4%, Campaign B at 5% (Percent Difference tab)",
+            result: "Percent difference of about 22.2%",
+            note: "Neither campaign is naturally the \"baseline\" here, so percent difference is used instead of growth rate. Swapping A and B gives the same result.",
+          },
+          {
+            title: "The growth rate needed to hit next quarter's target",
+            input: "Current 8,000 · Target 10,000 (Goal Growth tab)",
+            result: "Required growth rate +25%",
+            note: "Used to work out, ahead of time, how much this quarter's result (8,000) needs to grow to reach next quarter's target (10,000), for sharing as a team goal.",
+          },
+          {
+            title: "Checking current progress toward a target",
+            input: "Current 7,000 · Target 10,000 (Required Increase tab)",
+            result: "Progress 70%, remaining gap 3,000",
+            note: "A mid-quarter check that shows \"how much of the goal is filled\" directly, which suits progress reporting better than the goal growth tab's percentage.",
+          },
+          {
+            title: "Working out last month's value from this month's result",
+            input: "Final value 12,500 · growth rate +25% (Reverse tab)",
+            result: "Original value 10,000",
+            note: "Used when you have this month's number and a known growth rate but never recorded last month's raw figure separately, to reconstruct it.",
+          },
         ],
         limitations: [
           "Growth is undefined when the previous value is 0. Going from 0 to 100 is not \"infinite growth\"; report it as an absolute change of +100.",
           "When the previous value is negative (for example a loss turning into a profit), a percentage is mathematically computable but reads backwards and misleads. Use the absolute change instead.",
           "Only two points are compared, so anything that happened in between is invisible. To summarize three or more periods as a single annual figure, use the CAGR calculator.",
           "The tool does not distinguish percentage points from percent. A conversion rate moving from 2% to 3% is reported as +50%; whether to describe that as \"up 1pp\" is a judgment call for your report.",
+          "The growth rate tab is directional (A to B); the percent difference tab is not (the gap between A and B). Feeding the same two numbers into each gives different results, so decide which tab fits your question first.",
+          "The reverse tab cannot compute a result when the growth rate is −100% (division by zero). Read that as the value having dropped to nothing, with no original value to recover.",
         ],
       },
     },
@@ -3771,6 +3879,10 @@ export const TOOLS: Tool[] = [
         { question: "증가율과 감소율은 어떻게 구분되나요?", answer: "계산 방법은 같습니다. 결과가 양수(+)면 증가율, 음수(−)면 감소율로 표시됩니다. 별도의 증가율·감소율 계산기가 필요 없습니다." },
         { question: "퍼센트 증감률과 성장률은 다른가요?", answer: "부르는 이름만 다를 뿐 계산은 동일합니다. 두 값의 상대적 변화를 퍼센트로 나타낸 것으로, 상황에 따라 성장률·변화율·증감률로 불립니다." },
         { question: "이전 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 성장률을 계산할 수 없습니다. 오류 메시지가 표시되며, 시작점을 0이 아닌 값으로 잡아야 합니다." },
+        { question: "퍼센트 차이는 성장률과 뭐가 다른가요?", answer: "성장률은 이전 값에서 현재 값으로 가는 방향이 있는 계산이라 두 값을 바꾸면 결과 부호가 바뀝니다. 퍼센트 차이는 방향이 없어 두 값을 바꿔도 같은 결과가 나오며, 어느 쪽이 기준인지 정할 필요가 없는 비교에 씁니다." },
+        { question: "목표 성장률과 필요 증가량 탭은 어떻게 다른가요?", answer: "둘 다 현재 값과 목표 값을 입력받지만, 목표 성장률 탭은 결과를 퍼센트(몇 % 성장해야 하는가)로, 필요 증가량 탭은 절대적인 크기(얼마나 남았는가·몇 % 채웠는가)로 보여줍니다." },
+        { question: "역산 탭은 언제 쓰나요?", answer: "최종 값과 그 값에 적용된 성장률만 알고 원래 값을 모를 때 씁니다. 원래 값 = 최종 값 ÷ (1 + 성장률 / 100)으로 계산하며, 성장률이 −100%이면 계산할 수 없습니다." },
+        { question: "탭을 바꾸면 입력했던 값이 사라지나요?", answer: "네. 탭마다 입력 필드의 의미(이전값·현재값, 현재값·목표값, 최종값·성장률 등)가 달라 이전 탭의 값을 그대로 이어 쓰면 오히려 혼동을 줄 수 있어 기본값으로 초기화됩니다." },
         { question: "입력한 숫자가 서버로 전송되나요?", answer: "아니요. 모든 계산은 브라우저 안에서 처리되며 입력값은 서버로 전송·저장되지 않습니다." },
       ],
       en: [
@@ -3779,288 +3891,16 @@ export const TOOLS: Tool[] = [
         { question: "How are percentage increase and decrease different?", answer: "The calculation is identical. A positive result is a percentage increase and a negative result is a percentage decrease, so no separate increase or decrease calculator is needed." },
         { question: "Are percentage change and growth rate different?", answer: "Only the name differs: the math is the same relative change between two values expressed as a percent, called growth rate, percentage change, or percent change depending on context." },
         { question: "What happens if the previous value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message appears and you should choose a non-zero starting point." },
+        { question: "How is percent difference different from growth rate?", answer: "Growth rate is directional, from a previous value to a current one, so swapping the two flips the sign of the result. Percent difference has no direction: swapping the two values gives the same result, and it's for comparisons where neither value is naturally the baseline." },
+        { question: "What's the difference between the Goal Growth and Required Increase tabs?", answer: "Both take a current value and a target value, but Goal Growth reports the answer as a percentage (how much growth is needed), while Required Increase reports it as absolute amounts (how much is left, and what percent of the goal is already filled)." },
+        { question: "When would I use the Reverse tab?", answer: "When you know a final value and the growth rate that produced it, but not the original value. It computes Original Value = Final Value / (1 + Growth Rate / 100); the calculation is undefined when the growth rate is −100%." },
+        { question: "Does switching tabs clear the values I entered?", answer: "Yes. Each tab's fields mean something different (previous/current, current/target, final value/growth rate, and so on), so carrying a value over from another tab would likely cause confusion; fields reset to their defaults instead." },
         { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
     },
     og: {
-      ko: { title: "성장률 계산기", subtitle: "성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 즉시 계산" },
-      en: { title: "Growth Rate Calculator", subtitle: "Growth rate, % change and MoM/YoY/QoQ/WoW instantly" },
-    },
-  },
-
-  {
-    slug: "percent-difference-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "office-worker", "developer"],
-    ico: "|Δ|",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "퍼센트 차이 계산기", en: "Percent Difference Calculator" },
-    relatedTools: ["growth-rate-calculator", "cagr-calculator", "goal-growth-calculator"],
-    seo: {
-      ko: {
-        title: "퍼센트 차이 계산기 | 두 값의 상대적 차이",
-        description:
-          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다.",
-        keywords: ["퍼센트 차이 계산기", "percent difference calculator", "두 값 비교", "상대적 차이"],
-      },
-      en: {
-        title: "Percent Difference Calculator | Relative Difference Between Two Values",
-        description:
-          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction (not increase or decrease).",
-        keywords: ["percent difference calculator", "percentage difference calculator", "relative difference", "compare two values"],
-      },
-    },
-    content: {
-      ko: {
-        card: "두 값 A·B의 상대적 퍼센트 차이 계산.",
-        description:
-          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["값 A 입력", "값 B 입력", "퍼센트 차이 확인"],
-        aeo: {
-          what: "퍼센트 차이 계산기는 두 값의 상대적 차이를 퍼센트로 계산하는 도구입니다. 증가·감소 방향이 아닌 두 값 사이의 크기 차이를 구할 때 사용합니다.",
-          who: "두 그룹·두 측정값을 비교해야 하는 연구자, 분석가, 비즈니스 담당자를 위한 도구입니다.",
-          how: "|A − B| ÷ ((A + B) / 2) × 100 공식으로 두 값의 평균을 기준으로 한 상대적 차이를 계산합니다.",
-          why: "퍼센트 변화율과 달리 기준 방향이 없으므로, 어느 쪽이 이전/이후인지 관계없이 두 값의 차이를 구할 때 유용합니다.",
-        },
-      },
-      en: {
-        card: "Calculate the relative percent difference between values A and B.",
-        description:
-          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction.",
-        howItWorks: ["Enter value A", "Enter value B", "Read the percent difference"],
-        aeo: {
-          what: "A Percent Difference Calculator computes the relative difference between two values as a percentage of their average. It has no directional bias: neither value is 'before' or 'after'.",
-          who: "It is for researchers, analysts, and business users who need to compare two measurements, test results, or data points without implying which came first.",
-          how: "The formula |A − B| / ((A + B) / 2) × 100 uses the average of the two values as the reference point, making the result symmetric.",
-          why: "Unlike percentage change, it does not require you to designate a 'before' and 'after': ideal for comparing two independent measurements.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "퍼센트 변화율과 퍼센트 차이의 차이는 무엇인가요?", answer: "퍼센트 변화율은 이전 값을 기준으로 변화를 계산하고 방향(증가/감소)을 나타냅니다. 퍼센트 차이는 두 값의 평균을 기준으로 계산하며 방향이 없습니다." },
-        { question: "A와 B의 순서가 결과에 영향을 주나요?", answer: "영향을 주지 않습니다. 퍼센트 차이 공식은 절댓값을 사용하므로 A·B의 순서와 관계없이 동일한 결과가 나옵니다." },
-        { question: "두 값이 모두 0이면 어떻게 되나요?", answer: "평균이 0이 되어 0으로 나누기가 발생하므로 계산할 수 없습니다." },
-      ],
-      en: [
-        { question: "What is the difference between percent difference and percent change?", answer: "Percent change uses the original value as the base and has a direction (increase/decrease). Percent difference uses the average of both values and is non-directional." },
-        { question: "Does the order of A and B affect the result?", answer: "No. The formula uses an absolute value, so swapping A and B produces the same result." },
-        { question: "What if both values are zero?", answer: "The average would be zero, causing a division by zero error. A result cannot be computed." },
-      ],
-    },
-    og: {
-      ko: { title: "퍼센트 차이 계산기", subtitle: "두 값의 방향 없는 상대적 차이를 퍼센트로 계산" },
-      en: { title: "Percent Difference Calculator", subtitle: "Calculate the relative % difference between two values" },
-    },
-  },
-
-  {
-    slug: "goal-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "→%",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "목표 성장률 계산기", en: "Goal Growth Calculator" },
-    relatedTools: ["required-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "목표 성장률 계산기 | 목표 달성에 필요한 성장률",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
-        keywords: ["목표 성장률 계산기", "goal growth calculator", "필요 성장률", "target growth calculator"],
-      },
-      en: {
-        title: "Goal Growth Calculator | Growth Rate Needed to Hit Your Target",
-        description:
-          "Enter your current value and target value to instantly calculate the growth rate required to reach your goal. Great for revenue targets, KPI planning, and business goals.",
-        keywords: ["goal growth calculator", "target growth calculator", "required growth rate", "how much growth do I need"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재 값과 목표 값으로 필요 성장률 즉시 계산.",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
-        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 성장률·차이·배수 확인"],
-        aeo: {
-          what: "목표 성장률 계산기는 현재 값에서 목표 값까지 달성하기 위해 필요한 성장률을 계산해주는 도구입니다.",
-          who: "매출 목표·KPI를 계획하는 PM, 스타트업 창업자, 소상공인, 영업 담당자를 위한 도구입니다.",
-          how: "(목표 − 현재) ÷ 현재 × 100 공식으로 필요 성장률을 즉시 계산합니다.",
-          why: "목표를 숫자로 설정했을 때 '얼마나 성장해야 하는가'를 즉시 알 수 있어 현실적인 계획을 세우는 데 도움이 됩니다.",
-        },
-      },
-      en: {
-        card: "Calculate the growth rate needed to reach your target from your current value.",
-        description:
-          "Enter your current value and target value to instantly calculate the required growth rate. Great for revenue targets, KPI planning, and business goals.",
-        howItWorks: ["Enter the current value", "Enter the target value", "Read the required growth rate and multiplier"],
-        aeo: {
-          what: "A Goal Growth Calculator computes the percentage growth rate required to move from a current value to a target value.",
-          who: "It is for PMs, startup founders, sales teams, and small business owners who set numeric targets and want to know exactly what growth rate is needed.",
-          how: "The formula (Target − Current) / Current × 100 is applied; the result shows the required growth rate, difference, and multiplier needed.",
-          why: "It turns a vague goal into a concrete growth percentage, making targets more actionable and easier to communicate.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "음수 성장률이 나옵니다. 이는 목표 달성을 위해 수치를 줄여야 한다는 의미입니다(예: 비용 절감 목표)." },
-        { question: "기간을 반영할 수 있나요?", answer: "이 계산기는 단순 성장률만 계산합니다. 연도별 성장률이 필요하다면 CAGR 계산기를 사용하세요." },
-        { question: "목표를 달성하기 위해 필요한 배수란 무엇인가요?", answer: "현재 값에 곱해야 하는 수입니다. 예를 들어 현재 1,000에서 1,500이 목표면, 배수는 1.5입니다." },
-      ],
-      en: [
-        { question: "What if the target is less than the current value?", answer: "The result will be a negative growth rate, meaning you need to reduce the metric (e.g., cutting costs to hit a lower target)." },
-        { question: "Can I factor in a time period?", answer: "This calculator returns a total growth rate. If you need an annualized rate across multiple years, use the CAGR Calculator." },
-        { question: "What does the multiplier needed mean?", answer: "The multiplier is the number you multiply the current value by to reach the target. A multiplier of 1.5 means the target is 1.5× the current value." },
-      ],
-    },
-    og: {
-      ko: { title: "목표 성장률 계산기", subtitle: "현재값·목표값으로 필요 성장률·배수 즉시 계산" },
-      en: { title: "Goal Growth Calculator", subtitle: "Find the growth rate needed to hit your target instantly" },
-    },
-  },
-
-  {
-    slug: "required-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "req",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "필요 증가량 계산기", en: "Required Growth Calculator" },
-    relatedTools: ["goal-growth-calculator", "reverse-growth-calculator", "growth-rate-calculator"],
-    seo: {
-      ko: {
-        title: "필요 증가량 계산기 | 목표 달성에 필요한 증가량",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 달성률을 즉시 계산합니다.",
-        keywords: ["필요 증가량 계산기", "required growth calculator", "목표 달성률", "growth target calculator"],
-      },
-      en: {
-        title: "Required Growth Calculator | How Much Do You Need to Grow?",
-        description:
-          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
-        keywords: ["required growth calculator", "growth target calculator", "how much do I need to grow", "target progress calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재값·목표값으로 필요 증가량·달성률 즉시 계산.",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 남은 갭, 달성률을 즉시 계산합니다.",
-        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 증가량·달성률·남은 갭 확인"],
-        aeo: {
-          what: "필요 증가량 계산기는 현재 값에서 목표 값까지 도달하기 위해 필요한 증가량과 달성률을 계산해주는 도구입니다.",
-          who: "매출·KPI 목표를 추적하고 얼마나 더 성장해야 하는지 파악하려는 PM, 영업 담당자, 소상공인을 위한 도구입니다.",
-          how: "현재 값과 목표 값을 입력하면 필요 증가량(목표−현재), 필요 성장률, 달성률(현재÷목표×100)을 즉시 계산합니다.",
-          why: "목표까지 얼마나 남았는지 숫자로 확인해 팀과 공유하고 우선순위를 설정하는 데 도움이 됩니다.",
-        },
-      },
-      en: {
-        card: "Calculate the required increase, growth rate, and progress to your goal.",
-        description:
-          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
-        howItWorks: ["Enter the current value", "Enter the target value", "Read required increase, growth rate, gap, and progress"],
-        aeo: {
-          what: "A Required Growth Calculator shows exactly how much a metric needs to increase to reach a target, along with the current progress percentage.",
-          who: "It is for PMs, sales reps, and business owners who track targets and want to know the gap between where they are and where they need to be.",
-          how: "Required Increase = Target − Current; Progress = Current / Target × 100; Required Growth Rate = (Target − Current) / Current × 100.",
-          why: "It quantifies the gap to goal in multiple ways: absolute increase, percentage growth, and progress, so you can plan and communicate clearly.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "필요 증가량과 남은 갭의 차이는 무엇인가요?", answer: "이 계산기에서는 두 값이 동일합니다(목표−현재). 필요 증가량은 '얼마나 늘려야 하는가', 남은 갭은 '얼마나 부족한가'의 관점에서 같은 수치를 나타냅니다." },
-        { question: "달성률이 100%를 넘을 수 있나요?", answer: "네. 현재 값이 목표보다 크면 달성률이 100%를 초과합니다. 이미 목표를 달성했다는 의미입니다." },
-        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "필요 증가량이 음수로 나옵니다. 이는 수치를 줄여야 목표를 달성할 수 있음을 의미합니다(예: 비용 절감)." },
-      ],
-      en: [
-        { question: "What is the difference between required increase and remaining gap?", answer: "In this calculator they are the same value (Target − Current). Required Increase frames it as 'how much to add'; Remaining Gap frames it as 'how far you are from the goal'." },
-        { question: "Can progress to target exceed 100%?", answer: "Yes. If the current value is already above the target, progress will be above 100%, meaning the goal has been exceeded." },
-        { question: "What if the target is lower than the current value?", answer: "The required increase will be negative, indicating you need to reduce the metric to hit a lower target (e.g., cost reduction goals)." },
-      ],
-    },
-    og: {
-      ko: { title: "필요 증가량 계산기", subtitle: "현재값·목표값으로 필요 증가량·달성률 즉시 계산" },
-      en: { title: "Required Growth Calculator", subtitle: "See how much you need to grow to hit your target" },
-    },
-  },
-
-  {
-    slug: "reverse-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "developer", "office-worker"],
-    ico: "÷%",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "역산 계산기", en: "Reverse Growth Calculator" },
-    relatedTools: ["goal-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "역산 계산기 | 최종값과 성장률로 원래 값 역산",
-        description:
-          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
-        keywords: ["역산 계산기", "reverse growth calculator", "원래 값 역산", "성장률 역산"],
-      },
-      en: {
-        title: "Reverse Growth Calculator | Find the Original Value from Final Value and Growth Rate",
-        description:
-          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
-        keywords: ["reverse growth calculator", "reverse percentage calculator", "find original value", "reverse percent change"],
-      },
-    },
-    content: {
-      ko: {
-        card: "최종 값과 성장률로 원래 값 역산.",
-        description:
-          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
-        howItWorks: ["최종 값 입력", "성장률(%) 입력", "원래 값·차이·배수 확인"],
-        aeo: {
-          what: "역산 계산기는 최종 값과 성장률을 알고 있을 때 원래 값을 계산해주는 도구입니다.",
-          who: "기준값·세전 금액·할인 전 가격 등 성장 전 원래 수치를 알아야 하는 비즈니스 담당자, 회계 담당자, PM을 위한 도구입니다.",
-          how: "원래 값 = 최종 값 ÷ (1 + 성장률 ÷ 100) 공식으로 역산합니다.",
-          why: "최종 값과 변화율만 알고 시작값을 모를 때, 역방향으로 계산해 원래 수치를 빠르게 구할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate the original value from a final value and a known growth rate.",
-        description:
-          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
-        howItWorks: ["Enter the final value", "Enter the growth rate (%)", "Read the original value and difference"],
-        aeo: {
-          what: "A Reverse Growth Calculator finds the original value when you know the final value and the percentage change applied to it.",
-          who: "It is for business analysts, accountants, and PMs who need to back-calculate a base figure from a final number and a known rate.",
-          how: "Original Value = Final Value / (1 + Growth Rate / 100). This reverses any standard percentage growth calculation.",
-          why: "When the end result and growth rate are known but the starting point is not, this calculator solves it in one step without manual algebra.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "언제 역산 계산기를 사용하나요?", answer: "최종 값과 성장률은 알지만 시작 값을 모를 때 사용합니다. 예를 들어 성장 후 125가 됐고 성장률이 25%였다면, 원래 값은 100입니다." },
-        { question: "성장률이 음수일 수 있나요?", answer: "네. 감소율을 입력하면 최종 값보다 큰 원래 값이 계산됩니다." },
-        { question: "성장률이 -100%이면 어떻게 되나요?", answer: "-100%이면 분모가 0이 되어 계산이 불가능합니다. 오류 메시지가 표시됩니다." },
-      ],
-      en: [
-        { question: "When do I use a reverse growth calculator?", answer: "Use it when you know the final value and the growth rate but not the starting value. For example, if a value grew 25% to reach 125, the original value was 100." },
-        { question: "Can the growth rate be negative?", answer: "Yes. A negative growth rate means the value decreased; the calculator will return an original value larger than the final value." },
-        { question: "What happens if the growth rate is -100%?", answer: "A growth rate of -100% makes the denominator zero, which is undefined. An error message will appear." },
-      ],
-    },
-    og: {
-      ko: { title: "역산 계산기", subtitle: "최종값과 성장률로 원래 값 역산" },
-      en: { title: "Reverse Growth Calculator", subtitle: "Find the original value from final value and growth rate" },
+      ko: { title: "성장률 계산기", subtitle: "성장률·MoM·YoY부터 목표·역산·퍼센트 차이까지 한 페이지" },
+      en: { title: "Growth Rate Calculator", subtitle: "Growth rate, MoM, YoY, goal, reverse and % diff in one place" },
     },
   },
 
@@ -4074,32 +3914,38 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
-    relatedTools: ["compound-growth-calculator", "growth-rate-calculator", "goal-growth-calculator"],
+    relatedTools: ["growth-rate-calculator", "ad-budget-pacing-calculator", "salary-calculator"],
     seo: {
       ko: {
-        title: "CAGR 계산기 | 연평균 성장률 계산",
+        title: "CAGR 계산기 | 연평균 성장률·복리 미래값 예측",
         description:
-          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
-        keywords: ["CAGR 계산기", "CAGR calculator", "연평균 성장률", "annual growth rate calculator"],
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 탭을 전환하면 초기값·성장률·기간으로 복리 최종값과 미래 예측값도 같은 페이지에서 구할 수 있습니다. 투자 수익률·매출 성장률 분석과 성장 시나리오 플래닝에 활용하세요.",
+        keywords: [
+          "CAGR 계산기", "CAGR calculator", "연평균 성장률", "복리 성장 계산기", "미래값 계산기",
+          "성장 예측 계산기", "annual growth rate calculator", "compound growth calculator",
+        ],
       },
       en: {
-        title: "CAGR Calculator | Compound Annual Growth Rate",
+        title: "CAGR Calculator | Annual Growth Rate & Compound Projection",
         description:
-          "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Use it for investment returns, revenue growth analysis, and business planning.",
-        keywords: ["CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator"],
+          "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Switch tabs to project a compounded final value from an initial value, growth rate, and number of periods, on the same page. Use it for investment returns, revenue growth analysis, and scenario planning.",
+        keywords: [
+          "CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator",
+          "compound growth calculator", "future value calculator", "growth projection calculator",
+        ],
       },
     },
     content: {
       ko: {
-        card: "시작값·종료값·기간으로 CAGR 즉시 계산.",
+        card: "시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도.",
         description:
-          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
-        howItWorks: ["시작 값 입력", "종료 값 입력", "기간(년) 입력 후 CAGR·총 성장률 확인"],
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 탭을 전환하면 초기값·성장률·기간으로 복리 최종값과 미래 예측값도 같은 페이지에서 구할 수 있습니다. 두 계산은 서로 반대 방향으로 같은 수식을 풉니다: CAGR은 시작·종료값에서 연율을 역산하고, 복리 성장은 초기값과 연율에서 미래값을 구합니다. 투자 수익률·매출 성장률 분석과 성장 시나리오 플래닝에 활용하세요.",
+        howItWorks: ["상단 탭에서 CAGR 또는 복리 성장 선택", "필요한 값(시작·종료·기간 또는 초기값·성장률·기간) 입력", "CAGR 또는 최종값·총 성장률 확인"],
         aeo: {
-          what: "CAGR 계산기는 시작값과 종료값, 기간을 사용해 연평균 복리 성장률(CAGR)을 계산해주는 도구입니다. CAGR은 Compound Annual Growth Rate의 약자입니다.",
-          who: "투자 수익률을 분석하거나 다년간의 비즈니스 성장률을 비교하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
-          how: "CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다.",
-          why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 용이합니다.",
+          what: "CAGR 계산기는 시작값과 종료값, 기간을 사용해 연평균 복리 성장률(CAGR)을 계산하고, 탭을 전환하면 초기값·성장률·기간으로 복리 최종값·미래 예측값도 계산하는 통합 도구입니다. CAGR은 Compound Annual Growth Rate의 약자이며, 두 계산 모두 최종값 = 초기값 × (1 + 연율/100)^기간이라는 같은 관계식을 반대 방향으로 풉니다.",
+          who: "투자 수익률을 분석하거나 다년간의 비즈니스 성장률을 비교하려는 PM, 투자자, 소상공인, 그리고 매출·사용자 수의 미래값을 시나리오별로 예측해야 하는 스타트업 창업자를 위한 도구입니다.",
+          how: "CAGR 탭에서는 CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다. 복리 성장 탭에서는 최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 미래 값을 계산합니다.",
+          why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 쉽고, 그 연율로 미래를 내다보는 계산까지 같은 페이지에서 오갈 수 있어 성장 시나리오 검토가 빠릅니다.",
         },
               guide: [
           {
@@ -4114,7 +3960,7 @@ export const TOOLS: Tool[] = [
             body: [
               "가장 흔한 실수는 연도별 성장률을 더해서 연수로 나누는 것입니다. 1년 차에 +100%, 2년 차에 −50%였다면 산술평균은 +25%지만, 실제로는 100 → 200 → 100으로 제자리입니다. 진짜 연평균은 0%입니다.",
               "CAGR = (종료값 ÷ 시작값)^(1 ÷ 기간) − 1 은 이 문제를 곱셈으로 풉니다. 성장은 더해지는 것이 아니라 곱해지며 쌓이기 때문에, 평균도 기하평균으로 내야 실제 도달점과 맞아떨어집니다. 이 계산기가 내는 CAGR로 시작값을 기간만큼 복리 성장시키면 정확히 종료값이 나옵니다.",
-              "반대 방향의 계산이 필요하다면, 즉 시작값과 성장률로 미래 값을 구하고 싶다면 복리 성장 계산기를 쓰세요. 같은 수식을 반대로 푸는 도구입니다.",
+              "반대 방향의 계산이 필요하다면, 즉 시작값과 성장률로 미래 값을 구하고 싶다면 위 탭에서 복리 성장으로 전환하세요. 같은 수식을 반대로 푸는 계산입니다.",
             ],
           },
           {
@@ -4124,32 +3970,66 @@ export const TOOLS: Tool[] = [
               "기간을 셀 때는 연도 개수가 아니라 구간 수를 넣어야 합니다. 2023년 말부터 2026년 말까지라면 연도는 네 개지만 기간은 3년입니다. 이 한 칸 차이로 CAGR이 눈에 띄게 달라집니다.",
             ],
           },
+          {
+            heading: "복리 성장과 미래값 예측은 CAGR의 역계산",
+            body: [
+              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일하며, CAGR과 정반대 방향입니다. CAGR 탭이 시작·종료값에서 연율을 구한다면, 복리 성장 탭은 초기값과 연율에서 최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 미래 값을 구합니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
+              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산이 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측이 됩니다.",
+            ],
+          },
+          {
+            heading: "복리와 단리의 차이",
+            body: [
+              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
+              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
+            ],
+          },
+          {
+            heading: "복리 성장 탭의 기간 단위와 활용",
+            body: [
+              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
+              "미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요. 모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다.",
+            ],
+          },
         ],
         examples: [
           {
             title: "3년간 매출 성장을 연율로 환산",
-            input: "시작 120,000,000 · 종료 210,000,000 · 기간 3년",
+            input: "시작 120,000,000 · 종료 210,000,000 · 기간 3년 (CAGR 탭)",
             result: "CAGR 약 20.5% (총 성장률 75%)",
             note: "\"3년간 75% 성장\"보다 \"연평균 20.5% 성장\"이 다른 기간의 사업과 비교하기 쉽습니다. 검산: 1.205를 세 번 곱하면 약 1.75가 됩니다.",
           },
           {
             title: "요동친 성과의 실제 연평균 구하기",
-            input: "시작 100 · 종료 100 · 기간 2년 (1년 차 +100%, 2년 차 −50%)",
+            input: "시작 100 · 종료 100 · 기간 2년, 1년 차 +100%·2년 차 −50% (CAGR 탭)",
             result: "CAGR 0%",
             note: "연도별 성장률의 산술평균은 +25%로 나오지만, 실제로는 제자리입니다. 성장률을 평균 낼 때 CAGR을 써야 하는 이유가 이 차이입니다.",
           },
           {
             title: "감소한 지표의 연평균 하락률",
-            input: "시작 50,000 · 종료 32,000 · 기간 2년",
+            input: "시작 50,000 · 종료 32,000 · 기간 2년 (CAGR 탭)",
             result: "CAGR 약 −20%",
             note: "감소도 같은 수식으로 계산되며 음수 CAGR로 표시됩니다. 이탈률·해지 건수처럼 줄어드는 것이 목표인 지표에도 그대로 쓸 수 있습니다.",
+          },
+          {
+            title: "연 12% 성장 가정으로 5년 뒤 매출 예측",
+            input: "초기값 50,000,000 · 성장률 12% · 기간 5년 (복리 성장 탭)",
+            result: "약 88,117,000 (총 증가 약 76%)",
+            note: "단리로 계산하면 50,000,000 × (1 + 0.12 × 5) = 80,000,000입니다. 5년만 지나도 복리와 단리의 차이가 800만원 넘게 벌어집니다.",
+          },
+          {
+            title: "사업계획서의 성장 시나리오 비교",
+            input: "같은 초기값에 성장률 8% / 12% / 20%를 각각 입력 (복리 성장 탭)",
+            result: "5년 뒤 약 73,466,000 / 88,117,000 / 124,416,000",
+            note: "보수·기본·공격 세 가지 시나리오를 나란히 두면, 목표 숫자가 어느 가정에 기대고 있는지 한눈에 보입니다.",
           },
         ],
         limitations: [
           "시작값은 반드시 0보다 커야 합니다. 시작값이 0이거나 음수면 (종료÷시작) 자체가 성립하지 않아 CAGR을 정의할 수 없습니다.",
-          "중간 경로를 전부 지운 값입니다. CAGR이 같은 두 사업도 하나는 꾸준히 성장했고 다른 하나는 한 해에 몰아서 성장했을 수 있으므로, 변동성 판단에는 쓸 수 없습니다.",
-          "기간은 연도 개수가 아니라 구간 수입니다. 2023년 말 → 2026년 말은 3년이며, 4를 넣으면 성장률이 실제보다 낮게 나옵니다.",
-          "물가상승률을 반영하지 않은 명목 성장률입니다. 장기간(5년 이상) 금액을 비교할 때는 실질 가치 기준으로 따로 보정해야 합니다.",
+          "CAGR은 중간 경로를 전부 지운 값입니다. CAGR이 같은 두 사업도 하나는 꾸준히 성장했고 다른 하나는 한 해에 몰아서 성장했을 수 있으므로, 변동성 판단에는 쓸 수 없습니다.",
+          "기간은 연도 개수가 아니라 구간 수입니다. 2023년 말 → 2026년 말은 3년이며, 4를 넣으면 두 탭 모두 결과가 실제와 달라집니다.",
+          "복리 성장 탭은 성장률이 매 기간 동일하다고 가정합니다. 실제 사업은 시장 포화·경쟁 진입·계절성으로 성장률이 변하므로, 기간이 길어질수록 예측 오차가 급격히 커집니다. 5년을 넘는 예측은 참고용으로만 쓰세요.",
+          "두 탭 모두 물가상승률·환율·세금을 반영하지 않은 명목 값입니다. 장기간 금액을 비교하거나 투자 수익을 볼 때는 실질 가치·실질 수익률로 따로 환산해야 합니다.",
         ],
       },
       en: {
@@ -4176,7 +4056,7 @@ export const TOOLS: Tool[] = [
             body: [
               "The most common mistake is adding up the annual growth rates and dividing by the number of years. With +100% in year one and −50% in year two, the arithmetic mean is +25%, but the value went 100 → 200 → 100 and ended exactly where it started. The true annual average is 0%.",
               "CAGR = (End ÷ Start) ^ (1 ÷ Years) − 1 solves this with multiplication. Growth compounds rather than adds, so the average has to be geometric to land on the real end value. Compounding the start value at this calculator's CAGR for the given number of years reproduces the end value exactly.",
-              "If you need the reverse: a future value from a start value and a rate: use the compound growth calculator, which solves the same equation in the other direction.",
+              "If you need the reverse: a future value from a start value and a rate: switch to the Compound Growth tab above, which solves the same equation in the other direction.",
             ],
           },
           {
@@ -4186,162 +4066,10 @@ export const TOOLS: Tool[] = [
               "Count periods, not years. From the end of 2023 to the end of 2026 there are four calendar years but only three periods. That off-by-one changes the CAGR noticeably.",
             ],
           },
-        ],
-        examples: [
           {
-            title: "Turning three years of revenue growth into an annual rate",
-            input: "Start 120,000,000 · End 210,000,000 · 3 years",
-            result: "CAGR about 20.5% (total growth 75%)",
-            note: "\"20.5% a year\" compares across time spans in a way that \"75% over three years\" cannot. Check it: multiply 1.205 by itself three times and you get roughly 1.75.",
-          },
-          {
-            title: "Finding the real average behind a volatile run",
-            input: "Start 100 · End 100 · 2 years (+100% then −50%)",
-            result: "CAGR 0%",
-            note: "Averaging the yearly rates arithmetically gives +25%, yet nothing actually changed. That gap is exactly why growth rates should be averaged with CAGR.",
-          },
-          {
-            title: "The annual rate of a metric that is shrinking",
-            input: "Start 50,000 · End 32,000 · 2 years",
-            result: "CAGR about −20%",
-            note: "Declines use the same formula and come out as a negative CAGR, which works just as well for metrics like churn or cancellations where going down is the goal.",
-          },
-        ],
-        limitations: [
-          "The start value must be greater than zero. With a start of zero or a negative start, End ÷ Start breaks down and CAGR is undefined.",
-          "It erases the path in between. Two businesses with identical CAGR may have grown steadily or in a single burst, so it says nothing about volatility.",
-          "Years means the number of periods, not the number of calendar years. End of 2023 to end of 2026 is 3; entering 4 understates the growth rate.",
-          "It is a nominal rate with no inflation adjustment. When comparing money over five years or more, deflate to real terms separately.",
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        { question: "CAGR이란 무엇인가요?", answer: "CAGR(Compound Annual Growth Rate)은 연평균 복리 성장률입니다. 시작값에서 종료값까지 매년 동일한 비율로 성장했다면 그 비율이 CAGR입니다." },
-        { question: "CAGR과 단순 성장률의 차이는 무엇인가요?", answer: "단순 성장률은 시작과 끝 두 시점만 비교합니다. CAGR은 복리를 적용해 매년 균등한 성장률을 구하므로, 다년간 비교에 더 정확합니다." },
-        { question: "CAGR이 음수가 될 수 있나요?", answer: "네. 종료 값이 시작 값보다 작으면 CAGR은 음수가 됩니다. 다만 시작 값은 반드시 양수여야 합니다." },
-      ],
-      en: [
-        { question: "What does CAGR mean?", answer: "CAGR stands for Compound Annual Growth Rate. It is the constant annual rate at which a value would have grown from the start value to the end value over a given number of years." },
-        { question: "How is CAGR different from simple growth rate?", answer: "Simple growth rate compares only two points in time. CAGR compounds the growth evenly across each year, making it more useful for comparing growth over different time periods." },
-        { question: "Can CAGR be negative?", answer: "Yes. If the end value is lower than the start value, CAGR will be negative, indicating an average annual decline. The start value must always be positive." },
-      ],
-    },
-    og: {
-      ko: { title: "CAGR 계산기", subtitle: "시작값·종료값·기간으로 연평균 성장률(CAGR) 즉시 계산" },
-      en: { title: "CAGR Calculator", subtitle: "Calculate Compound Annual Growth Rate instantly" },
-    },
-  },
-
-  {
-    slug: "compound-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "^n",
-    ready: true,
-    indexable: true,
-    badge: "Calculator",
-    name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
-    relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
-    seo: {
-      ko: {
-        title: "복리 성장 계산기 | 미래값 예측·성장 시나리오",
-        description:
-          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 매출·사용자 수·트래픽의 미래값 예측과 성장 시나리오 플래닝에 활용하세요.",
-        keywords: [
-          "복리 성장 계산기", "복리 계산기", "성장 예측 계산기", "미래값 계산기", "성장 시나리오",
-          "compound growth calculator", "future value calculator", "growth projection calculator",
-        ],
-      },
-      en: {
-        title: "Compound Growth Calculator | Future Value & Projection",
-        description:
-          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. Great for projecting revenue, users, or investments and for growth scenario planning.",
-        keywords: [
-          "compound growth calculator", "compounding calculator", "future value calculator",
-          "growth projection calculator", "revenue projection calculator", "growth forecast calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "초기(현재)값·성장률·기간으로 복리 최종값·미래 예측값 즉시 계산.",
-        description:
-          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 초기 투자금의 복리 성장은 물론, 현재 매출·사용자 수·트래픽이 일정 성장률로 커졌을 때의 미래값 예측(성장 시나리오)까지 같은 공식으로 구할 수 있습니다.",
-        howItWorks: ["초기(현재) 값 입력", "기간당 성장률(%) 입력", "기간(회차) 입력 후 최종값·미래 예측값·총 성장률 확인"],
-        aeo: {
-          what: "복리 성장 계산기는 초기(현재) 값에 성장률을 복리로 적용해 일정 기간 후의 최종값을 계산하는 도구입니다. 초기 투자금의 복리 최종값 계산과 현재 지표의 미래값 예측(성장 예측)이 모두 최종값 = 초기값 × (1 + 성장률/100)^기간이라는 동일한 공식이라, 이 계산기 하나로 처리합니다.",
-          who: "복리로 성장하는 매출·투자·사용자 수의 최종값이나 미래 예측값을 구하려는 PM, 스타트업 창업자, 투자자, 소상공인을 위한 도구입니다.",
-          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다. '초기 값'에 현재 지표를 넣으면 그대로 미래 예측값(성장 예측)이 됩니다.",
-          why: "복리의 힘을 직관적으로 확인하고, 성장률·기간을 바꿔가며 여러 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "복리 성장과 미래값 예측은 같은 계산",
+            heading: "Compound growth and future projection are CAGR run in reverse",
             body: [
-              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일합니다. 둘 다 최종값 = 초기값 × (1 + 성장률/100)^기간 공식을 씁니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
-              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산기가 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측 계산기가 됩니다.",
-            ],
-          },
-          {
-            heading: "복리와 단리의 차이",
-            body: [
-              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
-              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
-            ],
-          },
-          {
-            heading: "기간 단위와 활용",
-            body: [
-              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
-              "모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다. 참고로 미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요.",
-            ],
-          },
-        ],
-              examples: [
-          {
-            title: "연 12% 성장 가정으로 5년 뒤 매출 예측",
-            input: "현재 값 50,000,000 · 성장률 12% · 기간 5년",
-            result: "약 88,117,000 (총 증가 약 76%)",
-            note: "단리로 계산하면 50,000,000 × (1 + 0.12 × 5) = 80,000,000입니다. 5년만 지나도 복리와 단리의 차이가 800만원 넘게 벌어집니다.",
-          },
-          {
-            title: "사업계획서의 성장 시나리오 비교",
-            input: "같은 현재 값에 성장률 8% / 12% / 20%를 각각 입력",
-            result: "5년 뒤 약 73,466,000 / 88,117,000 / 124,416,000",
-            note: "보수·기본·공격 세 가지 시나리오를 나란히 두면, 목표 숫자가 어느 가정에 기대고 있는지 한눈에 보입니다.",
-          },
-          {
-            title: "감소 시나리오(이탈) 예측",
-            input: "현재 값 12,000 · 성장률 −5% · 기간 8분기",
-            result: "약 7,963",
-            note: "성장률에 음수를 넣으면 복리 감소가 됩니다. 기간 단위는 연이 아니어도 되며, 분기 이탈률을 넣으면 분기 단위로 계산됩니다.",
-          },
-        ],
-        limitations: [
-          "성장률이 매 기간 동일하다고 가정합니다. 실제 사업은 시장 포화·경쟁 진입·계절성으로 성장률이 변하므로, 기간이 길어질수록 예측 오차가 급격히 커집니다.",
-          "5년을 넘는 예측은 참고용으로만 쓰세요. 연 20% 성장을 10년간 유지하면 6.2배가 되는데, 이 규모를 실제로 달성하는 사업은 드뭅니다.",
-          "기간 단위는 성장률의 단위와 반드시 같아야 합니다. 연 성장률에 기간 12를 넣으면 12개월이 아니라 12년이 계산됩니다.",
-          "물가상승률·환율·세금을 반영하지 않은 명목 값입니다. 투자 수익을 볼 때는 실질 수익률로 따로 환산해야 합니다.",
-        ],
-      },
-      en: {
-        card: "Compute compounded final value and future projection from a value, rate, and periods.",
-        description:
-          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric: the same formula either way.",
-        howItWorks: ["Enter the initial (current) value", "Enter the growth rate per period (%)", "Enter the number of periods, then read the final / projected value"],
-        aeo: {
-          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value. Compounding an initial investment and projecting a current metric into the future both use Final Value = Initial × (1 + Rate / 100) ^ Periods, so this one calculator handles both.",
-          who: "It is for PMs, startup founders, investors, and business owners projecting revenue, users, or investments that grow at a constant periodic rate.",
-          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Put your current metric in the initial value field and the result is your future projection.",
-          why: "Compound growth diverges sharply from simple growth at scale: vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
-        },
-        guide: [
-          {
-            heading: "Compound growth and future projection are the same math",
-            body: [
-              "'Compound growth' and 'growth projection (future value)' differ only in name and context: the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
+              "'Compound growth' and 'growth projection (future value)' differ only in name and context: the calculation is identical, and it runs the opposite direction from CAGR. Where the CAGR tab derives an annual rate from a start and end value, the Compound Growth tab derives a future value from an initial value and a rate: Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
               "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric: revenue, users, traffic: makes it a growth projection calculator that looks into the future.",
             ],
           },
@@ -4353,60 +4081,75 @@ export const TOOLS: Tool[] = [
             ],
           },
           {
-            heading: "Period units and how to use it",
+            heading: "Period units on the Compound Growth tab",
             body: [
               "Any period unit works as long as it matches the rate: use months if your rate is monthly, years if it's annual. Because the same starting value can end up very differently with small changes to rate or periods, entering optimistic, base, and conservative scenarios side by side helps you size the range of outcomes.",
-              "Everything runs in your browser and your inputs are never sent to a server. Note that a projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each.",
+              "A projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each. Everything runs in your browser and your inputs are never sent to a server.",
             ],
           },
         ],
-              examples: [
+        examples: [
+          {
+            title: "Turning three years of revenue growth into an annual rate",
+            input: "Start 120,000,000 · End 210,000,000 · 3 years (CAGR tab)",
+            result: "CAGR about 20.5% (total growth 75%)",
+            note: "\"20.5% a year\" compares across time spans in a way that \"75% over three years\" cannot. Check it: multiply 1.205 by itself three times and you get roughly 1.75.",
+          },
+          {
+            title: "Finding the real average behind a volatile run",
+            input: "Start 100 · End 100 · 2 years, +100% then −50% (CAGR tab)",
+            result: "CAGR 0%",
+            note: "Averaging the yearly rates arithmetically gives +25%, yet nothing actually changed. That gap is exactly why growth rates should be averaged with CAGR.",
+          },
+          {
+            title: "The annual rate of a metric that is shrinking",
+            input: "Start 50,000 · End 32,000 · 2 years (CAGR tab)",
+            result: "CAGR about −20%",
+            note: "Declines use the same formula and come out as a negative CAGR, which works just as well for metrics like churn or cancellations where going down is the goal.",
+          },
           {
             title: "Projecting revenue five years out at 12% a year",
-            input: "Current 50,000,000 · Rate 12% · 5 periods",
+            input: "Initial 50,000,000 · Rate 12% · 5 periods (Compound Growth tab)",
             result: "About 88,117,000 (roughly 76% total growth)",
             note: "Simple interest would give 50,000,000 × (1 + 0.12 × 5) = 80,000,000. Even at five years the compounding gap is over 8 million.",
           },
           {
             title: "Comparing growth scenarios in a business plan",
-            input: "The same current value at 8% / 12% / 20%",
+            input: "The same initial value at 8% / 12% / 20% (Compound Growth tab)",
             result: "About 73,466,000 / 88,117,000 / 124,416,000 after five periods",
             note: "Lining up conservative, base and aggressive cases makes it obvious which assumption your target number is leaning on.",
           },
-          {
-            title: "Modelling a decline instead of growth",
-            input: "Current 12,000 · Rate −5% · 8 quarters",
-            result: "About 7,963",
-            note: "A negative rate compounds downward. The period does not have to be a year: feed it a quarterly churn rate and the result is quarterly.",
-          },
         ],
         limitations: [
-          "It assumes the same rate every period. Real businesses see growth change with saturation, new competitors and seasonality, so the error grows sharply the further out you project.",
-          "Treat anything beyond five periods as illustrative. Sustaining 20% for ten years implies a 6.2x increase, which very few businesses actually achieve.",
-          "The period unit must match the rate unit. Entering 12 with an annual rate models twelve years, not twelve months.",
-          "Results are nominal, with no inflation, currency or tax effects. Convert to a real rate separately when evaluating investment returns.",
+          "The start value must be greater than zero. With a start of zero or a negative start, End ÷ Start breaks down and CAGR is undefined.",
+          "CAGR erases the path in between. Two businesses with identical CAGR may have grown steadily or in a single burst, so it says nothing about volatility.",
+          "Years means the number of periods, not the number of calendar years. End of 2023 to end of 2026 is 3; entering 4 throws off both tabs.",
+          "The Compound Growth tab assumes the same rate every period. Real businesses see growth change with saturation, new competitors and seasonality, so the error grows sharply the further out you project; treat anything beyond five periods as illustrative.",
+          "Both tabs are nominal, with no inflation, currency or tax effects. Convert to a real rate separately when comparing money over long spans or evaluating investment returns.",
         ],
       },
     },
     faq: {
       ko: [
-        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간까지 누적된 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
-        { question: "성장 예측(미래값)도 이 계산기로 구하나요?", answer: "네. 미래값 예측은 복리 성장과 동일한 공식을 씁니다. '초기 값' 칸에 현재 매출·사용자 수 등을 넣으면 그대로 미래 예측값이 됩니다." },
-        { question: "성장률이 매 기간 동일하다고 가정하나요?", answer: "네. 모든 기간에 같은 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 구간을 나눠 각각 계산하세요." },
-        { question: "기간(회차)을 0으로 설정하면 어떻게 되나요?", answer: "0 기간은 허용됩니다. 최종값은 초기값과 동일합니다." },
-        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 줄어드는 복리 감소를 계산합니다." },
+        { question: "CAGR이란 무엇인가요?", answer: "CAGR(Compound Annual Growth Rate)은 연평균 복리 성장률입니다. 시작값에서 종료값까지 매년 동일한 비율로 성장했다면 그 비율이 CAGR입니다." },
+        { question: "CAGR과 단순 성장률의 차이는 무엇인가요?", answer: "단순 성장률은 시작과 끝 두 시점만 비교합니다. CAGR은 복리를 적용해 매년 균등한 성장률을 구하므로, 다년간 비교에 더 정확합니다." },
+        { question: "CAGR과 복리 성장 탭은 어떻게 다른가요?", answer: "같은 관계식을 반대 방향으로 풉니다. CAGR 탭은 시작값과 종료값을 알 때 연율을 역산하고, 복리 성장 탭은 초기값과 연율을 알 때 미래 값을 구합니다. 알고 있는 것이 무엇이냐에 따라 탭을 고르면 됩니다." },
+        { question: "복리 성장 탭으로 미래 예측(성장 시나리오)도 할 수 있나요?", answer: "네. '초기 값' 칸에 현재 매출·사용자 수 같은 지표를 넣으면 성장 예측이 되고, 성장률·기간을 여러 값으로 바꿔가며 낙관·기본·보수 시나리오를 비교할 수 있습니다." },
+        { question: "탭을 바꾸면 입력했던 값이 사라지나요?", answer: "네. CAGR 탭은 시작값·종료값·기간을, 복리 성장 탭은 초기값·성장률·기간을 입력받아 필드 구성 자체가 달라 기본값으로 초기화됩니다." },
+        { question: "입력한 숫자가 서버로 전송되나요?", answer: "아니요. 모든 계산은 브라우저 안에서 처리되며 입력값은 서버로 전송·저장되지 않습니다." },
       ],
       en: [
-        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value, causing exponential growth over time." },
-        { question: "Can I project a future value here too?", answer: "Yes. A future-value projection uses the same formula as compound growth. Put your current revenue, users, or metric in the initial value field and the result is your projection." },
-        { question: "Does it assume a constant growth rate each period?", answer: "Yes. It assumes the same rate every period. For variable rates, split the horizon into segments and calculate each separately." },
-        { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value: no growth has occurred." },
-        { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
+        { question: "What does CAGR mean?", answer: "CAGR stands for Compound Annual Growth Rate. It is the constant annual rate at which a value would have grown from the start value to the end value over a given number of years." },
+        { question: "How is CAGR different from simple growth rate?", answer: "Simple growth rate compares only two points in time. CAGR compounds the growth evenly across each year, making it more useful for comparing growth over different time periods." },
+        { question: "How is the CAGR tab different from the Compound Growth tab?", answer: "They solve the same relationship in opposite directions. The CAGR tab derives an annual rate when you know a start and end value; the Compound Growth tab derives a future value when you know an initial value and a rate. Pick the tab based on what you already know." },
+        { question: "Can I use the Compound Growth tab to project a future value or scenario?", answer: "Yes. Put a current metric like revenue or users in the initial value field to get a projection, and vary the rate and periods to compare optimistic, base, and conservative scenarios." },
+        { question: "Does switching tabs clear the values I entered?", answer: "Yes. The CAGR tab takes a start value, end value and years, while the Compound Growth tab takes an initial value, rate and periods, so the field set itself changes and resets to defaults." },
+        { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
     },
     og: {
-      ko: { title: "복리 성장 계산기", subtitle: "복리 최종값·미래 예측값·성장 시나리오 즉시 계산" },
-      en: { title: "Compound Growth Calculator", subtitle: "Compounded final value and future projection instantly" },
+      ko: { title: "CAGR 계산기", subtitle: "연평균 성장률(CAGR)과 복리 미래값 예측을 한 페이지에서" },
+      en: { title: "CAGR Calculator", subtitle: "CAGR and compound growth projection in one place" },
     },
   },
 

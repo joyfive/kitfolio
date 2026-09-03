@@ -18,11 +18,32 @@ const nextConfig: NextConfig = {
       { source: `/en/${slug}`, destination: "/en/growth-rate-calculator", permanent: true },
     ]);
 
-    // 복리 성장 ≡ 성장 예측(동일 수식) → 복리 성장 계산기로 병합.
+    // 복리 성장 ≡ 성장 예측(동일 수식) → CAGR 계산기(복리 성장 모드)로 병합.
+    // (2026-09: compound-growth-calculator 자체도 cagr-calculator에 흡수돼 목적지를
+    // cagr-calculator?mode=compound-growth로 평탄화. 체인 방지)
     const projectionRedirects = [
-      { source: "/growth-projection-calculator", destination: "/compound-growth-calculator", permanent: true },
-      { source: "/en/growth-projection-calculator", destination: "/en/compound-growth-calculator", permanent: true },
+      { source: "/growth-projection-calculator", destination: "/cagr-calculator?mode=compound-growth", permanent: true },
+      { source: "/en/growth-projection-calculator", destination: "/en/cagr-calculator?mode=compound-growth", permanent: true },
     ];
+
+    // 2026-09 URL 통합: 복리 성장 계산기 → cagr-calculator 한 페이지(?mode=)로 병합.
+    const cagrFamilyRedirects = [
+      { source: "/compound-growth-calculator", destination: "/cagr-calculator?mode=compound-growth", permanent: true },
+      { source: "/en/compound-growth-calculator", destination: "/en/cagr-calculator?mode=compound-growth", permanent: true },
+    ];
+
+    // 2026-09 URL 통합: 목표 성장률·필요 증가량·역산·퍼센트 차이 4종을
+    // growth-rate-calculator 한 페이지(?mode=)로 병합.
+    const growthFamilyModes: Record<string, string> = {
+      "percent-difference-calculator": "percent-difference",
+      "goal-growth-calculator": "goal-growth",
+      "required-growth-calculator": "required-growth",
+      "reverse-growth-calculator": "reverse-growth",
+    };
+    const growthFamilyRedirects = Object.entries(growthFamilyModes).flatMap(([slug, mode]) => [
+      { source: `/${slug}`, destination: `/growth-rate-calculator?mode=${mode}`, permanent: true },
+      { source: `/en/${slug}`, destination: `/en/growth-rate-calculator?mode=${mode}`, permanent: true },
+    ]);
 
     // 2026-09 URL 통합: CSS 단위 변환기 5종 → css-unit-converter 한 페이지(?mode=)로 병합.
     const cssUnitModes: Record<string, string> = {
@@ -51,6 +72,8 @@ const nextConfig: NextConfig = {
       },
       ...growthRedirects,
       ...projectionRedirects,
+      ...growthFamilyRedirects,
+      ...cagrFamilyRedirects,
       ...cssUnitRedirects,
     ];
   },
