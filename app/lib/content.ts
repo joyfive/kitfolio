@@ -6985,6 +6985,11 @@ export function getTool(slug: string): Tool {
   return t;
 }
 
+/** 도구가 검색 색인 대상인지(=noindex 아닌지). AdUnit 등 광고 렌더링 가드가 참조하는 단일 출처. */
+export function isToolIndexable(slug: string): boolean {
+  return getTool(slug).indexable;
+}
+
 /** KO는 루트, EN은 /en 프리픽스. path는 KO 기준 경로('/json-formatter', '/'). */
 export function localizedHref(lang: Lang, path: string): string {
   if (lang === "ko") return path;
