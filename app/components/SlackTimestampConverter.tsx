@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
+import ToolGuide from "./ToolGuide";
 import { useT, type Dict } from "../lib/i18n";
 import {
   parseInput,
@@ -255,6 +256,7 @@ export default function SlackTimestampConverter() {
           </div>
       </div>
 
+      <ToolGuide slug="slack-timestamp-converter" />
       <Faq slug="slack-timestamp-converter" />
       <RelatedTools slug="slack-timestamp-converter" />
     </>

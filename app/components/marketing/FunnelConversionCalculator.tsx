@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import PageHead from "../PageHead";
 import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
+import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
 import { analyzeFunnel, reverseCalculateFunnel } from "../../lib/marketing/funnel";
 import type { FunnelStage, ReverseFunnelStage } from "../../lib/marketing/types";
@@ -547,6 +548,7 @@ export default function FunnelConversionCalculator() {
         </div>
       </div>
 
+      <ToolGuide slug="funnel-conversion-calculator" />
       <Faq slug="funnel-conversion-calculator" />
       <RelatedTools slug="funnel-conversion-calculator" />
     </>
