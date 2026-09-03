@@ -46,4 +46,4 @@ Watch out: vw alone gets too large on wide screens and too small on narrow ones.
 
 ## Convert to px to check
 
-Designs usually arrive in px while implementation uses rem, em, %, or vw, so you often convert between them. Seeing the real pixel value makes it easier to reason about: check instantly with the [rem→px](/en/rem-to-px), [em→px](/en/em-to-px), [vw→px](/en/vw-to-px), and [%→px](/en/percent-to-px) converters.
+Designs usually arrive in px while implementation uses rem, em, %, or vw, so you often convert between them. Seeing the real pixel value makes it easier to reason about: check instantly with the [rem→px](/en/css-unit-converter?mode=rem-px), [em→px](/en/css-unit-converter?mode=em-px), [vw→px](/en/css-unit-converter?mode=vw-px), and [%→px](/en/css-unit-converter?mode=percent-px) converters.

@@ -36,7 +36,7 @@ PDF에는 계약서, 명세서, 신분증 스캔본처럼 민감한 문서가 �
 
 필요한 작업에 맞는 도구를 바로 열어 쓰세요. 모두 파일을 서버로 전송하지 않고 브라우저 안에서 처리합니다.
 
-- 여러 PDF를 하나로: [PDF 병합](/pdf-merge)
-- 페이지·범위로 나누기: [PDF 분할](/pdf-split)
-- 눕거나 뒤집힌 페이지 바로 세우기: [PDF 회전](/pdf-rotate)
-- 불필요한 페이지 제거: [PDF 페이지 삭제](/pdf-page-delete)
+- 여러 PDF를 하나로: [PDF 병합](/pdf-tools?mode=merge)
+- 페이지·범위로 나누기: [PDF 분할](/pdf-tools?mode=split)
+- 눕거나 뒤집힌 페이지 바로 세우기: [PDF 회전](/pdf-tools?mode=rotate)
+- 불필요한 페이지 제거: [PDF 페이지 삭제](/pdf-tools?mode=page-delete)

@@ -33,7 +33,7 @@ tags: 마케팅, 광고, 지표
 - **CPA** = 300만원 ÷ 120 = **25,000원**: 전환 하나당 비용
 - **ROAS** = 12,600,000 ÷ 3,000,000 = **420%**: 광고비 1원당 매출
 
-각 지표는 [ROAS 계산기](/roas-calculator)·[CPA 계산기](/cpa-calculator)·[CTR 계산기](/ctr-calculator)에서 바로 확인할 수 있고, 단계별 이탈을 함께 보려면 [퍼널 전환율 계산기](/funnel-conversion-calculator)가 편합니다.
+각 지표는 [ROAS 계산기](/ad-metrics-calculator?mode=roas)·[CPA 계산기](/ad-metrics-calculator?mode=cpa)·[CTR 계산기](/ad-metrics-calculator?mode=ctr)에서 바로 확인할 수 있고, 단계별 이탈을 함께 보려면 [퍼널 전환율 계산기](/funnel-conversion-calculator)가 편합니다.
 
 ## 이 캠페인은 흑자인가
 
