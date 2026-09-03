@@ -4164,7 +4164,7 @@ export const TOOLS: Tool[] = [
     indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
-    relatedTools: ["roas-calculator", "cpa-calculator", "funnel-conversion-calculator"],
+    relatedTools: ["ad-metrics-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "광고 예산 페이싱 계산기 | 광고비 소진율·집행률 확인",
@@ -4288,168 +4288,266 @@ export const TOOLS: Tool[] = [
     },
   },
   {
-    slug: "roas-calculator",
+    slug: "ad-metrics-calculator",
     layout: "card",
     cat: "text",
     targets: ["marketer", "small-business-owner", "pm"],
-    ico: "ROAS",
+    ico: "ADS",
     ready: true,
     indexable: true,
     badge: "Marketing Calculator",
-    name: { ko: "ROAS 계산기", en: "ROAS Calculator" },
-    relatedTools: ["cpa-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
+    name: { ko: "광고 지표 계산기", en: "Ad Metrics Calculator" },
+    relatedTools: ["ad-budget-pacing-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "ROAS 계산기 | 광고 수익률·목표 매출·허용 광고비 계산",
+        title: "광고 지표 계산기 | ROAS·CPA·CPC·CPM·CTR 계산",
         description:
-          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+          "탭을 전환해 ROAS·CPA·CPC·CPM·CTR 다섯 개 광고 지표를 한 페이지에서 계산합니다. 정계산은 물론 목표 매출·허용 광고비·예상 전환(클릭·노출) 수·필요 예산까지 역산합니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산되며, 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
-          "ROAS 계산기",
-          "광고 수익률 계산",
-          "광고비 대비 매출",
-          "목표 ROAS 계산",
-          "손익분기 ROAS",
-          "return on ad spend calculator",
+          "광고 지표 계산기", "ROAS 계산기", "CPA 계산기", "CPC 계산기", "CPM 계산기", "CTR 계산기",
+          "광고 수익률 계산", "손익분기 ROAS", "return on ad spend calculator",
         ],
       },
       en: {
-        title: "ROAS Calculator | Return on Ad Spend, Target Revenue & Budget",
+        title: "Ad Metrics Calculator | ROAS, CPA, CPC, CPM, CTR",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
+          "Switch tabs to calculate ROAS, CPA, CPC, CPM, and CTR, five ad metrics, on one page. Beyond the direct calculation, reverse-calculate target revenue, allowable budget, expected conversions (clicks, impressions), or the required budget. Add a gross margin percentage to see break-even ROAS. Every calculation runs in your browser.",
         keywords: [
-          "ROAS calculator",
-          "return on ad spend calculator",
-          "target ROAS calculator",
-          "ad revenue calculator",
-          "break even ROAS",
-          "advertising ROI calculator",
+          "ad metrics calculator", "ROAS calculator", "CPA calculator", "CPC calculator", "CPM calculator", "CTR calculator",
+          "return on ad spend calculator", "break even ROAS", "advertising ROI calculator",
         ],
       },
     },
     content: {
       ko: {
-        card: "광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함.",
+        card: "ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지.",
         description:
-          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+          "탭을 전환해 ROAS·CPA·CPC·CPM·CTR 다섯 개 광고 지표를 한 페이지에서 계산합니다. 정계산은 물론 목표 매출·허용 광고비·예상 전환(클릭·노출) 수·필요 예산까지 역산합니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산되며, 모든 계산은 브라우저에서만 처리됩니다.",
         howItWorks: [
-          "계산 모드 선택(ROAS·목표 매출·허용 광고비)",
-          "광고비·매출 또는 목표값 입력",
-          "ROAS와 관련 수치 즉시 확인",
+          "상단 탭에서 지표(ROAS·CPA·CPC·CPM·CTR) 선택",
+          "계산 모드(정계산 또는 역산)와 값 입력",
+          "결과와 계산식 확인 및 복사",
         ],
         aeo: {
-          what: "ROAS 계산기는 광고비 대비 매출 비율인 ROAS(Return on Ad Spend)를 계산하고, 목표 ROAS에서 필요 매출과 허용 광고비를 역산하며, 매출총이익률로 손익분기 ROAS를 도출하는 도구입니다.",
+          what: "광고 지표 계산기는 ROAS(광고 수익률)·CPA(전환당 비용)·CPC(클릭당 비용)·CPM(1,000회 노출당 비용)·CTR(클릭률) 다섯 개 광고 지표를 한 페이지에서 계산하는 통합 도구입니다. 각 지표는 정계산뿐 아니라 목표값에서 필요 예산·예상 전환(클릭·노출) 수를 역산하는 모드도 지원합니다.",
           who: "광고 성과를 추적하는 마케터, 디지털 광고를 운영하는 소상공인, 캠페인 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "ROAS 계산 모드에서는 광고비와 광고 매출을 입력하면 ROAS(%)와 ROAS 배수를 즉시 계산합니다. 목표 매출·허용 광고비 모드에서는 목표값을 역산합니다. 매출총이익률을 추가로 입력하면 손익분기 ROAS도 계산됩니다.",
-          why: "ROAS는 광고 효율을 가장 직관적으로 나타내는 지표입니다. 목표 ROAS를 설정하고 역산하면 광고 예산을 더 정확하게 계획할 수 있습니다.",
+          how: "상단 탭에서 지표를 고르고 계산 모드(정계산 또는 역산)를 선택해 값을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. 지표마다 입력 필드와 공식이 다릅니다.",
+          why: "노출→클릭→전환→매출로 이어지는 광고 퍼널의 각 단계를 서로 다른 도구를 오가지 않고 한 페이지에서 확인하고, 목표값에서 예산·전환 수를 역산해 캠페인을 계획할 수 있습니다.",
         },
         guide: [
           {
-            heading: "ROAS란 무엇이고 어떻게 읽나",
+            heading: "광고 지표 다섯 개를 왜 한 곳에 모았나",
             body: [
-              "ROAS(Return on Ad Spend)는 광고비 대비 매출을 나타내는 지표로, 매출 ÷ 광고비로 계산합니다. ROAS 400%(또는 4:1)는 광고에 1원을 써서 4원의 매출이 났다는 뜻입니다. 채널·캠페인·소재별로 ROAS를 비교하면 어디에 예산을 더 넣고 어디를 줄일지 판단할 수 있어, 퍼포먼스 마케팅에서 가장 먼저 보는 숫자입니다.",
-              "이 계산기는 광고비와 매출로 ROAS를 즉시 구하고, 목표 매출이나 허용 광고비를 거꾸로 역산하는 것도 지원합니다.",
+              "광고 캠페인은 노출(impression) → 클릭(click) → 전환(conversion) → 매출(revenue)로 이어지는 퍼널을 거칩니다. CPM은 노출 1,000회당 비용, CTR은 노출 대비 클릭 비율, CPC는 클릭 1회당 비용, CPA는 전환 1건당 비용, ROAS는 광고비 대비 매출 비율입니다. 다섯 지표 모두 '비용 ÷ 무언가' 또는 '무언가 ÷ 무언가'라는 같은 형태의 나눗셈이지만, 퍼널의 어느 단계를 보느냐가 다릅니다.",
+              "캠페인이 기대만큼 성과가 안 나올 때, 어느 단계가 문제인지 진단하려면 다섯 지표를 나란히 봐야 합니다. CPM은 정상인데 CTR이 낮으면 소재 문제, CTR은 높은데 CPA가 높으면 랜딩페이지나 타겟팅 문제일 가능성이 큽니다.",
             ],
           },
           {
-            heading: "손익분기 ROAS를 알아야 진짜 수익이 보인다",
+            heading: "ROAS: 광고비 대비 매출",
             body: [
-              "ROAS가 높다고 무조건 이익은 아닙니다. 제품 마진을 고려해야 하기 때문입니다. 마진율이 25%라면 광고비를 회수하는 손익분기 ROAS는 400%이고, 그보다 높아야 비로소 이익이 남습니다. 즉 같은 ROAS 300%라도 마진이 높은 상품이면 흑자, 낮은 상품이면 적자일 수 있습니다.",
-              "그래서 목표 ROAS는 마진 구조 위에서 세워야 합니다. 목표 ROAS를 정하고 허용 광고비·필요 매출을 역산하면 예산을 감이 아니라 숫자로 계획할 수 있습니다. 모든 계산은 브라우저 안에서 이루어집니다.",
+              "ROAS(Return on Ad Spend)는 매출 ÷ 광고비 × 100으로 계산합니다. ROAS 400%는 광고비 1원당 매출 4원이 났다는 뜻입니다. ROAS가 높다고 무조건 이익은 아닙니다: 매출총이익률이 25%라면 손익분기 ROAS는 400%(=100÷마진율)이고, 그보다 높아야 비로소 이익이 남습니다.",
+              "정계산 모드는 광고비·매출로 ROAS를 구하고, 역산 모드는 목표 ROAS에서 필요 매출 또는 허용 광고비를 거꾸로 계산합니다.",
+            ],
+          },
+          {
+            heading: "CPA: 전환 1건당 비용",
+            body: [
+              "CPA(Cost Per Acquisition)는 광고비 ÷ 전환 수로 계산합니다. 정계산 모드는 광고비·전환 수로 CPA를 구하고, 역산 모드는 예산과 목표 CPA로 예상 전환 수를, 목표 전환 수와 목표 CPA로 필요 예산을 계산합니다.",
+              "CPA는 '전환'을 무엇으로 정의하느냐에 따라 값이 크게 달라집니다. 구매·회원가입·장바구니 담기 중 어느 것을 전환으로 잡았는지 캠페인 간 비교 전에 반드시 확인하세요.",
+            ],
+          },
+          {
+            heading: "CPC: 클릭 1회당 비용",
+            body: [
+              "CPC(Cost Per Click)는 광고비 ÷ 클릭 수로 계산합니다. 검색·디스플레이 광고의 입찰 기준으로 가장 흔히 쓰이는 지표입니다. 역산 모드는 예산과 목표 CPC로 예상 클릭 수를, 목표 클릭 수와 목표 CPC로 필요 예산을 계산합니다.",
+              "CPC만 낮다고 좋은 캠페인은 아닙니다. 클릭이 저렴해도 전환으로 이어지지 않으면 CPA가 오히려 높아질 수 있으므로 CPC와 CPA를 함께 보는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "CPM: 노출 1,000회당 비용",
+            body: [
+              "CPM(Cost Per Mille)은 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 클릭이 아니라 노출 자체를 사는 브랜드 인지도 캠페인에서 주로 쓰이는 단가 기준입니다. 역산 모드는 예산과 목표 CPM으로 예상 노출 수를, 목표 노출 수와 목표 CPM으로 필요 예산을 계산합니다.",
+              "CPM이 낮다고 항상 유리하지는 않습니다. 타겟이 넓을수록 CPM은 낮아지는 경향이 있지만, 캠페인 목적과 무관한 노출이 섞이면 다른 지표(CTR·CPA)가 오히려 나빠질 수 있습니다.",
+            ],
+          },
+          {
+            heading: "CTR: 노출 대비 클릭 비율",
+            body: [
+              "CTR(Click-Through Rate)은 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 소재·카피가 타겟에게 얼마나 매력적으로 보이는지 가늠하는 지표입니다. 역산 모드는 노출 수와 목표 CTR로 필요 클릭 수를, 클릭 수와 목표 CTR로 필요 노출 수를 계산합니다.",
+              "클릭 수가 노출 수보다 많으면 계산기가 경고를 표시합니다. 트래킹 중복 집계나 측정 기준 불일치로 흔히 발생하는 오류이니 데이터 소스를 다시 확인하세요.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "캠페인 ROAS 계산",
-            input: "광고비 3,000,000 · 광고 매출 12,600,000",
+            input: "광고비 3,000,000 · 광고 매출 12,600,000 (ROAS 탭)",
             result: "ROAS 420%",
             note: "광고비 1원당 매출 4.2원이라는 뜻입니다. ROAS는 매출 기준이라 원가와 수수료를 빼기 전 숫자이며, 이 값만으로는 흑자인지 알 수 없습니다.",
           },
           {
-            title: "손익분기 ROAS로 흑자 여부 판단",
-            input: "기여이익률 25%",
-            result: "손익분기 ROAS 400%",
-            note: "손익분기 ROAS = 1 ÷ 기여이익률입니다. 마진이 25%면 400%를 넘어야 본전이므로, 위 예시의 420%는 겨우 흑자 구간입니다. 마진율을 모른 채 \"ROAS 400% 달성\"을 성과로 보고하면 적자 캠페인을 성공으로 착각할 수 있습니다.",
-          },
-          {
             title: "목표 매출에서 허용 광고비 역산",
-            input: "목표 매출 50,000,000 · 목표 ROAS 500%",
+            input: "목표 매출 50,000,000 · 목표 ROAS 500% (ROAS 탭, 역산 모드)",
             result: "허용 광고비 10,000,000",
             note: "월 예산을 짤 때 쓰는 방향입니다. 목표 ROAS를 마진율에서 먼저 정하고, 거기서 쓸 수 있는 광고비를 도출하는 순서가 안전합니다.",
           },
+          {
+            title: "회원가입 캠페인의 CPA 확인",
+            input: "광고비 2,000,000 · 전환(가입) 수 400건 (CPA 탭)",
+            result: "CPA 5,000",
+            note: "전환 1건을 얻는 데 5,000원이 들었다는 뜻입니다. 예산으로 예상 전환 수를 미리 가늠하려면 역산 모드에서 목표 CPA를 넣으면 됩니다.",
+          },
+          {
+            title: "입찰가 조정을 위한 CPC 확인",
+            input: "광고비 300,000 · 클릭 수 1,500회 (CPC 탭)",
+            result: "CPC 200",
+            note: "클릭 1회당 200원입니다. 목표 CPC와 예산을 넣으면 그 예산으로 얻을 수 있는 예상 클릭 수를 역산할 수 있습니다.",
+          },
+          {
+            title: "브랜드 캠페인의 CPM 확인",
+            input: "광고비 500,000 · 노출 수 2,000,000회 (CPM 탭)",
+            result: "CPM 250",
+            note: "노출 1,000회당 250원입니다. 노출 목표를 먼저 정했다면 역산 모드에서 목표 노출 수와 목표 CPM으로 필요 예산을 먼저 계산해 볼 수 있습니다.",
+          },
+          {
+            title: "소재 성과 비교를 위한 CTR 확인",
+            input: "클릭 수 2,500회 · 노출 수 100,000회 (CTR 탭)",
+            result: "CTR 2.5%",
+            note: "노출 100회당 2.5회 클릭이 났다는 뜻입니다. 여러 소재의 CTR을 나란히 비교하면 어떤 카피·이미지가 더 반응이 좋은지 판단할 수 있습니다.",
+          },
+          {
+            title: "손익분기 ROAS로 흑자 여부 판단",
+            input: "기여이익률 25% (ROAS 탭)",
+            result: "손익분기 ROAS 400%",
+            note: "손익분기 ROAS = 100 ÷ 기여이익률입니다. 마진이 25%면 400%를 넘어야 본전이므로, 첫 번째 예시의 420%는 겨우 흑자 구간입니다.",
+          },
         ],
         limitations: [
-          "ROAS는 매출 기준 지표입니다. 원가·배송비·결제 수수료·반품을 반영하지 않으므로, 수익성 판단에는 반드시 기여이익률과 손익분기 ROAS를 함께 봐야 합니다.",
-          "광고 매출은 플랫폼이 자기 기여로 집계한 값입니다. 클릭 후 7일 이내 구매 같은 기여 기간(attribution window) 설정에 따라 같은 캠페인의 ROAS가 크게 달라지며, 여러 채널의 ROAS를 단순 합산하면 같은 주문이 중복 계상됩니다.",
-          "신규 고객 획득 캠페인은 첫 구매만으로 평가하면 ROAS가 낮게 나옵니다. 재구매가 있는 사업이라면 고객 생애 가치(LTV) 기준으로 함께 판단해야 합니다.",
-          "브랜드 검색처럼 광고가 없어도 발생했을 매출은 걷어내지 않습니다. 증분 효과를 보려면 캠페인을 끄고 비교하는 실험이 필요합니다.",
+          "ROAS·CPA는 매출·전환 기준 지표입니다. 원가·배송비·결제 수수료·반품을 반영하지 않으므로, 수익성 판단에는 기여이익률과 손익분기 ROAS를 함께 봐야 합니다.",
+          "광고 매출·전환은 플랫폼이 자기 기여로 집계한 값입니다. 기여 기간(attribution window) 설정에 따라 같은 캠페인의 ROAS·CPA가 크게 달라지며, 여러 채널을 단순 합산하면 같은 주문·전환이 중복 계상됩니다.",
+          "신규 고객 획득 캠페인은 첫 구매만으로 ROAS·CPA를 평가하면 낮게(나쁘게) 나옵니다. 재구매가 있는 사업이라면 고객 생애 가치(LTV) 기준으로 함께 판단해야 합니다.",
+          "다섯 지표는 퍼널의 서로 다른 단계를 보므로, 하나만 보고 캠페인 전체를 판단할 수 없습니다. CPM·CTR·CPC가 모두 좋아도 CPA·ROAS가 나쁘면 랜딩페이지나 타겟팅 문제일 수 있습니다.",
+          "브랜드 검색처럼 광고가 없어도 발생했을 매출·전환은 걷어내지 않습니다. 증분 효과를 보려면 캠페인을 끄고 비교하는 실험이 필요합니다.",
         ],
       },
       en: {
-        card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
+        card: "Calculate ROAS, CPA, CPC, CPM and CTR by tab. Reverse modes for target revenue, expected conversions, and required budget.",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
+          "Switch tabs to calculate ROAS, CPA, CPC, CPM, and CTR, five ad metrics, on one page. Beyond the direct calculation, reverse-calculate target revenue, allowable budget, expected conversions (clicks, impressions), or the required budget. Add a gross margin percentage to see break-even ROAS. Every calculation runs in your browser.",
         howItWorks: [
-          "Choose a calculation mode (ROAS, target revenue, or allowable budget)",
-          "Enter ad spend, revenue, or target values",
-          "See ROAS and related metrics instantly",
+          "Pick a metric from the tabs (ROAS, CPA, CPC, CPM, CTR)",
+          "Choose a calculation mode (direct or reverse) and enter values",
+          "See the result and formula, and copy it",
         ],
         aeo: {
-          what: "ROAS Calculator is a tool that computes Return on Ad Spend (ad revenue ÷ ad spend × 100), reverse-calculates target revenue or allowable ad budget from a target ROAS, and derives break-even ROAS from a gross margin percentage.",
+          what: "Ad Metrics Calculator is a unified tool that computes five advertising metrics on one page: ROAS (return on ad spend), CPA (cost per acquisition), CPC (cost per click), CPM (cost per 1,000 impressions), and CTR (click-through rate). Each metric supports both a direct calculation and reverse modes that derive the required budget or expected conversions (clicks, impressions) from a target.",
           who: "It is for marketers tracking ad performance, small business owners running digital ads, and PMs planning campaign budgets.",
-          how: "In ROAS mode, enter ad spend and revenue to get ROAS (%) and ROAS multiple instantly. In target modes, enter the target value to reverse-calculate the missing number. Enter a gross margin percentage to see the break-even ROAS.",
-          why: "ROAS is the most direct measure of advertising efficiency. Setting a target ROAS and reverse-calculating required inputs lets you plan budgets with precision rather than guesswork.",
+          how: "Pick a metric from the tabs, choose a calculation mode (direct or reverse), and enter the values it needs; the result appears instantly in your browser. Each metric has its own inputs and formula.",
+          why: "It lets you check every stage of the impression-to-click-to-conversion-to-revenue funnel on one page instead of hopping between tools, and reverse-calculate budget or expected conversions from a target to plan a campaign.",
         },
         guide: [
           {
-            heading: "What ROAS is and how to read it",
+            heading: "Why five ad metrics live on one page",
             body: [
-              "ROAS (Return on Ad Spend) is revenue relative to ad spend, calculated as revenue ÷ ad spend. A ROAS of 400% (or 4:1) means every 1 spent on ads produced 4 in revenue. Comparing ROAS across channels, campaigns, and creatives shows where to add budget and where to cut, which is why it's the first number performance marketers look at.",
-              "This calculator turns ad spend and revenue into ROAS instantly, and also reverse-calculates the target revenue or allowable ad spend you'd need.",
+              "An ad campaign runs through a funnel: impression, click, conversion, revenue. CPM is cost per 1,000 impressions, CTR is clicks relative to impressions, CPC is cost per click, CPA is cost per conversion, and ROAS is revenue relative to ad spend. All five reduce to the same shape of division, cost divided by something, or something divided by something, but each looks at a different stage of the funnel.",
+              "When a campaign underperforms, diagnosing which stage is the problem means looking at all five side by side. Normal CPM with low CTR points to a creative problem; high CTR with high CPA more often points to the landing page or targeting.",
             ],
           },
           {
-            heading: "Know your break-even ROAS to see real profit",
+            heading: "ROAS: revenue relative to ad spend",
             body: [
-              "A high ROAS isn't automatically profitable, because you have to account for product margin. At a 25% margin, the break-even ROAS that just recovers ad cost is 400%, and you only profit above that. So the same ROAS of 300% can be profitable on a high-margin product and a loss on a low-margin one.",
-              "That means your target ROAS should be built on your margin structure. Setting a target and reverse-calculating allowable spend and required revenue lets you plan budgets by the numbers rather than by feel. Everything runs in your browser.",
+              "ROAS (Return on Ad Spend) is Revenue / Ad Spend x 100. A ROAS of 400% means every 1 spent produced 4 in revenue. A high ROAS isn't automatically profitable: at a 25% gross margin, break-even ROAS is 400% (= 100 / margin), and you only profit above that.",
+              "The direct mode turns ad spend and revenue into ROAS; the reverse mode derives the required revenue or allowable ad spend from a target ROAS.",
+            ],
+          },
+          {
+            heading: "CPA: cost per conversion",
+            body: [
+              "CPA (Cost Per Acquisition) is Ad Spend / Conversions. The direct mode turns ad spend and conversions into CPA; the reverse modes derive expected conversions from a budget and target CPA, or the required budget from a target conversion count and target CPA.",
+              "CPA shifts a lot depending on what counts as a \"conversion\": purchase, sign-up, or add-to-cart. Confirm which definition each campaign is using before comparing CPA across them.",
+            ],
+          },
+          {
+            heading: "CPC: cost per click",
+            body: [
+              "CPC (Cost Per Click) is Ad Spend / Clicks, the most common bidding basis for search and display ads. The reverse modes derive expected clicks from a budget and target CPC, or the required budget from a target click count and target CPC.",
+              "A low CPC alone doesn't make a good campaign. Cheap clicks that don't convert can still push CPA up, so it's safer to read CPC alongside CPA.",
+            ],
+          },
+          {
+            heading: "CPM: cost per 1,000 impressions",
+            body: [
+              "CPM (Cost Per Mille) is Ad Spend / Impressions x 1,000, the usual pricing basis for brand-awareness campaigns that buy impressions rather than clicks. The reverse modes derive expected impressions from a budget and target CPM, or the required budget from a target impression count and target CPM.",
+              "A low CPM isn't always favorable. Broader targeting tends to lower CPM, but if the extra impressions are irrelevant to the campaign's goal, other metrics like CTR or CPA can get worse instead.",
+            ],
+          },
+          {
+            heading: "CTR: clicks relative to impressions",
+            body: [
+              "CTR (Click-Through Rate) is Clicks / Impressions x 100, a read on how compelling the creative and copy are to the target audience. The reverse modes derive the required clicks from an impression count and target CTR, or the required impressions from a click count and target CTR.",
+              "If clicks exceed impressions, the calculator shows a warning. That usually means duplicate tracking or mismatched measurement sources, so double-check the data source.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "Calculating campaign ROAS",
-            input: "Ad spend 3,000,000 · Attributed revenue 12,600,000",
+            input: "Ad spend 3,000,000 · Attributed revenue 12,600,000 (ROAS tab)",
             result: "ROAS 420%",
             note: "That is 4.2 in revenue per 1 spent. ROAS is a revenue figure taken before cost of goods and fees, so on its own it does not tell you whether the campaign made money.",
           },
           {
-            title: "Using break-even ROAS to judge profitability",
-            input: "Contribution margin 25%",
-            result: "Break-even ROAS 400%",
-            note: "Break-even ROAS = 1 ÷ contribution margin. At a 25% margin you need to clear 400% just to break even, so the 420% above is barely profitable. Reporting \"we hit 400% ROAS\" without knowing the margin can dress up a losing campaign as a win.",
-          },
-          {
             title: "Working backwards from a revenue target to an allowable budget",
-            input: "Target revenue 50,000,000 · Target ROAS 500%",
+            input: "Target revenue 50,000,000 · Target ROAS 500% (ROAS tab, reverse mode)",
             result: "Allowable ad spend 10,000,000",
             note: "This is the direction to use when planning a monthly budget: set the target ROAS from your margin first, then derive the spend it allows.",
           },
+          {
+            title: "Checking CPA for a sign-up campaign",
+            input: "Ad spend 2,000,000 · Conversions (sign-ups) 400 (CPA tab)",
+            result: "CPA 5,000",
+            note: "Each conversion cost 5,000. To gauge expected conversions from a budget ahead of time, use the reverse mode with a target CPA.",
+          },
+          {
+            title: "Checking CPC to adjust a bid",
+            input: "Ad spend 300,000 · Clicks 1,500 (CPC tab)",
+            result: "CPC 200",
+            note: "Each click cost 200. Enter a target CPC and budget to reverse-calculate the expected clicks that budget would buy.",
+          },
+          {
+            title: "Checking CPM for a brand campaign",
+            input: "Ad spend 500,000 · Impressions 2,000,000 (CPM tab)",
+            result: "CPM 250",
+            note: "That's 250 per 1,000 impressions. If you set an impression target first, use the reverse mode with a target impression count and target CPM to work out the required budget.",
+          },
+          {
+            title: "Comparing creative performance with CTR",
+            input: "Clicks 2,500 · Impressions 100,000 (CTR tab)",
+            result: "CTR 2.5%",
+            note: "That's 2.5 clicks per 100 impressions. Comparing CTR across creatives side by side shows which copy or image resonates more.",
+          },
+          {
+            title: "Using break-even ROAS to judge profitability",
+            input: "Contribution margin 25% (ROAS tab)",
+            result: "Break-even ROAS 400%",
+            note: "Break-even ROAS = 100 / contribution margin. At a 25% margin you need to clear 400% just to break even, so the 420% in the first example is barely profitable.",
+          },
         ],
         limitations: [
-          "ROAS is measured on revenue. It ignores cost of goods, shipping, payment fees and returns, so profitability decisions need contribution margin and break-even ROAS alongside it.",
-          "Attributed revenue is whatever the ad platform claims credit for. The attribution window (say, purchases within seven days of a click) can move the same campaign's ROAS substantially, and adding ROAS across channels double-counts the same orders.",
-          "Prospecting campaigns look weak when judged on the first purchase alone. If customers buy again, evaluate against lifetime value as well.",
-          "It does not strip out revenue that would have happened anyway, such as branded search. Measuring incrementality requires an experiment that turns the campaign off.",
+          "ROAS and CPA are measured on revenue and conversions. They ignore cost of goods, shipping, payment fees and returns, so profitability decisions need contribution margin and break-even ROAS alongside them.",
+          "Attributed revenue and conversions are whatever the ad platform claims credit for. The attribution window can move the same campaign's ROAS or CPA substantially, and simply adding totals across channels double-counts the same orders or conversions.",
+          "Prospecting campaigns look weak (a low ROAS, a high CPA) when judged on the first purchase alone. If customers buy again, evaluate against lifetime value as well.",
+          "The five metrics look at different stages of the funnel, so no single one judges a whole campaign. Good CPM, CTR and CPC alongside a bad CPA or ROAS usually points to the landing page or targeting instead.",
+          "None of them strip out revenue or conversions that would have happened anyway, such as branded search. Measuring incrementality requires an experiment that turns the campaign off.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "ROAS는 무엇인가요?",
+          question: "다섯 개 지표를 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "ROAS(Return on Ad Spend)는 광고 수익률로, 광고비 1원을 투자했을 때 매출이 얼마나 발생했는지를 나타냅니다. ROAS(%) = 광고 매출 ÷ 광고비 × 100으로 계산합니다. 예를 들어 광고비 100만 원으로 400만 원의 매출을 달성하면 ROAS는 400%입니다.",
+            "아니요. 상단 탭에서 ROAS·CPA·CPC·CPM·CTR 중 원하는 지표를 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 지표를 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /ad-metrics-calculator 하나입니다.",
         },
         {
           question: "ROAS와 ROI의 차이는 무엇인가요?",
@@ -4457,9 +4555,24 @@ export const TOOLS: Tool[] = [
             "ROAS는 광고비 대비 매출만 비교하는 단순 지표입니다. ROI(Return on Investment)는 광고비 외에 제조원가·운영비 등 전체 비용을 고려한 순이익 기준 지표입니다. 광고 효율만 빠르게 비교할 때는 ROAS를, 전체 사업 수익성을 볼 때는 ROI를 사용합니다.",
         },
         {
+          question: "CPA·CPC·CPM은 서로 어떻게 다른가요?",
+          answer:
+            "셋 다 '광고비 ÷ 무언가'지만 나누는 대상이 다릅니다. CPC는 클릭 수, CPM은 노출 수(1,000회 단위), CPA는 전환 수로 나눕니다. 광고 퍼널에서 노출·클릭·전환 중 어느 단계의 비용 효율을 보고 싶은지에 따라 골라 쓰면 됩니다.",
+        },
+        {
           question: "손익분기 ROAS는 어떻게 계산하나요?",
           answer:
             "손익분기 ROAS = 100 ÷ 매출총이익률(소수)로 계산합니다. 예를 들어 매출총이익률이 30%이면 손익분기 ROAS는 100 ÷ 0.3 = 333.33%입니다. 이 값 이상의 ROAS를 달성해야 광고비를 제외하고도 이익이 발생합니다.",
+        },
+        {
+          question: "탭을 바꾸면 계산 모드와 값이 초기화되나요?",
+          answer:
+            "네. 지표마다 입력 필드 구성과 기본값이 달라 탭을 바꾸면 계산 모드(A/B/C)와 입력값이 그 지표의 기본값으로 초기화됩니다. 통화 설정은 유지됩니다.",
+        },
+        {
+          question: "CTR 탭에서 클릭 수가 노출 수보다 많다는 경고가 뜨는 이유는 무엇인가요?",
+          answer:
+            "클릭 수가 노출 수를 넘는 것은 정상적인 상황이 아닙니다. 서로 다른 트래킹 도구의 중복 집계나 측정 기준(예: 고유 클릭 vs 전체 클릭) 불일치로 흔히 발생하니, 데이터 소스를 다시 확인하세요.",
         },
         {
           question: "입력한 광고비와 매출 데이터가 서버로 전송되나요?",
@@ -4469,9 +4582,9 @@ export const TOOLS: Tool[] = [
       ],
       en: [
         {
-          question: "What is ROAS?",
+          question: "Do I need to visit a different page for each of the five metrics?",
           answer:
-            "ROAS (Return on Ad Spend) measures how much revenue you earn for every dollar spent on advertising. ROAS (%) = ad revenue ÷ ad spend × 100. For example, spending $1,000 on ads and generating $4,000 in revenue gives you a ROAS of 400%.",
+            "No. Click ROAS, CPA, CPC, CPM, or CTR in the tabs above and it switches instantly on the same page. The URL reflects the current metric via a ?mode= query, but the canonical URL used for search indexing is always the single /ad-metrics-calculator.",
         },
         {
           question: "What is the difference between ROAS and ROI?",
@@ -4479,9 +4592,24 @@ export const TOOLS: Tool[] = [
             "ROAS only compares ad revenue to ad spend. ROI (Return on Investment) factors in all costs: cost of goods, operations, etc., and measures net profit. Use ROAS for a quick read on ad efficiency; use ROI for overall profitability.",
         },
         {
+          question: "How are CPA, CPC, and CPM different from each other?",
+          answer:
+            "All three are \"ad spend divided by something,\" just a different something: CPC divides by clicks, CPM by impressions (in units of 1,000), and CPA by conversions. Pick whichever matches the funnel stage, impressions, clicks, or conversions, whose cost efficiency you want to see.",
+        },
+        {
           question: "How is break-even ROAS calculated?",
           answer:
-            "Break-even ROAS = 100 ÷ gross margin (as a decimal). For example, a 30% gross margin gives a break-even ROAS of 100 ÷ 0.3 = 333.33%. You need to achieve at least this ROAS for ads to be profitable after accounting for cost of goods.",
+            "Break-even ROAS = 100 / gross margin (as a decimal). For example, a 30% gross margin gives a break-even ROAS of 100 / 0.3 = 333.33%. You need to achieve at least this ROAS for ads to be profitable after accounting for cost of goods.",
+        },
+        {
+          question: "Does switching tabs reset the calculation mode and values?",
+          answer:
+            "Yes. Each metric has its own set of fields and defaults, so switching tabs resets the calculation mode (A/B/C) and inputs to that metric's defaults. Your currency setting is kept.",
+        },
+        {
+          question: "Why does the CTR tab warn that clicks exceed impressions?",
+          answer:
+            "Clicks outnumbering impressions isn't a normal state. It usually comes from duplicate counting across tracking tools or a mismatch in measurement definitions (say, unique clicks vs. all clicks), so double-check the data source.",
         },
         {
           question: "Is my ad spend and revenue data sent to a server?",
@@ -4491,629 +4619,8 @@ export const TOOLS: Tool[] = [
       ],
     },
     og: {
-      ko: { title: "ROAS 계산기", subtitle: "광고 수익률 · 목표 매출 · 허용 광고비 역산" },
-      en: { title: "ROAS Calculator", subtitle: "Return on ad spend, target revenue and allowable budget" },
-    },
-  },
-  {
-    slug: "cpa-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPA",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPA 계산기", en: "CPA Calculator" },
-    relatedTools: ["roas-calculator", "cpc-calculator", "funnel-conversion-calculator"],
-    seo: {
-      ko: {
-        title: "CPA 계산기 | 전환당 광고비·예상 전환 수·필요 예산 계산",
-        description:
-          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPA 계산기",
-          "전환당 비용 계산",
-          "목표 CPA 계산",
-          "전환 광고비 계산",
-          "cost per acquisition calculator",
-          "cost per action calculator",
-        ],
-      },
-      en: {
-        title: "CPA Calculator | Cost Per Acquisition, Conversions & Budget",
-        description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPA calculator",
-          "cost per acquisition calculator",
-          "cost per action calculator",
-          "conversion cost calculator",
-          "target CPA calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPA·예상 전환 수·필요 예산)",
-          "광고비·전환 수 또는 목표값 입력",
-          "CPA와 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPA 계산기는 광고비 ÷ 전환 수로 전환당 광고비(CPA, Cost Per Acquisition)를 계산하고, 목표 CPA와 예산으로 예상 전환 수를 역산하거나 목표 전환 수와 CPA로 필요 예산을 계산하는 도구입니다.",
-          who: "전환 성과를 추적하는 마케터, 퍼포먼스 광고를 운영하는 소상공인, 캠페인 KPI를 관리하는 PM을 위한 도구입니다.",
-          how: "CPA 계산 모드에서는 광고비와 전환 수를 입력하면 CPA를 즉시 계산합니다. 목표 CPA 역산 모드에서는 예산과 목표 CPA로 예상 전환 수를, 필요 예산 모드에서는 목표 전환 수와 CPA로 필요 예산을 계산합니다.",
-          why: "CPA는 광고 효율을 전환 기준으로 측정하는 핵심 지표입니다. 목표 CPA를 설정하고 역산하면 광고 예산을 더 정밀하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPA는 '성과 1건'의 비용",
-            body: [
-              "CPA(Cost per Acquisition)는 전환(구매·가입·문의 등) 1건을 얻는 데 든 광고비로, 광고비 ÷ 전환 수로 계산합니다. 클릭이나 노출이 아니라 실제로 원하는 행동이 일어난 건수를 기준으로 하기 때문에, 비즈니스 목표에 가장 가까운 효율 지표입니다. CPC·CTR이 좋아도 전환이 없으면 CPA는 나빠집니다.",
-              "이 계산기는 광고비와 전환 수로 CPA를 즉시 구하고, 목표 CPA에 맞춘 예상 전환 수나 필요 예산을 역산할 수 있습니다.",
-            ],
-          },
-          {
-            heading: "CPA는 고객 가치(LTV·마진)와 비교해야 한다",
-            body: [
-              "CPA 자체의 높고 낮음보다 중요한 건 고객 한 명이 주는 가치와의 관계입니다. 고객 생애 가치(LTV)나 첫 구매 마진보다 CPA가 낮아야 광고가 지속 가능합니다. 예컨대 평균 마진이 3만원인데 CPA가 4만원이면, 전환이 늘수록 손해가 커집니다.",
-              "그래서 목표 CPA는 '고객 한 명에게 쓸 수 있는 최대 금액'에서 출발해 정합니다. 목표 CPA를 정하고 필요 전환·예산을 역산하면 캠페인을 실제 수익 구조 위에서 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
-        description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPA, expected conversions, or required budget)",
-          "Enter ad spend, conversions, or target values",
-          "See CPA and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPA Calculator is a tool that computes Cost Per Acquisition (ad spend ÷ conversions), reverse-calculates expected conversions from a budget and target CPA, and finds the required budget for a target number of conversions.",
-          who: "It is for marketers tracking conversion performance, small business owners running performance ads, and PMs managing campaign KPIs.",
-          how: "In CPA mode, enter ad spend and conversions to see CPA instantly. In reverse modes, enter a target CPA with a budget to get expected conversions, or a target conversion count with a CPA to get the required budget.",
-          why: "CPA measures advertising efficiency in terms of outcomes rather than clicks or impressions. Setting a target CPA lets you plan budgets around actual business goals.",
-        },
-        guide: [
-          {
-            heading: "CPA is the cost of one outcome",
-            body: [
-              "CPA (Cost per Acquisition) is the ad spend it takes to win one conversion: a purchase, sign-up, or lead: calculated as ad spend ÷ conversions. Because it's based on the action you actually want rather than clicks or impressions, it's the efficiency metric closest to your business goal. Even with a good CPC and CTR, no conversions means a bad CPA.",
-              "This calculator turns ad spend and conversions into CPA instantly, and reverse-calculates the expected conversions or budget needed to hit a target CPA.",
-            ],
-          },
-          {
-            heading: "Compare CPA against customer value (LTV, margin)",
-            body: [
-              "What matters isn't CPA on its own but its relationship to what a customer is worth. Your CPA needs to be lower than customer lifetime value (LTV) or first-purchase margin for advertising to be sustainable. If your average margin is 30 and CPA is 40, more conversions just mean bigger losses.",
-              "So a target CPA starts from 'the most you can spend to acquire one customer.' Setting that target and reverse-calculating the conversions and budget you need lets you plan the campaign on top of your real profit structure. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPA란 무엇인가요?",
-          answer:
-            "CPA(Cost Per Acquisition 또는 Cost Per Action)는 전환 1건을 달성하는 데 든 광고비를 나타냅니다. CPA = 광고비 ÷ 전환 수로 계산합니다. 전환은 구매·회원가입·신청·다운로드 등 목표로 정한 행동을 의미합니다.",
-        },
-        {
-          question: "예상 전환 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 전환 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 100만 원, 목표 CPA 30만 원이면 예상 전환 수는 floor(1,000,000 ÷ 300,000) = 3건입니다.",
-        },
-        {
-          question: "CPA와 CPC의 차이는 무엇인가요?",
-          answer:
-            "CPC(Cost Per Click)는 클릭 1번당 광고비이고, CPA(Cost Per Acquisition)는 전환 1건당 광고비입니다. CPC는 트래픽 비용을, CPA는 실제 성과(구매·신청 등) 비용을 측정합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPA?",
-          answer:
-            "CPA (Cost Per Acquisition or Cost Per Action) is the average cost of achieving one conversion. CPA = ad spend ÷ conversions. A conversion can be a purchase, sign-up, application, download: any goal action you define.",
-        },
-        {
-          question: "Why is the expected conversion count a whole number?",
-          answer:
-            "Expected conversions use floor (round down) because you can only achieve whole conversions. For example, with a $1,000 budget and $300 target CPA, expected conversions = floor(1000 ÷ 300) = 3.",
-        },
-        {
-          question: "What is the difference between CPA and CPC?",
-          answer:
-            "CPC (Cost Per Click) measures the cost of each click on your ad. CPA (Cost Per Acquisition) measures the cost of each actual conversion: a purchase, sign-up, etc. CPC tracks traffic cost; CPA tracks outcome cost.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPA 계산기", subtitle: "전환당 광고비 · 예상 전환 수 · 필요 예산 역산" },
-      en: { title: "CPA Calculator", subtitle: "Cost per acquisition, expected conversions and required budget" },
-    },
-  },
-  {
-    slug: "cpc-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPC",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPC 계산기", en: "CPC Calculator" },
-    relatedTools: ["ctr-calculator", "cpm-calculator", "cpa-calculator"],
-    seo: {
-      ko: {
-        title: "CPC 계산기 | 클릭당 광고비·예상 클릭 수·필요 예산 계산",
-        description:
-          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPC 계산기",
-          "클릭당 비용 계산",
-          "목표 CPC 계산",
-          "광고 클릭 비용",
-          "cost per click calculator",
-          "average CPC calculator",
-        ],
-      },
-      en: {
-        title: "CPC Calculator | Cost Per Click, Expected Clicks & Budget",
-        description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPC calculator",
-          "cost per click calculator",
-          "average CPC calculator",
-          "ad click cost",
-          "target CPC calculator",
-          "PPC calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPC·예상 클릭 수·필요 예산)",
-          "광고비·클릭 수 또는 목표값 입력",
-          "CPC와 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPC 계산기는 광고비 ÷ 클릭 수로 클릭당 광고비(CPC, Cost Per Click)를 계산하고, 목표 CPC와 예산으로 예상 클릭 수를 역산하거나 목표 클릭 수와 CPC로 필요 예산을 계산하는 도구입니다.",
-          who: "검색·디스플레이 광고를 운영하는 마케터, PPC 캠페인을 관리하는 소상공인, 클릭 기반 트래픽 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "CPC 계산 모드에서는 광고비와 클릭 수를 입력하면 CPC를 즉시 계산합니다. 역산 모드에서는 목표값을 입력하면 예상 클릭 수 또는 필요 예산을 계산합니다.",
-          why: "CPC를 파악하면 광고비 대비 트래픽 효율을 측정할 수 있습니다. 목표 CPC를 기준으로 예산과 클릭 수를 역산하면 SEM·PPC 캠페인 계획을 더 정확하게 세울 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPC는 클릭 1회의 비용",
-            body: [
-              "CPC(Cost per Click)는 광고 클릭 한 번에 든 비용으로, 광고비 ÷ 클릭 수로 계산합니다. 검색광고(SEM)와 클릭당 과금(PPC) 캠페인의 기본 단위이며, 키워드 경쟁 강도와 광고 품질점수(관련성·랜딩 경험)에 따라 오르내립니다. 같은 예산이라도 CPC가 낮으면 더 많은 방문을 살 수 있습니다.",
-              "이 계산기는 광고비와 클릭 수로 CPC를 즉시 구하고, 목표 CPC 기준의 예상 클릭 수나 필요 예산을 역산합니다.",
-            ],
-          },
-          {
-            heading: "낮은 CPC가 항상 좋은 건 아니다",
-            body: [
-              "CPC는 트래픽의 '단가'일 뿐, 그 트래픽이 전환으로 이어지는지는 별개입니다. CPC가 아무리 낮아도 방문자가 아무 행동도 하지 않으면 의미가 없고, 반대로 CPC가 다소 높아도 전환율(CVR)이 좋으면 최종 CPA는 낮아질 수 있습니다. 그래서 CPC는 CTR·CVR과 함께 봐야 합니다.",
-              "관계를 정리하면 CPC는 CPM ÷ (CTR×10)으로도 볼 수 있고, 목표 CPC × 필요 클릭 수로 예산을 잡을 수 있습니다. 목표 CPC를 정해 필요 예산·클릭을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
-        description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPC, expected clicks, or required budget)",
-          "Enter ad spend, clicks, or target values",
-          "See CPC and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPC Calculator is a tool that computes Cost Per Click (ad spend ÷ clicks), reverse-calculates expected clicks from a budget and target CPC, and finds the required budget for a target number of clicks.",
-          who: "It is for marketers running search and display ads, small business owners managing PPC campaigns, and PMs planning click-based traffic budgets.",
-          how: "In CPC mode, enter ad spend and clicks to see CPC instantly. In reverse modes, enter a target CPC with a budget to get expected clicks, or a target click count with a CPC to get the required budget.",
-          why: "Knowing your CPC lets you measure traffic efficiency per advertising dollar. Reverse-calculating from a target CPC helps you plan SEM and PPC budgets with precision.",
-        },
-        guide: [
-          {
-            heading: "CPC is the cost of one click",
-            body: [
-              "CPC (Cost per Click) is what one ad click costs, calculated as ad spend ÷ clicks. It's the base unit of search (SEM) and pay-per-click (PPC) campaigns, rising and falling with keyword competition and quality score (relevance and landing experience). For the same budget, a lower CPC buys more visits.",
-              "This calculator turns ad spend and clicks into CPC instantly, and reverse-calculates the expected clicks or budget needed for a target CPC.",
-            ],
-          },
-          {
-            heading: "A low CPC isn't always good",
-            body: [
-              "CPC is only the 'unit price' of traffic; whether that traffic converts is a separate question. A very low CPC means nothing if visitors don't act, while a somewhat higher CPC can still yield a low final CPA if the conversion rate (CVR) is strong. That's why CPC should be read alongside CTR and CVR.",
-              "As a relationship, CPC can also be seen as CPM ÷ (CTR×10), and you can size budget as target CPC × clicks needed. Set a target CPC and reverse-calculate the budget and clicks you need. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPC란 무엇인가요?",
-          answer:
-            "CPC(Cost Per Click)는 광고 클릭 1번당 지불한 광고비를 나타냅니다. CPC = 광고비 ÷ 클릭 수로 계산합니다. Google Ads, Meta Ads 등 대부분의 퍼포먼스 광고에서 핵심 효율 지표로 사용됩니다.",
-        },
-        {
-          question: "예상 클릭 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 클릭 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPC 300원이면 예상 클릭 수는 floor(100,000 ÷ 300) = 333건입니다.",
-        },
-        {
-          question: "CPC와 CPM의 차이는 무엇인가요?",
-          answer:
-            "CPC는 클릭 1번당 광고비이고, CPM은 노출 1,000회당 광고비입니다. 클릭 기반 과금 방식에서는 CPC를, 노출 기반 과금 방식에서는 CPM을 주요 지표로 사용합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPC?",
-          answer:
-            "CPC (Cost Per Click) is the average amount you pay for each click on your ad. CPC = ad spend ÷ clicks. It is a core efficiency metric in Google Ads, Meta Ads, and most performance advertising platforms.",
-        },
-        {
-          question: "Why is the expected click count a whole number?",
-          answer:
-            "Expected clicks use floor (round down) because you can only receive whole clicks. For example, with a $100 budget and a $0.30 target CPC, expected clicks = floor(100 ÷ 0.30) = 333.",
-        },
-        {
-          question: "What is the difference between CPC and CPM?",
-          answer:
-            "CPC is cost per click; CPM is cost per 1,000 impressions. Use CPC for click-based (CPC bidding) campaigns and CPM for impression-based (CPM bidding) campaigns.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPC 계산기", subtitle: "클릭당 광고비 · 예상 클릭 수 · 필요 예산 역산" },
-      en: { title: "CPC Calculator", subtitle: "Cost per click, expected clicks and required budget" },
-    },
-  },
-  {
-    slug: "cpm-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPM",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPM 계산기", en: "CPM Calculator" },
-    relatedTools: ["ctr-calculator", "cpc-calculator", "ad-budget-pacing-calculator"],
-    seo: {
-      ko: {
-        title: "CPM 계산기 | 천 회 노출당 광고비·예상 노출 수·필요 예산 계산",
-        description:
-          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPM 계산기",
-          "천 회 노출당 비용",
-          "광고 노출 비용 계산",
-          "목표 CPM 계산",
-          "cost per mille calculator",
-          "cost per thousand impressions",
-        ],
-      },
-      en: {
-        title: "CPM Calculator | Cost Per Mille, Impressions & Budget",
-        description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPM calculator",
-          "cost per mille calculator",
-          "cost per thousand impressions",
-          "ad impression cost",
-          "target CPM calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPM·예상 노출 수·필요 예산)",
-          "광고비·노출 수 또는 목표값 입력",
-          "CPM과 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPM 계산기는 광고비 ÷ 노출 수 × 1,000으로 천 회 노출당 광고비(CPM, Cost Per Mille)를 계산하고, 목표 CPM과 예산으로 예상 노출 수를 역산하거나 목표 노출 수와 CPM으로 필요 예산을 계산하는 도구입니다.",
-          who: "디스플레이·영상·소셜 광고를 운영하는 마케터, 브랜드 인지도 캠페인을 집행하는 소상공인, 노출 기반 광고 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "CPM 계산 모드에서는 광고비와 노출 수를 입력하면 CPM을 즉시 계산합니다. 역산 모드에서는 목표 CPM과 예산으로 예상 노출 수를, 또는 목표 노출 수와 CPM으로 필요 예산을 계산합니다.",
-          why: "CPM은 브랜드 인지도 캠페인에서 광고비 효율을 측정하는 핵심 지표입니다. 목표 CPM을 기준으로 역산하면 노출 기반 광고 예산을 더 정확하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPM은 노출 1,000회당 비용",
-            body: [
-              "CPM(Cost per Mille)은 광고 노출 1,000회에 드는 비용으로, 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 뜻합니다. 클릭이나 전환이 아니라 '얼마나 많은 사람에게 보였는가(도달·노출)'를 기준으로 하기 때문에, 브랜드 인지도 캠페인의 효율을 가늠하는 기본 지표입니다.",
-              "이 계산기는 광고비와 노출 수로 CPM을 즉시 구하고, 목표 CPM 기준의 예상 노출 수나 필요 예산을 역산합니다.",
-            ],
-          },
-          {
-            heading: "CPM은 언제 보고, 무엇에 좌우되나",
-            body: [
-              "목표에 따라 봐야 할 지표가 다릅니다. 브랜드 인지·도달이 목적이면 CPM이, 성과가 목적이면 CPA·ROAS가 우선입니다. 같은 매체라도 타겟팅이 좁을수록, 경쟁이 치열한 시즌일수록 CPM이 올라가는 경향이 있어 매체·오디언스별로 비교하는 것이 좋습니다.",
-              "CPM은 CPC·CTR과도 연결됩니다. CPC ≈ CPM ÷ (CTR×10) 관계이므로, 같은 CPM에서 CTR이 높을수록 실질 클릭 단가는 낮아집니다. 목표 CPM으로 도달 목표별 예산을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
-        description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPM, expected impressions, or required budget)",
-          "Enter ad spend, impressions, or target values",
-          "See CPM and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPM Calculator is a tool that computes Cost Per Mille (ad spend ÷ impressions × 1,000), reverse-calculates expected impressions from a budget and target CPM, and finds the required budget for a target number of impressions.",
-          who: "It is for marketers running display, video, and social ads, small business owners running brand awareness campaigns, and PMs planning impression-based ad budgets.",
-          how: "In CPM mode, enter ad spend and impressions to see CPM instantly. In reverse modes, enter a target CPM with a budget to get expected impressions, or a target impression count with a CPM to get the required budget.",
-          why: "CPM is the standard metric for measuring cost efficiency in brand awareness campaigns. Reverse-calculating from a target CPM helps you plan impression-based budgets accurately.",
-        },
-        guide: [
-          {
-            heading: "CPM is the cost per 1,000 impressions",
-            body: [
-              "CPM (Cost per Mille) is the cost of 1,000 ad impressions, calculated as ad spend ÷ impressions × 1,000: 'mille' is Latin for thousand. Because it's based on how many people saw the ad (reach and impressions) rather than clicks or conversions, it's the go-to metric for gauging the efficiency of brand awareness campaigns.",
-              "This calculator turns ad spend and impressions into CPM instantly, and reverse-calculates the expected impressions or budget needed for a target CPM.",
-            ],
-          },
-          {
-            heading: "When to watch CPM, and what drives it",
-            body: [
-              "Different goals call for different metrics: when the aim is brand awareness and reach, CPM leads; when the aim is results, CPA and ROAS come first. Even on the same platform, CPM tends to rise as targeting narrows and during competitive seasons, so it's worth comparing across placements and audiences.",
-              "CPM also connects to CPC and CTR: since CPC ≈ CPM ÷ (CTR×10), a higher CTR at the same CPM means a lower effective cost per click. Use a target CPM to reverse-calculate budgets for each reach goal. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPM이란 무엇인가요?",
-          answer:
-            "CPM(Cost Per Mille)은 광고 노출 1,000회당 지불한 광고비를 나타냅니다. CPM = 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 의미합니다.",
-        },
-        {
-          question: "예상 노출 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 노출 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPM 500원이면 예상 노출 수는 floor(100,000 ÷ 500 × 1,000) = 200,000회입니다.",
-        },
-        {
-          question: "CPM과 CPC의 차이는 무엇인가요?",
-          answer:
-            "CPM은 노출 1,000회당 광고비이고, CPC는 클릭 1번당 광고비입니다. 브랜드 인지도·도달 중심 캠페인에는 CPM이, 트래픽·전환 중심 캠페인에는 CPC가 더 적합한 지표입니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPM?",
-          answer:
-            "CPM (Cost Per Mille) is the average cost you pay for 1,000 ad impressions. CPM = ad spend ÷ impressions × 1,000. 'Mille' is Latin for 1,000.",
-        },
-        {
-          question: "Why is the expected impression count a whole number?",
-          answer:
-            "Expected impressions use floor (round down) because you can only serve whole impressions. For example, with a $100 budget and a $5 target CPM, expected impressions = floor(100 ÷ 5 × 1,000) = 20,000.",
-        },
-        {
-          question: "What is the difference between CPM and CPC?",
-          answer:
-            "CPM is cost per 1,000 impressions; CPC is cost per click. CPM is the standard metric for brand awareness and reach campaigns. CPC is better suited for traffic and conversion campaigns.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPM 계산기", subtitle: "천 회 노출당 광고비 · 예상 노출 수 · 필요 예산 역산" },
-      en: { title: "CPM Calculator", subtitle: "Cost per mille, expected impressions and required budget" },
-    },
-  },
-  {
-    slug: "ctr-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CTR",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CTR 계산기", en: "CTR Calculator" },
-    relatedTools: ["cpc-calculator", "cpm-calculator", "funnel-conversion-calculator"],
-    seo: {
-      ko: {
-        title: "CTR 계산기 | 클릭률·필요 클릭 수·필요 노출 수 계산",
-        description:
-          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CTR 계산기",
-          "클릭률 계산",
-          "광고 클릭률",
-          "목표 CTR 계산",
-          "click through rate calculator",
-          "CTR percentage calculator",
-        ],
-      },
-      en: {
-        title: "CTR Calculator | Click-Through Rate, Clicks & Impressions",
-        description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CTR calculator",
-          "click through rate calculator",
-          "CTR percentage calculator",
-          "ad click rate",
-          "target CTR calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함.",
-        description:
-          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CTR·필요 클릭 수·필요 노출 수)",
-          "클릭 수·노출 수 또는 목표값 입력",
-          "CTR과 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CTR 계산기는 클릭 수 ÷ 노출 수 × 100으로 클릭률(CTR, Click-Through Rate)을 계산하고, 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나 목표 CTR과 클릭 수로 필요 노출 수를 계산하는 도구입니다.",
-          who: "광고·이메일·콘텐츠 성과를 분석하는 마케터, 디지털 광고를 운영하는 소상공인, 클릭률 목표를 설정하는 PM을 위한 도구입니다.",
-          how: "CTR 계산 모드에서는 클릭 수와 노출 수를 입력하면 CTR(%)을 즉시 계산합니다. 역산 모드에서는 목표 CTR을 기준으로 필요 클릭 수 또는 노출 수를 계산합니다.",
-          why: "CTR은 광고·이메일·콘텐츠의 참여도를 측정하는 핵심 지표입니다. 목표 CTR을 기준으로 역산하면 도달 목표와 클릭 목표를 더 정확하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CTR은 노출 대비 클릭 비율",
-            body: [
-              "CTR(Click-Through Rate)은 노출된 광고·링크가 실제로 클릭된 비율로, 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고 배너, 검색 결과, 이메일 링크, 콘텐츠 썸네일이 사람들의 흥미를 얼마나 끌었는지를 보여주는 참여도 지표입니다. 같은 노출이라도 CTR이 높다는 건 소재와 메시지가 오디언스와 잘 맞았다는 신호입니다.",
-              "이 계산기는 클릭 수와 노출 수로 CTR을 즉시 구하고, 목표 CTR을 달성하는 데 필요한 클릭 수나 노출 수를 역산합니다.",
-            ],
-          },
-          {
-            heading: "CTR을 움직이는 것과 다른 지표와의 관계",
-            body: [
-              "CTR은 주로 소재(크리에이티브), 타겟팅, 카피, 노출 위치에 좌우됩니다. 관련성 높은 오디언스에게 매력적인 문구를 보여줄수록 올라갑니다. 다만 CTR이 높아도 랜딩 이후 전환이 약하면 최종 성과는 아쉬울 수 있어, 전환율(CVR)과 함께 봐야 합니다.",
-              "CTR은 비용 지표와도 얽혀 있습니다. 같은 CPM에서 CTR이 높으면 실질 CPC가 낮아집니다(CPC ≈ CPM ÷ (CTR×10)). 목표 CTR을 정해 필요 노출·클릭을 역산하면 도달·클릭 목표를 함께 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
-        description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CTR, required clicks, or required impressions)",
-          "Enter clicks, impressions, or target values",
-          "See CTR and related metrics instantly",
-        ],
-        aeo: {
-          what: "CTR Calculator is a tool that computes Click-Through Rate (clicks ÷ impressions × 100), reverse-calculates required clicks from a target CTR and impression count, and finds the required impressions for a target CTR and click count.",
-          who: "It is for marketers analyzing ad, email, and content performance, small business owners running digital ads, and PMs setting click-rate targets.",
-          how: "In CTR mode, enter clicks and impressions to see CTR (%) instantly. In reverse modes, enter a target CTR with impressions to get required clicks, or with clicks to get required impressions.",
-          why: "CTR measures audience engagement with your ads, emails, and content. Reverse-calculating from a target CTR lets you plan reach and click goals with precision.",
-        },
-        guide: [
-          {
-            heading: "CTR is clicks as a share of impressions",
-            body: [
-              "CTR (Click-Through Rate) is the share of impressions that turned into clicks, calculated as clicks ÷ impressions × 100. It's an engagement metric that shows how well an ad banner, search result, email link, or content thumbnail captured people's interest. For the same impressions, a higher CTR signals that the creative and message resonated with the audience.",
-              "This calculator turns clicks and impressions into CTR instantly, and reverse-calculates the clicks or impressions you'd need to hit a target CTR.",
-            ],
-          },
-          {
-            heading: "What moves CTR, and how it relates to other metrics",
-            body: [
-              "CTR is driven mostly by creative, targeting, copy, and placement: the more relevant the audience and the more compelling the wording, the higher it climbs. But a high CTR with weak post-click conversion can still disappoint, so read it alongside conversion rate (CVR).",
-              "CTR is also tied to cost metrics: at the same CPM, a higher CTR means a lower effective CPC (CPC ≈ CPM ÷ (CTR×10)). Set a target CTR and reverse-calculate the impressions and clicks you need to plan reach and click goals together. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CTR이란 무엇인가요?",
-          answer:
-            "CTR(Click-Through Rate, 클릭률)은 광고가 노출된 횟수 중 실제로 클릭된 비율을 나타냅니다. CTR(%) = 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고·이메일·검색 결과의 참여도를 측정하는 핵심 지표입니다.",
-        },
-        {
-          question: "필요 클릭 수와 필요 노출 수는 왜 올림으로 처리되나요?",
-          answer:
-            "목표를 달성하는 데 필요한 수량은 부족하면 안 되므로 ceil(올림) 처리합니다. 예를 들어 노출 수 10,000회에서 목표 CTR 2.5%를 달성하려면 ceil(10,000 × 0.025) = 250번의 클릭이 필요합니다.",
-        },
-        {
-          question: "클릭 수가 노출 수보다 많을 수도 있나요?",
-          answer:
-            "일반적으로 클릭 수는 노출 수를 초과할 수 없습니다. 다만 리타겟팅·교차 디바이스 트래킹 등 특수한 측정 방식에서 이런 현상이 나타날 수 있습니다. 이 계산기는 계산 자체는 허용하되 경고를 표시합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CTR?",
-          answer:
-            "CTR (Click-Through Rate) is the percentage of ad impressions that result in a click. CTR (%) = clicks ÷ impressions × 100. It is a core metric for measuring engagement with ads, emails, and search results.",
-        },
-        {
-          question: "Why are required clicks and impressions rounded up?",
-          answer:
-            "Required quantities use ceil (round up) because you need at least that many to hit your target. For example, to achieve a 2.5% CTR on 10,000 impressions, you need ceil(10,000 × 0.025) = 250 clicks.",
-        },
-        {
-          question: "Can clicks ever exceed impressions?",
-          answer:
-            "Normally, clicks cannot exceed impressions. However, retargeting, cross-device tracking, and certain measurement setups can produce this. This calculator allows the calculation but shows a warning.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CTR 계산기", subtitle: "클릭률 · 필요 클릭 수 · 필요 노출 수 역산" },
-      en: { title: "CTR Calculator", subtitle: "Click-through rate, required clicks and required impressions" },
+      ko: { title: "광고 지표 계산기", subtitle: "ROAS·CPA·CPC·CPM·CTR을 한 페이지에서 계산" },
+      en: { title: "Ad Metrics Calculator", subtitle: "ROAS, CPA, CPC, CPM and CTR in one place" },
     },
   },
   {
@@ -5126,7 +4633,7 @@ export const TOOLS: Tool[] = [
     indexable: false,
     badge: "Marketing Calculator",
     name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
-    relatedTools: ["ctr-calculator", "cpa-calculator", "ad-budget-pacing-calculator"],
+    relatedTools: ["ad-metrics-calculator", "ad-budget-pacing-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "퍼널 전환율 계산기 | 마케팅 퍼널 분석·목표 역산",

@@ -1,38 +1,36 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useLang } from "../../lib/i18n";
-import { localizedHref } from "../../lib/content";
+import type { AdMetricKey } from "../../lib/marketing/types";
 
-const TABS = [
-  { slug: "roas-calculator", label: "ROAS" },
-  { slug: "cpa-calculator", label: "CPA" },
-  { slug: "cpc-calculator", label: "CPC" },
-  { slug: "cpm-calculator", label: "CPM" },
-  { slug: "ctr-calculator", label: "CTR" },
-] as const;
+const TABS: { key: AdMetricKey; label: string }[] = [
+  { key: "roas", label: "ROAS" },
+  { key: "cpa", label: "CPA" },
+  { key: "cpc", label: "CPC" },
+  { key: "cpm", label: "CPM" },
+  { key: "ctr", label: "CTR" },
+];
 
-export default function AdMetricTabs() {
-  const { lang } = useLang();
-  const pathname = usePathname();
-
+/** 광고 지표 탭: ad-metrics-calculator 한 페이지 안에서 ?mode= 쿼리로 지표를 전환한다. */
+export default function AdMetricTabs({
+  active,
+  onChange,
+}: {
+  active: AdMetricKey;
+  onChange: (key: AdMetricKey) => void;
+}) {
   return (
     <div className="adm-tabs" role="navigation" aria-label="Ad metric calculators">
-      {TABS.map((tab) => {
-        const href = localizedHref(lang, `/${tab.slug}`);
-        const isActive = pathname === href || pathname === `/${tab.slug}`;
-        return (
-          <Link
-            key={tab.slug}
-            href={href}
-            className={`adm-tab${isActive ? " is-active" : ""}`}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {tab.label}
-          </Link>
-        );
-      })}
+      {TABS.map((tab) => (
+        <button
+          key={tab.key}
+          type="button"
+          onClick={() => onChange(tab.key)}
+          className={`adm-tab${tab.key === active ? " is-active" : ""}`}
+          aria-current={tab.key === active ? "page" : undefined}
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
   );
 }
