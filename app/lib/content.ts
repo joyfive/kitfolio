@@ -120,9 +120,12 @@ export type Tool = {
    *  허브 목록·검색·관련 도구 노출은 전부 이 값을 기준으로 한다. */
   ready: boolean;
   /** 검색 색인: 독립적인 검색 랜딩 페이지로 제공할 콘텐츠 품질이 확보됐는가.
-   *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출되며,
-   *  sitemap 제외 + robots noindex,follow 만 적용된다.
-   *  true 로 올리려면 validateIndexableTools() 의 품질 조건을 통과해야 한다. */
+   *  ready 와 완전히 별개다. false 여도 페이지는 정상 동작하고 UI에도 그대로 노출된다.
+   *  2026-09부터 robots noindex는 전면 폐기(URL 통합 작업지시서 결정 G)했으므로
+   *  false 라도 검색엔진 색인 자체는 막지 않는다: 대신 sitemap·허브 ItemList
+   *  JSON-LD에서 빠지고, AdUnit 광고 가드(isToolIndexable)가 광고를 렌더링하지
+   *  않는 안전장치로만 쓰인다. true 로 올리려면 validateIndexableTools() 의
+   *  품질 조건을 통과해야 한다. */
   indexable: boolean;
   /** 외부 기준 데이터(요율·세법·플랫폼 정책)에 의존하는 도구의 최근 검증일 */
   verifiedAt?: string;
@@ -1038,7 +1041,7 @@ export const TOOLS: Tool[] = [
     targets: ["pm", "developer"],
     ico: "ts",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
     relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
@@ -1068,6 +1071,55 @@ export const TOOLS: Tool[] = [
           how: "타임스탬프나 날짜를 입력하면 형식을 자동으로 감지해 UTC·로컬 시간·상대 시간과 Slack <!date> 구문으로 한 번에 변환합니다.",
           why: "타임존 계산 실수를 막아주고, 받는 사람의 시간대에 맞춰 표시되는 Slack 구문을 클릭 한 번으로 만들 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "Slack이 Unix 타임스탬프를 쓰는 이유",
+            body: [
+              "Slack API와 웹훅 응답의 `ts` 필드는 사람이 읽는 날짜가 아니라 1970년 1월 1일 자정(UTC)부터 흐른 초를 나타내는 Unix 타임스탬프입니다. 예를 들어 메시지 객체의 `\"ts\": \"1718071200.123456\"`처럼 소수부에 마이크로초까지 붙어 나오기도 합니다. 서버·로그·API 사이에서는 타임존 표기 없이 값을 주고받을 수 있어 이 형식을 쓰지만, 로그를 눈으로 확인하거나 디버깅할 때는 바로 읽을 수가 없습니다.",
+              "이 변환기는 이런 원시 타임스탬프를 붙여넣으면 UTC·로컬 시간·상대 시간(예: 3시간 전)으로 동시에 보여줘, 로그에 찍힌 시각이 실제로 언제인지 바로 확인할 수 있게 합니다.",
+            ],
+          },
+          {
+            heading: "Slack date 구문으로 타임존 문제를 없애는 법",
+            body: [
+              "여러 시간대에 흩어진 팀에 회의나 배포 시각을 공지할 때, 고정된 텍스트로 \"오후 3시\"라고 쓰면 어느 타임존 기준인지 매번 오해가 생깁니다. Slack의 `<!date^...>` 구문은 다릅니다: 메시지 안에 Unix 타임스탬프와 표시 형식을 심어두면, Slack이 그 메시지를 읽는 사람의 로컬 타임존에 맞춰 자동으로 다시 표시합니다.",
+              "이 도구는 같은 시각을 `{date_short_pretty} at {time}`, `{date_long_pretty} at {time_secs}`처럼 자주 쓰는 형식별로 미리 만들어 보여주므로, 원하는 형식을 그대로 복사해 메시지에 붙여넣기만 하면 됩니다.",
+            ],
+          },
+          {
+            heading: "입력 형식을 자동으로 구분합니다",
+            body: [
+              "Unix 초·밀리초·마이크로초 타임스탬프는 자릿수만 다를 뿐 겉보기엔 비슷한 숫자라 헷갈리기 쉽습니다(10자리 vs 13자리 vs 16자리). 이 도구는 입력값의 자릿수를 보고 세 형식을 자동으로 구분하며, ISO 8601 같은 일반 날짜·시간 문자열이나 이미 만들어진 `<!date^...>` Slack 구문을 붙여넣어도 그대로 인식합니다.",
+              "그래서 Slack 메시지에 이미 박혀 있는 구문을 역으로 붙여넣어 원래 시각이 언제였는지 확인하는 용도로도 쓸 수 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Slack API 응답의 ts 필드 해석",
+            input: "1718071200.123456 (Slack 메시지 객체의 ts 필드)",
+            result: "2024-06-11 06:00:00 UTC · 소수부는 마이크로초",
+            note: "Slack API 응답을 로그로 찍어보면 ts 필드가 이런 형식으로 나옵니다. 소수점 아래 자리는 초 미만 정밀도이며, 그대로 붙여넣으면 자동으로 인식됩니다.",
+          },
+          {
+            title: "글로벌 팀 공지에 쓸 Slack 구문 만들기",
+            input: "2026-06-11T15:00:00 (한국 시간 기준 회의 시각)",
+            result: "<!date^1749621600^{date_short_pretty} at {time}|Jun 11, 2026 3:00 PM> 형식의 구문",
+            note: "이 구문을 메시지에 붙여넣으면, 뉴욕에 있는 동료에게는 뉴욕 시간으로, 서울에 있는 동료에게는 서울 시간으로 각자 다르게 표시됩니다.",
+          },
+          {
+            title: "초 단위와 밀리초 단위 타임스탬프 구분하기",
+            input: "1718071200 (10자리, 초) vs 1718071200000 (13자리, 밀리초)",
+            result: "둘 다 같은 시각(2024-06-11 06:00:00 UTC)으로 변환",
+            note: "JavaScript의 Date.now()는 밀리초를, 대부분의 서버 로그는 초를 씁니다. 자릿수를 세지 않아도 도구가 자동으로 구분해 같은 결과를 냅니다.",
+          },
+        ],
+        limitations: [
+          "Slack 구문 미리보기는 근사치입니다. 실제 렌더링 결과(요일 표기, 12/24시간제 등)는 메시지를 읽는 사람의 Slack 클라이언트 언어·지역 설정에 따라 달라지며, 최종 확인은 실제 Slack에서 해야 합니다.",
+          "초·밀리초·마이크로초 판별은 입력값의 자릿수를 보는 휴리스틱입니다. 극단적으로 과거이거나 미래인 날짜의 초 단위 타임스탬프는 밀리초로 잘못 판별될 수 있습니다.",
+          "상대 시간(예: 3시간 전)은 이 페이지를 보는 기기의 시스템 시계를 기준으로 계산됩니다. 기기 시간이 실제 시간과 어긋나 있으면 상대 시간도 함께 어긋납니다.",
+          "로컬 시간은 브라우저에 설정된 타임존만 보여줍니다. UTC 외에 제3의 타임존을 지정해 미리 보는 기능은 제공하지 않습니다.",
+        ],
       },
       en: {
         card: "Convert Unix timestamps to dates and Slack date syntax. Live current timestamp.",
@@ -1080,6 +1132,55 @@ export const TOOLS: Tool[] = [
           how: "Enter a timestamp or date and the format is auto-detected, then converted to UTC, your local time, relative time and Slack date syntax all at once.",
           why: "It prevents timezone mistakes and produces Slack syntax that renders in each reader's own timezone with a single click.",
         },
+        guide: [
+          {
+            heading: "Why Slack uses Unix timestamps",
+            body: [
+              "The `ts` field in Slack API and webhook responses isn't a human-readable date: it's a Unix timestamp, the number of seconds since midnight UTC on January 1, 1970. A message object might show `\"ts\": \"1718071200.123456\"`, with microsecond precision after the decimal point. Servers, logs, and APIs pass this format around because it needs no timezone notation, but you can't read it at a glance when you're staring at a log or debugging.",
+              "Paste a raw timestamp like that into this converter and it shows UTC, your local time, and relative time (like \"3 hours ago\") side by side, so you can immediately tell what a logged moment actually was.",
+            ],
+          },
+          {
+            heading: "Eliminating timezone confusion with Slack date syntax",
+            body: [
+              "When you announce a meeting or deploy time to a team spread across timezones, writing a fixed \"3 PM\" invites confusion about whose 3 PM you mean. Slack's `<!date^...>` syntax solves this differently: embed a Unix timestamp and a display format in the message, and Slack re-renders it in each reader's own local timezone automatically.",
+              "This tool pre-builds the same instant in commonly used formats, like `{date_short_pretty} at {time}` and `{date_long_pretty} at {time_secs}`, so you can copy whichever one you need straight into your message.",
+            ],
+          },
+          {
+            heading: "It auto-detects the input format",
+            body: [
+              "Unix timestamps in seconds, milliseconds, and microseconds look like similar numbers at a glance and are easy to mix up (10 digits vs. 13 vs. 16). This tool reads the digit count and tells the three apart automatically, and it also recognizes plain date-time strings like ISO 8601 or an already-built `<!date^...>` Slack syntax pasted back in.",
+              "That means you can paste a syntax already embedded in a Slack message to check exactly what moment it originally referred to.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Reading the ts field from a Slack API response",
+            input: "1718071200.123456 (the ts field of a Slack message object)",
+            result: "2024-06-11 06:00:00 UTC, with sub-second precision",
+            note: "Logging a Slack API response shows the ts field in this shape. The digits after the decimal are sub-second precision, and pasting the value as-is is recognized automatically.",
+          },
+          {
+            title: "Building Slack syntax for a global team announcement",
+            input: "2026-06-11T15:00:00 (a meeting time in Korea Standard Time)",
+            result: "A syntax like <!date^1749621600^{date_short_pretty} at {time}|Jun 11, 2026 3:00 PM>",
+            note: "Paste this into a message and a colleague in New York sees New York time while one in Seoul sees Seoul time, each rendered locally.",
+          },
+          {
+            title: "Telling second and millisecond timestamps apart",
+            input: "1718071200 (10 digits, seconds) vs. 1718071200000 (13 digits, milliseconds)",
+            result: "Both convert to the same instant (2024-06-11 06:00:00 UTC)",
+            note: "JavaScript's Date.now() returns milliseconds while most server logs use seconds. You don't have to count digits yourself; the tool tells them apart and lands on the same result.",
+          },
+        ],
+        limitations: [
+          "The Slack syntax preview is an approximation. The actual rendering (weekday format, 12- vs 24-hour clock, and so on) depends on each reader's Slack client language and locale settings, so verify the final look inside Slack itself.",
+          "Detecting seconds vs. milliseconds vs. microseconds is a heuristic based on digit count. A seconds-based timestamp for an extremely distant past or future date can be misread as milliseconds.",
+          "Relative time (like \"3 hours ago\") is computed from the system clock of the device viewing this page. If that clock is off, the relative time will be off too.",
+          "Local time only reflects the timezone set in your browser. There is no way to preview an arbitrary third timezone.",
+        ],
       },
     },
     faq: {
@@ -1139,726 +1240,290 @@ export const TOOLS: Tool[] = [
   },
 
   // ── CSS Unit Converters (Developer) ───────────────────────────
+  // 2026-09: rem/em/vw/percent/ms 다섯 개 단위 변환기를 이 한 엔트리로 통합.
+  // 구 URL(각 /*-to-px, /ms-to-s)은 next.config.js 301로 이 URL의 ?mode=로 연결한다.
   {
-    slug: "rem-to-px",
+    slug: "css-unit-converter",
     layout: "card",
     cat: "dev",
     targets: ["developer", "designer"],
-    ico: "rem",
+    ico: "px",
     ready: true,
     indexable: true,
     badge: "Clean SaaS",
-    name: { ko: "Rem → Px 변환기", en: "Rem to Px Converter" },
+    name: { ko: "CSS 단위 변환기", en: "CSS Unit Converter" },
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
     seo: {
       ko: {
-        title: "Rem to Px 변환기 | CSS 단위 변환",
+        title: "CSS 단위 변환기 | rem·em·vw·%·ms → px 변환",
         description:
-          "rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환합니다. 루트 폰트 크기를 직접 설정하고 자주 쓰는 예시값을 클릭해 바로 입력하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["rem to px", "rem px 변환", "rem 변환기", "css 단위 변환", "px to rem"],
+          "rem·em·vw·퍼센트·ms, 자주 쓰는 CSS 상대 단위 다섯 가지를 px(또는 초)로 즉시 변환합니다. 루트 폰트 크기·부모 폰트 크기·뷰포트 너비 같은 기준값을 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: ["css 단위 변환기", "rem to px", "em to px", "vw to px", "ms to s", "px to rem"],
       },
       en: {
-        title: "Rem to Px Converter | CSS Unit Converter",
+        title: "CSS Unit Converter | rem, em, vw, %, ms to px",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
-        keywords: ["rem to px", "rem to pixels", "px to rem", "css unit converter", "rem converter"],
+          "Convert five common CSS relative units, rem, em, vw, percent and ms, to pixels (or seconds) instantly. Set the base value each unit depends on (root font size, parent font size, viewport width) and copy the result in one click. Everything runs entirely in your browser.",
+        keywords: ["css unit converter", "rem to px", "em to px", "vw to px", "ms to s", "px to rem"],
       },
     },
     content: {
       ko: {
-        card: "rem ↔ px 즉시 변환. 루트 폰트 크기 설정 지원.",
+        card: "rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서.",
         description:
-          "rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환합니다. 루트 폰트 크기를 직접 설정하고 자주 쓰는 예시값을 클릭해 바로 입력하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["rem 또는 px 값 입력", "루트 폰트 크기 설정 (기본값 16)", "변환 결과 확인 및 복사"],
+          "rem·em·vw·퍼센트·ms, 자주 쓰는 CSS 상대 단위 다섯 가지를 px(또는 초)로 즉시 변환합니다. 루트 폰트 크기·부모 폰트 크기·뷰포트 너비 같은 기준값을 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "상단 탭에서 변환할 단위 선택",
+          "값과 기준값(루트·부모 폰트, 뷰포트 너비 등) 입력",
+          "변환 결과 확인 및 복사",
+        ],
         aeo: {
-          what: "Rem to Px 변환기는 CSS 상대 단위 rem 값을 픽셀(px)로, 또는 픽셀을 rem으로 즉시 변환해주는 도구입니다.",
-          who: "CSS 레이아웃에서 rem과 픽셀 단위를 함께 쓰는 프론트엔드 개발자와 UI 디자이너를 위한 도구입니다.",
-          how: "rem 또는 px 값을 입력하고 루트 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. Swap으로 방향을 바꿀 수 있습니다.",
-          why: "반응형 디자인에서 px와 rem을 오갈 때 매번 계산할 필요 없이 빠르게 정확한 값을 얻을 수 있습니다.",
+          what: "CSS 단위 변환기는 rem·em·vw·퍼센트·ms 다섯 가지 CSS 상대 단위를 픽셀(px) 또는 초(s)로, 혹은 그 반대로 즉시 변환해주는 도구입니다.",
+          who: "반응형 레이아웃과 애니메이션을 다루며 상대 단위와 절대 단위를 자주 오가는 프론트엔드 개발자와 UI 디자이너를 위한 도구입니다.",
+          how: "상단 탭에서 변환할 단위를 고르고 값과 기준값(루트 폰트 크기, 부모 폰트 크기, 뷰포트 너비 등)을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. Swap으로 방향을 바꿀 수 있습니다.",
+          why: "단위마다 따로 계산기를 찾아다니지 않고 한 페이지에서 다섯 가지 CSS 단위를 전부 변환할 수 있어 반응형 작업의 반복 계산을 줄여줍니다.",
         },
         guide: [
           {
-            heading: "rem은 왜 접근성에 유리할까",
+            heading: "다섯 개 CSS 단위를 왜 한 곳에 모았나",
             body: [
-              "rem(root em)은 항상 HTML 루트 요소의 폰트 크기를 기준으로 계산됩니다. 사용자가 브라우저 기본 글자 크기를 키우면 rem으로 잡은 글꼴·여백·레이아웃이 함께 확대되어, 시력이 낮은 사용자에게도 화면이 자연스럽게 커집니다. 반면 px로 고정한 값은 사용자가 글자를 키워도 그대로라 접근성이 떨어집니다. 그래서 폰트 크기와 간격을 rem으로 설계하는 팀이 많습니다.",
-              "디자인 시안은 보통 px로 전달되지만 구현은 rem으로 하는 경우가 많아, 둘 사이를 오가는 변환이 자주 필요합니다. 이 변환기는 그 왕복을 한 번에 처리합니다.",
+              "CSS에는 화면 크기·부모 요소·루트 요소에 따라 실제 크기가 달라지는 상대 단위가 여러 개 있습니다. rem과 em은 폰트 크기를, vw는 뷰포트 너비를, 퍼센트는 부모 요소의 너비를, ms는 애니메이션·트랜지션의 지속 시간을 기준으로 합니다. 다섯 단위 모두 '기준값 × 배율 = 절대값(px 또는 초)'이라는 같은 형태의 계산이지만, 기준값이 무엇인지는 매번 다릅니다.",
+              "실무에서는 디자인 시안이 px로 오고 구현은 상대 단위로 하는 경우가 많아, 이 다섯 단위와 px 사이를 하루에도 여러 번 오가게 됩니다. 단위마다 다른 페이지를 열어 계산하는 대신, 탭을 눌러 같은 화면에서 바로 전환할 수 있게 모았습니다.",
             ],
           },
           {
-            heading: "루트 폰트 크기를 프로젝트 값과 맞추세요",
+            heading: "rem ↔ px: 루트 폰트 크기가 기준",
             body: [
-              "1rem은 루트 폰트 크기와 같습니다. 대부분의 브라우저 기본값은 16px이라 1rem = 16px, 1.5rem = 24px이 됩니다. 하지만 `html { font-size: 62.5% }`처럼 루트 크기를 바꾼 프로젝트에서는 1rem이 10px이 되기도 합니다. 정확한 변환을 위해 계산기의 루트 폰트 크기를 실제 프로젝트 설정과 동일하게 맞추세요.",
-              "em은 부모 요소 기준이라 중첩되면 값이 누적되지만, rem은 언제나 루트 기준이라 예측이 쉽습니다. 모든 변환은 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
+              "rem(root em)은 HTML 루트 요소의 폰트 크기를 기준으로 합니다. 계산식은 px = rem × 루트 폰트 크기입니다. 기본값 16px 기준으로 1rem = 16px이지만, html { font-size: 62.5% }처럼 루트를 바꾼 프로젝트에서는 값이 달라지므로 루트 폰트 크기 입력을 실제 프로젝트 값과 맞춰야 합니다.",
+              "사용자가 브라우저 기본 글자 크기를 키우면 rem으로 잡은 값도 함께 커져 접근성에 유리합니다. 폰트 크기·여백처럼 화면 전체와 함께 스케일되어야 하는 값에 주로 씁니다.",
+            ],
+          },
+          {
+            heading: "em ↔ px: 부모 폰트 크기가 기준, 중첩되면 누적",
+            body: [
+              "em의 계산식은 rem과 같은 px = em × 부모 폰트 크기지만, 기준이 루트가 아니라 해당 요소가 상속받은 부모의 폰트 크기입니다. em으로 폰트 크기를 지정한 요소 안에 또 em을 쓰면 배율이 곱해져 누적되므로, 여러 단계 중첩된 값을 확인할 때는 실제 부모 크기를 정확히 입력해야 합니다.",
+              "버튼 padding처럼 '이 요소가 자기 폰트 크기에 비례해 커지길' 원할 때는 em이, 화면 전체 기준의 예측 가능한 값이 필요할 때는 rem이 더 적합합니다.",
+            ],
+          },
+          {
+            heading: "vw ↔ px: 뷰포트 너비가 기준",
+            body: [
+              "vw(viewport width)는 계산식이 px = vw × 뷰포트 너비 ÷ 100으로, 브라우저 창(뷰포트) 전체 너비의 1%를 1vw로 봅니다. 반응형 히어로 타이틀이나 화면 너비에 정비례해 커지는 요소에 자주 쓰입니다.",
+              "뷰포트 너비 입력값을 실제 확인하려는 화면 크기(모바일 390px, 데스크톱 1440px 등)로 바꾸면 그 브레이크포인트에서 몇 px이 되는지 바로 알 수 있습니다.",
+            ],
+          },
+          {
+            heading: "% ↔ px: 부모 요소의 계산된 너비가 기준",
+            body: [
+              "퍼센트는 px = % × 부모 너비 ÷ 100으로 계산되며, 여기서 부모 너비는 CSS 선언값이 아니라 브라우저가 실제로 계산한(computed) 값입니다. 부모가 유동적인 레이아웃(flex·grid)에 속해 있다면 이 값 자체가 화면 크기에 따라 달라진다는 점을 기억하세요.",
+              "고정폭 컨테이너 안에서 요소 너비를 퍼센트로 설계할 때, 특정 화면 크기에서 실제 몇 px이 되는지 미리 확인하는 용도로 씁니다.",
+            ],
+          },
+          {
+            heading: "ms ↔ s: 애니메이션·트랜지션 지속 시간",
+            body: [
+              "ms와 s는 단순 비례식(1s = 1000ms)이라 기준값 입력이 필요 없습니다. CSS의 transition-duration, animation-duration은 두 단위 모두 허용하므로, 디자인 스펙에 적힌 밀리초 값을 코드에 초 단위로 옮기거나 그 반대로 확인할 때 씁니다.",
+              "단위 변환일 뿐이며, 실제 체감 속도는 easing 함수와 애니메이션 대상에 따라 달라진다는 점은 별도로 고려해야 합니다.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "디자인 시안의 px 값을 rem으로 옮기기",
             input: "24px, 루트 폰트 크기 16px",
             result: "1.5rem",
-            note: "디자인 도구는 px로 값을 주지만 접근성을 지키려면 폰트·여백을 rem으로 쓰는 편이 좋습니다. 16으로 나눈다는 규칙만 알면 되지만, 시안 하나에 수십 개 값이 있을 때는 계산기를 여는 편이 빠릅니다.",
+            note: "디자인 도구는 보통 px 값을 주지만 접근성을 지키려면 폰트·여백은 rem으로 구현하는 편이 좋습니다. 시안 하나에 수십 개 값이 있을 때는 계산기로 한 번에 확인하는 편이 빠릅니다.",
           },
           {
-            title: "루트 폰트 크기를 바꾼 프로젝트에서 환산하기",
-            input: "24px, 루트 폰트 크기 10px",
-            result: "2.4rem",
-            note: "html에 font-size: 62.5%를 적용해 루트를 10px로 맞춘 코드베이스가 있습니다. 이때 16 기준으로 계산하면 값이 전부 어긋나므로, 루트 폰트 크기 입력을 실제 값으로 바꿔야 합니다.",
+            title: "중첩된 요소의 em 값을 실제 px로 확인하기",
+            input: "0.75em, 부모 폰트 크기 20px",
+            result: "15px",
+            note: "부모 요소의 font-size가 이미 확대·축소된 상태라면 em 값만 보고는 실제 크기를 가늠하기 어렵습니다. 부모의 계산된 폰트 크기를 입력해야 정확한 px 값이 나옵니다.",
           },
           {
-            title: "사용자가 브라우저 기본 글꼴을 키웠을 때의 실제 크기 확인",
-            input: "1.5rem, 루트 폰트 크기 20px",
-            result: "30px",
-            note: "rem을 쓰는 이유가 여기 있습니다. 사용자가 브라우저 설정에서 기본 글꼴을 20px로 올리면 같은 1.5rem이 30px로 커집니다. px로 고정했다면 24px 그대로여서 확대가 반영되지 않습니다.",
+            title: "반응형 히어로 타이틀이 화면별로 몇 px인지 확인하기",
+            input: "5vw, 뷰포트 너비 1440px",
+            result: "72px",
+            note: "뷰포트 너비를 390px(모바일)로 바꾸면 같은 5vw가 19.5px이 됩니다. vw로 폰트 크기를 스케일할 때 최소·최대 크기를 벗어나지 않는지 여러 화면 너비에서 확인하는 용도로 씁니다.",
+          },
+          {
+            title: "고정폭 컨테이너 안에서 퍼센트 너비를 px로 환산하기",
+            input: "75%, 부모 너비 1200px",
+            result: "900px",
+            note: "그리드 컬럼이나 사이드바 너비를 퍼센트로 설계했을 때, 특정 브레이크포인트에서 실제 몇 px이 되는지 미리 확인해 다른 고정폭 요소와 나란히 배치할 수 있는지 가늠할 수 있습니다.",
+          },
+          {
+            title: "디자인 스펙의 트랜지션 시간을 CSS 값으로 옮기기",
+            input: "300ms",
+            result: "0.3s",
+            note: "디자인 스펙 문서는 밀리초로, 코드베이스는 초 단위 관례를 쓰는 경우가 섞여 있습니다. transition-duration에 어느 쪽을 적어도 동작은 같으므로 팀 컨벤션에 맞는 쪽으로 바꿔 적으면 됩니다.",
           },
         ],
         limitations: [
-          "rem은 항상 루트(html) 요소의 폰트 크기를 기준으로 합니다. 부모 요소 기준으로 커지는 값이 필요하다면 em을 써야 하며, 이때는 em → px 변환기를 사용하세요.",
-          "여기서 쓰는 루트 폰트 크기는 입력값일 뿐입니다. 실제 페이지에서는 사용자의 브라우저 글꼴 설정이 루트 크기를 바꾸므로, 변환 결과는 \"루트가 이 값일 때의 px\"로 읽어야 합니다.",
-          "미디어 쿼리 안의 rem은 루트 요소의 font-size가 아니라 브라우저 기본 글꼴을 기준으로 해석됩니다. html { font-size: 10px } 를 선언했더라도 @media (min-width: 40rem) 는 여전히 640px(16px 기준)입니다.",
-          "border-width처럼 소수점 px가 기기 픽셀에 정확히 떨어지지 않는 속성에서는 브라우저가 반올림해 렌더링합니다. 변환 결과와 개발자 도구에 찍히는 실제 값이 0.5px 정도 다를 수 있습니다.",
+          "rem은 루트(html) 요소, em은 부모 요소의 폰트 크기를 기준으로 합니다. em이 여러 단계 중첩되면 배율이 곱해져 누적되므로, 중첩이 깊은 경우 실제 계산값을 개발자 도구에서 함께 확인하세요.",
+          "미디어 쿼리 안의 rem·em은 요소의 font-size가 아니라 브라우저 기본 글꼴 크기를 기준으로 해석됩니다. html에 font-size: 10px를 선언했더라도 @media (min-width: 40rem)은 여전히 16px 기준(640px)에 가깝게 동작합니다.",
+          "100vw는 스크롤바 너비를 포함하지 않는 뷰포트 전체 너비를 기준으로 하므로, 세로 스크롤바가 있는 페이지에서는 100vw 요소가 뷰포트보다 살짝 넓어져 가로 스크롤이 생길 수 있습니다.",
+          "퍼센트 변환에 쓰는 부모 너비는 CSS 선언값이 아니라 실제 렌더링된 계산값입니다. 유동적인 flex·grid 레이아웃에서는 이 값 자체가 화면 크기·형제 요소 수에 따라 달라지므로, 입력한 부모 너비는 그 순간의 스냅샷으로만 보세요.",
+          "border-width처럼 소수점 px가 기기 픽셀에 정확히 떨어지지 않는 속성은 브라우저가 렌더링 시 반올림합니다. 계산기의 값과 개발자 도구에 찍히는 실제 값이 0.5px 정도 다를 수 있습니다.",
         ],
       },
       en: {
-        card: "Convert rem ↔ px instantly. Supports custom root font size.",
+        card: "Convert rem, em, vw, % and ms to px (or seconds) instantly. Five CSS unit converters in one place.",
         description:
-          "Convert rem values to pixels (px) or pixels to rem instantly. Set a custom root font size and click quick examples to fill the input in one step. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a rem or px value", "Set root font size (default 16)", "Copy the converted result"],
+          "Convert five common CSS relative units, rem, em, vw, percent and ms, to pixels (or seconds) instantly. Set the base value each unit depends on (root font size, parent font size, viewport width) and copy the result in one click. Everything runs entirely in your browser.",
+        howItWorks: [
+          "Pick a unit pair from the tabs above",
+          "Enter the value and its base (root/parent font size, viewport width, etc.)",
+          "Copy the converted result",
+        ],
         aeo: {
-          what: "Rem to Px Converter is a tool that instantly converts CSS rem values to pixels (px) and back.",
-          who: "It is for front-end developers and UI designers who work with both rem and pixel units in CSS layouts.",
-          how: "Enter a rem or px value and set your root font size; the converted result appears instantly in your browser. Use Swap to flip the direction.",
-          why: "It saves repeated manual calculations when switching between px and rem in responsive design workflows.",
+          what: "CSS Unit Converter instantly converts five common CSS relative units, rem, em, vw, percent, and ms, into pixels (or seconds) and back.",
+          who: "It is for front-end developers and UI designers who work with responsive layouts and animations and constantly move between relative and absolute units.",
+          how: "Pick a unit pair from the tabs above, enter a value and its base (root font size, parent font size, viewport width, and so on), and the result appears instantly in your browser. Use Swap to flip direction.",
+          why: "Instead of hunting down a separate converter for each unit, you get all five CSS unit conversions on one page, cutting down the repeated math in responsive work.",
         },
         guide: [
           {
-            heading: "Why rem is better for accessibility",
+            heading: "Why five CSS units live on one page",
             body: [
-              "rem (root em) is always calculated from the font size of the HTML root element. When a user increases their browser's default text size, everything sized in rem: fonts, spacing, layout: scales up with it, so the page grows naturally for people with low vision. Values fixed in px stay put no matter what the user does, which hurts accessibility. That's why many teams size typography and spacing in rem.",
-              "Designs usually arrive in px while implementation happens in rem, so you constantly move between the two. This converter handles that round trip in one step.",
+              "CSS has several relative units whose actual size depends on the screen, the parent element, or the root element. rem and em are relative to a font size, vw to the viewport width, percent to the parent's width, and ms to how long an animation or transition runs. All five reduce to the same shape of math, base value times a multiplier equals an absolute value (px or seconds), but what counts as the base changes every time.",
+              "In practice, designs arrive in px while implementation uses relative units, so you move between these five units and px many times a day. Instead of opening a different page for each unit, this page keeps them one tab-click away on the same screen.",
             ],
           },
           {
-            heading: "Match the root font size to your project",
+            heading: "rem to px: relative to the root font size",
             body: [
-              "1rem equals the root font size. Most browsers default to 16px, making 1rem = 16px and 1.5rem = 24px. But a project that changes the root (e.g. `html { font-size: 62.5% }`) can make 1rem equal 10px. For an accurate result, set the converter's root font size to match your actual project setup.",
-              "Unlike em, which is relative to the parent and compounds when nested, rem is always relative to the root, so it stays predictable. All conversion runs in your browser and your input is never sent to a server.",
+              "rem (root em) is relative to the HTML root element's font size. The formula is px = rem x root font size. At the default 16px, 1rem = 16px, but a project that changes the root (e.g. html { font-size: 62.5% }) shifts that, so set the root font size input to match your actual project.",
+              "When a visitor increases their browser's default text size, values sized in rem grow with it, which helps accessibility. rem is the usual choice for font sizes and spacing that should scale with the whole page.",
+            ],
+          },
+          {
+            heading: "em to px: relative to the parent font size, and it compounds when nested",
+            body: [
+              "em uses the same formula as rem, px = em x parent font size, but the base is the font size the element inherits from its parent, not the root. Using em inside an element that already sets its own font size in em multiplies the ratios together, so when you check a value nested several levels deep, enter the real parent size for an accurate result.",
+              "em suits a single element that should scale in proportion to its own font size, like button padding; rem suits values that need to scale predictably against the whole page.",
+            ],
+          },
+          {
+            heading: "vw to px: relative to the viewport width",
+            body: [
+              "vw (viewport width) uses px = vw x viewport width / 100: 1vw is 1% of the browser window's full width. It shows up often in responsive hero titles and elements meant to scale directly with screen width.",
+              "Set the viewport width input to the screen size you actually want to check, mobile at 390px, desktop at 1440px, and so on, to see how many pixels that value becomes at that breakpoint.",
+            ],
+          },
+          {
+            heading: "Percent to px: relative to the parent's computed width",
+            body: [
+              "Percent uses px = % x parent width / 100, where the parent width is the browser's actual computed value, not whatever the CSS declares. If the parent sits in a fluid layout (flex or grid), remember that this base value itself changes with the screen size.",
+              "It is useful for checking, ahead of time, how many pixels a percentage-based width becomes inside a fixed-width container at a specific screen size.",
+            ],
+          },
+          {
+            heading: "Ms to s: animation and transition duration",
+            body: [
+              "ms and s are a plain ratio (1s = 1000ms), so no base value is needed. CSS's transition-duration and animation-duration both accept either unit, so this is for moving a millisecond value from a design spec into seconds in code, or checking it the other way.",
+              "This only converts the unit; how fast an animation actually feels still depends on its easing function and what it's animating, which is a separate consideration.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
-            title: "Porting px values from a design file to rem",
+            title: "Porting a px value from a design file to rem",
             input: "24px with a 16px root font size",
             result: "1.5rem",
-            note: "Design tools hand you px, but font sizes and spacing are better expressed in rem for accessibility. The rule is just \"divide by 16\", yet with dozens of values in one screen it is faster to use the converter.",
+            note: "Design tools usually hand you px, but font sizes and spacing are better implemented in rem for accessibility. With dozens of values in one screen, it's faster to check them with the converter than to divide by 16 by hand each time.",
           },
           {
-            title: "Converting in a project that changed the root font size",
-            input: "24px with a 10px root font size",
-            result: "2.4rem",
-            note: "Some codebases set html { font-size: 62.5% } to make the root 10px. Calculating against 16 there throws every value off, so set the root font size field to the real value.",
+            title: "Checking the real px value of a nested em",
+            input: "0.75em with a 20px parent font size",
+            result: "15px",
+            note: "If the parent element's font-size has already been scaled up or down, the em value alone doesn't tell you the real size. Enter the parent's computed font size to get an accurate px value.",
           },
           {
-            title: "Checking the real size when a visitor enlarges their default font",
-            input: "1.5rem with a 20px root font size",
-            result: "30px",
-            note: "This is the reason to use rem at all. If someone raises their browser's default font to 20px, the same 1.5rem grows to 30px. Hard-coded 24px would stay at 24px and ignore the preference.",
+            title: "Checking how many px a responsive hero title becomes at different sizes",
+            input: "5vw with a 1440px viewport",
+            result: "72px",
+            note: "Change the viewport width to 390px (mobile) and the same 5vw becomes 19.5px. This is for checking, across several screen widths, that a font size scaled with vw stays within its intended min and max.",
+          },
+          {
+            title: "Converting a percentage width to px inside a fixed-width container",
+            input: "75% with a 1200px parent",
+            result: "900px",
+            note: "When a grid column or sidebar width is designed as a percentage, this checks how many pixels it becomes at a specific breakpoint, so you can tell whether it will line up with other fixed-width elements.",
+          },
+          {
+            title: "Moving a spec's transition duration into a CSS value",
+            input: "300ms",
+            result: "0.3s",
+            note: "Design specs are often written in milliseconds while a codebase's convention is seconds, or the reverse. transition-duration behaves the same either way, so use whichever matches your team's convention.",
           },
         ],
         limitations: [
-          "rem is always relative to the root (html) element's font size. If you need a value that scales with the parent element instead, use em and the em to px converter.",
-          "The root font size here is only an input. On a real page the visitor's browser font setting determines it, so read the output as \"the px value when the root is this size\".",
-          "Inside media queries, rem resolves against the browser's default font size, not the html element's font-size. Even with html { font-size: 10px }, @media (min-width: 40rem) still means 640px.",
-          "For properties like border-width, fractional px values do not always land on device pixels and the browser rounds when rendering. The converted value and what DevTools reports can differ by around half a pixel.",
+          "rem is relative to the root (html) element's font size, em to the parent's. When em is nested several levels deep, the ratios multiply and compound, so for deeply nested cases check the actual computed value in DevTools too.",
+          "Inside media queries, rem and em resolve against the browser's default font size, not an element's font-size. Even with html { font-size: 10px } declared, @media (min-width: 40rem) still behaves close to the 16px-based value (640px).",
+          "100vw is relative to the full viewport width and does not subtract the scrollbar's width, so on a page with a vertical scrollbar, a 100vw element can end up slightly wider than the viewport and cause horizontal scrolling.",
+          "The parent width used for percent conversion is the actual rendered, computed value, not whatever the CSS declares. In a fluid flex or grid layout that value itself shifts with screen size and sibling count, so treat the parent width you enter as a snapshot of one moment.",
+          "For properties like border-width, where a fractional px doesn't land evenly on a device pixel, the browser rounds it when rendering. The converter's value and what DevTools reports can differ by around half a pixel.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "rem이란 무엇인가요?",
+          question: "다섯 개 단위를 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "rem(root em)은 HTML 루트 요소(<html>)의 폰트 크기를 기준으로 계산되는 CSS 상대 단위입니다. 루트 폰트 크기가 16px일 때 1rem = 16px, 2rem = 32px이 됩니다.",
+            "아니요. 상단 탭에서 rem·em·vw·%·ms 중 원하는 단위를 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 단위를 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /css-unit-converter 하나입니다.",
         },
         {
-          question: "루트 폰트 크기 기본값이 16인 이유는 무엇인가요?",
+          question: "탭을 누르면 입력했던 값이 사라지나요?",
           answer:
-            "대부분의 브라우저는 기본 폰트 크기를 16px로 설정합니다. CSS에서 html { font-size } 를 따로 지정하지 않으면 이 값이 적용됩니다.",
+            "네, 단위를 바꾸면 그 단위의 기본값으로 초기화됩니다. 단위마다 기준값의 의미(루트 폰트 크기, 부모 폰트 크기, 뷰포트 너비 등)가 달라 이전 값을 그대로 이어 쓰면 오히려 혼동을 줄 수 있기 때문입니다.",
         },
         {
-          question: "Swap을 누르면 URL이 바뀌나요?",
+          question: "rem과 em 중 어떤 걸 써야 하나요?",
           answer:
-            "아니요. Swap은 변환 방향만 바꾸고 URL은 /rem-to-px 그대로 유지됩니다. 검색 의도는 유지하면서 양방향 변환을 지원합니다.",
+            "화면 전체 기준으로 예측 가능하게 스케일되길 원하면 rem을, 버튼처럼 특정 요소가 자기 폰트 크기에 비례해 커지길 원하면 em을 쓰는 경우가 많습니다. 다만 이는 관례일 뿐 정해진 규칙은 아닙니다.",
+        },
+        {
+          question: "100vw인데 왜 페이지에 가로 스크롤이 생기나요?",
+          answer:
+            "세로 스크롤바가 있는 브라우저에서 100vw는 스크롤바 너비를 포함한 값이라, 실제 콘텐츠 영역보다 넓어질 수 있습니다. 요소 너비를 100%로 바꾸거나 box-sizing과 overflow 설정을 함께 확인하세요.",
         },
         {
           question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
+          answer: "아니요. 모든 변환은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
         },
       ],
       en: [
         {
-          question: "What is a rem unit?",
+          question: "Do I need to visit a different page for each of the five units?",
           answer:
-            "rem (root em) is a CSS relative unit based on the font size of the root HTML element. When the root font size is 16px, 1rem = 16px, 2rem = 32px, and so on.",
+            "No. Click rem, em, vw, %, or ms in the tabs above and it switches instantly on the same page. The URL reflects the current unit via a ?mode= query, but the canonical URL used for search indexing is always the single /en/css-unit-converter.",
         },
         {
-          question: "Why is the default root font size 16?",
+          question: "Does switching tabs clear the value I entered?",
           answer:
-            "Most browsers default to a 16px base font size. Unless you set a custom html { font-size } in your CSS, this is the value browsers use.",
+            "Yes, switching units resets the fields to that unit's default. Each unit's base value means something different (root font size, parent font size, viewport width, and so on), so carrying over the previous value would likely cause confusion instead of helping.",
         },
         {
-          question: "Does pressing Swap change the URL?",
+          question: "Should I use rem or em?",
           answer:
-            "No. Swap only flips the conversion direction while keeping the URL at /rem-to-px. It preserves the search intent while supporting bidirectional conversion.",
+            "rem is common when you want predictable scaling relative to the whole page; em is common when a specific element, like button padding, should scale in proportion to its own font size. These are conventions, not hard rules.",
+        },
+        {
+          question: "Why does my page get horizontal scroll even though I used 100vw?",
+          answer:
+            "In a browser with a vertical scrollbar, 100vw includes the scrollbar's width, so it can end up wider than the actual content area. Try width: 100% instead, or check your box-sizing and overflow settings.",
         },
         {
           question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
+          answer: "No. All conversion happens in your browser and the values you enter are never uploaded or stored.",
         },
       ],
     },
     og: {
-      ko: { title: "Rem to Px 변환기", subtitle: "rem ↔ px 즉시 변환, 루트 폰트 크기 설정 지원" },
-      en: { title: "Rem to Px Converter", subtitle: "Convert rem to pixels instantly with custom root size" },
-    },
-  },
-  {
-    slug: "em-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "em",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Em → Px 변환기", en: "Em to Px Converter" },
-    relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Em to Px 변환기 | CSS 단위 변환",
-        description:
-          "em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환합니다. 부모 요소 폰트 크기를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["em to px", "em px 변환", "em 변환기", "css em 단위", "px to em"],
-      },
-      en: {
-        title: "Em to Px Converter | CSS Unit Converter",
-        description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        keywords: ["em to px", "em to pixels", "px to em", "css em converter", "em unit converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "em ↔ px 즉시 변환. 부모 폰트 크기 설정 지원.",
-        description:
-          "em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환합니다. 부모 요소 폰트 크기를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["em 또는 px 값 입력", "부모 폰트 크기 설정 (기본값 16)", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Em to Px 변환기는 CSS 상대 단위 em 값을 픽셀(px)로, 또는 픽셀을 em으로 즉시 변환해주는 도구입니다.",
-          who: "중첩된 요소의 폰트 크기를 계산하거나 em 단위와 픽셀 단위를 함께 쓰는 프론트엔드 개발자를 위한 도구입니다.",
-          how: "em 또는 px 값을 입력하고 부모 요소의 폰트 크기를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
-          why: "em 단위는 부모 요소 폰트 크기에 따라 달라지므로 매번 수동으로 계산하는 번거로움을 줄여줍니다.",
-        },
-        guide: [
-          {
-            heading: "em은 부모 폰트 크기를 기준으로 한다",
-            body: [
-              "em은 해당 요소가 상속받은 폰트 크기를 1로 보는 상대 단위입니다. 버튼의 padding을 0.75em으로 주면 글자 크기가 커질 때 여백도 함께 커져, 컴포넌트가 폰트 크기에 맞춰 통째로 스케일됩니다. 이렇게 '요소 하나가 자기 폰트 크기에 비례해 커지길' 원할 때 em이 rem보다 편리합니다.",
-              "이 상대성 때문에 시안의 px 값을 em으로 옮기거나 그 반대로 확인할 일이 잦고, 이 변환기가 그 계산을 대신합니다. 부모 폰트 크기를 실제 값으로 설정해야 정확합니다.",
-            ],
-          },
-          {
-            heading: "중첩되면 값이 누적되는 함정",
-            body: [
-              "em의 가장 흔한 함정은 중첩 누적입니다. em은 부모의 폰트 크기를 기준으로 하므로, em으로 폰트 크기를 지정한 요소 안에 또 em을 쓰면 조상들의 배율이 곱해져 예상보다 크거나 작아집니다. 예를 들어 1.2em이 세 단계 중첩되면 실제로는 1.2 × 1.2 × 1.2 ≈ 1.73배가 됩니다.",
-              "그래서 실제로 몇 px이 되는지 눈으로 확인하는 것이 중요합니다. 예측 가능한 값이 필요할 때는 루트 기준인 rem을 함께 고려하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert em ↔ px instantly. Supports custom parent font size.",
-        description:
-          "Convert em values to pixels (px) or pixels to em instantly. Set a custom parent font size and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter an em or px value", "Set parent font size (default 16)", "Copy the converted result"],
-        aeo: {
-          what: "Em to Px Converter is a tool that instantly converts CSS em values to pixels (px) and back.",
-          who: "It is for front-end developers working with nested font sizes and those who need to switch between em and pixel values in CSS.",
-          how: "Enter an em or px value and set the parent element's font size; the conversion result appears instantly in your browser.",
-          why: "em values depend on the parent element's font size, making manual calculation tedious: this tool gives you the answer instantly.",
-        },
-        guide: [
-          {
-            heading: "em is relative to the parent font size",
-            body: [
-              "em is a relative unit that treats the element's inherited font size as 1. Give a button 0.75em of padding and the spacing grows along with the text, so the whole component scales with its font size. When you want a single element to grow in proportion to its own font size, em is handier than rem.",
-              "Because of this relativity you frequently move a design's px value into em or check it the other way, and this converter does that math for you. Set the parent font size to your real value for an accurate result.",
-            ],
-          },
-          {
-            heading: "The nesting trap where values compound",
-            body: [
-              "em's most common pitfall is compounding when nested. Since em is based on the parent's font size, using em inside an element that itself sets its font size in em multiplies the ancestors' ratios, so it ends up larger or smaller than expected. For example, 1.2em nested three levels deep is actually 1.2 × 1.2 × 1.2 ≈ 1.73×.",
-              "That's why it helps to see the resulting px value directly. When you need predictable values, consider rem, which is relative to the root. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "em과 rem의 차이는 무엇인가요?",
-          answer:
-            "em은 해당 요소의 부모 요소 폰트 크기를 기준으로 계산됩니다. rem은 항상 루트(<html>) 요소의 폰트 크기를 기준으로 계산됩니다. 중첩된 요소에서 em은 값이 누적될 수 있어, 예측 가능한 rem이 선호되는 경우가 많습니다.",
-        },
-        {
-          question: "font-size 외 다른 속성에도 em을 쓸 수 있나요?",
-          answer:
-            "네. em은 margin, padding, width, line-height 등 다양한 속성에 사용할 수 있습니다. font-size에 em을 쓸 때는 부모 폰트 크기가 기준이 되고, 다른 속성에서는 같은 요소의 font-size가 기준이 됩니다.",
-        },
-        {
-          question: "Swap을 누르면 URL이 바뀌나요?",
-          answer:
-            "아니요. Swap은 변환 방향만 바꾸고 URL은 /em-to-px 그대로 유지됩니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is the difference between em and rem?",
-          answer:
-            "em is relative to the parent element's font size, while rem is always relative to the root (<html>) font size. In nested elements, em values can compound, which is why rem is often preferred for predictability.",
-        },
-        {
-          question: "Can em be used for properties other than font-size?",
-          answer:
-            "Yes. em can be used for margin, padding, width, line-height and more. When used on font-size, it refers to the parent font size; on other properties, it refers to the element's own computed font-size.",
-        },
-        {
-          question: "Does pressing Swap change the URL?",
-          answer:
-            "No. Swap only flips the conversion direction while keeping the URL at /em-to-px.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Em to Px 변환기", subtitle: "em ↔ px 즉시 변환, 부모 폰트 크기 설정 지원" },
-      en: { title: "Em to Px Converter", subtitle: "Convert em to pixels instantly with custom parent size" },
-    },
-  },
-  {
-    slug: "vw-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "vw",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Vw → Px 변환기", en: "Vw to Px Converter" },
-    relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Vw to Px 변환기 | CSS 뷰포트 단위 변환",
-        description:
-          "vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환합니다. 뷰포트 너비를 직접 입력하거나 390, 768, 1024, 1440, 1920 프리셋으로 선택하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["vw to px", "vw px 변환", "viewport width 변환", "css vw 단위", "px to vw"],
-      },
-      en: {
-        title: "Vw to Px Converter | CSS Viewport Unit Converter",
-        description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
-        keywords: ["vw to px", "vw to pixels", "px to vw", "viewport width converter", "css vw unit"],
-      },
-    },
-    content: {
-      ko: {
-        card: "vw ↔ px 즉시 변환. 반응형 뷰포트 너비 프리셋 지원.",
-        description:
-          "vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환합니다. 뷰포트 너비를 직접 입력하거나 390, 768, 1024, 1440, 1920 프리셋으로 선택하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["vw 또는 px 값 입력", "뷰포트 너비 설정 또는 프리셋 선택", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Vw to Px 변환기는 CSS 뷰포트 너비 단위 vw 값을 픽셀(px)로, 또는 픽셀을 vw로 즉시 변환해주는 도구입니다.",
-          who: "반응형 레이아웃을 설계하는 프론트엔드 개발자와 뷰포트 기반 크기를 계산해야 하는 디자이너를 위한 도구입니다.",
-          how: "vw 또는 px 값을 입력하고 뷰포트 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다. 일반 반응형 뷰포트 크기 프리셋도 제공합니다.",
-          why: "다양한 화면 크기에서 vw와 px를 오갈 때 계산 실수 없이 빠르게 정확한 값을 확인할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "vw는 뷰포트 너비의 1%",
-            body: [
-              "vw(viewport width)는 브라우저 표시 영역의 너비를 100으로 나눈 단위입니다. 100vw는 화면 전체 너비, 50vw는 그 절반입니다. 화면 크기에 따라 자동으로 값이 바뀌기 때문에 풀블리드 히어로 섹션이나 화면 폭에 비례해 커지는 반응형 타이포그래피에 자주 쓰입니다.",
-              "핵심은 같은 vw라도 기기마다 실제 픽셀이 달라진다는 점입니다. 10vw는 1440px 데스크톱에서 144px이지만 390px 모바일에서는 39px입니다. 그래서 특정 기기 기준의 실제 크기를 확인하려면 뷰포트 너비를 지정해 변환해야 하고, 이 계산기는 대표 기기 프리셋을 제공합니다.",
-            ],
-          },
-          {
-            heading: "clamp와 함께, 과도한 확대·축소 막기",
-            body: [
-              "vw만 단독으로 쓰면 큰 화면에서는 지나치게 커지고 작은 화면에서는 읽기 힘들 만큼 작아지기 쉽습니다. 그래서 실무에서는 min()·max()·clamp()로 하한과 상한을 함께 지정하는 경우가 많습니다. 이때 각 뷰포트에서 vw가 몇 px이 되는지 미리 확인하면 경계값을 합리적으로 잡을 수 있습니다.",
-              "이 변환기로 최소·최대 화면 폭에서의 px 값을 확인해 clamp 범위를 설계해 보세요. 모든 계산은 브라우저 안에서만 이루어지며 입력값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert vw ↔ px instantly. Includes responsive viewport width presets.",
-        description:
-          "Convert vw values to pixels (px) or pixels to vw instantly. Enter a custom viewport width or pick a preset: 390, 768, 1024, 1440, 1920. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a vw or px value", "Set viewport width or pick a preset", "Copy the converted result"],
-        aeo: {
-          what: "Vw to Px Converter is a tool that instantly converts CSS viewport width (vw) values to pixels and back.",
-          who: "It is for front-end developers designing responsive layouts and designers who need to calculate viewport-based sizes.",
-          how: "Enter a vw or px value and set the viewport width (or choose a preset like 1440); the result appears instantly in your browser.",
-          why: "It eliminates manual vw-to-px math across different screen sizes, speeding up responsive design work.",
-        },
-        guide: [
-          {
-            heading: "vw is 1% of the viewport width",
-            body: [
-              "vw (viewport width) divides the browser's visible width into 100 parts. 100vw is the full screen width and 50vw is half of it. Because the value changes automatically with the screen size, vw is popular for full-bleed hero sections and responsive typography that scales with the viewport.",
-              "The key point is that the same vw resolves to different pixels on different devices. 10vw is 144px on a 1440px desktop but 39px on a 390px phone. So to check the real size for a specific device you set the viewport width and convert, and this calculator ships common device presets.",
-            ],
-          },
-          {
-            heading: "Pair it with clamp to avoid extremes",
-            body: [
-              "Used alone, vw tends to get too large on wide screens and too small to read on narrow ones. That's why in practice people bound it with min(), max(), or clamp(). Checking how many pixels a vw value becomes at each viewport first lets you pick sensible boundaries.",
-              "Use this converter to read the px values at your minimum and maximum screen widths and design your clamp range around them. All calculation runs in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "1vw는 몇 픽셀인가요?",
-          answer:
-            "1vw는 뷰포트(브라우저 화면) 너비의 1%입니다. 뷰포트 너비가 1440px이면 1vw = 14.4px, 1024px이면 1vw = 10.24px이 됩니다.",
-        },
-        {
-          question: "vw와 %의 차이는 무엇인가요?",
-          answer:
-            "vw는 브라우저 뷰포트 전체 너비를 기준으로 하고, %는 부모 요소의 너비를 기준으로 합니다. 루트 요소(<html>)에서는 동일하지만 중첩 요소 안에서는 다른 값이 나올 수 있습니다.",
-        },
-        {
-          question: "모바일 화면 크기도 확인할 수 있나요?",
-          answer:
-            "네. 390px(iPhone), 768px(태블릿) 등 모바일 뷰포트 프리셋을 선택해 빠르게 확인할 수 있습니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is 1vw in pixels?",
-          answer:
-            "1vw is 1% of the viewport (browser window) width. At a viewport width of 1440px, 1vw = 14.4px. At 1024px, 1vw = 10.24px.",
-        },
-        {
-          question: "What is the difference between vw and %?",
-          answer:
-            "vw is relative to the full browser viewport width, while % is relative to the parent element's width. On the root element they are equal, but inside nested elements they can differ.",
-        },
-        {
-          question: "Can I check mobile screen sizes?",
-          answer:
-            "Yes. Select the 390px (iPhone) or 768px (tablet) preset to quickly check vw values at common mobile viewport sizes.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Vw to Px 변환기", subtitle: "vw ↔ px 즉시 변환, 반응형 뷰포트 프리셋 지원" },
-      en: { title: "Vw to Px Converter", subtitle: "Convert vw to pixels instantly with viewport presets" },
-    },
-  },
-  {
-    slug: "percent-to-px",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "%px",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "% → Px 변환기", en: "Percent to Px Converter" },
-    relatedTools: ["css-gradient", "tailwind-palette-generator", "json-formatter"],
-    seo: {
-      ko: {
-        title: "Percent to Px 변환기 | CSS % 단위 변환",
-        description:
-          "CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환합니다. 부모 요소 너비를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["percent to px", "퍼센트 px 변환", "% to px", "css percent 단위", "px to percent"],
-      },
-      en: {
-        title: "Percent to Px Converter | CSS Unit Converter",
-        description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        keywords: ["percent to px", "% to pixels", "px to percent", "css percent converter", "percentage unit converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "CSS % ↔ px 즉시 변환. 부모 요소 너비 설정 지원.",
-        description:
-          "CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환합니다. 부모 요소 너비를 직접 설정하고 결과를 바로 복사하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["% 또는 px 값 입력", "부모 요소 너비 설정", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Percent to Px 변환기는 CSS 퍼센트(%) 값을 픽셀(px)로, 또는 픽셀을 퍼센트로 즉시 변환해주는 도구입니다.",
-          who: "반응형 레이아웃에서 퍼센트 기반 크기와 픽셀 크기를 오가야 하는 프론트엔드 개발자와 디자이너를 위한 도구입니다.",
-          how: "% 또는 px 값을 입력하고 부모 요소 너비를 설정하면 브라우저 안에서 즉시 변환 결과를 보여줍니다.",
-          why: "퍼센트와 픽셀 단위 계산을 빠르게 처리해 반응형 레이아웃 설계 시간을 줄여줍니다.",
-        },
-        guide: [
-          {
-            heading: "CSS %는 '무엇의 100%'인지가 핵심",
-            body: [
-              "CSS 퍼센트는 속성마다 기준이 다릅니다. width는 부모 요소의 너비, height는 부모의 높이, font-size는 부모의 폰트 크기를 기준으로 하고, 흥미롭게도 padding과 margin은 세로 값이라도 부모의 '너비'를 기준으로 계산됩니다. 이 변환기는 가장 흔한 경우인 부모 요소 너비를 기준으로 % ↔ px를 변환합니다.",
-              "즉 50%는 언제나 '부모 너비의 절반'입니다. 부모가 800px이면 50% = 400px, 부모가 1200px이면 600px이 됩니다. 정확한 값을 얻으려면 부모 요소의 실제 너비를 입력해야 합니다.",
-            ],
-          },
-          {
-            heading: "% vs vw: 무엇을 기준으로 삼는가",
-            body: [
-              "퍼센트와 vw는 헷갈리기 쉽지만 기준이 다릅니다. %는 부모(컨테이너)를 기준으로 하고, vw는 화면(뷰포트) 전체를 기준으로 합니다. 그래서 컨테이너 안에서의 비율 배분에는 %가, 화면 폭에 직접 비례해야 할 때는 vw가 맞습니다. 중첩된 레이아웃에서 실제 픽셀이 얼마가 되는지 확인할 때 이 변환기가 유용합니다.",
-              "모든 계산은 브라우저 안에서만 이루어지며 입력한 값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert CSS % ↔ px instantly. Supports custom parent width.",
-        description:
-          "Convert CSS percentage (%) values to pixels (px) or pixels to percent instantly. Set a custom parent width and copy the result in one click. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter a % or px value", "Set the parent element width", "Copy the converted result"],
-        aeo: {
-          what: "Percent to Px Converter is a tool that instantly converts CSS percentage (%) values to pixels and back.",
-          who: "It is for front-end developers and designers working with percentage-based and pixel-based sizes in responsive layouts.",
-          how: "Enter a % or px value and set the parent element width; the converted result appears instantly in your browser.",
-          why: "It handles the division and multiplication instantly so you can focus on the layout instead of the arithmetic.",
-        },
-        guide: [
-          {
-            heading: "With CSS %, the question is '100% of what?'",
-            body: [
-              "CSS percentages are relative to different things depending on the property. width is relative to the parent's width, height to the parent's height, font-size to the parent's font size, and, notably, padding and margin are calculated from the parent's width even for vertical values. This converter handles the most common case, converting % ↔ px relative to the parent element's width.",
-              "So 50% is always 'half the parent's width': with an 800px parent, 50% = 400px; with a 1200px parent, 600px. Enter the parent's real width to get an accurate value.",
-            ],
-          },
-          {
-            heading: "% vs vw: what each is relative to",
-            body: [
-              "Percent and vw are easy to confuse, but their references differ: % is relative to the parent (container), while vw is relative to the whole viewport. Use % to divide space within a container and vw when something must scale directly with the screen width. This converter is handy for seeing the real pixel value inside a nested layout.",
-              "All calculation runs in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CSS에서 퍼센트(%)는 무엇을 기준으로 하나요?",
-          answer:
-            "속성에 따라 기준이 다릅니다. width에 쓴 %는 부모 요소의 width 기준이고, height의 %는 부모 요소의 height 기준입니다. margin, padding의 %는 부모 요소의 width를 기준으로 합니다.",
-        },
-        {
-          question: "퍼센트와 vw의 차이는 무엇인가요?",
-          answer:
-            "퍼센트(%)는 부모 요소를 기준으로 하고, vw는 브라우저 전체 뷰포트 너비를 기준으로 합니다. 루트 요소에서는 동일하지만, 중첩된 요소 안에서는 값이 달라집니다.",
-        },
-        {
-          question: "음수 값도 입력할 수 있나요?",
-          answer:
-            "네. 음수 px 또는 % 값을 입력할 수 있습니다. CSS에서 margin 같은 속성은 음수 값을 허용합니다.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What does percent (%) refer to in CSS?",
-          answer:
-            "It depends on the property. For width, % is relative to the parent's width. For height, it is relative to the parent's height. For margin and padding, % is always relative to the parent's width.",
-        },
-        {
-          question: "What is the difference between % and vw?",
-          answer:
-            "Percent (%) is relative to the parent element's size, while vw is relative to the entire browser viewport width. They are equal on the root element but differ inside nested elements.",
-        },
-        {
-          question: "Can I enter negative values?",
-          answer:
-            "Yes. Negative px or % values are accepted. Some CSS properties such as margin allow negative values.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Percent to Px 변환기", subtitle: "CSS % ↔ px 즉시 변환, 부모 너비 설정 지원" },
-      en: { title: "Percent to Px Converter", subtitle: "Convert CSS percentages to pixels instantly" },
-    },
-  },
-  {
-    slug: "ms-to-s",
-    layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
-    ico: "ms",
-    ready: true,
-    indexable: false,
-    badge: "Clean SaaS",
-    name: { ko: "Ms → S 변환기", en: "Ms to S Converter" },
-    relatedTools: ["json-formatter", "slack-timestamp-converter", "time-converter"],
-    seo: {
-      ko: {
-        title: "Ms to S 변환기 | 밀리초·초 단위 변환",
-        description:
-          "밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환합니다. CSS 애니메이션·트랜지션 작업 시 자주 쓰이는 단위를 빠르게 변환하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        keywords: ["ms to s", "밀리초 초 변환", "milliseconds to seconds", "css animation 시간", "ms 변환기"],
-      },
-      en: {
-        title: "Ms to S Converter | Milliseconds to Seconds",
-        description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
-        keywords: ["ms to s", "milliseconds to seconds", "seconds to milliseconds", "css animation time", "ms converter"],
-      },
-    },
-    content: {
-      ko: {
-        card: "ms ↔ s 즉시 변환. CSS 애니메이션·트랜지션 시간 계산에 유용.",
-        description:
-          "밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환합니다. CSS 애니메이션·트랜지션 작업 시 자주 쓰이는 단위를 빠르게 변환하세요. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["ms 또는 s 값 입력", "Swap으로 변환 방향 전환", "변환 결과 확인 및 복사"],
-        aeo: {
-          what: "Ms to S 변환기는 밀리초(ms)를 초(s)로, 또는 초를 밀리초로 즉시 변환해주는 도구입니다.",
-          who: "CSS 애니메이션·트랜지션 지속 시간을 계산하거나 JavaScript setTimeout/setInterval 값을 ms와 s 단위로 오가야 하는 프론트엔드 개발자를 위한 도구입니다.",
-          how: "ms 또는 s 값을 입력하면 브라우저 안에서 즉시 상대 단위로 변환합니다. Swap 버튼으로 변환 방향을 바꿀 수 있습니다.",
-          why: "1000ms = 1s 계산이 단순하지만 큰 값에서 자주 실수하므로, 빠르게 검증하고 복사하는 데 유용합니다.",
-        },
-        guide: [
-          {
-            heading: "ms와 s, CSS·JS에서 언제 무엇을 쓰나",
-            body: [
-              "1초(s)는 1,000밀리초(ms)입니다. CSS의 transition·animation duration은 `0.3s`와 `300ms` 두 표기를 모두 허용하는데, 코드베이스마다 컨벤션이 달라 값을 오갈 일이 생깁니다. 일반적으로 짧은 시간은 ms(예: 150ms)가, 긴 시간은 s(예: 1.5s)가 읽기 편해 팀 단위로 표기를 통일하는 경우가 많습니다.",
-              "JavaScript의 setTimeout·setInterval은 항상 ms 단위를 받기 때문에, 디자이너가 'S' 단위로 정한 모션 스펙을 코드로 옮길 때 변환이 필요합니다. 이 변환기가 그 왕복을 즉시 처리합니다.",
-            ],
-          },
-          {
-            heading: "체감 속도의 감을 잡는 데도 유용",
-            body: [
-              "UI 인터랙션에서 트랜지션 시간은 체감 품질을 좌우합니다. 보통 150~300ms가 자연스러운 마이크로 인터랙션 구간으로 여겨지고, 500ms를 넘어가면 굼떠 보이기 쉽습니다. 값을 ms와 s로 오가며 보면 애니메이션이 실제로 얼마나 길지 감을 잡는 데 도움이 됩니다.",
-              "변환은 전부 브라우저 안에서 이루어지며 입력값은 서버로 전송되지 않습니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Convert ms ↔ s instantly. Useful for CSS animations and transitions.",
-        description:
-          "Convert milliseconds (ms) to seconds (s) or seconds to milliseconds instantly. Handy for CSS animations, transitions and JavaScript timing. Everything runs in your browser: no login, no installation.",
-        howItWorks: ["Enter an ms or s value", "Flip direction with Swap", "Copy the converted result"],
-        aeo: {
-          what: "Ms to S Converter is a tool that instantly converts milliseconds (ms) to seconds (s) and back.",
-          who: "It is for front-end developers calculating CSS animation and transition durations, or converting between ms and s for JavaScript setTimeout and setInterval.",
-          how: "Enter an ms or s value and the result appears instantly in your browser. Use the Swap button to flip the conversion direction.",
-          why: "While 1000ms = 1s seems simple, larger values are easy to miscalculate: this tool gives the answer instantly so you can copy and move on.",
-        },
-        guide: [
-          {
-            heading: "ms vs s: when to use each in CSS and JS",
-            body: [
-              "One second (s) is 1,000 milliseconds (ms). CSS transition and animation durations accept both `0.3s` and `300ms`, and since conventions differ between codebases you often move between the two. As a rule, short durations read better in ms (e.g. 150ms) and longer ones in s (e.g. 1.5s), so teams tend to standardize on one style.",
-              "JavaScript's setTimeout and setInterval always take milliseconds, so when a designer specifies a motion spec in seconds you need to convert it for code. This tool handles that round trip instantly.",
-            ],
-          },
-          {
-            heading: "Also useful for gauging perceived speed",
-            body: [
-              "In UI interactions, transition timing drives how the experience feels. Roughly 150-300ms is considered the natural range for micro-interactions, while anything over 500ms tends to feel sluggish. Flipping a value between ms and s helps you sense how long an animation will actually run.",
-              "All conversion happens in your browser and your input is never sent to a server.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CSS animation-duration에 ms와 s 중 어느 단위가 좋은가요?",
-          answer:
-            "둘 다 유효합니다. CSS 명세에서 s와 ms 단위를 모두 지원합니다. 0.3s처럼 1초 미만의 짧은 시간은 s로 쓰는 것이 더 읽기 쉽고, 길고 정밀한 타이밍은 ms로 관리하는 편이 유리합니다.",
-        },
-        {
-          question: "음수 값(animation-delay)도 처리할 수 있나요?",
-          answer:
-            "네. 음수 ms 또는 s 값을 입력할 수 있습니다. CSS animation-delay에 음수 값을 사용하면 애니메이션이 도중부터 시작됩니다.",
-        },
-        {
-          question: "소수점은 몇 자리까지 지원하나요?",
-          answer:
-            "최대 4자리 소수점까지 지원하며 불필요한 소수점은 자동으로 제거합니다. 예: 1000ms → 1s, 150ms → 0.15s.",
-        },
-        {
-          question: "입력한 값이 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Should I use ms or s for CSS animation-duration?",
-          answer:
-            "Both are valid CSS units. For values under 1 second, s is more readable (e.g., 0.3s). For larger or more precise timing, ms is easier to work with. Most developers use both interchangeably.",
-        },
-        {
-          question: "Can I use negative values for animation-delay?",
-          answer:
-            "Yes. Negative ms or s values are accepted. A negative CSS animation-delay starts the animation partway through its cycle.",
-        },
-        {
-          question: "How many decimal places are supported?",
-          answer:
-            "Up to 4 decimal places are shown, with trailing zeros removed automatically. For example: 1000ms → 1s, 150ms → 0.15s.",
-        },
-        {
-          question: "Is anything I enter sent to a server?",
-          answer:
-            "No. All calculations happen in your browser and the values you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "Ms to S 변환기", subtitle: "밀리초 ↔ 초 즉시 변환" },
-      en: { title: "Ms to S Converter", subtitle: "Convert milliseconds to seconds instantly" },
+      ko: { title: "CSS 단위 변환기", subtitle: "rem·em·vw·%·ms를 px로 한 번에 변환" },
+      en: { title: "CSS Unit Converter", subtitle: "Convert rem, em, vw, % and ms to px in one place" },
     },
   },
 
@@ -3585,7 +3250,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm", "developer"],
     ico: "±h",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "시간 더하기 빼기 계산기", en: "Time Calculator" },
     relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
@@ -3615,6 +3280,55 @@ export const TOOLS: Tool[] = [
           how: "시간 블록(시·분·초)을 입력하고 각 항목에 더하기(+) 또는 빼기(-) 연산자를 선택하면, 실시간으로 총 합계를 계산해 여러 형식으로 보여줍니다. 항목을 자유롭게 추가하거나 삭제할 수 있습니다.",
           why: "머릿속에서 시간을 계산하다 실수하는 일 없이, 여러 근무 블록의 합계를 정확하게 구할 수 있고 청구 시간이나 타임시트 작성 시간을 줄여줍니다.",
         },
+        guide: [
+          {
+            heading: "시:분:초는 60진법이라 암산이 자주 틀립니다",
+            body: [
+              "시간은 10진법이 아니라 60진법입니다. 1시간 45분에 40분을 더하면 1시간 85분이 아니라 2시간 25분이어야 하는데, 여러 블록을 손으로 더하다 보면 이런 자리올림을 놓치기 쉽습니다. 특히 오전·오후 근무를 나눠 기록했거나 휴게시간을 뺀 실근무시간을 따로 계산해야 할 때, 블록이 3~4개만 넘어가도 암산 오류가 잦아집니다.",
+              "이 계산기는 각 시간 블록에 +/- 부호만 정해주면 60진법 자리올림을 자동으로 처리해 정확한 합계를 냅니다.",
+            ],
+          },
+          {
+            heading: "형식을 바꿔가며 결과를 확인하는 이유",
+            body: [
+              "같은 합계를 시:분:초, 소수점 시간, 총 분, 총 초로 동시에 보여주는 이유는 쓰임새가 다르기 때문입니다. 타임시트에는 시:분:초가, 시급 계산이나 인보이스에는 1시간 30분 = 1.5h처럼 소수점 시간이 필요합니다. 회의 시간을 분 단위로 예약 시스템에 입력해야 할 때는 총 분이 바로 쓰기 편합니다.",
+              "매번 단위를 손으로 환산하는 대신, 필요한 형식을 그 자리에서 골라 복사하면 됩니다.",
+            ],
+          },
+          {
+            heading: "빼기 항목으로 초과·부족 근무를 확인하는 법",
+            body: [
+              "더하기(+) 항목만 쓰면 단순 합산 계산기지만, 빼기(-) 항목을 섞으면 목표 시간 대비 초과·부족분을 계산하는 용도로도 쓸 수 있습니다. 예를 들어 하루 8시간을 더하기로 넣고 실제 근무를 마친 시각까지의 시간을 빼기로 넣으면, 남은 근무 시간(또는 이미 초과한 시간)이 바로 나옵니다.",
+              "뺄 항목이 더할 항목보다 크면 합계가 음수로 표시되어, 조기 퇴근인지 초과 근무인지도 부호로 바로 구분됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "오전·오후로 나눠 기록한 근무시간 합산",
+            input: "오전 4시간 15분(+) · 오후 3시간 50분(+)",
+            result: "8시간 5분 (8.083h · 485분)",
+            note: "분 단위가 60을 넘는 자리올림(15+50=65분 → 1시간 5분)을 자동으로 처리합니다. 손으로 더하면 놓치기 쉬운 부분입니다.",
+          },
+          {
+            title: "휴게시간을 뺀 실근무시간 계산",
+            input: "출근~퇴근 9시간(+) · 점심 휴게 1시간(-)",
+            result: "8시간 (8.0h)",
+            note: "전체 재실 시간에서 휴게시간을 빼는 방식으로, 급여 계산 기준이 되는 실근무시간을 구합니다.",
+          },
+          {
+            title: "목표 근무시간 대비 초과분 확인",
+            input: "목표 8시간(+) · 실제 근무 9시간 20분(-)",
+            result: "−1시간 20분",
+            note: "결과가 음수면 목표보다 더 일했다는 뜻입니다. 부호만 보면 초과인지 부족인지 바로 판단할 수 있어 주간 근무시간 정산에 씁니다.",
+          },
+        ],
+        limitations: [
+          "이 도구는 시간의 '길이'(duration)를 더하고 빼는 계산기입니다. 특정 시각(예: 오후 3시)에 몇 시간을 더해 몇 시가 되는지 구하는 시각 계산과는 다릅니다.",
+          "날짜 경계를 넘는 계산(예: 자정을 넘겨 다음 날까지 근무)은 시·분·초 값만으로 처리하므로, 날짜가 바뀌는 지점을 직접 반영해 입력해야 합니다.",
+          "표준 근무 정책(연장·야간·휴일 근로수당 배율 등)은 계산하지 않습니다. 이 도구는 시간의 합계만 구하며, 급여 산정이 필요하면 연봉 실수령액 계산기를 함께 사용하세요.",
+          "입력한 항목은 새로고침하거나 탭을 닫으면 저장되지 않습니다. 여러 날짜의 근무시간을 누적 기록하려면 결과를 별도로 옮겨 적어야 합니다.",
+        ],
       },
       en: {
         card: "Add and subtract time blocks to total up work hours. Built for timesheets and billing.",
@@ -3627,6 +3341,55 @@ export const TOOLS: Tool[] = [
           how: "Enter each time block in hours, minutes and seconds, choose + or − for each row, and the running total updates instantly in multiple formats. Add or remove rows as needed.",
           why: "It eliminates mental arithmetic errors when summing multiple time blocks, making timesheet entry and billing calculations faster and more accurate.",
         },
+        guide: [
+          {
+            heading: "H:M:S is base 60, and mental math slips on it",
+            body: [
+              "Time isn't base 10; it's base 60. Adding 40 minutes to 1 hour 45 minutes should give 2 hours 25 minutes, not 1 hour 85 minutes, but that carry is easy to miss once you're adding several blocks by hand. Once you're past three or four rows, splitting morning and afternoon shifts or subtracting a break from total time on-site, mental math errors creep in fast.",
+              "This calculator only needs a + or − sign per block; it handles the base-60 carrying automatically and lands on an exact total.",
+            ],
+          },
+          {
+            heading: "Why the same total is shown in several formats",
+            body: [
+              "The same total appears as H:M:S, decimal hours, total minutes, and total seconds because each suits a different use. A timesheet wants H:M:S; an hourly rate calculation or invoice wants decimal hours, where 1 hour 30 minutes becomes 1.5h. Entering a meeting length into a booking system in minutes is easiest with the total-minutes figure.",
+              "Instead of converting units by hand each time, pick whichever format you need and copy it straight from the result.",
+            ],
+          },
+          {
+            heading: "Using subtraction to check overtime or a shortfall",
+            body: [
+              "With only + rows, this is a plain adder, but mixing in − rows turns it into a way to check actual time against a target. Add your target (say, 8 hours) as a + row and subtract the time you actually worked, and what's left (or how much you went over) comes out directly.",
+              "When the subtracted rows outweigh the added ones, the total goes negative, so the sign alone tells you whether you left early or worked overtime.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Totaling a shift logged as morning and afternoon blocks",
+            input: "Morning 4h 15m (+), afternoon 3h 50m (+)",
+            result: "8h 5m (8.083h, 485 minutes)",
+            note: "The carry when minutes pass 60 (15 + 50 = 65 minutes, i.e. 1h 5m) is handled automatically: exactly the kind of thing that's easy to miss adding by hand.",
+          },
+          {
+            title: "Calculating actual worked time minus a break",
+            input: "Clock-in to clock-out 9h (+), lunch break 1h (−)",
+            result: "8h (8.0h)",
+            note: "Subtracting the break from total time on-site gives the actual worked time that pay is usually based on.",
+          },
+          {
+            title: "Checking overtime against a target shift length",
+            input: "Target 8h (+), actual worked 9h 20m (−)",
+            result: "−1h 20m",
+            note: "A negative result means more was worked than the target. The sign alone tells you overtime from a shortfall, handy for a weekly hours reconciliation.",
+          },
+        ],
+        limitations: [
+          "This tool adds and subtracts durations (lengths of time). It is not a clock-time calculator that answers \"what time is it 5 hours after 3 PM\".",
+          "Calculations that cross a date boundary (a shift that runs past midnight into the next day) are handled purely as hour/minute/second values, so you need to account for the date change yourself in what you enter.",
+          "It does not apply labor policy multipliers (overtime, night-shift, or holiday pay rates). This tool only totals durations; pair it with the Salary Calculator if you need an actual pay figure.",
+          "Entries are not saved across a page reload or a closed tab. To track hours across multiple days, copy each result out somewhere else.",
+        ],
       },
     },
     faq: {
@@ -3693,7 +3456,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "pm"],
     ico: "h↔d",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Clean SaaS",
     name: { ko: "시간 단위 변환기", en: "Time Converter" },
     relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
@@ -3723,6 +3486,48 @@ export const TOOLS: Tool[] = [
           how: "숫자와 단위를 입력하면 모든 단위(초·분·시간·일·주·월·년)로 변환된 결과를 한 화면에 보여줍니다. 캘린더 기준과 근무 기준 중 계산 방식을 선택할 수 있습니다.",
           why: "프로젝트 견적에서 '200시간이 몇 주인지', 온보딩에서 '2주가 몇 시간인지' 같은 계산을 매번 직접 하지 않고 즉시 확인할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "캘린더 기준과 근무 기준, 같은 '일'이 다른 시간이 되는 이유",
+            body: [
+              "\"3일\"이라는 말은 맥락에 따라 완전히 다른 시간을 뜻합니다. 캘린더 기준으로는 1일 = 24시간이라 3일은 72시간이지만, 업무 공수로 말하는 3일(맨데이)은 보통 1일 = 8시간 근무를 뜻해 24시간에 불과합니다. 이 차이를 모르고 프로젝트 견적에 캘린더 기준 일수를 그대로 쓰면 공수를 3배 과대 산정하게 됩니다.",
+              "이 변환기는 두 기준을 나란히 계산해, 지금 다루는 숫자가 '흘러가는 시간'인지 '업무 공수'인지에 맞는 쪽을 바로 골라 쓸 수 있게 합니다.",
+            ],
+          },
+          {
+            heading: "월(month) 변환이 근사값인 이유",
+            body: [
+              "1개월은 28일부터 31일까지 달마다 길이가 다르기 때문에, 다른 단위처럼 고정된 환산 비율이 없습니다. 이 도구는 캘린더 기준에서 1개월 = 30.44일(365.25일 ÷ 12), 근무 기준에서 1개월 = 21.75 근무일(연 261 근무일 ÷ 12)이라는 평균값을 씁니다. 특정 달(예: 2월 28일)의 정확한 일수가 아니라 연간 평균에 기반한 근사치입니다.",
+              "분기·반기 단위로 대략적인 기간을 추산할 때는 충분히 쓸 만하지만, 특정 월의 정확한 날짜 수가 필요하면 캘린더를 직접 확인해야 합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "프로젝트 견적의 시간을 근무일로 환산",
+            input: "200시간 (근무 기준)",
+            result: "25근무일 (5주)",
+            note: "8시간/일, 5일/주 기준으로 나눈 값입니다. 캘린더 기준으로 잘못 계산하면 200시간이 8.3일(24시간/일)로 나와 공수를 크게 과소평가하게 됩니다.",
+          },
+          {
+            title: "온보딩 기간을 시간 단위로 확인",
+            input: "2주 (근무 기준)",
+            result: "80시간 (10근무일)",
+            note: "신규 입사자 온보딩 프로그램이나 교육 일정을 시간 단위 커리큘럼으로 짤 때, 몇 주가 총 몇 시간인지 바로 확인할 수 있습니다.",
+          },
+          {
+            title: "분기 프로젝트 기간을 개월로 추산",
+            input: "90일 (캘린더 기준)",
+            result: "약 2.96개월",
+            note: "정확히 3개월이 아닌 이유는 1개월을 30.44일 평균으로 계산하기 때문입니다. 분기 단위 로드맵을 대략적인 개월 수로 표현할 때 씁니다.",
+          },
+        ],
+        limitations: [
+          "월(month) 단위는 실제 달력의 날짜 수가 아니라 연간 평균(캘린더 30.44일, 근무 21.75일)에 기반한 근사값입니다. 2월처럼 짧은 달이나 31일까지 있는 달의 실제 일수와는 차이가 납니다.",
+          "근무 기준은 1일 8시간·1주 5일·연 261 근무일이라는 일반적인 값을 고정으로 씁니다. 실제 회사의 소정근로시간이나 주 4일제처럼 다른 근무 형태는 반영하지 않습니다.",
+          "공휴일·연차·재량근무처럼 개별 일정에 따라 달라지는 변수는 계산하지 않습니다. 실제 근무일을 정확히 따지려면 유연근무 잔여시간 계산기를 함께 사용하세요.",
+          "단순 단위 환산기입니다. 특정 날짜에서 특정 날짜까지의 실제 캘린더 일수를 세는 기능은 제공하지 않습니다.",
+        ],
       },
       en: {
         card: "Convert hours, days, weeks and months instantly. Switch between calendar and work basis.",
@@ -3735,6 +3540,48 @@ export const TOOLS: Tool[] = [
           how: "Enter a number and select a unit; the result appears in every other unit simultaneously. Toggle between calendar basis and work basis to match your context.",
           why: "It saves the mental calculation of questions like 'how many weeks is 200 hours?' or 'how many hours is 2 weeks?' that come up repeatedly in project planning and scheduling.",
         },
+        guide: [
+          {
+            heading: "Why the same 'day' means different amounts of time",
+            body: [
+              "\"Three days\" means very different things depending on context. On a calendar basis, 1 day = 24 hours, so three days is 72 hours; but three person-days of work usually means 8-hour workdays, just 24 hours total. Applying calendar-basis day counts to a project estimate without noticing this triples the effort you think you have.",
+              "This converter computes both bases side by side, so you can pick whichever matches whether you're dealing with elapsed time or work effort.",
+            ],
+          },
+          {
+            heading: "Why month conversions are approximate",
+            body: [
+              "A month runs anywhere from 28 to 31 days, so unlike the other units, there's no fixed ratio to convert with. This tool uses annual averages: 1 month = 30.44 days on a calendar basis (365.25 / 12), and 1 month = 21.75 working days on a work basis (261 working days / 12). That's an approximation based on the yearly average, not the exact day count of any specific month (like February's 28).",
+              "It's accurate enough for rough quarter- or half-year estimates, but check an actual calendar if you need the precise day count of a particular month.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Converting a project estimate's hours to working days",
+            input: "200 hours (work basis)",
+            result: "25 working days (5 weeks)",
+            note: "Divided at 8 hours/day and 5 days/week. Using calendar basis by mistake would give 8.3 days (24 hours/day), badly underestimating the effort.",
+          },
+          {
+            title: "Checking an onboarding period in hours",
+            input: "2 weeks (work basis)",
+            result: "80 hours (10 working days)",
+            note: "Useful for turning a new-hire onboarding program or training schedule into an hour-based curriculum.",
+          },
+          {
+            title: "Estimating a quarterly project length in months",
+            input: "90 days (calendar basis)",
+            result: "About 2.96 months",
+            note: "It isn't exactly 3 months because a month is computed as the 30.44-day average. Handy for expressing a quarterly roadmap as an approximate month count.",
+          },
+        ],
+        limitations: [
+          "The month unit is an approximation based on the annual average (30.44 calendar days, 21.75 working days), not the actual number of days in a real calendar month. It differs from a short month like February or a 31-day month.",
+          "Work basis uses fixed, generic figures: 8 hours a day, 5 days a week, 261 working days a year. It does not reflect a specific company's contracted hours or a 4-day workweek.",
+          "It does not account for schedule-specific variables like public holidays, vacation days, or discretionary work arrangements. For an exact working-day count, pair it with the Flex Work Calculator.",
+          "This is a plain unit converter. It does not count the actual calendar days between two specific dates.",
+        ],
       },
     },
     faq: {
@@ -4052,41 +3899,41 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "Calculator",
     name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
-    relatedTools: ["cagr-calculator", "goal-growth-calculator", "compound-growth-calculator"],
+    relatedTools: ["cagr-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
     seo: {
       ko: {
-        title: "성장률 계산기 | 퍼센트 증감률·MoM·YoY·QoQ·WoW 계산",
+        title: "성장률 계산기 | MoM·YoY·목표·역산·퍼센트 차이 계산",
         description:
-          "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 MoM·YoY·QoQ·WoW 성장률까지 이 계산기 하나로 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
+          "이전 값과 현재 값을 입력하면 성장률·퍼센트 증감률·차이·배수를 즉시 계산합니다. MoM·YoY·QoQ·WoW 성장률은 물론, 목표까지 필요한 성장률·필요 증가량·역산·퍼센트 차이까지 탭 전환만으로 한 페이지에서 구합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 쓰이며 브라우저 안에서만 동작합니다.",
         keywords: [
           "성장률 계산기", "퍼센트 증감률 계산기", "변화율 계산기", "증가율 계산기", "감소율 계산기",
           "MoM 계산기", "YoY 계산기", "QoQ 계산기", "WoW 계산기",
-          "MoM 성장률", "YoY 성장률", "QoQ 성장률", "WoW 성장률",
+          "목표 성장률 계산기", "필요 증가량 계산기", "역산 계산기", "퍼센트 차이 계산기",
           "growth rate calculator", "percentage change calculator",
         ],
       },
       en: {
-        title: "Growth Rate Calculator | % Change, MoM, YoY, QoQ, WoW",
+        title: "Growth Rate Calculator | MoM, YoY, Goal, Reverse, % Diff",
         description:
-          "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. One calculator covers percentage increase and decrease as well as MoM, YoY, QoQ, and WoW growth. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+          "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. Beyond MoM, YoY, QoQ, and WoW growth, switch tabs on the same page to find the growth rate needed to hit a goal, the required increase, the reverse-calculated original value, or a plain percent difference. Works for revenue, users, traffic, or any metric, entirely in your browser.",
         keywords: [
           "growth rate calculator", "percentage change calculator", "percentage increase calculator",
           "percentage decrease calculator", "MoM growth calculator", "YoY growth calculator",
-          "QoQ growth calculator", "WoW growth calculator", "percent change calculator",
+          "goal growth calculator", "required growth calculator", "reverse growth calculator", "percent difference calculator",
         ],
       },
     },
     content: {
       ko: {
-        card: "이전값·현재값으로 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 즉시 계산.",
+        card: "이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로.",
         description:
-          "이전 값과 현재 값을 입력하면 성장률(%), 퍼센트 증감률, 차이, 배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 지난달 대비(MoM)·전년 대비(YoY)·전분기 대비(QoQ)·전주 대비(WoW) 성장률까지 모두 같은 공식이라 이 계산기 하나로 구할 수 있습니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["비교 기준이 되는 이전(시작) 값 입력", "현재(종료) 값 입력", "성장률·증감률·차이·배수 확인 및 복사"],
+          "이전 값과 현재 값을 입력하면 성장률(%), 퍼센트 증감률, 차이, 배수를 즉시 계산합니다. 변화율·증가율·감소율은 물론 지난달 대비(MoM)·전년 대비(YoY)·전분기 대비(QoQ)·전주 대비(WoW) 성장률까지 모두 같은 공식이라 이 계산기 하나로 구할 수 있습니다. 목표까지 필요한 성장률·필요 증가량과 달성률·최종값에서 원래 값을 역산·방향 없는 퍼센트 차이까지, 상단 탭으로 전환해 같은 페이지에서 계산합니다. 매출·사용자 수·트래픽 등 어떤 수치에도 사용 가능하며, 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: ["상단 탭에서 원하는 계산(성장률·목표·필요 증가량·역산·퍼센트 차이) 선택", "필요한 값 입력", "결과 확인 및 복사"],
         aeo: {
-          what: "성장률 계산기는 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW를 빠르게 계산하기 위한 통합 도구입니다. 성장률 계산기 · MoM 계산기 · YoY 계산기 · QoQ 계산기 · WoW 계산기 · 변화율(증가율·감소율) 계산기가 모두 동일한 (현재−이전)÷이전×100 공식을 쓰기 때문에, 이전 값과 현재 값만 입력하면 성장률과 증감률, 차이, 배수를 한 화면에서 보여줍니다.",
-          who: "매출·사용자 수·트래픽·지표 변화를 분석하는 PM, 마케터, 데이터 담당자, 소상공인, 개발자를 위한 도구입니다. 월간(MoM)·연간(YoY)·분기(QoQ)·주간(WoW) 성장률을 보고서에 담아야 하는 사람에게 특히 유용합니다.",
-          how: "이전 값과 현재 값을 입력하면 (현재−이전)÷이전×100 공식으로 성장률을 즉시 계산합니다. 결과가 양수면 증가율, 음수면 감소율이며, 비교 기간을 지난달·작년·지난 분기·지난주로 두면 각각 MoM·YoY·QoQ·WoW 성장률이 됩니다.",
-          why: "성장률·변화율·MoM·YoY·QoQ·WoW를 계산하려고 서로 다른 도구를 오갈 필요 없이, 수기 계산 없이 정확한 값을 한 번에 얻어 보고서 작성과 데이터 분석 시간을 줄일 수 있습니다.",
+          what: "성장률 계산기는 성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 계산부터 목표 성장률·필요 증가량·역산·퍼센트 차이까지, 두 값 사이의 변화를 다루는 다섯 가지 계산을 한 페이지에 모은 통합 도구입니다. 성장률·MoM·YoY·QoQ·WoW·증가율·감소율은 모두 동일한 (현재−이전)÷이전×100 공식을 쓰고, 목표 성장률·필요 증가량·역산은 같은 관계식을 목표 값·최종 값 기준으로 다시 푼 것입니다.",
+          who: "매출·사용자 수·트래픽·지표 변화를 분석하는 PM, 마케터, 데이터 담당자, 소상공인, 개발자를 위한 도구입니다. 월간(MoM)·연간(YoY)·분기(QoQ)·주간(WoW) 성장률 보고, 목표 대비 진척 확인, 역산이 필요한 사람에게 특히 유용합니다.",
+          how: "상단 탭에서 계산하려는 항목(성장률·목표 성장률·필요 증가량·역산·퍼센트 차이)을 고르고 값을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. 탭마다 필요한 입력 필드와 공식이 달라집니다.",
+          why: "성장률·변화율·목표 성장률·필요 증가량·역산·퍼센트 차이를 계산하려고 서로 다른 도구를 오갈 필요 없이, 수기 계산 없이 정확한 값을 한 번에 얻어 보고서 작성과 목표 관리 시간을 줄일 수 있습니다.",
         },
         guide: [
           {
@@ -4110,6 +3957,34 @@ export const TOOLS: Tool[] = [
               "매출·트래픽·구독자·전환 수 등 어떤 수치든 넣어 보고서의 성장 지표를 채우거나, 목표 대비 진척을 점검할 때 활용하세요. 모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다.",
             ],
           },
+          {
+            heading: "퍼센트 차이: 방향 없이 두 값의 격차만 볼 때",
+            body: [
+              "성장률은 '무엇에서 무엇으로'라는 방향이 있는 계산이라 이전 값과 현재 값을 바꿔 넣으면 결과가 달라집니다. 반면 퍼센트 차이는 |A − B| ÷ ((A + B) / 2) × 100으로, 두 값 중 어느 쪽이 기준인지 정하지 않고 격차의 크기만 대칭적으로 나타냅니다. A와 B의 자리를 바꿔도 결과는 같습니다.",
+              "두 캠페인의 성과, 두 그룹의 평균처럼 '어느 쪽이 먼저인지'가 의미 없는 비교에는 성장률 탭 대신 퍼센트 차이 탭을 쓰는 편이 맞습니다.",
+            ],
+          },
+          {
+            heading: "목표 성장률: 목표까지 필요한 증가율 역산",
+            body: [
+              "목표 성장률 탭은 현재 값과 목표 값을 넣으면 (목표 − 현재) ÷ 현재 × 100으로 그 목표에 도달하는 데 필요한 성장률을 계산합니다. '다음 분기에 몇 % 성장해야 목표를 채우는가' 같은 역방향 질문에 씁니다.",
+              "일반 성장률 계산과 입력값은 비슷해 보이지만 목적이 다릅니다. 성장률 탭은 이미 일어난 변화를 측정하고, 목표 성장률 탭은 앞으로 필요한 변화를 구합니다.",
+            ],
+          },
+          {
+            heading: "필요 증가량과 달성률: 목표까지 남은 거리",
+            body: [
+              "필요 증가량 탭은 목표 성장률과 같은 두 입력(현재 값·목표 값)을 쓰지만 결과를 퍼센트가 아니라 절대적인 크기로 보여줍니다: 목표까지 남은 증가량, 현재까지의 달성률(현재 ÷ 목표 × 100), 남은 갭(목표 − 현재)입니다. 팀 대시보드에 '목표 대비 몇 %를 채웠는가'를 표시할 때 달성률을 바로 씁니다.",
+              "목표 성장률 탭이 '몇 % 성장해야 하는가'에 답한다면, 이 탭은 '지금 얼마나 왔고 얼마나 남았는가'에 답합니다.",
+            ],
+          },
+          {
+            heading: "역산: 최종 값과 성장률로 원래 값 구하기",
+            body: [
+              "역산 탭은 반대 방향 계산입니다. 최종 값과 그 값에 적용된 성장률(%)을 알 때, 원래 값 = 최종 값 ÷ (1 + 성장률 / 100)으로 변화 이전의 값을 구합니다. '이번 달 매출이 지난달보다 25% 늘어 12,500이 됐다는데, 지난달 매출은 얼마였나'처럼 결과만 알고 출발점을 모를 때 씁니다.",
+              "성장률이 −100%면 분모가 0이 되어 계산할 수 없습니다. 이 경우는 값이 완전히 0으로 사라졌다는 뜻이라 역산으로 원래 값을 복원할 수 없습니다.",
+            ],
+          },
         ],
               examples: [
           {
@@ -4130,24 +4005,50 @@ export const TOOLS: Tool[] = [
             result: "회복에 필요한 성장률은 +25% (20%가 아님)",
             note: "퍼센트는 기준값이 바뀌면 대칭이 아닙니다. −20% 뒤의 +20%는 원래 값이 아니라 96이 됩니다. 목표 복귀 수치가 필요할 때 자주 틀리는 부분입니다.",
           },
+          {
+            title: "두 광고 캠페인의 전환율 격차 비교",
+            input: "캠페인 A 전환율 4%, 캠페인 B 전환율 5% (퍼센트 차이 탭)",
+            result: "퍼센트 차이 약 22.2%",
+            note: "어느 캠페인이 '기준'인지 정할 이유가 없는 비교라 성장률 대신 퍼센트 차이를 씁니다. A와 B 순서를 바꿔 넣어도 결과는 같습니다.",
+          },
+          {
+            title: "다음 분기 목표를 채우려면 필요한 성장률",
+            input: "현재 값 8,000 · 목표 값 10,000 (목표 성장률 탭)",
+            result: "필요 성장률 +25%",
+            note: "이번 분기 실적(8,000)에서 다음 분기 목표(10,000)까지 얼마나 성장해야 하는지를 미리 계산해 팀 목표로 공유할 때 씁니다.",
+          },
+          {
+            title: "목표 대비 현재 진척률 확인",
+            input: "현재 값 7,000 · 목표 값 10,000 (필요 증가량 탭)",
+            result: "달성률 70%, 남은 갭 3,000",
+            note: "분기 중간 점검에서 '목표의 몇 %를 채웠는가'를 바로 보여주므로, 목표 성장률 탭의 퍼센트보다 진행 상황 보고에 적합합니다.",
+          },
+          {
+            title: "이번 달 결과에서 지난달 값을 역산",
+            input: "최종 값 12,500 · 성장률 +25% (역산 탭)",
+            result: "원래 값 10,000",
+            note: "이번 달 수치와 알려진 성장률만 있고 지난달 원본 수치를 따로 기록하지 않았을 때, 역으로 계산해 복원합니다.",
+          },
         ],
         limitations: [
           "이전 값이 0이면 성장률을 정의할 수 없습니다. 0에서 100으로 늘어난 것은 \"무한대 성장\"이 아니라 증가량(+100)으로 표현해야 합니다.",
           "이전 값이 음수인 경우(적자에서 흑자 전환 등) 퍼센트 성장률은 수학적으로는 계산되지만 해석이 뒤집혀 오해를 부릅니다. 이때는 퍼센트 대신 절대 금액 변화를 쓰세요.",
           "두 시점만 비교하므로 그 사이의 등락은 보이지 않습니다. 3개월 이상 흐름을 하나의 연율로 요약하려면 CAGR 계산기를 쓰는 편이 정확합니다.",
           "퍼센트포인트(%p)와 퍼센트(%)를 구분하지 않습니다. 전환율이 2%에서 3%가 된 경우 이 도구는 +50%로 계산하며, 이를 \"1%p 상승\"으로 표현할지는 보고 맥락에 따라 직접 선택해야 합니다.",
+          "성장률 탭은 방향이 있고(A→B), 퍼센트 차이 탭은 방향이 없습니다(A와 B의 격차). 같은 두 숫자를 넣어도 두 탭의 결과 값 자체가 다르므로 어느 탭을 쓸지는 질문의 성격에 따라 먼저 정해야 합니다.",
+          "역산 탭은 성장률이 −100%일 때 계산할 수 없습니다(분모가 0). 값이 완전히 사라진 경우이므로 원래 값을 복원할 수 없다는 의미로 해석해야 합니다.",
         ],
       },
       en: {
-        card: "Instantly calculate growth rate, % change, and MoM/YoY/QoQ/WoW from two values.",
+        card: "Growth rate, MoM, YoY from two values. Goal growth, required increase, reverse, and % difference too, via tabs.",
         description:
-          "Enter a previous and current value to instantly calculate growth rate (%), percentage change, difference, and multiplier. Percentage increase and decrease, plus month-over-month (MoM), year-over-year (YoY), quarter-over-quarter (QoQ), and week-over-week (WoW) growth all share the same formula, so this one calculator covers them all. Works for revenue, users, traffic, or any metric, entirely in your browser.",
-        howItWorks: ["Enter the previous (starting) value", "Enter the current (ending) value", "Read or copy the growth rate, change, difference, and multiplier"],
+          "Enter a previous and current value to instantly calculate growth rate (%), percentage change, difference, and multiplier. Percentage increase and decrease, plus month-over-month (MoM), year-over-year (YoY), quarter-over-quarter (QoQ), and week-over-week (WoW) growth all share the same formula, so this one calculator covers them all. Switch tabs on the same page to find the growth rate needed to hit a goal, the required increase and progress toward it, the original value behind a known result, or a plain percent difference. Works for revenue, users, traffic, or any metric, entirely in your browser.",
+        howItWorks: ["Pick a calculation from the tabs (growth rate, goal, required increase, reverse, % difference)", "Enter the values it needs", "Read or copy the result"],
         aeo: {
-          what: "A Growth Rate Calculator is a unified tool for quickly calculating growth rate, percentage change, and MoM, YoY, QoQ, and WoW growth. A growth rate calculator, MoM calculator, YoY calculator, QoQ calculator, WoW calculator, and percentage increase/decrease calculator all use the same (Current − Previous) / Previous × 100 formula, so entering a previous and current value shows the growth rate, change, difference, and multiplier on one screen.",
-          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric: especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth.",
-          how: "Enter a previous and current value and it applies (Current − Previous) / Previous × 100. A positive result is a percentage increase and a negative one a decrease; set the comparison period to last month, last year, last quarter, or last week to read it as MoM, YoY, QoQ, or WoW growth.",
-          why: "Instead of hopping between separate tools for growth rate, percentage change, and MoM/YoY/QoQ/WoW, you get an accurate number in one place with no manual math: saving time on reports and analysis.",
+          what: "A Growth Rate Calculator is a unified tool covering five calculations about the change between two values: growth rate, percentage change, MoM, YoY, QoQ, and WoW growth, plus goal growth rate, required increase, reverse calculation, and percent difference. Growth rate, MoM, YoY, QoQ, WoW, and percentage increase/decrease all use the same (Current − Previous) / Previous × 100 formula; goal growth, required increase, and reverse calculation solve that same relationship for a target value or a final value instead.",
+          who: "It is for PMs, marketers, analysts, small business owners, and developers who measure changes in revenue, users, traffic, or any metric: especially anyone reporting monthly (MoM), yearly (YoY), quarterly (QoQ), or weekly (WoW) growth, checking progress toward a goal, or working backward from a known result.",
+          how: "Pick what you want to calculate from the tabs (growth rate, goal growth, required increase, reverse, percent difference), enter the values it needs, and the result appears instantly in your browser. Each tab has its own inputs and formula.",
+          why: "Instead of hopping between separate tools for growth rate, percentage change, goal growth, required increase, reverse calculation, and percent difference, you get an accurate number in one place with no manual math: saving time on reports and goal tracking.",
         },
         guide: [
           {
@@ -4171,6 +4072,34 @@ export const TOOLS: Tool[] = [
               "Use it with any metric: revenue, traffic, subscribers, conversions: to fill in the growth figures in a report or to check progress toward a goal. Every calculation runs in your browser and the numbers you enter are never sent to a server.",
             ],
           },
+          {
+            heading: "Percent difference: comparing two values with no direction",
+            body: [
+              "Growth rate is directional (it goes from one value to another), so swapping the previous and current values changes the result. Percent difference instead computes |A − B| / ((A + B) / 2) × 100: it doesn't designate either value as the baseline, and reports the size of the gap symmetrically. Swapping A and B gives the same result.",
+              "Use the percent difference tab instead of the growth rate tab when neither value is naturally \"first\": comparing two campaigns' performance, or two groups' averages, for example.",
+            ],
+          },
+          {
+            heading: "Goal growth: the rate needed to hit a target",
+            body: [
+              "The goal growth tab takes a current value and a target value and computes (Target − Current) / Current × 100: the growth rate required to reach that target. It answers a forward-looking question like \"how much do we need to grow next quarter to hit the goal?\"",
+              "The inputs look similar to a plain growth rate calculation, but the purpose differs. The growth rate tab measures a change that already happened; the goal growth tab computes a change that still needs to happen.",
+            ],
+          },
+          {
+            heading: "Required increase and progress: how far is left to the goal",
+            body: [
+              "The required increase tab uses the same two inputs (current, target) as goal growth, but reports the answer as absolute amounts instead of a percentage: how much more is needed, the progress made so far (Current / Target × 100), and the remaining gap (Target − Current). Use the progress figure directly when a dashboard needs to show \"how much of the goal is filled.\"",
+              "Where the goal growth tab answers \"what growth rate do we need,\" this tab answers \"how far have we come, and how far is left.\"",
+            ],
+          },
+          {
+            heading: "Reverse: finding the original value from a final value and a rate",
+            body: [
+              "The reverse tab runs the calculation backward. Given a final value and the growth rate that produced it, Original Value = Final Value / (1 + Growth Rate / 100) recovers the value before the change. Use it when you know this month's revenue grew 25% to reach 12,500 but didn't record last month's figure separately.",
+              "When the growth rate is −100%, the denominator becomes zero and the calculation is undefined: the value dropped to nothing, so there is no original value to recover.",
+            ],
+          },
         ],
               examples: [
           {
@@ -4191,12 +4120,38 @@ export const TOOLS: Tool[] = [
             result: "The recovery requires +25%, not +20%",
             note: "Percentages are not symmetric because the base changes. Adding 20% after losing 20% lands at 96, not the original value. This trips people up whenever a recovery target is involved.",
           },
+          {
+            title: "Comparing the conversion rate gap between two ad campaigns",
+            input: "Campaign A converts at 4%, Campaign B at 5% (Percent Difference tab)",
+            result: "Percent difference of about 22.2%",
+            note: "Neither campaign is naturally the \"baseline\" here, so percent difference is used instead of growth rate. Swapping A and B gives the same result.",
+          },
+          {
+            title: "The growth rate needed to hit next quarter's target",
+            input: "Current 8,000 · Target 10,000 (Goal Growth tab)",
+            result: "Required growth rate +25%",
+            note: "Used to work out, ahead of time, how much this quarter's result (8,000) needs to grow to reach next quarter's target (10,000), for sharing as a team goal.",
+          },
+          {
+            title: "Checking current progress toward a target",
+            input: "Current 7,000 · Target 10,000 (Required Increase tab)",
+            result: "Progress 70%, remaining gap 3,000",
+            note: "A mid-quarter check that shows \"how much of the goal is filled\" directly, which suits progress reporting better than the goal growth tab's percentage.",
+          },
+          {
+            title: "Working out last month's value from this month's result",
+            input: "Final value 12,500 · growth rate +25% (Reverse tab)",
+            result: "Original value 10,000",
+            note: "Used when you have this month's number and a known growth rate but never recorded last month's raw figure separately, to reconstruct it.",
+          },
         ],
         limitations: [
           "Growth is undefined when the previous value is 0. Going from 0 to 100 is not \"infinite growth\"; report it as an absolute change of +100.",
           "When the previous value is negative (for example a loss turning into a profit), a percentage is mathematically computable but reads backwards and misleads. Use the absolute change instead.",
           "Only two points are compared, so anything that happened in between is invisible. To summarize three or more periods as a single annual figure, use the CAGR calculator.",
           "The tool does not distinguish percentage points from percent. A conversion rate moving from 2% to 3% is reported as +50%; whether to describe that as \"up 1pp\" is a judgment call for your report.",
+          "The growth rate tab is directional (A to B); the percent difference tab is not (the gap between A and B). Feeding the same two numbers into each gives different results, so decide which tab fits your question first.",
+          "The reverse tab cannot compute a result when the growth rate is −100% (division by zero). Read that as the value having dropped to nothing, with no original value to recover.",
         ],
       },
     },
@@ -4207,6 +4162,10 @@ export const TOOLS: Tool[] = [
         { question: "증가율과 감소율은 어떻게 구분되나요?", answer: "계산 방법은 같습니다. 결과가 양수(+)면 증가율, 음수(−)면 감소율로 표시됩니다. 별도의 증가율·감소율 계산기가 필요 없습니다." },
         { question: "퍼센트 증감률과 성장률은 다른가요?", answer: "부르는 이름만 다를 뿐 계산은 동일합니다. 두 값의 상대적 변화를 퍼센트로 나타낸 것으로, 상황에 따라 성장률·변화율·증감률로 불립니다." },
         { question: "이전 값이 0이면 어떻게 되나요?", answer: "0으로 나누기가 발생하므로 성장률을 계산할 수 없습니다. 오류 메시지가 표시되며, 시작점을 0이 아닌 값으로 잡아야 합니다." },
+        { question: "퍼센트 차이는 성장률과 뭐가 다른가요?", answer: "성장률은 이전 값에서 현재 값으로 가는 방향이 있는 계산이라 두 값을 바꾸면 결과 부호가 바뀝니다. 퍼센트 차이는 방향이 없어 두 값을 바꿔도 같은 결과가 나오며, 어느 쪽이 기준인지 정할 필요가 없는 비교에 씁니다." },
+        { question: "목표 성장률과 필요 증가량 탭은 어떻게 다른가요?", answer: "둘 다 현재 값과 목표 값을 입력받지만, 목표 성장률 탭은 결과를 퍼센트(몇 % 성장해야 하는가)로, 필요 증가량 탭은 절대적인 크기(얼마나 남았는가·몇 % 채웠는가)로 보여줍니다." },
+        { question: "역산 탭은 언제 쓰나요?", answer: "최종 값과 그 값에 적용된 성장률만 알고 원래 값을 모를 때 씁니다. 원래 값 = 최종 값 ÷ (1 + 성장률 / 100)으로 계산하며, 성장률이 −100%이면 계산할 수 없습니다." },
+        { question: "탭을 바꾸면 입력했던 값이 사라지나요?", answer: "네. 탭마다 입력 필드의 의미(이전값·현재값, 현재값·목표값, 최종값·성장률 등)가 달라 이전 탭의 값을 그대로 이어 쓰면 오히려 혼동을 줄 수 있어 기본값으로 초기화됩니다." },
         { question: "입력한 숫자가 서버로 전송되나요?", answer: "아니요. 모든 계산은 브라우저 안에서 처리되며 입력값은 서버로 전송·저장되지 않습니다." },
       ],
       en: [
@@ -4215,288 +4174,16 @@ export const TOOLS: Tool[] = [
         { question: "How are percentage increase and decrease different?", answer: "The calculation is identical. A positive result is a percentage increase and a negative result is a percentage decrease, so no separate increase or decrease calculator is needed." },
         { question: "Are percentage change and growth rate different?", answer: "Only the name differs: the math is the same relative change between two values expressed as a percent, called growth rate, percentage change, or percent change depending on context." },
         { question: "What happens if the previous value is zero?", answer: "Division by zero is undefined, so the growth rate cannot be calculated. An error message appears and you should choose a non-zero starting point." },
+        { question: "How is percent difference different from growth rate?", answer: "Growth rate is directional, from a previous value to a current one, so swapping the two flips the sign of the result. Percent difference has no direction: swapping the two values gives the same result, and it's for comparisons where neither value is naturally the baseline." },
+        { question: "What's the difference between the Goal Growth and Required Increase tabs?", answer: "Both take a current value and a target value, but Goal Growth reports the answer as a percentage (how much growth is needed), while Required Increase reports it as absolute amounts (how much is left, and what percent of the goal is already filled)." },
+        { question: "When would I use the Reverse tab?", answer: "When you know a final value and the growth rate that produced it, but not the original value. It computes Original Value = Final Value / (1 + Growth Rate / 100); the calculation is undefined when the growth rate is −100%." },
+        { question: "Does switching tabs clear the values I entered?", answer: "Yes. Each tab's fields mean something different (previous/current, current/target, final value/growth rate, and so on), so carrying a value over from another tab would likely cause confusion; fields reset to their defaults instead." },
         { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
     },
     og: {
-      ko: { title: "성장률 계산기", subtitle: "성장률·퍼센트 증감률·MoM·YoY·QoQ·WoW 즉시 계산" },
-      en: { title: "Growth Rate Calculator", subtitle: "Growth rate, % change and MoM/YoY/QoQ/WoW instantly" },
-    },
-  },
-
-  {
-    slug: "percent-difference-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "office-worker", "developer"],
-    ico: "|Δ|",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "퍼센트 차이 계산기", en: "Percent Difference Calculator" },
-    relatedTools: ["growth-rate-calculator", "cagr-calculator", "goal-growth-calculator"],
-    seo: {
-      ko: {
-        title: "퍼센트 차이 계산기 | 두 값의 상대적 차이",
-        description:
-          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다.",
-        keywords: ["퍼센트 차이 계산기", "percent difference calculator", "두 값 비교", "상대적 차이"],
-      },
-      en: {
-        title: "Percent Difference Calculator | Relative Difference Between Two Values",
-        description:
-          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction (not increase or decrease).",
-        keywords: ["percent difference calculator", "percentage difference calculator", "relative difference", "compare two values"],
-      },
-    },
-    content: {
-      ko: {
-        card: "두 값 A·B의 상대적 퍼센트 차이 계산.",
-        description:
-          "두 값 A와 B 사이의 퍼센트 차이를 계산합니다. 방향이 없는 상대적 차이를 구할 때 사용하는 계산기입니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["값 A 입력", "값 B 입력", "퍼센트 차이 확인"],
-        aeo: {
-          what: "퍼센트 차이 계산기는 두 값의 상대적 차이를 퍼센트로 계산하는 도구입니다. 증가·감소 방향이 아닌 두 값 사이의 크기 차이를 구할 때 사용합니다.",
-          who: "두 그룹·두 측정값을 비교해야 하는 연구자, 분석가, 비즈니스 담당자를 위한 도구입니다.",
-          how: "|A − B| ÷ ((A + B) / 2) × 100 공식으로 두 값의 평균을 기준으로 한 상대적 차이를 계산합니다.",
-          why: "퍼센트 변화율과 달리 기준 방향이 없으므로, 어느 쪽이 이전/이후인지 관계없이 두 값의 차이를 구할 때 유용합니다.",
-        },
-      },
-      en: {
-        card: "Calculate the relative percent difference between values A and B.",
-        description:
-          "Calculate the percent difference between two values A and B. Use this when you need the relative difference without a defined direction.",
-        howItWorks: ["Enter value A", "Enter value B", "Read the percent difference"],
-        aeo: {
-          what: "A Percent Difference Calculator computes the relative difference between two values as a percentage of their average. It has no directional bias: neither value is 'before' or 'after'.",
-          who: "It is for researchers, analysts, and business users who need to compare two measurements, test results, or data points without implying which came first.",
-          how: "The formula |A − B| / ((A + B) / 2) × 100 uses the average of the two values as the reference point, making the result symmetric.",
-          why: "Unlike percentage change, it does not require you to designate a 'before' and 'after': ideal for comparing two independent measurements.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "퍼센트 변화율과 퍼센트 차이의 차이는 무엇인가요?", answer: "퍼센트 변화율은 이전 값을 기준으로 변화를 계산하고 방향(증가/감소)을 나타냅니다. 퍼센트 차이는 두 값의 평균을 기준으로 계산하며 방향이 없습니다." },
-        { question: "A와 B의 순서가 결과에 영향을 주나요?", answer: "영향을 주지 않습니다. 퍼센트 차이 공식은 절댓값을 사용하므로 A·B의 순서와 관계없이 동일한 결과가 나옵니다." },
-        { question: "두 값이 모두 0이면 어떻게 되나요?", answer: "평균이 0이 되어 0으로 나누기가 발생하므로 계산할 수 없습니다." },
-      ],
-      en: [
-        { question: "What is the difference between percent difference and percent change?", answer: "Percent change uses the original value as the base and has a direction (increase/decrease). Percent difference uses the average of both values and is non-directional." },
-        { question: "Does the order of A and B affect the result?", answer: "No. The formula uses an absolute value, so swapping A and B produces the same result." },
-        { question: "What if both values are zero?", answer: "The average would be zero, causing a division by zero error. A result cannot be computed." },
-      ],
-    },
-    og: {
-      ko: { title: "퍼센트 차이 계산기", subtitle: "두 값의 방향 없는 상대적 차이를 퍼센트로 계산" },
-      en: { title: "Percent Difference Calculator", subtitle: "Calculate the relative % difference between two values" },
-    },
-  },
-
-  {
-    slug: "goal-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "→%",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "목표 성장률 계산기", en: "Goal Growth Calculator" },
-    relatedTools: ["required-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "목표 성장률 계산기 | 목표 달성에 필요한 성장률",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
-        keywords: ["목표 성장률 계산기", "goal growth calculator", "필요 성장률", "target growth calculator"],
-      },
-      en: {
-        title: "Goal Growth Calculator | Growth Rate Needed to Hit Your Target",
-        description:
-          "Enter your current value and target value to instantly calculate the growth rate required to reach your goal. Great for revenue targets, KPI planning, and business goals.",
-        keywords: ["goal growth calculator", "target growth calculator", "required growth rate", "how much growth do I need"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재 값과 목표 값으로 필요 성장률 즉시 계산.",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 성장률(%)을 즉시 계산합니다. 매출 목표·KPI 달성률 계획에 활용하세요.",
-        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 성장률·차이·배수 확인"],
-        aeo: {
-          what: "목표 성장률 계산기는 현재 값에서 목표 값까지 달성하기 위해 필요한 성장률을 계산해주는 도구입니다.",
-          who: "매출 목표·KPI를 계획하는 PM, 스타트업 창업자, 소상공인, 영업 담당자를 위한 도구입니다.",
-          how: "(목표 − 현재) ÷ 현재 × 100 공식으로 필요 성장률을 즉시 계산합니다.",
-          why: "목표를 숫자로 설정했을 때 '얼마나 성장해야 하는가'를 즉시 알 수 있어 현실적인 계획을 세우는 데 도움이 됩니다.",
-        },
-      },
-      en: {
-        card: "Calculate the growth rate needed to reach your target from your current value.",
-        description:
-          "Enter your current value and target value to instantly calculate the required growth rate. Great for revenue targets, KPI planning, and business goals.",
-        howItWorks: ["Enter the current value", "Enter the target value", "Read the required growth rate and multiplier"],
-        aeo: {
-          what: "A Goal Growth Calculator computes the percentage growth rate required to move from a current value to a target value.",
-          who: "It is for PMs, startup founders, sales teams, and small business owners who set numeric targets and want to know exactly what growth rate is needed.",
-          how: "The formula (Target − Current) / Current × 100 is applied; the result shows the required growth rate, difference, and multiplier needed.",
-          why: "It turns a vague goal into a concrete growth percentage, making targets more actionable and easier to communicate.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "음수 성장률이 나옵니다. 이는 목표 달성을 위해 수치를 줄여야 한다는 의미입니다(예: 비용 절감 목표)." },
-        { question: "기간을 반영할 수 있나요?", answer: "이 계산기는 단순 성장률만 계산합니다. 연도별 성장률이 필요하다면 CAGR 계산기를 사용하세요." },
-        { question: "목표를 달성하기 위해 필요한 배수란 무엇인가요?", answer: "현재 값에 곱해야 하는 수입니다. 예를 들어 현재 1,000에서 1,500이 목표면, 배수는 1.5입니다." },
-      ],
-      en: [
-        { question: "What if the target is less than the current value?", answer: "The result will be a negative growth rate, meaning you need to reduce the metric (e.g., cutting costs to hit a lower target)." },
-        { question: "Can I factor in a time period?", answer: "This calculator returns a total growth rate. If you need an annualized rate across multiple years, use the CAGR Calculator." },
-        { question: "What does the multiplier needed mean?", answer: "The multiplier is the number you multiply the current value by to reach the target. A multiplier of 1.5 means the target is 1.5× the current value." },
-      ],
-    },
-    og: {
-      ko: { title: "목표 성장률 계산기", subtitle: "현재값·목표값으로 필요 성장률·배수 즉시 계산" },
-      en: { title: "Goal Growth Calculator", subtitle: "Find the growth rate needed to hit your target instantly" },
-    },
-  },
-
-  {
-    slug: "required-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "req",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "필요 증가량 계산기", en: "Required Growth Calculator" },
-    relatedTools: ["goal-growth-calculator", "reverse-growth-calculator", "growth-rate-calculator"],
-    seo: {
-      ko: {
-        title: "필요 증가량 계산기 | 목표 달성에 필요한 증가량",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 달성률을 즉시 계산합니다.",
-        keywords: ["필요 증가량 계산기", "required growth calculator", "목표 달성률", "growth target calculator"],
-      },
-      en: {
-        title: "Required Growth Calculator | How Much Do You Need to Grow?",
-        description:
-          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
-        keywords: ["required growth calculator", "growth target calculator", "how much do I need to grow", "target progress calculator"],
-      },
-    },
-    content: {
-      ko: {
-        card: "현재값·목표값으로 필요 증가량·달성률 즉시 계산.",
-        description:
-          "현재 값과 목표 값을 입력하면 목표 달성에 필요한 증가량, 성장률, 남은 갭, 달성률을 즉시 계산합니다.",
-        howItWorks: ["현재 값 입력", "목표 값 입력", "필요 증가량·달성률·남은 갭 확인"],
-        aeo: {
-          what: "필요 증가량 계산기는 현재 값에서 목표 값까지 도달하기 위해 필요한 증가량과 달성률을 계산해주는 도구입니다.",
-          who: "매출·KPI 목표를 추적하고 얼마나 더 성장해야 하는지 파악하려는 PM, 영업 담당자, 소상공인을 위한 도구입니다.",
-          how: "현재 값과 목표 값을 입력하면 필요 증가량(목표−현재), 필요 성장률, 달성률(현재÷목표×100)을 즉시 계산합니다.",
-          why: "목표까지 얼마나 남았는지 숫자로 확인해 팀과 공유하고 우선순위를 설정하는 데 도움이 됩니다.",
-        },
-      },
-      en: {
-        card: "Calculate the required increase, growth rate, and progress to your goal.",
-        description:
-          "Enter your current value and target value to instantly see the required increase, growth rate, remaining gap, and current progress toward your goal.",
-        howItWorks: ["Enter the current value", "Enter the target value", "Read required increase, growth rate, gap, and progress"],
-        aeo: {
-          what: "A Required Growth Calculator shows exactly how much a metric needs to increase to reach a target, along with the current progress percentage.",
-          who: "It is for PMs, sales reps, and business owners who track targets and want to know the gap between where they are and where they need to be.",
-          how: "Required Increase = Target − Current; Progress = Current / Target × 100; Required Growth Rate = (Target − Current) / Current × 100.",
-          why: "It quantifies the gap to goal in multiple ways: absolute increase, percentage growth, and progress, so you can plan and communicate clearly.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "필요 증가량과 남은 갭의 차이는 무엇인가요?", answer: "이 계산기에서는 두 값이 동일합니다(목표−현재). 필요 증가량은 '얼마나 늘려야 하는가', 남은 갭은 '얼마나 부족한가'의 관점에서 같은 수치를 나타냅니다." },
-        { question: "달성률이 100%를 넘을 수 있나요?", answer: "네. 현재 값이 목표보다 크면 달성률이 100%를 초과합니다. 이미 목표를 달성했다는 의미입니다." },
-        { question: "목표가 현재 값보다 작으면 어떻게 되나요?", answer: "필요 증가량이 음수로 나옵니다. 이는 수치를 줄여야 목표를 달성할 수 있음을 의미합니다(예: 비용 절감)." },
-      ],
-      en: [
-        { question: "What is the difference between required increase and remaining gap?", answer: "In this calculator they are the same value (Target − Current). Required Increase frames it as 'how much to add'; Remaining Gap frames it as 'how far you are from the goal'." },
-        { question: "Can progress to target exceed 100%?", answer: "Yes. If the current value is already above the target, progress will be above 100%, meaning the goal has been exceeded." },
-        { question: "What if the target is lower than the current value?", answer: "The required increase will be negative, indicating you need to reduce the metric to hit a lower target (e.g., cost reduction goals)." },
-      ],
-    },
-    og: {
-      ko: { title: "필요 증가량 계산기", subtitle: "현재값·목표값으로 필요 증가량·달성률 즉시 계산" },
-      en: { title: "Required Growth Calculator", subtitle: "See how much you need to grow to hit your target" },
-    },
-  },
-
-  {
-    slug: "reverse-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "developer", "office-worker"],
-    ico: "÷%",
-    ready: true,
-    indexable: false,
-    badge: "Calculator",
-    name: { ko: "역산 계산기", en: "Reverse Growth Calculator" },
-    relatedTools: ["goal-growth-calculator", "growth-rate-calculator", "cagr-calculator"],
-    seo: {
-      ko: {
-        title: "역산 계산기 | 최종값과 성장률로 원래 값 역산",
-        description:
-          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
-        keywords: ["역산 계산기", "reverse growth calculator", "원래 값 역산", "성장률 역산"],
-      },
-      en: {
-        title: "Reverse Growth Calculator | Find the Original Value from Final Value and Growth Rate",
-        description:
-          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
-        keywords: ["reverse growth calculator", "reverse percentage calculator", "find original value", "reverse percent change"],
-      },
-    },
-    content: {
-      ko: {
-        card: "최종 값과 성장률로 원래 값 역산.",
-        description:
-          "최종 값과 성장률(%)을 입력하면 원래 값을 역산합니다. 성장 전 기준값이나 세전 금액을 계산할 때 사용하세요.",
-        howItWorks: ["최종 값 입력", "성장률(%) 입력", "원래 값·차이·배수 확인"],
-        aeo: {
-          what: "역산 계산기는 최종 값과 성장률을 알고 있을 때 원래 값을 계산해주는 도구입니다.",
-          who: "기준값·세전 금액·할인 전 가격 등 성장 전 원래 수치를 알아야 하는 비즈니스 담당자, 회계 담당자, PM을 위한 도구입니다.",
-          how: "원래 값 = 최종 값 ÷ (1 + 성장률 ÷ 100) 공식으로 역산합니다.",
-          why: "최종 값과 변화율만 알고 시작값을 모를 때, 역방향으로 계산해 원래 수치를 빠르게 구할 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Calculate the original value from a final value and a known growth rate.",
-        description:
-          "Enter the final value and growth rate to calculate the original starting value. Useful for finding base values, pre-tax amounts, or starting points before a known percentage change.",
-        howItWorks: ["Enter the final value", "Enter the growth rate (%)", "Read the original value and difference"],
-        aeo: {
-          what: "A Reverse Growth Calculator finds the original value when you know the final value and the percentage change applied to it.",
-          who: "It is for business analysts, accountants, and PMs who need to back-calculate a base figure from a final number and a known rate.",
-          how: "Original Value = Final Value / (1 + Growth Rate / 100). This reverses any standard percentage growth calculation.",
-          why: "When the end result and growth rate are known but the starting point is not, this calculator solves it in one step without manual algebra.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        { question: "언제 역산 계산기를 사용하나요?", answer: "최종 값과 성장률은 알지만 시작 값을 모를 때 사용합니다. 예를 들어 성장 후 125가 됐고 성장률이 25%였다면, 원래 값은 100입니다." },
-        { question: "성장률이 음수일 수 있나요?", answer: "네. 감소율을 입력하면 최종 값보다 큰 원래 값이 계산됩니다." },
-        { question: "성장률이 -100%이면 어떻게 되나요?", answer: "-100%이면 분모가 0이 되어 계산이 불가능합니다. 오류 메시지가 표시됩니다." },
-      ],
-      en: [
-        { question: "When do I use a reverse growth calculator?", answer: "Use it when you know the final value and the growth rate but not the starting value. For example, if a value grew 25% to reach 125, the original value was 100." },
-        { question: "Can the growth rate be negative?", answer: "Yes. A negative growth rate means the value decreased; the calculator will return an original value larger than the final value." },
-        { question: "What happens if the growth rate is -100%?", answer: "A growth rate of -100% makes the denominator zero, which is undefined. An error message will appear." },
-      ],
-    },
-    og: {
-      ko: { title: "역산 계산기", subtitle: "최종값과 성장률로 원래 값 역산" },
-      en: { title: "Reverse Growth Calculator", subtitle: "Find the original value from final value and growth rate" },
+      ko: { title: "성장률 계산기", subtitle: "성장률·MoM·YoY부터 목표·역산·퍼센트 차이까지 한 페이지" },
+      en: { title: "Growth Rate Calculator", subtitle: "Growth rate, MoM, YoY, goal, reverse and % diff in one place" },
     },
   },
 
@@ -4510,32 +4197,38 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
-    relatedTools: ["compound-growth-calculator", "growth-rate-calculator", "goal-growth-calculator"],
+    relatedTools: ["growth-rate-calculator", "ad-budget-pacing-calculator", "salary-calculator"],
     seo: {
       ko: {
-        title: "CAGR 계산기 | 연평균 성장률 계산",
+        title: "CAGR 계산기 | 연평균 성장률·복리 미래값 예측",
         description:
-          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
-        keywords: ["CAGR 계산기", "CAGR calculator", "연평균 성장률", "annual growth rate calculator"],
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 탭을 전환하면 초기값·성장률·기간으로 복리 최종값과 미래 예측값도 같은 페이지에서 구할 수 있습니다. 투자 수익률·매출 성장률 분석과 성장 시나리오 플래닝에 활용하세요.",
+        keywords: [
+          "CAGR 계산기", "CAGR calculator", "연평균 성장률", "복리 성장 계산기", "미래값 계산기",
+          "성장 예측 계산기", "annual growth rate calculator", "compound growth calculator",
+        ],
       },
       en: {
-        title: "CAGR Calculator | Compound Annual Growth Rate",
+        title: "CAGR Calculator | Annual Growth Rate & Compound Projection",
         description:
-          "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Use it for investment returns, revenue growth analysis, and business planning.",
-        keywords: ["CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator"],
+          "Enter a start value, end value, and number of years to instantly calculate the Compound Annual Growth Rate (CAGR). Switch tabs to project a compounded final value from an initial value, growth rate, and number of periods, on the same page. Use it for investment returns, revenue growth analysis, and scenario planning.",
+        keywords: [
+          "CAGR calculator", "compound annual growth rate calculator", "CAGR formula", "annual growth rate calculator",
+          "compound growth calculator", "future value calculator", "growth projection calculator",
+        ],
       },
     },
     content: {
       ko: {
-        card: "시작값·종료값·기간으로 CAGR 즉시 계산.",
+        card: "시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도.",
         description:
-          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 투자 수익률·매출 성장률 분석에 활용하세요.",
-        howItWorks: ["시작 값 입력", "종료 값 입력", "기간(년) 입력 후 CAGR·총 성장률 확인"],
+          "시작값·종료값·기간을 입력하면 연평균 성장률(CAGR)을 즉시 계산합니다. 탭을 전환하면 초기값·성장률·기간으로 복리 최종값과 미래 예측값도 같은 페이지에서 구할 수 있습니다. 두 계산은 서로 반대 방향으로 같은 수식을 풉니다: CAGR은 시작·종료값에서 연율을 역산하고, 복리 성장은 초기값과 연율에서 미래값을 구합니다. 투자 수익률·매출 성장률 분석과 성장 시나리오 플래닝에 활용하세요.",
+        howItWorks: ["상단 탭에서 CAGR 또는 복리 성장 선택", "필요한 값(시작·종료·기간 또는 초기값·성장률·기간) 입력", "CAGR 또는 최종값·총 성장률 확인"],
         aeo: {
-          what: "CAGR 계산기는 시작값과 종료값, 기간을 사용해 연평균 복리 성장률(CAGR)을 계산해주는 도구입니다. CAGR은 Compound Annual Growth Rate의 약자입니다.",
-          who: "투자 수익률을 분석하거나 다년간의 비즈니스 성장률을 비교하려는 PM, 투자자, 소상공인을 위한 도구입니다.",
-          how: "CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다.",
-          why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 용이합니다.",
+          what: "CAGR 계산기는 시작값과 종료값, 기간을 사용해 연평균 복리 성장률(CAGR)을 계산하고, 탭을 전환하면 초기값·성장률·기간으로 복리 최종값·미래 예측값도 계산하는 통합 도구입니다. CAGR은 Compound Annual Growth Rate의 약자이며, 두 계산 모두 최종값 = 초기값 × (1 + 연율/100)^기간이라는 같은 관계식을 반대 방향으로 풉니다.",
+          who: "투자 수익률을 분석하거나 다년간의 비즈니스 성장률을 비교하려는 PM, 투자자, 소상공인, 그리고 매출·사용자 수의 미래값을 시나리오별로 예측해야 하는 스타트업 창업자를 위한 도구입니다.",
+          how: "CAGR 탭에서는 CAGR = (종료 ÷ 시작)^(1÷기간) − 1 공식으로 연평균 성장률을 계산합니다. 복리 성장 탭에서는 최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 미래 값을 계산합니다.",
+          why: "단순 성장률과 달리 복리 효과를 반영해 여러 해에 걸친 성장을 단일 연율로 표현하므로 비교가 쉽고, 그 연율로 미래를 내다보는 계산까지 같은 페이지에서 오갈 수 있어 성장 시나리오 검토가 빠릅니다.",
         },
               guide: [
           {
@@ -4550,7 +4243,7 @@ export const TOOLS: Tool[] = [
             body: [
               "가장 흔한 실수는 연도별 성장률을 더해서 연수로 나누는 것입니다. 1년 차에 +100%, 2년 차에 −50%였다면 산술평균은 +25%지만, 실제로는 100 → 200 → 100으로 제자리입니다. 진짜 연평균은 0%입니다.",
               "CAGR = (종료값 ÷ 시작값)^(1 ÷ 기간) − 1 은 이 문제를 곱셈으로 풉니다. 성장은 더해지는 것이 아니라 곱해지며 쌓이기 때문에, 평균도 기하평균으로 내야 실제 도달점과 맞아떨어집니다. 이 계산기가 내는 CAGR로 시작값을 기간만큼 복리 성장시키면 정확히 종료값이 나옵니다.",
-              "반대 방향의 계산이 필요하다면, 즉 시작값과 성장률로 미래 값을 구하고 싶다면 복리 성장 계산기를 쓰세요. 같은 수식을 반대로 푸는 도구입니다.",
+              "반대 방향의 계산이 필요하다면, 즉 시작값과 성장률로 미래 값을 구하고 싶다면 위 탭에서 복리 성장으로 전환하세요. 같은 수식을 반대로 푸는 계산입니다.",
             ],
           },
           {
@@ -4560,32 +4253,66 @@ export const TOOLS: Tool[] = [
               "기간을 셀 때는 연도 개수가 아니라 구간 수를 넣어야 합니다. 2023년 말부터 2026년 말까지라면 연도는 네 개지만 기간은 3년입니다. 이 한 칸 차이로 CAGR이 눈에 띄게 달라집니다.",
             ],
           },
+          {
+            heading: "복리 성장과 미래값 예측은 CAGR의 역계산",
+            body: [
+              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일하며, CAGR과 정반대 방향입니다. CAGR 탭이 시작·종료값에서 연율을 구한다면, 복리 성장 탭은 초기값과 연율에서 최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 미래 값을 구합니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
+              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산이 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측이 됩니다.",
+            ],
+          },
+          {
+            heading: "복리와 단리의 차이",
+            body: [
+              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
+              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
+            ],
+          },
+          {
+            heading: "복리 성장 탭의 기간 단위와 활용",
+            body: [
+              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
+              "미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요. 모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다.",
+            ],
+          },
         ],
         examples: [
           {
             title: "3년간 매출 성장을 연율로 환산",
-            input: "시작 120,000,000 · 종료 210,000,000 · 기간 3년",
+            input: "시작 120,000,000 · 종료 210,000,000 · 기간 3년 (CAGR 탭)",
             result: "CAGR 약 20.5% (총 성장률 75%)",
             note: "\"3년간 75% 성장\"보다 \"연평균 20.5% 성장\"이 다른 기간의 사업과 비교하기 쉽습니다. 검산: 1.205를 세 번 곱하면 약 1.75가 됩니다.",
           },
           {
             title: "요동친 성과의 실제 연평균 구하기",
-            input: "시작 100 · 종료 100 · 기간 2년 (1년 차 +100%, 2년 차 −50%)",
+            input: "시작 100 · 종료 100 · 기간 2년, 1년 차 +100%·2년 차 −50% (CAGR 탭)",
             result: "CAGR 0%",
             note: "연도별 성장률의 산술평균은 +25%로 나오지만, 실제로는 제자리입니다. 성장률을 평균 낼 때 CAGR을 써야 하는 이유가 이 차이입니다.",
           },
           {
             title: "감소한 지표의 연평균 하락률",
-            input: "시작 50,000 · 종료 32,000 · 기간 2년",
+            input: "시작 50,000 · 종료 32,000 · 기간 2년 (CAGR 탭)",
             result: "CAGR 약 −20%",
             note: "감소도 같은 수식으로 계산되며 음수 CAGR로 표시됩니다. 이탈률·해지 건수처럼 줄어드는 것이 목표인 지표에도 그대로 쓸 수 있습니다.",
+          },
+          {
+            title: "연 12% 성장 가정으로 5년 뒤 매출 예측",
+            input: "초기값 50,000,000 · 성장률 12% · 기간 5년 (복리 성장 탭)",
+            result: "약 88,117,000 (총 증가 약 76%)",
+            note: "단리로 계산하면 50,000,000 × (1 + 0.12 × 5) = 80,000,000입니다. 5년만 지나도 복리와 단리의 차이가 800만원 넘게 벌어집니다.",
+          },
+          {
+            title: "사업계획서의 성장 시나리오 비교",
+            input: "같은 초기값에 성장률 8% / 12% / 20%를 각각 입력 (복리 성장 탭)",
+            result: "5년 뒤 약 73,466,000 / 88,117,000 / 124,416,000",
+            note: "보수·기본·공격 세 가지 시나리오를 나란히 두면, 목표 숫자가 어느 가정에 기대고 있는지 한눈에 보입니다.",
           },
         ],
         limitations: [
           "시작값은 반드시 0보다 커야 합니다. 시작값이 0이거나 음수면 (종료÷시작) 자체가 성립하지 않아 CAGR을 정의할 수 없습니다.",
-          "중간 경로를 전부 지운 값입니다. CAGR이 같은 두 사업도 하나는 꾸준히 성장했고 다른 하나는 한 해에 몰아서 성장했을 수 있으므로, 변동성 판단에는 쓸 수 없습니다.",
-          "기간은 연도 개수가 아니라 구간 수입니다. 2023년 말 → 2026년 말은 3년이며, 4를 넣으면 성장률이 실제보다 낮게 나옵니다.",
-          "물가상승률을 반영하지 않은 명목 성장률입니다. 장기간(5년 이상) 금액을 비교할 때는 실질 가치 기준으로 따로 보정해야 합니다.",
+          "CAGR은 중간 경로를 전부 지운 값입니다. CAGR이 같은 두 사업도 하나는 꾸준히 성장했고 다른 하나는 한 해에 몰아서 성장했을 수 있으므로, 변동성 판단에는 쓸 수 없습니다.",
+          "기간은 연도 개수가 아니라 구간 수입니다. 2023년 말 → 2026년 말은 3년이며, 4를 넣으면 두 탭 모두 결과가 실제와 달라집니다.",
+          "복리 성장 탭은 성장률이 매 기간 동일하다고 가정합니다. 실제 사업은 시장 포화·경쟁 진입·계절성으로 성장률이 변하므로, 기간이 길어질수록 예측 오차가 급격히 커집니다. 5년을 넘는 예측은 참고용으로만 쓰세요.",
+          "두 탭 모두 물가상승률·환율·세금을 반영하지 않은 명목 값입니다. 장기간 금액을 비교하거나 투자 수익을 볼 때는 실질 가치·실질 수익률로 따로 환산해야 합니다.",
         ],
       },
       en: {
@@ -4612,7 +4339,7 @@ export const TOOLS: Tool[] = [
             body: [
               "The most common mistake is adding up the annual growth rates and dividing by the number of years. With +100% in year one and −50% in year two, the arithmetic mean is +25%, but the value went 100 → 200 → 100 and ended exactly where it started. The true annual average is 0%.",
               "CAGR = (End ÷ Start) ^ (1 ÷ Years) − 1 solves this with multiplication. Growth compounds rather than adds, so the average has to be geometric to land on the real end value. Compounding the start value at this calculator's CAGR for the given number of years reproduces the end value exactly.",
-              "If you need the reverse: a future value from a start value and a rate: use the compound growth calculator, which solves the same equation in the other direction.",
+              "If you need the reverse: a future value from a start value and a rate: switch to the Compound Growth tab above, which solves the same equation in the other direction.",
             ],
           },
           {
@@ -4622,162 +4349,10 @@ export const TOOLS: Tool[] = [
               "Count periods, not years. From the end of 2023 to the end of 2026 there are four calendar years but only three periods. That off-by-one changes the CAGR noticeably.",
             ],
           },
-        ],
-        examples: [
           {
-            title: "Turning three years of revenue growth into an annual rate",
-            input: "Start 120,000,000 · End 210,000,000 · 3 years",
-            result: "CAGR about 20.5% (total growth 75%)",
-            note: "\"20.5% a year\" compares across time spans in a way that \"75% over three years\" cannot. Check it: multiply 1.205 by itself three times and you get roughly 1.75.",
-          },
-          {
-            title: "Finding the real average behind a volatile run",
-            input: "Start 100 · End 100 · 2 years (+100% then −50%)",
-            result: "CAGR 0%",
-            note: "Averaging the yearly rates arithmetically gives +25%, yet nothing actually changed. That gap is exactly why growth rates should be averaged with CAGR.",
-          },
-          {
-            title: "The annual rate of a metric that is shrinking",
-            input: "Start 50,000 · End 32,000 · 2 years",
-            result: "CAGR about −20%",
-            note: "Declines use the same formula and come out as a negative CAGR, which works just as well for metrics like churn or cancellations where going down is the goal.",
-          },
-        ],
-        limitations: [
-          "The start value must be greater than zero. With a start of zero or a negative start, End ÷ Start breaks down and CAGR is undefined.",
-          "It erases the path in between. Two businesses with identical CAGR may have grown steadily or in a single burst, so it says nothing about volatility.",
-          "Years means the number of periods, not the number of calendar years. End of 2023 to end of 2026 is 3; entering 4 understates the growth rate.",
-          "It is a nominal rate with no inflation adjustment. When comparing money over five years or more, deflate to real terms separately.",
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        { question: "CAGR이란 무엇인가요?", answer: "CAGR(Compound Annual Growth Rate)은 연평균 복리 성장률입니다. 시작값에서 종료값까지 매년 동일한 비율로 성장했다면 그 비율이 CAGR입니다." },
-        { question: "CAGR과 단순 성장률의 차이는 무엇인가요?", answer: "단순 성장률은 시작과 끝 두 시점만 비교합니다. CAGR은 복리를 적용해 매년 균등한 성장률을 구하므로, 다년간 비교에 더 정확합니다." },
-        { question: "CAGR이 음수가 될 수 있나요?", answer: "네. 종료 값이 시작 값보다 작으면 CAGR은 음수가 됩니다. 다만 시작 값은 반드시 양수여야 합니다." },
-      ],
-      en: [
-        { question: "What does CAGR mean?", answer: "CAGR stands for Compound Annual Growth Rate. It is the constant annual rate at which a value would have grown from the start value to the end value over a given number of years." },
-        { question: "How is CAGR different from simple growth rate?", answer: "Simple growth rate compares only two points in time. CAGR compounds the growth evenly across each year, making it more useful for comparing growth over different time periods." },
-        { question: "Can CAGR be negative?", answer: "Yes. If the end value is lower than the start value, CAGR will be negative, indicating an average annual decline. The start value must always be positive." },
-      ],
-    },
-    og: {
-      ko: { title: "CAGR 계산기", subtitle: "시작값·종료값·기간으로 연평균 성장률(CAGR) 즉시 계산" },
-      en: { title: "CAGR Calculator", subtitle: "Calculate Compound Annual Growth Rate instantly" },
-    },
-  },
-
-  {
-    slug: "compound-growth-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
-    ico: "^n",
-    ready: true,
-    indexable: true,
-    badge: "Calculator",
-    name: { ko: "복리 성장 계산기", en: "Compound Growth Calculator" },
-    relatedTools: ["cagr-calculator", "goal-growth-calculator", "growth-rate-calculator"],
-    seo: {
-      ko: {
-        title: "복리 성장 계산기 | 미래값 예측·성장 시나리오",
-        description:
-          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 매출·사용자 수·트래픽의 미래값 예측과 성장 시나리오 플래닝에 활용하세요.",
-        keywords: [
-          "복리 성장 계산기", "복리 계산기", "성장 예측 계산기", "미래값 계산기", "성장 시나리오",
-          "compound growth calculator", "future value calculator", "growth projection calculator",
-        ],
-      },
-      en: {
-        title: "Compound Growth Calculator | Future Value & Projection",
-        description:
-          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. Great for projecting revenue, users, or investments and for growth scenario planning.",
-        keywords: [
-          "compound growth calculator", "compounding calculator", "future value calculator",
-          "growth projection calculator", "revenue projection calculator", "growth forecast calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "초기(현재)값·성장률·기간으로 복리 최종값·미래 예측값 즉시 계산.",
-        description:
-          "초기(현재) 값, 성장률(%), 기간을 입력하면 복리로 계산된 최종값과 총 성장률을 즉시 계산합니다. 초기 투자금의 복리 성장은 물론, 현재 매출·사용자 수·트래픽이 일정 성장률로 커졌을 때의 미래값 예측(성장 시나리오)까지 같은 공식으로 구할 수 있습니다.",
-        howItWorks: ["초기(현재) 값 입력", "기간당 성장률(%) 입력", "기간(회차) 입력 후 최종값·미래 예측값·총 성장률 확인"],
-        aeo: {
-          what: "복리 성장 계산기는 초기(현재) 값에 성장률을 복리로 적용해 일정 기간 후의 최종값을 계산하는 도구입니다. 초기 투자금의 복리 최종값 계산과 현재 지표의 미래값 예측(성장 예측)이 모두 최종값 = 초기값 × (1 + 성장률/100)^기간이라는 동일한 공식이라, 이 계산기 하나로 처리합니다.",
-          who: "복리로 성장하는 매출·투자·사용자 수의 최종값이나 미래 예측값을 구하려는 PM, 스타트업 창업자, 투자자, 소상공인을 위한 도구입니다.",
-          how: "최종값 = 초기값 × (1 + 성장률/100)^기간 공식으로 계산합니다. '초기 값'에 현재 지표를 넣으면 그대로 미래 예측값(성장 예측)이 됩니다.",
-          why: "복리의 힘을 직관적으로 확인하고, 성장률·기간을 바꿔가며 여러 성장 시나리오의 결과를 즉시 비교해 계획 수립과 의사결정을 빠르게 할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "복리 성장과 미래값 예측은 같은 계산",
+            heading: "Compound growth and future projection are CAGR run in reverse",
             body: [
-              "'복리 성장'과 '성장 예측(미래값)'은 이름과 쓰는 맥락이 다를 뿐 계산은 동일합니다. 둘 다 최종값 = 초기값 × (1 + 성장률/100)^기간 공식을 씁니다. 초기 투자금 1,000만원이 매년 10%씩 복리로 늘면 5년 뒤 얼마인지 구하는 것과, 이번 달 사용자 5,000명이 매달 8%씩 성장하면 1년 뒤 몇 명일지 예측하는 것은 수식상 완전히 같은 문제입니다.",
-              "그래서 '초기 값' 칸에 투자 원금을 넣으면 복리 최종값 계산기가 되고, 현재 매출·사용자·트래픽 같은 비즈니스 지표를 넣으면 그대로 미래값을 내다보는 성장 예측 계산기가 됩니다.",
-            ],
-          },
-          {
-            heading: "복리와 단리의 차이",
-            body: [
-              "핵심은 각 기간의 성장이 원래 값이 아니라 '직전까지 누적된 값'에 적용된다는 점입니다. 단리라면 매 기간 같은 금액이 더해지지만, 복리는 늘어난 값에 다시 성장률이 붙어 시간이 지날수록 증가 속도가 빨라집니다. 기간이 길고 성장률이 높을수록 복리와 단리의 격차는 극적으로 벌어집니다.",
-              "성장률에 음수를 넣으면 매 기간 일정 비율로 줄어드는 복리 감소를 계산합니다. 이탈률이 매달 붙는 사용자 수 감소나 감가 시나리오를 볼 때 유용합니다.",
-            ],
-          },
-          {
-            heading: "기간 단위와 활용",
-            body: [
-              "기간 단위는 성장률과 일치시키면 무엇이든 됩니다. 성장률이 월 기준이면 기간도 개월 수로, 연 기준이면 연수로 넣으세요. 같은 초기값이라도 성장률과 기간을 조금만 바꾸면 최종값이 크게 달라지므로, 낙관·기본·보수 시나리오를 각각 넣어 비교하면 계획의 폭을 가늠할 수 있습니다.",
-              "모든 계산은 브라우저 안에서만 이루어지며 입력한 숫자는 서버로 전송되지 않습니다. 참고로 미래 예측은 '성장률이 매 기간 일정하다'는 가정에 기반하므로, 성장률이 변동한다면 구간을 나눠 계산하세요.",
-            ],
-          },
-        ],
-              examples: [
-          {
-            title: "연 12% 성장 가정으로 5년 뒤 매출 예측",
-            input: "현재 값 50,000,000 · 성장률 12% · 기간 5년",
-            result: "약 88,117,000 (총 증가 약 76%)",
-            note: "단리로 계산하면 50,000,000 × (1 + 0.12 × 5) = 80,000,000입니다. 5년만 지나도 복리와 단리의 차이가 800만원 넘게 벌어집니다.",
-          },
-          {
-            title: "사업계획서의 성장 시나리오 비교",
-            input: "같은 현재 값에 성장률 8% / 12% / 20%를 각각 입력",
-            result: "5년 뒤 약 73,466,000 / 88,117,000 / 124,416,000",
-            note: "보수·기본·공격 세 가지 시나리오를 나란히 두면, 목표 숫자가 어느 가정에 기대고 있는지 한눈에 보입니다.",
-          },
-          {
-            title: "감소 시나리오(이탈) 예측",
-            input: "현재 값 12,000 · 성장률 −5% · 기간 8분기",
-            result: "약 7,963",
-            note: "성장률에 음수를 넣으면 복리 감소가 됩니다. 기간 단위는 연이 아니어도 되며, 분기 이탈률을 넣으면 분기 단위로 계산됩니다.",
-          },
-        ],
-        limitations: [
-          "성장률이 매 기간 동일하다고 가정합니다. 실제 사업은 시장 포화·경쟁 진입·계절성으로 성장률이 변하므로, 기간이 길어질수록 예측 오차가 급격히 커집니다.",
-          "5년을 넘는 예측은 참고용으로만 쓰세요. 연 20% 성장을 10년간 유지하면 6.2배가 되는데, 이 규모를 실제로 달성하는 사업은 드뭅니다.",
-          "기간 단위는 성장률의 단위와 반드시 같아야 합니다. 연 성장률에 기간 12를 넣으면 12개월이 아니라 12년이 계산됩니다.",
-          "물가상승률·환율·세금을 반영하지 않은 명목 값입니다. 투자 수익을 볼 때는 실질 수익률로 따로 환산해야 합니다.",
-        ],
-      },
-      en: {
-        card: "Compute compounded final value and future projection from a value, rate, and periods.",
-        description:
-          "Enter an initial (current) value, growth rate, and number of periods to instantly calculate the compounded final value and total growth. It covers both compounding an initial investment and projecting the future value of a current metric: the same formula either way.",
-        howItWorks: ["Enter the initial (current) value", "Enter the growth rate per period (%)", "Enter the number of periods, then read the final / projected value"],
-        aeo: {
-          what: "A Compound Growth Calculator applies a growth rate repeatedly over a number of periods to compute the final value. Compounding an initial investment and projecting a current metric into the future both use Final Value = Initial × (1 + Rate / 100) ^ Periods, so this one calculator handles both.",
-          who: "It is for PMs, startup founders, investors, and business owners projecting revenue, users, or investments that grow at a constant periodic rate.",
-          how: "Final Value = Initial Value × (1 + Rate / 100) ^ Periods. Put your current metric in the initial value field and the result is your future projection.",
-          why: "Compound growth diverges sharply from simple growth at scale: vary the rate and periods to compare growth scenarios and ground your planning in concrete numbers.",
-        },
-        guide: [
-          {
-            heading: "Compound growth and future projection are the same math",
-            body: [
-              "'Compound growth' and 'growth projection (future value)' differ only in name and context: the calculation is identical. Both use Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
+              "'Compound growth' and 'growth projection (future value)' differ only in name and context: the calculation is identical, and it runs the opposite direction from CAGR. Where the CAGR tab derives an annual rate from a start and end value, the Compound Growth tab derives a future value from an initial value and a rate: Final Value = Initial × (1 + Rate / 100) ^ Periods. Working out what an initial 10,000 becomes after growing 10% a year for five years, and projecting what this month's 5,000 users become after a year of 8% monthly growth, are the exact same problem in formula terms.",
               "So putting a principal amount in the initial value field makes it a compound final-value calculator, while putting in a current business metric: revenue, users, traffic: makes it a growth projection calculator that looks into the future.",
             ],
           },
@@ -4789,60 +4364,75 @@ export const TOOLS: Tool[] = [
             ],
           },
           {
-            heading: "Period units and how to use it",
+            heading: "Period units on the Compound Growth tab",
             body: [
               "Any period unit works as long as it matches the rate: use months if your rate is monthly, years if it's annual. Because the same starting value can end up very differently with small changes to rate or periods, entering optimistic, base, and conservative scenarios side by side helps you size the range of outcomes.",
-              "Everything runs in your browser and your inputs are never sent to a server. Note that a projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each.",
+              "A projection assumes a constant rate every period, so if growth varies, split the horizon into segments and calculate each. Everything runs in your browser and your inputs are never sent to a server.",
             ],
           },
         ],
-              examples: [
+        examples: [
+          {
+            title: "Turning three years of revenue growth into an annual rate",
+            input: "Start 120,000,000 · End 210,000,000 · 3 years (CAGR tab)",
+            result: "CAGR about 20.5% (total growth 75%)",
+            note: "\"20.5% a year\" compares across time spans in a way that \"75% over three years\" cannot. Check it: multiply 1.205 by itself three times and you get roughly 1.75.",
+          },
+          {
+            title: "Finding the real average behind a volatile run",
+            input: "Start 100 · End 100 · 2 years, +100% then −50% (CAGR tab)",
+            result: "CAGR 0%",
+            note: "Averaging the yearly rates arithmetically gives +25%, yet nothing actually changed. That gap is exactly why growth rates should be averaged with CAGR.",
+          },
+          {
+            title: "The annual rate of a metric that is shrinking",
+            input: "Start 50,000 · End 32,000 · 2 years (CAGR tab)",
+            result: "CAGR about −20%",
+            note: "Declines use the same formula and come out as a negative CAGR, which works just as well for metrics like churn or cancellations where going down is the goal.",
+          },
           {
             title: "Projecting revenue five years out at 12% a year",
-            input: "Current 50,000,000 · Rate 12% · 5 periods",
+            input: "Initial 50,000,000 · Rate 12% · 5 periods (Compound Growth tab)",
             result: "About 88,117,000 (roughly 76% total growth)",
             note: "Simple interest would give 50,000,000 × (1 + 0.12 × 5) = 80,000,000. Even at five years the compounding gap is over 8 million.",
           },
           {
             title: "Comparing growth scenarios in a business plan",
-            input: "The same current value at 8% / 12% / 20%",
+            input: "The same initial value at 8% / 12% / 20% (Compound Growth tab)",
             result: "About 73,466,000 / 88,117,000 / 124,416,000 after five periods",
             note: "Lining up conservative, base and aggressive cases makes it obvious which assumption your target number is leaning on.",
           },
-          {
-            title: "Modelling a decline instead of growth",
-            input: "Current 12,000 · Rate −5% · 8 quarters",
-            result: "About 7,963",
-            note: "A negative rate compounds downward. The period does not have to be a year: feed it a quarterly churn rate and the result is quarterly.",
-          },
         ],
         limitations: [
-          "It assumes the same rate every period. Real businesses see growth change with saturation, new competitors and seasonality, so the error grows sharply the further out you project.",
-          "Treat anything beyond five periods as illustrative. Sustaining 20% for ten years implies a 6.2x increase, which very few businesses actually achieve.",
-          "The period unit must match the rate unit. Entering 12 with an annual rate models twelve years, not twelve months.",
-          "Results are nominal, with no inflation, currency or tax effects. Convert to a real rate separately when evaluating investment returns.",
+          "The start value must be greater than zero. With a start of zero or a negative start, End ÷ Start breaks down and CAGR is undefined.",
+          "CAGR erases the path in between. Two businesses with identical CAGR may have grown steadily or in a single burst, so it says nothing about volatility.",
+          "Years means the number of periods, not the number of calendar years. End of 2023 to end of 2026 is 3; entering 4 throws off both tabs.",
+          "The Compound Growth tab assumes the same rate every period. Real businesses see growth change with saturation, new competitors and seasonality, so the error grows sharply the further out you project; treat anything beyond five periods as illustrative.",
+          "Both tabs are nominal, with no inflation, currency or tax effects. Convert to a real rate separately when comparing money over long spans or evaluating investment returns.",
         ],
       },
     },
     faq: {
       ko: [
-        { question: "복리 성장이란 무엇인가요?", answer: "복리 성장은 각 기간의 성장이 이전 기간까지 누적된 값에 적용되는 방식입니다. 단리와 달리 시간이 지날수록 성장 속도가 빨라집니다." },
-        { question: "성장 예측(미래값)도 이 계산기로 구하나요?", answer: "네. 미래값 예측은 복리 성장과 동일한 공식을 씁니다. '초기 값' 칸에 현재 매출·사용자 수 등을 넣으면 그대로 미래 예측값이 됩니다." },
-        { question: "성장률이 매 기간 동일하다고 가정하나요?", answer: "네. 모든 기간에 같은 성장률이 적용된다고 가정합니다. 성장률이 변동한다면 구간을 나눠 각각 계산하세요." },
-        { question: "기간(회차)을 0으로 설정하면 어떻게 되나요?", answer: "0 기간은 허용됩니다. 최종값은 초기값과 동일합니다." },
-        { question: "음수 성장률을 입력할 수 있나요?", answer: "네. 음수 성장률을 입력하면 기간이 지날수록 값이 줄어드는 복리 감소를 계산합니다." },
+        { question: "CAGR이란 무엇인가요?", answer: "CAGR(Compound Annual Growth Rate)은 연평균 복리 성장률입니다. 시작값에서 종료값까지 매년 동일한 비율로 성장했다면 그 비율이 CAGR입니다." },
+        { question: "CAGR과 단순 성장률의 차이는 무엇인가요?", answer: "단순 성장률은 시작과 끝 두 시점만 비교합니다. CAGR은 복리를 적용해 매년 균등한 성장률을 구하므로, 다년간 비교에 더 정확합니다." },
+        { question: "CAGR과 복리 성장 탭은 어떻게 다른가요?", answer: "같은 관계식을 반대 방향으로 풉니다. CAGR 탭은 시작값과 종료값을 알 때 연율을 역산하고, 복리 성장 탭은 초기값과 연율을 알 때 미래 값을 구합니다. 알고 있는 것이 무엇이냐에 따라 탭을 고르면 됩니다." },
+        { question: "복리 성장 탭으로 미래 예측(성장 시나리오)도 할 수 있나요?", answer: "네. '초기 값' 칸에 현재 매출·사용자 수 같은 지표를 넣으면 성장 예측이 되고, 성장률·기간을 여러 값으로 바꿔가며 낙관·기본·보수 시나리오를 비교할 수 있습니다." },
+        { question: "탭을 바꾸면 입력했던 값이 사라지나요?", answer: "네. CAGR 탭은 시작값·종료값·기간을, 복리 성장 탭은 초기값·성장률·기간을 입력받아 필드 구성 자체가 달라 기본값으로 초기화됩니다." },
+        { question: "입력한 숫자가 서버로 전송되나요?", answer: "아니요. 모든 계산은 브라우저 안에서 처리되며 입력값은 서버로 전송·저장되지 않습니다." },
       ],
       en: [
-        { question: "What is compound growth?", answer: "Compound growth applies a growth rate to the accumulated total at the end of each period, not just the original value, causing exponential growth over time." },
-        { question: "Can I project a future value here too?", answer: "Yes. A future-value projection uses the same formula as compound growth. Put your current revenue, users, or metric in the initial value field and the result is your projection." },
-        { question: "Does it assume a constant growth rate each period?", answer: "Yes. It assumes the same rate every period. For variable rates, split the horizon into segments and calculate each separately." },
-        { question: "What happens if I set periods to 0?", answer: "Zero periods is allowed. The final value equals the initial value: no growth has occurred." },
-        { question: "Can I enter a negative growth rate?", answer: "Yes. A negative rate models compound decline, where the value decreases by the specified percentage each period." },
+        { question: "What does CAGR mean?", answer: "CAGR stands for Compound Annual Growth Rate. It is the constant annual rate at which a value would have grown from the start value to the end value over a given number of years." },
+        { question: "How is CAGR different from simple growth rate?", answer: "Simple growth rate compares only two points in time. CAGR compounds the growth evenly across each year, making it more useful for comparing growth over different time periods." },
+        { question: "How is the CAGR tab different from the Compound Growth tab?", answer: "They solve the same relationship in opposite directions. The CAGR tab derives an annual rate when you know a start and end value; the Compound Growth tab derives a future value when you know an initial value and a rate. Pick the tab based on what you already know." },
+        { question: "Can I use the Compound Growth tab to project a future value or scenario?", answer: "Yes. Put a current metric like revenue or users in the initial value field to get a projection, and vary the rate and periods to compare optimistic, base, and conservative scenarios." },
+        { question: "Does switching tabs clear the values I entered?", answer: "Yes. The CAGR tab takes a start value, end value and years, while the Compound Growth tab takes an initial value, rate and periods, so the field set itself changes and resets to defaults." },
+        { question: "Are the numbers I enter sent to a server?", answer: "No. Every calculation happens in your browser and your inputs are never uploaded or stored." },
       ],
     },
     og: {
-      ko: { title: "복리 성장 계산기", subtitle: "복리 최종값·미래 예측값·성장 시나리오 즉시 계산" },
-      en: { title: "Compound Growth Calculator", subtitle: "Compounded final value and future projection instantly" },
+      ko: { title: "CAGR 계산기", subtitle: "연평균 성장률(CAGR)과 복리 미래값 예측을 한 페이지에서" },
+      en: { title: "CAGR Calculator", subtitle: "CAGR and compound growth projection in one place" },
     },
   },
 
@@ -4854,10 +4444,10 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "small-business-owner", "pm"],
     ico: "pace",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Marketing Calculator",
     name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
-    relatedTools: ["roas-calculator", "cpa-calculator", "funnel-conversion-calculator"],
+    relatedTools: ["ad-metrics-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "광고 예산 페이싱 계산기 | 광고비 소진율·집행률 확인",
@@ -4901,6 +4491,48 @@ export const TOOLS: Tool[] = [
           how: "총예산·시작일·종료일·기준일·누적 지출액을 입력하면 브라우저에서 즉시 기간 진행률, 예산 소진율, 페이싱 차이, 남은 예산, 필요 일평균 광고비를 계산합니다.",
           why: "광고비가 계획보다 빠르게 소진되면 캠페인 후반에 예산이 부족해지고, 너무 느리면 집행 효율이 떨어집니다. 페이싱 계산기로 매일 현황을 파악하면 예산을 최적으로 배분할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "페이싱이 어긋났다는 걸 왜 중간에 알아야 하는가",
+            body: [
+              "한 달짜리 캠페인에서 15일째(진행률 50%)에 예산의 70%를 이미 썼다면, 이 상태를 캠페인이 끝난 뒤에야 정산 리포트로 확인하면 손쓸 방법이 없습니다. 페이싱 계산기는 '기간이 얼마나 지났는가'와 '예산을 얼마나 썼는가'라는 서로 다른 두 비율을 매일 비교해, 과다 집행이나 부족 집행을 캠페인이 진행되는 도중에 바로 알 수 있게 합니다.",
+              "두 비율의 차이(페이싱 갭)가 크면 클수록 조정이 급합니다. 작은 차이는 자연스러운 요일별 변동일 수 있지만, 두 자릿수 퍼센트 차이는 입찰가나 타겟팅을 바로 점검해야 하는 신호입니다.",
+            ],
+          },
+          {
+            heading: "남은 기간의 일평균 광고비를 미리 계산하는 이유",
+            body: [
+              "과다 집행 상태를 발견했다면 다음 질문은 '남은 기간 동안 하루에 얼마씩 써야 예산을 맞출 수 있는가'입니다. 이 계산기는 남은 예산을 남은 집행일 수로 나눠 그 값을 바로 보여주므로, 캠페인 매니저가 입찰가를 낮추거나 타겟을 좁혀야 하는 정도를 감이 아니라 숫자로 판단할 수 있습니다.",
+              "예상 일평균 광고비를 직접 입력하면(예: 프로모션 기간 지출이 늘어날 것을 미리 반영), 그 값을 기준으로 예상 최종 지출액도 함께 계산됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "캠페인 중반에 과다 집행 확인",
+            input: "총예산 10,000,000 · 30일 캠페인 · 15일째 · 누적 지출 7,000,000",
+            result: "기간 진행률 50%, 소진율 70%, 페이싱 갭 +20%p (과다 집행)",
+            note: "이 시점에 개입하지 않으면 남은 15일 안에 예산이 소진돼 캠페인 후반부 노출이 끊길 수 있습니다. 입찰가를 낮추거나 일예산 상한을 걸어야 하는 신호입니다.",
+          },
+          {
+            title: "남은 기간에 맞춰 하루 예산 재조정",
+            input: "남은 예산 3,000,000 · 남은 집행일 15일",
+            result: "필요 일평균 광고비 200,000",
+            note: "지금까지의 실제 일평균(7,000,000÷15≈467,000)보다 훨씬 낮은 금액입니다. 이 페이스를 유지하도록 캠페인 관리자에서 일예산을 낮춰야 합니다.",
+          },
+          {
+            title: "평일만 집행하는 B2B 캠페인 페이싱",
+            input: "30일 캠페인을 평일 집행 기준으로 계산",
+            result: "실제 집행일은 30일이 아닌 약 21~22일(평일만)",
+            note: "주말에는 노출이 없는 B2B 캠페인처럼 평일만 집행할 때는 이 기준을 선택해야 기간 진행률이 실제 집행 상황과 맞아떨어집니다.",
+          },
+        ],
+        limitations: [
+          "평일만 집행 기준을 선택해도 공휴일은 자동으로 제외되지 않습니다. 공휴일에 집행을 멈추는 캠페인이라면 시작일·종료일을 수동으로 조정하거나 결과를 참고치로만 써야 합니다.",
+          "예상 최종 지출액은 남은 기간에도 지금까지와 비슷한 페이스로 집행된다는 가정에 기반합니다. 실제로는 요일별·주차별 변동, 예산 소진으로 인한 자동 중단 등으로 달라질 수 있습니다.",
+          "이 도구는 예산 소진 속도만 봅니다. ROAS·CPA 같은 성과 효율은 반영하지 않으므로, 예산을 다 썼다고 캠페인이 잘 되고 있다는 뜻은 아닙니다. 성과는 광고 지표 계산기로 별도 확인하세요.",
+          "플랫폼(구글 광고·메타 광고 등)이 자체적으로 적용하는 일예산 변동 허용치(하루 최대 2배까지 집행 가능한 정책 등)는 반영하지 않습니다. 실제 플랫폼 리포트의 소진액과 다를 수 있습니다.",
+        ],
       },
       en: {
         card: "Compare campaign time progress vs budget burn rate to spot overpacing or underpacing instantly.",
@@ -4917,6 +4549,48 @@ export const TOOLS: Tool[] = [
           how: "Enter your total budget, campaign start and end dates, the reference date, and spend to date. The calculator instantly computes time progress, budget burn rate, pacing gap, remaining budget, and required daily spend: all in your browser.",
           why: "If ad spend burns too fast, your campaign runs dry before it ends. Too slow, and you under-deliver. Daily pacing checks let you reallocate budget at the right moment.",
         },
+        guide: [
+          {
+            heading: "Why you need to catch a pacing problem mid-flight",
+            body: [
+              "If a month-long campaign has burned 70% of its budget by day 15 (50% time progress), finding out from an end-of-campaign report is too late to do anything about it. A pacing calculator compares two different ratios, time elapsed and budget consumed, every day, so you catch overpacing or underpacing while the campaign is still running.",
+              "The bigger the gap between the two ratios, the more urgent the fix. A small gap can just be normal day-of-week variance, but a double-digit percentage-point gap is a signal to check bids or targeting right away.",
+            ],
+          },
+          {
+            heading: "Why it works out the daily budget needed for what's left",
+            body: [
+              "Once you've spotted overpacing, the next question is: how much can you spend per day for the rest of the campaign and still land on budget? This calculator divides the remaining budget by the remaining days and shows that number directly, so a campaign manager knows exactly how much to lower bids or narrow targeting instead of guessing.",
+              "Enter a custom expected daily spend (say, to account for a promotion period that will spend more), and the projected final spend is calculated against that instead.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Catching overpacing mid-campaign",
+            input: "Total budget 10,000,000 · 30-day campaign · day 15 · spend to date 7,000,000",
+            result: "Time progress 50%, burn rate 70%, pacing gap +20pp (overpacing)",
+            note: "Without intervention here, the budget runs out well before the remaining 15 days end, cutting off impressions late in the campaign. This is the signal to lower bids or cap the daily budget.",
+          },
+          {
+            title: "Rebalancing the daily budget for what's left",
+            input: "Remaining budget 3,000,000 · 15 days remaining",
+            result: "Required daily spend 200,000",
+            note: "That's well below the actual daily average so far (7,000,000 / 15 ≈ 467,000). The daily budget in the ad platform needs to come down to hold this new pace.",
+          },
+          {
+            title: "Pacing a weekday-only B2B campaign",
+            input: "A 30-day campaign calculated on weekday-only pacing",
+            result: "Actual running days are about 21-22, not 30 (weekdays only)",
+            note: "For a B2B campaign with no weekend delivery, selecting this basis is what makes time progress line up with how the campaign actually runs.",
+          },
+        ],
+        limitations: [
+          "Selecting weekday-only pacing does not automatically exclude public holidays. If a campaign pauses on holidays too, adjust the dates manually or treat the result as a rough guide.",
+          "Projected final spend assumes the remaining period runs at a similar pace to what's happened so far. Day-of-week or week-to-week variance and automatic pauses from exhausted budgets can change the actual outcome.",
+          "This tool only looks at spend velocity. It does not factor in performance metrics like ROAS or CPA, so spending on pace doesn't mean the campaign is performing well. Check performance separately with the Ad Metrics Calculator.",
+          "It does not account for a platform's own daily-budget overspend allowance (policies that let Google Ads or Meta Ads spend up to double a daily budget on a given day). Actual platform reports may differ from this result.",
+        ],
       },
     },
     faq: {
@@ -4981,168 +4655,266 @@ export const TOOLS: Tool[] = [
     },
   },
   {
-    slug: "roas-calculator",
+    slug: "ad-metrics-calculator",
     layout: "card",
     cat: "text",
     targets: ["marketer", "small-business-owner", "pm"],
-    ico: "ROAS",
+    ico: "ADS",
     ready: true,
     indexable: true,
     badge: "Marketing Calculator",
-    name: { ko: "ROAS 계산기", en: "ROAS Calculator" },
-    relatedTools: ["cpa-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
+    name: { ko: "광고 지표 계산기", en: "Ad Metrics Calculator" },
+    relatedTools: ["ad-budget-pacing-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
-        title: "ROAS 계산기 | 광고 수익률·목표 매출·허용 광고비 계산",
+        title: "광고 지표 계산기 | ROAS·CPA·CPC·CPM·CTR 계산",
         description:
-          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+          "탭을 전환해 ROAS·CPA·CPC·CPM·CTR 다섯 개 광고 지표를 한 페이지에서 계산합니다. 정계산은 물론 목표 매출·허용 광고비·예상 전환(클릭·노출) 수·필요 예산까지 역산합니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산되며, 모든 계산은 브라우저에서만 처리됩니다.",
         keywords: [
-          "ROAS 계산기",
-          "광고 수익률 계산",
-          "광고비 대비 매출",
-          "목표 ROAS 계산",
-          "손익분기 ROAS",
-          "return on ad spend calculator",
+          "광고 지표 계산기", "ROAS 계산기", "CPA 계산기", "CPC 계산기", "CPM 계산기", "CTR 계산기",
+          "광고 수익률 계산", "손익분기 ROAS", "return on ad spend calculator",
         ],
       },
       en: {
-        title: "ROAS Calculator | Return on Ad Spend, Target Revenue & Budget",
+        title: "Ad Metrics Calculator | ROAS, CPA, CPC, CPM, CTR",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
+          "Switch tabs to calculate ROAS, CPA, CPC, CPM, and CTR, five ad metrics, on one page. Beyond the direct calculation, reverse-calculate target revenue, allowable budget, expected conversions (clicks, impressions), or the required budget. Add a gross margin percentage to see break-even ROAS. Every calculation runs in your browser.",
         keywords: [
-          "ROAS calculator",
-          "return on ad spend calculator",
-          "target ROAS calculator",
-          "ad revenue calculator",
-          "break even ROAS",
-          "advertising ROI calculator",
+          "ad metrics calculator", "ROAS calculator", "CPA calculator", "CPC calculator", "CPM calculator", "CTR calculator",
+          "return on ad spend calculator", "break even ROAS", "advertising ROI calculator",
         ],
       },
     },
     content: {
       ko: {
-        card: "광고비·매출로 ROAS 즉시 계산. 목표 매출·허용 광고비 역산과 손익분기 ROAS 포함.",
+        card: "ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지.",
         description:
-          "광고비와 광고 매출을 입력해 ROAS(광고 수익률)를 즉시 계산합니다. 목표 ROAS로 필요 매출을 역산하거나 목표 매출로 허용 광고비를 역산할 수도 있습니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산됩니다. 모든 계산은 브라우저에서만 처리됩니다.",
+          "탭을 전환해 ROAS·CPA·CPC·CPM·CTR 다섯 개 광고 지표를 한 페이지에서 계산합니다. 정계산은 물론 목표 매출·허용 광고비·예상 전환(클릭·노출) 수·필요 예산까지 역산합니다. 매출총이익률 입력 시 손익분기 ROAS도 함께 계산되며, 모든 계산은 브라우저에서만 처리됩니다.",
         howItWorks: [
-          "계산 모드 선택(ROAS·목표 매출·허용 광고비)",
-          "광고비·매출 또는 목표값 입력",
-          "ROAS와 관련 수치 즉시 확인",
+          "상단 탭에서 지표(ROAS·CPA·CPC·CPM·CTR) 선택",
+          "계산 모드(정계산 또는 역산)와 값 입력",
+          "결과와 계산식 확인 및 복사",
         ],
         aeo: {
-          what: "ROAS 계산기는 광고비 대비 매출 비율인 ROAS(Return on Ad Spend)를 계산하고, 목표 ROAS에서 필요 매출과 허용 광고비를 역산하며, 매출총이익률로 손익분기 ROAS를 도출하는 도구입니다.",
+          what: "광고 지표 계산기는 ROAS(광고 수익률)·CPA(전환당 비용)·CPC(클릭당 비용)·CPM(1,000회 노출당 비용)·CTR(클릭률) 다섯 개 광고 지표를 한 페이지에서 계산하는 통합 도구입니다. 각 지표는 정계산뿐 아니라 목표값에서 필요 예산·예상 전환(클릭·노출) 수를 역산하는 모드도 지원합니다.",
           who: "광고 성과를 추적하는 마케터, 디지털 광고를 운영하는 소상공인, 캠페인 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "ROAS 계산 모드에서는 광고비와 광고 매출을 입력하면 ROAS(%)와 ROAS 배수를 즉시 계산합니다. 목표 매출·허용 광고비 모드에서는 목표값을 역산합니다. 매출총이익률을 추가로 입력하면 손익분기 ROAS도 계산됩니다.",
-          why: "ROAS는 광고 효율을 가장 직관적으로 나타내는 지표입니다. 목표 ROAS를 설정하고 역산하면 광고 예산을 더 정확하게 계획할 수 있습니다.",
+          how: "상단 탭에서 지표를 고르고 계산 모드(정계산 또는 역산)를 선택해 값을 입력하면 브라우저 안에서 즉시 결과를 보여줍니다. 지표마다 입력 필드와 공식이 다릅니다.",
+          why: "노출→클릭→전환→매출로 이어지는 광고 퍼널의 각 단계를 서로 다른 도구를 오가지 않고 한 페이지에서 확인하고, 목표값에서 예산·전환 수를 역산해 캠페인을 계획할 수 있습니다.",
         },
         guide: [
           {
-            heading: "ROAS란 무엇이고 어떻게 읽나",
+            heading: "광고 지표 다섯 개를 왜 한 곳에 모았나",
             body: [
-              "ROAS(Return on Ad Spend)는 광고비 대비 매출을 나타내는 지표로, 매출 ÷ 광고비로 계산합니다. ROAS 400%(또는 4:1)는 광고에 1원을 써서 4원의 매출이 났다는 뜻입니다. 채널·캠페인·소재별로 ROAS를 비교하면 어디에 예산을 더 넣고 어디를 줄일지 판단할 수 있어, 퍼포먼스 마케팅에서 가장 먼저 보는 숫자입니다.",
-              "이 계산기는 광고비와 매출로 ROAS를 즉시 구하고, 목표 매출이나 허용 광고비를 거꾸로 역산하는 것도 지원합니다.",
+              "광고 캠페인은 노출(impression) → 클릭(click) → 전환(conversion) → 매출(revenue)로 이어지는 퍼널을 거칩니다. CPM은 노출 1,000회당 비용, CTR은 노출 대비 클릭 비율, CPC는 클릭 1회당 비용, CPA는 전환 1건당 비용, ROAS는 광고비 대비 매출 비율입니다. 다섯 지표 모두 '비용 ÷ 무언가' 또는 '무언가 ÷ 무언가'라는 같은 형태의 나눗셈이지만, 퍼널의 어느 단계를 보느냐가 다릅니다.",
+              "캠페인이 기대만큼 성과가 안 나올 때, 어느 단계가 문제인지 진단하려면 다섯 지표를 나란히 봐야 합니다. CPM은 정상인데 CTR이 낮으면 소재 문제, CTR은 높은데 CPA가 높으면 랜딩페이지나 타겟팅 문제일 가능성이 큽니다.",
             ],
           },
           {
-            heading: "손익분기 ROAS를 알아야 진짜 수익이 보인다",
+            heading: "ROAS: 광고비 대비 매출",
             body: [
-              "ROAS가 높다고 무조건 이익은 아닙니다. 제품 마진을 고려해야 하기 때문입니다. 마진율이 25%라면 광고비를 회수하는 손익분기 ROAS는 400%이고, 그보다 높아야 비로소 이익이 남습니다. 즉 같은 ROAS 300%라도 마진이 높은 상품이면 흑자, 낮은 상품이면 적자일 수 있습니다.",
-              "그래서 목표 ROAS는 마진 구조 위에서 세워야 합니다. 목표 ROAS를 정하고 허용 광고비·필요 매출을 역산하면 예산을 감이 아니라 숫자로 계획할 수 있습니다. 모든 계산은 브라우저 안에서 이루어집니다.",
+              "ROAS(Return on Ad Spend)는 매출 ÷ 광고비 × 100으로 계산합니다. ROAS 400%는 광고비 1원당 매출 4원이 났다는 뜻입니다. ROAS가 높다고 무조건 이익은 아닙니다: 매출총이익률이 25%라면 손익분기 ROAS는 400%(=100÷마진율)이고, 그보다 높아야 비로소 이익이 남습니다.",
+              "정계산 모드는 광고비·매출로 ROAS를 구하고, 역산 모드는 목표 ROAS에서 필요 매출 또는 허용 광고비를 거꾸로 계산합니다.",
+            ],
+          },
+          {
+            heading: "CPA: 전환 1건당 비용",
+            body: [
+              "CPA(Cost Per Acquisition)는 광고비 ÷ 전환 수로 계산합니다. 정계산 모드는 광고비·전환 수로 CPA를 구하고, 역산 모드는 예산과 목표 CPA로 예상 전환 수를, 목표 전환 수와 목표 CPA로 필요 예산을 계산합니다.",
+              "CPA는 '전환'을 무엇으로 정의하느냐에 따라 값이 크게 달라집니다. 구매·회원가입·장바구니 담기 중 어느 것을 전환으로 잡았는지 캠페인 간 비교 전에 반드시 확인하세요.",
+            ],
+          },
+          {
+            heading: "CPC: 클릭 1회당 비용",
+            body: [
+              "CPC(Cost Per Click)는 광고비 ÷ 클릭 수로 계산합니다. 검색·디스플레이 광고의 입찰 기준으로 가장 흔히 쓰이는 지표입니다. 역산 모드는 예산과 목표 CPC로 예상 클릭 수를, 목표 클릭 수와 목표 CPC로 필요 예산을 계산합니다.",
+              "CPC만 낮다고 좋은 캠페인은 아닙니다. 클릭이 저렴해도 전환으로 이어지지 않으면 CPA가 오히려 높아질 수 있으므로 CPC와 CPA를 함께 보는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "CPM: 노출 1,000회당 비용",
+            body: [
+              "CPM(Cost Per Mille)은 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 클릭이 아니라 노출 자체를 사는 브랜드 인지도 캠페인에서 주로 쓰이는 단가 기준입니다. 역산 모드는 예산과 목표 CPM으로 예상 노출 수를, 목표 노출 수와 목표 CPM으로 필요 예산을 계산합니다.",
+              "CPM이 낮다고 항상 유리하지는 않습니다. 타겟이 넓을수록 CPM은 낮아지는 경향이 있지만, 캠페인 목적과 무관한 노출이 섞이면 다른 지표(CTR·CPA)가 오히려 나빠질 수 있습니다.",
+            ],
+          },
+          {
+            heading: "CTR: 노출 대비 클릭 비율",
+            body: [
+              "CTR(Click-Through Rate)은 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 소재·카피가 타겟에게 얼마나 매력적으로 보이는지 가늠하는 지표입니다. 역산 모드는 노출 수와 목표 CTR로 필요 클릭 수를, 클릭 수와 목표 CTR로 필요 노출 수를 계산합니다.",
+              "클릭 수가 노출 수보다 많으면 계산기가 경고를 표시합니다. 트래킹 중복 집계나 측정 기준 불일치로 흔히 발생하는 오류이니 데이터 소스를 다시 확인하세요.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "캠페인 ROAS 계산",
-            input: "광고비 3,000,000 · 광고 매출 12,600,000",
+            input: "광고비 3,000,000 · 광고 매출 12,600,000 (ROAS 탭)",
             result: "ROAS 420%",
             note: "광고비 1원당 매출 4.2원이라는 뜻입니다. ROAS는 매출 기준이라 원가와 수수료를 빼기 전 숫자이며, 이 값만으로는 흑자인지 알 수 없습니다.",
           },
           {
-            title: "손익분기 ROAS로 흑자 여부 판단",
-            input: "기여이익률 25%",
-            result: "손익분기 ROAS 400%",
-            note: "손익분기 ROAS = 1 ÷ 기여이익률입니다. 마진이 25%면 400%를 넘어야 본전이므로, 위 예시의 420%는 겨우 흑자 구간입니다. 마진율을 모른 채 \"ROAS 400% 달성\"을 성과로 보고하면 적자 캠페인을 성공으로 착각할 수 있습니다.",
-          },
-          {
             title: "목표 매출에서 허용 광고비 역산",
-            input: "목표 매출 50,000,000 · 목표 ROAS 500%",
+            input: "목표 매출 50,000,000 · 목표 ROAS 500% (ROAS 탭, 역산 모드)",
             result: "허용 광고비 10,000,000",
             note: "월 예산을 짤 때 쓰는 방향입니다. 목표 ROAS를 마진율에서 먼저 정하고, 거기서 쓸 수 있는 광고비를 도출하는 순서가 안전합니다.",
           },
+          {
+            title: "회원가입 캠페인의 CPA 확인",
+            input: "광고비 2,000,000 · 전환(가입) 수 400건 (CPA 탭)",
+            result: "CPA 5,000",
+            note: "전환 1건을 얻는 데 5,000원이 들었다는 뜻입니다. 예산으로 예상 전환 수를 미리 가늠하려면 역산 모드에서 목표 CPA를 넣으면 됩니다.",
+          },
+          {
+            title: "입찰가 조정을 위한 CPC 확인",
+            input: "광고비 300,000 · 클릭 수 1,500회 (CPC 탭)",
+            result: "CPC 200",
+            note: "클릭 1회당 200원입니다. 목표 CPC와 예산을 넣으면 그 예산으로 얻을 수 있는 예상 클릭 수를 역산할 수 있습니다.",
+          },
+          {
+            title: "브랜드 캠페인의 CPM 확인",
+            input: "광고비 500,000 · 노출 수 2,000,000회 (CPM 탭)",
+            result: "CPM 250",
+            note: "노출 1,000회당 250원입니다. 노출 목표를 먼저 정했다면 역산 모드에서 목표 노출 수와 목표 CPM으로 필요 예산을 먼저 계산해 볼 수 있습니다.",
+          },
+          {
+            title: "소재 성과 비교를 위한 CTR 확인",
+            input: "클릭 수 2,500회 · 노출 수 100,000회 (CTR 탭)",
+            result: "CTR 2.5%",
+            note: "노출 100회당 2.5회 클릭이 났다는 뜻입니다. 여러 소재의 CTR을 나란히 비교하면 어떤 카피·이미지가 더 반응이 좋은지 판단할 수 있습니다.",
+          },
+          {
+            title: "손익분기 ROAS로 흑자 여부 판단",
+            input: "기여이익률 25% (ROAS 탭)",
+            result: "손익분기 ROAS 400%",
+            note: "손익분기 ROAS = 100 ÷ 기여이익률입니다. 마진이 25%면 400%를 넘어야 본전이므로, 첫 번째 예시의 420%는 겨우 흑자 구간입니다.",
+          },
         ],
         limitations: [
-          "ROAS는 매출 기준 지표입니다. 원가·배송비·결제 수수료·반품을 반영하지 않으므로, 수익성 판단에는 반드시 기여이익률과 손익분기 ROAS를 함께 봐야 합니다.",
-          "광고 매출은 플랫폼이 자기 기여로 집계한 값입니다. 클릭 후 7일 이내 구매 같은 기여 기간(attribution window) 설정에 따라 같은 캠페인의 ROAS가 크게 달라지며, 여러 채널의 ROAS를 단순 합산하면 같은 주문이 중복 계상됩니다.",
-          "신규 고객 획득 캠페인은 첫 구매만으로 평가하면 ROAS가 낮게 나옵니다. 재구매가 있는 사업이라면 고객 생애 가치(LTV) 기준으로 함께 판단해야 합니다.",
-          "브랜드 검색처럼 광고가 없어도 발생했을 매출은 걷어내지 않습니다. 증분 효과를 보려면 캠페인을 끄고 비교하는 실험이 필요합니다.",
+          "ROAS·CPA는 매출·전환 기준 지표입니다. 원가·배송비·결제 수수료·반품을 반영하지 않으므로, 수익성 판단에는 기여이익률과 손익분기 ROAS를 함께 봐야 합니다.",
+          "광고 매출·전환은 플랫폼이 자기 기여로 집계한 값입니다. 기여 기간(attribution window) 설정에 따라 같은 캠페인의 ROAS·CPA가 크게 달라지며, 여러 채널을 단순 합산하면 같은 주문·전환이 중복 계상됩니다.",
+          "신규 고객 획득 캠페인은 첫 구매만으로 ROAS·CPA를 평가하면 낮게(나쁘게) 나옵니다. 재구매가 있는 사업이라면 고객 생애 가치(LTV) 기준으로 함께 판단해야 합니다.",
+          "다섯 지표는 퍼널의 서로 다른 단계를 보므로, 하나만 보고 캠페인 전체를 판단할 수 없습니다. CPM·CTR·CPC가 모두 좋아도 CPA·ROAS가 나쁘면 랜딩페이지나 타겟팅 문제일 수 있습니다.",
+          "브랜드 검색처럼 광고가 없어도 발생했을 매출·전환은 걷어내지 않습니다. 증분 효과를 보려면 캠페인을 끄고 비교하는 실험이 필요합니다.",
         ],
       },
       en: {
-        card: "Calculate ROAS from ad spend and revenue. Reverse-calculate target revenue or allowable budget.",
+        card: "Calculate ROAS, CPA, CPC, CPM and CTR by tab. Reverse modes for target revenue, expected conversions, and required budget.",
         description:
-          "Enter your ad spend and revenue to calculate ROAS instantly. Reverse-calculate the required revenue from a target ROAS, or find the allowable ad budget from a target revenue. Add a gross margin percentage to see your break-even ROAS. Every calculation runs in your browser and the figures you enter are never uploaded.",
+          "Switch tabs to calculate ROAS, CPA, CPC, CPM, and CTR, five ad metrics, on one page. Beyond the direct calculation, reverse-calculate target revenue, allowable budget, expected conversions (clicks, impressions), or the required budget. Add a gross margin percentage to see break-even ROAS. Every calculation runs in your browser.",
         howItWorks: [
-          "Choose a calculation mode (ROAS, target revenue, or allowable budget)",
-          "Enter ad spend, revenue, or target values",
-          "See ROAS and related metrics instantly",
+          "Pick a metric from the tabs (ROAS, CPA, CPC, CPM, CTR)",
+          "Choose a calculation mode (direct or reverse) and enter values",
+          "See the result and formula, and copy it",
         ],
         aeo: {
-          what: "ROAS Calculator is a tool that computes Return on Ad Spend (ad revenue ÷ ad spend × 100), reverse-calculates target revenue or allowable ad budget from a target ROAS, and derives break-even ROAS from a gross margin percentage.",
+          what: "Ad Metrics Calculator is a unified tool that computes five advertising metrics on one page: ROAS (return on ad spend), CPA (cost per acquisition), CPC (cost per click), CPM (cost per 1,000 impressions), and CTR (click-through rate). Each metric supports both a direct calculation and reverse modes that derive the required budget or expected conversions (clicks, impressions) from a target.",
           who: "It is for marketers tracking ad performance, small business owners running digital ads, and PMs planning campaign budgets.",
-          how: "In ROAS mode, enter ad spend and revenue to get ROAS (%) and ROAS multiple instantly. In target modes, enter the target value to reverse-calculate the missing number. Enter a gross margin percentage to see the break-even ROAS.",
-          why: "ROAS is the most direct measure of advertising efficiency. Setting a target ROAS and reverse-calculating required inputs lets you plan budgets with precision rather than guesswork.",
+          how: "Pick a metric from the tabs, choose a calculation mode (direct or reverse), and enter the values it needs; the result appears instantly in your browser. Each metric has its own inputs and formula.",
+          why: "It lets you check every stage of the impression-to-click-to-conversion-to-revenue funnel on one page instead of hopping between tools, and reverse-calculate budget or expected conversions from a target to plan a campaign.",
         },
         guide: [
           {
-            heading: "What ROAS is and how to read it",
+            heading: "Why five ad metrics live on one page",
             body: [
-              "ROAS (Return on Ad Spend) is revenue relative to ad spend, calculated as revenue ÷ ad spend. A ROAS of 400% (or 4:1) means every 1 spent on ads produced 4 in revenue. Comparing ROAS across channels, campaigns, and creatives shows where to add budget and where to cut, which is why it's the first number performance marketers look at.",
-              "This calculator turns ad spend and revenue into ROAS instantly, and also reverse-calculates the target revenue or allowable ad spend you'd need.",
+              "An ad campaign runs through a funnel: impression, click, conversion, revenue. CPM is cost per 1,000 impressions, CTR is clicks relative to impressions, CPC is cost per click, CPA is cost per conversion, and ROAS is revenue relative to ad spend. All five reduce to the same shape of division, cost divided by something, or something divided by something, but each looks at a different stage of the funnel.",
+              "When a campaign underperforms, diagnosing which stage is the problem means looking at all five side by side. Normal CPM with low CTR points to a creative problem; high CTR with high CPA more often points to the landing page or targeting.",
             ],
           },
           {
-            heading: "Know your break-even ROAS to see real profit",
+            heading: "ROAS: revenue relative to ad spend",
             body: [
-              "A high ROAS isn't automatically profitable, because you have to account for product margin. At a 25% margin, the break-even ROAS that just recovers ad cost is 400%, and you only profit above that. So the same ROAS of 300% can be profitable on a high-margin product and a loss on a low-margin one.",
-              "That means your target ROAS should be built on your margin structure. Setting a target and reverse-calculating allowable spend and required revenue lets you plan budgets by the numbers rather than by feel. Everything runs in your browser.",
+              "ROAS (Return on Ad Spend) is Revenue / Ad Spend x 100. A ROAS of 400% means every 1 spent produced 4 in revenue. A high ROAS isn't automatically profitable: at a 25% gross margin, break-even ROAS is 400% (= 100 / margin), and you only profit above that.",
+              "The direct mode turns ad spend and revenue into ROAS; the reverse mode derives the required revenue or allowable ad spend from a target ROAS.",
+            ],
+          },
+          {
+            heading: "CPA: cost per conversion",
+            body: [
+              "CPA (Cost Per Acquisition) is Ad Spend / Conversions. The direct mode turns ad spend and conversions into CPA; the reverse modes derive expected conversions from a budget and target CPA, or the required budget from a target conversion count and target CPA.",
+              "CPA shifts a lot depending on what counts as a \"conversion\": purchase, sign-up, or add-to-cart. Confirm which definition each campaign is using before comparing CPA across them.",
+            ],
+          },
+          {
+            heading: "CPC: cost per click",
+            body: [
+              "CPC (Cost Per Click) is Ad Spend / Clicks, the most common bidding basis for search and display ads. The reverse modes derive expected clicks from a budget and target CPC, or the required budget from a target click count and target CPC.",
+              "A low CPC alone doesn't make a good campaign. Cheap clicks that don't convert can still push CPA up, so it's safer to read CPC alongside CPA.",
+            ],
+          },
+          {
+            heading: "CPM: cost per 1,000 impressions",
+            body: [
+              "CPM (Cost Per Mille) is Ad Spend / Impressions x 1,000, the usual pricing basis for brand-awareness campaigns that buy impressions rather than clicks. The reverse modes derive expected impressions from a budget and target CPM, or the required budget from a target impression count and target CPM.",
+              "A low CPM isn't always favorable. Broader targeting tends to lower CPM, but if the extra impressions are irrelevant to the campaign's goal, other metrics like CTR or CPA can get worse instead.",
+            ],
+          },
+          {
+            heading: "CTR: clicks relative to impressions",
+            body: [
+              "CTR (Click-Through Rate) is Clicks / Impressions x 100, a read on how compelling the creative and copy are to the target audience. The reverse modes derive the required clicks from an impression count and target CTR, or the required impressions from a click count and target CTR.",
+              "If clicks exceed impressions, the calculator shows a warning. That usually means duplicate tracking or mismatched measurement sources, so double-check the data source.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "Calculating campaign ROAS",
-            input: "Ad spend 3,000,000 · Attributed revenue 12,600,000",
+            input: "Ad spend 3,000,000 · Attributed revenue 12,600,000 (ROAS tab)",
             result: "ROAS 420%",
             note: "That is 4.2 in revenue per 1 spent. ROAS is a revenue figure taken before cost of goods and fees, so on its own it does not tell you whether the campaign made money.",
           },
           {
-            title: "Using break-even ROAS to judge profitability",
-            input: "Contribution margin 25%",
-            result: "Break-even ROAS 400%",
-            note: "Break-even ROAS = 1 ÷ contribution margin. At a 25% margin you need to clear 400% just to break even, so the 420% above is barely profitable. Reporting \"we hit 400% ROAS\" without knowing the margin can dress up a losing campaign as a win.",
-          },
-          {
             title: "Working backwards from a revenue target to an allowable budget",
-            input: "Target revenue 50,000,000 · Target ROAS 500%",
+            input: "Target revenue 50,000,000 · Target ROAS 500% (ROAS tab, reverse mode)",
             result: "Allowable ad spend 10,000,000",
             note: "This is the direction to use when planning a monthly budget: set the target ROAS from your margin first, then derive the spend it allows.",
           },
+          {
+            title: "Checking CPA for a sign-up campaign",
+            input: "Ad spend 2,000,000 · Conversions (sign-ups) 400 (CPA tab)",
+            result: "CPA 5,000",
+            note: "Each conversion cost 5,000. To gauge expected conversions from a budget ahead of time, use the reverse mode with a target CPA.",
+          },
+          {
+            title: "Checking CPC to adjust a bid",
+            input: "Ad spend 300,000 · Clicks 1,500 (CPC tab)",
+            result: "CPC 200",
+            note: "Each click cost 200. Enter a target CPC and budget to reverse-calculate the expected clicks that budget would buy.",
+          },
+          {
+            title: "Checking CPM for a brand campaign",
+            input: "Ad spend 500,000 · Impressions 2,000,000 (CPM tab)",
+            result: "CPM 250",
+            note: "That's 250 per 1,000 impressions. If you set an impression target first, use the reverse mode with a target impression count and target CPM to work out the required budget.",
+          },
+          {
+            title: "Comparing creative performance with CTR",
+            input: "Clicks 2,500 · Impressions 100,000 (CTR tab)",
+            result: "CTR 2.5%",
+            note: "That's 2.5 clicks per 100 impressions. Comparing CTR across creatives side by side shows which copy or image resonates more.",
+          },
+          {
+            title: "Using break-even ROAS to judge profitability",
+            input: "Contribution margin 25% (ROAS tab)",
+            result: "Break-even ROAS 400%",
+            note: "Break-even ROAS = 100 / contribution margin. At a 25% margin you need to clear 400% just to break even, so the 420% in the first example is barely profitable.",
+          },
         ],
         limitations: [
-          "ROAS is measured on revenue. It ignores cost of goods, shipping, payment fees and returns, so profitability decisions need contribution margin and break-even ROAS alongside it.",
-          "Attributed revenue is whatever the ad platform claims credit for. The attribution window (say, purchases within seven days of a click) can move the same campaign's ROAS substantially, and adding ROAS across channels double-counts the same orders.",
-          "Prospecting campaigns look weak when judged on the first purchase alone. If customers buy again, evaluate against lifetime value as well.",
-          "It does not strip out revenue that would have happened anyway, such as branded search. Measuring incrementality requires an experiment that turns the campaign off.",
+          "ROAS and CPA are measured on revenue and conversions. They ignore cost of goods, shipping, payment fees and returns, so profitability decisions need contribution margin and break-even ROAS alongside them.",
+          "Attributed revenue and conversions are whatever the ad platform claims credit for. The attribution window can move the same campaign's ROAS or CPA substantially, and simply adding totals across channels double-counts the same orders or conversions.",
+          "Prospecting campaigns look weak (a low ROAS, a high CPA) when judged on the first purchase alone. If customers buy again, evaluate against lifetime value as well.",
+          "The five metrics look at different stages of the funnel, so no single one judges a whole campaign. Good CPM, CTR and CPC alongside a bad CPA or ROAS usually points to the landing page or targeting instead.",
+          "None of them strip out revenue or conversions that would have happened anyway, such as branded search. Measuring incrementality requires an experiment that turns the campaign off.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "ROAS는 무엇인가요?",
+          question: "다섯 개 지표를 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "ROAS(Return on Ad Spend)는 광고 수익률로, 광고비 1원을 투자했을 때 매출이 얼마나 발생했는지를 나타냅니다. ROAS(%) = 광고 매출 ÷ 광고비 × 100으로 계산합니다. 예를 들어 광고비 100만 원으로 400만 원의 매출을 달성하면 ROAS는 400%입니다.",
+            "아니요. 상단 탭에서 ROAS·CPA·CPC·CPM·CTR 중 원하는 지표를 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 지표를 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /ad-metrics-calculator 하나입니다.",
         },
         {
           question: "ROAS와 ROI의 차이는 무엇인가요?",
@@ -5150,9 +4922,24 @@ export const TOOLS: Tool[] = [
             "ROAS는 광고비 대비 매출만 비교하는 단순 지표입니다. ROI(Return on Investment)는 광고비 외에 제조원가·운영비 등 전체 비용을 고려한 순이익 기준 지표입니다. 광고 효율만 빠르게 비교할 때는 ROAS를, 전체 사업 수익성을 볼 때는 ROI를 사용합니다.",
         },
         {
+          question: "CPA·CPC·CPM은 서로 어떻게 다른가요?",
+          answer:
+            "셋 다 '광고비 ÷ 무언가'지만 나누는 대상이 다릅니다. CPC는 클릭 수, CPM은 노출 수(1,000회 단위), CPA는 전환 수로 나눕니다. 광고 퍼널에서 노출·클릭·전환 중 어느 단계의 비용 효율을 보고 싶은지에 따라 골라 쓰면 됩니다.",
+        },
+        {
           question: "손익분기 ROAS는 어떻게 계산하나요?",
           answer:
             "손익분기 ROAS = 100 ÷ 매출총이익률(소수)로 계산합니다. 예를 들어 매출총이익률이 30%이면 손익분기 ROAS는 100 ÷ 0.3 = 333.33%입니다. 이 값 이상의 ROAS를 달성해야 광고비를 제외하고도 이익이 발생합니다.",
+        },
+        {
+          question: "탭을 바꾸면 계산 모드와 값이 초기화되나요?",
+          answer:
+            "네. 지표마다 입력 필드 구성과 기본값이 달라 탭을 바꾸면 계산 모드(A/B/C)와 입력값이 그 지표의 기본값으로 초기화됩니다. 통화 설정은 유지됩니다.",
+        },
+        {
+          question: "CTR 탭에서 클릭 수가 노출 수보다 많다는 경고가 뜨는 이유는 무엇인가요?",
+          answer:
+            "클릭 수가 노출 수를 넘는 것은 정상적인 상황이 아닙니다. 서로 다른 트래킹 도구의 중복 집계나 측정 기준(예: 고유 클릭 vs 전체 클릭) 불일치로 흔히 발생하니, 데이터 소스를 다시 확인하세요.",
         },
         {
           question: "입력한 광고비와 매출 데이터가 서버로 전송되나요?",
@@ -5162,9 +4949,9 @@ export const TOOLS: Tool[] = [
       ],
       en: [
         {
-          question: "What is ROAS?",
+          question: "Do I need to visit a different page for each of the five metrics?",
           answer:
-            "ROAS (Return on Ad Spend) measures how much revenue you earn for every dollar spent on advertising. ROAS (%) = ad revenue ÷ ad spend × 100. For example, spending $1,000 on ads and generating $4,000 in revenue gives you a ROAS of 400%.",
+            "No. Click ROAS, CPA, CPC, CPM, or CTR in the tabs above and it switches instantly on the same page. The URL reflects the current metric via a ?mode= query, but the canonical URL used for search indexing is always the single /ad-metrics-calculator.",
         },
         {
           question: "What is the difference between ROAS and ROI?",
@@ -5172,9 +4959,24 @@ export const TOOLS: Tool[] = [
             "ROAS only compares ad revenue to ad spend. ROI (Return on Investment) factors in all costs: cost of goods, operations, etc., and measures net profit. Use ROAS for a quick read on ad efficiency; use ROI for overall profitability.",
         },
         {
+          question: "How are CPA, CPC, and CPM different from each other?",
+          answer:
+            "All three are \"ad spend divided by something,\" just a different something: CPC divides by clicks, CPM by impressions (in units of 1,000), and CPA by conversions. Pick whichever matches the funnel stage, impressions, clicks, or conversions, whose cost efficiency you want to see.",
+        },
+        {
           question: "How is break-even ROAS calculated?",
           answer:
-            "Break-even ROAS = 100 ÷ gross margin (as a decimal). For example, a 30% gross margin gives a break-even ROAS of 100 ÷ 0.3 = 333.33%. You need to achieve at least this ROAS for ads to be profitable after accounting for cost of goods.",
+            "Break-even ROAS = 100 / gross margin (as a decimal). For example, a 30% gross margin gives a break-even ROAS of 100 / 0.3 = 333.33%. You need to achieve at least this ROAS for ads to be profitable after accounting for cost of goods.",
+        },
+        {
+          question: "Does switching tabs reset the calculation mode and values?",
+          answer:
+            "Yes. Each metric has its own set of fields and defaults, so switching tabs resets the calculation mode (A/B/C) and inputs to that metric's defaults. Your currency setting is kept.",
+        },
+        {
+          question: "Why does the CTR tab warn that clicks exceed impressions?",
+          answer:
+            "Clicks outnumbering impressions isn't a normal state. It usually comes from duplicate counting across tracking tools or a mismatch in measurement definitions (say, unique clicks vs. all clicks), so double-check the data source.",
         },
         {
           question: "Is my ad spend and revenue data sent to a server?",
@@ -5184,629 +4986,8 @@ export const TOOLS: Tool[] = [
       ],
     },
     og: {
-      ko: { title: "ROAS 계산기", subtitle: "광고 수익률 · 목표 매출 · 허용 광고비 역산" },
-      en: { title: "ROAS Calculator", subtitle: "Return on ad spend, target revenue and allowable budget" },
-    },
-  },
-  {
-    slug: "cpa-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPA",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPA 계산기", en: "CPA Calculator" },
-    relatedTools: ["roas-calculator", "cpc-calculator", "funnel-conversion-calculator"],
-    seo: {
-      ko: {
-        title: "CPA 계산기 | 전환당 광고비·예상 전환 수·필요 예산 계산",
-        description:
-          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPA 계산기",
-          "전환당 비용 계산",
-          "목표 CPA 계산",
-          "전환 광고비 계산",
-          "cost per acquisition calculator",
-          "cost per action calculator",
-        ],
-      },
-      en: {
-        title: "CPA Calculator | Cost Per Acquisition, Conversions & Budget",
-        description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPA calculator",
-          "cost per acquisition calculator",
-          "cost per action calculator",
-          "conversion cost calculator",
-          "target CPA calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·전환 수로 CPA 즉시 계산. 예상 전환 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 전환 수를 입력해 CPA(전환당 비용)를 즉시 계산합니다. 목표 CPA로 예상 전환 수를 역산하거나, 목표 전환 수와 CPA로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPA·예상 전환 수·필요 예산)",
-          "광고비·전환 수 또는 목표값 입력",
-          "CPA와 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPA 계산기는 광고비 ÷ 전환 수로 전환당 광고비(CPA, Cost Per Acquisition)를 계산하고, 목표 CPA와 예산으로 예상 전환 수를 역산하거나 목표 전환 수와 CPA로 필요 예산을 계산하는 도구입니다.",
-          who: "전환 성과를 추적하는 마케터, 퍼포먼스 광고를 운영하는 소상공인, 캠페인 KPI를 관리하는 PM을 위한 도구입니다.",
-          how: "CPA 계산 모드에서는 광고비와 전환 수를 입력하면 CPA를 즉시 계산합니다. 목표 CPA 역산 모드에서는 예산과 목표 CPA로 예상 전환 수를, 필요 예산 모드에서는 목표 전환 수와 CPA로 필요 예산을 계산합니다.",
-          why: "CPA는 광고 효율을 전환 기준으로 측정하는 핵심 지표입니다. 목표 CPA를 설정하고 역산하면 광고 예산을 더 정밀하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPA는 '성과 1건'의 비용",
-            body: [
-              "CPA(Cost per Acquisition)는 전환(구매·가입·문의 등) 1건을 얻는 데 든 광고비로, 광고비 ÷ 전환 수로 계산합니다. 클릭이나 노출이 아니라 실제로 원하는 행동이 일어난 건수를 기준으로 하기 때문에, 비즈니스 목표에 가장 가까운 효율 지표입니다. CPC·CTR이 좋아도 전환이 없으면 CPA는 나빠집니다.",
-              "이 계산기는 광고비와 전환 수로 CPA를 즉시 구하고, 목표 CPA에 맞춘 예상 전환 수나 필요 예산을 역산할 수 있습니다.",
-            ],
-          },
-          {
-            heading: "CPA는 고객 가치(LTV·마진)와 비교해야 한다",
-            body: [
-              "CPA 자체의 높고 낮음보다 중요한 건 고객 한 명이 주는 가치와의 관계입니다. 고객 생애 가치(LTV)나 첫 구매 마진보다 CPA가 낮아야 광고가 지속 가능합니다. 예컨대 평균 마진이 3만원인데 CPA가 4만원이면, 전환이 늘수록 손해가 커집니다.",
-              "그래서 목표 CPA는 '고객 한 명에게 쓸 수 있는 최대 금액'에서 출발해 정합니다. 목표 CPA를 정하고 필요 전환·예산을 역산하면 캠페인을 실제 수익 구조 위에서 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPA from ad spend and conversions. Reverse-calculate expected conversions or required budget.",
-        description:
-          "Enter ad spend and conversions to calculate CPA (cost per acquisition) instantly. Reverse-calculate expected conversions from a target CPA and budget, or find the required budget for a target conversion count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPA, expected conversions, or required budget)",
-          "Enter ad spend, conversions, or target values",
-          "See CPA and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPA Calculator is a tool that computes Cost Per Acquisition (ad spend ÷ conversions), reverse-calculates expected conversions from a budget and target CPA, and finds the required budget for a target number of conversions.",
-          who: "It is for marketers tracking conversion performance, small business owners running performance ads, and PMs managing campaign KPIs.",
-          how: "In CPA mode, enter ad spend and conversions to see CPA instantly. In reverse modes, enter a target CPA with a budget to get expected conversions, or a target conversion count with a CPA to get the required budget.",
-          why: "CPA measures advertising efficiency in terms of outcomes rather than clicks or impressions. Setting a target CPA lets you plan budgets around actual business goals.",
-        },
-        guide: [
-          {
-            heading: "CPA is the cost of one outcome",
-            body: [
-              "CPA (Cost per Acquisition) is the ad spend it takes to win one conversion: a purchase, sign-up, or lead: calculated as ad spend ÷ conversions. Because it's based on the action you actually want rather than clicks or impressions, it's the efficiency metric closest to your business goal. Even with a good CPC and CTR, no conversions means a bad CPA.",
-              "This calculator turns ad spend and conversions into CPA instantly, and reverse-calculates the expected conversions or budget needed to hit a target CPA.",
-            ],
-          },
-          {
-            heading: "Compare CPA against customer value (LTV, margin)",
-            body: [
-              "What matters isn't CPA on its own but its relationship to what a customer is worth. Your CPA needs to be lower than customer lifetime value (LTV) or first-purchase margin for advertising to be sustainable. If your average margin is 30 and CPA is 40, more conversions just mean bigger losses.",
-              "So a target CPA starts from 'the most you can spend to acquire one customer.' Setting that target and reverse-calculating the conversions and budget you need lets you plan the campaign on top of your real profit structure. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPA란 무엇인가요?",
-          answer:
-            "CPA(Cost Per Acquisition 또는 Cost Per Action)는 전환 1건을 달성하는 데 든 광고비를 나타냅니다. CPA = 광고비 ÷ 전환 수로 계산합니다. 전환은 구매·회원가입·신청·다운로드 등 목표로 정한 행동을 의미합니다.",
-        },
-        {
-          question: "예상 전환 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 전환 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 100만 원, 목표 CPA 30만 원이면 예상 전환 수는 floor(1,000,000 ÷ 300,000) = 3건입니다.",
-        },
-        {
-          question: "CPA와 CPC의 차이는 무엇인가요?",
-          answer:
-            "CPC(Cost Per Click)는 클릭 1번당 광고비이고, CPA(Cost Per Acquisition)는 전환 1건당 광고비입니다. CPC는 트래픽 비용을, CPA는 실제 성과(구매·신청 등) 비용을 측정합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPA?",
-          answer:
-            "CPA (Cost Per Acquisition or Cost Per Action) is the average cost of achieving one conversion. CPA = ad spend ÷ conversions. A conversion can be a purchase, sign-up, application, download: any goal action you define.",
-        },
-        {
-          question: "Why is the expected conversion count a whole number?",
-          answer:
-            "Expected conversions use floor (round down) because you can only achieve whole conversions. For example, with a $1,000 budget and $300 target CPA, expected conversions = floor(1000 ÷ 300) = 3.",
-        },
-        {
-          question: "What is the difference between CPA and CPC?",
-          answer:
-            "CPC (Cost Per Click) measures the cost of each click on your ad. CPA (Cost Per Acquisition) measures the cost of each actual conversion: a purchase, sign-up, etc. CPC tracks traffic cost; CPA tracks outcome cost.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPA 계산기", subtitle: "전환당 광고비 · 예상 전환 수 · 필요 예산 역산" },
-      en: { title: "CPA Calculator", subtitle: "Cost per acquisition, expected conversions and required budget" },
-    },
-  },
-  {
-    slug: "cpc-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPC",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPC 계산기", en: "CPC Calculator" },
-    relatedTools: ["ctr-calculator", "cpm-calculator", "cpa-calculator"],
-    seo: {
-      ko: {
-        title: "CPC 계산기 | 클릭당 광고비·예상 클릭 수·필요 예산 계산",
-        description:
-          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPC 계산기",
-          "클릭당 비용 계산",
-          "목표 CPC 계산",
-          "광고 클릭 비용",
-          "cost per click calculator",
-          "average CPC calculator",
-        ],
-      },
-      en: {
-        title: "CPC Calculator | Cost Per Click, Expected Clicks & Budget",
-        description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPC calculator",
-          "cost per click calculator",
-          "average CPC calculator",
-          "ad click cost",
-          "target CPC calculator",
-          "PPC calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·클릭 수로 CPC 즉시 계산. 예상 클릭 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 클릭 수를 입력해 CPC(클릭당 비용)를 즉시 계산합니다. 목표 CPC와 예산으로 예상 클릭 수를 역산하거나, 목표 클릭 수와 CPC로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPC·예상 클릭 수·필요 예산)",
-          "광고비·클릭 수 또는 목표값 입력",
-          "CPC와 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPC 계산기는 광고비 ÷ 클릭 수로 클릭당 광고비(CPC, Cost Per Click)를 계산하고, 목표 CPC와 예산으로 예상 클릭 수를 역산하거나 목표 클릭 수와 CPC로 필요 예산을 계산하는 도구입니다.",
-          who: "검색·디스플레이 광고를 운영하는 마케터, PPC 캠페인을 관리하는 소상공인, 클릭 기반 트래픽 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "CPC 계산 모드에서는 광고비와 클릭 수를 입력하면 CPC를 즉시 계산합니다. 역산 모드에서는 목표값을 입력하면 예상 클릭 수 또는 필요 예산을 계산합니다.",
-          why: "CPC를 파악하면 광고비 대비 트래픽 효율을 측정할 수 있습니다. 목표 CPC를 기준으로 예산과 클릭 수를 역산하면 SEM·PPC 캠페인 계획을 더 정확하게 세울 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPC는 클릭 1회의 비용",
-            body: [
-              "CPC(Cost per Click)는 광고 클릭 한 번에 든 비용으로, 광고비 ÷ 클릭 수로 계산합니다. 검색광고(SEM)와 클릭당 과금(PPC) 캠페인의 기본 단위이며, 키워드 경쟁 강도와 광고 품질점수(관련성·랜딩 경험)에 따라 오르내립니다. 같은 예산이라도 CPC가 낮으면 더 많은 방문을 살 수 있습니다.",
-              "이 계산기는 광고비와 클릭 수로 CPC를 즉시 구하고, 목표 CPC 기준의 예상 클릭 수나 필요 예산을 역산합니다.",
-            ],
-          },
-          {
-            heading: "낮은 CPC가 항상 좋은 건 아니다",
-            body: [
-              "CPC는 트래픽의 '단가'일 뿐, 그 트래픽이 전환으로 이어지는지는 별개입니다. CPC가 아무리 낮아도 방문자가 아무 행동도 하지 않으면 의미가 없고, 반대로 CPC가 다소 높아도 전환율(CVR)이 좋으면 최종 CPA는 낮아질 수 있습니다. 그래서 CPC는 CTR·CVR과 함께 봐야 합니다.",
-              "관계를 정리하면 CPC는 CPM ÷ (CTR×10)으로도 볼 수 있고, 목표 CPC × 필요 클릭 수로 예산을 잡을 수 있습니다. 목표 CPC를 정해 필요 예산·클릭을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPC from ad spend and clicks. Reverse-calculate expected clicks or required budget.",
-        description:
-          "Enter ad spend and clicks to calculate CPC (cost per click) instantly. Reverse-calculate expected clicks from a target CPC and budget, or find the required budget for a target click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPC, expected clicks, or required budget)",
-          "Enter ad spend, clicks, or target values",
-          "See CPC and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPC Calculator is a tool that computes Cost Per Click (ad spend ÷ clicks), reverse-calculates expected clicks from a budget and target CPC, and finds the required budget for a target number of clicks.",
-          who: "It is for marketers running search and display ads, small business owners managing PPC campaigns, and PMs planning click-based traffic budgets.",
-          how: "In CPC mode, enter ad spend and clicks to see CPC instantly. In reverse modes, enter a target CPC with a budget to get expected clicks, or a target click count with a CPC to get the required budget.",
-          why: "Knowing your CPC lets you measure traffic efficiency per advertising dollar. Reverse-calculating from a target CPC helps you plan SEM and PPC budgets with precision.",
-        },
-        guide: [
-          {
-            heading: "CPC is the cost of one click",
-            body: [
-              "CPC (Cost per Click) is what one ad click costs, calculated as ad spend ÷ clicks. It's the base unit of search (SEM) and pay-per-click (PPC) campaigns, rising and falling with keyword competition and quality score (relevance and landing experience). For the same budget, a lower CPC buys more visits.",
-              "This calculator turns ad spend and clicks into CPC instantly, and reverse-calculates the expected clicks or budget needed for a target CPC.",
-            ],
-          },
-          {
-            heading: "A low CPC isn't always good",
-            body: [
-              "CPC is only the 'unit price' of traffic; whether that traffic converts is a separate question. A very low CPC means nothing if visitors don't act, while a somewhat higher CPC can still yield a low final CPA if the conversion rate (CVR) is strong. That's why CPC should be read alongside CTR and CVR.",
-              "As a relationship, CPC can also be seen as CPM ÷ (CTR×10), and you can size budget as target CPC × clicks needed. Set a target CPC and reverse-calculate the budget and clicks you need. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPC란 무엇인가요?",
-          answer:
-            "CPC(Cost Per Click)는 광고 클릭 1번당 지불한 광고비를 나타냅니다. CPC = 광고비 ÷ 클릭 수로 계산합니다. Google Ads, Meta Ads 등 대부분의 퍼포먼스 광고에서 핵심 효율 지표로 사용됩니다.",
-        },
-        {
-          question: "예상 클릭 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 클릭 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPC 300원이면 예상 클릭 수는 floor(100,000 ÷ 300) = 333건입니다.",
-        },
-        {
-          question: "CPC와 CPM의 차이는 무엇인가요?",
-          answer:
-            "CPC는 클릭 1번당 광고비이고, CPM은 노출 1,000회당 광고비입니다. 클릭 기반 과금 방식에서는 CPC를, 노출 기반 과금 방식에서는 CPM을 주요 지표로 사용합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPC?",
-          answer:
-            "CPC (Cost Per Click) is the average amount you pay for each click on your ad. CPC = ad spend ÷ clicks. It is a core efficiency metric in Google Ads, Meta Ads, and most performance advertising platforms.",
-        },
-        {
-          question: "Why is the expected click count a whole number?",
-          answer:
-            "Expected clicks use floor (round down) because you can only receive whole clicks. For example, with a $100 budget and a $0.30 target CPC, expected clicks = floor(100 ÷ 0.30) = 333.",
-        },
-        {
-          question: "What is the difference between CPC and CPM?",
-          answer:
-            "CPC is cost per click; CPM is cost per 1,000 impressions. Use CPC for click-based (CPC bidding) campaigns and CPM for impression-based (CPM bidding) campaigns.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPC 계산기", subtitle: "클릭당 광고비 · 예상 클릭 수 · 필요 예산 역산" },
-      en: { title: "CPC Calculator", subtitle: "Cost per click, expected clicks and required budget" },
-    },
-  },
-  {
-    slug: "cpm-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CPM",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CPM 계산기", en: "CPM Calculator" },
-    relatedTools: ["ctr-calculator", "cpc-calculator", "ad-budget-pacing-calculator"],
-    seo: {
-      ko: {
-        title: "CPM 계산기 | 천 회 노출당 광고비·예상 노출 수·필요 예산 계산",
-        description:
-          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CPM 계산기",
-          "천 회 노출당 비용",
-          "광고 노출 비용 계산",
-          "목표 CPM 계산",
-          "cost per mille calculator",
-          "cost per thousand impressions",
-        ],
-      },
-      en: {
-        title: "CPM Calculator | Cost Per Mille, Impressions & Budget",
-        description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CPM calculator",
-          "cost per mille calculator",
-          "cost per thousand impressions",
-          "ad impression cost",
-          "target CPM calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "광고비·노출 수로 CPM 즉시 계산. 예상 노출 수·필요 예산 역산 포함.",
-        description:
-          "광고비와 노출 수를 입력해 CPM(천 회 노출당 비용)을 즉시 계산합니다. 목표 CPM과 예산으로 예상 노출 수를 역산하거나, 목표 노출 수와 CPM으로 필요 예산을 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CPM·예상 노출 수·필요 예산)",
-          "광고비·노출 수 또는 목표값 입력",
-          "CPM과 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CPM 계산기는 광고비 ÷ 노출 수 × 1,000으로 천 회 노출당 광고비(CPM, Cost Per Mille)를 계산하고, 목표 CPM과 예산으로 예상 노출 수를 역산하거나 목표 노출 수와 CPM으로 필요 예산을 계산하는 도구입니다.",
-          who: "디스플레이·영상·소셜 광고를 운영하는 마케터, 브랜드 인지도 캠페인을 집행하는 소상공인, 노출 기반 광고 예산을 계획하는 PM을 위한 도구입니다.",
-          how: "CPM 계산 모드에서는 광고비와 노출 수를 입력하면 CPM을 즉시 계산합니다. 역산 모드에서는 목표 CPM과 예산으로 예상 노출 수를, 또는 목표 노출 수와 CPM으로 필요 예산을 계산합니다.",
-          why: "CPM은 브랜드 인지도 캠페인에서 광고비 효율을 측정하는 핵심 지표입니다. 목표 CPM을 기준으로 역산하면 노출 기반 광고 예산을 더 정확하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CPM은 노출 1,000회당 비용",
-            body: [
-              "CPM(Cost per Mille)은 광고 노출 1,000회에 드는 비용으로, 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 뜻합니다. 클릭이나 전환이 아니라 '얼마나 많은 사람에게 보였는가(도달·노출)'를 기준으로 하기 때문에, 브랜드 인지도 캠페인의 효율을 가늠하는 기본 지표입니다.",
-              "이 계산기는 광고비와 노출 수로 CPM을 즉시 구하고, 목표 CPM 기준의 예상 노출 수나 필요 예산을 역산합니다.",
-            ],
-          },
-          {
-            heading: "CPM은 언제 보고, 무엇에 좌우되나",
-            body: [
-              "목표에 따라 봐야 할 지표가 다릅니다. 브랜드 인지·도달이 목적이면 CPM이, 성과가 목적이면 CPA·ROAS가 우선입니다. 같은 매체라도 타겟팅이 좁을수록, 경쟁이 치열한 시즌일수록 CPM이 올라가는 경향이 있어 매체·오디언스별로 비교하는 것이 좋습니다.",
-              "CPM은 CPC·CTR과도 연결됩니다. CPC ≈ CPM ÷ (CTR×10) 관계이므로, 같은 CPM에서 CTR이 높을수록 실질 클릭 단가는 낮아집니다. 목표 CPM으로 도달 목표별 예산을 역산해 보세요. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CPM from ad spend and impressions. Reverse-calculate expected impressions or required budget.",
-        description:
-          "Enter ad spend and impressions to calculate CPM (cost per 1,000 impressions) instantly. Reverse-calculate expected impressions from a target CPM and budget, or find the required budget for a target impression count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CPM, expected impressions, or required budget)",
-          "Enter ad spend, impressions, or target values",
-          "See CPM and related metrics instantly",
-        ],
-        aeo: {
-          what: "CPM Calculator is a tool that computes Cost Per Mille (ad spend ÷ impressions × 1,000), reverse-calculates expected impressions from a budget and target CPM, and finds the required budget for a target number of impressions.",
-          who: "It is for marketers running display, video, and social ads, small business owners running brand awareness campaigns, and PMs planning impression-based ad budgets.",
-          how: "In CPM mode, enter ad spend and impressions to see CPM instantly. In reverse modes, enter a target CPM with a budget to get expected impressions, or a target impression count with a CPM to get the required budget.",
-          why: "CPM is the standard metric for measuring cost efficiency in brand awareness campaigns. Reverse-calculating from a target CPM helps you plan impression-based budgets accurately.",
-        },
-        guide: [
-          {
-            heading: "CPM is the cost per 1,000 impressions",
-            body: [
-              "CPM (Cost per Mille) is the cost of 1,000 ad impressions, calculated as ad spend ÷ impressions × 1,000: 'mille' is Latin for thousand. Because it's based on how many people saw the ad (reach and impressions) rather than clicks or conversions, it's the go-to metric for gauging the efficiency of brand awareness campaigns.",
-              "This calculator turns ad spend and impressions into CPM instantly, and reverse-calculates the expected impressions or budget needed for a target CPM.",
-            ],
-          },
-          {
-            heading: "When to watch CPM, and what drives it",
-            body: [
-              "Different goals call for different metrics: when the aim is brand awareness and reach, CPM leads; when the aim is results, CPA and ROAS come first. Even on the same platform, CPM tends to rise as targeting narrows and during competitive seasons, so it's worth comparing across placements and audiences.",
-              "CPM also connects to CPC and CTR: since CPC ≈ CPM ÷ (CTR×10), a higher CTR at the same CPM means a lower effective cost per click. Use a target CPM to reverse-calculate budgets for each reach goal. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CPM이란 무엇인가요?",
-          answer:
-            "CPM(Cost Per Mille)은 광고 노출 1,000회당 지불한 광고비를 나타냅니다. CPM = 광고비 ÷ 노출 수 × 1,000으로 계산합니다. 'Mille'는 라틴어로 1,000을 의미합니다.",
-        },
-        {
-          question: "예상 노출 수는 왜 소수점이 아닌 정수로 표시되나요?",
-          answer:
-            "예상 노출 수는 달성 가능한 최대값이므로 floor(내림) 처리합니다. 예를 들어 예산 10만 원, 목표 CPM 500원이면 예상 노출 수는 floor(100,000 ÷ 500 × 1,000) = 200,000회입니다.",
-        },
-        {
-          question: "CPM과 CPC의 차이는 무엇인가요?",
-          answer:
-            "CPM은 노출 1,000회당 광고비이고, CPC는 클릭 1번당 광고비입니다. 브랜드 인지도·도달 중심 캠페인에는 CPM이, 트래픽·전환 중심 캠페인에는 CPC가 더 적합한 지표입니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CPM?",
-          answer:
-            "CPM (Cost Per Mille) is the average cost you pay for 1,000 ad impressions. CPM = ad spend ÷ impressions × 1,000. 'Mille' is Latin for 1,000.",
-        },
-        {
-          question: "Why is the expected impression count a whole number?",
-          answer:
-            "Expected impressions use floor (round down) because you can only serve whole impressions. For example, with a $100 budget and a $5 target CPM, expected impressions = floor(100 ÷ 5 × 1,000) = 20,000.",
-        },
-        {
-          question: "What is the difference between CPM and CPC?",
-          answer:
-            "CPM is cost per 1,000 impressions; CPC is cost per click. CPM is the standard metric for brand awareness and reach campaigns. CPC is better suited for traffic and conversion campaigns.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CPM 계산기", subtitle: "천 회 노출당 광고비 · 예상 노출 수 · 필요 예산 역산" },
-      en: { title: "CPM Calculator", subtitle: "Cost per mille, expected impressions and required budget" },
-    },
-  },
-  {
-    slug: "ctr-calculator",
-    layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
-    ico: "CTR",
-    ready: true,
-    indexable: false,
-    badge: "Marketing Calculator",
-    name: { ko: "CTR 계산기", en: "CTR Calculator" },
-    relatedTools: ["cpc-calculator", "cpm-calculator", "funnel-conversion-calculator"],
-    seo: {
-      ko: {
-        title: "CTR 계산기 | 클릭률·필요 클릭 수·필요 노출 수 계산",
-        description:
-          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        keywords: [
-          "CTR 계산기",
-          "클릭률 계산",
-          "광고 클릭률",
-          "목표 CTR 계산",
-          "click through rate calculator",
-          "CTR percentage calculator",
-        ],
-      },
-      en: {
-        title: "CTR Calculator | Click-Through Rate, Clicks & Impressions",
-        description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        keywords: [
-          "CTR calculator",
-          "click through rate calculator",
-          "CTR percentage calculator",
-          "ad click rate",
-          "target CTR calculator",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "클릭 수·노출 수로 CTR 즉시 계산. 필요 클릭 수·필요 노출 수 역산 포함.",
-        description:
-          "클릭 수와 노출 수를 입력해 CTR(클릭률)을 즉시 계산합니다. 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나, 목표 CTR과 클릭 수로 필요 노출 수를 계산할 수도 있습니다. 모든 계산은 브라우저에서만 처리됩니다.",
-        howItWorks: [
-          "계산 모드 선택(CTR·필요 클릭 수·필요 노출 수)",
-          "클릭 수·노출 수 또는 목표값 입력",
-          "CTR과 관련 수치 즉시 확인",
-        ],
-        aeo: {
-          what: "CTR 계산기는 클릭 수 ÷ 노출 수 × 100으로 클릭률(CTR, Click-Through Rate)을 계산하고, 목표 CTR과 노출 수로 필요 클릭 수를 역산하거나 목표 CTR과 클릭 수로 필요 노출 수를 계산하는 도구입니다.",
-          who: "광고·이메일·콘텐츠 성과를 분석하는 마케터, 디지털 광고를 운영하는 소상공인, 클릭률 목표를 설정하는 PM을 위한 도구입니다.",
-          how: "CTR 계산 모드에서는 클릭 수와 노출 수를 입력하면 CTR(%)을 즉시 계산합니다. 역산 모드에서는 목표 CTR을 기준으로 필요 클릭 수 또는 노출 수를 계산합니다.",
-          why: "CTR은 광고·이메일·콘텐츠의 참여도를 측정하는 핵심 지표입니다. 목표 CTR을 기준으로 역산하면 도달 목표와 클릭 목표를 더 정확하게 계획할 수 있습니다.",
-        },
-        guide: [
-          {
-            heading: "CTR은 노출 대비 클릭 비율",
-            body: [
-              "CTR(Click-Through Rate)은 노출된 광고·링크가 실제로 클릭된 비율로, 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고 배너, 검색 결과, 이메일 링크, 콘텐츠 썸네일이 사람들의 흥미를 얼마나 끌었는지를 보여주는 참여도 지표입니다. 같은 노출이라도 CTR이 높다는 건 소재와 메시지가 오디언스와 잘 맞았다는 신호입니다.",
-              "이 계산기는 클릭 수와 노출 수로 CTR을 즉시 구하고, 목표 CTR을 달성하는 데 필요한 클릭 수나 노출 수를 역산합니다.",
-            ],
-          },
-          {
-            heading: "CTR을 움직이는 것과 다른 지표와의 관계",
-            body: [
-              "CTR은 주로 소재(크리에이티브), 타겟팅, 카피, 노출 위치에 좌우됩니다. 관련성 높은 오디언스에게 매력적인 문구를 보여줄수록 올라갑니다. 다만 CTR이 높아도 랜딩 이후 전환이 약하면 최종 성과는 아쉬울 수 있어, 전환율(CVR)과 함께 봐야 합니다.",
-              "CTR은 비용 지표와도 얽혀 있습니다. 같은 CPM에서 CTR이 높으면 실질 CPC가 낮아집니다(CPC ≈ CPM ÷ (CTR×10)). 목표 CTR을 정해 필요 노출·클릭을 역산하면 도달·클릭 목표를 함께 계획할 수 있습니다. 계산은 브라우저 안에서만 이루어집니다.",
-            ],
-          },
-        ],
-      },
-      en: {
-        card: "Calculate CTR from clicks and impressions. Reverse-calculate required clicks or required impressions.",
-        description:
-          "Enter clicks and impressions to calculate CTR (click-through rate) instantly. Reverse-calculate required clicks from a target CTR and impressions, or find the required impressions for a target CTR and click count. Every calculation runs in your browser and the figures you enter are never uploaded.",
-        howItWorks: [
-          "Choose a calculation mode (CTR, required clicks, or required impressions)",
-          "Enter clicks, impressions, or target values",
-          "See CTR and related metrics instantly",
-        ],
-        aeo: {
-          what: "CTR Calculator is a tool that computes Click-Through Rate (clicks ÷ impressions × 100), reverse-calculates required clicks from a target CTR and impression count, and finds the required impressions for a target CTR and click count.",
-          who: "It is for marketers analyzing ad, email, and content performance, small business owners running digital ads, and PMs setting click-rate targets.",
-          how: "In CTR mode, enter clicks and impressions to see CTR (%) instantly. In reverse modes, enter a target CTR with impressions to get required clicks, or with clicks to get required impressions.",
-          why: "CTR measures audience engagement with your ads, emails, and content. Reverse-calculating from a target CTR lets you plan reach and click goals with precision.",
-        },
-        guide: [
-          {
-            heading: "CTR is clicks as a share of impressions",
-            body: [
-              "CTR (Click-Through Rate) is the share of impressions that turned into clicks, calculated as clicks ÷ impressions × 100. It's an engagement metric that shows how well an ad banner, search result, email link, or content thumbnail captured people's interest. For the same impressions, a higher CTR signals that the creative and message resonated with the audience.",
-              "This calculator turns clicks and impressions into CTR instantly, and reverse-calculates the clicks or impressions you'd need to hit a target CTR.",
-            ],
-          },
-          {
-            heading: "What moves CTR, and how it relates to other metrics",
-            body: [
-              "CTR is driven mostly by creative, targeting, copy, and placement: the more relevant the audience and the more compelling the wording, the higher it climbs. But a high CTR with weak post-click conversion can still disappoint, so read it alongside conversion rate (CVR).",
-              "CTR is also tied to cost metrics: at the same CPM, a higher CTR means a lower effective CPC (CPC ≈ CPM ÷ (CTR×10)). Set a target CTR and reverse-calculate the impressions and clicks you need to plan reach and click goals together. All calculation runs in your browser.",
-            ],
-          },
-        ],
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "CTR이란 무엇인가요?",
-          answer:
-            "CTR(Click-Through Rate, 클릭률)은 광고가 노출된 횟수 중 실제로 클릭된 비율을 나타냅니다. CTR(%) = 클릭 수 ÷ 노출 수 × 100으로 계산합니다. 광고·이메일·검색 결과의 참여도를 측정하는 핵심 지표입니다.",
-        },
-        {
-          question: "필요 클릭 수와 필요 노출 수는 왜 올림으로 처리되나요?",
-          answer:
-            "목표를 달성하는 데 필요한 수량은 부족하면 안 되므로 ceil(올림) 처리합니다. 예를 들어 노출 수 10,000회에서 목표 CTR 2.5%를 달성하려면 ceil(10,000 × 0.025) = 250번의 클릭이 필요합니다.",
-        },
-        {
-          question: "클릭 수가 노출 수보다 많을 수도 있나요?",
-          answer:
-            "일반적으로 클릭 수는 노출 수를 초과할 수 없습니다. 다만 리타겟팅·교차 디바이스 트래킹 등 특수한 측정 방식에서 이런 현상이 나타날 수 있습니다. 이 계산기는 계산 자체는 허용하되 경고를 표시합니다.",
-        },
-        {
-          question: "입력한 데이터가 서버로 전송되나요?",
-          answer:
-            "아니요. 모든 계산은 브라우저에서만 처리됩니다. 입력한 데이터는 어떤 서버에도 전송되거나 저장되지 않습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "What is CTR?",
-          answer:
-            "CTR (Click-Through Rate) is the percentage of ad impressions that result in a click. CTR (%) = clicks ÷ impressions × 100. It is a core metric for measuring engagement with ads, emails, and search results.",
-        },
-        {
-          question: "Why are required clicks and impressions rounded up?",
-          answer:
-            "Required quantities use ceil (round up) because you need at least that many to hit your target. For example, to achieve a 2.5% CTR on 10,000 impressions, you need ceil(10,000 × 0.025) = 250 clicks.",
-        },
-        {
-          question: "Can clicks ever exceed impressions?",
-          answer:
-            "Normally, clicks cannot exceed impressions. However, retargeting, cross-device tracking, and certain measurement setups can produce this. This calculator allows the calculation but shows a warning.",
-        },
-        {
-          question: "Is my data sent to a server?",
-          answer:
-            "No. Every calculation runs entirely in your browser. The budget and spend figures you enter are never uploaded or stored.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "CTR 계산기", subtitle: "클릭률 · 필요 클릭 수 · 필요 노출 수 역산" },
-      en: { title: "CTR Calculator", subtitle: "Click-through rate, required clicks and required impressions" },
+      ko: { title: "광고 지표 계산기", subtitle: "ROAS·CPA·CPC·CPM·CTR을 한 페이지에서 계산" },
+      en: { title: "Ad Metrics Calculator", subtitle: "ROAS, CPA, CPC, CPM and CTR in one place" },
     },
   },
   {
@@ -5816,10 +4997,10 @@ export const TOOLS: Tool[] = [
     targets: ["marketer", "pm", "small-business-owner"],
     ico: "⇢%",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Marketing Calculator",
     name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
-    relatedTools: ["ctr-calculator", "cpa-calculator", "ad-budget-pacing-calculator"],
+    relatedTools: ["ad-metrics-calculator", "ad-budget-pacing-calculator", "growth-rate-calculator"],
     seo: {
       ko: {
         title: "퍼널 전환율 계산기 | 마케팅 퍼널 분석·목표 역산",
@@ -5864,6 +5045,54 @@ export const TOOLS: Tool[] = [
           how: "퍼널 단계 이름과 각 단계 수량을 입력하면 단계별 전환율·이탈률과 전체 전환율이 즉시 계산됩니다. 목표 역산 모드에서는 최종 목표 수량과 단계별 예상 전환율을 입력하면 각 상위 단계에서 필요한 수량을 계산합니다.",
           why: "퍼널 분석으로 가장 많은 이탈이 발생하는 구간을 파악하면 개선 우선순위를 정할 수 있습니다. 목표 역산으로 필요 트래픽을 미리 계획하면 광고 예산도 더 정확하게 설정할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "전체 전환율 하나만 보면 놓치는 것",
+            body: [
+              "\"방문자의 2%가 구매로 이어진다\"는 전체 전환율은 어디를 고쳐야 할지 알려주지 않습니다. 방문 → 장바구니 → 결제 시작 → 구매 4단계 퍼널에서 전체가 2%인 이유가 방문에서 장바구니로 넘어가는 첫 단계 때문인지, 결제 시작 직전 이탈 때문인지에 따라 손봐야 할 지점이 완전히 다릅니다.",
+              "이 계산기는 인접한 두 단계 사이의 전환율·이탈률을 각각 계산해 보여주므로, 전체 숫자 하나가 아니라 어느 구간에서 사람이 가장 많이 빠져나가는지 바로 짚어낼 수 있습니다.",
+            ],
+          },
+          {
+            heading: "목표 역산: 결과에서 거꾸로 필요한 트래픽을 구하기",
+            body: [
+              "일반 모드가 '지금 수치로 전환율이 얼마인가'를 계산한다면, 목표 역산 모드는 반대 방향입니다. '이번 달 구매 100건을 만들려면 방문자가 몇 명 필요한가'처럼, 각 단계의 예상 전환율을 알고 있을 때 최종 목표에서 거슬러 올라가며 상위 단계마다 필요한 수량을 계산합니다.",
+              "이전 단계 필요 수량 = ceil(다음 단계 목표 수량 ÷ 전환율)로, 목표에 못 미치는 일이 없도록 항상 올림 처리합니다. 캠페인을 시작하기 전에 필요한 트래픽 규모를 먼저 가늠하고, 여기서 나온 방문자 수를 광고 예산 계획의 출발점으로 쓸 수 있습니다.",
+            ],
+          },
+          {
+            heading: "퍼널 프리셋과 단계 커스터마이징",
+            body: [
+              "광고·리드·커머스처럼 자주 쓰는 퍼널 구조는 프리셋으로 바로 불러올 수 있고, 단계 이름과 개수(최소 2~최대 10단계)는 자유롭게 바꿀 수 있어 실제 사업 구조에 맞춰 조정할 수 있습니다. 다음 단계 수가 이전 단계보다 많이 나오는 경우(리타겟팅 유입, 중복 이벤트 등)에는 경고를 표시하되 계산 자체는 막지 않습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "이커머스 퍼널에서 이탈 구간 찾기",
+            input: "방문 10,000 → 장바구니 2,000 → 결제시작 800 → 구매 500",
+            result: "방문→장바구니 20%, 장바구니→결제시작 40%, 결제시작→구매 62.5%, 전체 5%",
+            note: "가장 큰 이탈은 방문에서 장바구니로 넘어가는 첫 구간(80% 이탈)입니다. 결제 단계보다 상품 페이지나 첫인상 개선이 우선순위임을 알 수 있습니다.",
+          },
+          {
+            title: "이번 달 리드 100건 목표에서 필요 방문자 역산",
+            input: "목표 리드 100건, 방문→리드폼 조회 30%, 리드폼 조회→제출 25%",
+            result: "리드폼 조회 필요 334명, 방문 필요 1,113명",
+            note: "역산 모드로 캠페인 시작 전에 필요한 트래픽 규모를 먼저 파악해, 이 방문자 수를 만들려면 광고 예산이 얼마나 필요한지 역으로 계획할 수 있습니다.",
+          },
+          {
+            title: "리타겟팅 유입으로 다음 단계가 더 많아진 경우",
+            input: "1단계 방문 500 → 2단계 재방문(리타겟팅 포함) 620",
+            result: "전환율 124%, 경고 표시",
+            note: "정상적인 퍼널이라면 하위 단계로 갈수록 줄어들지만, 리타겟팅 광고로 재유입된 사용자가 섞이면 이런 역전이 나타날 수 있습니다. 계산은 그대로 진행되고 경고만 표시됩니다.",
+          },
+        ],
+        limitations: [
+          "입력한 각 단계 수치를 그대로 신뢰합니다. 서로 다른 도구(광고 플랫폼·GA4·자체 DB)에서 가져온 숫자를 섞으면 집계 기준 차이로 전환율이 왜곡될 수 있습니다.",
+          "목표 역산은 각 단계 전환율이 앞으로도 동일하게 유지된다는 가정입니다. 실제로는 트래픽 규모가 커지면 전환율이 낮아지는 경우가 많아(예: 리타겟팅 풀 소진), 역산 결과는 상한선이 아니라 참고치로 봐야 합니다.",
+          "기간 개념이 없습니다. 이번 달 100건 목표처럼 기간 안에 트래픽을 어떻게 배분할지는 계산하지 않고, 전체 필요 수량만 보여줍니다.",
+          "단계 정의(예: '리드'가 폼 제출인지 상담 신청인지)는 직접 일관되게 유지해야 합니다. 도구가 단계 이름의 의미를 검증하지는 않습니다.",
+        ],
       },
       en: {
         card: "Analyze stage-by-stage conversion and drop-off rates for your funnel, then reverse-calculate required traffic.",
@@ -5880,6 +5109,54 @@ export const TOOLS: Tool[] = [
           how: "Enter stage names and counts. The calculator instantly shows conversion rate, drop-off rate, and drop-off count for each step, plus the overall conversion rate. Switch to reverse mode, enter a final target and stage conversion rates, and it calculates how many visitors you need at every stage.",
           why: "Funnel analysis pinpoints where most visitors drop off, letting you prioritize improvements. Reverse-calculating required traffic helps you set realistic ad budgets before a campaign launches.",
         },
+        guide: [
+          {
+            heading: "What a single overall conversion rate hides",
+            body: [
+              "\"2% of visitors convert to a purchase\" doesn't tell you what to fix. In a 4-stage funnel (visit, cart, checkout start, purchase), that 2% overall figure could come from a weak first step (visit to cart) or from people abandoning right before checkout, and the fix is completely different depending on which.",
+              "This calculator computes the conversion and drop-off rate between each pair of adjacent stages, so instead of one aggregate number, you can point directly at where the most people are actually leaving.",
+            ],
+          },
+          {
+            heading: "Reverse mode: working backward from a result to required traffic",
+            body: [
+              "Where the normal mode answers \"what's my conversion rate right now,\" reverse mode runs the other direction. Given expected conversion rates at each stage, it answers something like \"how many visitors do I need to land 100 purchases this month,\" walking backward from the final target to the count needed at every stage above it.",
+              "Required count at the previous stage = ceil(next stage's target / conversion rate), always rounded up so you never fall short of the target. Use it before a campaign launches to gauge the traffic scale you'll need, and treat that visitor count as the starting point for an ad budget plan.",
+            ],
+          },
+          {
+            heading: "Funnel presets and customizing stages",
+            body: [
+              "Common funnel shapes, ad, lead, and commerce, load instantly as presets, and stage names and count (2 to 10 stages) are fully editable to match how your business actually works. If a later stage comes out higher than the one before it (retargeting inflow, duplicate events, and so on), the calculator shows a warning but still runs the calculation.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Finding the drop-off point in an e-commerce funnel",
+            input: "Visit 10,000 → Cart 2,000 → Checkout start 800 → Purchase 500",
+            result: "Visit→Cart 20%, Cart→Checkout 40%, Checkout→Purchase 62.5%, overall 5%",
+            note: "The biggest drop-off is the first step, visit to cart (80% lost). That means the product page or first impression needs attention before the checkout flow does.",
+          },
+          {
+            title: "Reverse-calculating visitors needed for 100 leads this month",
+            input: "Target 100 leads, visit→form view 30%, form view→submit 25%",
+            result: "334 form views needed, 1,113 visits needed",
+            note: "Reverse mode surfaces the traffic scale you need before a campaign starts, letting you plan an ad budget backward from that visitor count.",
+          },
+          {
+            title: "A later stage coming out higher due to retargeting inflow",
+            input: "Stage 1 visits 500 → Stage 2 return visits (including retargeting) 620",
+            result: "Conversion rate 124%, flagged with a warning",
+            note: "A normal funnel shrinks at each stage, but mixing in users who returned via a retargeting ad can invert that. The calculation still runs; it's just flagged.",
+          },
+        ],
+        limitations: [
+          "It trusts the numbers you enter at each stage as-is. Mixing figures pulled from different tools (an ad platform, GA4, an internal database) can distort the rates if their counting definitions differ.",
+          "Reverse calculation assumes each stage's conversion rate stays constant going forward. In practice, rates often drop as traffic scales up (a retargeting pool running dry, for example), so treat the result as a reference, not a hard ceiling.",
+          "There is no concept of a time period. It shows the total traffic needed, not how to spread that traffic across a period like \"this month.\"",
+          "You are responsible for keeping stage definitions consistent (whether \"lead\" means a form submission or a consultation request, for instance). The tool does not validate what a stage name actually means.",
+        ],
       },
     },
     faq: {
@@ -6204,7 +5481,7 @@ export const TOOLS: Tool[] = [
     targets: ["office-worker", "designer", "developer", "small-business-owner"],
     ico: "◲",
     ready: true,
-    indexable: false,
+    indexable: true,
     badge: "Canvas",
     name: { ko: "QR 코드 읽기", en: "QR Code Reader" },
     relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
@@ -6252,6 +5529,54 @@ export const TOOLS: Tool[] = [
           how: "붙여넣은 이미지, 업로드 파일 또는 카메라 영상을 브라우저에서 분석하고 판독된 내용을 URL과 일반 텍스트로 구분합니다.",
           why: "별도 앱을 설치하거나 이미지를 서버에 업로드하지 않고 QR 코드 내용을 확인하고 복사할 수 있습니다.",
         },
+        guide: [
+          {
+            heading: "QR 코드를 열기 전에 내용을 먼저 확인해야 하는 이유",
+            body: [
+              "스마트폰 카메라 앱은 QR을 인식하자마자 바로 링크를 열도록 유도하는 경우가 많아, 실제로 어떤 도메인으로 이동하는지 보지 못한 채 클릭하게 됩니다. 길거리 포스터나 출처가 불분명한 전단지의 QR처럼 신뢰할 수 없는 곳에서 발견한 코드는 특히 위험합니다.",
+              "이 도구는 판독한 URL과 도메인을 화면에 먼저 보여주고, 사용자가 '링크 열기' 버튼을 직접 눌러야만 새 탭이 열립니다. 의심스러운 도메인이면 열지 않고 그대로 복사만 해서 별도로 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "세 가지 입력 방법: 붙여넣기·업로드·카메라",
+            body: [
+              "이미 캡처했거나 클립보드에 복사된 QR 이미지는 Ctrl+V(Cmd+V)로 바로 붙여넣어 읽을 수 있고, 저장된 이미지 파일은 업로드로 판독합니다. 인쇄물이나 화면에 떠 있는 QR을 그 자리에서 읽어야 한다면 카메라를 켜서 실시간으로 스캔합니다. 카메라가 여러 개인 기기에서는 전면·후면 카메라를 전환할 수 있습니다.",
+              "세 방법 모두 브라우저 안에서만 이미지를 분석하며, 어떤 경우에도 이미지나 카메라 영상을 서버로 전송하지 않습니다.",
+            ],
+          },
+          {
+            heading: "URL이 아닌 QR도 읽을 수 있습니다",
+            body: [
+              "QR 코드에는 URL 말고도 Wi-Fi 접속 정보, 연락처(vCard), 일반 텍스트 같은 다양한 데이터가 담길 수 있습니다. 이 도구는 판독된 내용을 원문 그대로 보여주고 복사만 지원하며, Wi-Fi에 자동 접속하거나 연락처를 자동으로 저장하는 것 같은 동작은 하지 않습니다. 내용을 확인한 뒤 어떻게 쓸지는 사용자가 직접 판단합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "출처가 불분명한 포스터의 QR 안전하게 확인",
+            input: "길거리 포스터를 카메라로 스캔",
+            result: "판독된 도메인 표시, 자동으로 열리지 않음",
+            note: "도메인이 낯설거나 단축 URL이면 열지 않고 그대로 두거나, 텍스트를 복사해 별도로 검색해서 실제 목적지를 확인한 뒤 판단합니다.",
+          },
+          {
+            title: "스크린샷 속 QR 코드 판독",
+            input: "회의 자료 스크린샷에 포함된 QR 이미지 업로드",
+            result: "이미지 안의 QR을 찾아 링크 또는 텍스트로 판독",
+            note: "카메라로 다시 촬영할 필요 없이, 이미 찍어둔 스크린샷이나 저장된 이미지 파일을 그대로 업로드해 판독합니다.",
+          },
+          {
+            title: "Wi-Fi 공유 QR에서 비밀번호 확인",
+            input: "카페나 사무실에 붙어 있는 Wi-Fi QR 스캔",
+            result: "SSID·비밀번호가 포함된 원문 텍스트 표시",
+            note: "휴대폰의 QR 자동 연결 기능 없이도 비밀번호만 텍스트로 확인해 다른 기기에 수동으로 입력할 때 유용합니다.",
+          },
+        ],
+        limitations: [
+          "판독된 URL의 실제 안전성(악성 사이트 여부 등)은 검사하지 않습니다. 도메인과 원문을 보여줄 뿐이며, 열기 전 최종 판단은 사용자가 해야 합니다.",
+          "심하게 훼손되거나 초점이 맞지 않는 이미지, 해상도가 너무 낮은 QR은 판독에 실패할 수 있습니다. 이 경우 더 선명한 사진을 다시 촬영하거나 업로드해야 합니다.",
+          "이미지 한 장에 QR 코드가 여러 개 있으면 그중 하나만 판독될 수 있습니다. 여러 QR을 각각 확인하려면 코드별로 잘라서 따로 스캔하는 편이 안전합니다.",
+          "카메라 스캔은 HTTPS 환경과 브라우저의 카메라 권한 허용이 필요합니다. 권한을 거부했거나 다른 앱이 카메라를 점유 중이면 실행되지 않습니다.",
+        ],
       },
       en: {
         card: "Paste or upload a QR image, or scan it with your camera to view its link or text.",
@@ -6268,6 +5593,54 @@ export const TOOLS: Tool[] = [
           how: "It analyzes a pasted image, uploaded file, or camera stream in the browser and classifies the decoded result as a URL or plain text.",
           why: "It reads QR codes without requiring an installed app or uploading images to a server.",
         },
+        guide: [
+          {
+            heading: "Why you should check a QR's content before opening it",
+            body: [
+              "A phone's camera app often nudges you to open the link the instant it recognizes a QR code, so you end up tapping through without ever seeing which domain you're actually going to. A code found somewhere untrustworthy, a street poster or an unmarked flyer, is exactly where that matters most.",
+              "This tool shows the decoded URL and domain on screen first, and a new tab only opens when you press \"Open link\" yourself. If the domain looks suspicious, you can leave it unopened and just copy the text to check it separately.",
+            ],
+          },
+          {
+            heading: "Three ways in: paste, upload, or camera",
+            body: [
+              "A QR image you've already captured or copied to the clipboard reads instantly with Ctrl+V (Cmd+V); a saved image file decodes through upload. When you need to read a QR that's printed or displayed live in front of you, turn on the camera and scan it in real time. On a device with more than one camera, you can switch between front and back.",
+              "All three methods analyze the image entirely in your browser; none of them ever sends the image or camera video to a server.",
+            ],
+          },
+          {
+            heading: "It reads QR codes that aren't URLs too",
+            body: [
+              "A QR code can hold more than a URL: Wi-Fi credentials, a contact card (vCard), or plain text. This tool shows the decoded content exactly as-is and supports copying it, but it does not auto-connect to Wi-Fi or auto-save a contact. What to do with the content once you've seen it is up to you.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Safely checking a QR from an unfamiliar poster",
+            input: "Scanning a street poster with the camera",
+            result: "The decoded domain is shown; nothing opens automatically",
+            note: "If the domain looks unfamiliar or is a shortened URL, leave it unopened, or copy the text and search for it separately to confirm the real destination before deciding.",
+          },
+          {
+            title: "Decoding a QR code inside a screenshot",
+            input: "Uploading a screenshot of meeting slides that contains a QR image",
+            result: "Finds the QR within the image and decodes it as a link or text",
+            note: "No need to re-capture with a camera: upload an existing screenshot or saved image file and it decodes directly.",
+          },
+          {
+            title: "Reading a password from a Wi-Fi sharing QR",
+            input: "Scanning a Wi-Fi QR posted at a café or office",
+            result: "The raw text containing the SSID and password is shown",
+            note: "Useful for reading just the password as text and typing it into another device manually, without relying on a phone's auto-connect feature.",
+          },
+        ],
+        limitations: [
+          "It does not check whether a decoded URL is actually safe (malicious sites and so on). It only shows the domain and raw content; the final call on whether to open it is yours.",
+          "A badly damaged, out-of-focus, or very low-resolution QR code may fail to decode. Retake a clearer photo or upload a better image in that case.",
+          "If one image contains several QR codes, only one of them may get decoded. To check multiple codes, it's safer to crop and scan each one separately.",
+          "Camera scanning requires HTTPS and the browser's camera permission. It will not start if permission was denied or another application is currently using the camera.",
+        ],
       },
     },
     faq: {
@@ -6340,479 +5713,280 @@ export const TOOLS: Tool[] = [
 
   // ── Design ── PDF 도구 4종 (병합·분할·회전·페이지 삭제, 공통 탭) ──
   {
-    slug: "pdf-merge",
+    slug: "pdf-tools",
     layout: "canvas",
     cat: "design",
     targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⊞",
+    ico: "PDF",
     ready: true,
     indexable: true,
     badge: "Canvas",
-    name: { ko: "PDF 병합", en: "Merge PDF" },
-    relatedTools: ["pdf-split", "pdf-rotate", "pdf-page-delete"],
+    name: { ko: "PDF 도구", en: "PDF Tools" },
+    relatedTools: ["qr-code-generator", "qr-code-reader", "open-graph-preview"],
     seo: {
       ko: {
-        title: "PDF 병합 | 여러 PDF를 하나로 합치기",
+        title: "PDF 도구 | 병합·분할·회전·페이지 삭제",
         description:
-          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+          "탭을 전환해 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리합니다. 여러 PDF를 원하는 순서로 합치거나, 페이지·범위별로 나누거나, 90도 단위로 회전하거나, 필요 없는 페이지를 제거할 수 있습니다. 모든 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
         keywords: [
-          "PDF 병합",
-          "PDF 합치기",
-          "PDF 합치기 무료",
-          "여러 PDF 하나로",
-          "PDF 파일 합치기",
-          "온라인 PDF 병합",
+          "PDF 도구", "PDF 병합", "PDF 분할", "PDF 회전", "PDF 페이지 삭제",
+          "PDF 합치기", "PDF 나누기", "온라인 PDF 편집",
         ],
       },
       en: {
-        title: "Merge PDF | Combine PDF Files in Order",
+        title: "PDF Tools | Merge, Split, Rotate, Delete Pages",
         description:
-          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+          "Switch tabs to merge, split, rotate, or delete pages from a PDF, all on one page. Combine several PDFs in your order, split by page or range, rotate in 90-degree steps, or remove pages you don't need. Every file is processed entirely in your browser and never uploaded to a server.",
         keywords: [
-          "merge PDF",
-          "combine PDF",
-          "merge PDF files",
-          "join PDF online",
-          "PDF merger free",
-          "combine PDF files",
+          "PDF tools", "merge PDF", "split PDF", "rotate PDF", "delete PDF pages",
+          "combine PDF", "PDF editor online",
         ],
       },
     },
     content: {
       ko: {
-        card: "여러 PDF를 업로드해 원하는 순서로 정렬하고 하나의 PDF로 합칩니다.",
+        card: "PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서.",
         description:
-          "여러 PDF 파일을 업로드하고 원하는 순서로 정렬한 뒤 하나의 PDF로 합칩니다. 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않으며, 드래그 정렬·위아래 이동·개별 삭제로 병합 순서를 자유롭게 조정할 수 있습니다.",
+          "탭을 전환해 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리합니다. 여러 PDF를 원하는 순서로 합치거나, 페이지·범위별로 나누거나, 90도 단위로 회전하거나, 필요 없는 페이지를 제거할 수 있습니다. 모든 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
         howItWorks: [
-          "PDF 파일 여러 개를 업로드합니다.",
-          "드래그하거나 위아래로 이동해 병합 순서를 정합니다.",
-          "PDF 병합을 눌러 합쳐진 파일을 내려받습니다.",
+          "상단 탭에서 작업(병합·분할·회전·페이지 삭제) 선택",
+          "PDF 파일 업로드",
+          "결과를 확인하고 새 PDF로 다운로드",
         ],
         aeo: {
-          what: "PDF 병합은 여러 PDF 파일을 지정한 순서대로 하나의 PDF로 합치는 브라우저 도구입니다.",
-          who: "보고서·계약서·스캔본 등 나뉜 PDF를 한 파일로 정리해야 하는 사무직·PM·소상공인을 위한 도구입니다.",
-          how: "업로드한 PDF의 페이지를 순서대로 복사해 새 PDF를 만들며, 병합 순서는 드래그·이동·삭제로 조정합니다.",
-          why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 여러 PDF를 하나로 합칠 수 있습니다.",
+          what: "PDF 도구는 PDF 병합·분할·회전·페이지 삭제 네 가지 작업을 한 페이지에서 처리하는 통합 브라우저 도구입니다.",
+          who: "보고서·계약서·스캔본을 정리해야 하는 사무직·PM·소상공인·디자이너를 위한 도구입니다.",
+          how: "상단 탭에서 작업을 고르고 PDF를 업로드하면 브라우저 안에서 처리되어 새 PDF로 다운로드됩니다. 작업마다 업로드하는 파일 수와 조작 방식이 다릅니다.",
+          why: "설치나 로그인 없이, 파일을 서버에 올리지 않고 브라우저에서 바로 PDF를 다룰 수 있어 민감한 문서도 안심하고 처리할 수 있습니다.",
         },
         guide: [
           {
-            heading: "PDF를 합쳐야 하는 순간",
+            heading: "PDF 작업 네 가지를 한 곳에 모은 이유",
             body: [
-              "업무 문서는 조각으로 흩어지기 쉽습니다. 각자 만든 슬라이드를 모아 하나의 발표 자료로 묶거나, 여러 장을 따로 스캔한 계약서를 한 파일로 정리하거나, 견적서·명세서·증빙을 붙여 한 번에 제출해야 할 때가 그렇습니다. 파일이 여러 개로 나뉘어 있으면 받는 사람이 순서를 맞춰 열어야 하고, 이메일 첨부도 번거로워집니다.",
-              "PDF 병합은 이렇게 나뉜 PDF들을 원하는 순서대로 이어 붙여 하나의 파일로 만들어 줍니다. 파일을 업로드한 뒤 드래그하거나 위아래로 옮겨 순서를 정하고, 필요 없는 파일은 목록에서 빼면 됩니다. 목록에 보이는 위에서 아래 순서 그대로 합쳐집니다.",
+              "PDF 병합·분할·회전·페이지 삭제는 서로 다른 결과물을 만들지만, '업로드한 PDF를 브라우저 안에서 재구성해 새 PDF로 내려받는다'는 처리 방식은 같습니다. 계약서, 신분증 스캔본, 내부 보고서처럼 PDF에는 민감한 문서가 자주 담기는데, 이 네 가지 작업 모두 파일을 어떤 서버로도 전송하거나 저장하지 않고 기기 안에서만 처리합니다.",
+              "네 작업을 각각 다른 페이지로 흩어 두는 대신 탭으로 묶어, 예를 들어 스캔한 페이지 방향을 회전으로 바로잡은 뒤 필요 없는 페이지를 삭제하는 식의 연속 작업도 다시 도구를 찾아 이동할 필요 없이 처리할 수 있습니다.",
             ],
           },
           {
-            heading: "합치기 전에 순서를 확인하세요",
+            heading: "PDF 병합: 여러 파일을 순서대로 하나로",
             body: [
-              "병합에서 가장 흔한 실수는 순서입니다. 계약서 뒤에 부록이 와야 하는데 뒤바뀌거나, 표지가 중간에 끼는 식이죠. 이 도구는 병합을 실행하기 전에 파일 목록을 눈으로 보며 순서를 조정할 수 있어, 합친 뒤 다시 만드는 수고를 덜어 줍니다.",
-              "여러 파일을 한 번에 올린 경우 이름순으로 정렬해 두면 순서를 맞추기 쉽습니다. 스캔 파일이라면 파일명에 01, 02처럼 번호를 붙여 두는 습관이 병합 순서를 자동으로 정리해 줍니다.",
+              "여러 PDF 파일을 업로드하고 드래그하거나 위아래로 이동해 순서를 정하면, 목록의 위에서 아래 순서 그대로 이어 붙인 하나의 PDF를 만듭니다. 파일 1개당 100MB, 병합 총합 200MB, 최대 30개 파일까지 지원합니다.",
+              "열기 암호가 걸린 PDF는 병합할 수 없어 먼저 암호를 해제해야 하며, 북마크(목차)·양식 필드·전자서명은 병합 과정에서 유지되지 않을 수 있습니다. 페이지 순서만 이어 붙일 뿐 페이지 크기 통일이나 압축 같은 후처리는 하지 않습니다.",
             ],
           },
           {
-            heading: "문서를 업로드하지 않고 처리합니다",
+            heading: "PDF 분할: 페이지별 또는 범위별로",
             body: [
-              "계약서, 명세서, 신분증 스캔본처럼 PDF에는 민감한 문서가 담기는 경우가 많습니다. 파일을 서버에 올려 처리하는 온라인 도구를 쓰면, 그 문서가 외부 서버에 잠시라도 머물게 됩니다. Kitfolio의 PDF 병합은 모든 처리를 브라우저 안에서 수행하며, 업로드한 파일을 어떤 서버로도 전송하거나 저장하지 않습니다.",
-              "파일은 여러분의 기기를 벗어나지 않고, 병합이 끝난 결과물은 그 자리에서 바로 내려받습니다. 민감한 문서를 다룰 때도 안심할 수 있고, 인터넷이 불안정한 환경에서도 동작합니다.",
+              "PDF 1개를 업로드해 모든 페이지를 한 장씩 나누거나, 1-3, 4-7처럼 범위를 지정해 구간별로 나눕니다. PDF 1개당 최대 300페이지, 결과 최대 300개 파일까지 지원하며, 결과가 2개 이상이면 ZIP 파일로 한 번에 다운로드됩니다.",
+              "계약서에서 서명 페이지만 따로 저장하거나, 긴 보고서를 장별로 쪼갤 때 씁니다. 범위는 쉼표와 하이픈으로 입력하며 페이지는 1부터 시작하고 총 페이지 수를 넘을 수 없습니다.",
+            ],
+          },
+          {
+            heading: "PDF 회전: 90도 단위로 방향 바로잡기",
+            body: [
+              "PDF 전체 또는 썸네일에서 선택한 페이지만 왼쪽 90도·오른쪽 90도·180도로 회전합니다. 페이지 콘텐츠를 이미지로 다시 그리지 않고 회전 속성만 바꾸므로 원본 화질이 그대로 유지됩니다.",
+              "가로로 스캔되었거나 방향이 뒤집힌 페이지를 바로잡을 때 씁니다. 90도 단위 회전만 지원하며, 스캔이 살짝 기울어진 경우의 미세 각도 보정(기울기 보정)은 지원하지 않습니다.",
+            ],
+          },
+          {
+            heading: "PDF 페이지 삭제: 필요 없는 페이지만 제거",
+            body: [
+              "썸네일에서 삭제할 페이지를 선택(개별 클릭·전체 선택·선택 반전·범위 입력)하면 남는 페이지 수가 바로 표시되고, 선택한 페이지를 뺀 나머지로 새 PDF를 만듭니다. 최소 1페이지는 남아야 실행할 수 있습니다.",
+              "빈 페이지, 표지, 중복 스캔 페이지처럼 최종본에 필요 없는 페이지를 골라낼 때 씁니다. 실행 취소와 전체 원상 복구를 지원해 삭제 전 선택을 다시 조정할 수 있습니다.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "견적서·계약서·부속서류를 한 파일로",
-            input: "PDF 3개 업로드 후 드래그로 순서 정렬",
+            input: "PDF 3개 업로드 후 드래그로 순서 정렬 (병합 탭)",
             result: "지정한 순서대로 이어 붙인 단일 PDF",
             note: "업로드 순서가 아니라 목록에서 지정한 순서로 합쳐집니다. 파일명이 1, 2, 10처럼 되어 있으면 이름순 정렬이 의도와 다를 수 있으니 병합 전 순서를 눈으로 확인하세요.",
           },
           {
             title: "스캔한 서류 여러 장을 하나로 제출",
-            input: "페이지별로 나뉘어 스캔된 PDF 여러 개",
+            input: "페이지별로 나뉘어 스캔된 PDF 여러 개 (병합 탭)",
             result: "한 번에 제출할 수 있는 단일 PDF",
             note: "온라인 제출 서식이 파일 1개만 허용할 때 쓰는 방식입니다. 파일이 서버로 올라가지 않으므로 신분증·계약서처럼 민감한 서류도 그대로 다룰 수 있습니다.",
           },
           {
-            title: "페이지 크기가 다른 문서 합치기",
-            input: "A4 문서와 가로 방향 슬라이드 PDF",
-            result: "각 페이지가 원래 크기와 방향을 유지한 채로 이어짐",
-            note: "PDF는 페이지마다 다른 크기를 가질 수 있어 강제로 통일되지 않습니다. 인쇄할 계획이라면 병합 전에 크기를 맞추는 편이 낫습니다.",
+            title: "긴 계약서에서 서명 페이지만 따로 저장",
+            input: "12페이지 PDF에서 범위 10-12 지정 (분할 탭)",
+            result: "10~12페이지만 담은 별도 PDF",
+            note: "전체를 다시 스캔하거나 인쇄할 필요 없이, 필요한 구간만 빠르게 추려 서명본만 따로 보관하거나 공유할 때 씁니다.",
+          },
+          {
+            title: "가로로 스캔된 페이지 방향 바로잡기",
+            input: "5페이지 중 2, 4페이지가 옆으로 누워 스캔됨 (회전 탭)",
+            result: "2, 4페이지만 오른쪽 90도 회전, 나머지는 그대로",
+            note: "선택한 페이지에만 회전이 적용되므로 문서 전체를 다시 정렬할 필요가 없습니다.",
+          },
+          {
+            title: "불필요한 표지·빈 페이지 제거",
+            input: "10페이지 중 표지 1페이지·빈 페이지 1페이지 선택 (페이지 삭제 탭)",
+            result: "8페이지로 줄어든 새 PDF",
+            note: "스캔 과정에서 섞여 들어간 빈 페이지나 사내용 표지처럼 최종 배포본에는 필요 없는 페이지를 정리할 때 씁니다.",
           },
         ],
         limitations: [
-          "파일 1개당 100MB, 병합 총합 200MB, 최대 30개 파일까지 처리합니다. 브라우저 메모리 안에서 처리하므로 저사양 기기에서는 이 한도보다 낮은 용량에서도 실패할 수 있습니다.",
-          "열기 암호가 걸린 PDF는 병합할 수 없습니다. 암호를 먼저 해제한 뒤 업로드하세요.",
-          "북마크(목차)·양식 필드·전자서명은 병합 과정에서 유지되지 않을 수 있습니다. 전자서명은 문서가 변경되면 무효가 되는 것이 정상 동작입니다.",
-          "페이지 순서만 이어 붙입니다. 페이지 크기 통일, 여백 조정, 압축 같은 후처리는 하지 않습니다.",
+          "병합은 파일 1개당 100MB, 총합 200MB, 최대 30개까지 지원합니다. 분할·회전·페이지 삭제는 PDF 1개당 최대 300페이지까지 지원합니다. 브라우저 메모리 안에서 처리하므로 저사양 기기에서는 이 한도보다 낮은 용량에서도 실패할 수 있습니다.",
+          "열기 암호가 걸린 PDF는 네 작업 모두 처리할 수 없습니다. 암호를 먼저 해제한 뒤 업로드하세요.",
+          "병합 과정에서 북마크(목차)·양식 필드·전자서명은 유지되지 않을 수 있습니다. 전자서명은 문서가 변경되면 무효가 되는 것이 정상 동작입니다.",
+          "회전은 90도 단위(왼쪽·오른쪽 90도, 180도)만 지원하며, 스캔이 살짝 기울어진 경우의 미세 각도 보정은 제공하지 않습니다.",
+          "페이지 삭제는 최소 1페이지가 남아야 실행됩니다. 네 작업 모두 페이지 내용 자체를 편집하거나 텍스트를 수정하는 기능은 제공하지 않습니다.",
         ],
       },
       en: {
-        card: "Upload several PDFs, arrange the order, and combine them into one PDF.",
+        card: "Merge, split, rotate, or delete PDF pages by tab. Everything runs in your browser.",
         description:
-          "Upload multiple PDF files, arrange them in any order, and combine them into a single PDF. Everything runs in your browser and no file is uploaded to a server. Reorder by drag-and-drop, move files up or down, or remove them before merging.",
+          "Switch tabs to merge, split, rotate, or delete pages from a PDF, all on one page. Combine several PDFs in your order, split by page or range, rotate in 90-degree steps, or remove pages you don't need. Every file is processed entirely in your browser and never uploaded to a server.",
         howItWorks: [
-          "Upload multiple PDF files.",
-          "Set the merge order by dragging or moving files up and down.",
-          "Press Merge PDF and download the combined file.",
+          "Pick a task from the tabs (merge, split, rotate, delete pages)",
+          "Upload your PDF file(s)",
+          "Review the result and download the new PDF",
         ],
         aeo: {
-          what: "Merge PDF is a browser tool that combines several PDF files into a single PDF in the order you choose.",
-          who: "It is for office workers, PMs, and small business owners who need to combine split reports, contracts, or scans into one file.",
-          how: "It copies the pages of each uploaded PDF in order into a new PDF, with the order controlled by drag, move, and remove actions.",
-          why: "It combines multiple PDFs into one directly in the browser, with no install, no login, and no file upload to a server.",
+          what: "PDF Tools is a unified browser tool that handles four PDF tasks on one page: merge, split, rotate, and delete pages.",
+          who: "It is for office workers, PMs, small business owners, and designers who need to clean up reports, contracts, or scans.",
+          how: "Pick a task from the tabs, upload your PDF, and it's processed in your browser and downloads as a new PDF. Each task takes a different number of files and works differently.",
+          why: "No install, no login, and no file upload to a server, so even sensitive documents can be handled safely, right in your browser.",
         },
         guide: [
           {
-            heading: "When you need to merge PDFs",
+            heading: "Why four PDF tasks live on one page",
             body: [
-              "Work documents tend to arrive in pieces. Slides each person built need to be joined into one deck; a contract scanned a page at a time needs to become a single file; a quote, an invoice, and receipts have to be submitted together. When files stay separate, the recipient has to open them in the right order, and email attachments get unwieldy.",
-              "Merge PDF stitches these separate PDFs together into one file in the order you choose. Upload the files, set the order by dragging or moving them up and down, and drop any you don't need from the list. They combine top to bottom, exactly as the list shows.",
+              "Merge, split, rotate, and delete pages produce different results, but they share the same processing model: reconstruct the uploaded PDF inside the browser and download a new one. PDFs often carry sensitive material: contracts, ID scans, internal reports: and all four tasks process files on-device, never transmitting or storing them on a server.",
+              "Grouping the four under tabs instead of scattering them across separate pages means a sequence like rotating a scanned page upright and then deleting pages you don't need can happen without hunting down a different tool in between.",
             ],
           },
           {
-            heading: "Check the order before you merge",
+            heading: "Merge: combine several files in your order",
             body: [
-              "The most common merging mistake is order: an appendix ending up ahead of the contract it belongs to, or a cover page landing in the middle. This tool lets you review and rearrange the file list before you run the merge, saving you from rebuilding the combined file afterward.",
-              "If you uploaded many files at once, sorting them by name makes the order easy to set. For scans, getting into the habit of numbering filenames (01, 02, and so on) lines up the merge order automatically.",
+              "Upload several PDF files and set the order by dragging or moving them up and down; they combine top to bottom exactly as the list shows. Limits are 100MB per file, 200MB combined, and up to 30 files.",
+              "Password-protected PDFs cannot be merged, so remove the open password first. Bookmarks, form fields, and digital signatures may not survive the merge. It concatenates pages only, with no page-size normalization or compression.",
             ],
           },
           {
-            heading: "Nothing gets uploaded",
+            heading: "Split: by every page or by range",
             body: [
-              "PDFs often hold sensitive material: contracts, statements, ID scans. Online tools that process files by uploading them leave your document sitting on an outside server, if only briefly. Kitfolio's Merge PDF does all of its work inside your browser and never transmits or stores the files you add.",
-              "Your files never leave your device, and the merged result downloads right there. That makes it safe for sensitive documents and keeps it working even on an unreliable connection.",
+              "Upload one PDF and either split it into every single page or into custom ranges like 1-3, 4-7. Limits are 300 pages per PDF and 300 result files; when there is more than one result, they download together as a ZIP.",
+              "Use it to pull out just the signature page of a contract, or to break a long report into chapters. Ranges use commas and hyphens; pages start at 1 and cannot exceed the total page count.",
+            ],
+          },
+          {
+            heading: "Rotate: fix orientation in 90-degree steps",
+            body: [
+              "Rotate an entire PDF or only the pages you select from thumbnails, left 90, right 90, or 180 degrees. Only the rotation attribute changes, not a re-render of the content, so original quality is preserved.",
+              "Use it to fix sideways scans or upside-down pages. It supports 90-degree steps only; it does not correct a slight skew from an imperfectly aligned scan.",
+            ],
+          },
+          {
+            heading: "Delete pages: remove only what you don't need",
+            body: [
+              "Select pages to remove from thumbnails (individually, select all, invert, or by range), see the remaining page count update instantly, and build a new PDF from what's left. At least one page must remain to run it.",
+              "Use it to clean up blank pages, cover sheets, or duplicate scans before sharing a final version. Undo and Reset all let you adjust the selection before deleting.",
             ],
           },
         ],
-              examples: [
+        examples: [
           {
             title: "Combining a quote, a contract and appendices",
-            input: "Upload three PDFs, then drag to set the order",
+            input: "Upload three PDFs, then drag to set the order (Merge tab)",
             result: "A single PDF joined in the order you specified",
             note: "Files merge in list order, not upload order. Names like 1, 2 and 10 sort alphabetically in ways you may not expect, so check the order visually before merging.",
           },
           {
             title: "Submitting several scanned pages as one file",
-            input: "Multiple PDFs scanned one page at a time",
+            input: "Multiple PDFs scanned one page at a time (Merge tab)",
             result: "A single PDF ready for submission",
             note: "This is what you need when an online form accepts only one attachment. Your files are never uploaded to a server, so ID documents and contracts can be handled as-is.",
           },
           {
-            title: "Merging documents with different page sizes",
-            input: "An A4 document and a landscape slide deck",
-            result: "Each page keeps its original size and orientation in the combined file",
-            note: "PDF allows per-page dimensions, so nothing is forced to match. If the result is going to print, normalize the sizes before merging.",
+            title: "Saving just the signature page of a long contract",
+            input: "A 12-page PDF with range 10-12 (Split tab)",
+            result: "A separate PDF containing only pages 10-12",
+            note: "No need to rescan or reprint the whole document: pull out just the section you need to file or share the signed page on its own.",
+          },
+          {
+            title: "Fixing pages that were scanned sideways",
+            input: "Pages 2 and 4 of a 5-page PDF came out sideways (Rotate tab)",
+            result: "Pages 2 and 4 rotated 90° right; the rest untouched",
+            note: "Rotation only applies to the pages you select, so you don't have to realign the whole document.",
+          },
+          {
+            title: "Removing an unneeded cover sheet and a blank page",
+            input: "A cover sheet and one blank page selected out of 10 (Delete Pages tab)",
+            result: "A new 8-page PDF",
+            note: "Use it to clean up blank pages that snuck in during scanning, or internal cover sheets that shouldn't be in the final distributed version.",
           },
         ],
         limitations: [
-          "Limits are 100MB per file, 200MB combined, and 30 files. Processing happens in browser memory, so lower-spec devices can fail below those numbers.",
-          "Password-protected PDFs cannot be merged. Remove the open password before uploading.",
-          "Bookmarks, form fields and digital signatures may not survive the merge. A digital signature becoming invalid once the document changes is expected behavior, not a bug.",
-          "It concatenates pages only. There is no page-size normalization, margin adjustment or compression.",
+          "Merge supports up to 100MB per file, 200MB combined, and 30 files. Split, rotate, and delete pages support up to 300 pages per PDF. Processing happens in browser memory, so lower-spec devices can fail below those numbers.",
+          "Password-protected PDFs cannot be processed by any of the four tasks. Remove the password before uploading.",
+          "Bookmarks, form fields, and digital signatures may not survive a merge. A digital signature becoming invalid once the document changes is expected behavior, not a bug.",
+          "Rotation supports 90-degree steps only (left, right, 180); it does not correct a slight skew from an imperfectly aligned scan.",
+          "Deleting pages requires at least one page to remain. None of the four tasks edit page content or text directly.",
         ],
       },
     },
     faq: {
       ko: [
         {
-          question: "업로드한 PDF 파일이 서버로 전송되나요?",
+          question: "네 가지 작업을 각각 다른 페이지에서 찾아야 하나요?",
           answer:
-            "아니요. 병합은 사용자의 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
+            "아니요. 상단 탭에서 병합·분할·회전·페이지 삭제 중 원하는 작업을 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 작업을 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /pdf-tools 하나입니다.",
         },
         {
-          question: "병합 순서를 어떻게 바꾸나요?",
+          question: "업로드한 PDF가 서버로 전송되나요?",
           answer:
-            "파일 카드를 드래그하거나 위·아래 이동 버튼으로 순서를 바꿀 수 있습니다. 목록의 위에서 아래 순서대로 병합됩니다.",
+            "아니요. 병합·분할·회전·페이지 삭제 모두 브라우저 안에서만 처리되며, 업로드한 파일은 어떤 서버로도 전송되거나 저장되지 않습니다.",
         },
         {
-          question: "몇 개의 파일까지 합칠 수 있나요?",
+          question: "탭을 바꾸면 업로드했던 파일이 사라지나요?",
           answer:
-            "최대 30개 파일, 총합 200MB, 파일당 100MB까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
+            "네. 각 작업은 파일 상태를 독립적으로 관리하므로, 예를 들어 회전 탭에서 업로드한 파일은 분할 탭으로 넘어가면 유지되지 않습니다. 작업을 마친 뒤 다음 작업으로 넘어가려면 결과를 다운로드한 파일을 다시 업로드하세요.",
         },
         {
-          question: "암호가 걸린 PDF도 합칠 수 있나요?",
+          question: "암호가 걸린 PDF도 처리할 수 있나요?",
           answer:
-            "아니요. 암호로 보호된 PDF는 처리할 수 없습니다. 암호를 해제한 뒤 다시 시도해 주세요.",
+            "아니요. 네 작업 모두 열기 암호가 걸린 PDF는 처리할 수 없습니다. 암호를 해제한 뒤 다시 시도해 주세요.",
         },
         {
-          question: "원본 파일이 바뀌나요?",
-          answer:
-            "아니요. 원본은 변경되지 않으며 병합 결과는 새 PDF 파일로 다운로드됩니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Are my uploaded PDF files sent to a server?",
-          answer:
-            "No. Merging happens entirely in your browser. Files are never uploaded or stored on a server.",
-        },
-        {
-          question: "How do I change the merge order?",
-          answer:
-            "Drag a file card or use the up and down buttons. Files are merged from top to bottom of the list.",
-        },
-        {
-          question: "How many files can I combine?",
-          answer:
-            "Up to 30 files, 200MB in total, and 100MB per file. Depending on browser memory, it may fail even below these limits.",
-        },
-        {
-          question: "Can I merge password-protected PDFs?",
-          answer:
-            "No. Encrypted PDFs cannot be processed. Remove the password first and try again.",
-        },
-        {
-          question: "Does merging change my original files?",
-          answer:
-            "No. Originals are left untouched; the merged result downloads as a new PDF file.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 병합", subtitle: "여러 PDF를 원하는 순서로 하나로 합치기" },
-      en: { title: "Merge PDF", subtitle: "Combine several PDFs into one, in your order" },
-    },
-  },
-
-  {
-    slug: "pdf-split",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⊟",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 분할", en: "Split PDF" },
-    relatedTools: ["pdf-merge", "pdf-page-delete", "pdf-rotate"],
-    seo: {
-      ko: {
-        title: "PDF 분할 | 페이지·범위별로 PDF 나누기",
-        description:
-          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
-        keywords: [
-          "PDF 분할",
-          "PDF 나누기",
-          "PDF 페이지 분할",
-          "PDF 범위 분할",
-          "PDF 쪼개기",
-          "온라인 PDF 분할",
-        ],
-      },
-      en: {
-        title: "Split PDF | Split by Page or Page Range",
-        description:
-          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
-        keywords: [
-          "split PDF",
-          "split PDF pages",
-          "split PDF by range",
-          "separate PDF pages",
-          "extract PDF pages",
-          "PDF splitter free",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "PDF를 모든 페이지 또는 지정한 범위별로 나눠 새 PDF로 만듭니다.",
-        description:
-          "하나의 PDF를 모든 페이지로 나누거나 1-3, 4-7 같은 범위별로 나눠 별도 PDF로 만듭니다. 파일은 브라우저 안에서만 처리되며, 결과가 여러 개면 ZIP으로 한 번에 내려받을 수 있습니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "페이지별 분할 또는 범위(예: 1-3, 4-7)를 선택합니다.",
-          "PDF 분할을 눌러 결과 파일 또는 ZIP을 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 분할은 하나의 PDF를 페이지별 또는 지정한 범위별로 여러 개의 PDF로 나누는 브라우저 도구입니다.",
-          who: "긴 PDF에서 특정 구간만 따로 저장하거나 페이지를 개별 파일로 분리해야 하는 사용자를 위한 도구입니다.",
-          how: "선택한 페이지 또는 범위를 각각 새 PDF로 추출하며, 결과가 2개 이상이면 ZIP으로 묶어 제공합니다.",
-          why: "설치나 업로드 없이 브라우저에서 바로 원하는 페이지 구간을 별도 PDF로 나눌 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Split a PDF into every page or into custom page ranges as new PDFs.",
-        description:
-          "Split one PDF into every single page, or into custom ranges like 1-3, 4-7. Each part becomes its own PDF. Everything runs in your browser, and when there are multiple results they download together as a ZIP.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Choose split-every-page or enter ranges like 1-3, 4-7.",
-          "Press Split PDF and download the files or a ZIP.",
-        ],
-        aeo: {
-          what: "Split PDF is a browser tool that divides one PDF into several PDFs by page or by page range.",
-          who: "It is for people who need to save specific sections of a long PDF or separate its pages into individual files.",
-          how: "It extracts each selected page or range into its own new PDF, bundling the results into a ZIP when there is more than one.",
-          why: "It splits a PDF into the sections you want right in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 분할은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "페이지 범위는 어떻게 입력하나요?",
-          answer:
-            "쉼표와 하이픈을 사용해 1-3, 4-7, 8 처럼 입력합니다. 페이지는 1부터 시작하며 총 페이지 수를 넘을 수 없습니다.",
-        },
-        {
-          question: "결과 파일은 어떻게 받나요?",
-          answer:
-            "결과가 1개면 PDF로 바로 다운로드되고, 2개 이상이면 kitfolio-split-pdf.zip 파일로 묶여 다운로드됩니다.",
-        },
-        {
-          question: "페이지별 분할은 무엇인가요?",
-          answer:
-            "모든 페이지를 각각 한 페이지짜리 PDF로 만드는 방식입니다. 예를 들어 10페이지 PDF는 10개의 PDF로 나뉩니다.",
-        },
-        {
-          question: "몇 페이지까지 분할할 수 있나요?",
-          answer:
-            "PDF 1개당 최대 300페이지, 결과 최대 300개 파일까지 지원합니다. 브라우저 메모리에 따라 제한 이하에서도 실패할 수 있습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Is my PDF sent to a server?",
-          answer:
-            "No. Splitting happens entirely in your browser. The file is never uploaded or stored on a server.",
-        },
-        {
-          question: "How do I enter page ranges?",
-          answer:
-            "Use commas and hyphens, for example 1-3, 4-7, 8. Pages start at 1 and cannot exceed the total page count.",
-        },
-        {
-          question: "How do I receive the result files?",
-          answer:
-            "A single result downloads directly as a PDF. Multiple results are bundled into kitfolio-split-pdf.zip.",
-        },
-        {
-          question: "What does splitting every page do?",
-          answer:
-            "It turns each page into its own single-page PDF. A 10-page PDF, for example, becomes 10 separate PDFs.",
-        },
-        {
-          question: "How many pages can I split?",
-          answer:
-            "Up to 300 pages per PDF and up to 300 result files. Depending on browser memory, it may fail even below these limits.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 분할", subtitle: "PDF를 페이지·범위별로 나누기" },
-      en: { title: "Split PDF", subtitle: "Split a PDF by page or by page range" },
-    },
-  },
-
-  {
-    slug: "pdf-rotate",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⟳",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 회전", en: "Rotate PDF" },
-    relatedTools: ["pdf-merge", "pdf-split", "pdf-page-delete"],
-    seo: {
-      ko: {
-        title: "PDF 회전 | 전체·선택 페이지 90도 회전",
-        description:
-          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
-        keywords: [
-          "PDF 회전",
-          "PDF 페이지 회전",
-          "PDF 돌리기",
-          "PDF 90도 회전",
-          "PDF 방향 변경",
-          "온라인 PDF 회전",
-        ],
-      },
-      en: {
-        title: "Rotate PDF | Rotate All or Selected Pages",
-        description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
-        keywords: [
-          "rotate PDF",
-          "rotate PDF pages",
-          "turn PDF pages",
-          "rotate PDF 90 degrees",
-          "change PDF orientation",
-          "rotate PDF online",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "PDF 전체 또는 선택한 페이지만 90도 단위로 회전해 새 PDF로 저장합니다.",
-        description:
-          "PDF 전체 또는 선택한 페이지만 왼쪽·오른쪽 90도, 180도로 회전합니다. 페이지를 이미지로 변환하지 않고 회전 속성만 바꿔 원본 품질을 유지하며, 파일은 브라우저 안에서만 처리됩니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "회전할 페이지를 선택하거나 전체를 대상으로 방향을 정합니다.",
-          "회전된 PDF 저장을 눌러 결과를 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 회전은 PDF 전체 또는 선택한 페이지를 90도 단위로 회전하는 브라우저 도구입니다.",
-          who: "가로로 스캔되었거나 방향이 뒤집힌 페이지를 바로잡아야 하는 사용자를 위한 도구입니다.",
-          how: "페이지 콘텐츠를 이미지로 변환하지 않고 PDF 페이지의 회전 속성만 변경해 원본 품질을 유지합니다.",
-          why: "설치나 업로드 없이 브라우저에서 원하는 페이지의 방향만 손쉽게 바로잡을 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Rotate an entire PDF or only selected pages by 90 degrees and save a new PDF.",
-        description:
-          "Rotate an entire PDF or only selected pages left, right, or 180 degrees. Pages are not converted to images: only the rotation attribute changes, so quality is preserved. Everything runs in your browser.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Select the pages to rotate, or target all pages, and pick a direction.",
-          "Press Save rotated PDF and download the result.",
-        ],
-        aeo: {
-          what: "Rotate PDF is a browser tool that rotates an entire PDF or selected pages in 90-degree steps.",
-          who: "It is for people who need to fix sideways scans or upside-down pages in a PDF.",
-          how: "It changes only the rotation attribute of each PDF page instead of converting content to images, so original quality is preserved.",
-          why: "It fixes the orientation of the pages you choose directly in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 회전은 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "회전하면 화질이 떨어지나요?",
+          question: "회전은 화질에 영향을 주나요?",
           answer:
             "아니요. 페이지를 이미지로 다시 그리지 않고 회전 속성만 바꾸기 때문에 원본 품질이 그대로 유지됩니다.",
         },
         {
-          question: "일부 페이지만 회전할 수 있나요?",
+          question: "분할 결과는 어떻게 받나요?",
           answer:
-            "네. 썸네일에서 페이지를 클릭해 선택하거나 범위로 선택한 뒤 회전할 수 있습니다. 선택이 없으면 전체 페이지에 적용됩니다.",
+            "결과가 1개면 PDF로 바로 다운로드되고, 2개 이상이면 ZIP 파일로 묶여 다운로드됩니다.",
         },
         {
-          question: "임의 각도로 회전할 수 있나요?",
+          question: "페이지 삭제에서 모든 페이지를 삭제할 수 있나요?",
           answer:
-            "아니요. 이 도구는 90도 단위(왼쪽 90도·오른쪽 90도·180도) 회전만 지원합니다. 기울기 보정은 제공하지 않습니다.",
-        },
-        {
-          question: "회전을 되돌릴 수 있나요?",
-          answer:
-            "네. 선택 원상 복구 또는 전체 원상 복구로 저장 전에 회전 상태를 초기화할 수 있으며, 원본 파일은 변경되지 않습니다.",
+            "아니요. 최소 1페이지는 남아야 합니다. 남는 페이지가 없으면 실행이 차단됩니다.",
         },
       ],
       en: [
         {
-          question: "Is my PDF sent to a server?",
+          question: "Do I need to visit a different page for each of the four tasks?",
           answer:
-            "No. Rotation happens entirely in your browser. The file is never uploaded or stored on a server.",
+            "No. Click Merge, Split, Rotate, or Delete Pages in the tabs above and it switches instantly on the same page. The URL reflects the current task via a ?mode= query, but the canonical URL used for search indexing is always the single /pdf-tools.",
+        },
+        {
+          question: "Are my uploaded PDFs sent to a server?",
+          answer:
+            "No. Merge, split, rotate, and delete pages all run entirely in your browser. Uploaded files are never transmitted or stored on a server.",
+        },
+        {
+          question: "Does switching tabs clear the file I uploaded?",
+          answer:
+            "Yes. Each task manages its own file state independently, so a file uploaded on the Rotate tab, for example, is not carried over to the Split tab. To chain tasks, download the result of one and upload it again for the next.",
+        },
+        {
+          question: "Can any of these handle password-protected PDFs?",
+          answer:
+            "No. None of the four tasks can process a PDF with an open password. Remove the password and try again.",
         },
         {
           question: "Does rotating reduce quality?",
@@ -6820,160 +5994,20 @@ export const TOOLS: Tool[] = [
             "No. Pages are not re-rendered as images; only the rotation attribute changes, so original quality is preserved.",
         },
         {
-          question: "Can I rotate only some pages?",
+          question: "How do I receive the split result files?",
           answer:
-            "Yes. Click page thumbnails to select them, or select by range, then rotate. With no selection, rotation applies to all pages.",
-        },
-        {
-          question: "Can I rotate by an arbitrary angle?",
-          answer:
-            "No. This tool rotates in 90-degree steps only (left 90, right 90, 180). It does not correct skew.",
-        },
-        {
-          question: "Can I undo a rotation?",
-          answer:
-            "Yes. Use Reset selected or Reset all to clear rotation before saving. The original file is never changed.",
-        },
-      ],
-    },
-    og: {
-      ko: { title: "PDF 회전", subtitle: "전체 또는 선택 페이지를 90도 단위로 회전" },
-      en: { title: "Rotate PDF", subtitle: "Rotate all or selected pages in 90° steps" },
-    },
-  },
-
-  {
-    slug: "pdf-page-delete",
-    layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
-    ico: "⌦",
-    ready: true,
-    indexable: false,
-    badge: "Canvas",
-    name: { ko: "PDF 페이지 삭제", en: "Delete PDF Pages" },
-    relatedTools: ["pdf-split", "pdf-merge", "pdf-rotate"],
-    seo: {
-      ko: {
-        title: "PDF 페이지 삭제 | 필요 없는 페이지 제거",
-        description:
-          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
-        keywords: [
-          "PDF 페이지 삭제",
-          "PDF 페이지 제거",
-          "PDF 특정 페이지 삭제",
-          "PDF 페이지 지우기",
-          "PDF 페이지 빼기",
-          "온라인 PDF 페이지 삭제",
-        ],
-      },
-      en: {
-        title: "Delete PDF Pages | Remove Unwanted Pages",
-        description:
-          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
-        keywords: [
-          "delete PDF pages",
-          "remove PDF pages",
-          "delete page from PDF",
-          "remove pages from PDF",
-          "PDF page remover",
-          "delete PDF pages online",
-        ],
-      },
-    },
-    content: {
-      ko: {
-        card: "필요 없는 페이지를 골라 제거한 새 PDF를 만듭니다.",
-        description:
-          "PDF에서 필요 없는 페이지를 선택해 제거한 새 PDF를 만듭니다. 썸네일에서 삭제할 페이지를 고르면 남는 페이지 수를 바로 확인할 수 있고, 파일은 브라우저 안에서만 처리되어 서버로 전송되지 않습니다.",
-        howItWorks: [
-          "PDF 파일 하나를 업로드합니다.",
-          "썸네일에서 삭제할 페이지를 선택합니다.",
-          "선택 페이지 삭제를 눌러 남은 페이지로 만든 PDF를 내려받습니다.",
-        ],
-        aeo: {
-          what: "PDF 페이지 삭제는 PDF에서 선택한 페이지를 제거해 나머지 페이지로 새 PDF를 만드는 브라우저 도구입니다.",
-          who: "빈 페이지, 표지, 중복 페이지 등 불필요한 페이지를 빼고 문서를 정리해야 하는 사용자를 위한 도구입니다.",
-          how: "삭제로 표시한 페이지를 제외한 나머지 페이지를 복사해 새 PDF를 만들며, 최소 1페이지는 남아야 합니다.",
-          why: "설치나 업로드 없이 브라우저에서 원하지 않는 페이지만 제거해 깔끔한 PDF를 만들 수 있습니다.",
-        },
-      },
-      en: {
-        card: "Pick the pages you do not need and build a new PDF without them.",
-        description:
-          "Select the pages you do not need and create a new PDF without them. Choose pages from thumbnails and see how many pages remain instantly. Everything runs in your browser and no file is uploaded to a server.",
-        howItWorks: [
-          "Upload a single PDF file.",
-          "Select the pages to remove from the thumbnails.",
-          "Press Delete selected pages and download the trimmed PDF.",
-        ],
-        aeo: {
-          what: "Delete PDF Pages is a browser tool that removes selected pages from a PDF and builds a new PDF from the remaining pages.",
-          who: "It is for people who need to clean up a document by removing blank pages, cover sheets, or duplicates.",
-          how: "It copies every page except the ones marked for deletion into a new PDF, and at least one page must remain.",
-          why: "It removes only the pages you do not want, right in the browser, with no install and no upload.",
-        },
-      },
-    },
-    faq: {
-      ko: [
-        {
-          question: "PDF 파일이 서버로 전송되나요?",
-          answer:
-            "아니요. 페이지 삭제는 브라우저 안에서만 처리되며 파일은 서버로 전송되거나 저장되지 않습니다.",
-        },
-        {
-          question: "원본 파일이 변경되나요?",
-          answer:
-            "아니요. 원본은 그대로 유지되며 선택한 페이지를 제외한 결과는 새 PDF 파일로 다운로드됩니다.",
-        },
-        {
-          question: "모든 페이지를 삭제할 수 있나요?",
-          answer:
-            "아니요. 최소 1페이지는 남아야 합니다. 남는 페이지가 없으면 실행이 차단됩니다.",
-        },
-        {
-          question: "삭제 선택을 되돌릴 수 있나요?",
-          answer:
-            "네. 실행 취소로 직전 선택을 되돌리거나 전체 원상 복구로 선택을 모두 초기화할 수 있습니다. 삭제 실행 전에는 확인 절차도 제공됩니다.",
-        },
-        {
-          question: "여러 페이지를 한 번에 선택할 수 있나요?",
-          answer:
-            "네. 썸네일을 개별 클릭하거나, 전체 선택·선택 반전·범위로 선택(예: 2, 5-7)을 사용해 여러 페이지를 한 번에 지정할 수 있습니다.",
-        },
-      ],
-      en: [
-        {
-          question: "Is my PDF sent to a server?",
-          answer:
-            "No. Page deletion happens entirely in your browser. The file is never uploaded or stored on a server.",
-        },
-        {
-          question: "Does this change my original file?",
-          answer:
-            "No. The original is kept intact; the result without the selected pages downloads as a new PDF file.",
+            "A single result downloads directly as a PDF. Multiple results are bundled into a ZIP file.",
         },
         {
           question: "Can I delete every page?",
           answer:
             "No. At least one page must remain. If no page would be left, the action is blocked.",
         },
-        {
-          question: "Can I undo a deletion selection?",
-          answer:
-            "Yes. Use Undo to revert the last change or Reset all to clear the selection. A confirmation step is shown before deleting.",
-        },
-        {
-          question: "Can I select multiple pages at once?",
-          answer:
-            "Yes. Click thumbnails individually, or use Select all, Invert selection, or select by range (e.g. 2, 5-7).",
-        },
       ],
     },
     og: {
-      ko: { title: "PDF 페이지 삭제", subtitle: "필요 없는 페이지를 제거한 새 PDF 만들기" },
-      en: { title: "Delete PDF Pages", subtitle: "Remove unwanted pages and save a new PDF" },
+      ko: { title: "PDF 도구", subtitle: "PDF 병합·분할·회전·페이지 삭제를 한 페이지에서" },
+      en: { title: "PDF Tools", subtitle: "Merge, split, rotate and delete PDF pages in one place" },
     },
   },
 ];
@@ -6983,6 +6017,11 @@ export function getTool(slug: string): Tool {
   const t = TOOLS.find((x) => x.slug === slug);
   if (!t) throw new Error(`Unknown tool slug: ${slug}`);
   return t;
+}
+
+/** 도구가 검색 색인 대상인지(=noindex 아닌지). AdUnit 등 광고 렌더링 가드가 참조하는 단일 출처. */
+export function isToolIndexable(slug: string): boolean {
+  return getTool(slug).indexable;
 }
 
 /** KO는 루트, EN은 /en 프리픽스. path는 KO 기준 경로('/json-formatter', '/'). */
@@ -7043,10 +6082,10 @@ export function buildToolMetadata(slug: string, lang: Lang): Metadata {
     title: s.title!,
     description: s.description!,
     keywords: s.keywords,
-    // 기능 공개(ready)와 검색 색인(indexable)은 별개다.
-    // indexable=false 도구는 페이지·기능은 그대로 두고 색인만 막는다.
-    // follow 는 유지: 관련 도구/허브로 이어지는 링크 가치는 그대로 흐르게 한다.
-    robots: t.indexable ? undefined : { index: false, follow: true },
+    // 2026-09: noindex 정책 전면 폐기, 전 페이지 색인 허용 (URL 통합 작업지시서 결정 G).
+    // indexable 필드 자체는 남겨둔다: sitemap 포함 여부·허브 ItemList JSON-LD·
+    // AdUnit 광고 가드(isToolIndexable)가 여전히 이 값을 참조하므로, 앞으로
+    // 콘텐츠가 덜 갖춰진 새 도구를 추가할 때도 안전장치로 계속 쓴다.
     alternates: {
       canonical: url,
       languages: { "ko-KR": koUrl, "en-US": enUrl, "x-default": koUrl },

@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <JsonLd data={toolJsonLd("cagr-calculator", "en")} />
-      <GrowthCalculator mode="cagr" />
+      <GrowthCalculator defaultMode="cagr" />
     </>
   );
 }

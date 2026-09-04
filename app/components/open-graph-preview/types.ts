@@ -36,7 +36,7 @@ export type PreviewLayout =
 
 export type PlatformPreset = {
   id: PlatformId;
-  label: string;
+  label: { ko: string; en: string };
   layout: PreviewLayout;
   /** 카드 이미지 영역 비율 (width / height) */
   imageAspectRatio: number;

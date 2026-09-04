@@ -18,11 +18,59 @@ const nextConfig: NextConfig = {
       { source: `/en/${slug}`, destination: "/en/growth-rate-calculator", permanent: true },
     ]);
 
-    // 복리 성장 ≡ 성장 예측(동일 수식) → 복리 성장 계산기로 병합.
+    // 복리 성장 ≡ 성장 예측(동일 수식) → CAGR 계산기(복리 성장 모드)로 병합.
+    // (2026-09: compound-growth-calculator 자체도 cagr-calculator에 흡수돼 목적지를
+    // cagr-calculator?mode=compound-growth로 평탄화. 체인 방지)
     const projectionRedirects = [
-      { source: "/growth-projection-calculator", destination: "/compound-growth-calculator", permanent: true },
-      { source: "/en/growth-projection-calculator", destination: "/en/compound-growth-calculator", permanent: true },
+      { source: "/growth-projection-calculator", destination: "/cagr-calculator?mode=compound-growth", permanent: true },
+      { source: "/en/growth-projection-calculator", destination: "/en/cagr-calculator?mode=compound-growth", permanent: true },
     ];
+
+    // 2026-09 URL 통합: 복리 성장 계산기 → cagr-calculator 한 페이지(?mode=)로 병합.
+    const cagrFamilyRedirects = [
+      { source: "/compound-growth-calculator", destination: "/cagr-calculator?mode=compound-growth", permanent: true },
+      { source: "/en/compound-growth-calculator", destination: "/en/cagr-calculator?mode=compound-growth", permanent: true },
+    ];
+
+    // 2026-09 URL 통합: 목표 성장률·필요 증가량·역산·퍼센트 차이 4종을
+    // growth-rate-calculator 한 페이지(?mode=)로 병합.
+    const growthFamilyModes: Record<string, string> = {
+      "percent-difference-calculator": "percent-difference",
+      "goal-growth-calculator": "goal-growth",
+      "required-growth-calculator": "required-growth",
+      "reverse-growth-calculator": "reverse-growth",
+    };
+    const growthFamilyRedirects = Object.entries(growthFamilyModes).flatMap(([slug, mode]) => [
+      { source: `/${slug}`, destination: `/growth-rate-calculator?mode=${mode}`, permanent: true },
+      { source: `/en/${slug}`, destination: `/en/growth-rate-calculator?mode=${mode}`, permanent: true },
+    ]);
+
+    // 2026-09 URL 통합: 광고 지표 계산기 5종(ROAS/CPA/CPC/CPM/CTR) → ad-metrics-calculator
+    // 한 페이지(?mode=)로 병합. 페이싱·퍼널 전환율은 입력 구조가 달라 별도 유지.
+    const adMetricRedirects = ["roas", "cpa", "cpc", "cpm", "ctr"].flatMap((m) => [
+      { source: `/${m}-calculator`, destination: `/ad-metrics-calculator?mode=${m}`, permanent: true },
+      { source: `/en/${m}-calculator`, destination: `/en/ad-metrics-calculator?mode=${m}`, permanent: true },
+    ]);
+
+    // 2026-09 URL 통합: PDF 도구 4종(병합/분할/회전/페이지 삭제) → pdf-tools
+    // 한 페이지(?mode=)로 병합.
+    const pdfToolRedirects = ["merge", "split", "rotate", "page-delete"].flatMap((m) => [
+      { source: `/pdf-${m}`, destination: `/pdf-tools?mode=${m}`, permanent: true },
+      { source: `/en/pdf-${m}`, destination: `/en/pdf-tools?mode=${m}`, permanent: true },
+    ]);
+
+    // 2026-09 URL 통합: CSS 단위 변환기 5종 → css-unit-converter 한 페이지(?mode=)로 병합.
+    const cssUnitModes: Record<string, string> = {
+      "rem-to-px": "rem-px",
+      "em-to-px": "em-px",
+      "vw-to-px": "vw-px",
+      "percent-to-px": "percent-px",
+      "ms-to-s": "ms-s",
+    };
+    const cssUnitRedirects = Object.entries(cssUnitModes).flatMap(([slug, mode]) => [
+      { source: `/${slug}`, destination: `/css-unit-converter?mode=${mode}`, permanent: true },
+      { source: `/en/${slug}`, destination: `/en/css-unit-converter?mode=${mode}`, permanent: true },
+    ]);
 
     return [
       // 구 2뎁스 URL → 플랫 URL (제품 방향: 모든 도구는 1뎁스 라우트)
@@ -38,6 +86,11 @@ const nextConfig: NextConfig = {
       },
       ...growthRedirects,
       ...projectionRedirects,
+      ...growthFamilyRedirects,
+      ...cagrFamilyRedirects,
+      ...adMetricRedirects,
+      ...pdfToolRedirects,
+      ...cssUnitRedirects,
     ];
   },
 };

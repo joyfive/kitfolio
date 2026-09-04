@@ -6,7 +6,7 @@ import type { PlatformPreset } from "./types";
 export const PLATFORM_PRESETS: PlatformPreset[] = [
   {
     id: "kakao",
-    label: "카카오톡",
+    label: { ko: "카카오톡", en: "KakaoTalk" },
     layout: "stacked",
     imageAspectRatio: 1.91,
     titleLines: 2,
@@ -17,7 +17,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "facebook",
-    label: "Facebook",
+    label: { ko: "Facebook", en: "Facebook" },
     layout: "stacked",
     imageAspectRatio: 1.91,
     titleLines: 2,
@@ -28,7 +28,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "x",
-    label: "X",
+    label: { ko: "X", en: "X" },
     layout: "stacked",
     imageAspectRatio: 2,
     titleLines: 2,
@@ -39,7 +39,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "threads",
-    label: "Threads",
+    label: { ko: "Threads", en: "Threads" },
     layout: "stacked",
     imageAspectRatio: 1.91,
     titleLines: 2,
@@ -50,7 +50,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "linkedin",
-    label: "LinkedIn",
+    label: { ko: "LinkedIn", en: "LinkedIn" },
     layout: "stacked",
     imageAspectRatio: 1.91,
     titleLines: 2,
@@ -61,7 +61,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "naver-blog",
-    label: "네이버 블로그",
+    label: { ko: "네이버 블로그", en: "Naver Blog" },
     layout: "horizontal-left",
     imageAspectRatio: 1,
     titleLines: 2,
@@ -72,7 +72,7 @@ export const PLATFORM_PRESETS: PlatformPreset[] = [
   },
   {
     id: "notion",
-    label: "Notion",
+    label: { ko: "Notion", en: "Notion" },
     layout: "horizontal-right",
     imageAspectRatio: 4 / 3,
     titleLines: 2,

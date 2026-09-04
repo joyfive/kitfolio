@@ -33,7 +33,7 @@ Every one of them is a division.
 - **CPA** = 3,000,000 ÷ 120 = **25,000**: cost per conversion
 - **ROAS** = 12,600,000 ÷ 3,000,000 = **420%**: revenue per unit of spend
 
-Each has its own tool: the [ROAS calculator](/en/roas-calculator), [CPA calculator](/en/cpa-calculator) and [CTR calculator](/en/ctr-calculator), with the [funnel conversion calculator](/en/funnel-conversion-calculator) for seeing drop-off stage by stage.
+Each has its own tool: the [ROAS calculator](/en/ad-metrics-calculator?mode=roas), [CPA calculator](/en/ad-metrics-calculator?mode=cpa) and [CTR calculator](/en/ad-metrics-calculator?mode=ctr), with the [funnel conversion calculator](/en/funnel-conversion-calculator) for seeing drop-off stage by stage.
 
 ## Is this campaign actually profitable?
 

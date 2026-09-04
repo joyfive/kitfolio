@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import PageHead from "../PageHead";
 import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
@@ -224,8 +225,11 @@ const CURRENCIES: Currency[] = ["KRW", "USD", "JPY", "EUR"];
 type Mode = "A" | "B" | "C";
 
 interface Props {
-  metricKey: AdMetricKey;
+  defaultMetric: AdMetricKey;
 }
+
+const SLUG = "ad-metrics-calculator";
+const METRIC_KEYS: AdMetricKey[] = ["roas", "cpa", "cpc", "cpm", "ctr"];
 
 const DEFAULTS: Record<AdMetricKey, Record<string, string>> = {
   roas: { spend: "1000000", revenue: "4000000", targetRoas: "400", targetRevenue: "4000000", margin: "" },
@@ -235,23 +239,39 @@ const DEFAULTS: Record<AdMetricKey, Record<string, string>> = {
   ctr: { clicks: "2500", impressions: "100000", targetCtr: "2.5", targetClicks: "2500" },
 };
 
-export default function AdMetricCalculator({ metricKey }: Props) {
+export default function AdMetricCalculator({ defaultMetric }: Props) {
   const { lang } = useLang();
   const t = useT(DICT);
+  const pathname = usePathname();
 
+  const [metricKey, setMetricKey] = useState<AdMetricKey>(defaultMetric);
   const [mode, setMode] = useState<Mode>("A");
   const [currency, setCurrency] = useState<Currency>(lang === "ko" ? "KRW" : "USD");
-  const [vals, setVals] = useState<Record<string, string>>(DEFAULTS[metricKey]);
+  const [vals, setVals] = useState<Record<string, string>>(DEFAULTS[defaultMetric]);
   const [copied, setCopied] = useState(false);
 
-  const slugMap: Record<AdMetricKey, string> = {
-    roas: "roas-calculator",
-    cpa: "cpa-calculator",
-    cpc: "cpc-calculator",
-    cpm: "cpm-calculator",
-    ctr: "ctr-calculator",
-  };
-  const slug = slugMap[metricKey];
+  const slug = SLUG;
+
+  // 쿼리스트링(?mode=)에서 초기 지표를 읽는다. canonical은 항상 쿼리 없는 base URL이라
+  // 서버 렌더링에는 영향이 없고, 클라이언트에서만 마운트 후 한 번 반영한다.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("mode");
+    if (q && (METRIC_KEYS as string[]).includes(q)) applyMetric(q as AdMetricKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function applyMetric(key: AdMetricKey) {
+    setMetricKey(key);
+    setMode("A");
+    setVals(DEFAULTS[key]);
+    setCopied(false);
+  }
+
+  function switchMetric(key: AdMetricKey) {
+    if (key === metricKey) return;
+    applyMetric(key);
+    window.history.replaceState(null, "", `${pathname}?mode=${key}`);
+  }
 
   function set(key: string, value: string) {
     setVals((prev) => ({ ...prev, [key]: value }));
@@ -342,7 +362,7 @@ export default function AdMetricCalculator({ metricKey }: Props) {
       <PageHead slug={slug} />
 
       <div className="adm-work">
-        <AdMetricTabs />
+        <AdMetricTabs active={metricKey} onChange={switchMetric} />
 
         {/* Controls bar */}
         <div className="adm-controls">

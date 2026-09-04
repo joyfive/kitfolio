@@ -46,4 +46,4 @@ em의 함정은 **중첩 누적**입니다. em으로 폰트 크기를 지정한 
 
 ## px로 환산해 확인하기
 
-디자인 시안은 보통 px로 전달되지만 구현은 rem·em·%·vw로 하는 경우가 많아, 둘 사이를 오가는 환산이 자주 필요합니다. 실제로 몇 px이 되는지 확인하면 감을 잡기 쉽습니다: [rem→px](/rem-to-px), [em→px](/em-to-px), [vw→px](/vw-to-px), [%→px](/percent-to-px) 변환기로 즉시 확인해 보세요.
+디자인 시안은 보통 px로 전달되지만 구현은 rem·em·%·vw로 하는 경우가 많아, 둘 사이를 오가는 환산이 자주 필요합니다. 실제로 몇 px이 되는지 확인하면 감을 잡기 쉽습니다: [rem→px](/css-unit-converter?mode=rem-px), [em→px](/css-unit-converter?mode=em-px), [vw→px](/css-unit-converter?mode=vw-px), [%→px](/css-unit-converter?mode=percent-px) 변환기로 즉시 확인해 보세요.

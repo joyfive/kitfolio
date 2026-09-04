@@ -5,6 +5,7 @@ import type { IScannerControls } from "@zxing/browser";
 import PageHead from "./PageHead";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
+import ToolGuide from "./ToolGuide";
 import QrToolTabs from "./QrToolTabs";
 import { useT, type Dict } from "../lib/i18n";
 import { decodeImageElement } from "../lib/qr/decodeQr";
@@ -586,6 +587,7 @@ export default function QrCodeReader() {
         </div>
       </div>
 
+      <ToolGuide slug="qr-code-reader" />
       <Faq slug="qr-code-reader" />
       <RelatedTools slug="qr-code-reader" />
     </>

@@ -49,4 +49,4 @@ A 3-point difference, or an extra 10 years, multiplies the final value. So when 
 
 If the calculation above looks forward, sometimes you instead want to summarize **what average annual rate already-realized growth came out to**. That's CAGR (Compound Annual Growth Rate). It needs only a start value, end value, and number of periods, and it's the standard way to fairly compare the long-run growth of different investments or businesses.
 
-To try the numbers, use the [Compound Growth Calculator](/en/compound-growth-calculator) for future value and the [CAGR Calculator](/en/cagr-calculator) for a past annual rate. For a single-period change, the [Growth Rate Calculator](/en/growth-rate-calculator) is the quickest.
+To try the numbers, use the [Compound Growth Calculator](/en/cagr-calculator?mode=compound-growth) for future value and the [CAGR Calculator](/en/cagr-calculator) for a past annual rate. For a single-period change, the [Growth Rate Calculator](/en/growth-rate-calculator) is the quickest.

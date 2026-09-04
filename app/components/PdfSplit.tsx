@@ -1,10 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
-import PageHead from "./PageHead";
-import Faq from "./Faq";
-import RelatedTools from "./RelatedTools";
-import PdfToolTabs from "./PdfToolTabs";
 import PdfDropzone from "./PdfDropzone";
 import PdfFileSummary from "./PdfFileSummary";
 import PdfThumbnailGrid from "./PdfThumbnailGrid";
@@ -202,9 +198,6 @@ export default function PdfSplit() {
 
   return (
     <>
-      <PageHead slug="pdf-split" />
-      <PdfToolTabs active="split" />
-
       {!pdf ? (
         <div className="pdf-work pdf-work-empty">
           <PdfDropzone onFiles={loadFile} title={t("s.drop")} hint={t("s.dropHint")} />
@@ -299,9 +292,6 @@ export default function PdfSplit() {
           </div>
         </div>
       )}
-
-      <Faq slug="pdf-split" />
-      <RelatedTools slug="pdf-split" />
     </>
   );
 }

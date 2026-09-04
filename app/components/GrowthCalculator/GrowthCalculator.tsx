@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import { useState, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import PageHead from "../PageHead";
 import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
-import { localizedHref } from "../../lib/content";
 import { compute } from "./growthMath";
 import type { GrowthMode, Direction } from "./growthMath";
 import { CONFIGS } from "./calculatorConfig";
@@ -90,21 +89,49 @@ function directionLabel(d: Direction, t: (k: string) => string): string {
 
 // ── Component ─────────────────────────────────────────────
 
-export default function GrowthCalculator({ mode }: { mode: GrowthMode }) {
+function emptyInputs(cfg: { inputs: { key: string }[] }): Record<string, string> {
+  return Object.fromEntries(cfg.inputs.map((inp) => [inp.key, ""]));
+}
+
+/** defaultMode: 이 컴포넌트가 렌더되는 페이지(family)의 기본 모드.
+ *  growth-rate-calculator/page.tsx → "growth-rate", cagr-calculator/page.tsx → "cagr". */
+export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthMode }) {
   const { lang } = useLang();
   const t = useT(DICT);
+  const pathname = usePathname();
+  const [mode, setMode] = useState<GrowthMode>(defaultMode);
   const cfg = CONFIGS[mode];
 
-  const initInputs = Object.fromEntries(cfg.inputs.map((inp) => [inp.key, ""]));
-  const [rawInputs, setRawInputs] = useState<Record<string, string>>(initInputs);
+  const [rawInputs, setRawInputs] = useState<Record<string, string>>(() => emptyInputs(cfg));
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  // 쿼리스트링(?mode=)에서 초기 모드를 읽는다. canonical은 항상 쿼리 없는 base URL이라
+  // 서버 렌더링에는 영향이 없고, 클라이언트에서만 마운트 후 한 번 반영한다.
+  // 같은 family(탭 목록) 안의 모드만 인정: family 밖 값이 오면 defaultMode를 유지한다.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search).get("mode") as GrowthMode | null;
+    if (q && CONFIGS[q] && CONFIGS[q].slug === CONFIGS[defaultMode].slug) applyMode(q);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function applyMode(m: GrowthMode) {
+    setMode(m);
+    setRawInputs(emptyInputs(CONFIGS[m]));
+    setCopiedKey(null);
+  }
+
+  function switchMode(m: GrowthMode) {
+    if (m === mode) return;
+    applyMode(m);
+    window.history.replaceState(null, "", `${pathname}?mode=${m}`);
+  }
 
   function setField(key: string, val: string) {
     setRawInputs((prev) => ({ ...prev, [key]: val }));
   }
 
   function handleReset() {
-    setRawInputs(initInputs);
+    setRawInputs(emptyInputs(cfg));
     setCopiedKey(null);
   }
 
@@ -145,14 +172,15 @@ export default function GrowthCalculator({ mode }: { mode: GrowthMode }) {
         <div className="uc-tabs-inner">
           <span className="uc-tabs-label">{t("gc.tab.label")}</span>
           {cfg.tabs.map((tab) => (
-            <Link
+            <button
               key={tab.mode}
-              href={localizedHref(lang, "/" + tab.slug)}
+              type="button"
+              onClick={() => switchMode(tab.mode)}
               className={`uc-tab${tab.mode === mode ? " is-active" : ""}`}
-              prefetch={true}
+              aria-current={tab.mode === mode ? "true" : undefined}
             >
               {lang === "ko" ? tab.label.ko : tab.label.en}
-            </Link>
+            </button>
           ))}
         </div>
       </div>

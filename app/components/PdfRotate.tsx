@@ -1,10 +1,6 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
-import PageHead from "./PageHead";
-import Faq from "./Faq";
-import RelatedTools from "./RelatedTools";
-import PdfToolTabs from "./PdfToolTabs";
 import PdfDropzone from "./PdfDropzone";
 import PdfFileSummary from "./PdfFileSummary";
 import PdfThumbnailGrid from "./PdfThumbnailGrid";
@@ -228,9 +224,6 @@ export default function PdfRotate() {
 
   return (
     <>
-      <PageHead slug="pdf-rotate" />
-      <PdfToolTabs active="rotate" />
-
       {!pdf ? (
         <div className="pdf-work pdf-work-empty">
           <PdfDropzone onFiles={loadFile} title={t("r.drop")} hint={t("r.dropHint")} />
@@ -354,9 +347,6 @@ export default function PdfRotate() {
           </div>
         </div>
       )}
-
-      <Faq slug="pdf-rotate" />
-      <RelatedTools slug="pdf-rotate" />
     </>
   );
 }

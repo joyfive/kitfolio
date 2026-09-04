@@ -1,11 +1,6 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import PageHead from "./PageHead";
-import Faq from "./Faq";
-import ToolGuide from "./ToolGuide";
-import RelatedTools from "./RelatedTools";
-import PdfToolTabs from "./PdfToolTabs";
 import PdfDropzone from "./PdfDropzone";
 import PdfPageThumbnail from "./PdfPageThumbnail";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
@@ -214,9 +209,6 @@ export default function PdfMerge() {
 
   return (
     <>
-      <PageHead slug="pdf-merge" />
-      <PdfToolTabs active="merge" />
-
       <div className="pdf-work pdf-work-merge">
         {/* 좌: 파일 목록 · 순서 설정 */}
         <div className="pdf-panel">
@@ -367,10 +359,6 @@ export default function PdfMerge() {
           </div>
         </div>
       </div>
-
-      <ToolGuide slug="pdf-merge" />
-      <Faq slug="pdf-merge" />
-      <RelatedTools slug="pdf-merge" />
     </>
   );
 }

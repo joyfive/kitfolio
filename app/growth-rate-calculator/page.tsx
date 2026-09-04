@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <JsonLd data={toolJsonLd("growth-rate-calculator", "ko")} />
-      <GrowthCalculator mode="growth-rate" />
+      <GrowthCalculator defaultMode="growth-rate" />
     </>
   );
 }

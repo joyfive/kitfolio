@@ -68,6 +68,6 @@ To summarize three or more periods as a single figure, use the [CAGR calculator]
 - **When the previous value is 0**: it is undefined. Going from 0 to 100 is "+100", not infinite growth.
 - **When the previous value is negative**: a loss turning into a profit produces a percentage whose sign reads backwards and misleads. Report the absolute change.
 - **When the sample is tiny**: with a denominator in the double digits or lower, the percentage carries almost no statistical meaning.
-- **When you need a forecast**: growth rate summarizes the past. To project where that rate leads, move to the [compound growth calculator](/en/compound-growth-calculator).
+- **When you need a forecast**: growth rate summarizes the past. To project where that rate leads, move to the [compound growth calculator](/en/cagr-calculator?mode=compound-growth).
 
 The time-consuming part of growth reporting was never the arithmetic. It is **choosing the right comparison period and attaching scale and context to the number**. Hand the division to a tool and spend your time on the rest.

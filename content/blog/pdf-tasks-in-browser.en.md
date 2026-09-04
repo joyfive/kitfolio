@@ -36,7 +36,7 @@ A tool that does everything inside your browser keeps files on your device. That
 
 Open the tool that matches your task. All of them process files inside the browser and never send them to a server.
 
-- Several PDFs into one: [Merge PDF](/en/pdf-merge)
-- Split by pages or ranges: [Split PDF](/en/pdf-split)
-- Straighten tilted or flipped pages: [Rotate PDF](/en/pdf-rotate)
-- Remove unwanted pages: [Delete PDF Pages](/en/pdf-page-delete)
+- Several PDFs into one: [Merge PDF](/en/pdf-tools?mode=merge)
+- Split by pages or ranges: [Split PDF](/en/pdf-tools?mode=split)
+- Straighten tilted or flipped pages: [Rotate PDF](/en/pdf-tools?mode=rotate)
+- Remove unwanted pages: [Delete PDF Pages](/en/pdf-tools?mode=page-delete)

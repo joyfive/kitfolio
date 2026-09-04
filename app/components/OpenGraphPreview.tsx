@@ -5,7 +5,7 @@ import PageHead from "./PageHead";
 import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
-import { useT, type Dict } from "../lib/i18n";
+import { useLang, useT, type Dict } from "../lib/i18n";
 import { PLATFORM_PRESETS } from "./open-graph-preview/platformPresets";
 import type {
   ImageSource,
@@ -186,6 +186,8 @@ function PlatformCard({
   emptyDesc: string;
   variant: "detail" | "grid";
 }) {
+  const { lang } = useLang();
+  const label = preset.label[lang];
   const imageArea = (
     <div
       className="og-card-media"
@@ -193,7 +195,7 @@ function PlatformCard({
     >
       {image ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={image.src} alt={title || preset.label} />
+        <img src={image.src} alt={title || label} />
       ) : (
         <span className="og-card-media-empty">{emptyImage}</span>
       )}
@@ -222,7 +224,7 @@ function PlatformCard({
 
   return (
     <div className={"og-platform-card og-platform-card--" + preset.layout}>
-      <div className="og-card-head">{preset.label}</div>
+      <div className="og-card-head">{label}</div>
       <div className={"og-card-body" + (variant === "detail" ? " is-detail" : "")}>
         {preset.imagePosition === "right" ? (
           <>
@@ -241,6 +243,7 @@ function PlatformCard({
 }
 
 export default function OpenGraphPreview() {
+  const { lang } = useLang();
   const t = useT(DICT);
 
   const [sourceMode, setSourceMode] = useState<ImageSourceMode>("upload");
@@ -676,7 +679,7 @@ export default function OpenGraphPreview() {
                 onClick={() => setSelectedPlatform(p.id)}
                 onKeyDown={(e) => onTabKeyDown(e, i)}
               >
-                {p.label}
+                {p.label[lang]}
               </button>
             ))}
           </div>
