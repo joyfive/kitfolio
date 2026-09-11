@@ -2191,6 +2191,754 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "color-contrast-checker",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer"],
+    ico: "◐",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "명도대비 검사기", en: "Color Contrast Checker" },
+    // 색각이상 시뮬레이터가 가장 직접적인 후속 작업이라 open-graph-preview 를 대체한다.
+    relatedTools: ["color-blindness-simulator", "tailwind-palette-generator", "css-gradient"],
+    seo: {
+      ko: {
+        title: "명도대비 검사기 | WCAG 색상 대비·팔레트 점검",
+        description:
+          "전경색과 배경색의 WCAG 2.2 명도대비를 확인하고 본문·큰 글자·UI 컴포넌트의 AA·AAA 충족 여부를 비교하세요. 기준에 미달하면 원래 색의 인상을 유지한 수정 후보를 제안하고, 여러 HEX 색상은 팔레트 매트릭스로 한 번에 점검합니다. 입력한 색상값은 서버로 전송되지 않고 브라우저에서 처리됩니다.",
+        keywords: [
+          "명도대비 검사",
+          "명도 대비 검사기",
+          "색상 대비 검사기",
+          "WCAG 대비 비율",
+          "웹접근성 색상",
+          "배경색 글자색 대비",
+          "팔레트 접근성 검사",
+          "color contrast checker",
+        ],
+      },
+      en: {
+        title: "Color Contrast Checker | WCAG Palette Audit",
+        description:
+          "Check foreground and background colors against WCAG 2.2 contrast requirements for normal text, large text and interface components. Find a close passing color when a pair fails, or paste multiple HEX colors to audit every palette combination in a matrix. Your colors are processed locally in the browser and are never uploaded to a server.",
+        keywords: [
+          "color contrast checker",
+          "wcag contrast checker",
+          "accessibility color checker",
+          "contrast ratio calculator",
+          "accessible color palette",
+          "palette contrast matrix",
+          "foreground background contrast",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다.",
+        description:
+          "글자색과 배경색의 대비 비율을 계산해 WCAG 2.2 AA·AAA 충족 여부를 확인하세요. 본문 텍스트·큰 텍스트·UI 컴포넌트 기준을 한 화면에서 비교하고, 기준에 미달하면 원래 색조를 유지한 수정 후보를 제안합니다. 여러 HEX 색상을 붙여넣으면 전경색과 배경색의 모든 조합을 매트릭스로 한 번에 점검할 수 있습니다.",
+        howItWorks: [
+          "전경색·배경색 또는 HEX 팔레트 입력",
+          "WCAG 2.2 대비 비율과 사용 가능한 범위 확인",
+          "통과 색상 적용 또는 필요한 조합 선택",
+        ],
+        aeo: {
+          what: "명도대비 검사기는 전경색과 배경색의 상대 휘도 차이를 계산해 WCAG 2.2 기준 충족 여부를 보여주는 브라우저 도구입니다.",
+          who: "웹과 앱의 텍스트, 버튼, 입력창, 아이콘, 그래프 색상을 검수하는 디자이너와 프론트엔드 개발자를 위한 도구입니다.",
+          how: "두 색의 sRGB 상대 휘도로 대비 비율을 계산하고, 여러 색상을 입력하면 모든 전경색·배경색 조합을 매트릭스로 비교합니다.",
+          why: "낮은 대비로 인한 가독성 문제를 시안과 구현 단계에서 발견하고, 기준을 통과하는 대체 색상을 더 빠르게 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성 명도대비, 무엇을 검사해야 하나요?",
+            body: [
+              "명도대비는 글자나 인터페이스 요소가 주변 배경과 얼마나 밝고 어둡게 구분되는지를 나타냅니다. 색상이 서로 달라 보여도 밝기가 비슷하면 대비 비율은 낮을 수 있습니다. 반대로 색조가 비슷해도 밝기 차이가 충분하면 더 높은 대비가 나올 수 있습니다.",
+              "따라서 브랜드 컬러의 이름이나 육안 인상만으로 판단하지 말고, 실제 화면에서 함께 놓일 전경색과 배경색을 한 쌍으로 검사해야 합니다.",
+            ],
+          },
+          {
+            heading: "WCAG 대비 비율은 어떻게 계산되나요?",
+            body: [
+              "WCAG 2.2는 sRGB 색상의 상대 휘도를 이용합니다. 두 색 중 밝은 색의 상대 휘도를 L1, 어두운 색을 L2라고 하면 대비 비율은 (L1 + 0.05) / (L2 + 0.05)로 계산합니다. 같은 색끼리는 1:1이고 검정과 흰색은 최대 21:1입니다. 이 수치는 색이 예쁜지 평가하는 점수가 아니라, 특정 용도로 쓸 수 있는 최소한의 밝기 차이를 확인하는 기준입니다.",
+              "판정 경계에서는 반올림하면 안 됩니다. 실제 계산값이 4.499:1이라면 화면상 4.50에 가까워 보여도 4.5:1 기준을 통과하지 않습니다. 이 도구는 원시 계산값으로 판정하고, 경계에 가까운 값은 소수점 셋째 자리까지 표시합니다.",
+            ],
+          },
+          {
+            heading: "본문·큰 글자·UI의 기준은 서로 다릅니다",
+            body: [
+              "일반 텍스트와 텍스트 이미지는 AA 4.5:1, AAA 7:1입니다. 큰 텍스트는 AA 3:1, AAA 4.5:1로 완화됩니다. UI 컴포넌트와 의미 있는 그래픽은 AA 3:1이며 별도의 AAA 기준이 없습니다.",
+              "큰 텍스트는 일반적으로 18pt, CSS 기준 약 24px 이상인 텍스트를 말합니다. 굵은 글자는 14pt, 약 18.5px 이상이면 큰 텍스트 범주에 들어갈 수 있습니다. 다만 획이 매우 얇거나 형태가 특이한 글꼴은 같은 크기라도 실제로 더 흐리게 보일 수 있습니다. 기준을 간신히 통과한 색상이라면 글자 크기만 키우는 편법보다 대비 자체를 여유 있게 높이는 편이 안전합니다.",
+              "로고와 순수 장식 텍스트, 비활성 상태의 UI는 일부 대비 요구에서 예외가 될 수 있습니다. 그러나 로고가 링크나 버튼 역할을 하거나, 비활성처럼 보이는 요소가 실제로 조작 가능하다면 별도 검토가 필요합니다.",
+            ],
+          },
+          {
+            heading: "버튼·입력창·아이콘은 어디를 재야 하나요?",
+            body: [
+              "UI 컴포넌트와 의미 있는 그래픽은 요소를 식별하거나 상태를 이해하는 데 필요한 부분이 인접한 색상과 3:1 이상 대비되어야 합니다. 입력창을 알아보는 유일한 단서가 테두리라면 테두리와 바깥 배경을 검사합니다. 체크박스의 체크 표시, 드롭다운 화살표, 선택 상태 표시, 사용자 정의 포커스 링처럼 기능이나 상태를 전달하는 시각 요소도 주변 색상과 비교해야 합니다.",
+              "모든 버튼에 반드시 3:1 테두리가 필요한 것은 아닙니다. 버튼의 텍스트나 아이콘, 배치 맥락만으로 컨트롤의 존재가 분명하다면 전체 클릭 영역의 경계까지 표시할 의무는 없습니다. 대신 실제로 식별에 사용되는 텍스트·아이콘·상태 표시는 해당 기준을 충족해야 합니다.",
+            ],
+          },
+          {
+            heading: "팔레트 매트릭스는 이렇게 사용하세요",
+            body: [
+              "팔레트 감사는 각 색상을 전경색과 배경색으로 놓았을 때의 모든 조합을 보여줍니다. 먼저 본문 텍스트와 표면색 조합에서 4.5:1 이상인 셀을 찾고, 버튼 테두리·아이콘·차트 선처럼 비텍스트 요소에는 3:1 이상인 조합을 확인하세요. 브랜드의 강조색이 본문 텍스트에는 부족하더라도 큰 제목이나 굵은 아이콘에는 쓸 수 있습니다.",
+              "매트릭스의 통과 셀이 많다고 좋은 팔레트인 것은 아닙니다. 실제 제품에서 함께 배치할 조합만 선택하고, 기본·호버·포커스·선택·오류 상태까지 확인해야 합니다. 같은 색이 밝은 배경에서는 통과하지만 어두운 배경에서는 실패할 수 있으므로 라이트·다크 테마가 있다면 각각 검사하세요.",
+            ],
+          },
+          {
+            heading: "기준에 미달한 색상은 어떤 순서로 수정하나요?",
+            body: [
+              "본문 텍스트라면 배경을 유지하고 글자색을 먼저 더 어둡거나 밝게 조정합니다. 브랜드 컬러를 반드시 유지해야 한다면, 그 색을 텍스트나 아이콘보다 넓은 배경 또는 장식 요소로 역할을 바꾸고 실제 정보에는 별도의 고대비 색상을 쓰는 편이 낫습니다.",
+              "UI 테두리나 아이콘은 주변 배경과 3:1 이상이 되도록 조정합니다. 얇은 선은 수치상 통과해도 흐리게 보일 수 있으므로 대비에 여유를 둡니다. 큰 텍스트의 3:1 예외를 적용하려면 실제로 전달되는 크기와 굵기가 큰 텍스트 기준을 충족하는지 먼저 확인해야 합니다. 오류·성공·선택 상태는 색만 바꾸지 말고 텍스트, 아이콘, 패턴 또는 형태를 함께 제공합니다.",
+              "이 도구의 수정 후보는 원래 hue를 유지하면서 밝기를 우선 조정하고, 화면에서 표현 가능한 sRGB 색역을 벗어날 때만 채도를 필요한 만큼 낮춥니다. 제안값은 빠른 출발점이지 브랜드 가이드와 실제 화면 검수를 대신하는 최종 정답은 아닙니다.",
+            ],
+          },
+          {
+            heading: "높은 명도대비만으로 색상 접근성이 끝나지는 않습니다",
+            body: [
+              "명도대비 기준과 '색상만으로 정보를 전달하지 말 것'은 별개의 요구사항입니다. 빨간색 오류와 초록색 성공 상태가 각각 배경과 충분히 대비되더라도, 색만 바뀌고 텍스트나 아이콘이 없다면 상태를 구분하지 못하는 사용자가 생깁니다. 오류 문구, 체크 아이콘, 선의 패턴, 직접적인 상태 라벨처럼 색 이외의 단서를 함께 제공해야 합니다.",
+              "본문 속 링크를 밑줄 없이 색상만으로 구분한다면 링크색은 주변 일반 텍스트와 3:1 이상 차이가 나야 하고, 포커스나 호버 시에는 밑줄 같은 추가 시각 단서를 제공하는 방식이 권장됩니다. 가장 단순하고 안정적인 방법은 기본 상태에서도 링크에 밑줄이나 명확한 형태 차이를 두는 것입니다.",
+            ],
+          },
+          {
+            heading: "배포 전 색상 접근성 체크리스트",
+            body: [
+              "본문과 placeholder 텍스트가 실제 배경과 4.5:1 이상인지, 3:1 기준을 적용한 제목이 실제로 큰 텍스트 크기와 굵기를 충족하는지 확인합니다. 입력창 테두리, 아이콘, 포커스 표시, 선택 상태도 인접 색상과 3:1 이상이어야 합니다.",
+              "라이트·다크 테마와 기본·호버·포커스·선택·오류 상태를 모두 확인하고, 그라디언트나 이미지 위 텍스트는 가장 대비가 낮은 영역에서도 읽히는지 봅니다. 마지막으로 오류와 상태, 차트 범례, 링크를 색상만으로 구분하고 있지 않은지 점검합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "흰 배경 위 연한 회색 본문 텍스트",
+            input: "전경색 #9CA3AF · 배경색 #FFFFFF",
+            result: "2.54:1 · 본문 AA(4.5:1)는 물론 큰 텍스트·UI 기준(3:1)에도 미달",
+            note: "본문 AA를 목표로 두고 전경색을 조정하면 #707782(4.52:1)가 제안됩니다. 회색 톤은 그대로 두고 밝기만 낮춘 값입니다.",
+          },
+          {
+            title: "브랜드 블루 버튼 위의 흰 글자",
+            input: "전경색 #FFFFFF · 배경색 #6486EF",
+            result: "3.39:1 · 큰 텍스트와 UI 컴포넌트 기준(3:1)은 통과하지만 본문 AA(4.5:1)는 미달",
+            note: "버튼 라벨이 작은 글자라면 조정 대상을 배경색으로 바꾸세요. #5170D7(4.52:1)이 제안되어 흰 글자를 그대로 쓸 수 있습니다.",
+          },
+          {
+            title: "그레이 스케일 팔레트 5색 감사",
+            input: "#0F172A #334155 #64748B #E2E8F0 #FFFFFF 붙여넣기",
+            result: "5×5 매트릭스 25칸. 같은 색끼리인 5칸은 1:1이고, 나머지 20칸 중 본문 AA 이상이 10칸, 3:1 미만 미달이 6칸",
+            note: "#64748B는 흰 배경에서 4.76:1로 본문에 쓸 수 있지만 #E2E8F0 위에서는 3.86:1이라 큰 글자·UI 용도까지만 가능합니다.",
+          },
+        ],
+        limitations: [
+          "입력한 두 개의 불투명 단색만 계산합니다. 그라디언트·사진·배경 이미지·반투명 오버레이는 위치마다 실제 배경색이 달라지므로, 가장 대비가 낮은 지점의 색을 직접 골라 따로 검사해야 합니다.",
+          "투명도가 포함된 4자리·8자리 알파 HEX와 RGB·HSL·OKLCH 함수 표기는 아직 입력할 수 없습니다. 불투명 3자리·6자리 HEX로 변환해 입력하세요.",
+          "한 쌍의 색상이 통과했다는 것은 그 조합이 기준을 만족한다는 뜻일 뿐, 페이지 전체가 WCAG나 한국형 웹 콘텐츠 접근성 지침을 준수한다는 뜻이 아닙니다. 키보드 접근, 대체 텍스트, 구조, 포커스, 상태 전달은 별도로 확인해야 합니다.",
+          "수정 후보는 한쪽 색만 조정해서 목표에 도달할 수 있을 때만 제안합니다. 중간 밝기 배경처럼 어느 방향으로도 목표에 도달할 수 없는 조합에서는 억지로 후보를 만들지 않고 반대 색상도 함께 조정하도록 안내합니다.",
+          "팔레트 감사는 한 번에 최대 12색까지 검사합니다. 색이 더 많다면 실제 화면에서 함께 쓰이는 색끼리 묶어 나눠 검사하세요.",
+          "안티앨리어싱, 디스플레이 상태, 글꼴의 실제 획 두께는 계산에 반영되지 않습니다. 수치상 간신히 통과한 조합은 실제 화면에서 한 번 더 확인하는 편이 안전합니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "한국형 웹 콘텐츠 접근성 지침 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?sn=22592",
+          },
+        ],
+      },
+      en: {
+        card: "Check WCAG contrast for a color pair and get a close passing color when it fails.",
+        description:
+          "Calculate the contrast ratio between foreground and background colors and check WCAG 2.2 AA and AAA results. Compare the normal text, large text and interface component thresholds on one screen, and when a pair fails, get a passing alternative that keeps the original hue. Paste several HEX colors to audit every foreground and background combination in one matrix.",
+        howItWorks: [
+          "Enter foreground and background colors or paste a HEX palette",
+          "Review the WCAG 2.2 ratio and supported use cases",
+          "Apply a passing suggestion or inspect a palette pair",
+        ],
+        aeo: {
+          what: "A color contrast checker calculates the relative luminance difference between foreground and background colors and reports their WCAG 2.2 results.",
+          who: "It is for designers and front-end developers reviewing text, controls, icons and data visualization colors for web or app interfaces.",
+          how: "It calculates a contrast ratio from the sRGB relative luminance of two colors and compares every foreground and background pair when a palette is provided.",
+          why: "It helps teams identify low-contrast combinations during design and implementation and find a close alternative that meets the selected target.",
+        },
+        guide: [
+          {
+            heading: "What should you test for accessible color contrast?",
+            body: [
+              "Color contrast describes how clearly foreground content differs in lightness from its background. Two colors can look different in hue while still having a low contrast ratio if their luminance is similar. The reverse is also true: similar hues can reach a high ratio when their lightness differs enough.",
+              "Test the foreground and background colors that will actually appear together instead of judging a brand color by its name or by how it feels on its own.",
+            ],
+          },
+          {
+            heading: "How the WCAG contrast ratio is calculated",
+            body: [
+              "WCAG 2.2 uses the relative luminance of sRGB colors. If L1 is the relative luminance of the lighter color and L2 is that of the darker color, the ratio is (L1 + 0.05) / (L2 + 0.05). Identical colors have a ratio of 1:1, while black and white reach the maximum of 21:1. The ratio is not a visual quality score. It indicates whether a color pair reaches a minimum requirement for a specific use.",
+              "Thresholds must be evaluated without rounding. A calculated ratio of 4.499:1 does not meet a 4.5:1 requirement. This tool uses the unrounded value for pass or fail and shows an additional decimal place near a threshold.",
+            ],
+          },
+          {
+            heading: "Text, large text and interface elements use different thresholds",
+            body: [
+              "Normal text and images of text need 4.5:1 for AA and 7:1 for AAA. Large text relaxes to 3:1 for AA and 4.5:1 for AAA. User interface components and meaningful graphics need 3:1 for AA and have no separate AAA threshold.",
+              "Large text generally means at least 18pt, approximately 24 CSS pixels, or at least 14pt bold, approximately 18.5 CSS pixels. Very thin or unusual typefaces can appear less legible even when the calculated pair passes. When a result barely reaches the threshold, increasing the contrast is safer than relying on text size alone.",
+              "Logotypes, purely decorative text and inactive controls can be exempt from some contrast requirements. A logo that also functions as a control, or a component that only appears disabled, requires separate review.",
+            ],
+          },
+          {
+            heading: "What to measure for controls and icons",
+            body: [
+              "Visual information required to identify a control or understand its state should have at least 3:1 contrast against adjacent colors. If a border is the only cue that an input exists, compare the border with the outer background. Check marks, dropdown arrows, selected-state indicators and custom focus rings should also be compared with the colors next to them.",
+              "Not every button needs a 3:1 outline. If text, an icon or the surrounding context already identifies the control, the boundary of the full hit area does not have to be visible. The visual information people actually rely on must still meet its applicable contrast requirement.",
+            ],
+          },
+          {
+            heading: "How to use the palette matrix",
+            body: [
+              "The palette audit compares every color as both foreground and background. Start by finding text-and-surface pairs that reach 4.5:1. Use pairs at or above 3:1 for visible control boundaries, icons and essential chart lines. An accent color that fails for body text may still work for large text or a substantial icon.",
+              "A palette is not automatically accessible because it contains many passing cells. Review only combinations that will appear together and include default, hover, focus, selected and error states. Audit light and dark themes separately, because the same foreground color can pass on one surface and fail on another.",
+            ],
+          },
+          {
+            heading: "How to fix a failing pair",
+            body: [
+              "For body text, keep the surface color and adjust the text lighter or darker first. If a brand color must remain unchanged, use it for a larger surface or for decoration and choose a separate high-contrast color for the information itself.",
+              "Bring control boundaries and icons above 3:1 against their adjacent colors. Thin lines benefit from extra margin above the minimum. Apply the 3:1 large-text threshold only when the delivered size and weight actually meet the large-text definition. Add text, icons, patterns or shapes to error, success and selected states instead of relying on color alone.",
+              "The suggested color keeps the original hue and adjusts lightness first. Chroma is reduced only when necessary to keep a candidate inside the sRGB gamut. Treat the result as a practical starting point, not a replacement for reviewing the actual interface and brand system.",
+            ],
+          },
+          {
+            heading: "Contrast is not the same as using color accessibly",
+            body: [
+              "Meeting a contrast ratio does not satisfy every color requirement. Red error and green success colors can each contrast strongly with the background while still being indistinguishable to a user when color is the only state cue. Add a visible label, icon, pattern or other non-color signal.",
+              "When an inline link has no underline and color is the only difference, its color should differ from the surrounding text by at least 3:1 and gain another visual cue on focus or hover. Keeping an underline in the default state is the simpler and more robust choice.",
+            ],
+          },
+          {
+            heading: "Pre-release color accessibility checklist",
+            body: [
+              "Confirm that body text and placeholder text reach 4.5:1 against their actual backgrounds, and that every heading using the 3:1 threshold really is delivered at large-text size and weight. Input boundaries, icons, focus indicators and selected states should reach 3:1 against adjacent colors.",
+              "Check light and dark themes along with default, hover, focus, selected and error states, and make sure text over an image or gradient stays readable in its lowest-contrast area. Finally, verify that links, errors, states and chart series are distinguishable without color alone.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Light grey body text on white",
+            input: "Foreground #9CA3AF, background #FFFFFF",
+            result: "2.54:1, which misses body AA (4.5:1) and even the 3:1 large text and UI threshold",
+            note: "Targeting body AA and adjusting the foreground suggests #707782 at 4.52:1: the same grey tone, only darker.",
+          },
+          {
+            title: "White label on a brand blue button",
+            input: "Foreground #FFFFFF, background #6486EF",
+            result: "3.39:1, which passes the 3:1 large text and UI component threshold but misses body AA (4.5:1)",
+            note: "If the label is small text, switch the adjusted role to the background. #5170D7 at 4.52:1 is suggested, so the white label can stay as it is.",
+          },
+          {
+            title: "Auditing a five-color grey scale",
+            input: "Paste #0F172A #334155 #64748B #E2E8F0 #FFFFFF",
+            result: "A 5x5 matrix of 25 cells. Five same-color cells are 1:1, and of the remaining 20, ten reach body AA while six fall below 3:1",
+            note: "#64748B reaches 4.76:1 on white and works for body text, but only 3.86:1 on #E2E8F0, where it is limited to large text and UI use.",
+          },
+        ],
+        limitations: [
+          "Only two opaque solid colors are calculated. Gradients, photographs, background images and translucent overlays create a different effective background across an element, so pick the color at the lowest-contrast point and test it separately.",
+          "Four and eight digit alpha HEX values and rgb, hsl or oklch function syntax cannot be entered yet. Convert them to an opaque three or six digit HEX first.",
+          "A passing pair means that combination meets the threshold, not that the page conforms to WCAG or to another accessibility standard. Keyboard support, text alternatives, document structure, focus behavior and status communication require separate testing.",
+          "A suggestion is offered only when adjusting one color can reach the target. For combinations such as a mid-lightness background, where neither direction reaches the target, no candidate is forced and the tool asks you to adjust the other color too.",
+          "The palette audit checks up to 12 colors at a time. For a larger system, split it into groups of colors that actually appear together.",
+          "Anti-aliasing, display conditions and the real stroke weight of a typeface are not part of the calculation. A pair that barely passes on paper is worth checking once on the actual screen.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "Korean Web Content Accessibility Guidelines 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?sn=22592",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "WCAG 2.2에서 일반 텍스트의 최소 명도대비는 얼마인가요?",
+          answer:
+            "AA 기준은 4.5:1이고 AAA 기준은 7:1입니다. placeholder와 호버·포커스 시 나타나는 텍스트도 실제로 사용자에게 보이는 텍스트라면 같은 기준으로 확인해야 합니다.",
+        },
+        {
+          question: "큰 텍스트에는 왜 3:1 기준을 적용하나요?",
+          answer:
+            "큰 글자는 획과 면적이 커서 상대적으로 낮은 대비에서도 읽기 쉽기 때문입니다. 일반적으로 18pt(약 24px) 이상 또는 굵은 14pt(약 18.5px) 이상이어야 큰 텍스트로 봅니다.",
+        },
+        {
+          question: "버튼과 아이콘도 4.5:1을 충족해야 하나요?",
+          answer:
+            "버튼의 텍스트에는 텍스트 기준을 적용합니다. 다만 컨트롤의 존재나 상태를 식별하는 데 필요한 테두리·아이콘·그래픽에는 일반적으로 3:1 기준을 적용합니다.",
+        },
+        {
+          question: "대비 비율을 통과하면 색상 접근성을 모두 충족한 건가요?",
+          answer:
+            "아닙니다. 오류, 성공, 선택 상태처럼 의미가 있는 정보는 색상만으로 전달해서는 안 됩니다. 텍스트, 아이콘, 패턴 또는 형태를 함께 사용해야 합니다.",
+        },
+        {
+          question: "가장 가까운 통과 색상은 어떻게 찾나요?",
+          answer:
+            "원래 색조를 유지한 채 밝기를 우선 조정하고, sRGB 색역을 벗어날 때만 채도를 필요한 만큼 낮춥니다. 목표 대비를 만족하는 후보 중 원본과의 지각 거리가 가장 작은 색상을 제안합니다.",
+        },
+        {
+          question: "입력한 색상이나 팔레트가 서버로 전송되나요?",
+          answer:
+            "아니요. 색상 파싱, 대비 계산, 수정 후보 생성은 모두 브라우저에서 처리되며 입력값 자체를 Kitfolio 서버로 전송하거나 저장하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the minimum WCAG 2.2 contrast ratio for normal text?",
+          answer:
+            "The Level AA requirement is 4.5:1 and the Level AAA requirement is 7:1. Visible placeholder text and text shown on hover or focus should be checked against the same applicable threshold.",
+        },
+        {
+          question: "Why can large text use a 3:1 contrast ratio?",
+          answer:
+            "Larger letterforms are generally easier to read at a lower contrast. Large text is usually at least 18pt, about 24 CSS pixels, or at least 14pt bold, about 18.5 CSS pixels.",
+        },
+        {
+          question: "Do buttons and icons need a 4.5:1 contrast ratio?",
+          answer:
+            "Button text follows the text requirement. Visual information needed to identify a control or its state, including essential borders, icons and graphics, generally follows the 3:1 non-text contrast requirement.",
+        },
+        {
+          question: "Does a passing ratio make a color system fully accessible?",
+          answer:
+            "No. Information such as errors, success and selected states should not be communicated by color alone. Add text, an icon, a pattern or another visible cue.",
+        },
+        {
+          question: "How does the checker find the closest passing color?",
+          answer:
+            "It keeps the original hue, adjusts lightness first, and reduces chroma only when required to stay inside the sRGB gamut. It selects a passing candidate with the shortest perceptual distance from the original color.",
+        },
+        {
+          question: "Are my colors or palette sent to a server?",
+          answer:
+            "No. Color parsing, contrast calculations and suggestions all run in your browser. The colors you enter are never uploaded to or stored on the Kitfolio server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "명도대비 검사기",
+        subtitle: "WCAG 2.2 대비 검사 + 팔레트 매트릭스",
+      },
+      en: {
+        title: "Color Contrast Checker",
+        subtitle: "WCAG 2.2 results and a palette audit matrix",
+      },
+    },
+  },
+  {
+    slug: "color-blindness-simulator",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "pm"],
+    ico: "◉",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "색각이상 시뮬레이터", en: "Color Blindness Simulator" },
+    relatedTools: ["color-contrast-checker", "tailwind-palette-generator", "css-gradient"],
+    seo: {
+      ko: {
+        title: "색각이상 시뮬레이터 | 색약·적록색약 시안 미리보기",
+        description:
+          "웹과 앱의 화면 시안·스크린샷을 Protan, Deutan, Tritan 색각 조건과 흑백 보기로 비교하세요. 강도를 조절하며 상태색, 차트, 링크, 선택 요소가 색상 없이도 구분되는지 확인할 수 있습니다. PNG·JPG·WebP 이미지는 서버에 업로드되지 않고 브라우저에서 처리됩니다.",
+        keywords: [
+          "색각이상 시뮬레이터",
+          "색약 시뮬레이터",
+          "적록색약 시뮬레이션",
+          "색맹 시뮬레이터",
+          "웹접근성 색상 검사",
+          "색각이상 시안 검수",
+          "color blindness simulator",
+        ],
+      },
+      en: {
+        title: "Color Blindness Simulator | Check UI Designs",
+        description:
+          "Preview a UI design or screenshot under protan, deutan and tritan color vision conditions, or remove color entirely with the grayscale check. Adjust the simulation strength and compare against the original to find status colors, charts, links and selected states that rely on color alone. PNG, JPG and WebP images are processed locally in your browser.",
+        keywords: [
+          "color blindness simulator",
+          "color vision deficiency simulator",
+          "color blind design checker",
+          "protan deutan tritan simulator",
+          "accessibility color checker",
+          "ui color accessibility",
+          "color blind screenshot preview",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다.",
+        description:
+          "화면 시안이나 스크린샷을 여러 색각 조건으로 변환해 색상에만 의존한 정보 구분이 사라지는 지점을 확인하세요. 원본과 결과를 나란히 비교하고 상태색·차트·선택 요소의 보조 단서를 점검할 수 있습니다. Protan·Deutan·Tritan 세 유형과 흑백 점검을 제공하며, 이미지는 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "검수할 화면 시안이나 스크린샷 올리기",
+          "색각 유형과 시뮬레이션 강도 선택",
+          "원본과 비교해 색상 없이 구분되지 않는 요소 찾기",
+        ],
+        aeo: {
+          what: "색각이상 시뮬레이터는 화면 시안이나 스크린샷의 색상을 여러 색각 조건으로 변환해 원본과 비교하는 브라우저 도구입니다.",
+          who: "상태색, 차트, 지도, 링크, 선택 요소의 색상 접근성을 검수하는 디자이너, 개발자와 PM을 위한 도구입니다.",
+          how: "이미지를 브라우저에서 픽셀 단위로 변환하고 Protan·Deutan·Tritan 유형과 강도 또는 흑백 보기를 원본 옆에 표시합니다.",
+          why: "색상 차이가 줄어들었을 때 의미와 상태도 함께 사라지는 디자인 문제를 개발 전달이나 배포 전에 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "색각이상 시뮬레이터로 무엇을 확인해야 하나요?",
+            body: [
+              "이 도구의 목적은 화면을 낯선 색으로 바꿔 보는 데 있지 않습니다. 색상 차이가 줄어들었을 때 정보의 의미, 상태, 우선순위까지 함께 사라지는지를 확인하는 것이 핵심입니다. 성공과 오류, 활성과 비활성, 차트의 여러 계열처럼 색상이 기능을 맡고 있는 영역을 중심으로 원본과 변환 결과를 비교해야 합니다.",
+              "WCAG 2.2는 정보 전달, 동작 표시, 응답 유도, 시각 요소 구분에 색상만을 사용하지 않도록 요구합니다. 색을 없애야 한다는 뜻은 아닙니다. 색상을 쓰되 텍스트, 아이콘, 패턴, 형태, 위치 같은 다른 단서도 함께 제공해야 한다는 뜻입니다.",
+            ],
+          },
+          {
+            heading: "Protan·Deutan·Tritan은 무엇이 다른가요?",
+            body: [
+              "Protan은 적색 계열 신호가 달라지는 조건입니다. 일부 빨강이 어둡게 보이거나 녹색·갈색 계열과 가까워져 오류·성공 배지, 빨강·초록 차트 계열, 어두운 배경 위의 빨간 경고에서 문제가 드러나기 쉽습니다.",
+              "Deutan은 녹색 계열 신호가 달라지는 조건입니다. 초록·빨강·갈색·주황의 구분이 함께 줄어들어 승인·대기 상태, 지도 범례, 완료율 색상 단계를 확인하기 좋습니다.",
+              "Tritan은 청황 계열이 달라지는 조건입니다. 파랑·초록, 보라·빨강, 노랑·분홍 같은 조합의 차이가 줄어들어 파란 링크와 녹색 상태, 보라·빨강 계열 차트, 노란 강조 영역을 점검할 때 씁니다.",
+              "이 구분은 검수할 위치를 찾기 위한 실무 요약입니다. 실제로 보이는 색은 원본 색상, 명도, 채도, 주변 배경과 시뮬레이션 강도에 따라 달라집니다. 이름만 보고 특정 색 조합이 반드시 실패한다고 단정하지 말고 실제 시안을 비교하세요.",
+            ],
+          },
+          {
+            heading: "시뮬레이션 강도는 어떻게 사용하나요?",
+            body: [
+              "강도 0%는 원본이고, 값을 높일수록 선택한 색각 조건에서 색상 차이가 더 크게 줄어든 결과를 보여줍니다. 100%는 가장 강한 조건에서도 정보가 유지되는지 확인하는 보수적인 검수값입니다. 먼저 100%에서 사라지는 구분을 찾고, 40~70% 구간에서도 같은 문제가 나타나는지 비교하면 수정 우선순위를 정하기 쉽습니다.",
+              "사람마다 색 지각은 연속적으로 다르고 주변 조명, 디스플레이, 색 프로필도 결과에 영향을 줍니다. 한 강도의 이미지가 모든 사용자의 시야를 그대로 나타낸다고 보지 말고, 여러 조건에서도 의미가 유지되는 디자인을 목표로 삼으세요.",
+            ],
+          },
+          {
+            heading: "가장 먼저 봐야 할 화면 요소",
+            body: [
+              "상태와 피드백: 성공을 초록색으로만, 오류를 빨간색으로만 표시하면 두 색의 차이가 줄었을 때 의미도 사라집니다. 상태 텍스트와 서로 다른 아이콘을 함께 쓰세요. 입력 오류도 테두리 색상만 바꾸지 말고 해당 필드 가까이에 원인과 수정 방법을 적어야 합니다.",
+              "차트와 데이터 시각화: 범례와 선·막대가 색으로만 연결되면 일부 계열이 합쳐져 보일 수 있습니다. 선 그래프에는 실선·점선·파선과 데이터 포인트 모양을 조합하고, 막대나 영역에는 패턴·테두리·직접 라벨을 쓸 수 있습니다. 순차 데이터는 색조를 늘리는 것보다 명도 단계를 충분히 벌리는 편이 안정적입니다.",
+              "링크·탭·선택 상태: 본문 링크, 활성 탭, 선택된 카드가 색상만 달라지는지 확인하세요. 링크에는 밑줄을, 활성 탭에는 굵기나 하단 표시선을, 선택된 카드에는 체크 아이콘이나 테두리 형태를 더하면 색상 차이가 줄어도 상태가 남습니다.",
+              "버튼·입력창·아이콘: 버튼 텍스트와 배경, 입력창 테두리와 바깥 배경, 의미 있는 아이콘과 인접 색상의 명도 차이를 확인해야 합니다. 시뮬레이션에서 흐려 보이는 조합은 명도대비 검사기에 두 색을 넣어 WCAG 비율을 수치로 확인하세요.",
+            ],
+          },
+          {
+            heading: "흑백 점검은 왜 필요한가요?",
+            body: [
+              "흑백 보기는 특정 색각 조건을 나타내는 기능이 아니라, 색상이라는 단서를 완전히 제거하는 스트레스 테스트입니다. 원본에서는 분명했던 상태·계열·선택 요소가 흑백에서 모두 같은 회색으로 합쳐진다면 색상 의존도가 높은 디자인일 가능성이 큽니다.",
+              "이 도구의 흑백 변환은 채널 평균이 아니라 상대 휘도를 씁니다. 그래서 두 색의 명도대비 비율은 원본과 똑같이 유지되고 색상 단서만 사라집니다. 흑백에서도 구분되지 않는다면 그것은 대비 문제가 아니라 색상에만 의존한 설계라는 뜻입니다.",
+              "흑백에서 모든 색이 서로 달라야 하는 것은 아닙니다. 텍스트 라벨, 아이콘, 패턴, 선의 형태로 같은 정보를 알아볼 수 있다면 목적을 달성한 것입니다. 중요한 질문은 '색이 없어도 원래 의미를 찾을 수 있는가'입니다.",
+            ],
+          },
+          {
+            heading: "문제를 발견했을 때 수정하는 순서",
+            body: [
+              "먼저 의미를 직접 말하는 텍스트 라벨을 추가하고, 성공·오류·주의·선택 상태에 서로 다른 아이콘이나 형태를 씁니다. 차트 계열에는 선 스타일, 포인트 모양, 패턴 또는 직접 라벨을 더합니다.",
+              "그다음 전경색과 배경색, 인접한 데이터 색상의 명도 차이를 키웁니다. 중요한 상태를 작은 색 점 하나에 맡기지 말고 충분한 면적과 명확한 위치를 주세요. 수정한 시안은 세 가지 보기와 흑백에서 다시 확인합니다.",
+              "색을 전부 없애거나 브랜드 팔레트를 버릴 필요는 없습니다. 색상은 빠른 인지와 강조에 유용합니다. 다만 색상 하나가 사라졌을 때 기능과 의미까지 사라지지 않도록 중복 단서를 설계해야 합니다.",
+            ],
+          },
+          {
+            heading: "색각 시뮬레이션과 명도대비 검사는 서로 다릅니다",
+            body: [
+              "색각 시뮬레이션은 서로 다른 색이 비슷하게 보일 가능성을 시각적으로 찾는 도구입니다. 명도대비 검사는 두 색의 상대 휘도 차이가 WCAG 기준을 충족하는지 수치로 판정합니다. 빨강과 초록이 각각 배경과 충분히 대비되어도 두 상태가 색으로만 구분된다면 여전히 문제가 될 수 있고, 반대로 색상 구분은 남아 있어도 글자와 배경의 명도대비가 부족할 수 있습니다.",
+              "따라서 시뮬레이터에서 구분 문제를 찾은 뒤 명도대비 검사기로 실제 텍스트·UI 색상 쌍을 확인하는 순서가 좋습니다. 두 검사는 대체 관계가 아니라 보완 관계입니다.",
+            ],
+          },
+          {
+            heading: "배포 전 색상 접근성 체크리스트",
+            body: [
+              "성공·오류·주의·완료 상태에 텍스트나 아이콘이 함께 있는지, 차트 계열을 선 스타일·패턴·모양 또는 직접 라벨로도 구분할 수 있는지 확인합니다. 링크와 활성 탭, 선택된 카드에도 색상 외의 형태 차이가 있어야 합니다.",
+              "글자와 아이콘, 입력창 테두리가 실제 배경과 충분히 대비되는지 보고, 라이트·다크 테마와 기본·호버·포커스·선택·오류 상태를 각각 확인합니다. 마지막으로 Protan·Deutan·Tritan과 흑백 보기에서 핵심 과업을 끝내는 데 필요한 정보가 남아 있는지 점검하세요.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "예시 시안의 상태 점을 Deutan 100%로 보기",
+            input: "내장 예시 시안 · Deutan · 강도 100%",
+            result: "완료 상태의 초록 #16A34A는 #958951로, 실패 상태의 빨강 #DC2626은 #8F801B로 수렴해 두 색의 대비 비율이 1.47:1에서 1.13:1로 떨어진다",
+            note: "라벨 없이 점 색상만으로 상태를 표시한 영역은 사실상 구분되지 않습니다. 상태 텍스트나 서로 다른 아이콘을 함께 두어야 합니다.",
+          },
+          {
+            title: "같은 시안을 Protan 100%와 비교",
+            input: "내장 예시 시안 · Protan · 강도 100%",
+            result: "같은 두 색이 #A49442와 #635923이 되어 색상은 비슷해지지만 명도 차이는 남아 대비 비율이 2.31:1이 된다",
+            note: "유형에 따라 남는 단서가 다릅니다. Deutan에서 사라진 구분이 Protan에서는 밝기로 일부 남을 수 있으므로 세 유형을 모두 확인해야 합니다.",
+          },
+          {
+            title: "흑백 점검으로 색상 의존도 확인",
+            input: "내장 예시 시안 · 흑백 점검",
+            result: "파란 링크 #2563EB는 #6D6D6D, 본문 글자 #334155는 #404040이 되어 명도대비 2.00:1은 그대로 유지되지만 색상 단서는 완전히 사라진다",
+            note: "흑백 점검은 명도 차이를 그대로 두고 색상만 제거합니다. 여기서 합쳐지는 요소가 있다면 밑줄·아이콘·형태 같은 단서를 더해야 합니다.",
+          },
+        ],
+        limitations: [
+          "스크린샷에는 호버, 키보드 포커스, 로딩, 오류, 비활성, 드래그 같은 모든 상태가 담기지 않습니다. 중요한 상태마다 별도 이미지를 올리거나 실제 구현 화면에서 다시 확인해야 합니다.",
+          "이미지 안의 요소가 색상 외 단서로 충분히 구분되는지는 사람이 판단해야 하므로 이 도구는 자동 합격 점수나 접근성 준수 판정을 제공하지 않습니다.",
+          "시뮬레이션은 연구 모델을 사용한 근사 결과입니다. 개인별 색 지각과 실제 디스플레이 환경을 그대로 재현할 수는 없으므로, 픽셀 단위 절대값이 아니라 구분이 사라지는 위치를 찾는 검수 자료로 쓰세요.",
+          "넓은 색역으로 저장된 이미지는 브라우저 캔버스의 처리 색 공간으로 변환되면서 원본과 색이 조금 달라질 수 있습니다.",
+          "PNG·JPG·WebP만 지원하며 파일은 10MB, 해상도는 40메가픽셀까지 받습니다. 미리보기는 반응 속도를 위해 최대 2메가픽셀로 비율을 유지한 채 축소해 처리합니다.",
+          "저시력 흐림, 백내장, 눈부심처럼 색각이상이 아닌 다른 시각 조건은 다루지 않습니다. 대비 부족 영역을 자동으로 표시하는 히트맵도 제공하지 않습니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "Machado, Oliveira, Fernandes · A Physiologically-based Model for Simulation of Color Vision Deficiency (2009)",
+            url: "https://pubmed.ncbi.nlm.nih.gov/19834201/",
+          },
+          {
+            label: "National Eye Institute · Types of Color Vision Deficiency",
+            url: "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/color-blindness/types-color-vision-deficiency",
+          },
+        ],
+      },
+      en: {
+        card: "Simulate color vision conditions on a design to find distinctions that rely on color alone.",
+        description:
+          "Preview a UI design or screenshot under different color vision conditions to find where information depends on color alone. Compare the original and the simulated result side by side and review status colors, chart series and selected states for non-color cues. Protan, deutan and tritan views plus a grayscale check are available, and images are processed entirely in your browser.",
+        howItWorks: [
+          "Add a UI design or screenshot",
+          "Choose a color vision type and simulation strength",
+          "Compare both views and find elements that rely on color alone",
+        ],
+        aeo: {
+          what: "A color blindness simulator transforms the colors in a UI design or screenshot and compares the simulated result with the original image.",
+          who: "It is for designers, developers and product managers reviewing color accessibility in status indicators, charts, maps, links and selected controls.",
+          how: "It processes image pixels locally and displays protan, deutan, tritan or grayscale views next to the original at the selected simulation strength.",
+          why: "It helps teams find places where reduced color differences also remove meaning, state or visual separation before implementation or release.",
+        },
+        guide: [
+          {
+            heading: "What should you check with a color blindness simulator?",
+            body: [
+              "The purpose of this tool is not simply to recolor a screen. It is to reveal whether meaning, state and priority disappear when color differences become less distinct. Compare the original and simulated views around elements where color performs a function, including success and error states, active and inactive controls, and multiple chart series.",
+              "WCAG 2.2 requires that color is not the only visual means of conveying information, indicating an action, prompting a response or distinguishing an element. This does not mean removing color. It means pairing color with text, icons, patterns, shapes, position or another visible cue.",
+            ],
+          },
+          {
+            heading: "How protan, deutan and tritan views differ",
+            body: [
+              "Protan describes a change in the red signal. Some reds appear darker or move closer to greens and browns, so red and green status badges, chart series, and red warnings on dark surfaces are where problems tend to show.",
+              "Deutan describes a change in the green signal. Differences among greens, reds, browns and oranges decrease together, which makes it useful for approval states, map legends and progress color scales.",
+              "Tritan affects the blue-yellow range. Differences can decrease among blue-green, purple-red and yellow-pink combinations, so use it to review blue links next to green states, purple and red charts, and yellow highlights.",
+              "Treat these as a guide to where to look, not as a prediction that every listed pair will fail. The visible result depends on the source colors, luminance, saturation, background and the selected strength, so compare the actual design.",
+            ],
+          },
+          {
+            heading: "How to use simulation strength",
+            body: [
+              "At 0%, the result matches the original. Increasing the value reduces color differences according to the selected condition. A 100% view is a conservative stress test for checking whether information survives a strong transformation. Start at 100% to find lost distinctions, then compare intermediate values such as 40% to 70% to prioritize changes.",
+              "Color perception varies continuously, and lighting, displays and color profiles also affect the result. Do not treat one setting as a universal view. Design so that meaning remains available across several conditions and strengths.",
+            ],
+          },
+          {
+            heading: "Elements to review first",
+            body: [
+              "Status and feedback: if success is only green and error is only red, the meaning can disappear when those colors move closer together. Add explicit status text and different icons. For form errors, do not rely on a colored border alone; place the cause and suggested correction near the field.",
+              "Charts and data visualization: series connected to a legend by color alone can become indistinguishable. Combine solid, dashed and dotted lines with different point shapes, and use patterns, borders or direct labels for bars and areas. For sequential data, sufficiently separated luminance steps are often more reliable than adding more hues.",
+              "Links, tabs and selected states: check whether inline links, active tabs and selected cards only change color. Add an underline to links, weight or an indicator line to active tabs, and a check icon or border treatment to selected cards.",
+              "Controls and icons: review button text against its fill, input borders against the outer surface, and meaningful icons against adjacent colors. If a pair becomes difficult to see, enter its foreground and background colors in the contrast checker to measure the applicable WCAG ratio.",
+            ],
+          },
+          {
+            heading: "Why use a grayscale check?",
+            body: [
+              "Grayscale is a stress test that removes color as an information cue rather than a representation of any color vision condition. If states, series or selections collapse into the same gray, the design likely relies heavily on hue.",
+              "This tool converts to gray using relative luminance rather than a channel average, so the contrast ratio between any two colors stays exactly what it was in the original and only the hue cue is removed. Anything that becomes indistinguishable here is a color-dependence problem, not a contrast problem.",
+              "The goal is not to make every color look different in grayscale. The goal is to keep the same information available through labels, icons, patterns, line styles or other visible structure. Ask one practical question: can a user still identify the original meaning when color is removed?",
+            ],
+          },
+          {
+            heading: "How to fix a problem",
+            body: [
+              "Start by adding a text label that states the meaning directly, and use different icons or shapes for success, error, warning and selected states. Add line styles, point shapes, patterns or direct labels to chart series.",
+              "Then increase the luminance difference between foreground and background or between adjacent data colors. Do not assign an important state to a tiny color dot; provide sufficient area and clear placement. Recheck the revised design in all three views and in grayscale.",
+              "Color remains useful for fast recognition and emphasis. The objective is not to discard a brand palette but to ensure that removing a color difference does not also remove function or meaning.",
+            ],
+          },
+          {
+            heading: "Simulation and contrast checking answer different questions",
+            body: [
+              "A color vision simulation helps locate different colors that may become difficult to distinguish. A contrast checker measures whether the relative luminance between two colors reaches a WCAG threshold. Red and green states can each contrast strongly with their background while still failing when color is the only difference. A pair can also remain different in the simulation while the text-to-background contrast is too low.",
+              "Use the simulator to locate a design risk, then measure the actual foreground and background pair in the contrast checker. The two tools complement each other.",
+            ],
+          },
+          {
+            heading: "Pre-release color accessibility checklist",
+            body: [
+              "Confirm that success, error, warning and completion states include text or an icon, and that chart series can be distinguished by line style, pattern, shape or a direct label. Links, active tabs and selected cards should carry a non-color cue as well.",
+              "Check that text, icons and input boundaries have sufficient contrast against their actual background, and review light and dark themes along with default, hover, focus, selected and error states. Finally, confirm that the information required to complete the main task remains available in the protan, deutan, tritan and grayscale views.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Viewing the sample design's status dots at deutan 100%",
+            input: "Built-in sample design, deutan, strength 100%",
+            result: "The completed state's green #16A34A becomes #958951 and the failed state's red #DC2626 becomes #8F801B, dropping the contrast between them from 1.47:1 to 1.13:1",
+            note: "Anywhere status is shown by dot color without a label becomes effectively unreadable. Pair the dot with status text or a distinct icon.",
+          },
+          {
+            title: "Comparing the same design at protan 100%",
+            input: "Built-in sample design, protan, strength 100%",
+            result: "The same two colors become #A49442 and #635923: the hues converge but a lightness difference remains, so the contrast between them is 2.31:1",
+            note: "Different views leave different cues intact. A distinction lost under deutan can partly survive as lightness under protan, so check all three.",
+          },
+          {
+            title: "Using the grayscale check for color dependence",
+            input: "Built-in sample design, grayscale check",
+            result: "The blue link #2563EB becomes #6D6D6D and body text #334155 becomes #404040, keeping the 2.00:1 contrast ratio intact while the hue cue disappears entirely",
+            note: "Grayscale leaves luminance differences untouched and removes only color. Anything that merges here needs an underline, icon or shape cue.",
+          },
+        ],
+        limitations: [
+          "A screenshot does not include every hover, keyboard focus, loading, error, disabled or drag state. Upload separate images for important states and review the implemented interface as well.",
+          "A person still needs to decide whether non-color cues preserve the information, so this tool does not produce an automatic accessibility score or conformance verdict.",
+          "The simulation is an approximation based on a research model. It cannot reproduce every person's color perception or every display environment, so use it to locate lost distinctions rather than as an absolute pixel reference.",
+          "Images saved in a wide gamut can shift slightly when the browser canvas converts them into its working color space.",
+          "Only PNG, JPG and WebP are supported, up to 10MB and 40 megapixels. The preview is scaled down to at most 2 megapixels, preserving aspect ratio, to keep the controls responsive.",
+          "Other visual conditions such as low-vision blur, cataracts or glare are out of scope, and no automatic heatmap of low-contrast areas is provided.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "Machado, Oliveira, Fernandes · A Physiologically-based Model for Simulation of Color Vision Deficiency (2009)",
+            url: "https://pubmed.ncbi.nlm.nih.gov/19834201/",
+          },
+          {
+            label: "National Eye Institute · Types of Color Vision Deficiency",
+            url: "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/color-blindness/types-color-vision-deficiency",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "색각이상 시뮬레이터는 어떤 디자인을 검사할 수 있나요?",
+          answer:
+            "웹·앱 화면, 대시보드, 차트, 지도, 배너처럼 PNG·JPG·WebP 이미지로 저장하거나 캡처할 수 있는 시안을 검사할 수 있습니다. 상태색, 차트 계열, 링크와 선택 요소처럼 색상이 기능을 맡는 영역을 중심으로 비교하세요.",
+        },
+        {
+          question: "Protan, Deutan, Tritan 보기는 무엇이 다른가요?",
+          answer:
+            "Protan과 Deutan은 주로 적록 계열 색상 차이가 줄어드는 조건을, Tritan은 일부 청황 계열 색상 차이가 줄어드는 조건을 보여줍니다. 같은 시안도 유형에 따라 구분하기 어려운 조합이 달라질 수 있습니다.",
+        },
+        {
+          question: "시뮬레이션 강도는 몇 퍼센트로 확인해야 하나요?",
+          answer:
+            "먼저 100%에서 정보 구분이 유지되는지 확인하고, 40~70% 같은 중간값에서도 비교하세요. 한 값만 통과 기준으로 쓰기보다 여러 강도에서 상태와 의미가 유지되는지 보는 것이 좋습니다.",
+        },
+        {
+          question: "흑백 보기는 왜 제공하나요?",
+          answer:
+            "색상을 완전히 제거했을 때도 텍스트, 아이콘, 패턴과 형태로 같은 정보를 구분할 수 있는지 확인하기 위해서입니다. 상대 휘도로 변환하므로 두 색의 명도대비 비율은 그대로 유지되고 색상 단서만 사라집니다.",
+        },
+        {
+          question: "시뮬레이션 결과만으로 웹접근성 준수 여부를 알 수 있나요?",
+          answer:
+            "아닙니다. 시뮬레이션은 색상에만 의존한 디자인 문제를 찾는 검수 단계입니다. 글자와 배경, UI 요소의 실제 대비 비율은 명도대비 검사기로 확인하고 키보드·구조·대체 텍스트 같은 다른 접근성 항목도 별도로 검수해야 합니다.",
+        },
+        {
+          question: "업로드한 시안 이미지가 서버로 전송되나요?",
+          answer:
+            "아니요. 이미지 디코딩과 색상 변환은 브라우저에서 처리되며, 업로드한 이미지와 파일명은 Kitfolio 서버로 전송하거나 저장하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What designs can I check with the color blindness simulator?",
+          answer:
+            "You can review web and app screens, dashboards, charts, maps and other designs saved or captured as PNG, JPG or WebP. Focus on places where color communicates a state, series, link or selection.",
+        },
+        {
+          question: "What is the difference between protan, deutan and tritan views?",
+          answer:
+            "Protan and deutan views reduce differences across parts of the red-green range, while tritan affects some blue-yellow combinations. A pair that remains distinct in one view can become difficult to separate in another.",
+        },
+        {
+          question: "Which simulation strength should I use?",
+          answer:
+            "Start at 100% as a conservative stress test, then compare intermediate values such as 40% to 70%. Review whether meaning and state remain available across several strengths instead of treating one value as a universal threshold.",
+        },
+        {
+          question: "Why does the tool include a grayscale view?",
+          answer:
+            "Grayscale removes color as an information cue and reveals where labels, icons, patterns or shapes are missing. It converts using relative luminance, so contrast ratios stay exactly as they were and only the hue cue is removed.",
+        },
+        {
+          question: "Does the simulation confirm that a design meets web accessibility requirements?",
+          answer:
+            "No. The simulation helps find design problems that rely on color alone. Measure actual foreground and background pairs with a contrast checker, and review other requirements such as keyboard support, structure and text alternatives separately.",
+        },
+        {
+          question: "Is my uploaded design sent to a server?",
+          answer:
+            "No. Image decoding and color transformation run in your browser. The image and filename you provide are not uploaded to or stored on the Kitfolio server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "색각이상 시뮬레이터",
+        subtitle: "시안의 상태색·차트·선택 요소를 색각 조건별로 비교",
+      },
+      en: {
+        title: "Color Blindness Simulator",
+        subtitle: "Compare UI states, charts and controls across color vision conditions",
+      },
+    },
+  },
 
   // ── Text ─────────────────────────────
   {
