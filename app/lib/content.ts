@@ -2191,6 +2191,372 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "color-contrast-checker",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer"],
+    ico: "◐",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "명도대비 검사기", en: "Color Contrast Checker" },
+    relatedTools: ["tailwind-palette-generator", "css-gradient", "open-graph-preview"],
+    seo: {
+      ko: {
+        title: "명도대비 검사기 | WCAG 색상 대비·팔레트 점검",
+        description:
+          "전경색과 배경색의 WCAG 2.2 명도대비를 확인하고 본문·큰 글자·UI 컴포넌트의 AA·AAA 충족 여부를 비교하세요. 기준에 미달하면 원래 색의 인상을 유지한 수정 후보를 제안하고, 여러 HEX 색상은 팔레트 매트릭스로 한 번에 점검합니다. 입력한 색상값은 서버로 전송되지 않고 브라우저에서 처리됩니다.",
+        keywords: [
+          "명도대비 검사",
+          "명도 대비 검사기",
+          "색상 대비 검사기",
+          "WCAG 대비 비율",
+          "웹접근성 색상",
+          "배경색 글자색 대비",
+          "팔레트 접근성 검사",
+          "color contrast checker",
+        ],
+      },
+      en: {
+        title: "Color Contrast Checker | WCAG Palette Audit",
+        description:
+          "Check foreground and background colors against WCAG 2.2 contrast requirements for normal text, large text and interface components. Find a close passing color when a pair fails, or paste multiple HEX colors to audit every palette combination in a matrix. Your colors are processed locally in the browser and are never uploaded to a server.",
+        keywords: [
+          "color contrast checker",
+          "wcag contrast checker",
+          "accessibility color checker",
+          "contrast ratio calculator",
+          "accessible color palette",
+          "palette contrast matrix",
+          "foreground background contrast",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다.",
+        description:
+          "글자색과 배경색의 대비 비율을 계산해 WCAG 2.2 AA·AAA 충족 여부를 확인하세요. 본문 텍스트·큰 텍스트·UI 컴포넌트 기준을 한 화면에서 비교하고, 기준에 미달하면 원래 색조를 유지한 수정 후보를 제안합니다. 여러 HEX 색상을 붙여넣으면 전경색과 배경색의 모든 조합을 매트릭스로 한 번에 점검할 수 있습니다.",
+        howItWorks: [
+          "전경색·배경색 또는 HEX 팔레트 입력",
+          "WCAG 2.2 대비 비율과 사용 가능한 범위 확인",
+          "통과 색상 적용 또는 필요한 조합 선택",
+        ],
+        aeo: {
+          what: "명도대비 검사기는 전경색과 배경색의 상대 휘도 차이를 계산해 WCAG 2.2 기준 충족 여부를 보여주는 브라우저 도구입니다.",
+          who: "웹과 앱의 텍스트, 버튼, 입력창, 아이콘, 그래프 색상을 검수하는 디자이너와 프론트엔드 개발자를 위한 도구입니다.",
+          how: "두 색의 sRGB 상대 휘도로 대비 비율을 계산하고, 여러 색상을 입력하면 모든 전경색·배경색 조합을 매트릭스로 비교합니다.",
+          why: "낮은 대비로 인한 가독성 문제를 시안과 구현 단계에서 발견하고, 기준을 통과하는 대체 색상을 더 빠르게 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성 명도대비, 무엇을 검사해야 하나요?",
+            body: [
+              "명도대비는 글자나 인터페이스 요소가 주변 배경과 얼마나 밝고 어둡게 구분되는지를 나타냅니다. 색상이 서로 달라 보여도 밝기가 비슷하면 대비 비율은 낮을 수 있습니다. 반대로 색조가 비슷해도 밝기 차이가 충분하면 더 높은 대비가 나올 수 있습니다.",
+              "따라서 브랜드 컬러의 이름이나 육안 인상만으로 판단하지 말고, 실제 화면에서 함께 놓일 전경색과 배경색을 한 쌍으로 검사해야 합니다.",
+            ],
+          },
+          {
+            heading: "WCAG 대비 비율은 어떻게 계산되나요?",
+            body: [
+              "WCAG 2.2는 sRGB 색상의 상대 휘도를 이용합니다. 두 색 중 밝은 색의 상대 휘도를 L1, 어두운 색을 L2라고 하면 대비 비율은 (L1 + 0.05) / (L2 + 0.05)로 계산합니다. 같은 색끼리는 1:1이고 검정과 흰색은 최대 21:1입니다. 이 수치는 색이 예쁜지 평가하는 점수가 아니라, 특정 용도로 쓸 수 있는 최소한의 밝기 차이를 확인하는 기준입니다.",
+              "판정 경계에서는 반올림하면 안 됩니다. 실제 계산값이 4.499:1이라면 화면상 4.50에 가까워 보여도 4.5:1 기준을 통과하지 않습니다. 이 도구는 원시 계산값으로 판정하고, 경계에 가까운 값은 소수점 셋째 자리까지 표시합니다.",
+            ],
+          },
+          {
+            heading: "본문·큰 글자·UI의 기준은 서로 다릅니다",
+            body: [
+              "일반 텍스트와 텍스트 이미지는 AA 4.5:1, AAA 7:1입니다. 큰 텍스트는 AA 3:1, AAA 4.5:1로 완화됩니다. UI 컴포넌트와 의미 있는 그래픽은 AA 3:1이며 별도의 AAA 기준이 없습니다.",
+              "큰 텍스트는 일반적으로 18pt, CSS 기준 약 24px 이상인 텍스트를 말합니다. 굵은 글자는 14pt, 약 18.5px 이상이면 큰 텍스트 범주에 들어갈 수 있습니다. 다만 획이 매우 얇거나 형태가 특이한 글꼴은 같은 크기라도 실제로 더 흐리게 보일 수 있습니다. 기준을 간신히 통과한 색상이라면 글자 크기만 키우는 편법보다 대비 자체를 여유 있게 높이는 편이 안전합니다.",
+              "로고와 순수 장식 텍스트, 비활성 상태의 UI는 일부 대비 요구에서 예외가 될 수 있습니다. 그러나 로고가 링크나 버튼 역할을 하거나, 비활성처럼 보이는 요소가 실제로 조작 가능하다면 별도 검토가 필요합니다.",
+            ],
+          },
+          {
+            heading: "버튼·입력창·아이콘은 어디를 재야 하나요?",
+            body: [
+              "UI 컴포넌트와 의미 있는 그래픽은 요소를 식별하거나 상태를 이해하는 데 필요한 부분이 인접한 색상과 3:1 이상 대비되어야 합니다. 입력창을 알아보는 유일한 단서가 테두리라면 테두리와 바깥 배경을 검사합니다. 체크박스의 체크 표시, 드롭다운 화살표, 선택 상태 표시, 사용자 정의 포커스 링처럼 기능이나 상태를 전달하는 시각 요소도 주변 색상과 비교해야 합니다.",
+              "모든 버튼에 반드시 3:1 테두리가 필요한 것은 아닙니다. 버튼의 텍스트나 아이콘, 배치 맥락만으로 컨트롤의 존재가 분명하다면 전체 클릭 영역의 경계까지 표시할 의무는 없습니다. 대신 실제로 식별에 사용되는 텍스트·아이콘·상태 표시는 해당 기준을 충족해야 합니다.",
+            ],
+          },
+          {
+            heading: "팔레트 매트릭스는 이렇게 사용하세요",
+            body: [
+              "팔레트 감사는 각 색상을 전경색과 배경색으로 놓았을 때의 모든 조합을 보여줍니다. 먼저 본문 텍스트와 표면색 조합에서 4.5:1 이상인 셀을 찾고, 버튼 테두리·아이콘·차트 선처럼 비텍스트 요소에는 3:1 이상인 조합을 확인하세요. 브랜드의 강조색이 본문 텍스트에는 부족하더라도 큰 제목이나 굵은 아이콘에는 쓸 수 있습니다.",
+              "매트릭스의 통과 셀이 많다고 좋은 팔레트인 것은 아닙니다. 실제 제품에서 함께 배치할 조합만 선택하고, 기본·호버·포커스·선택·오류 상태까지 확인해야 합니다. 같은 색이 밝은 배경에서는 통과하지만 어두운 배경에서는 실패할 수 있으므로 라이트·다크 테마가 있다면 각각 검사하세요.",
+            ],
+          },
+          {
+            heading: "기준에 미달한 색상은 어떤 순서로 수정하나요?",
+            body: [
+              "본문 텍스트라면 배경을 유지하고 글자색을 먼저 더 어둡거나 밝게 조정합니다. 브랜드 컬러를 반드시 유지해야 한다면, 그 색을 텍스트나 아이콘보다 넓은 배경 또는 장식 요소로 역할을 바꾸고 실제 정보에는 별도의 고대비 색상을 쓰는 편이 낫습니다.",
+              "UI 테두리나 아이콘은 주변 배경과 3:1 이상이 되도록 조정합니다. 얇은 선은 수치상 통과해도 흐리게 보일 수 있으므로 대비에 여유를 둡니다. 큰 텍스트의 3:1 예외를 적용하려면 실제로 전달되는 크기와 굵기가 큰 텍스트 기준을 충족하는지 먼저 확인해야 합니다. 오류·성공·선택 상태는 색만 바꾸지 말고 텍스트, 아이콘, 패턴 또는 형태를 함께 제공합니다.",
+              "이 도구의 수정 후보는 원래 hue를 유지하면서 밝기를 우선 조정하고, 화면에서 표현 가능한 sRGB 색역을 벗어날 때만 채도를 필요한 만큼 낮춥니다. 제안값은 빠른 출발점이지 브랜드 가이드와 실제 화면 검수를 대신하는 최종 정답은 아닙니다.",
+            ],
+          },
+          {
+            heading: "높은 명도대비만으로 색상 접근성이 끝나지는 않습니다",
+            body: [
+              "명도대비 기준과 '색상만으로 정보를 전달하지 말 것'은 별개의 요구사항입니다. 빨간색 오류와 초록색 성공 상태가 각각 배경과 충분히 대비되더라도, 색만 바뀌고 텍스트나 아이콘이 없다면 상태를 구분하지 못하는 사용자가 생깁니다. 오류 문구, 체크 아이콘, 선의 패턴, 직접적인 상태 라벨처럼 색 이외의 단서를 함께 제공해야 합니다.",
+              "본문 속 링크를 밑줄 없이 색상만으로 구분한다면 링크색은 주변 일반 텍스트와 3:1 이상 차이가 나야 하고, 포커스나 호버 시에는 밑줄 같은 추가 시각 단서를 제공하는 방식이 권장됩니다. 가장 단순하고 안정적인 방법은 기본 상태에서도 링크에 밑줄이나 명확한 형태 차이를 두는 것입니다.",
+            ],
+          },
+          {
+            heading: "배포 전 색상 접근성 체크리스트",
+            body: [
+              "본문과 placeholder 텍스트가 실제 배경과 4.5:1 이상인지, 3:1 기준을 적용한 제목이 실제로 큰 텍스트 크기와 굵기를 충족하는지 확인합니다. 입력창 테두리, 아이콘, 포커스 표시, 선택 상태도 인접 색상과 3:1 이상이어야 합니다.",
+              "라이트·다크 테마와 기본·호버·포커스·선택·오류 상태를 모두 확인하고, 그라디언트나 이미지 위 텍스트는 가장 대비가 낮은 영역에서도 읽히는지 봅니다. 마지막으로 오류와 상태, 차트 범례, 링크를 색상만으로 구분하고 있지 않은지 점검합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "흰 배경 위 연한 회색 본문 텍스트",
+            input: "전경색 #9CA3AF · 배경색 #FFFFFF",
+            result: "2.54:1 · 본문 AA(4.5:1)는 물론 큰 텍스트·UI 기준(3:1)에도 미달",
+            note: "본문 AA를 목표로 두고 전경색을 조정하면 #707782(4.52:1)가 제안됩니다. 회색 톤은 그대로 두고 밝기만 낮춘 값입니다.",
+          },
+          {
+            title: "브랜드 블루 버튼 위의 흰 글자",
+            input: "전경색 #FFFFFF · 배경색 #6486EF",
+            result: "3.39:1 · 큰 텍스트와 UI 컴포넌트 기준(3:1)은 통과하지만 본문 AA(4.5:1)는 미달",
+            note: "버튼 라벨이 작은 글자라면 조정 대상을 배경색으로 바꾸세요. #5170D7(4.52:1)이 제안되어 흰 글자를 그대로 쓸 수 있습니다.",
+          },
+          {
+            title: "그레이 스케일 팔레트 5색 감사",
+            input: "#0F172A #334155 #64748B #E2E8F0 #FFFFFF 붙여넣기",
+            result: "5×5 매트릭스 25칸. 같은 색끼리인 5칸은 1:1이고, 나머지 20칸 중 본문 AA 이상이 10칸, 3:1 미만 미달이 6칸",
+            note: "#64748B는 흰 배경에서 4.76:1로 본문에 쓸 수 있지만 #E2E8F0 위에서는 3.86:1이라 큰 글자·UI 용도까지만 가능합니다.",
+          },
+        ],
+        limitations: [
+          "입력한 두 개의 불투명 단색만 계산합니다. 그라디언트·사진·배경 이미지·반투명 오버레이는 위치마다 실제 배경색이 달라지므로, 가장 대비가 낮은 지점의 색을 직접 골라 따로 검사해야 합니다.",
+          "투명도가 포함된 4자리·8자리 알파 HEX와 RGB·HSL·OKLCH 함수 표기는 아직 입력할 수 없습니다. 불투명 3자리·6자리 HEX로 변환해 입력하세요.",
+          "한 쌍의 색상이 통과했다는 것은 그 조합이 기준을 만족한다는 뜻일 뿐, 페이지 전체가 WCAG나 한국형 웹 콘텐츠 접근성 지침을 준수한다는 뜻이 아닙니다. 키보드 접근, 대체 텍스트, 구조, 포커스, 상태 전달은 별도로 확인해야 합니다.",
+          "수정 후보는 한쪽 색만 조정해서 목표에 도달할 수 있을 때만 제안합니다. 중간 밝기 배경처럼 어느 방향으로도 목표에 도달할 수 없는 조합에서는 억지로 후보를 만들지 않고 반대 색상도 함께 조정하도록 안내합니다.",
+          "팔레트 감사는 한 번에 최대 12색까지 검사합니다. 색이 더 많다면 실제 화면에서 함께 쓰이는 색끼리 묶어 나눠 검사하세요.",
+          "안티앨리어싱, 디스플레이 상태, 글꼴의 실제 획 두께는 계산에 반영되지 않습니다. 수치상 간신히 통과한 조합은 실제 화면에서 한 번 더 확인하는 편이 안전합니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "한국형 웹 콘텐츠 접근성 지침 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?sn=22592",
+          },
+        ],
+      },
+      en: {
+        card: "Check WCAG contrast for a color pair and get a close passing color when it fails.",
+        description:
+          "Calculate the contrast ratio between foreground and background colors and check WCAG 2.2 AA and AAA results. Compare the normal text, large text and interface component thresholds on one screen, and when a pair fails, get a passing alternative that keeps the original hue. Paste several HEX colors to audit every foreground and background combination in one matrix.",
+        howItWorks: [
+          "Enter foreground and background colors or paste a HEX palette",
+          "Review the WCAG 2.2 ratio and supported use cases",
+          "Apply a passing suggestion or inspect a palette pair",
+        ],
+        aeo: {
+          what: "A color contrast checker calculates the relative luminance difference between foreground and background colors and reports their WCAG 2.2 results.",
+          who: "It is for designers and front-end developers reviewing text, controls, icons and data visualization colors for web or app interfaces.",
+          how: "It calculates a contrast ratio from the sRGB relative luminance of two colors and compares every foreground and background pair when a palette is provided.",
+          why: "It helps teams identify low-contrast combinations during design and implementation and find a close alternative that meets the selected target.",
+        },
+        guide: [
+          {
+            heading: "What should you test for accessible color contrast?",
+            body: [
+              "Color contrast describes how clearly foreground content differs in lightness from its background. Two colors can look different in hue while still having a low contrast ratio if their luminance is similar. The reverse is also true: similar hues can reach a high ratio when their lightness differs enough.",
+              "Test the foreground and background colors that will actually appear together instead of judging a brand color by its name or by how it feels on its own.",
+            ],
+          },
+          {
+            heading: "How the WCAG contrast ratio is calculated",
+            body: [
+              "WCAG 2.2 uses the relative luminance of sRGB colors. If L1 is the relative luminance of the lighter color and L2 is that of the darker color, the ratio is (L1 + 0.05) / (L2 + 0.05). Identical colors have a ratio of 1:1, while black and white reach the maximum of 21:1. The ratio is not a visual quality score. It indicates whether a color pair reaches a minimum requirement for a specific use.",
+              "Thresholds must be evaluated without rounding. A calculated ratio of 4.499:1 does not meet a 4.5:1 requirement. This tool uses the unrounded value for pass or fail and shows an additional decimal place near a threshold.",
+            ],
+          },
+          {
+            heading: "Text, large text and interface elements use different thresholds",
+            body: [
+              "Normal text and images of text need 4.5:1 for AA and 7:1 for AAA. Large text relaxes to 3:1 for AA and 4.5:1 for AAA. User interface components and meaningful graphics need 3:1 for AA and have no separate AAA threshold.",
+              "Large text generally means at least 18pt, approximately 24 CSS pixels, or at least 14pt bold, approximately 18.5 CSS pixels. Very thin or unusual typefaces can appear less legible even when the calculated pair passes. When a result barely reaches the threshold, increasing the contrast is safer than relying on text size alone.",
+              "Logotypes, purely decorative text and inactive controls can be exempt from some contrast requirements. A logo that also functions as a control, or a component that only appears disabled, requires separate review.",
+            ],
+          },
+          {
+            heading: "What to measure for controls and icons",
+            body: [
+              "Visual information required to identify a control or understand its state should have at least 3:1 contrast against adjacent colors. If a border is the only cue that an input exists, compare the border with the outer background. Check marks, dropdown arrows, selected-state indicators and custom focus rings should also be compared with the colors next to them.",
+              "Not every button needs a 3:1 outline. If text, an icon or the surrounding context already identifies the control, the boundary of the full hit area does not have to be visible. The visual information people actually rely on must still meet its applicable contrast requirement.",
+            ],
+          },
+          {
+            heading: "How to use the palette matrix",
+            body: [
+              "The palette audit compares every color as both foreground and background. Start by finding text-and-surface pairs that reach 4.5:1. Use pairs at or above 3:1 for visible control boundaries, icons and essential chart lines. An accent color that fails for body text may still work for large text or a substantial icon.",
+              "A palette is not automatically accessible because it contains many passing cells. Review only combinations that will appear together and include default, hover, focus, selected and error states. Audit light and dark themes separately, because the same foreground color can pass on one surface and fail on another.",
+            ],
+          },
+          {
+            heading: "How to fix a failing pair",
+            body: [
+              "For body text, keep the surface color and adjust the text lighter or darker first. If a brand color must remain unchanged, use it for a larger surface or for decoration and choose a separate high-contrast color for the information itself.",
+              "Bring control boundaries and icons above 3:1 against their adjacent colors. Thin lines benefit from extra margin above the minimum. Apply the 3:1 large-text threshold only when the delivered size and weight actually meet the large-text definition. Add text, icons, patterns or shapes to error, success and selected states instead of relying on color alone.",
+              "The suggested color keeps the original hue and adjusts lightness first. Chroma is reduced only when necessary to keep a candidate inside the sRGB gamut. Treat the result as a practical starting point, not a replacement for reviewing the actual interface and brand system.",
+            ],
+          },
+          {
+            heading: "Contrast is not the same as using color accessibly",
+            body: [
+              "Meeting a contrast ratio does not satisfy every color requirement. Red error and green success colors can each contrast strongly with the background while still being indistinguishable to a user when color is the only state cue. Add a visible label, icon, pattern or other non-color signal.",
+              "When an inline link has no underline and color is the only difference, its color should differ from the surrounding text by at least 3:1 and gain another visual cue on focus or hover. Keeping an underline in the default state is the simpler and more robust choice.",
+            ],
+          },
+          {
+            heading: "Pre-release color accessibility checklist",
+            body: [
+              "Confirm that body text and placeholder text reach 4.5:1 against their actual backgrounds, and that every heading using the 3:1 threshold really is delivered at large-text size and weight. Input boundaries, icons, focus indicators and selected states should reach 3:1 against adjacent colors.",
+              "Check light and dark themes along with default, hover, focus, selected and error states, and make sure text over an image or gradient stays readable in its lowest-contrast area. Finally, verify that links, errors, states and chart series are distinguishable without color alone.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Light grey body text on white",
+            input: "Foreground #9CA3AF, background #FFFFFF",
+            result: "2.54:1, which misses body AA (4.5:1) and even the 3:1 large text and UI threshold",
+            note: "Targeting body AA and adjusting the foreground suggests #707782 at 4.52:1: the same grey tone, only darker.",
+          },
+          {
+            title: "White label on a brand blue button",
+            input: "Foreground #FFFFFF, background #6486EF",
+            result: "3.39:1, which passes the 3:1 large text and UI component threshold but misses body AA (4.5:1)",
+            note: "If the label is small text, switch the adjusted role to the background. #5170D7 at 4.52:1 is suggested, so the white label can stay as it is.",
+          },
+          {
+            title: "Auditing a five-color grey scale",
+            input: "Paste #0F172A #334155 #64748B #E2E8F0 #FFFFFF",
+            result: "A 5x5 matrix of 25 cells. Five same-color cells are 1:1, and of the remaining 20, ten reach body AA while six fall below 3:1",
+            note: "#64748B reaches 4.76:1 on white and works for body text, but only 3.86:1 on #E2E8F0, where it is limited to large text and UI use.",
+          },
+        ],
+        limitations: [
+          "Only two opaque solid colors are calculated. Gradients, photographs, background images and translucent overlays create a different effective background across an element, so pick the color at the lowest-contrast point and test it separately.",
+          "Four and eight digit alpha HEX values and rgb, hsl or oklch function syntax cannot be entered yet. Convert them to an opaque three or six digit HEX first.",
+          "A passing pair means that combination meets the threshold, not that the page conforms to WCAG or to another accessibility standard. Keyboard support, text alternatives, document structure, focus behavior and status communication require separate testing.",
+          "A suggestion is offered only when adjusting one color can reach the target. For combinations such as a mid-lightness background, where neither direction reaches the target, no candidate is forced and the tool asks you to adjust the other color too.",
+          "The palette audit checks up to 12 colors at a time. For a larger system, split it into groups of colors that actually appear together.",
+          "Anti-aliasing, display conditions and the real stroke weight of a typeface are not part of the calculation. A pair that barely passes on paper is worth checking once on the actual screen.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "Korean Web Content Accessibility Guidelines 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?sn=22592",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "WCAG 2.2에서 일반 텍스트의 최소 명도대비는 얼마인가요?",
+          answer:
+            "AA 기준은 4.5:1이고 AAA 기준은 7:1입니다. placeholder와 호버·포커스 시 나타나는 텍스트도 실제로 사용자에게 보이는 텍스트라면 같은 기준으로 확인해야 합니다.",
+        },
+        {
+          question: "큰 텍스트에는 왜 3:1 기준을 적용하나요?",
+          answer:
+            "큰 글자는 획과 면적이 커서 상대적으로 낮은 대비에서도 읽기 쉽기 때문입니다. 일반적으로 18pt(약 24px) 이상 또는 굵은 14pt(약 18.5px) 이상이어야 큰 텍스트로 봅니다.",
+        },
+        {
+          question: "버튼과 아이콘도 4.5:1을 충족해야 하나요?",
+          answer:
+            "버튼의 텍스트에는 텍스트 기준을 적용합니다. 다만 컨트롤의 존재나 상태를 식별하는 데 필요한 테두리·아이콘·그래픽에는 일반적으로 3:1 기준을 적용합니다.",
+        },
+        {
+          question: "대비 비율을 통과하면 색상 접근성을 모두 충족한 건가요?",
+          answer:
+            "아닙니다. 오류, 성공, 선택 상태처럼 의미가 있는 정보는 색상만으로 전달해서는 안 됩니다. 텍스트, 아이콘, 패턴 또는 형태를 함께 사용해야 합니다.",
+        },
+        {
+          question: "가장 가까운 통과 색상은 어떻게 찾나요?",
+          answer:
+            "원래 색조를 유지한 채 밝기를 우선 조정하고, sRGB 색역을 벗어날 때만 채도를 필요한 만큼 낮춥니다. 목표 대비를 만족하는 후보 중 원본과의 지각 거리가 가장 작은 색상을 제안합니다.",
+        },
+        {
+          question: "입력한 색상이나 팔레트가 서버로 전송되나요?",
+          answer:
+            "아니요. 색상 파싱, 대비 계산, 수정 후보 생성은 모두 브라우저에서 처리되며 입력값 자체를 Kitfolio 서버로 전송하거나 저장하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the minimum WCAG 2.2 contrast ratio for normal text?",
+          answer:
+            "The Level AA requirement is 4.5:1 and the Level AAA requirement is 7:1. Visible placeholder text and text shown on hover or focus should be checked against the same applicable threshold.",
+        },
+        {
+          question: "Why can large text use a 3:1 contrast ratio?",
+          answer:
+            "Larger letterforms are generally easier to read at a lower contrast. Large text is usually at least 18pt, about 24 CSS pixels, or at least 14pt bold, about 18.5 CSS pixels.",
+        },
+        {
+          question: "Do buttons and icons need a 4.5:1 contrast ratio?",
+          answer:
+            "Button text follows the text requirement. Visual information needed to identify a control or its state, including essential borders, icons and graphics, generally follows the 3:1 non-text contrast requirement.",
+        },
+        {
+          question: "Does a passing ratio make a color system fully accessible?",
+          answer:
+            "No. Information such as errors, success and selected states should not be communicated by color alone. Add text, an icon, a pattern or another visible cue.",
+        },
+        {
+          question: "How does the checker find the closest passing color?",
+          answer:
+            "It keeps the original hue, adjusts lightness first, and reduces chroma only when required to stay inside the sRGB gamut. It selects a passing candidate with the shortest perceptual distance from the original color.",
+        },
+        {
+          question: "Are my colors or palette sent to a server?",
+          answer:
+            "No. Color parsing, contrast calculations and suggestions all run in your browser. The colors you enter are never uploaded to or stored on the Kitfolio server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "명도대비 검사기",
+        subtitle: "WCAG 2.2 대비 검사 + 팔레트 매트릭스",
+      },
+      en: {
+        title: "Color Contrast Checker",
+        subtitle: "WCAG 2.2 results and a palette audit matrix",
+      },
+    },
+  },
 
   // ── Text ─────────────────────────────
   {
