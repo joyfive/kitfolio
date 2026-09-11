@@ -2202,7 +2202,8 @@ export const TOOLS: Tool[] = [
     verifiedAt: "2026-09-11",
     badge: "Canvas",
     name: { ko: "명도대비 검사기", en: "Color Contrast Checker" },
-    relatedTools: ["tailwind-palette-generator", "css-gradient", "open-graph-preview"],
+    // 색각이상 시뮬레이터가 가장 직접적인 후속 작업이라 open-graph-preview 를 대체한다.
+    relatedTools: ["color-blindness-simulator", "tailwind-palette-generator", "css-gradient"],
     seo: {
       ko: {
         title: "명도대비 검사기 | WCAG 색상 대비·팔레트 점검",
@@ -2554,6 +2555,387 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Color Contrast Checker",
         subtitle: "WCAG 2.2 results and a palette audit matrix",
+      },
+    },
+  },
+  {
+    slug: "color-blindness-simulator",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "pm"],
+    ico: "◉",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "색각이상 시뮬레이터", en: "Color Blindness Simulator" },
+    relatedTools: ["color-contrast-checker", "tailwind-palette-generator", "css-gradient"],
+    seo: {
+      ko: {
+        title: "색각이상 시뮬레이터 | 색약·적록색약 시안 미리보기",
+        description:
+          "웹과 앱의 화면 시안·스크린샷을 Protan, Deutan, Tritan 색각 조건과 흑백 보기로 비교하세요. 강도를 조절하며 상태색, 차트, 링크, 선택 요소가 색상 없이도 구분되는지 확인할 수 있습니다. PNG·JPG·WebP 이미지는 서버에 업로드되지 않고 브라우저에서 처리됩니다.",
+        keywords: [
+          "색각이상 시뮬레이터",
+          "색약 시뮬레이터",
+          "적록색약 시뮬레이션",
+          "색맹 시뮬레이터",
+          "웹접근성 색상 검사",
+          "색각이상 시안 검수",
+          "color blindness simulator",
+        ],
+      },
+      en: {
+        title: "Color Blindness Simulator | Check UI Designs",
+        description:
+          "Preview a UI design or screenshot under protan, deutan and tritan color vision conditions, or remove color entirely with the grayscale check. Adjust the simulation strength and compare against the original to find status colors, charts, links and selected states that rely on color alone. PNG, JPG and WebP images are processed locally in your browser.",
+        keywords: [
+          "color blindness simulator",
+          "color vision deficiency simulator",
+          "color blind design checker",
+          "protan deutan tritan simulator",
+          "accessibility color checker",
+          "ui color accessibility",
+          "color blind screenshot preview",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다.",
+        description:
+          "화면 시안이나 스크린샷을 여러 색각 조건으로 변환해 색상에만 의존한 정보 구분이 사라지는 지점을 확인하세요. 원본과 결과를 나란히 비교하고 상태색·차트·선택 요소의 보조 단서를 점검할 수 있습니다. Protan·Deutan·Tritan 세 유형과 흑백 점검을 제공하며, 이미지는 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "검수할 화면 시안이나 스크린샷 올리기",
+          "색각 유형과 시뮬레이션 강도 선택",
+          "원본과 비교해 색상 없이 구분되지 않는 요소 찾기",
+        ],
+        aeo: {
+          what: "색각이상 시뮬레이터는 화면 시안이나 스크린샷의 색상을 여러 색각 조건으로 변환해 원본과 비교하는 브라우저 도구입니다.",
+          who: "상태색, 차트, 지도, 링크, 선택 요소의 색상 접근성을 검수하는 디자이너, 개발자와 PM을 위한 도구입니다.",
+          how: "이미지를 브라우저에서 픽셀 단위로 변환하고 Protan·Deutan·Tritan 유형과 강도 또는 흑백 보기를 원본 옆에 표시합니다.",
+          why: "색상 차이가 줄어들었을 때 의미와 상태도 함께 사라지는 디자인 문제를 개발 전달이나 배포 전에 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "색각이상 시뮬레이터로 무엇을 확인해야 하나요?",
+            body: [
+              "이 도구의 목적은 화면을 낯선 색으로 바꿔 보는 데 있지 않습니다. 색상 차이가 줄어들었을 때 정보의 의미, 상태, 우선순위까지 함께 사라지는지를 확인하는 것이 핵심입니다. 성공과 오류, 활성과 비활성, 차트의 여러 계열처럼 색상이 기능을 맡고 있는 영역을 중심으로 원본과 변환 결과를 비교해야 합니다.",
+              "WCAG 2.2는 정보 전달, 동작 표시, 응답 유도, 시각 요소 구분에 색상만을 사용하지 않도록 요구합니다. 색을 없애야 한다는 뜻은 아닙니다. 색상을 쓰되 텍스트, 아이콘, 패턴, 형태, 위치 같은 다른 단서도 함께 제공해야 한다는 뜻입니다.",
+            ],
+          },
+          {
+            heading: "Protan·Deutan·Tritan은 무엇이 다른가요?",
+            body: [
+              "Protan은 적색 계열 신호가 달라지는 조건입니다. 일부 빨강이 어둡게 보이거나 녹색·갈색 계열과 가까워져 오류·성공 배지, 빨강·초록 차트 계열, 어두운 배경 위의 빨간 경고에서 문제가 드러나기 쉽습니다.",
+              "Deutan은 녹색 계열 신호가 달라지는 조건입니다. 초록·빨강·갈색·주황의 구분이 함께 줄어들어 승인·대기 상태, 지도 범례, 완료율 색상 단계를 확인하기 좋습니다.",
+              "Tritan은 청황 계열이 달라지는 조건입니다. 파랑·초록, 보라·빨강, 노랑·분홍 같은 조합의 차이가 줄어들어 파란 링크와 녹색 상태, 보라·빨강 계열 차트, 노란 강조 영역을 점검할 때 씁니다.",
+              "이 구분은 검수할 위치를 찾기 위한 실무 요약입니다. 실제로 보이는 색은 원본 색상, 명도, 채도, 주변 배경과 시뮬레이션 강도에 따라 달라집니다. 이름만 보고 특정 색 조합이 반드시 실패한다고 단정하지 말고 실제 시안을 비교하세요.",
+            ],
+          },
+          {
+            heading: "시뮬레이션 강도는 어떻게 사용하나요?",
+            body: [
+              "강도 0%는 원본이고, 값을 높일수록 선택한 색각 조건에서 색상 차이가 더 크게 줄어든 결과를 보여줍니다. 100%는 가장 강한 조건에서도 정보가 유지되는지 확인하는 보수적인 검수값입니다. 먼저 100%에서 사라지는 구분을 찾고, 40~70% 구간에서도 같은 문제가 나타나는지 비교하면 수정 우선순위를 정하기 쉽습니다.",
+              "사람마다 색 지각은 연속적으로 다르고 주변 조명, 디스플레이, 색 프로필도 결과에 영향을 줍니다. 한 강도의 이미지가 모든 사용자의 시야를 그대로 나타낸다고 보지 말고, 여러 조건에서도 의미가 유지되는 디자인을 목표로 삼으세요.",
+            ],
+          },
+          {
+            heading: "가장 먼저 봐야 할 화면 요소",
+            body: [
+              "상태와 피드백: 성공을 초록색으로만, 오류를 빨간색으로만 표시하면 두 색의 차이가 줄었을 때 의미도 사라집니다. 상태 텍스트와 서로 다른 아이콘을 함께 쓰세요. 입력 오류도 테두리 색상만 바꾸지 말고 해당 필드 가까이에 원인과 수정 방법을 적어야 합니다.",
+              "차트와 데이터 시각화: 범례와 선·막대가 색으로만 연결되면 일부 계열이 합쳐져 보일 수 있습니다. 선 그래프에는 실선·점선·파선과 데이터 포인트 모양을 조합하고, 막대나 영역에는 패턴·테두리·직접 라벨을 쓸 수 있습니다. 순차 데이터는 색조를 늘리는 것보다 명도 단계를 충분히 벌리는 편이 안정적입니다.",
+              "링크·탭·선택 상태: 본문 링크, 활성 탭, 선택된 카드가 색상만 달라지는지 확인하세요. 링크에는 밑줄을, 활성 탭에는 굵기나 하단 표시선을, 선택된 카드에는 체크 아이콘이나 테두리 형태를 더하면 색상 차이가 줄어도 상태가 남습니다.",
+              "버튼·입력창·아이콘: 버튼 텍스트와 배경, 입력창 테두리와 바깥 배경, 의미 있는 아이콘과 인접 색상의 명도 차이를 확인해야 합니다. 시뮬레이션에서 흐려 보이는 조합은 명도대비 검사기에 두 색을 넣어 WCAG 비율을 수치로 확인하세요.",
+            ],
+          },
+          {
+            heading: "흑백 점검은 왜 필요한가요?",
+            body: [
+              "흑백 보기는 특정 색각 조건을 나타내는 기능이 아니라, 색상이라는 단서를 완전히 제거하는 스트레스 테스트입니다. 원본에서는 분명했던 상태·계열·선택 요소가 흑백에서 모두 같은 회색으로 합쳐진다면 색상 의존도가 높은 디자인일 가능성이 큽니다.",
+              "이 도구의 흑백 변환은 채널 평균이 아니라 상대 휘도를 씁니다. 그래서 두 색의 명도대비 비율은 원본과 똑같이 유지되고 색상 단서만 사라집니다. 흑백에서도 구분되지 않는다면 그것은 대비 문제가 아니라 색상에만 의존한 설계라는 뜻입니다.",
+              "흑백에서 모든 색이 서로 달라야 하는 것은 아닙니다. 텍스트 라벨, 아이콘, 패턴, 선의 형태로 같은 정보를 알아볼 수 있다면 목적을 달성한 것입니다. 중요한 질문은 '색이 없어도 원래 의미를 찾을 수 있는가'입니다.",
+            ],
+          },
+          {
+            heading: "문제를 발견했을 때 수정하는 순서",
+            body: [
+              "먼저 의미를 직접 말하는 텍스트 라벨을 추가하고, 성공·오류·주의·선택 상태에 서로 다른 아이콘이나 형태를 씁니다. 차트 계열에는 선 스타일, 포인트 모양, 패턴 또는 직접 라벨을 더합니다.",
+              "그다음 전경색과 배경색, 인접한 데이터 색상의 명도 차이를 키웁니다. 중요한 상태를 작은 색 점 하나에 맡기지 말고 충분한 면적과 명확한 위치를 주세요. 수정한 시안은 세 가지 보기와 흑백에서 다시 확인합니다.",
+              "색을 전부 없애거나 브랜드 팔레트를 버릴 필요는 없습니다. 색상은 빠른 인지와 강조에 유용합니다. 다만 색상 하나가 사라졌을 때 기능과 의미까지 사라지지 않도록 중복 단서를 설계해야 합니다.",
+            ],
+          },
+          {
+            heading: "색각 시뮬레이션과 명도대비 검사는 서로 다릅니다",
+            body: [
+              "색각 시뮬레이션은 서로 다른 색이 비슷하게 보일 가능성을 시각적으로 찾는 도구입니다. 명도대비 검사는 두 색의 상대 휘도 차이가 WCAG 기준을 충족하는지 수치로 판정합니다. 빨강과 초록이 각각 배경과 충분히 대비되어도 두 상태가 색으로만 구분된다면 여전히 문제가 될 수 있고, 반대로 색상 구분은 남아 있어도 글자와 배경의 명도대비가 부족할 수 있습니다.",
+              "따라서 시뮬레이터에서 구분 문제를 찾은 뒤 명도대비 검사기로 실제 텍스트·UI 색상 쌍을 확인하는 순서가 좋습니다. 두 검사는 대체 관계가 아니라 보완 관계입니다.",
+            ],
+          },
+          {
+            heading: "배포 전 색상 접근성 체크리스트",
+            body: [
+              "성공·오류·주의·완료 상태에 텍스트나 아이콘이 함께 있는지, 차트 계열을 선 스타일·패턴·모양 또는 직접 라벨로도 구분할 수 있는지 확인합니다. 링크와 활성 탭, 선택된 카드에도 색상 외의 형태 차이가 있어야 합니다.",
+              "글자와 아이콘, 입력창 테두리가 실제 배경과 충분히 대비되는지 보고, 라이트·다크 테마와 기본·호버·포커스·선택·오류 상태를 각각 확인합니다. 마지막으로 Protan·Deutan·Tritan과 흑백 보기에서 핵심 과업을 끝내는 데 필요한 정보가 남아 있는지 점검하세요.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "예시 시안의 상태 점을 Deutan 100%로 보기",
+            input: "내장 예시 시안 · Deutan · 강도 100%",
+            result: "완료 상태의 초록 #16A34A는 #958951로, 실패 상태의 빨강 #DC2626은 #8F801B로 수렴해 두 색의 대비 비율이 1.47:1에서 1.13:1로 떨어진다",
+            note: "라벨 없이 점 색상만으로 상태를 표시한 영역은 사실상 구분되지 않습니다. 상태 텍스트나 서로 다른 아이콘을 함께 두어야 합니다.",
+          },
+          {
+            title: "같은 시안을 Protan 100%와 비교",
+            input: "내장 예시 시안 · Protan · 강도 100%",
+            result: "같은 두 색이 #A49442와 #635923이 되어 색상은 비슷해지지만 명도 차이는 남아 대비 비율이 2.31:1이 된다",
+            note: "유형에 따라 남는 단서가 다릅니다. Deutan에서 사라진 구분이 Protan에서는 밝기로 일부 남을 수 있으므로 세 유형을 모두 확인해야 합니다.",
+          },
+          {
+            title: "흑백 점검으로 색상 의존도 확인",
+            input: "내장 예시 시안 · 흑백 점검",
+            result: "파란 링크 #2563EB는 #6D6D6D, 본문 글자 #334155는 #404040이 되어 명도대비 2.00:1은 그대로 유지되지만 색상 단서는 완전히 사라진다",
+            note: "흑백 점검은 명도 차이를 그대로 두고 색상만 제거합니다. 여기서 합쳐지는 요소가 있다면 밑줄·아이콘·형태 같은 단서를 더해야 합니다.",
+          },
+        ],
+        limitations: [
+          "스크린샷에는 호버, 키보드 포커스, 로딩, 오류, 비활성, 드래그 같은 모든 상태가 담기지 않습니다. 중요한 상태마다 별도 이미지를 올리거나 실제 구현 화면에서 다시 확인해야 합니다.",
+          "이미지 안의 요소가 색상 외 단서로 충분히 구분되는지는 사람이 판단해야 하므로 이 도구는 자동 합격 점수나 접근성 준수 판정을 제공하지 않습니다.",
+          "시뮬레이션은 연구 모델을 사용한 근사 결과입니다. 개인별 색 지각과 실제 디스플레이 환경을 그대로 재현할 수는 없으므로, 픽셀 단위 절대값이 아니라 구분이 사라지는 위치를 찾는 검수 자료로 쓰세요.",
+          "넓은 색역으로 저장된 이미지는 브라우저 캔버스의 처리 색 공간으로 변환되면서 원본과 색이 조금 달라질 수 있습니다.",
+          "PNG·JPG·WebP만 지원하며 파일은 10MB, 해상도는 40메가픽셀까지 받습니다. 미리보기는 반응 속도를 위해 최대 2메가픽셀로 비율을 유지한 채 축소해 처리합니다.",
+          "저시력 흐림, 백내장, 눈부심처럼 색각이상이 아닌 다른 시각 조건은 다루지 않습니다. 대비 부족 영역을 자동으로 표시하는 히트맵도 제공하지 않습니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "Machado, Oliveira, Fernandes · A Physiologically-based Model for Simulation of Color Vision Deficiency (2009)",
+            url: "https://pubmed.ncbi.nlm.nih.gov/19834201/",
+          },
+          {
+            label: "National Eye Institute · Types of Color Vision Deficiency",
+            url: "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/color-blindness/types-color-vision-deficiency",
+          },
+        ],
+      },
+      en: {
+        card: "Simulate color vision conditions on a design to find distinctions that rely on color alone.",
+        description:
+          "Preview a UI design or screenshot under different color vision conditions to find where information depends on color alone. Compare the original and the simulated result side by side and review status colors, chart series and selected states for non-color cues. Protan, deutan and tritan views plus a grayscale check are available, and images are processed entirely in your browser.",
+        howItWorks: [
+          "Add a UI design or screenshot",
+          "Choose a color vision type and simulation strength",
+          "Compare both views and find elements that rely on color alone",
+        ],
+        aeo: {
+          what: "A color blindness simulator transforms the colors in a UI design or screenshot and compares the simulated result with the original image.",
+          who: "It is for designers, developers and product managers reviewing color accessibility in status indicators, charts, maps, links and selected controls.",
+          how: "It processes image pixels locally and displays protan, deutan, tritan or grayscale views next to the original at the selected simulation strength.",
+          why: "It helps teams find places where reduced color differences also remove meaning, state or visual separation before implementation or release.",
+        },
+        guide: [
+          {
+            heading: "What should you check with a color blindness simulator?",
+            body: [
+              "The purpose of this tool is not simply to recolor a screen. It is to reveal whether meaning, state and priority disappear when color differences become less distinct. Compare the original and simulated views around elements where color performs a function, including success and error states, active and inactive controls, and multiple chart series.",
+              "WCAG 2.2 requires that color is not the only visual means of conveying information, indicating an action, prompting a response or distinguishing an element. This does not mean removing color. It means pairing color with text, icons, patterns, shapes, position or another visible cue.",
+            ],
+          },
+          {
+            heading: "How protan, deutan and tritan views differ",
+            body: [
+              "Protan describes a change in the red signal. Some reds appear darker or move closer to greens and browns, so red and green status badges, chart series, and red warnings on dark surfaces are where problems tend to show.",
+              "Deutan describes a change in the green signal. Differences among greens, reds, browns and oranges decrease together, which makes it useful for approval states, map legends and progress color scales.",
+              "Tritan affects the blue-yellow range. Differences can decrease among blue-green, purple-red and yellow-pink combinations, so use it to review blue links next to green states, purple and red charts, and yellow highlights.",
+              "Treat these as a guide to where to look, not as a prediction that every listed pair will fail. The visible result depends on the source colors, luminance, saturation, background and the selected strength, so compare the actual design.",
+            ],
+          },
+          {
+            heading: "How to use simulation strength",
+            body: [
+              "At 0%, the result matches the original. Increasing the value reduces color differences according to the selected condition. A 100% view is a conservative stress test for checking whether information survives a strong transformation. Start at 100% to find lost distinctions, then compare intermediate values such as 40% to 70% to prioritize changes.",
+              "Color perception varies continuously, and lighting, displays and color profiles also affect the result. Do not treat one setting as a universal view. Design so that meaning remains available across several conditions and strengths.",
+            ],
+          },
+          {
+            heading: "Elements to review first",
+            body: [
+              "Status and feedback: if success is only green and error is only red, the meaning can disappear when those colors move closer together. Add explicit status text and different icons. For form errors, do not rely on a colored border alone; place the cause and suggested correction near the field.",
+              "Charts and data visualization: series connected to a legend by color alone can become indistinguishable. Combine solid, dashed and dotted lines with different point shapes, and use patterns, borders or direct labels for bars and areas. For sequential data, sufficiently separated luminance steps are often more reliable than adding more hues.",
+              "Links, tabs and selected states: check whether inline links, active tabs and selected cards only change color. Add an underline to links, weight or an indicator line to active tabs, and a check icon or border treatment to selected cards.",
+              "Controls and icons: review button text against its fill, input borders against the outer surface, and meaningful icons against adjacent colors. If a pair becomes difficult to see, enter its foreground and background colors in the contrast checker to measure the applicable WCAG ratio.",
+            ],
+          },
+          {
+            heading: "Why use a grayscale check?",
+            body: [
+              "Grayscale is a stress test that removes color as an information cue rather than a representation of any color vision condition. If states, series or selections collapse into the same gray, the design likely relies heavily on hue.",
+              "This tool converts to gray using relative luminance rather than a channel average, so the contrast ratio between any two colors stays exactly what it was in the original and only the hue cue is removed. Anything that becomes indistinguishable here is a color-dependence problem, not a contrast problem.",
+              "The goal is not to make every color look different in grayscale. The goal is to keep the same information available through labels, icons, patterns, line styles or other visible structure. Ask one practical question: can a user still identify the original meaning when color is removed?",
+            ],
+          },
+          {
+            heading: "How to fix a problem",
+            body: [
+              "Start by adding a text label that states the meaning directly, and use different icons or shapes for success, error, warning and selected states. Add line styles, point shapes, patterns or direct labels to chart series.",
+              "Then increase the luminance difference between foreground and background or between adjacent data colors. Do not assign an important state to a tiny color dot; provide sufficient area and clear placement. Recheck the revised design in all three views and in grayscale.",
+              "Color remains useful for fast recognition and emphasis. The objective is not to discard a brand palette but to ensure that removing a color difference does not also remove function or meaning.",
+            ],
+          },
+          {
+            heading: "Simulation and contrast checking answer different questions",
+            body: [
+              "A color vision simulation helps locate different colors that may become difficult to distinguish. A contrast checker measures whether the relative luminance between two colors reaches a WCAG threshold. Red and green states can each contrast strongly with their background while still failing when color is the only difference. A pair can also remain different in the simulation while the text-to-background contrast is too low.",
+              "Use the simulator to locate a design risk, then measure the actual foreground and background pair in the contrast checker. The two tools complement each other.",
+            ],
+          },
+          {
+            heading: "Pre-release color accessibility checklist",
+            body: [
+              "Confirm that success, error, warning and completion states include text or an icon, and that chart series can be distinguished by line style, pattern, shape or a direct label. Links, active tabs and selected cards should carry a non-color cue as well.",
+              "Check that text, icons and input boundaries have sufficient contrast against their actual background, and review light and dark themes along with default, hover, focus, selected and error states. Finally, confirm that the information required to complete the main task remains available in the protan, deutan, tritan and grayscale views.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Viewing the sample design's status dots at deutan 100%",
+            input: "Built-in sample design, deutan, strength 100%",
+            result: "The completed state's green #16A34A becomes #958951 and the failed state's red #DC2626 becomes #8F801B, dropping the contrast between them from 1.47:1 to 1.13:1",
+            note: "Anywhere status is shown by dot color without a label becomes effectively unreadable. Pair the dot with status text or a distinct icon.",
+          },
+          {
+            title: "Comparing the same design at protan 100%",
+            input: "Built-in sample design, protan, strength 100%",
+            result: "The same two colors become #A49442 and #635923: the hues converge but a lightness difference remains, so the contrast between them is 2.31:1",
+            note: "Different views leave different cues intact. A distinction lost under deutan can partly survive as lightness under protan, so check all three.",
+          },
+          {
+            title: "Using the grayscale check for color dependence",
+            input: "Built-in sample design, grayscale check",
+            result: "The blue link #2563EB becomes #6D6D6D and body text #334155 becomes #404040, keeping the 2.00:1 contrast ratio intact while the hue cue disappears entirely",
+            note: "Grayscale leaves luminance differences untouched and removes only color. Anything that merges here needs an underline, icon or shape cue.",
+          },
+        ],
+        limitations: [
+          "A screenshot does not include every hover, keyboard focus, loading, error, disabled or drag state. Upload separate images for important states and review the implemented interface as well.",
+          "A person still needs to decide whether non-color cues preserve the information, so this tool does not produce an automatic accessibility score or conformance verdict.",
+          "The simulation is an approximation based on a research model. It cannot reproduce every person's color perception or every display environment, so use it to locate lost distinctions rather than as an absolute pixel reference.",
+          "Images saved in a wide gamut can shift slightly when the browser canvas converts them into its working color space.",
+          "Only PNG, JPG and WebP are supported, up to 10MB and 40 megapixels. The preview is scaled down to at most 2 megapixels, preserving aspect ratio, to keep the controls responsive.",
+          "Other visual conditions such as low-vision blur, cataracts or glare are out of scope, and no automatic heatmap of low-contrast areas is provided.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Use of Color",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Contrast (Minimum)",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Contrast",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html",
+          },
+          {
+            label: "Machado, Oliveira, Fernandes · A Physiologically-based Model for Simulation of Color Vision Deficiency (2009)",
+            url: "https://pubmed.ncbi.nlm.nih.gov/19834201/",
+          },
+          {
+            label: "National Eye Institute · Types of Color Vision Deficiency",
+            url: "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/color-blindness/types-color-vision-deficiency",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "색각이상 시뮬레이터는 어떤 디자인을 검사할 수 있나요?",
+          answer:
+            "웹·앱 화면, 대시보드, 차트, 지도, 배너처럼 PNG·JPG·WebP 이미지로 저장하거나 캡처할 수 있는 시안을 검사할 수 있습니다. 상태색, 차트 계열, 링크와 선택 요소처럼 색상이 기능을 맡는 영역을 중심으로 비교하세요.",
+        },
+        {
+          question: "Protan, Deutan, Tritan 보기는 무엇이 다른가요?",
+          answer:
+            "Protan과 Deutan은 주로 적록 계열 색상 차이가 줄어드는 조건을, Tritan은 일부 청황 계열 색상 차이가 줄어드는 조건을 보여줍니다. 같은 시안도 유형에 따라 구분하기 어려운 조합이 달라질 수 있습니다.",
+        },
+        {
+          question: "시뮬레이션 강도는 몇 퍼센트로 확인해야 하나요?",
+          answer:
+            "먼저 100%에서 정보 구분이 유지되는지 확인하고, 40~70% 같은 중간값에서도 비교하세요. 한 값만 통과 기준으로 쓰기보다 여러 강도에서 상태와 의미가 유지되는지 보는 것이 좋습니다.",
+        },
+        {
+          question: "흑백 보기는 왜 제공하나요?",
+          answer:
+            "색상을 완전히 제거했을 때도 텍스트, 아이콘, 패턴과 형태로 같은 정보를 구분할 수 있는지 확인하기 위해서입니다. 상대 휘도로 변환하므로 두 색의 명도대비 비율은 그대로 유지되고 색상 단서만 사라집니다.",
+        },
+        {
+          question: "시뮬레이션 결과만으로 웹접근성 준수 여부를 알 수 있나요?",
+          answer:
+            "아닙니다. 시뮬레이션은 색상에만 의존한 디자인 문제를 찾는 검수 단계입니다. 글자와 배경, UI 요소의 실제 대비 비율은 명도대비 검사기로 확인하고 키보드·구조·대체 텍스트 같은 다른 접근성 항목도 별도로 검수해야 합니다.",
+        },
+        {
+          question: "업로드한 시안 이미지가 서버로 전송되나요?",
+          answer:
+            "아니요. 이미지 디코딩과 색상 변환은 브라우저에서 처리되며, 업로드한 이미지와 파일명은 Kitfolio 서버로 전송하거나 저장하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What designs can I check with the color blindness simulator?",
+          answer:
+            "You can review web and app screens, dashboards, charts, maps and other designs saved or captured as PNG, JPG or WebP. Focus on places where color communicates a state, series, link or selection.",
+        },
+        {
+          question: "What is the difference between protan, deutan and tritan views?",
+          answer:
+            "Protan and deutan views reduce differences across parts of the red-green range, while tritan affects some blue-yellow combinations. A pair that remains distinct in one view can become difficult to separate in another.",
+        },
+        {
+          question: "Which simulation strength should I use?",
+          answer:
+            "Start at 100% as a conservative stress test, then compare intermediate values such as 40% to 70%. Review whether meaning and state remain available across several strengths instead of treating one value as a universal threshold.",
+        },
+        {
+          question: "Why does the tool include a grayscale view?",
+          answer:
+            "Grayscale removes color as an information cue and reveals where labels, icons, patterns or shapes are missing. It converts using relative luminance, so contrast ratios stay exactly as they were and only the hue cue is removed.",
+        },
+        {
+          question: "Does the simulation confirm that a design meets web accessibility requirements?",
+          answer:
+            "No. The simulation helps find design problems that rely on color alone. Measure actual foreground and background pairs with a contrast checker, and review other requirements such as keyboard support, structure and text alternatives separately.",
+        },
+        {
+          question: "Is my uploaded design sent to a server?",
+          answer:
+            "No. Image decoding and color transformation run in your browser. The image and filename you provide are not uploaded to or stored on the Kitfolio server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "색각이상 시뮬레이터",
+        subtitle: "시안의 상태색·차트·선택 요소를 색각 조건별로 비교",
+      },
+      en: {
+        title: "Color Blindness Simulator",
+        subtitle: "Compare UI states, charts and controls across color vision conditions",
       },
     },
   },
