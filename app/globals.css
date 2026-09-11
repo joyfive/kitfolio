@@ -3870,3 +3870,220 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
   .kf-article-lead { font-size: 15.5px; }
   .kf-article-body p, .kf-article-body li { font-size: 15.5px; }
 }
+
+/* ============================================================
+   HTML Accessibility Checker (IDE theme)
+   왼쪽 화이트 입력 · 오른쪽 다크 결과 패널.
+   결과 카드만 밝은 표면으로 분리한다: 이유·수정 방향이 긴 산문이라
+   다크 위 본문으로 길게 이어지면 읽기 부담이 크다 (기획서 4.1 허용 범위).
+   ============================================================ */
+.a11y {
+  display: flex; flex-direction: column; min-height: 0;
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-lg);
+  overflow: hidden; box-shadow: var(--shadow-card);
+}
+@media (min-width: 960px) { .a11y { height: 720px; } }
+
+/* 범위 선택: 진짜 탭이 아니라 버튼 그룹이므로 aria-pressed 를 쓴다 */
+.a11y-scope { display: inline-flex; gap: 2px; padding: 2px; background: var(--color-blue-gray-50); border-radius: var(--radius-sm); }
+.a11y-scope button {
+  height: 26px; padding: 0 10px; border-radius: 5px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--color-blue-gray-700); transition: background .12s ease, color .12s ease;
+}
+.a11y-scope button:hover { background: var(--color-blue-gray-100); color: var(--color-blue-gray-900); }
+.a11y-scope button[aria-pressed="true"] { background: var(--color-blue-primary-700); color: #fff; }
+
+.a11y .pane-act[disabled] { opacity: .45; cursor: not-allowed; }
+/* 다크 패널 헤드의 공통 색은 작은 글자에 4.5:1 을 넘지 못한다.
+   접근성 검사 도구 자체가 기준에 걸리면 안 되므로 이 도구에서만 올린다. */
+.a11y .pane-out .pane-act { color: var(--color-blue-gray-200); }
+.a11y .pane-out .pane-meta, .a11y .pane-out .pane-tab { color: var(--color-blue-gray-300); }
+.a11y .btn-ide[disabled] { opacity: .6; cursor: progress; }
+
+/* 전체 문서 검사 제안: 선택값을 몰래 바꾸지 않고 버튼으로만 전환한다 */
+.a11y-suggest { padding: 8px 14px; background: var(--color-blue-primary-50); border-bottom: 1px solid var(--color-blue-primary-100); }
+.a11y-suggest button {
+  font-size: 12.5px; font-weight: 500; color: var(--color-blue-primary-700);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.a11y-suggest button:hover { color: var(--color-blue-primary-800); }
+
+.a11y-input-note {
+  margin: 0; padding: 8px 14px; flex-shrink: 0;
+  font-size: 11.5px; line-height: 1.6; color: var(--color-blue-gray-700);
+  background: var(--color-blue-gray-50); border-top: 1px solid var(--color-blue-gray-100);
+}
+
+/* 결과 패널: IDE 다크 지면 + 밝은 결과 카드 */
+/* .pane-body 자체에 붙는 클래스다. 공통 .pane-body 의 overflow: hidden 을 스크롤로
+   바꾸기만 하고 position 은 건드리지 않는다: absolute 로 만들면 pane-body 가
+   컨테이닝 블록을 잃고 뷰포트 전체를 덮는다. */
+.a11y-panel { overflow: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.a11y-dirty {
+  margin: 0; padding: 7px 10px; border-radius: var(--radius-sm);
+  background: var(--color-blue-gray-900); color: var(--color-blue-primary-300);
+  font-family: var(--font-mono); font-size: 11.5px;
+}
+
+.a11y-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (min-width: 1100px) { .a11y-summary { grid-template-columns: repeat(4, 1fr); } }
+.a11y-stat {
+  display: flex; flex-direction: column; gap: 3px; padding: 10px 12px;
+  background: var(--color-blue-gray-900); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-blue-gray-700);
+}
+.a11y-stat.lv-issue { border-left-color: #e07a76; }
+.a11y-stat.lv-review { border-left-color: var(--color-blue-primary-400); }
+.a11y-stat.lv-manual { border-left-color: var(--color-blue-gray-500); }
+.a11y-stat-n { font-family: var(--font-inter); font-size: 20px; font-weight: 500; color: #fff; line-height: 1.1; }
+.a11y-stat-l { font-size: 11.5px; color: var(--color-blue-gray-300); }
+
+.a11y-views { display: flex; flex-wrap: wrap; gap: 4px; }
+.a11y-views button {
+  padding: 6px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 500;
+  color: var(--color-blue-gray-300); background: var(--color-blue-gray-900);
+  transition: background .12s ease, color .12s ease;
+}
+.a11y-views button:hover:not([disabled]) { background: var(--color-blue-gray-800); color: #fff; }
+.a11y-views button[aria-pressed="true"] { background: var(--color-blue-primary-700); color: #fff; }
+.a11y-views button[disabled] { opacity: .4; cursor: not-allowed; }
+
+.a11y-filters { display: flex; flex-direction: column; gap: 6px; }
+.a11y-filters > div { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.a11y-filter-l { font-size: 11px; color: var(--color-blue-gray-500); margin-right: 4px; }
+.a11y-filters button {
+  padding: 4px 9px; border-radius: var(--radius-sm); font-size: 11.5px;
+  color: var(--color-blue-gray-300); background: var(--color-blue-gray-900);
+}
+.a11y-filters button:hover { background: var(--color-blue-gray-800); color: #fff; }
+.a11y-filters button[aria-pressed="true"] { background: var(--color-blue-primary-100); color: var(--color-blue-primary-800); }
+
+.a11y-empty, .a11y-note { margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--color-blue-gray-400); }
+/* 같은 문구가 밝은 결과 카드 안에도 들어가므로 지면에 맞춰 대비를 맞춘다 */
+.a11y-list .a11y-empty, .a11y-list .a11y-note { color: var(--color-blue-gray-700); }
+
+/* 결과 카드 (밝은 표면) */
+.a11y-findings { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.a11y-card {
+  background: #fff; border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-blue-gray-300); padding: 12px 14px;
+}
+.a11y-card.lv-issue { border-left-color: #c0504e; }
+.a11y-card.lv-review { border-left-color: var(--color-blue-primary-600); }
+.a11y-card.lv-manual { border-left-color: var(--color-blue-gray-400); }
+.a11y-card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.a11y-card-head h3 {
+  margin: 0; flex: 1 1 100%; order: 3;
+  font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; color: var(--color-blue-gray-950);
+}
+/* 심각도는 색뿐 아니라 글자·형태로도 구분한다 */
+.a11y-level {
+  width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-inter); font-size: 12px; font-weight: 700; color: #fff;
+}
+.a11y-level.lv-issue { background: #c0504e; border-radius: 50%; }
+.a11y-level.lv-review { background: var(--color-blue-primary-600); border-radius: 6px; }
+.a11y-level.lv-manual { background: var(--color-blue-gray-500); border-radius: 2px; }
+.a11y-level-text { font-size: 11.5px; font-weight: 500; color: var(--color-blue-gray-700); }
+.a11y-rule-id {
+  margin-left: auto; font-family: var(--font-mono); font-size: 11px;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  padding: 2px 7px; border-radius: 999px;
+}
+.a11y-card-meta { margin: 10px 0 0; display: grid; gap: 4px; }
+.a11y-card-meta > div { display: flex; gap: 8px; align-items: baseline; }
+.a11y-card-meta dt { flex-shrink: 0; min-width: 72px; font-size: 11.5px; color: var(--color-blue-gray-700); }
+.a11y-card-meta dd { margin: 0; font-size: 12.5px; color: var(--color-blue-gray-800); min-width: 0; overflow-wrap: anywhere; }
+.a11y-card-meta code { font-family: var(--font-mono); font-size: 12px; color: var(--color-blue-gray-900); }
+.a11y-snippet {
+  margin: 10px 0 0; padding: 9px 11px; overflow-x: auto;
+  background: var(--color-blue-gray-950); border-radius: var(--radius-sm);
+}
+.a11y-snippet code {
+  font-family: var(--font-mono); font-size: 12px; line-height: 1.6;
+  color: var(--color-blue-gray-200); white-space: pre;
+}
+.a11y-card-body { margin: 9px 0 0; font-size: 13.5px; line-height: 1.65; color: var(--color-blue-gray-800); }
+.a11y-card-body b { font-weight: 700; color: var(--color-blue-gray-950); margin-right: 4px; }
+
+/* 헤딩 트리 · 랜드마크 · 예상 탭 순서 */
+.a11y-list { background: #fff; border-radius: var(--radius-sm); padding: 12px 14px; display: grid; gap: 10px; }
+.a11y-tree, .a11y-rows { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.a11y-tree > li, .a11y-rows > li {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px;
+  font-size: 13px; color: var(--color-blue-gray-800);
+  padding-bottom: 6px; border-bottom: 1px solid var(--color-blue-gray-100);
+}
+.a11y-tree > li:last-child, .a11y-rows > li:last-child { border-bottom: none; padding-bottom: 0; }
+.a11y-tree-lv, .a11y-role, .a11y-order {
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 500;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+  padding: 2px 7px; border-radius: var(--radius-sm); flex-shrink: 0;
+}
+.a11y-order { color: #fff; background: var(--color-blue-primary-700); min-width: 26px; text-align: center; }
+.a11y-tree-name, .a11y-row-name { font-weight: 500; color: var(--color-blue-gray-950); min-width: 0; overflow-wrap: anywhere; }
+.a11y-tree-name em, .a11y-row-name em { font-style: normal; font-weight: 400; color: var(--color-blue-gray-700); }
+.a11y-tree-path, .a11y-row-path {
+  flex: 1 1 100%; font-family: var(--font-mono); font-size: 11px;
+  color: var(--color-blue-gray-700); overflow-wrap: anywhere;
+}
+.a11y-tag {
+  font-size: 11px; padding: 2px 7px; border-radius: 999px;
+  color: var(--color-blue-gray-800); background: var(--color-blue-gray-100); flex-shrink: 0;
+}
+.a11y-tag.is-warn { color: #a33f3d; background: #fae3e3; }
+
+/* HTML 파싱 참고: 접근성 결과와 분리 */
+.a11y-parse { background: var(--color-blue-gray-900); border-radius: var(--radius-sm); padding: 10px 12px; display: grid; gap: 8px; }
+.a11y-parse > button {
+  text-align: left; font-size: 12.5px; font-weight: 500; color: var(--color-blue-gray-300);
+}
+.a11y-parse > button:hover { color: #fff; }
+.a11y-parse ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.a11y-parse li { font-size: 11.5px; color: var(--color-blue-gray-300); }
+.a11y-parse code { font-family: var(--font-mono); color: var(--color-blue-primary-300); }
+
+.a11y .ide-status { gap: 10px; height: auto; min-height: 30px; padding: 6px 16px; white-space: normal; }
+.a11y-live { font-family: var(--font-sans); font-size: 12px; color: var(--color-blue-gray-800); }
+
+.a11y-scope-hint {
+  margin: 12px 0 0; font-size: 13px; line-height: 1.65; color: var(--color-blue-gray-700);
+}
+
+/* 자동·수동 검사 범위 안내: 입력·결과가 비어 있어도 항상 노출되는 본문 */
+.a11y-range { margin: 44px auto 0; max-width: 880px; }
+.a11y-range h2 {
+  margin: 0 0 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--color-blue-gray-950);
+}
+.a11y-range-grid { display: grid; gap: 12px; }
+@media (min-width: 760px) { .a11y-range-grid { grid-template-columns: 1fr 1fr; } }
+.a11y-range-grid > div {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg); padding: 16px 18px;
+}
+.a11y-range-grid h3 {
+  margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--color-blue-primary-700);
+}
+.a11y-range-grid ul { margin: 0; padding-left: 18px; list-style: disc; display: grid; gap: 6px; }
+.a11y-range-grid li { font-size: 13.5px; line-height: 1.6; color: var(--color-blue-gray-700); }
+.a11y-range-grid li::marker { color: var(--color-blue-primary-400); }
+.a11y-range-grid b { font-weight: 700; color: var(--color-blue-gray-950); }
+
+/* 모바일: 상하 배치 · 인풋 min 240px / max 600px */
+@media (max-width: 959px) {
+  .a11y .pane-in textarea.code-in {
+    position: static; display: block; height: auto;
+    min-height: 240px; max-height: 600px;
+    field-sizing: content;
+  }
+  .a11y .pane-out .pane-body { height: auto; max-height: 640px; }
+  .a11y .ide-bar { flex-wrap: wrap; gap: 8px; }
+  .a11y-card-meta dt { min-width: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a11y-scope button, .a11y-views button { transition: none; }
+}
