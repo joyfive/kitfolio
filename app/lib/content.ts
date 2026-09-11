@@ -3375,6 +3375,425 @@ export const TOOLS: Tool[] = [
     },
   },
 
+  {
+    slug: "text-scaling-checker",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "pm"],
+    ico: "200%",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "텍스트 확대·간격 검사기", en: "Text Scaling & Spacing Checker" },
+    // 확대 문제가 구조에서 비롯될 때의 다음 검사, 단위 조정, 색상 검사 순서로 잇는다.
+    relatedTools: ["html-accessibility-checker", "css-unit-converter", "color-contrast-checker"],
+    seo: {
+      ko: {
+        title: "웹접근성 텍스트 확대 검사기 | 200%·간격 테스트",
+        description:
+          "HTML과 CSS를 붙여넣어 웹접근성 텍스트 확대를 검사하세요. 200% 글자 확대, 320px 리플로와 WCAG 텍스트 간격을 원본과 나란히 비교하고 가로 오버플로·고정 영역의 내용 잘림 후보를 확인할 수 있습니다. 입력한 코드는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
+        keywords: [
+          "웹접근성 텍스트 확대",
+          "웹접근성 글자 크기",
+          "200% 확대 테스트",
+          "400% 확대 테스트",
+          "320px 리플로",
+          "WCAG 리플로",
+          "텍스트 간격 기준",
+          "글자 간격 접근성",
+          "줄간격 접근성",
+          "WCAG 1.4.12",
+          "텍스트 확대 검사기",
+          "HTML 확대 테스트",
+        ],
+      },
+      en: {
+        title: "Text Scaling & Spacing Checker | WCAG Reflow Test",
+        description:
+          "Paste HTML and CSS to test 200% text resizing, a 320 CSS pixel reflow viewport, and WCAG text spacing overrides side by side. The checker highlights horizontal overflow, clipped text, fixed containers, and nowrap candidates while processing your source locally in the browser without sign-in or upload.",
+        keywords: [
+          "text scaling checker",
+          "wcag text resize test",
+          "200 percent text resize",
+          "400 percent zoom accessibility",
+          "320 css pixel reflow test",
+          "wcag reflow checker",
+          "text spacing checker",
+          "wcag 1.4.12 test",
+          "letter spacing accessibility",
+          "line height accessibility",
+          "html css accessibility preview",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "HTML·CSS에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다.",
+        description:
+          "HTML과 CSS에 200% 텍스트 확대, 320 CSS px 리플로, WCAG 간격값을 적용해 보세요. 원본과 비교하며 고정된 카드, 버튼, 문단과 반응형 레이아웃에서 내용이 사라지는 위치를 찾을 수 있습니다. 붙여넣은 코드는 정제 후 스크립트 없이 격리된 미리보기에서만 렌더링되며, 외부 이미지·웹폰트·stylesheet는 불러오지 않습니다.",
+        howItWorks: [
+          "HTML 또는 텍스트와 필요한 CSS 입력",
+          "텍스트 200%·리플로 320px·텍스트 간격 중 선택",
+          "원본과 비교하고 오버플로·잘림 후보와 수동 확인 항목 점검",
+        ],
+        aeo: {
+          what: "텍스트 확대·간격 검사기는 HTML과 CSS에 웹접근성 확대·리플로·간격 조건을 적용해 원본과 비교하는 브라우저 도구입니다.",
+          who: "200% 글자 확대, 320px 반응형 재배치와 사용자 텍스트 간격 변경을 검수하는 퍼블리셔, 개발자, 디자이너와 QA 담당자를 위한 도구입니다.",
+          how: "안전하게 격리된 preview에 텍스트 200%, 320 CSS px viewport 또는 WCAG 간격값을 적용하고 오버플로·잘림 후보를 측정합니다.",
+          why: "고정 width·height, 줄바꿈 차단과 좁은 control 때문에 확대 시 정보나 기능이 사라지는 문제를 배포 전에 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성에서 글자 크기는 어떻게 검사하나요?",
+            body: [
+              "WCAG 2.2에는 모든 웹페이지가 반드시 사용해야 하는 하나의 최소 폰트 크기가 정해져 있지 않습니다. 작은 글자가 무조건 괜찮다는 뜻은 아닙니다. 사용자가 브라우저나 사용자 설정으로 텍스트를 키웠을 때 내용과 기능을 잃지 않는지가 핵심 검사 대상입니다. 글자 크기를 하나의 숫자로 고정해 검사하면 화면 크기, 글꼴, 언어와 사용자의 확대 방식에 따라 달라지는 실제 문제를 놓치기 쉽습니다.",
+              "이 도구는 세 가지 조건을 분리해 보여줍니다. 텍스트 200%는 글자만 두 배가 됐을 때 고정된 카드와 control이 버티는지 확인합니다. 리플로 320px은 좁은 viewport에서 페이지가 한 방향으로 다시 배치되는지 확인합니다. 텍스트 간격은 사용자가 줄·문단·글자·단어 간격을 넓혀도 정보가 사라지지 않는지 확인합니다.",
+            ],
+          },
+          {
+            heading: "텍스트 200%와 브라우저 200% 확대는 같은가요?",
+            body: [
+              "WCAG 1.4.4의 목적은 텍스트를 최대 200%까지 키워도 내용이나 기능이 잘리거나 가려지지 않게 하는 것입니다. 브라우저는 전체 페이지 zoom, 텍스트 전용 확대, 사용자 글꼴 설정처럼 여러 방식을 제공할 수 있습니다. 이 검사기의 텍스트 200% 프리셋은 각 요소의 계산된 글자 크기만 두 배로 만들고 width·height·padding은 그대로 둡니다. 고정된 컨테이너가 텍스트 증가를 견디는지 빠르게 찾기 위한 보수적인 stress test입니다.",
+              "따라서 preview가 실제 브라우저의 full-page zoom과 픽셀 단위로 같지는 않습니다. 운영 화면에서는 Chrome, Edge, Firefox 또는 Safari의 실제 확대 기능으로 100%부터 200% 사이의 단계도 확인해야 합니다. 특히 media query가 바뀌는 구간, sticky header, modal과 form control은 실제 페이지에서 다시 테스트하세요.",
+            ],
+          },
+          {
+            heading: "320px 리플로와 400% 확대는 어떤 관계인가요?",
+            body: [
+              "WCAG 1.4.10은 일반적으로 세로로 읽는 콘텐츠가 320 CSS px 너비에서 정보와 기능을 잃지 않고, 페이지 전체를 가로·세로 두 방향으로 반복 스크롤하지 않도록 요구합니다. 320 CSS px는 시작 viewport가 1280 CSS px일 때 브라우저를 400% 확대한 것과 동등한 폭입니다.",
+              "그래서 이 도구는 화면을 단순히 네 배 확대하는 필터를 사용하지 않습니다. 원본 preview의 내부 viewport를 1280px, 검사 preview를 320px로 실제 변경합니다. 이렇게 해야 좁은 화면을 겨냥한 반응형 CSS가 동작하고 여러 열이 쌓이거나 navigation이 재배치되는 모습을 확인할 수 있습니다.",
+              "데이터 표, 지도, 다이어그램처럼 의미를 이해하거나 조작하기 위해 2차원 배치가 필요한 영역은 수평 스크롤이 허용될 수 있습니다. 그렇더라도 페이지 전체가 아니라 해당 영역만 스크롤되는지, 표의 각 칸 안 텍스트가 불필요하게 잘리지 않는지는 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "WCAG 텍스트 간격 기준은 무엇인가요?",
+            body: [
+              "WCAG 1.4.12는 줄 높이 글자 크기의 1.5배, 문단 뒤 간격 2배, 글자 간격 0.12배, 단어 간격 0.16배를 동시에 적용했을 때 콘텐츠나 기능 손실이 없어야 한다고 설명합니다.",
+              "이 값을 사이트의 기본 typography로 반드시 사용하라는 기준은 아닙니다. 사용자가 자신의 읽기 필요에 맞춰 author style을 덮어쓸 수 있어야 하고, 그 결과 문구·버튼·입력창·tooltip이 잘리거나 사라지지 않아야 한다는 뜻입니다. 검사기는 현재 값이 기준보다 이미 크다면 줄이지 않고 네 속성만 확대합니다.",
+              "언어와 문자 체계에 따라 일부 간격 속성의 효과는 다릅니다. 한글은 띄어쓰기가 있는 문장에서 word-spacing 영향이 나타나지만, 실제 문구가 짧거나 공백이 없다면 차이가 작을 수 있습니다. 한국어·영어·숫자가 섞인 실제 서비스 문구로 확인하는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "어떤 CSS에서 확대 문제가 자주 생기나요?",
+            body: [
+              "고정된 width와 height: 카드에 height 200px와 overflow: hidden을 함께 사용하면 기본 문구는 맞더라도 확대된 문구나 번역된 긴 문구가 잘릴 수 있습니다. 꼭 필요한 경우가 아니라면 자연스러운 높이, min-height, 내부 여백과 줄바꿈을 사용하세요. 고정 width가 320px viewport보다 크면 페이지 전체의 가로 오버플로 원인이 됩니다.",
+              "줄바꿈을 막는 white-space: nowrap은 날짜, 코드, 한 줄 label에 유용하지만 긴 버튼 문구나 navigation 전체에 적용하면 좁은 화면에서 벗어날 수 있습니다. 문구가 반드시 한 줄이어야 하는지 확인하고, 필요하면 control이 늘어나거나 해당 영역만 스크롤되도록 설계하세요.",
+              "절대 위치와 고정 위치: position absolute로 문구와 아이콘 위치를 픽셀에 맞추면 글자 크기나 줄 수가 바뀔 때 서로 겹칠 수 있습니다. position fixed인 header와 하단 액션도 확대 후 본문을 가릴 수 있습니다. flow layout, flex·grid의 자연스러운 크기 계산과 충분한 padding을 우선하세요.",
+              "제한된 line-height와 overflow: 글자 크기는 커지는데 line-height를 고정된 작은 px로 유지하면 위아래 획이 겹치거나 control 안에서 잘릴 수 있습니다. 단일 행 입력처럼 높이가 제한된 컴포넌트도 실제 확대 상태에서 텍스트가 중앙에 보이는지 확인해야 합니다.",
+              "viewport 단위만 사용한 글자 크기: font-size를 2vw처럼 viewport 변화에만 의존하게 하면 브라우저 확대와 breakpoint 변화에서 기대한 200% 증가가 나오지 않을 수 있습니다. clamp()를 쓰더라도 rem 기반 최소·기본값과 확대 결과를 함께 확인하세요.",
+            ],
+          },
+          {
+            heading: "px를 쓰면 접근성에 실패하고 rem을 쓰면 통과하나요?",
+            body: [
+              "그렇게 단순하지 않습니다. 현대 브라우저의 full-page zoom은 px로 지정한 글자도 함께 확대할 수 있으므로 px 사용이 곧 WCAG 실패라는 설명은 정확하지 않습니다. 반대로 rem을 사용해도 부모 컨테이너의 height가 고정돼 있거나 overflow를 숨기면 내용은 잘릴 수 있습니다. 최종 판단은 단위 이름이 아니라 확대 후 콘텐츠와 기능이 유지되는지에 달려 있습니다.",
+              "다만 rem과 em은 사용자의 기본 글자 크기 설정을 반영하고 글자와 관련된 padding·gap·container가 함께 확장되도록 설계할 때 유용합니다. font-size는 rem, 컴포넌트 내부 간격은 em, 최대 너비는 rem처럼 의도를 나눠 사용할 수 있습니다. 기존 px 값을 바꿀 때는 CSS 단위 변환기를 사용하되, 변환만 하고 끝내지 말고 이 검사기와 실제 브라우저에서 결과를 다시 확인하세요.",
+            ],
+          },
+          {
+            heading: "이미지로 된 텍스트는 왜 별도로 봐야 하나요?",
+            body: [
+              "이미지 안의 글자는 일반 HTML 텍스트처럼 사용자가 글꼴, 크기, 색상과 간격을 바꾸기 어렵고 확대 시 선명도가 떨어질 수 있습니다. 로고처럼 시각 표현이 본질적인 경우를 제외하면 실제 텍스트와 CSS를 사용하는 편이 좋습니다. 이 도구는 외부 이미지를 불러오지 않고 이미지 안의 문자를 인식하지 않으므로, 시안과 구현 화면에서 이미지로 된 텍스트가 있는지 직접 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "검사 결과는 어떻게 해석해야 하나요?",
+            body: [
+              "페이지 가로 오버플로는 검사 viewport보다 document가 넓어진 상태입니다. 내용 잘림 가능성은 텍스트가 있는 영역에서 scroll 크기가 client box보다 크면서 overflow가 숨겨진 경우입니다. 수평 스크롤 영역 검토는 특정 컴포넌트가 별도 가로 스크롤을 갖는 상태로, 표나 다이어그램이라면 허용 가능한 예외일 수 있습니다.",
+              "결과는 원본에도 있던 문제와 이 프리셋에서 새로 생긴 문제를 구분해 보여줍니다. 확대 때문에 생긴 문제인지, 원래부터 좁았던 컨테이너인지를 나눠 보면 수정 우선순위를 정하기 쉽습니다.",
+              "자동 후보가 없다고 해서 기준을 통과한 것은 아닙니다. 텍스트끼리 겹쳤는지, 기능을 실행할 수 있는지, 말줄임된 전체 문구가 다른 방법으로 제공되는지와 실제 브라우저 확대는 사람이 확인해야 합니다. preview는 문제를 찾는 지도이지 합격 도장을 찍는 심사관이 아닙니다.",
+            ],
+          },
+          {
+            heading: "배포 전 권장 검사 순서",
+            body: [
+              "먼저 실제 서비스의 대표적인 짧은 문구와 가장 긴 문구를 각각 준비합니다. 텍스트 200%에서 카드, 버튼, 입력창, 탭과 tooltip의 내용 손실을 확인하고, 리플로 320px에서 페이지 전체 가로 스크롤과 고정 UI 가림을 확인합니다. 텍스트 간격에서는 문단·control·배지의 잘림과 겹침을 봅니다.",
+              "감지된 요소의 고정 width·height, overflow와 nowrap 사용 이유를 검토한 다음, 실제 운영 화면에서 브라우저 확대와 키보드 조작을 다시 테스트하세요. 구조 문제가 의심되면 HTML 접근성 검사기로 헤딩·랜드마크·DOM 순서를 확인하고, 실제 색상은 명도대비 검사기에서 별도로 측정합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "예시 카드를 텍스트 200%로 검사",
+            input: "예시 불러오기로 채운 summary-card (width 560px · height 230px · overflow: hidden) · 프리셋 텍스트 200% · viewport 768px",
+            result:
+              "후보 1개. section 에서 CLIP-001 세로 내용 잘림 가능성: clientHeight 228px 안에 콘텐츠가 448px",
+            note: "글자만 두 배가 됐을 뿐인데 콘텐츠 높이가 카드의 두 배에 가까워집니다. 카드 아래쪽의 저장 버튼과 링크가 화면에서 사라진다는 뜻이라 고정 height 를 min-height 로 바꿔야 합니다.",
+          },
+          {
+            title: "같은 카드를 리플로 320px로 검사",
+            input: "같은 입력 · 프리셋 리플로 320px (원본 1280px → 검사 320px)",
+            result:
+              "후보 2개. 문서 전체에서 REFLOW-001 페이지 가로 오버플로(scrollWidth 560px · clientWidth 320px), section 에서 REFLOW-002 화면 밖으로 벗어난 요소(오른쪽 경계 560px)",
+            note: "고정 width 560px 하나가 원인입니다. 카드 안의 문단·버튼도 함께 넘치지만 원인이 되는 가장 바깥 요소만 카드로 묶어 수정 위치를 하나로 좁혀 줍니다.",
+          },
+          {
+            title: "같은 카드를 텍스트 간격으로 검사",
+            input: "같은 입력 · 프리셋 텍스트 간격 · viewport 768px",
+            result:
+              "후보 1개. section 에서 CLIP-001: clientHeight 228px 안에 콘텐츠가 260px. 문단의 line-height 는 28.8px에서 36px로, margin-bottom 은 6px에서 32px로, letter-spacing 은 0에서 1.92px로 늘어납니다",
+            note: "글자 크기는 그대로인데 간격만 넓혀도 카드를 넘칩니다. 확대와 간격은 서로 다른 조건이라 프리셋을 나눠 각각 확인해야 하는 이유입니다.",
+          },
+        ],
+        limitations: [
+          "실제 브라우저 확대를 그대로 복제하지 않습니다. 텍스트 200%는 계산된 글자 크기만 두 배로 만드는 보수적인 stress test이고, full-page zoom은 여백·이미지·media query까지 함께 바꿉니다. 최종 확인은 실제 브라우저의 확대 기능으로 해야 합니다.",
+          "JavaScript를 실행하지 않습니다. React hydration, 스크립트로 열리는 모달, 런타임에 바뀌는 클래스와 동적 상태는 재현되지 않으므로 정적 HTML과 CSS로 검사합니다.",
+          "외부 웹폰트·이미지·stylesheet를 불러오지 않습니다. 시스템 글꼴로 렌더링되므로 실제 운영 화면과 줄바꿈 위치가 달라질 수 있고, 이미지는 크기만 유지한 중립 placeholder로 표시됩니다.",
+          "겹침은 자동으로 판정하지 않습니다. 두 텍스트가 실제로 겹쳤는지, 겹침 때문에 기능이 가려졌는지는 preview를 눈으로 확인해야 합니다.",
+          "지도·데이터 표·다이어그램이 리플로 예외에 해당하는지 자동으로 분류하지 않습니다. 수평 스크롤 영역은 후보로만 표시하고 예외 여부는 사람이 판단합니다.",
+          "입력은 HTML·텍스트 200,000자, CSS 100,000자, 요소 10,000개까지 검사합니다. 더 큰 화면은 컴포넌트 단위로 나눠 검사하세요.",
+          "감지 결과가 0개라는 것은 WCAG나 한국형 웹 콘텐츠 접근성 지침을 준수한다는 뜻이 아닙니다. 이 도구는 점수나 합격 여부를 제공하지 않습니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Resize Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Reflow",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/reflow.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Text Spacing",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Images of Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/images-of-text.html",
+          },
+          {
+            label: "MDN · iframe sandbox",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox",
+          },
+          {
+            label: "MDN · Content Security Policy",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
+          },
+        ],
+      },
+      en: {
+        card: "Apply 200% text, 320px reflow and WCAG spacing to HTML and CSS, side by side with the original.",
+        description:
+          "Apply 200% text resizing, a 320 CSS pixel reflow viewport, or WCAG text spacing values to an HTML and CSS sample. Compare the original and test views to find fixed containers, controls, and responsive layouts that lose content. Your source is sanitized and rendered only inside an isolated preview with scripts disabled, and external images, fonts and stylesheets are never loaded.",
+        howItWorks: [
+          "Paste HTML or plain text and optional CSS",
+          "Choose 200% text, 320px reflow, or WCAG text spacing",
+          "Compare both previews and inspect overflow, clipping and manual checks",
+        ],
+        aeo: {
+          what: "A text scaling and spacing checker applies accessibility resize, reflow, and spacing conditions to HTML and CSS and compares the result with the original.",
+          who: "It is for HTML authors, front-end developers, designers, and QA testers reviewing 200% text resize, 320px reflow, and user spacing overrides.",
+          how: "It renders sanitized source in isolated previews, applies one WCAG-related preset, and measures horizontal overflow and likely clipped text.",
+          why: "It helps teams find fixed dimensions, blocked wrapping, and narrow controls that can hide content or functionality when text is enlarged or spaced out.",
+        },
+        guide: [
+          {
+            heading: "How should text size be tested for web accessibility?",
+            body: [
+              "WCAG 2.2 does not define one minimum font size that every web page must use. That does not make very small text automatically acceptable. The important test is whether people can enlarge or restyle text without losing content or functionality. A single font-size number cannot represent every viewport, typeface, language, and user setting.",
+              "This checker separates three conditions. 200% text doubles text size to stress fixed cards and controls. 320px reflow tests whether the layout adapts to a narrow viewport without page-level two-dimensional scrolling. Text spacing checks whether content survives user overrides for line, paragraph, letter, and word spacing.",
+            ],
+          },
+          {
+            heading: "Is 200% text the same as 200% browser zoom?",
+            body: [
+              "WCAG 1.4.4 aims to keep content and functionality available when text is resized up to 200%. Browsers can support this through full-page zoom, text-only resizing, or user font preferences. The checker doubles each element's computed font size while leaving width, height, padding, and other properties unchanged. This is a conservative stress test for containers that do not grow with text.",
+              "The result is not a pixel-identical copy of full-page browser zoom. Test the implemented page at intermediate steps from 100% to 200% in the browsers your product supports. Pay particular attention to responsive breakpoints, sticky headers, dialogs, and form controls.",
+            ],
+          },
+          {
+            heading: "How are 320px reflow and 400% zoom related?",
+            body: [
+              "WCAG 1.4.10 expects vertically scrolling content to remain available at a width equivalent to 320 CSS pixels without requiring scrolling in two dimensions. A 320 CSS pixel viewport is equivalent to starting at 1280 CSS pixels and zooming to 400%.",
+              "The checker does not create this view by visually scaling an image four times. It uses a 1280px layout viewport for the original and a real 320px layout viewport for the test. Responsive media queries can therefore rearrange columns, navigation, and controls.",
+              "Some regions require a two-dimensional layout for their meaning or operation, including data tables, maps, and diagrams. These can be exceptions, but review whether scrolling is limited to the region and whether text inside it remains usable.",
+            ],
+          },
+          {
+            heading: "What are the WCAG text spacing values?",
+            body: [
+              "WCAG 1.4.12 describes four values that must be applicable together without loss of content or functionality: line height at least 1.5 times the font size, space after paragraphs at least 2 times, letter spacing at least 0.12 times, and word spacing at least 0.16 times.",
+              "These are not mandatory default typography values. The requirement is that a user can override author styles to these values without clipping text or losing controls. The checker leaves an existing value unchanged when it is already larger and modifies only the four relevant properties.",
+              "Some properties have different effects across languages and writing systems. Test realistic product strings, including mixed text, numbers, and longer localized labels.",
+            ],
+          },
+          {
+            heading: "Which CSS patterns commonly break during resizing?",
+            body: [
+              "Fixed width and height: a card with height 200px and overflow hidden may fit the default copy but clip enlarged or translated text. Prefer natural height, min-height, flexible spacing, and wrapping unless a fixed dimension is essential. A fixed width larger than 320px can create page-level horizontal overflow.",
+              "Blocked wrapping: white-space nowrap is useful for dates and code, but it can push long buttons or navigation beyond a narrow viewport. Decide whether one line is essential and allow the control to grow, wrap, or scroll only inside a justified region.",
+              "Absolute and fixed positioning: pixel-positioned text and icons can overlap when line count or font size changes. Fixed headers and bottom actions can also obscure content at high zoom. Prefer normal flow and flexible grid or flex sizing where possible.",
+              "Restricted line height and overflow: if font size grows while a fixed pixel line height remains small, glyphs and controls can overlap or clip. Test single-line fields and compact components with actual enlarged text.",
+              "Viewport-only font sizing: a size such as 2vw can respond to viewport changes in ways that prevent the expected enlargement across zoom and breakpoints. If you use clamp(), combine it with sensible relative minimums and verify the outcome.",
+            ],
+          },
+          {
+            heading: "Does px fail accessibility while rem passes?",
+            body: [
+              "No. Modern full-page browser zoom can enlarge text sized in px, so the claim that px equals failure is not accurate. A rem-based interface can still clip content when its container has a fixed height or hidden overflow. Conformance depends on the result after resizing, not the name of the CSS unit.",
+              "Relative units are still useful. rem can respond to a user's default font setting, and em can help spacing and control dimensions grow with local text. Use the CSS unit converter when changing values, then verify the final behavior in this checker and in a real browser.",
+            ],
+          },
+          {
+            heading: "Why review images of text separately?",
+            body: [
+              "Text embedded in an image cannot be restyled like HTML text and may lose clarity when enlarged. Except where a particular visual presentation is essential, use real text and CSS. This checker blocks external images and does not recognize text inside them, so inspect the design and implementation separately for images of text.",
+            ],
+          },
+          {
+            heading: "How should you interpret detected candidates?",
+            body: [
+              "Page horizontal overflow means the document became wider than the test viewport. Possible clipping means a text container has more scroll content than its visible box while overflow is hidden or clipped. Horizontal scroll region identifies a component that scrolls separately and may be justified for a table or diagram.",
+              "Every candidate is marked as either already present in the original or introduced by the preset. Separating the two makes it easier to decide what the resize actually broke and what was already too tight.",
+              "No detected candidates does not confirm conformance. A person still needs to inspect overlap, available functionality, access to truncated text, and actual browser zoom. The preview narrows the search; it does not replace an accessibility evaluation.",
+            ],
+          },
+          {
+            heading: "A practical pre-release sequence",
+            body: [
+              "Prepare representative short labels and the longest realistic content. Use 200% text to review cards, buttons, fields, tabs, and tooltips, then use 320px reflow to find page-level horizontal scrolling and fixed UI obstruction. Apply text spacing and inspect paragraphs, controls, and badges for clipping or overlap.",
+              "Review fixed dimensions, overflow, and nowrap on every detected element, then retest the deployed interface with actual browser zoom and keyboard operation. Use the HTML accessibility checker when structure or DOM order appears incorrect, and measure rendered colors separately with the contrast checker.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Checking the sample card with 200% text",
+            input: "The summary-card loaded by Load sample (width 560px, height 230px, overflow hidden), preset 200% text, viewport 768px",
+            result:
+              "One candidate. CLIP-001 possible vertical clipping on section: 448px of content inside a 228px clientHeight",
+            note: "Only the text doubled, yet the content is nearly twice the height of the card. The save button and link at the bottom disappear, so the fixed height should become a min-height.",
+          },
+          {
+            title: "Checking the same card with 320px reflow",
+            input: "The same input, preset 320px reflow (original 1280px, test 320px)",
+            result:
+              "Two candidates. REFLOW-001 page horizontal overflow on the document (scrollWidth 560px, clientWidth 320px) and REFLOW-002 on section (right edge 560px)",
+            note: "A single fixed width of 560px is the cause. The paragraphs and buttons inside overflow too, but only the outermost element is listed so there is one place to fix.",
+          },
+          {
+            title: "Checking the same card with WCAG text spacing",
+            input: "The same input, preset text spacing, viewport 768px",
+            result:
+              "One candidate. CLIP-001 on section: 260px of content inside a 228px clientHeight. Paragraph line height goes from 28.8px to 36px, margin-bottom from 6px to 32px, and letter spacing from 0 to 1.92px",
+            note: "Font size never changed, yet wider spacing alone overflows the card. Resizing and spacing are separate conditions, which is why each has its own preset.",
+          },
+        ],
+        limitations: [
+          "This is not a copy of real browser zoom. The 200% text preset doubles computed font sizes only, while full-page zoom also scales spacing, images and media query behavior. Confirm the final result with the browser's own zoom.",
+          "JavaScript is not executed. React hydration, script-opened dialogs, runtime class changes and dynamic state are not reproduced, so the check covers static HTML and CSS.",
+          "External web fonts, images and stylesheets are never loaded. System fonts change where lines break compared with production, and images appear as neutral placeholders that keep only their dimensions.",
+          "Overlap is not detected automatically. Whether two pieces of text actually overlap, and whether that overlap hides functionality, has to be judged by looking at the preview.",
+          "Maps, data tables and diagrams are not automatically classified as reflow exceptions. Horizontal scroll regions are listed as candidates and a person decides whether the exception applies.",
+          "Input is limited to 200,000 characters of HTML or text, 100,000 characters of CSS, and 10,000 elements. Check a larger screen one component at a time.",
+          "Zero detected candidates does not mean the markup conforms to WCAG or to another accessibility standard. This tool reports no score and no pass or fail.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Resize Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Reflow",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/reflow.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Text Spacing",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Images of Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/images-of-text.html",
+          },
+          {
+            label: "MDN · iframe sandbox",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox",
+          },
+          {
+            label: "MDN · Content Security Policy",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "웹접근성에 최소 글자 크기 기준이 있나요?",
+          answer:
+            "WCAG 2.2는 모든 콘텐츠에 적용되는 하나의 최소 폰트 크기를 정하지 않습니다. 대신 사용자가 텍스트를 최대 200%까지 키워도 내용과 기능이 잘리거나 가려지지 않는지 검사합니다. 작은 기본 글자는 사용성을 해칠 수 있으므로 실제 독해성도 별도로 검토해야 합니다.",
+        },
+        {
+          question: "200% 텍스트 확대와 400% 확대는 무엇이 다른가요?",
+          answer:
+            "200% 텍스트 프리셋은 글자 크기를 두 배로 만들어 고정 컨테이너의 내성을 확인합니다. 400% 확대와 관련된 리플로 검사는 1280 CSS px viewport가 320 CSS px로 줄어든 조건을 사용해 페이지가 한 방향으로 재배치되는지 확인합니다.",
+        },
+        {
+          question: "WCAG 텍스트 간격 기준값은 무엇인가요?",
+          answer:
+            "줄 높이 1.5배, 문단 뒤 간격 2배, 글자 간격 0.12배, 단어 간격 0.16배입니다. 사이트가 이 값을 기본 디자인으로 사용해야 한다는 뜻이 아니라, 사용자가 해당 값으로 바꿔도 콘텐츠와 기능이 유지되어야 한다는 뜻입니다.",
+        },
+        {
+          question: "px 대신 rem을 사용하면 확대 문제를 해결할 수 있나요?",
+          answer:
+            "rem과 em은 사용자 기본 글자 크기와 컴포넌트 내부 비율을 반영하는 데 유용하지만 자동 해결책은 아닙니다. px도 브라우저 확대로 커질 수 있고, rem을 사용해도 고정 height나 숨김 overflow가 있으면 문구가 잘릴 수 있으므로 실제 결과를 검사해야 합니다.",
+        },
+        {
+          question: "React JSX나 실행 중인 웹페이지를 검사할 수 있나요?",
+          answer:
+            "1차 버전은 브라우저가 해석할 수 있는 정적 HTML과 CSS만 지원합니다. JSX, JavaScript 상태, 외부 font와 실제 운영 페이지는 재현하지 않으므로 렌더링된 HTML을 사용하고 마지막에는 실제 브라우저에서 다시 테스트하세요.",
+        },
+        {
+          question: "입력한 HTML과 CSS가 서버로 전송되나요?",
+          answer:
+            "아닙니다. 정제, preview 생성과 측정은 브라우저에서 이루어집니다. 입력 원문, 요소 경로와 화면 문구는 Kitfolio 서버에 저장하거나 분석 이벤트로 전송하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does WCAG define a minimum font size?",
+          answer:
+            "WCAG 2.2 does not set one minimum font size for all content. It requires text to be resizable up to 200% without loss of content or functionality. Very small default text can still be a usability problem and should be reviewed separately.",
+        },
+        {
+          question: "What is the difference between 200% text and 400% zoom?",
+          answer:
+            "The 200% text preset doubles computed font sizes to stress fixed containers. The reflow condition associated with 400% zoom uses a 320 CSS pixel viewport, equivalent to zooming a 1280 CSS pixel starting viewport to 400%, and checks whether content reflows in one direction.",
+        },
+        {
+          question: "What are the WCAG text spacing values?",
+          answer:
+            "They are line height of at least 1.5 times font size, space after paragraphs of at least 2 times font size, letter spacing of at least 0.12 times font size, and word spacing of at least 0.16 times font size. Content must survive these overrides; they are not required default styles.",
+        },
+        {
+          question: "Will replacing px with rem fix text resizing issues?",
+          answer:
+            "Relative units can help text and related dimensions respond to user settings, but they do not guarantee success. Browser zoom can enlarge px text, while a rem-based component can still clip content because of fixed height or hidden overflow. Test the rendered outcome.",
+        },
+        {
+          question: "Can I test React JSX or a live website?",
+          answer:
+            "The first release accepts static HTML and CSS that a browser can render. It does not execute JSX, JavaScript state, external fonts, or a deployed site. Use rendered HTML for this preview and complete the review in the real browser afterward.",
+        },
+        {
+          question: "Is my HTML or CSS sent to a server?",
+          answer:
+            "No. Sanitization, preview rendering, and measurement run in your browser. The source, element paths, and visible copy are not uploaded to or stored by Kitfolio and are not included in analytics events.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "텍스트 확대·간격 검사기",
+        subtitle: "200% 확대·320px 리플로·WCAG 간격을 한 화면에서 비교",
+      },
+      en: {
+        title: "Text Scaling & Spacing Checker",
+        subtitle: "Compare 200% text, 320px reflow and WCAG spacing side by side",
+      },
+    },
+  },
   // ── Text ─────────────────────────────
   {
     slug: "character-counter",

@@ -4087,3 +4087,236 @@ a.qr-tab:hover { color: var(--color-blue-gray-900); background: var(--color-blue
 @media (prefers-reduced-motion: reduce) {
   .a11y-scope button, .a11y-views button { transition: none; }
 }
+
+/* ============================================================
+   Text Scaling & Spacing Checker (Canvas theme)
+   위: 입력 + 프리셋·viewport 제어 · 아래: 원본·검사 preview 2열.
+   preview 는 체커보드가 아니라 중립 화이트 canvas + 얇은 회색 테두리를 쓴다
+   (투명 이미지 편집기가 아니므로 체커보드는 오히려 방해가 된다).
+   ============================================================ */
+.ts-work {
+  display: grid; gap: 16px;
+  grid-template-areas: "editor" "controls" "stage" "status" "notices";
+}
+@media (min-width: 960px) {
+  .ts-work {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "editor controls"
+      "stage stage"
+      "status status"
+      "notices notices";
+  }
+}
+
+/* 입력: HTML·텍스트 / CSS 두 탭 */
+.ts-editor {
+  grid-area: editor; display: flex; flex-direction: column; min-width: 0;
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);
+}
+.ts-tabs {
+  display: flex; align-items: center; gap: 4px; padding: 8px 10px;
+  border-bottom: 1px solid var(--color-blue-gray-100); background: var(--color-blue-gray-50);
+}
+.ts-tabs > button {
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  font-family: var(--font-inter); font-size: 12.5px; font-weight: 500;
+  color: var(--color-blue-gray-700); transition: background .12s ease, color .12s ease;
+}
+.ts-tabs > button:hover { background: var(--color-blue-gray-100); }
+.ts-tabs > button[aria-pressed="true"] { background: var(--color-blue-primary-700); color: #fff; }
+.ts-tab-spacer { flex: 1; }
+.ts-act {
+  padding: 6px 10px; border-radius: var(--radius-sm); font-size: 12px;
+  color: var(--color-blue-gray-700);
+}
+.ts-act:hover { background: var(--color-blue-gray-100); color: var(--color-blue-gray-950); }
+.ts-act:disabled { opacity: .45; cursor: not-allowed; }
+
+textarea.ts-code {
+  flex: 1; width: 100%; border: none; outline: none; resize: none; background: #fff;
+  color: var(--color-blue-gray-900); font-family: var(--font-mono);
+  font-size: 13px; line-height: 1.7; padding: 14px 16px; tab-size: 2;
+  min-height: 240px; max-height: 600px; field-sizing: content;
+}
+@media (min-width: 960px) { textarea.ts-code { min-height: 300px; } }
+textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
+
+.ts-editor-foot {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 12px;
+  border-top: 1px solid var(--color-blue-gray-100); background: var(--color-blue-gray-50);
+}
+.ts-apply {
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-family: var(--font-inter); font-size: 13px; font-weight: 500;
+  background: var(--color-blue-primary-700); color: #fff;
+}
+.ts-apply:hover { background: var(--color-blue-primary-800); }
+.ts-apply:disabled { opacity: .6; cursor: progress; }
+.ts-count { font-family: var(--font-mono); font-size: 11px; color: var(--color-blue-gray-700); }
+
+/* 프리셋 · viewport */
+.ts-controls { grid-area: controls; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.ts-control-group {
+  margin: 0; padding: 14px 16px; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl); background: #fff; box-shadow: var(--shadow-card);
+}
+.ts-control-group legend {
+  padding: 0 4px; font-family: var(--font-inter); font-size: 11.5px; font-weight: 700;
+  letter-spacing: 0.03em; text-transform: uppercase; color: var(--color-blue-gray-700);
+}
+.ts-choices { display: grid; gap: 6px; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.ts-choices.is-compact { grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); }
+.ts-choices button {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  padding: 9px 11px; border-radius: var(--radius-sm); text-align: left;
+  background: var(--color-blue-gray-50); border: 1px solid transparent;
+  transition: background .12s ease, border-color .12s ease;
+}
+.ts-choices button:hover:not(:disabled) { background: var(--color-blue-gray-100); }
+.ts-choices button b {
+  font-family: var(--font-inter); font-size: 13px; font-weight: 500; color: var(--color-blue-gray-900);
+}
+.ts-choices button span { font-family: var(--font-mono); font-size: 11px; color: var(--color-blue-gray-700); }
+.ts-choices button[aria-pressed="true"] {
+  background: var(--color-blue-primary-100); border-color: var(--color-blue-primary-200);
+}
+.ts-choices button[aria-pressed="true"] b,
+.ts-choices button[aria-pressed="true"] span { color: var(--color-blue-primary-800); }
+.ts-choices button:disabled { opacity: .45; cursor: not-allowed; }
+.ts-hint { margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--color-blue-gray-700); }
+
+/* preview 무대: 원본 · 검사 2열 */
+.ts-stage { grid-area: stage; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 760px) { .ts-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.ts-frame {
+  margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px;
+}
+.ts-frame figcaption {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+}
+.ts-frame figcaption b {
+  font-family: var(--font-inter); font-size: 13px; font-weight: 500; color: var(--color-blue-gray-950);
+}
+.ts-frame figcaption span { font-family: var(--font-mono); font-size: 11px; color: var(--color-blue-gray-700); }
+.ts-frame-fit {
+  max-width: 100%; overflow: hidden; background: #fff;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-lg);
+}
+.ts-frame-fit iframe {
+  display: block; border: 0; transform-origin: top left; background: #fff;
+  /* 사용자 HTML 은 보기 전용이다: 클릭·포커스 대상이 아니다 */
+  pointer-events: none;
+}
+
+/* 상태 · 안내 */
+.ts-status {
+  grid-area: status; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--color-blue-gray-800);
+}
+.ts-badge {
+  padding: 3px 9px; border-radius: 999px; font-size: 11.5px; font-weight: 500;
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-800);
+}
+.ts-notices { grid-area: notices; margin: 0; padding-left: 20px; list-style: disc; display: grid; gap: 4px; }
+.ts-notices li { font-size: 12.5px; line-height: 1.6; color: var(--color-blue-gray-700); }
+.ts-notices li::marker { color: var(--color-blue-primary-400); }
+
+/* 감지 결과 */
+.ts-results { margin-top: 36px; }
+.ts-results > h2, .ts-criteria > h2 {
+  margin: 0 0 14px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--color-blue-gray-950);
+}
+.ts-summary {
+  margin: 0 0 16px; display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+.ts-summary > div {
+  min-width: 0; padding: 10px 14px; background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg);
+}
+.ts-summary dt { font-size: 11.5px; color: var(--color-blue-gray-700); }
+.ts-summary dd {
+  margin: 3px 0 0; font-family: var(--font-inter); font-size: 14px; font-weight: 500;
+  color: var(--color-blue-gray-950); overflow-wrap: anywhere;
+}
+
+/* min-width: 0 이 없으면 white-space: pre 인 측정값 코드가 grid item 의
+   최소 크기를 키워 좁은 화면에서 페이지 전체가 가로로 밀린다.
+   코드 블록만 자기 영역 안에서 가로 스크롤되게 한다. */
+.ts-candidates { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.ts-candidate {
+  min-width: 0; padding: 14px 16px; background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-left: 3px solid var(--color-blue-primary-600); border-radius: var(--radius-lg);
+}
+.ts-candidate.is-selected { border-color: var(--color-blue-primary-600); background: var(--color-blue-primary-50); }
+.ts-candidate-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ts-candidate-head code {
+  font-family: var(--font-mono); font-size: 12px; color: var(--color-blue-gray-900);
+  overflow-wrap: anywhere;
+}
+.ts-origin-tag {
+  margin-left: auto; padding: 2px 8px; border-radius: 999px; font-size: 11px;
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-800);
+}
+.ts-origin-tag.is-pre { background: var(--color-blue-gray-100); color: var(--color-blue-gray-800); }
+.ts-candidate-text {
+  margin: 8px 0 0; font-size: 12.5px; color: var(--color-blue-gray-700);
+  overflow-wrap: anywhere;
+}
+.ts-reasons { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.ts-reasons > li { min-width: 0; padding-top: 10px; border-top: 1px solid var(--color-blue-gray-100); }
+.ts-reasons > li:first-child { padding-top: 0; border-top: none; }
+.ts-rule {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 8px;
+  font-size: 13.5px; font-weight: 700; color: var(--color-blue-gray-950);
+}
+.ts-rule em {
+  font-style: normal; font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-800);
+}
+.ts-metrics {
+  display: block; max-width: 100%; margin: 6px 0 0; padding: 7px 10px; overflow-x: auto;
+  background: var(--color-blue-gray-950); border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--color-blue-gray-200);
+  white-space: pre;
+}
+.ts-reasons p { margin: 7px 0 0; font-size: 13px; line-height: 1.65; color: var(--color-blue-gray-800); }
+.ts-reasons p b { font-weight: 700; color: var(--color-blue-gray-950); margin-right: 4px; }
+.ts-locate {
+  margin-top: 10px; padding: 6px 11px; border-radius: var(--radius-sm); font-size: 12.5px;
+  font-weight: 500; color: var(--color-blue-primary-800); background: var(--color-blue-primary-100);
+}
+.ts-locate:hover { background: var(--color-blue-primary-200); }
+.ts-empty { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--color-blue-gray-700); }
+.ts-always { margin: 14px 0 0; font-size: 13px; color: var(--color-blue-gray-700); }
+
+.ts-manual {
+  margin-top: 20px; padding: 16px 18px; background: #fff;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-xl);
+}
+.ts-manual h3 { margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--color-blue-primary-800); }
+.ts-manual ul { margin: 0; padding-left: 20px; list-style: disc; display: grid; gap: 6px; }
+.ts-manual li { font-size: 13.5px; line-height: 1.6; color: var(--color-blue-gray-800); }
+.ts-manual li::marker { color: var(--color-blue-primary-400); }
+
+/* 프리셋 기준 요약: 입력·결과가 비어 있어도 항상 노출되는 본문 */
+.ts-criteria { margin: 40px auto 0; max-width: 880px; }
+.ts-criteria-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.ts-criteria-grid > div {
+  padding: 16px 18px; background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl);
+}
+.ts-criteria-grid h3 { margin: 0; font-size: 14px; font-weight: 700; color: var(--color-blue-gray-950); }
+.ts-criteria-sc {
+  margin: 4px 0 8px; font-family: var(--font-mono); font-size: 11.5px;
+  color: var(--color-blue-primary-800);
+}
+.ts-criteria-grid p { margin: 0; font-size: 13px; line-height: 1.65; color: var(--color-blue-gray-800); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-tabs > button, .ts-choices button { transition: none; }
+}
