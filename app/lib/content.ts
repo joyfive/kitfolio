@@ -3794,6 +3794,431 @@ export const TOOLS: Tool[] = [
       },
     },
   },
+  {
+    slug: "accessibility-checklist",
+    layout: "card",
+    cat: "design",
+    targets: ["pm", "designer", "developer"],
+    ico: "☑",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-12",
+    badge: "Clean SaaS",
+    name: { ko: "웹접근성 체크리스트 빌더", en: "Web Accessibility Checklist Builder" },
+    // 네 검사 도구보다 앞 단계에서 쓰는 도구라, 항목에서 각 검사 도구로 내려보낸다.
+    relatedTools: [
+      "html-accessibility-checker",
+      "color-contrast-checker",
+      "color-blindness-simulator",
+      "text-scaling-checker",
+    ],
+    seo: {
+      ko: {
+        title: "웹접근성 체크리스트 빌더 | KWCAG·WCAG 2.2 검사항목",
+        description:
+          "KWCAG 2.2 33개 검사항목 또는 WCAG 2.2 Level A·AA 기준을 고르고 서비스 기능에 맞는 웹접근성 체크리스트를 만드세요. 기획·디자인·퍼블리싱 역할과 검토 상태, 메모, 근거 URL을 브라우저에 저장하고 Markdown·CSV로 내보낼 수 있습니다. 로그인과 업로드 없이 전부 브라우저에서 처리됩니다.",
+        keywords: [
+          "웹접근성 체크리스트",
+          "KWCAG 2.2 검사항목",
+          "WCAG 2.2 체크리스트",
+          "한국형 웹 콘텐츠 접근성 지침",
+          "웹접근성 점검표",
+          "웹접근성 인증 준비",
+          "접근성 QA",
+          "접근성 검사 항목",
+          "WCAG AA 체크리스트",
+          "접근성 검수 체크리스트",
+          "웹접근성 33개 항목",
+        ],
+      },
+      en: {
+        title: "Web Accessibility Checklist Builder | WCAG 2.2",
+        description:
+          "Choose WCAG 2.2 Level A or AA, or the 33 KWCAG 2.2 requirements, and generate an accessibility checklist that matches the features your product actually has. Assign planning, design, and development roles, track review status, notes, and evidence in your browser, and export the result as Markdown or CSV. No sign-in and no upload.",
+        keywords: [
+          "web accessibility checklist",
+          "wcag 2.2 checklist",
+          "accessibility qa checklist",
+          "accessibility audit checklist",
+          "wcag aa checklist",
+          "website accessibility testing plan",
+          "wcag level a criteria list",
+          "kwcag 2.2 requirements",
+          "accessibility review tracker",
+          "accessibility checklist generator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다.",
+        description:
+          "적용 기준과 목표 레벨, 테스트 환경, 서비스가 가진 기능을 선택하면 기획·디자인·퍼블리싱 담당이 함께 관리할 수 있는 접근성 검토 목록을 만듭니다. 항목마다 실무 질문과 확인 방법, 완료 근거 예시를 제공하고 상태·메모·근거 URL을 기록할 수 있습니다. 결과는 이 브라우저에만 저장되며 Markdown 또는 CSV로 내보내 전달합니다.",
+        howItWorks: [
+          "기준·목표 레벨·테스트 환경과 서비스 기능 선택",
+          "항목별 상태·메모·근거 URL 기록과 역할·축 필터",
+          "Markdown 복사·다운로드 또는 CSV 다운로드",
+        ],
+        aeo: {
+          what: "웹접근성 체크리스트 빌더는 KWCAG 2.2 또는 WCAG 2.2 기준을 프로젝트에서 실행할 수 있는 검토 항목으로 구성하고, 역할·진행 상태·메모·근거를 관리해 Markdown이나 CSV로 내보내는 브라우저 도구입니다.",
+          who: "프로젝트 착수부터 출시 전 QA까지 접근성 업무를 나눠야 하는 PM, 서비스 기획자, 디자이너, 퍼블리셔, 프론트엔드 개발자와 QA 담당자에게 적합합니다.",
+          how: "적용 기준, WCAG 목표 레벨, 테스트 환경과 서비스 기능을 선택하면 항목이 생성됩니다. 각 항목에서 상태와 메모·근거를 기록하고 역할이나 검사 축으로 필터링한 뒤 문서로 내보냅니다.",
+          why: "기준 번호만 있는 긴 목록을 역할과 실행 단계에 맞게 바꾸고, 프로젝트에 없는 기능을 해당 없음 후보로 확인하며, 검토 이력과 이슈를 한 형식으로 전달할 수 있기 때문입니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성 체크리스트는 어떻게 시작해야 하나요?",
+            body: [
+              "웹접근성 체크리스트는 출시 직전 QA에서 갑자기 꺼내는 문서가 아닙니다. 대체 텍스트의 작성 책임, 색상 시스템, 키보드 인터랙션, 오류 안내와 인증 방식처럼 구조를 바꾸는 항목은 기획과 설계 단계에서 결정해야 수정 비용이 낮습니다. 프로젝트를 시작할 때 기준과 담당을 정하고, 디자인 리뷰와 구현 QA에서 같은 목록을 업데이트하는 방식이 효율적입니다.",
+              "첫 단계는 적용 기준을 정하는 것입니다. 국내 웹 프로젝트에서 KWCAG 2.2를 기준으로 사전 점검할지, 국제 기준인 WCAG 2.2의 A 또는 AA를 목표로 할지 팀 안에서 명시해야 합니다. 두 기준은 공통된 원칙이 많지만 번호와 구성, 일부 세부 항목이 같지 않습니다. 따라서 하나를 다른 하나의 단순 번역본으로 취급하면 누락이나 잘못된 완료 판단이 생길 수 있습니다.",
+            ],
+          },
+          {
+            heading: "KWCAG 2.2와 WCAG 2.2는 무엇이 다른가요?",
+            body: [
+              "KWCAG 2.2는 국내 웹 콘텐츠 접근성 표준으로 4개 원칙, 14개 지침, 33개 검사항목을 제시합니다. A·AA·AAA 등급을 사용하지 않습니다. 국내 웹 접근성 품질인증 전문가 심사의 항목도 33개지만, 체크리스트에서 한 번 통과를 선택했다고 실제 인증 준수율이 되는 것은 아닙니다. 인증은 선정된 표본 페이지와 콘텐츠를 기준으로 별도 산정하며 사용자 심사도 포함합니다.",
+              "WCAG 2.2는 성공 기준을 A, AA, AAA로 나눕니다. Level AA를 목표로 하면 AA 항목만 고르는 것이 아니라 A와 AA를 모두 포함해야 합니다. 이 도구는 A 31개와 AA 24개, 합쳐서 55개를 생성하고 실무에서 목표로 삼는 일이 드문 AAA는 제외합니다. WCAG 2.2에서 삭제된 4.1.1 Parsing도 포함하지 않습니다.",
+              "기준 선택이 곧 법적 의무나 인증 범위를 결정하는 것은 아닙니다. 조직의 계약 조건, 발주 규격, 정책과 최신 심사 기준을 별도로 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "민간과 공공을 선택하면 왜 항목이 달라지지 않나요?",
+            body: [
+              "접근성은 사용자의 이용 가능성을 다루는 품질 기준입니다. 사이트 운영 주체가 민간인지 공공인지에 따라 적용 법령, 발주 조건, 인증 필요성은 달라질 수 있지만 버튼이 키보드로 동작해야 하는지, 이미지에 적절한 대체 텍스트가 필요한지 같은 기술 검토 항목을 임의로 제거할 근거는 되지 않습니다.",
+              "그래서 이 도구의 운영 유형 선택은 보고서의 프로젝트 정보와 안내 문구에만 반영합니다. 공공·품질인증 준비를 고르면 공식 심사를 대체하지 않는다는 경고를 더 분명히 보여줍니다. 실제 항목의 적용 가능성은 사이트가 영상, 인증, 시간 제한, 드래그 같은 기능을 갖는지에 따라 판단합니다.",
+            ],
+          },
+          {
+            heading: "목표 레벨은 어떻게 선택하나요?",
+            body: [
+              "WCAG A는 기본적인 접근 장벽을 다루지만, 일반적인 제품 품질 목표로는 AA를 권장합니다. AA를 선택하면 텍스트 명도대비, 리플로, 텍스트 간격, 비텍스트 명도대비, 가려지지 않는 초점, 최소 타겟 크기 같은 항목이 추가됩니다. 다만 목표 레벨은 계약이나 정책에 따라 정해야 하므로 도구가 대신 결정하지 않습니다.",
+              "레벨을 A에서 AA로 올리면 이미 기록한 A 항목의 상태와 메모는 그대로 두고 AA 항목만 미검토로 추가됩니다. 반대로 AA에서 A로 내리면 기록이 남은 AA 항목이 사라지므로 몇 개가 삭제되는지 먼저 확인합니다. KWCAG 2.2 모드에서는 레벨을 선택하지 않습니다. 33개 전체를 만든 뒤 실제 기능에 따라 해당 없음 여부를 검토합니다.",
+            ],
+          },
+          {
+            heading: "서비스 기능 질문은 왜 필요한가요?",
+            body: [
+              "모든 사이트에 녹화 영상, 실시간 방송, 로그인, 시간 제한, 드래그 기능이 있는 것은 아닙니다. 정적인 체크리스트는 이런 항목을 전부 보여주거나 반대로 너무 일찍 제외합니다. 기능 질문은 적용되지 않을 가능성이 높은 항목을 표시해 검토 순서를 줄이는 장치입니다.",
+              "하지만 선택 결과만으로 항목을 삭제하면 안 됩니다. 예를 들어 팀이 자동 재생 콘텐츠가 없다고 답했어도 광고, 외부 위젯, 운영 단계의 캐러셀이 추가될 수 있습니다. 그래서 이 도구는 해당 없음 후보만 표시하고 최종 판단은 사용자가 이유를 확인한 뒤 선택하도록 합니다. 키보드 사용 보장, 이름·역할·값, 웹 애플리케이션 접근성처럼 범위가 넓은 항목은 어떤 답변에서도 후보가 되지 않습니다.",
+            ],
+          },
+          {
+            heading: "역할 태그는 책임을 어떻게 나누나요?",
+            body: [
+              "기획 담당은 오류 문구, 시간 제한, 인증, 중복 입력, 도움 정보 같은 절차를 정의합니다. 디자인 담당은 색, 대비, 초점 표현, 타겟 크기와 색 이외의 단서를 설계합니다. 퍼블리싱·개발 담당은 의미 구조, 키보드 동작, ARIA 상태와 실제 인터랙션을 구현합니다.",
+              "한 항목에 역할이 여러 개 붙는 것은 책임이 불명확해서가 아닙니다. 접근성 문제는 한 단계에서만 해결되지 않기 때문입니다. 예를 들어 폼 레이블은 기획자가 이름을 정하고, 디자이너가 시각적 라벨을 배치하며, 개발자가 입력 요소와 연결해야 합니다. 팀에서는 역할 태그를 작업을 넘기는 순서로 사용하고 최종 검토 책임자를 별도로 합의하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "진행률과 통과 상태는 어떻게 해석해야 하나요?",
+            body: [
+              "검토 진행률은 팀이 몇 개 항목을 살펴봤는지 보여주는 작업 관리 수치입니다. 접근성 준수율이나 공식 합격 가능성이 아닙니다. 통과는 현재 프로젝트 범위와 확인한 화면에서 문제를 발견하지 못했다는 기록일 뿐, 모든 페이지와 보조기술 조합에서 완전한 준수를 보장하지 않습니다.",
+              "이슈는 실패 선언이 아니라 수정 작업의 시작점입니다. 메모에 영향 화면, 재현 방법, 수정 담당과 재검수 조건을 남기면 체크리스트가 단순 보고용 표가 아니라 실행 가능한 백로그가 됩니다. 해당 없음에는 적용되지 않는 이유를 적어 나중에 기능이 추가됐을 때 다시 판단할 수 있게 해야 합니다.",
+              "진행률의 분모는 전체 항목에서 해당 없음을 뺀 수입니다. 모든 항목을 해당 없음으로 두면 100%가 되는 대신 검토할 항목이 없다고 표시합니다. 분모가 없는데 완료처럼 보이는 숫자를 만들지 않기 위해서입니다.",
+            ],
+          },
+          {
+            heading: "자동 검사 도구와 수동 검수는 어떻게 조합하나요?",
+            body: [
+              "자동 검사기는 마크업 누락, 일부 대비 값, 특정 속성과 구조를 빠르게 찾는 데 유용합니다. 하지만 대체 텍스트가 상황에 적절한지, 초점 순서가 사용 흐름과 맞는지, 오류 설명이 이해 가능한지, 색 외 단서가 충분한지는 사람의 판단이 필요합니다.",
+              "권장 순서는 이렇습니다. 기획 단계에서 서비스 기능과 절차 관련 항목을 분류하고, 디자인 리뷰에서 명도대비·색각 구분·타겟 크기·초점 표현을 확인합니다. 구현 중에는 HTML 구조와 키보드 동작을 검사하고, 확대·리플로·텍스트 간격을 실제 렌더링으로 확인합니다. 그다음 스크린리더와 키보드만 사용한 주요 과업 테스트를 수행하고, 발견한 이슈를 수정한 뒤 다른 화면에 같은 패턴이 없는지 회귀 검수합니다.",
+              "Kitfolio의 개별 검사 도구는 이 중 디자인 리뷰와 구현 검사 단계를 돕습니다. 체크리스트는 각 도구의 결과를 자동으로 가져오지 않습니다. 검사한 범위와 수정 링크를 메모나 근거 URL에 직접 남겨야 나중에 무엇을 근거로 통과했는지 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "Markdown과 CSV는 언제 사용하나요?",
+            body: [
+              "Markdown은 GitHub Issue, 저장소 문서, Notion 본문처럼 사람이 읽고 리뷰하는 문서에 적합합니다. 축별 제목과 항목별 상태·메모가 계층적으로 정리됩니다. CSV는 스프레드시트에서 담당별로 필터링하거나 이슈 수를 집계할 때 유용하며, 한국어 Excel에서 깨지지 않도록 UTF-8 BOM을 붙여 내보냅니다.",
+              "두 형식 모두 화면 필터와 상관없이 현재 체크리스트 전체를 포함합니다. 받는 사람이 빠진 항목을 알 수 없기 때문입니다. 중요한 프로젝트라면 브라우저 저장만 믿지 말고 정기적으로 파일을 내려받아 보관하세요. 브라우저 데이터 삭제나 다른 기기 사용 시 로컬 상태는 복원되지 않습니다.",
+            ],
+          },
+          {
+            heading: "품질인증 준비에 사용할 때 주의할 점",
+            body: [
+              "이 도구는 심사 준비 범위를 정리하는 데 사용할 수 있지만 품질인증 심사표 자체가 아닙니다. 공식 심사는 페이지 표본 선정, 콘텐츠 단위 판정, 항목별 준수율 산정, 사용자 심사 등 별도 절차를 사용합니다. 심사를 준비한다면 신청 시점의 최신 표준심사 지침과 인증기관 안내를 확인해야 합니다.",
+              "체크리스트에서 모든 항목을 통과로 표시했더라도 이를 인증 통과나 준수율 100%로 보고하지 마세요. 내부 문서에는 사전 검토 완료와 검사 범위, 사용한 브라우저·보조기술, 날짜를 함께 기록하는 표현이 정확합니다.",
+            ],
+          },
+          {
+            heading: "배포 전 권장 운영 방식",
+            body: [
+              "프로젝트 착수 시점에는 기준·목표·주요 기능·역할을 정합니다. 와이어프레임 리뷰에서 정보 구조, 오류 절차, 인증, 시간 제한을 확인하고, UI 리뷰에서 색·대비·포커스·타겟과 상태 표현을 확인합니다. 구현 QA에서는 키보드, 의미 구조, 이름·역할·값, 상태 메시지를 확인하고, 출시 전에는 주요 과업을 실제 브라우저와 보조기술로 반복합니다. 출시 후에는 신규 컴포넌트와 운영 콘텐츠가 추가될 때 관련 항목을 다시 엽니다.",
+              "접근성은 한 번 완료하고 닫는 인증 스티커가 아니라 제품 변경과 함께 유지해야 하는 품질 조건입니다. 체크리스트의 가장 중요한 값도 완벽해 보이는 숫자가 아니라, 누가 무엇을 언제 다시 확인할지 남기는 데 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "국내 공공 리뉴얼 사전 점검",
+            input:
+              "프로젝트명 고객센터 리뉴얼 · 기준 KWCAG 2.2 · 환경 반응형 웹 · 운영 공공·품질인증 준비 · 기능은 입력 폼과 복합 UI만 있음",
+            result:
+              "33개 항목 생성. 자막 제공, 자동 재생 금지, 정지 기능 제공, 응답시간 조절, 단일 포인터 입력 지원, 동작 기반 작동, 표의 구성, 고정된 참조 위치 정보, 접근 가능한 인증까지 9개가 해당 없음 후보로 표시됩니다",
+            note: "후보 9개는 목록에서 사라지지 않고 배지만 붙습니다. 영상이나 캐러셀이 운영 중에 추가될 수 있으므로 실제 화면을 본 뒤 직접 해당 없음을 선택해야 분모에서 빠집니다. 키보드 사용 보장처럼 범위가 넓은 항목은 어떤 응답에서도 후보가 되지 않습니다.",
+          },
+          {
+            title: "WCAG 목표를 A에서 AA로 올리기",
+            input:
+              "WCAG 2.2 Level A로 31개를 만들고 1.1.1을 통과로, 2.1.1을 이슈로 기록한 뒤 설정 변경에서 레벨을 AA로 변경",
+            result:
+              "항목이 55개로 늘고 1.1.1 통과와 2.1.1 이슈 기록은 그대로 유지됩니다. 새로 들어온 AA 24개는 전부 미검토 상태입니다",
+            note: "AA 목표는 A를 포함하므로 다시 만들 필요가 없습니다. 반대로 AA에서 A로 내리면 기록이 남은 AA 항목이 몇 개 삭제되는지 먼저 확인 대화상자로 알려줍니다.",
+          },
+          {
+            title: "진행률과 이슈 목록 전달",
+            input:
+              "55개 중 통과 10 · 이슈 3 · 검토 중 3 · 해당 없음 2 로 기록한 뒤 이슈 먼저 정렬로 확인하고 Markdown 다운로드",
+            result:
+              "검토 진행률 30%. 분모는 55에서 해당 없음 2를 뺀 53이고 분자는 검토 중·통과·이슈를 더한 16입니다",
+            note: "30%는 작업 진행 상황이지 준수율이 아닙니다. 내보낸 Markdown에는 축별 제목 아래 상태·메모·근거·공식 출처가 항목마다 들어가므로 이슈 3건을 그대로 수정 백로그로 옮길 수 있습니다.",
+          },
+        ],
+        limitations: [
+          "사이트를 크롤링하거나 자동으로 진단하지 않습니다. URL을 넣어 점수를 받는 도구가 아니라 검토해야 할 항목을 만들고 기록을 남기는 도구입니다.",
+          "품질인증 합격 여부를 예측하지 않고 인증마크를 발급하지도 않습니다. 공식 심사는 표본 페이지 선정, 항목별 준수율 산정, 전문가 심사와 사용자 심사를 별도로 수행합니다.",
+          "민간·공공 구분이나 법적 의무 여부를 판정하지 않습니다. 운영 유형 선택은 프로젝트 정보와 안내 문구에만 반영됩니다.",
+          "WCAG는 Level A와 AA만 제공하고 AAA는 포함하지 않습니다. WCAG 2.2에서 제거된 4.1.1 Parsing도 포함하지 않습니다.",
+          "모바일 네이티브 앱 접근성 항목은 다루지 않습니다. 웹과 모바일 웹을 기준으로 작성돼 있습니다.",
+          "한 번에 한 프로젝트만 저장합니다. 새 체크리스트를 만들면 이전 기록은 이 브라우저에서 사라지므로 먼저 내보내야 합니다.",
+          "브라우저 로컬 저장이라 다른 기기·다른 브라우저와 동기화되지 않고, 시크릿 모드 종료나 브라우저 데이터 삭제 후에는 복구할 수 없습니다.",
+          "연결된 네 가지 검사 도구의 결과를 자동으로 가져오지 않습니다. 도구로 이동해 확인한 내용은 직접 메모와 근거 URL에 남겨야 합니다.",
+        ],
+        sources: [
+          { label: "W3C · WCAG 2.2 Recommendation", url: "https://www.w3.org/TR/WCAG22/" },
+          {
+            label: "W3C · How to Meet WCAG 2.2 Quick Reference",
+            url: "https://www.w3.org/WAI/WCAG22/quickref/",
+          },
+          {
+            label: "한국정보접근성인증평가원 · 한국형 웹 콘텐츠 접근성 지침 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=22592",
+          },
+          {
+            label: "한국정보접근성인증평가원 · 정보통신접근성 품질인증 표준심사 지침 (2025-01-01 시행)",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=35560",
+          },
+        ],
+      },
+      en: {
+        card: "Turn KWCAG or WCAG 2.2 requirements into a project checklist with roles, status and evidence.",
+        description:
+          "Pick a standard, a WCAG target level, a test environment, and the features your product actually has, then get a review list that planning, design, and development can share. Every item carries a practical question, how to check it, and what evidence to record, alongside a status, a note, and an evidence URL. Everything stays in this browser and exports as Markdown or CSV.",
+        howItWorks: [
+          "Choose the standard, target level, environment and product features",
+          "Record status, notes and evidence, and filter by role or axis",
+          "Copy or download Markdown, or download CSV",
+        ],
+        aeo: {
+          what: "A web accessibility checklist builder is a browser tool that turns KWCAG 2.2 or WCAG 2.2 requirements into project review tasks, tracks roles, status, notes, and evidence, and exports the checklist as Markdown or CSV.",
+          who: "It is designed for product managers, designers, front-end developers, publishers, and QA specialists coordinating accessibility work from planning through release review.",
+          how: "Choose a standard, WCAG target level, test environment, and the features present in your product. Review the generated items, record status and evidence, filter the list, and export it.",
+          why: "It converts standards into actionable, role-based tasks, highlights likely non-applicable items without hiding them, preserves local progress, and creates a consistent handoff document.",
+        },
+        guide: [
+          {
+            heading: "How should you start a web accessibility checklist?",
+            body: [
+              "An accessibility checklist should begin before release QA. Decisions about alternative text ownership, color systems, keyboard interaction, error recovery, and authentication can affect product structure, and resolving them during planning and design is usually cheaper than fixing them after implementation.",
+              "Start by naming the standard and target the project will use. Then keep the same checklist through requirements, design review, implementation, and release testing so that decisions and evidence stay connected to the criteria they belong to.",
+            ],
+          },
+          {
+            heading: "How are KWCAG 2.2 and WCAG 2.2 different?",
+            body: [
+              "KWCAG 2.2 is a Korean web content accessibility standard organized into four principles, 14 guidelines, and 33 requirements. It does not use A, AA, and AAA levels. WCAG 2.2 organizes success criteria into those three conformance levels, and a WCAG AA target includes both Level A and Level AA criteria.",
+              "The standards overlap in purpose, but their numbering, grouping, and some requirements differ. Do not treat one as a direct translation of the other. This builder keeps them as separate datasets: KWCAG generates all 33 requirements, while WCAG generates 31 Level A criteria, or 55 criteria when AA is selected. Level AAA is out of scope, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+            ],
+          },
+          {
+            heading: "Why does organization type not remove requirements?",
+            body: [
+              "Public and private organizations may have different legal, procurement, or certification obligations, but organization type alone does not determine whether a control needs a keyboard interface or an image needs an appropriate text alternative. The selection is therefore recorded as project context and changes the guidance shown, not the technical checklist.",
+              "Product features are far more useful for identifying likely non-applicable items. Media, authentication, time limits, gestures, and motion input each flag a specific set of criteria for review.",
+            ],
+          },
+          {
+            heading: "How should you choose a WCAG target level?",
+            body: [
+              "Level A covers foundational barriers. Level AA adds requirements commonly used as a product accessibility target, including minimum contrast, reflow, text spacing, non-text contrast, focus that is not obscured, and minimum target size. The correct target may be set by policy, contract, or regulation, so the builder does not decide it for the team.",
+              "Raising the target from A to AA keeps the status and notes you already recorded on Level A items and adds the AA criteria as not started. Lowering it back to A removes AA items, so the builder first tells you how many of them already carry a record. KWCAG mode has no level control and always includes all 33 requirements.",
+            ],
+          },
+          {
+            heading: "Why are some items marked as not applicable candidates?",
+            body: [
+              "A product without prerecorded media may not need a caption review, and a product without authentication may not need an authentication criterion. However, a setup answer is not enough to prove that a requirement is inapplicable. Embedded content, an advertisement, or a feature added after launch can change the scope at any time.",
+              "The builder therefore highlights candidates but keeps them visible and inside the progress denominator. A reviewer must explicitly choose Not applicable and should record the reason. Broad criteria such as keyboard operation, name, role, value, and overall web application accessibility are never flagged as candidates, because no single feature answer can rule them out.",
+            ],
+          },
+          {
+            heading: "How should roles share accessibility work?",
+            body: [
+              "Planning roles define flows such as error recovery, timing, authentication, redundant entry, and help. Designers specify color, contrast, focus presentation, target size, and non-color cues. Developers implement semantics, keyboard behavior, programmatic names, roles, values, and status announcements.",
+              "Many criteria need more than one role. A form label, for example, is named during planning, positioned during design, and associated with its input during implementation. Treat role tags as a handoff path and agree on one final reviewer for each product area.",
+            ],
+          },
+          {
+            heading: "What does review progress mean?",
+            body: [
+              "Review progress measures workflow completion. It is not a conformance score, an accessibility percentage, or a certification prediction. Passed means no issue was found in the reviewed scope; it does not prove that every page, state, browser, and assistive technology combination conforms.",
+              "Use Issue to start remediation work, and record the affected screen, reproduction steps, owner, and retest condition in the note. Record a reason for every Not applicable decision so it can be reconsidered when the product changes.",
+              "The denominator is the total number of items minus the ones you marked Not applicable. When every item is Not applicable the builder reports that there is nothing to review instead of showing 100%, because a full bar with no denominator reads as completion that never happened.",
+            ],
+          },
+          {
+            heading: "How should automated and manual tests be combined?",
+            body: [
+              "Automated checks can find missing markup, some contrast problems, and specific structural failures. Human review is still needed to judge alternative text quality, logical focus order, understandable errors, complete non-color cues, and real task completion.",
+              "A practical sequence is to classify product features and process requirements during planning, review contrast, color differentiation, target size, and focus design next, inspect HTML structure and keyboard behavior during implementation, test resizing, reflow, and text spacing in the rendered interface, complete key tasks with keyboard-only and screen reader workflows, then fix issues and run regression checks across reused patterns.",
+              "The individual Kitfolio checkers support the design review and implementation steps. The checklist never collects their output automatically, so record what you tested and link the fix in the note and evidence fields.",
+            ],
+          },
+          {
+            heading: "When should you use Markdown or CSV export?",
+            body: [
+              "Markdown works well for repository documentation, issues, and readable review notes, grouping items under each review axis with their status, notes, and sources. CSV is useful for spreadsheet filtering, ownership views, and issue counts, and it carries a UTF-8 byte order mark so Korean text opens correctly in Excel.",
+              "Both exports contain the complete current checklist regardless of the filters on screen, because the person receiving the file cannot tell which items were hidden. Browser storage is convenient but it is not a durable backup, so export important work regularly, especially before clearing browser data or moving to another device.",
+            ],
+          },
+          {
+            heading: "Can this checklist be used for Korean accessibility certification?",
+            body: [
+              "It can organize pre-review work, but it is not the official assessment sheet and cannot predict certification. Formal assessment can include page sampling, content-level evaluation, item-level conformance calculations, and user testing. Always confirm the current assessment instructions at the time of application.",
+              "Describe the output as a pre-review record together with the scope you tested, the browsers and assistive technology you used, and the date. Do not describe it as proof of certification or as 100% conformance.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Pre-review for a Korean public sector redesign",
+            input:
+              "Project Support center redesign, standard KWCAG 2.2, responsive web, public sector or certification prep, with only forms and composite UI answered as present",
+            result:
+              "33 items generated. Nine appear as not applicable candidates: captions, no automatic audio playback, pause control, adjustable response time, single pointer input, motion actuation, table structure, fixed reference location, and accessible authentication",
+            note: "Those nine stay in the list with a badge rather than disappearing. Video or a carousel can be added after launch, so they leave the denominator only when a reviewer looks at the real screens and selects Not applicable. Broad items such as keyboard accessibility are never flagged, whatever you answer.",
+          },
+          {
+            title: "Raising a WCAG target from A to AA",
+            input:
+              "Build 31 Level A items, mark 1.1.1 as Passed and 2.1.1 as Issue, then change the target level to AA in the settings card",
+            result:
+              "The list grows to 55 items while the 1.1.1 pass and the 2.1.1 issue stay exactly as recorded. The 24 newly added AA criteria all start as Not started",
+            note: "An AA target includes Level A, so there is no need to rebuild. Going back down to A instead asks for confirmation and names how many AA items with a record would be deleted.",
+          },
+          {
+            title: "Handing over progress and an issue list",
+            input:
+              "Of 55 items: 10 passed, 3 issues, 3 in review, 2 not applicable, sorted with Issues first, then exported as Markdown",
+            result:
+              "Review progress 30%. The denominator is 55 minus the 2 not applicable items, and the numerator is the 16 items in review, passed, or flagged as issues",
+            note: "30% describes workflow, not conformance. The exported Markdown lists status, note, evidence, and the official source under each axis heading, so the three issues move straight into a remediation backlog.",
+          },
+        ],
+        limitations: [
+          "It does not crawl a site or run an automated audit. You do not enter a URL and receive a score; you generate the items to review and keep the record.",
+          "It does not predict a certification result or issue any conformance mark. Formal assessment runs its own sampling, item-level scoring, expert review, and user testing.",
+          "It does not decide whether a legal obligation applies to your organization. The organization type only changes project context and the guidance shown.",
+          "WCAG coverage is Level A and AA only. Level AAA is excluded, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+          "Mobile native app accessibility is out of scope. The requirements are written for web and mobile web.",
+          "Only one project is stored at a time. Starting a new checklist removes the previous record from this browser, so export it first.",
+          "Local browser storage does not sync across devices or browsers, and it cannot be recovered after clearing site data or closing a private window.",
+          "Results from the four linked checkers are never imported automatically. Anything you verify in those tools has to be written back into the note and evidence fields yourself.",
+        ],
+        sources: [
+          { label: "W3C · WCAG 2.2 Recommendation", url: "https://www.w3.org/TR/WCAG22/" },
+          {
+            label: "W3C · How to Meet WCAG 2.2 Quick Reference",
+            url: "https://www.w3.org/WAI/WCAG22/quickref/",
+          },
+          {
+            label: "Korean Web Content Accessibility Guidelines 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=22592",
+          },
+          {
+            label:
+              "Korean ICT Accessibility Quality Certification Standard Assessment Guidelines (effective 2025-01-01)",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=35560",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "웹접근성 체크리스트는 자동 검사 결과인가요?",
+          answer:
+            "아닙니다. 표준 항목을 프로젝트 업무로 관리하기 위한 도구입니다. 일부 항목은 연결된 검사 도구로 확인할 수 있지만 최종 판단에는 실제 화면, 키보드와 보조기술을 사용한 수동 검수가 필요합니다.",
+        },
+        {
+          question: "WCAG 2.2에서 AA를 선택하면 A 항목도 포함되나요?",
+          answer:
+            "네. AA 목표는 Level A와 Level AA 성공 기준을 함께 포함합니다. 이 도구에서는 A 31개와 AA 24개, 총 55개 기준을 생성합니다. AAA는 제공하지 않고, WCAG 2.2에서 제거된 4.1.1 Parsing도 포함하지 않습니다.",
+        },
+        {
+          question: "KWCAG 2.2에도 A와 AA 레벨이 있나요?",
+          answer:
+            "아닙니다. KWCAG 2.2는 4개 원칙, 14개 지침, 33개 검사항목으로 구성되며 A·AA·AAA 레벨을 사용하지 않습니다. 그래서 KWCAG를 선택하면 레벨 입력이 사라지고 33개 전체가 생성됩니다.",
+        },
+        {
+          question: "공공기관을 선택하면 체크 항목이 더 많아지나요?",
+          answer:
+            "운영 유형만으로 기술 항목을 추가하거나 제거하지 않습니다. 공공·품질인증 준비 선택은 안내와 내보내기 정보에 반영되며, 실제 항목 적용 가능성은 서비스 기능과 공식 요구사항을 확인해 판단해야 합니다.",
+        },
+        {
+          question: "체크리스트 데이터는 어디에 저장되나요?",
+          answer:
+            "현재 브라우저의 로컬 저장소에만 저장되고 서버로 전송되지 않습니다. 프로젝트명, 메모, 근거 URL은 분석 이벤트에도 포함하지 않습니다. 브라우저 데이터를 삭제하거나 다른 기기를 사용하면 복원되지 않으므로 중요한 결과는 Markdown 또는 CSV로 내려받으세요.",
+        },
+        {
+          question: "모든 항목을 통과로 표시하면 웹 접근성 인증을 받을 수 있나요?",
+          answer:
+            "아닙니다. 이 결과는 내부 사전 검토 기록이며 공식 인증 판정이 아닙니다. 실제 인증은 최신 심사 지침에 따른 표본 선정, 전문가 심사와 사용자 심사 등 별도 절차를 거칩니다. 진행률도 준수율이 아니라 검토한 항목의 비율입니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does this accessibility checklist automatically audit my website?",
+          answer:
+            "No. It organizes standards into project review tasks. Linked tools can help inspect selected issues, but conformance still requires testing the rendered product with keyboard and assistive technology workflows.",
+        },
+        {
+          question: "Does WCAG 2.2 Level AA include Level A criteria?",
+          answer:
+            "Yes. An AA target includes all Level A and Level AA success criteria. The builder generates 31 A criteria and 24 AA criteria, for a total of 55. Level AAA is not offered, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+        },
+        {
+          question: "Does KWCAG 2.2 use A and AA levels?",
+          answer:
+            "No. KWCAG 2.2 is organized into four principles, 14 guidelines, and 33 requirements without A, AA, or AAA levels. Choosing KWCAG hides the level control and generates all 33 requirements.",
+        },
+        {
+          question: "Does choosing a public organization add more checklist items?",
+          answer:
+            "No items are added or removed based only on organization type. The choice changes project context and certification guidance. Applicability still depends on product features and current official requirements.",
+        },
+        {
+          question: "Where is my checklist data stored?",
+          answer:
+            "It stays in local browser storage and is not sent to a server. The project name, notes, and evidence URLs are never included in analytics either. Export important work as Markdown or CSV, because clearing browser data or changing devices will remove access to the saved state.",
+        },
+        {
+          question: "Does a completed checklist prove accessibility certification?",
+          answer:
+            "No. It is a pre-review workflow record, not a formal conformance or certification decision. Formal assessment uses its own sampling, expert review, user testing, and scoring procedures, and review progress reports how much you reviewed rather than how much conforms.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "웹접근성 체크리스트 빌더",
+        subtitle: "KWCAG·WCAG 2.2 항목을 역할·상태·근거와 함께 관리",
+      },
+      en: {
+        title: "Web Accessibility Checklist Builder",
+        subtitle: "Turn WCAG 2.2 criteria into a tracked, exportable review list",
+      },
+    },
+  },
   // ── Text ─────────────────────────────
   {
     slug: "character-counter",
