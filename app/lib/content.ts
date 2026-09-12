@@ -1526,6 +1526,441 @@ export const TOOLS: Tool[] = [
       en: { title: "CSS Unit Converter", subtitle: "Convert rem, em, vw, % and ms to px in one place" },
     },
   },
+  {
+    slug: "html-accessibility-checker",
+    layout: "ide",
+    cat: "dev",
+    targets: ["developer", "designer", "pm"],
+    ico: "a11y",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "IDE / Editor",
+    name: { ko: "HTML 접근성 검사기", en: "HTML Accessibility Checker" },
+    // 정적 HTML 검사가 판정하지 못하는 두 영역(렌더링된 색상 대비 · 색상 의존)을
+    // 그대로 이어받는 도구만 연결한다. 관련성이 약한 개발 도구를 채워 넣지 않는다.
+    relatedTools: ["color-contrast-checker", "color-blindness-simulator"],
+    seo: {
+      ko: {
+        title: "HTML 접근성 검사기 | 헤딩·alt·label 구조 점검",
+        description:
+          "HTML 접근성 검사기에 코드를 붙여넣어 헤딩 계층, 랜드마크, 이미지 alt, 폼 label 연결, 접근 가능한 이름, tabindex와 ARIA 참조를 점검하세요. 자동으로 확인할 수 있는 문제와 수동 검사 항목을 구분해 보여주며, 입력한 마크업은 로그인이나 업로드 없이 브라우저에서만 분석됩니다.",
+        keywords: [
+          "HTML 접근성 검사",
+          "HTML 접근성 검사기",
+          "웹접근성 검사",
+          "마크업 접근성 검사",
+          "헤딩 구조 확인",
+          "HTML 헤딩 검사",
+          "alt 속성 검사",
+          "이미지 대체 텍스트 검사",
+          "label for 검사",
+          "폼 레이블 검사",
+          "tabindex 검사",
+          "ARIA 검사",
+        ],
+      },
+      en: {
+        title: "HTML Accessibility Checker | Headings, Alt, Labels",
+        description:
+          "Paste HTML into this accessibility checker to review heading hierarchy, landmarks, image alt text, form labels, accessible name signals, ARIA references, and estimated tab order. It separates high-confidence issues from items that require manual testing, and analyzes your markup locally in the browser without sign-in or upload.",
+        keywords: [
+          "html accessibility checker",
+          "accessibility html validator",
+          "html accessibility test",
+          "heading structure checker",
+          "alt attribute checker",
+          "alt text checker",
+          "form label checker",
+          "label for checker",
+          "tabindex checker",
+          "aria reference checker",
+          "wcag html checker",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "HTML을 붙여넣어 헤딩·랜드마크·alt·label·탭 순서를 정적으로 점검하고 수정 위치를 확인합니다.",
+        description:
+          "HTML을 붙여넣어 헤딩 구조, 랜드마크, 이미지 대체 텍스트, 폼 레이블과 예상 탭 순서를 확인하세요. 코드만으로 판단하기 어려운 항목은 수동 검사로 분리해 과도한 합격 판정을 피합니다. 검사는 붙여넣은 마크업을 렌더링하지 않는 파서로 이루어지며, 결과는 규칙 ID·소스 위치·수정 방향과 함께 Markdown 보고서로 복사할 수 있습니다.",
+        howItWorks: [
+          "컴포넌트 조각 또는 전체 문서를 선택하고 HTML 붙여넣기",
+          "헤딩·랜드마크·레이블·이미지·포커스 정적 규칙 검사",
+          "문제 위치 확인 또는 Markdown 보고서로 복사",
+        ],
+        aeo: {
+          what: "HTML 접근성 검사기는 붙여넣은 HTML의 구조, 대체 텍스트, 폼 레이블, 이름 신호와 포커스 순서를 정적으로 분석하는 브라우저 도구입니다.",
+          who: "구현 중인 마크업을 PR이나 웹접근성 QA 전에 점검하려는 프론트엔드 개발자, 퍼블리셔, QA 담당자와 PM을 위한 도구입니다.",
+          how: "HTML을 렌더링하지 않는 파서로 요소와 속성을 읽고, 규칙별 문제 위치·관련 WCAG 기준·수정 방향과 수동 검사 목록을 보여줍니다.",
+          why: "설치나 배포 전에 반복되는 마크업 오류를 빠르게 찾고, 자동 검사 결과를 전체 접근성 준수로 오해하지 않도록 검사 범위를 구분하기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "HTML 접근성 검사기는 무엇을 확인하나요?",
+            body: [
+              "HTML 접근성 검사기는 화면이 완성되기 전에도 마크업에서 반복적으로 발생하는 문제를 찾는 도구입니다. 헤딩 단계가 갑자기 건너뛰는지, 이미지에 alt가 있는지, 폼 필드와 label이 연결됐는지, 버튼과 링크에 읽을 수 있는 이름이 있는지, ARIA 속성이 실제 요소를 참조하는지 확인할 수 있습니다. 코드 리뷰 전에 실행하면 수정 위치를 좁히고, QA에서는 수동으로 확인할 항목을 놓치지 않는 데 도움이 됩니다.",
+              "다만 HTML만으로 웹접근성을 전부 판정할 수는 없습니다. 키보드로 실제 기능을 실행할 수 있는지, 포커스 표시가 보이는지, CSS가 적용된 시각적 순서와 DOM 순서가 일치하는지, 동적 상태가 스크린리더에 전달되는지는 실행 화면에서 확인해야 합니다. 따라서 이 도구는 페이지에 점수를 주지 않고 오류 가능성 높음, 검토 필요, 수동 검사를 나눠 보여줍니다.",
+            ],
+          },
+          {
+            heading: "컴포넌트 조각과 전체 문서는 어떻게 다른가요?",
+            body: [
+              "버튼, 카드, 폼 일부처럼 페이지 안에 들어갈 코드만 검사할 때는 컴포넌트 조각을 선택하세요. 이 범위에서는 해당 조각 안의 헤딩, 이미지, 폼, 이름, ARIA 참조와 포커스 요소를 확인합니다. 조각에는 원래 html의 lang이나 title, main이 없으므로 이런 항목을 오류로 표시하지 않습니다.",
+              "페이지 전체 HTML을 붙여넣었다면 전체 문서를 선택하세요. 이 범위에서는 페이지 언어, 제목, 주요 랜드마크와 반복 영역 우회 방법까지 함께 검토합니다. 도구가 전체 문서처럼 보이는 입력을 발견하면 전환을 제안하지만, 검사 범위를 자동으로 바꾸지는 않습니다. 사용자가 어떤 문맥을 검사하는지 아는 것이 오탐을 줄이는 가장 확실한 방법이기 때문입니다.",
+            ],
+          },
+          {
+            heading: "헤딩 구조는 왜 중요한가요?",
+            body: [
+              "헤딩은 글자를 크게 보이게 하는 장식이 아니라 문서의 목차 역할을 합니다. 스크린리더와 보조 기술은 헤딩 목록을 제공하고 사용자가 원하는 섹션으로 바로 이동할 수 있게 합니다. 가장 중요한 제목은 보통 h1, 그 아래 주요 섹션은 h2, 하위 항목은 h3처럼 콘텐츠의 포함 관계를 단계로 표현합니다.",
+              "h2 다음에 바로 h4가 나오면 중간 단계가 생략됐다고 느낄 수 있습니다. 반대로 h4에서 h2로 돌아가는 것은 앞선 하위 섹션이 끝난 정상적인 구조일 수 있습니다. 검사기는 아래 단계로 두 칸 이상 내려갈 때만 검토 항목을 만들며, 여러 h1이나 h1 부재는 WCAG 위반으로 단정하지 않고 전체 문서의 구조를 다시 확인하도록 안내합니다.",
+              "헤딩 문구 자체가 다음 내용을 정확히 설명하는지도 중요하지만, 이는 문자열만으로 판정할 수 없습니다. 상세, 기타, 더보기처럼 문맥 없이는 목적을 알기 어려운 헤딩이 있다면 사람이 직접 수정 여부를 판단해야 합니다.",
+            ],
+          },
+          {
+            heading: "랜드마크는 페이지 탐색을 어떻게 돕나요?",
+            body: [
+              "header, nav, main, aside, footer와 ARIA landmark role은 페이지를 큰 영역으로 나눕니다. 보조 기술 사용자는 전체 링크를 하나씩 지나가지 않고 주요 콘텐츠나 탐색 영역으로 이동할 수 있습니다. 특히 전체 문서에는 현재 페이지의 핵심 콘텐츠를 나타내는 main이 있는지 확인할 가치가 있습니다.",
+              "같은 역할의 랜드마크가 여러 개라면 이름으로 구분해야 합니다. 예를 들어 상단 주요 탐색과 푸터 탐색이 모두 nav라면 각각에 주요 메뉴, 푸터 메뉴 같은 aria-label을 주어 목적을 알려줄 수 있습니다. 이름 없이 navigation이 반복되면 스크린리더의 랜드마크 목록에서도 서로 구분하기 어렵습니다.",
+              "랜드마크를 많이 추가하는 것이 목표는 아닙니다. 콘텐츠 구조에 필요한 영역만 사용하고, 반복되는 역할에 명확한 이름을 붙이는 것이 중요합니다. 모든 섹션에 role=\"region\"을 붙이면 탐색 목록이 오히려 복잡해질 수 있습니다.",
+            ],
+          },
+          {
+            heading: "폼의 label과 접근 가능한 이름은 무엇이 다른가요?",
+            body: [
+              "시각적 레이블은 화면에서 사용자가 보는 이름이고, 접근 가능한 이름은 브라우저가 접근성 API를 통해 보조 기술에 전달하는 이름입니다. 일반적인 폼 필드는 label의 for와 input의 id를 정확히 일치시키는 방법이 가장 명확합니다. label 안에 입력 필드를 넣는 암시적 연결도 가능하지만, 명시적 연결은 코드 리뷰와 유지보수에서 관계를 확인하기 쉽습니다.",
+              "placeholder는 입력을 시작하면 사라지고 레이블 역할을 안정적으로 대신하지 못합니다. aria-label은 화면에 텍스트가 없는 아이콘 버튼처럼 필요한 상황에 사용할 수 있지만, 보이는 레이블이 있다면 그 문구가 접근 가능한 이름에도 포함되어야 합니다. 화면에 검색이라고 쓰인 버튼의 aria-label이 항목 찾기라면 음성 명령 사용자가 화면에 보이는 말을 그대로 사용해 버튼을 찾기 어려울 수 있습니다.",
+              "이 도구는 aria-labelledby, aria-label, 연결된 label, 요소 안의 텍스트와 일부 native 대체값을 이용해 이름 신호를 추정합니다. 실제 accessible name 계산은 CSS 가시성, shadow DOM, host language 규칙과 재귀 관계가 얽힌 표준 알고리즘이므로, 복잡한 custom control은 브라우저 접근성 트리에서도 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "이미지 alt는 존재 여부보다 목적이 중요합니다",
+            body: [
+              "정보를 전달하는 이미지는 같은 목적을 제공하는 대체 텍스트가 필요합니다. 링크나 버튼 안의 이미지라면 이미지 모양보다 동작의 목적을 설명해야 합니다. 반대로 순수 장식 이미지는 빈 alt를 사용해 보조 기술이 건너뛰게 하는 것이 적절할 수 있습니다. 그래서 검사기는 alt 누락은 높은 가능성 문제로, 빈 alt는 장식 여부를 확인할 검토 항목으로 구분합니다.",
+              "alt 값이 image, 사진, banner-final-v3.jpg 같은 형태라면 사용자가 이미지의 의미를 이해하는 데 거의 도움이 되지 않습니다. 파일명이나 일반 단어만 들어간 경우 검사기가 경고하지만, 적절한 설명의 길이나 내용은 자동으로 판단하지 않습니다. 같은 이미지도 뉴스 기사, 상품 카드, 링크 버튼 등 사용 문맥에 따라 필요한 대체 텍스트가 달라집니다.",
+              "복잡한 차트와 다이어그램은 짧은 alt 하나만으로 모든 정보를 전달하기 어렵습니다. 핵심 요약을 대체 텍스트에 제공하고, 근처 본문이나 데이터 표에서 상세 내용을 제공하는 방식을 함께 검토하세요.",
+            ],
+          },
+          {
+            heading: "ARIA 참조는 왜 끊어지기 쉬운가요?",
+            body: [
+              "aria-labelledby, aria-describedby, aria-controls 같은 속성은 하나 이상의 요소 ID를 가리킵니다. 컴포넌트를 복제하거나 ID를 변경하면서 참조 속성만 남으면 보조 기술이 이름, 설명 또는 제어 관계를 찾지 못할 수 있습니다. 검사기는 참조된 ID가 문서 안에 실제로 존재하는지 확인하고, 중복 ID도 함께 찾습니다.",
+              "ARIA는 native HTML의 의미를 대체하는 만능 패치가 아닙니다. 가능한 경우 button, nav, main, label처럼 이미 역할과 동작이 정의된 HTML 요소를 먼저 사용하세요. custom role의 필수 상태와 키보드 동작 전체를 이 도구가 검증하지는 않으므로, 복잡한 위젯은 WAI-ARIA Authoring Practices와 실제 보조 기술 테스트가 필요합니다.",
+            ],
+          },
+          {
+            heading: "tabindex와 예상 탭 순서는 어떻게 읽어야 하나요?",
+            body: [
+              "대부분의 인터페이스는 DOM 순서와 native 요소의 기본 포커스 동작을 유지하는 편이 안전합니다. tabindex에 1, 2 같은 양수 값을 사용하면 해당 요소들이 일반적인 DOM 순서보다 먼저 이동하고, 코드가 바뀔 때 관리하기 어려운 별도 순서를 만들 수 있습니다. 검사기는 양수 값을 검토 항목으로 표시하고, 숫자 순서와 DOM 순서를 조합해 예상 탭 순서를 보여줍니다.",
+              "이 목록은 실제 브라우저 테스트를 대체하지 않습니다. CSS로 숨긴 요소, display: contents, flex와 grid의 order, JavaScript로 열린 모달, 비활성 상태와 shadow DOM은 붙여넣은 HTML만으로 완전히 알 수 없습니다. 결과를 보고 의심되는 위치를 찾은 다음 실제 화면에서 Tab과 Shift+Tab으로 순서를 확인하세요.",
+              "tabindex가 -1인 경우는 프로그램으로 포커스를 옮겨야 하지만 일반 탭 순서에는 들어오지 않는 요소에 의도적으로 사용할 수 있습니다. native 버튼이나 링크에 적용됐다면 핵심 기능을 키보드로 놓칠 가능성이 있으므로 사용 이유를 검토해야 합니다.",
+            ],
+          },
+          {
+            heading: "자동 검사 결과를 어떻게 해석해야 하나요?",
+            body: [
+              "오류 가능성 높음은 누락된 alt, 끊어진 label 연결, 이름 없는 버튼처럼 코드만으로도 수정 위치가 비교적 분명한 항목입니다. 검토 필요는 빈 alt가 정말 장식용인지, 건너뛴 헤딩 단계가 문서 구조상 문제인지처럼 문맥을 확인해야 하는 항목입니다. 수동 검사는 포커스 표시, 키보드 트랩, 색상 대비, 동적 상태처럼 실제 화면을 실행해야 확인할 수 있는 항목입니다.",
+              "발견 항목이 0개라고 해서 접근성이 완성됐다는 뜻은 아닙니다. 자동 검사는 사람이 볼 범위를 줄이는 필터에 가깝습니다. W3C도 평가 도구가 잠재적인 문제를 빠르게 찾는 데 도움을 주지만 모든 접근성 측면을 판정할 수 없고, 잘못되거나 오해를 부르는 결과가 생길 수 있다고 설명합니다.",
+            ],
+          },
+          {
+            heading: "PR 전에 확인하는 권장 순서",
+            body: [
+              "먼저 구현한 컴포넌트의 HTML 조각을 붙여넣고 높은 가능성 문제부터 수정합니다. 그다음 헤딩 트리와 랜드마크 목록에서 콘텐츠 구조와 영역 이름을 확인하고, 예상 탭 순서에서 양수 tabindex와 이름 없는 상호작용 요소를 찾습니다. 정리가 끝나면 Markdown 보고서를 복사해 PR이나 QA 티켓에 첨부하세요.",
+              "마지막은 실제 화면입니다. 키보드 조작, 포커스 표시, 시각적 순서와 동적 상태를 직접 테스트하고, CSS가 적용된 색상 대비는 명도대비 검사기에서 따로 측정하세요. 오류·선택·차트가 색상에만 의존하는지는 색각이상 시뮬레이터로 확인할 수 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "내장 예시 HTML을 전체 문서로 검사",
+            input: "예시 HTML 버튼으로 불러온 계정 설정 페이지 · 검사 범위 전체 문서",
+            result:
+              "요소 15개에서 오류 가능성 높음 5건(DOC-001 lang 누락 · DOC-003 빈 title · IMG-001 alt 누락 · FORM-002 끊어진 label[for] · NAME-001 이름 없는 링크)과 검토 필요 4건(HEAD-002 h1 다음 h3 · FORM-003 placeholder만 있는 입력 · NAME-002 보이는 문구와 다른 이름 · FOCUS-001 양수 tabindex)",
+            note: "수동 검사 8개는 발견 항목과 무관하게 항상 함께 표시됩니다. 자동 검사에서 잡히지 않는 영역을 시야에서 놓치지 않기 위해서입니다.",
+          },
+          {
+            title: "카드 컴포넌트 조각만 검사",
+            input:
+              'section 안에 h4 제목, 이미지만 있는 링크(alt 없음), placeholder만 있는 input, onclick 만 있는 div role="button" · 검사 범위 컴포넌트 조각',
+            result:
+              "요소 6개에서 오류 가능성 높음 2건(IMG-004 이미지 링크에 이름 없음 · IMG-001 alt 누락)과 검토 필요 2건(FORM-003 placeholder만 있는 입력 · FOCUS-003 키보드 경로 없는 클릭 핸들러)",
+            note: "같은 조각이라도 h4 하나만 있는 것은 건너뛴 헤딩으로 보지 않습니다. 앞선 헤딩이 없어 단계를 비교할 수 없기 때문이며, 조각 범위에서는 lang·title·main 규칙도 실행되지 않습니다.",
+          },
+          {
+            title: "양수 tabindex가 섞인 폼의 예상 탭 순서 확인",
+            input: 'tabindex="1"인 바로가기 링크, 검색 input, 검색 button, tabindex="3"인 도움말 링크 순서로 작성된 form',
+            result:
+              "예상 탭 순서는 1) tabindex=1 바로가기 링크 2) tabindex=3 도움말 링크 3) 검색 input 4) 검색 button. 양수 tabindex 2건이 검토 필요로 표시됨",
+            note: "DOM에서는 도움말 링크가 마지막인데 탭으로는 두 번째로 이동합니다. 양수 값을 모두 제거하면 순서가 DOM 순서와 다시 일치합니다.",
+          },
+        ],
+        limitations: [
+          "CSS를 계산하지 않습니다. display, visibility, flex와 grid의 order, 화면 위치, 색상 대비는 붙여넣은 HTML만으로 알 수 없으므로 판정 대상에서 제외하고 수동 검사로 남깁니다.",
+          "JavaScript를 실행하지 않습니다. 프레임워크가 연결한 이벤트 핸들러, 스크립트로 열리는 모달, 런타임에 바뀌는 속성은 확인할 수 없고 inline 이벤트 속성만 읽습니다.",
+          "React JSX, Vue SFC, Svelte 같은 빌드 전 템플릿 문법은 정확히 해석하지 않습니다. 브라우저가 읽는 HTML로 변환한 뒤 붙여넣거나 프레임워크 전용 린터를 함께 사용하세요.",
+          "접근 가능한 이름은 표준 알고리즘 전체가 아니라 제한된 이름 신호로 추정합니다. shadow DOM, slot, pseudo element, CSS로 숨긴 텍스트와 브라우저별 HTML-AAM 동작은 반영되지 않으므로 복잡한 custom control은 접근성 트리에서 다시 확인하세요.",
+          "발견 항목이 0개라는 결과는 WCAG나 한국형 웹 콘텐츠 접근성 지침을 준수한다는 뜻이 아닙니다. 이 도구는 점수나 합격 여부를 제공하지 않고, 정적 소스에서 확인 가능한 항목만 다룹니다.",
+          "입력은 500,000자, 요소는 20,000개까지 검사합니다. 더 큰 문서는 컴포넌트나 섹션 단위로 나눠 검사하세요.",
+          "URL을 입력해 페이지를 가져오거나 사이트 전체를 크롤링하지 않습니다. 붙여넣은 HTML은 렌더링하지 않고 파서로만 읽으므로 이미지·iframe·스타일시트 같은 외부 리소스도 요청하지 않습니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Content",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Info and Relationships",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Focus Order",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Label in Name",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html",
+          },
+          {
+            label: "W3C · Selecting Web Accessibility Evaluation Tools",
+            url: "https://www.w3.org/WAI/test-evaluate/tools/selecting/",
+          },
+          {
+            label: "W3C · Accessible Name and Description Computation",
+            url: "https://www.w3.org/TR/accname-1.2/",
+          },
+        ],
+      },
+      en: {
+        card: "Paste HTML to statically review headings, landmarks, alt text, labels and tab order.",
+        description:
+          "Paste an HTML fragment or document to review its heading structure, landmarks, image alternatives, form labels, and estimated tab order. Checks that need rendering or human judgment stay clearly marked for manual testing. The markup is read by a parser that never renders it, and every finding comes with a rule ID, a source location and a suggested fix you can copy as a Markdown report.",
+        howItWorks: [
+          "Choose fragment or document scope and paste your HTML",
+          "Run static checks for headings, landmarks, labels, images and focus",
+          "Review each location and fix, or copy the Markdown report",
+        ],
+        aeo: {
+          what: "An HTML accessibility checker statically analyzes pasted markup for structure, text alternatives, form labels, name signals, ARIA references, and focus order.",
+          who: "It is for front-end developers, HTML authors, QA testers, designers, and product managers reviewing markup before a pull request or accessibility QA.",
+          how: "It parses HTML without rendering it and reports each issue with its source location, related WCAG criterion, suggested fix, and a separate manual-test list.",
+          why: "It helps teams find repeatable markup problems before deployment while keeping checks that require rendering or human judgment outside the automatic result.",
+        },
+        guide: [
+          {
+            heading: "What does an HTML accessibility checker inspect?",
+            body: [
+              "An HTML accessibility checker finds repeatable markup problems before a page is fully deployed. It can inspect heading levels, image alt attributes, associations between controls and labels, name signals for buttons and links, ARIA references, landmarks, and the order suggested by tabindex. Running it before a pull request narrows the places that need correction and creates a practical checklist for QA.",
+              "Static HTML cannot establish full accessibility. It cannot confirm whether every feature works from a keyboard, whether focus indicators are visible, whether visual and DOM order match after CSS, or whether dynamic status messages reach assistive technology. This tool therefore separates high-confidence issues, items that require review, and checks that must be performed manually. It does not produce a conformance score.",
+            ],
+          },
+          {
+            heading: "When should you choose fragment or document scope?",
+            body: [
+              "Choose HTML fragment for a button, card, form section, or another piece that will be inserted into a larger page. Fragment scope checks headings, images, forms, names, ARIA references, and focusable elements inside that piece. It does not report missing page-level metadata such as a document language, a title, or a main landmark.",
+              "Choose Full document when the input represents a complete page. This adds checks for page language, title, primary landmarks, and ways to bypass repeated regions. The tool can suggest document scope when it sees a doctype or document elements, but it does not silently change the selection. Explicit scope prevents page-level rules from becoming false alarms in component reviews.",
+            ],
+          },
+          {
+            heading: "Why does heading structure matter?",
+            body: [
+              "Headings are not merely large text. They communicate the organization of a document, and browsers and assistive technologies can use them for in-page navigation. A common hierarchy uses h1 for the main title, h2 for major sections, and h3 for subsections that belong to an h2.",
+              "Moving directly from h2 to h4 can imply a missing level. Moving from h4 back to h2 can be valid because it closes nested sections. The checker only flags jumps that move down by more than one level. A missing or repeated h1 is presented as a review item for full documents, not an automatic WCAG failure.",
+              "The wording of each heading must also describe its section, but source analysis cannot reliably judge that meaning. Review vague headings such as More, Other, or Details in their actual content context.",
+            ],
+          },
+          {
+            heading: "How do landmarks support navigation?",
+            body: [
+              "Elements such as header, nav, main, aside, and footer, along with ARIA landmark roles, divide a page into larger regions. Assistive-technology users can move to main content or navigation without traversing every link. A full document should be reviewed for a clear primary content region.",
+              "Repeated landmarks need distinct names. If a header and footer both contain a nav element, names such as Primary and Footer applied with aria-label help users distinguish them in a landmark list. Adding more landmarks is not the goal: use only meaningful regions and label repeated roles clearly.",
+            ],
+          },
+          {
+            heading: "What is the difference between a label and an accessible name?",
+            body: [
+              "A visible label is the text a person sees, while an accessible name is the name exposed by the browser through accessibility APIs. For a typical form field, an explicit association between a label's for attribute and the control's id is clear and maintainable. Wrapping a control inside a label can also create an implicit association.",
+              "A placeholder disappears when typing begins and is not a stable replacement for a label. An aria-label can name an icon-only control, but when visible text exists, the accessible name should contain that text. A button that visibly says Search but is named Find items can be difficult to operate with speech input because the spoken visible label does not match its programmatic name.",
+              "The checker estimates name signals from aria-labelledby, aria-label, associated labels, descendant text, and selected native fallbacks. The complete accessible-name algorithm also depends on host-language rules, hidden content, shadow DOM, and recursive references. Confirm complex custom controls in the browser accessibility tree.",
+            ],
+          },
+          {
+            heading: "How should you review image alt text?",
+            body: [
+              "An informative image needs a text alternative that serves the same purpose. If an image is the only content of a link or button, its alternative should describe the action or destination. A purely decorative image can correctly use an empty alt so assistive technology ignores it. The checker therefore treats a missing alt as a high-confidence issue and an empty alt as an item that requires context.",
+              "Values such as image, photo, or banner-final-v3.jpg rarely explain purpose. The checker warns when an alternative looks like a filename, URL, or generic word, but it does not score writing quality. The correct text depends on whether the same image appears in an article, product card, functional link, or decorative layout.",
+              "Complex charts and diagrams may need more than a short alt. Provide a concise summary and make detailed information available in nearby text or a data table when appropriate.",
+            ],
+          },
+          {
+            heading: "Why do ARIA references break?",
+            body: [
+              "Attributes such as aria-labelledby, aria-describedby, and aria-controls point to element IDs. Copying a component or renaming an ID without updating every reference can remove a control's name, description, or relationship. The checker identifies missing targets and duplicate IDs.",
+              "ARIA is not a universal patch for missing native semantics. Prefer elements such as button, nav, main, and label when they match the intended role and behavior. This tool does not validate every required state and keyboard interaction for custom widgets. Use the WAI-ARIA Authoring Practices and test complex controls with actual assistive technology.",
+            ],
+          },
+          {
+            heading: "How should you interpret estimated tab order?",
+            body: [
+              "Interfaces are usually easier to maintain when DOM order and native focus behavior provide the sequence. Positive tabindex values move those elements before the regular sequence and create a separate ordering system that can become inconsistent as the page changes. The checker marks positive values for review and estimates their order before native focusable elements and elements with tabindex zero.",
+              "The list is not a substitute for browser testing. Pasted HTML does not reveal every CSS-hidden element, flex or grid reordering, script-opened dialog, disabled state, shadow root, or focus trap. Use the result to locate suspicious markup, then test Tab and Shift+Tab in the implemented interface.",
+              "A tabindex of -1 can be intentional for an element that receives programmatic focus but should not appear in sequential keyboard navigation. When it is added to a native button or link, review whether keyboard users can still reach the feature.",
+            ],
+          },
+          {
+            heading: "How should you read the result levels?",
+            body: [
+              "High-confidence issue covers cases with a relatively clear source location, such as a missing alt, a broken label association, or a native button without a name. Needs review covers cases that depend on context, such as whether an empty alt is truly decorative or whether a heading jump reflects the intended structure. Manual test covers focus visibility, keyboard traps, visual order, contrast, and dynamic updates that require a running page.",
+              "Zero automatic findings do not mean the interface is accessible. Automated checks reduce the area a person needs to inspect. W3C guidance also notes that evaluation tools can quickly identify potential issues but cannot test every accessibility aspect and can produce inaccurate or misleading results.",
+            ],
+          },
+          {
+            heading: "A practical pre-PR review sequence",
+            body: [
+              "Start by pasting the component HTML and fixing high-confidence issues first. Review the heading tree and landmark list for meaningful structure and names, then inspect the estimated tab order for positive tabindex values and unnamed controls. When the markup is clean, copy the Markdown report into the pull request or QA ticket.",
+              "Finish in the running interface. Test keyboard operation, focus visibility, visual order, and dynamic updates, and measure rendered text, icon, and component colors in the contrast checker. Capture states and charts in the color blindness simulator to find information conveyed by color alone.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Checking the built-in sample as a full document",
+            input: "The account settings page loaded with the Sample HTML button, in full document scope",
+            result:
+              "Across 15 elements: 5 high-confidence issues (DOC-001 missing lang, DOC-003 empty title, IMG-001 missing alt, FORM-002 broken label association, NAME-001 unnamed link) and 4 review items (HEAD-002 h1 followed by h3, FORM-003 placeholder-only input, NAME-002 visible text missing from the name, FOCUS-001 positive tabindex)",
+            note: "The 8 manual checks are always listed regardless of the findings, so the areas automation cannot reach stay in view.",
+          },
+          {
+            title: "Checking a card component in fragment scope",
+            input:
+              'A section with an h4 heading, an image-only link without alt, a placeholder-only input, and a div with role="button" and only an onclick handler, in fragment scope',
+            result:
+              "Across 6 elements: 2 high-confidence issues (IMG-004 unnamed image-only link, IMG-001 missing alt) and 2 review items (FORM-003 placeholder-only input, FOCUS-003 click handler with no keyboard path)",
+            note: "A lone h4 is not reported as a skipped level, because there is no earlier heading to compare it with. Fragment scope also skips the page-level lang, title and main rules.",
+          },
+          {
+            title: "Reading estimated tab order with positive tabindex",
+            input: 'A form containing a skip link with tabindex="1", a search input, a search button, and a help link with tabindex="3", in that source order',
+            result:
+              "The estimated order is 1) the skip link with tabindex 1, 2) the help link with tabindex 3, 3) the search input, 4) the search button, with 2 positive tabindex values marked for review",
+            note: "The help link is last in the DOM but second in the tab sequence. Removing both positive values restores an order that matches the source.",
+          },
+        ],
+        limitations: [
+          "CSS is not evaluated. Display, visibility, flex and grid order, screen position and color contrast cannot be derived from pasted HTML, so they stay in the manual-test list rather than the automatic result.",
+          "JavaScript is not executed. Framework-attached event handlers, script-opened dialogs and attributes changed at runtime are invisible to the checker, which reads inline event attributes only.",
+          "Pre-build template syntax such as React JSX, Vue SFC and Svelte is not parsed accurately. Convert the markup to browser-readable HTML first, or use a framework-specific linter alongside this tool.",
+          "Accessible names are estimated from a limited set of name signals rather than the full standard algorithm. Shadow DOM, slots, pseudo elements, CSS-hidden text and browser-specific HTML-AAM behavior are not represented, so confirm complex custom controls in the accessibility tree.",
+          "A result with no findings does not mean the markup conforms to WCAG or to another accessibility standard. This tool reports no score and no pass or fail, and covers only what static source can show.",
+          "Input is limited to 500,000 characters and 20,000 elements. Check a larger document one component or section at a time.",
+          "The checker does not fetch a URL or crawl a site. Pasted HTML is parsed rather than rendered, so external resources such as images, iframes and stylesheets are never requested.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Non-text Content",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Info and Relationships",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Focus Order",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Label in Name",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html",
+          },
+          {
+            label: "W3C · Selecting Web Accessibility Evaluation Tools",
+            url: "https://www.w3.org/WAI/test-evaluate/tools/selecting/",
+          },
+          {
+            label: "W3C · Accessible Name and Description Computation",
+            url: "https://www.w3.org/TR/accname-1.2/",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "HTML 접근성 검사기는 어떤 문제를 찾나요?",
+          answer:
+            "헤딩 단계, 페이지 언어와 제목, 랜드마크, 이미지 alt, 폼 label 연결, 이름 없는 버튼·링크, 끊어진 ARIA 참조, 양수 tabindex와 예상 탭 순서를 검사합니다. 전체 문서와 컴포넌트 조각은 적용되는 규칙이 다릅니다.",
+        },
+        {
+          question: "검사 결과가 없으면 WCAG 2.2를 준수한 것인가요?",
+          answer:
+            "아닙니다. 정적 HTML에서 자동으로 확인 가능한 항목만 발견되지 않았다는 뜻입니다. 키보드 조작, 포커스 표시, 색상 대비, 시각적 순서, 동적 상태와 대체 텍스트의 실제 적절성은 구현 화면에서 수동으로 확인해야 합니다.",
+        },
+        {
+          question: "HTML 조각과 전체 문서 중 무엇을 선택해야 하나요?",
+          answer:
+            "컴포넌트나 페이지 일부만 붙여넣는다면 HTML 조각을, doctype·html·head·body를 포함한 페이지 전체를 검사한다면 전체 문서를 선택하세요. 전체 문서 모드에서만 lang, title, main 같은 페이지 수준 항목을 검사합니다.",
+        },
+        {
+          question: "React JSX나 Vue·Svelte 파일도 검사할 수 있나요?",
+          answer:
+            "1차 버전은 브라우저가 해석하는 HTML만 지원합니다. JSX의 htmlFor, Vue directive, Svelte 문법처럼 빌드 전 템플릿 문법은 정확히 해석하지 않습니다. 실제 렌더링된 HTML을 복사하거나 프레임워크 전용 린터를 함께 사용하세요.",
+        },
+        {
+          question: "붙여넣은 HTML이 실제 화면에 실행되나요?",
+          answer:
+            "아닙니다. 코드는 렌더링하거나 활성 DOM에 삽입하지 않고 순수 HTML 파서로 구조만 분석합니다. script, inline event handler와 외부 이미지·iframe을 실행하거나 불러오지 않습니다.",
+        },
+        {
+          question: "입력한 코드나 검사 결과가 서버로 전송되나요?",
+          answer:
+            "아닙니다. HTML 분석과 보고서 생성은 브라우저에서 이루어지며 원본 코드, 코드 조각과 요소 경로는 Kitfolio 서버나 분석 이벤트로 전송하거나 저장하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What issues does the HTML accessibility checker find?",
+          answer:
+            "It checks heading levels, page language and title, landmarks, image alt attributes, form-label associations, unnamed buttons and links, broken ARIA references, positive tabindex values, and estimated tab order. Document and fragment scope use different rule sets.",
+        },
+        {
+          question: "Does a result with no findings mean the HTML meets WCAG 2.2?",
+          answer:
+            "No. It only means the static checks did not find an issue in the pasted markup. Keyboard operation, focus appearance, color contrast, visual order, dynamic states, and the quality of text alternatives still require testing in the implemented interface.",
+        },
+        {
+          question: "Should I choose HTML fragment or full document?",
+          answer:
+            "Choose HTML fragment for a component or part of a page. Choose full document when the input contains the complete page, including document-level elements. Checks for lang, title, and the primary main landmark only run in document scope.",
+        },
+        {
+          question: "Can the checker inspect React JSX, Vue, or Svelte files?",
+          answer:
+            "The first release supports browser-readable HTML only. It does not accurately parse framework syntax such as the JSX htmlFor attribute, Vue directives, or Svelte templates. Paste the rendered HTML or use a framework-specific linter alongside this tool.",
+        },
+        {
+          question: "Does the checker execute or render the HTML I paste?",
+          answer:
+            "No. It parses the structure without inserting the markup into the active page. Scripts and inline event handlers are not executed, and external image or iframe resources are not loaded by the parser.",
+        },
+        {
+          question: "Is my HTML or report sent to a server?",
+          answer:
+            "No. Parsing and report generation run in your browser. The source, snippets, and element paths are not uploaded to or stored by the Kitfolio server and are not included in analytics events.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "HTML 접근성 검사기",
+        subtitle: "헤딩·alt·label·탭 순서를 코드에서 바로 점검",
+      },
+      en: {
+        title: "HTML Accessibility Checker",
+        subtitle: "Review headings, alt text, labels and tab order before your PR",
+      },
+    },
+  },
 
   // ── Design ─────────────────────────────
   {
@@ -2940,6 +3375,425 @@ export const TOOLS: Tool[] = [
     },
   },
 
+  {
+    slug: "text-scaling-checker",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "pm"],
+    ico: "200%",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-11",
+    badge: "Canvas",
+    name: { ko: "텍스트 확대·간격 검사기", en: "Text Scaling & Spacing Checker" },
+    // 확대 문제가 구조에서 비롯될 때의 다음 검사, 단위 조정, 색상 검사 순서로 잇는다.
+    relatedTools: ["html-accessibility-checker", "css-unit-converter", "color-contrast-checker"],
+    seo: {
+      ko: {
+        title: "웹접근성 텍스트 확대 검사기 | 200%·간격 테스트",
+        description:
+          "HTML과 CSS를 붙여넣어 웹접근성 텍스트 확대를 검사하세요. 200% 글자 확대, 320px 리플로와 WCAG 텍스트 간격을 원본과 나란히 비교하고 가로 오버플로·고정 영역의 내용 잘림 후보를 확인할 수 있습니다. 입력한 코드는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
+        keywords: [
+          "웹접근성 텍스트 확대",
+          "웹접근성 글자 크기",
+          "200% 확대 테스트",
+          "400% 확대 테스트",
+          "320px 리플로",
+          "WCAG 리플로",
+          "텍스트 간격 기준",
+          "글자 간격 접근성",
+          "줄간격 접근성",
+          "WCAG 1.4.12",
+          "텍스트 확대 검사기",
+          "HTML 확대 테스트",
+        ],
+      },
+      en: {
+        title: "Text Scaling & Spacing Checker | WCAG Reflow Test",
+        description:
+          "Paste HTML and CSS to test 200% text resizing, a 320 CSS pixel reflow viewport, and WCAG text spacing overrides side by side. The checker highlights horizontal overflow, clipped text, fixed containers, and nowrap candidates while processing your source locally in the browser without sign-in or upload.",
+        keywords: [
+          "text scaling checker",
+          "wcag text resize test",
+          "200 percent text resize",
+          "400 percent zoom accessibility",
+          "320 css pixel reflow test",
+          "wcag reflow checker",
+          "text spacing checker",
+          "wcag 1.4.12 test",
+          "letter spacing accessibility",
+          "line height accessibility",
+          "html css accessibility preview",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "HTML·CSS에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다.",
+        description:
+          "HTML과 CSS에 200% 텍스트 확대, 320 CSS px 리플로, WCAG 간격값을 적용해 보세요. 원본과 비교하며 고정된 카드, 버튼, 문단과 반응형 레이아웃에서 내용이 사라지는 위치를 찾을 수 있습니다. 붙여넣은 코드는 정제 후 스크립트 없이 격리된 미리보기에서만 렌더링되며, 외부 이미지·웹폰트·stylesheet는 불러오지 않습니다.",
+        howItWorks: [
+          "HTML 또는 텍스트와 필요한 CSS 입력",
+          "텍스트 200%·리플로 320px·텍스트 간격 중 선택",
+          "원본과 비교하고 오버플로·잘림 후보와 수동 확인 항목 점검",
+        ],
+        aeo: {
+          what: "텍스트 확대·간격 검사기는 HTML과 CSS에 웹접근성 확대·리플로·간격 조건을 적용해 원본과 비교하는 브라우저 도구입니다.",
+          who: "200% 글자 확대, 320px 반응형 재배치와 사용자 텍스트 간격 변경을 검수하는 퍼블리셔, 개발자, 디자이너와 QA 담당자를 위한 도구입니다.",
+          how: "안전하게 격리된 preview에 텍스트 200%, 320 CSS px viewport 또는 WCAG 간격값을 적용하고 오버플로·잘림 후보를 측정합니다.",
+          why: "고정 width·height, 줄바꿈 차단과 좁은 control 때문에 확대 시 정보나 기능이 사라지는 문제를 배포 전에 찾기 위해 사용합니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성에서 글자 크기는 어떻게 검사하나요?",
+            body: [
+              "WCAG 2.2에는 모든 웹페이지가 반드시 사용해야 하는 하나의 최소 폰트 크기가 정해져 있지 않습니다. 작은 글자가 무조건 괜찮다는 뜻은 아닙니다. 사용자가 브라우저나 사용자 설정으로 텍스트를 키웠을 때 내용과 기능을 잃지 않는지가 핵심 검사 대상입니다. 글자 크기를 하나의 숫자로 고정해 검사하면 화면 크기, 글꼴, 언어와 사용자의 확대 방식에 따라 달라지는 실제 문제를 놓치기 쉽습니다.",
+              "이 도구는 세 가지 조건을 분리해 보여줍니다. 텍스트 200%는 글자만 두 배가 됐을 때 고정된 카드와 control이 버티는지 확인합니다. 리플로 320px은 좁은 viewport에서 페이지가 한 방향으로 다시 배치되는지 확인합니다. 텍스트 간격은 사용자가 줄·문단·글자·단어 간격을 넓혀도 정보가 사라지지 않는지 확인합니다.",
+            ],
+          },
+          {
+            heading: "텍스트 200%와 브라우저 200% 확대는 같은가요?",
+            body: [
+              "WCAG 1.4.4의 목적은 텍스트를 최대 200%까지 키워도 내용이나 기능이 잘리거나 가려지지 않게 하는 것입니다. 브라우저는 전체 페이지 zoom, 텍스트 전용 확대, 사용자 글꼴 설정처럼 여러 방식을 제공할 수 있습니다. 이 검사기의 텍스트 200% 프리셋은 각 요소의 계산된 글자 크기만 두 배로 만들고 width·height·padding은 그대로 둡니다. 고정된 컨테이너가 텍스트 증가를 견디는지 빠르게 찾기 위한 보수적인 stress test입니다.",
+              "따라서 preview가 실제 브라우저의 full-page zoom과 픽셀 단위로 같지는 않습니다. 운영 화면에서는 Chrome, Edge, Firefox 또는 Safari의 실제 확대 기능으로 100%부터 200% 사이의 단계도 확인해야 합니다. 특히 media query가 바뀌는 구간, sticky header, modal과 form control은 실제 페이지에서 다시 테스트하세요.",
+            ],
+          },
+          {
+            heading: "320px 리플로와 400% 확대는 어떤 관계인가요?",
+            body: [
+              "WCAG 1.4.10은 일반적으로 세로로 읽는 콘텐츠가 320 CSS px 너비에서 정보와 기능을 잃지 않고, 페이지 전체를 가로·세로 두 방향으로 반복 스크롤하지 않도록 요구합니다. 320 CSS px는 시작 viewport가 1280 CSS px일 때 브라우저를 400% 확대한 것과 동등한 폭입니다.",
+              "그래서 이 도구는 화면을 단순히 네 배 확대하는 필터를 사용하지 않습니다. 원본 preview의 내부 viewport를 1280px, 검사 preview를 320px로 실제 변경합니다. 이렇게 해야 좁은 화면을 겨냥한 반응형 CSS가 동작하고 여러 열이 쌓이거나 navigation이 재배치되는 모습을 확인할 수 있습니다.",
+              "데이터 표, 지도, 다이어그램처럼 의미를 이해하거나 조작하기 위해 2차원 배치가 필요한 영역은 수평 스크롤이 허용될 수 있습니다. 그렇더라도 페이지 전체가 아니라 해당 영역만 스크롤되는지, 표의 각 칸 안 텍스트가 불필요하게 잘리지 않는지는 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "WCAG 텍스트 간격 기준은 무엇인가요?",
+            body: [
+              "WCAG 1.4.12는 줄 높이 글자 크기의 1.5배, 문단 뒤 간격 2배, 글자 간격 0.12배, 단어 간격 0.16배를 동시에 적용했을 때 콘텐츠나 기능 손실이 없어야 한다고 설명합니다.",
+              "이 값을 사이트의 기본 typography로 반드시 사용하라는 기준은 아닙니다. 사용자가 자신의 읽기 필요에 맞춰 author style을 덮어쓸 수 있어야 하고, 그 결과 문구·버튼·입력창·tooltip이 잘리거나 사라지지 않아야 한다는 뜻입니다. 검사기는 현재 값이 기준보다 이미 크다면 줄이지 않고 네 속성만 확대합니다.",
+              "언어와 문자 체계에 따라 일부 간격 속성의 효과는 다릅니다. 한글은 띄어쓰기가 있는 문장에서 word-spacing 영향이 나타나지만, 실제 문구가 짧거나 공백이 없다면 차이가 작을 수 있습니다. 한국어·영어·숫자가 섞인 실제 서비스 문구로 확인하는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "어떤 CSS에서 확대 문제가 자주 생기나요?",
+            body: [
+              "고정된 width와 height: 카드에 height 200px와 overflow: hidden을 함께 사용하면 기본 문구는 맞더라도 확대된 문구나 번역된 긴 문구가 잘릴 수 있습니다. 꼭 필요한 경우가 아니라면 자연스러운 높이, min-height, 내부 여백과 줄바꿈을 사용하세요. 고정 width가 320px viewport보다 크면 페이지 전체의 가로 오버플로 원인이 됩니다.",
+              "줄바꿈을 막는 white-space: nowrap은 날짜, 코드, 한 줄 label에 유용하지만 긴 버튼 문구나 navigation 전체에 적용하면 좁은 화면에서 벗어날 수 있습니다. 문구가 반드시 한 줄이어야 하는지 확인하고, 필요하면 control이 늘어나거나 해당 영역만 스크롤되도록 설계하세요.",
+              "절대 위치와 고정 위치: position absolute로 문구와 아이콘 위치를 픽셀에 맞추면 글자 크기나 줄 수가 바뀔 때 서로 겹칠 수 있습니다. position fixed인 header와 하단 액션도 확대 후 본문을 가릴 수 있습니다. flow layout, flex·grid의 자연스러운 크기 계산과 충분한 padding을 우선하세요.",
+              "제한된 line-height와 overflow: 글자 크기는 커지는데 line-height를 고정된 작은 px로 유지하면 위아래 획이 겹치거나 control 안에서 잘릴 수 있습니다. 단일 행 입력처럼 높이가 제한된 컴포넌트도 실제 확대 상태에서 텍스트가 중앙에 보이는지 확인해야 합니다.",
+              "viewport 단위만 사용한 글자 크기: font-size를 2vw처럼 viewport 변화에만 의존하게 하면 브라우저 확대와 breakpoint 변화에서 기대한 200% 증가가 나오지 않을 수 있습니다. clamp()를 쓰더라도 rem 기반 최소·기본값과 확대 결과를 함께 확인하세요.",
+            ],
+          },
+          {
+            heading: "px를 쓰면 접근성에 실패하고 rem을 쓰면 통과하나요?",
+            body: [
+              "그렇게 단순하지 않습니다. 현대 브라우저의 full-page zoom은 px로 지정한 글자도 함께 확대할 수 있으므로 px 사용이 곧 WCAG 실패라는 설명은 정확하지 않습니다. 반대로 rem을 사용해도 부모 컨테이너의 height가 고정돼 있거나 overflow를 숨기면 내용은 잘릴 수 있습니다. 최종 판단은 단위 이름이 아니라 확대 후 콘텐츠와 기능이 유지되는지에 달려 있습니다.",
+              "다만 rem과 em은 사용자의 기본 글자 크기 설정을 반영하고 글자와 관련된 padding·gap·container가 함께 확장되도록 설계할 때 유용합니다. font-size는 rem, 컴포넌트 내부 간격은 em, 최대 너비는 rem처럼 의도를 나눠 사용할 수 있습니다. 기존 px 값을 바꿀 때는 CSS 단위 변환기를 사용하되, 변환만 하고 끝내지 말고 이 검사기와 실제 브라우저에서 결과를 다시 확인하세요.",
+            ],
+          },
+          {
+            heading: "이미지로 된 텍스트는 왜 별도로 봐야 하나요?",
+            body: [
+              "이미지 안의 글자는 일반 HTML 텍스트처럼 사용자가 글꼴, 크기, 색상과 간격을 바꾸기 어렵고 확대 시 선명도가 떨어질 수 있습니다. 로고처럼 시각 표현이 본질적인 경우를 제외하면 실제 텍스트와 CSS를 사용하는 편이 좋습니다. 이 도구는 외부 이미지를 불러오지 않고 이미지 안의 문자를 인식하지 않으므로, 시안과 구현 화면에서 이미지로 된 텍스트가 있는지 직접 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "검사 결과는 어떻게 해석해야 하나요?",
+            body: [
+              "페이지 가로 오버플로는 검사 viewport보다 document가 넓어진 상태입니다. 내용 잘림 가능성은 텍스트가 있는 영역에서 scroll 크기가 client box보다 크면서 overflow가 숨겨진 경우입니다. 수평 스크롤 영역 검토는 특정 컴포넌트가 별도 가로 스크롤을 갖는 상태로, 표나 다이어그램이라면 허용 가능한 예외일 수 있습니다.",
+              "결과는 원본에도 있던 문제와 이 프리셋에서 새로 생긴 문제를 구분해 보여줍니다. 확대 때문에 생긴 문제인지, 원래부터 좁았던 컨테이너인지를 나눠 보면 수정 우선순위를 정하기 쉽습니다.",
+              "자동 후보가 없다고 해서 기준을 통과한 것은 아닙니다. 텍스트끼리 겹쳤는지, 기능을 실행할 수 있는지, 말줄임된 전체 문구가 다른 방법으로 제공되는지와 실제 브라우저 확대는 사람이 확인해야 합니다. preview는 문제를 찾는 지도이지 합격 도장을 찍는 심사관이 아닙니다.",
+            ],
+          },
+          {
+            heading: "배포 전 권장 검사 순서",
+            body: [
+              "먼저 실제 서비스의 대표적인 짧은 문구와 가장 긴 문구를 각각 준비합니다. 텍스트 200%에서 카드, 버튼, 입력창, 탭과 tooltip의 내용 손실을 확인하고, 리플로 320px에서 페이지 전체 가로 스크롤과 고정 UI 가림을 확인합니다. 텍스트 간격에서는 문단·control·배지의 잘림과 겹침을 봅니다.",
+              "감지된 요소의 고정 width·height, overflow와 nowrap 사용 이유를 검토한 다음, 실제 운영 화면에서 브라우저 확대와 키보드 조작을 다시 테스트하세요. 구조 문제가 의심되면 HTML 접근성 검사기로 헤딩·랜드마크·DOM 순서를 확인하고, 실제 색상은 명도대비 검사기에서 별도로 측정합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "예시 카드를 텍스트 200%로 검사",
+            input: "예시 불러오기로 채운 summary-card (width 560px · height 230px · overflow: hidden) · 프리셋 텍스트 200% · viewport 768px",
+            result:
+              "후보 1개. section 에서 CLIP-001 세로 내용 잘림 가능성: clientHeight 228px 안에 콘텐츠가 448px",
+            note: "글자만 두 배가 됐을 뿐인데 콘텐츠 높이가 카드의 두 배에 가까워집니다. 카드 아래쪽의 저장 버튼과 링크가 화면에서 사라진다는 뜻이라 고정 height 를 min-height 로 바꿔야 합니다.",
+          },
+          {
+            title: "같은 카드를 리플로 320px로 검사",
+            input: "같은 입력 · 프리셋 리플로 320px (원본 1280px → 검사 320px)",
+            result:
+              "후보 2개. 문서 전체에서 REFLOW-001 페이지 가로 오버플로(scrollWidth 560px · clientWidth 320px), section 에서 REFLOW-002 화면 밖으로 벗어난 요소(오른쪽 경계 560px)",
+            note: "고정 width 560px 하나가 원인입니다. 카드 안의 문단·버튼도 함께 넘치지만 원인이 되는 가장 바깥 요소만 카드로 묶어 수정 위치를 하나로 좁혀 줍니다.",
+          },
+          {
+            title: "같은 카드를 텍스트 간격으로 검사",
+            input: "같은 입력 · 프리셋 텍스트 간격 · viewport 768px",
+            result:
+              "후보 1개. section 에서 CLIP-001: clientHeight 228px 안에 콘텐츠가 260px. 문단의 line-height 는 28.8px에서 36px로, margin-bottom 은 6px에서 32px로, letter-spacing 은 0에서 1.92px로 늘어납니다",
+            note: "글자 크기는 그대로인데 간격만 넓혀도 카드를 넘칩니다. 확대와 간격은 서로 다른 조건이라 프리셋을 나눠 각각 확인해야 하는 이유입니다.",
+          },
+        ],
+        limitations: [
+          "실제 브라우저 확대를 그대로 복제하지 않습니다. 텍스트 200%는 계산된 글자 크기만 두 배로 만드는 보수적인 stress test이고, full-page zoom은 여백·이미지·media query까지 함께 바꿉니다. 최종 확인은 실제 브라우저의 확대 기능으로 해야 합니다.",
+          "JavaScript를 실행하지 않습니다. React hydration, 스크립트로 열리는 모달, 런타임에 바뀌는 클래스와 동적 상태는 재현되지 않으므로 정적 HTML과 CSS로 검사합니다.",
+          "외부 웹폰트·이미지·stylesheet를 불러오지 않습니다. 시스템 글꼴로 렌더링되므로 실제 운영 화면과 줄바꿈 위치가 달라질 수 있고, 이미지는 크기만 유지한 중립 placeholder로 표시됩니다.",
+          "겹침은 자동으로 판정하지 않습니다. 두 텍스트가 실제로 겹쳤는지, 겹침 때문에 기능이 가려졌는지는 preview를 눈으로 확인해야 합니다.",
+          "지도·데이터 표·다이어그램이 리플로 예외에 해당하는지 자동으로 분류하지 않습니다. 수평 스크롤 영역은 후보로만 표시하고 예외 여부는 사람이 판단합니다.",
+          "입력은 HTML·텍스트 200,000자, CSS 100,000자, 요소 10,000개까지 검사합니다. 더 큰 화면은 컴포넌트 단위로 나눠 검사하세요.",
+          "감지 결과가 0개라는 것은 WCAG나 한국형 웹 콘텐츠 접근성 지침을 준수한다는 뜻이 아닙니다. 이 도구는 점수나 합격 여부를 제공하지 않습니다.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Resize Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Reflow",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/reflow.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Text Spacing",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Images of Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/images-of-text.html",
+          },
+          {
+            label: "MDN · iframe sandbox",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox",
+          },
+          {
+            label: "MDN · Content Security Policy",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
+          },
+        ],
+      },
+      en: {
+        card: "Apply 200% text, 320px reflow and WCAG spacing to HTML and CSS, side by side with the original.",
+        description:
+          "Apply 200% text resizing, a 320 CSS pixel reflow viewport, or WCAG text spacing values to an HTML and CSS sample. Compare the original and test views to find fixed containers, controls, and responsive layouts that lose content. Your source is sanitized and rendered only inside an isolated preview with scripts disabled, and external images, fonts and stylesheets are never loaded.",
+        howItWorks: [
+          "Paste HTML or plain text and optional CSS",
+          "Choose 200% text, 320px reflow, or WCAG text spacing",
+          "Compare both previews and inspect overflow, clipping and manual checks",
+        ],
+        aeo: {
+          what: "A text scaling and spacing checker applies accessibility resize, reflow, and spacing conditions to HTML and CSS and compares the result with the original.",
+          who: "It is for HTML authors, front-end developers, designers, and QA testers reviewing 200% text resize, 320px reflow, and user spacing overrides.",
+          how: "It renders sanitized source in isolated previews, applies one WCAG-related preset, and measures horizontal overflow and likely clipped text.",
+          why: "It helps teams find fixed dimensions, blocked wrapping, and narrow controls that can hide content or functionality when text is enlarged or spaced out.",
+        },
+        guide: [
+          {
+            heading: "How should text size be tested for web accessibility?",
+            body: [
+              "WCAG 2.2 does not define one minimum font size that every web page must use. That does not make very small text automatically acceptable. The important test is whether people can enlarge or restyle text without losing content or functionality. A single font-size number cannot represent every viewport, typeface, language, and user setting.",
+              "This checker separates three conditions. 200% text doubles text size to stress fixed cards and controls. 320px reflow tests whether the layout adapts to a narrow viewport without page-level two-dimensional scrolling. Text spacing checks whether content survives user overrides for line, paragraph, letter, and word spacing.",
+            ],
+          },
+          {
+            heading: "Is 200% text the same as 200% browser zoom?",
+            body: [
+              "WCAG 1.4.4 aims to keep content and functionality available when text is resized up to 200%. Browsers can support this through full-page zoom, text-only resizing, or user font preferences. The checker doubles each element's computed font size while leaving width, height, padding, and other properties unchanged. This is a conservative stress test for containers that do not grow with text.",
+              "The result is not a pixel-identical copy of full-page browser zoom. Test the implemented page at intermediate steps from 100% to 200% in the browsers your product supports. Pay particular attention to responsive breakpoints, sticky headers, dialogs, and form controls.",
+            ],
+          },
+          {
+            heading: "How are 320px reflow and 400% zoom related?",
+            body: [
+              "WCAG 1.4.10 expects vertically scrolling content to remain available at a width equivalent to 320 CSS pixels without requiring scrolling in two dimensions. A 320 CSS pixel viewport is equivalent to starting at 1280 CSS pixels and zooming to 400%.",
+              "The checker does not create this view by visually scaling an image four times. It uses a 1280px layout viewport for the original and a real 320px layout viewport for the test. Responsive media queries can therefore rearrange columns, navigation, and controls.",
+              "Some regions require a two-dimensional layout for their meaning or operation, including data tables, maps, and diagrams. These can be exceptions, but review whether scrolling is limited to the region and whether text inside it remains usable.",
+            ],
+          },
+          {
+            heading: "What are the WCAG text spacing values?",
+            body: [
+              "WCAG 1.4.12 describes four values that must be applicable together without loss of content or functionality: line height at least 1.5 times the font size, space after paragraphs at least 2 times, letter spacing at least 0.12 times, and word spacing at least 0.16 times.",
+              "These are not mandatory default typography values. The requirement is that a user can override author styles to these values without clipping text or losing controls. The checker leaves an existing value unchanged when it is already larger and modifies only the four relevant properties.",
+              "Some properties have different effects across languages and writing systems. Test realistic product strings, including mixed text, numbers, and longer localized labels.",
+            ],
+          },
+          {
+            heading: "Which CSS patterns commonly break during resizing?",
+            body: [
+              "Fixed width and height: a card with height 200px and overflow hidden may fit the default copy but clip enlarged or translated text. Prefer natural height, min-height, flexible spacing, and wrapping unless a fixed dimension is essential. A fixed width larger than 320px can create page-level horizontal overflow.",
+              "Blocked wrapping: white-space nowrap is useful for dates and code, but it can push long buttons or navigation beyond a narrow viewport. Decide whether one line is essential and allow the control to grow, wrap, or scroll only inside a justified region.",
+              "Absolute and fixed positioning: pixel-positioned text and icons can overlap when line count or font size changes. Fixed headers and bottom actions can also obscure content at high zoom. Prefer normal flow and flexible grid or flex sizing where possible.",
+              "Restricted line height and overflow: if font size grows while a fixed pixel line height remains small, glyphs and controls can overlap or clip. Test single-line fields and compact components with actual enlarged text.",
+              "Viewport-only font sizing: a size such as 2vw can respond to viewport changes in ways that prevent the expected enlargement across zoom and breakpoints. If you use clamp(), combine it with sensible relative minimums and verify the outcome.",
+            ],
+          },
+          {
+            heading: "Does px fail accessibility while rem passes?",
+            body: [
+              "No. Modern full-page browser zoom can enlarge text sized in px, so the claim that px equals failure is not accurate. A rem-based interface can still clip content when its container has a fixed height or hidden overflow. Conformance depends on the result after resizing, not the name of the CSS unit.",
+              "Relative units are still useful. rem can respond to a user's default font setting, and em can help spacing and control dimensions grow with local text. Use the CSS unit converter when changing values, then verify the final behavior in this checker and in a real browser.",
+            ],
+          },
+          {
+            heading: "Why review images of text separately?",
+            body: [
+              "Text embedded in an image cannot be restyled like HTML text and may lose clarity when enlarged. Except where a particular visual presentation is essential, use real text and CSS. This checker blocks external images and does not recognize text inside them, so inspect the design and implementation separately for images of text.",
+            ],
+          },
+          {
+            heading: "How should you interpret detected candidates?",
+            body: [
+              "Page horizontal overflow means the document became wider than the test viewport. Possible clipping means a text container has more scroll content than its visible box while overflow is hidden or clipped. Horizontal scroll region identifies a component that scrolls separately and may be justified for a table or diagram.",
+              "Every candidate is marked as either already present in the original or introduced by the preset. Separating the two makes it easier to decide what the resize actually broke and what was already too tight.",
+              "No detected candidates does not confirm conformance. A person still needs to inspect overlap, available functionality, access to truncated text, and actual browser zoom. The preview narrows the search; it does not replace an accessibility evaluation.",
+            ],
+          },
+          {
+            heading: "A practical pre-release sequence",
+            body: [
+              "Prepare representative short labels and the longest realistic content. Use 200% text to review cards, buttons, fields, tabs, and tooltips, then use 320px reflow to find page-level horizontal scrolling and fixed UI obstruction. Apply text spacing and inspect paragraphs, controls, and badges for clipping or overlap.",
+              "Review fixed dimensions, overflow, and nowrap on every detected element, then retest the deployed interface with actual browser zoom and keyboard operation. Use the HTML accessibility checker when structure or DOM order appears incorrect, and measure rendered colors separately with the contrast checker.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Checking the sample card with 200% text",
+            input: "The summary-card loaded by Load sample (width 560px, height 230px, overflow hidden), preset 200% text, viewport 768px",
+            result:
+              "One candidate. CLIP-001 possible vertical clipping on section: 448px of content inside a 228px clientHeight",
+            note: "Only the text doubled, yet the content is nearly twice the height of the card. The save button and link at the bottom disappear, so the fixed height should become a min-height.",
+          },
+          {
+            title: "Checking the same card with 320px reflow",
+            input: "The same input, preset 320px reflow (original 1280px, test 320px)",
+            result:
+              "Two candidates. REFLOW-001 page horizontal overflow on the document (scrollWidth 560px, clientWidth 320px) and REFLOW-002 on section (right edge 560px)",
+            note: "A single fixed width of 560px is the cause. The paragraphs and buttons inside overflow too, but only the outermost element is listed so there is one place to fix.",
+          },
+          {
+            title: "Checking the same card with WCAG text spacing",
+            input: "The same input, preset text spacing, viewport 768px",
+            result:
+              "One candidate. CLIP-001 on section: 260px of content inside a 228px clientHeight. Paragraph line height goes from 28.8px to 36px, margin-bottom from 6px to 32px, and letter spacing from 0 to 1.92px",
+            note: "Font size never changed, yet wider spacing alone overflows the card. Resizing and spacing are separate conditions, which is why each has its own preset.",
+          },
+        ],
+        limitations: [
+          "This is not a copy of real browser zoom. The 200% text preset doubles computed font sizes only, while full-page zoom also scales spacing, images and media query behavior. Confirm the final result with the browser's own zoom.",
+          "JavaScript is not executed. React hydration, script-opened dialogs, runtime class changes and dynamic state are not reproduced, so the check covers static HTML and CSS.",
+          "External web fonts, images and stylesheets are never loaded. System fonts change where lines break compared with production, and images appear as neutral placeholders that keep only their dimensions.",
+          "Overlap is not detected automatically. Whether two pieces of text actually overlap, and whether that overlap hides functionality, has to be judged by looking at the preview.",
+          "Maps, data tables and diagrams are not automatically classified as reflow exceptions. Horizontal scroll regions are listed as candidates and a person decides whether the exception applies.",
+          "Input is limited to 200,000 characters of HTML or text, 100,000 characters of CSS, and 10,000 elements. Check a larger screen one component at a time.",
+          "Zero detected candidates does not mean the markup conforms to WCAG or to another accessibility standard. This tool reports no score and no pass or fail.",
+        ],
+        sources: [
+          {
+            label: "W3C · WCAG 2.2 Understanding Resize Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/resize-text.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Reflow",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/reflow.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Text Spacing",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html",
+          },
+          {
+            label: "W3C · WCAG 2.2 Understanding Images of Text",
+            url: "https://www.w3.org/WAI/WCAG22/Understanding/images-of-text.html",
+          },
+          {
+            label: "MDN · iframe sandbox",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe#sandbox",
+          },
+          {
+            label: "MDN · Content Security Policy",
+            url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "웹접근성에 최소 글자 크기 기준이 있나요?",
+          answer:
+            "WCAG 2.2는 모든 콘텐츠에 적용되는 하나의 최소 폰트 크기를 정하지 않습니다. 대신 사용자가 텍스트를 최대 200%까지 키워도 내용과 기능이 잘리거나 가려지지 않는지 검사합니다. 작은 기본 글자는 사용성을 해칠 수 있으므로 실제 독해성도 별도로 검토해야 합니다.",
+        },
+        {
+          question: "200% 텍스트 확대와 400% 확대는 무엇이 다른가요?",
+          answer:
+            "200% 텍스트 프리셋은 글자 크기를 두 배로 만들어 고정 컨테이너의 내성을 확인합니다. 400% 확대와 관련된 리플로 검사는 1280 CSS px viewport가 320 CSS px로 줄어든 조건을 사용해 페이지가 한 방향으로 재배치되는지 확인합니다.",
+        },
+        {
+          question: "WCAG 텍스트 간격 기준값은 무엇인가요?",
+          answer:
+            "줄 높이 1.5배, 문단 뒤 간격 2배, 글자 간격 0.12배, 단어 간격 0.16배입니다. 사이트가 이 값을 기본 디자인으로 사용해야 한다는 뜻이 아니라, 사용자가 해당 값으로 바꿔도 콘텐츠와 기능이 유지되어야 한다는 뜻입니다.",
+        },
+        {
+          question: "px 대신 rem을 사용하면 확대 문제를 해결할 수 있나요?",
+          answer:
+            "rem과 em은 사용자 기본 글자 크기와 컴포넌트 내부 비율을 반영하는 데 유용하지만 자동 해결책은 아닙니다. px도 브라우저 확대로 커질 수 있고, rem을 사용해도 고정 height나 숨김 overflow가 있으면 문구가 잘릴 수 있으므로 실제 결과를 검사해야 합니다.",
+        },
+        {
+          question: "React JSX나 실행 중인 웹페이지를 검사할 수 있나요?",
+          answer:
+            "1차 버전은 브라우저가 해석할 수 있는 정적 HTML과 CSS만 지원합니다. JSX, JavaScript 상태, 외부 font와 실제 운영 페이지는 재현하지 않으므로 렌더링된 HTML을 사용하고 마지막에는 실제 브라우저에서 다시 테스트하세요.",
+        },
+        {
+          question: "입력한 HTML과 CSS가 서버로 전송되나요?",
+          answer:
+            "아닙니다. 정제, preview 생성과 측정은 브라우저에서 이루어집니다. 입력 원문, 요소 경로와 화면 문구는 Kitfolio 서버에 저장하거나 분석 이벤트로 전송하지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does WCAG define a minimum font size?",
+          answer:
+            "WCAG 2.2 does not set one minimum font size for all content. It requires text to be resizable up to 200% without loss of content or functionality. Very small default text can still be a usability problem and should be reviewed separately.",
+        },
+        {
+          question: "What is the difference between 200% text and 400% zoom?",
+          answer:
+            "The 200% text preset doubles computed font sizes to stress fixed containers. The reflow condition associated with 400% zoom uses a 320 CSS pixel viewport, equivalent to zooming a 1280 CSS pixel starting viewport to 400%, and checks whether content reflows in one direction.",
+        },
+        {
+          question: "What are the WCAG text spacing values?",
+          answer:
+            "They are line height of at least 1.5 times font size, space after paragraphs of at least 2 times font size, letter spacing of at least 0.12 times font size, and word spacing of at least 0.16 times font size. Content must survive these overrides; they are not required default styles.",
+        },
+        {
+          question: "Will replacing px with rem fix text resizing issues?",
+          answer:
+            "Relative units can help text and related dimensions respond to user settings, but they do not guarantee success. Browser zoom can enlarge px text, while a rem-based component can still clip content because of fixed height or hidden overflow. Test the rendered outcome.",
+        },
+        {
+          question: "Can I test React JSX or a live website?",
+          answer:
+            "The first release accepts static HTML and CSS that a browser can render. It does not execute JSX, JavaScript state, external fonts, or a deployed site. Use rendered HTML for this preview and complete the review in the real browser afterward.",
+        },
+        {
+          question: "Is my HTML or CSS sent to a server?",
+          answer:
+            "No. Sanitization, preview rendering, and measurement run in your browser. The source, element paths, and visible copy are not uploaded to or stored by Kitfolio and are not included in analytics events.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "텍스트 확대·간격 검사기",
+        subtitle: "200% 확대·320px 리플로·WCAG 간격을 한 화면에서 비교",
+      },
+      en: {
+        title: "Text Scaling & Spacing Checker",
+        subtitle: "Compare 200% text, 320px reflow and WCAG spacing side by side",
+      },
+    },
+  },
   // ── Text ─────────────────────────────
   {
     slug: "character-counter",
