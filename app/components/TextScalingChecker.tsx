@@ -12,17 +12,23 @@ import { applyPreset, viewportsFor } from "../lib/textscale/presets";
 import { afterLayout, snapshotDocument } from "../lib/textscale/measure";
 import { DOCUMENT_NODE, detectCandidates, summarize } from "../lib/textscale/detect";
 import { MANUAL_CHECKS, RULE_COPY } from "../lib/textscale/messages";
-import { sampleCss, sampleHtml } from "../lib/textscale/sample";
+import { sampleCss, sampleHtml, sampleJsx, sampleTailwindCss } from "../lib/textscale/sample";
+import type { JsxNotes } from "../lib/textscale/jsx";
 import {
   DEFAULT_PRESET,
+  DEFAULT_SOURCE_FORMAT,
   DEFAULT_VIEWPORT,
   LIMITS,
+  LIST_REPEAT,
   PRESET_CRITERION,
+  PreviewError,
+  SOURCE_FORMATS,
   VIEWPORTS,
   type Candidate,
   type InputKind,
   type Preset,
   type PreviewErrorType,
+  type SourceFormat,
   type Viewport,
 } from "../lib/textscale/types";
 
@@ -32,11 +38,31 @@ import {
 const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
   ko: {
     "ts.tab.html": "HTML·텍스트",
+    "ts.tab.jsx": "JSX·TSX",
     "ts.tab.css": "CSS",
+    "ts.tab.tailwind": "CSS·Tailwind",
     "ts.input.html.label": "검사할 HTML 또는 텍스트",
     "ts.input.html.placeholder": "<section>...</section> 또는 일반 텍스트를 붙여넣으세요.",
+    "ts.input.jsx.label": "검사할 JSX 또는 TSX",
+    "ts.input.jsx.placeholder":
+      "export default function Card() { return <section className=\"...\">...</section> }",
     "ts.input.css.label": "적용할 CSS · 선택",
     "ts.input.css.placeholder": ".card { max-width: 40rem; }",
+    "ts.input.tailwind.label": "적용할 CSS · @theme 정의 · 선택",
+    "ts.input.tailwind.placeholder": "@theme { --color-brand: #2d5dc8; }",
+
+    "ts.format.legend": "소스 형식",
+    "ts.format.html": "HTML",
+    "ts.format.jsx": "JSX·TSX",
+    "ts.format.html.sub": "markup",
+    "ts.format.jsx.sub": "React",
+    "ts.format.html.desc":
+      "HTML 또는 일반 텍스트를 그대로 읽습니다. 스타일은 CSS 입력 영역에서 가져옵니다.",
+    "ts.format.jsx.desc":
+      "컴포넌트 코드를 실행하지 않고 구문만 읽어 마크업으로 바꿉니다. 값을 알 수 없는 표현식은 식 자체를 자리표시자 텍스트로 넣습니다.",
+    "ts.tailwind.label": "Tailwind 클래스로 스타일 만들기",
+    "ts.tailwind.desc":
+      "마크업에 쓰인 클래스만 골라 브라우저 안에서 Tailwind CSS를 만듭니다. 프로젝트의 @theme·@utility 정의는 CSS 입력 영역에 함께 붙여넣으세요.",
     "ts.action.apply": "미리보기 적용",
     "ts.action.sample": "예시 불러오기",
     "ts.action.reset": "초기화",
@@ -80,6 +106,10 @@ const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
     "ts.error.too-many-elements":
       "요소가 10,000개를 넘습니다. 컴포넌트 단위로 나눠 검사해 주세요.",
     "ts.error.parse-failed": "HTML을 해석하지 못했습니다. 마크업을 확인하고 다시 시도해 주세요.",
+    "ts.error.jsx-parse-failed":
+      "JSX 또는 TSX를 해석하지 못했습니다. 괄호와 태그가 맞는 조각인지 확인하고 다시 시도해 주세요.",
+    "ts.error.jsx-no-element":
+      "JSX 요소를 찾지 못했습니다. 컴포넌트가 화면을 그리는 부분까지 함께 붙여넣어 주세요.",
     "ts.error.render-failed": "미리보기를 만들지 못했습니다. 입력을 줄이거나 다시 시도해 주세요.",
     "ts.error.unsupported":
       "이 브라우저에서는 안전한 미리보기를 만들 수 없습니다. 최신 브라우저에서 다시 시도해 주세요.",
@@ -91,6 +121,19 @@ const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
     "ts.notice.textInput":
       "일반 텍스트로 인식해 빈 줄 기준으로 문단을 나눠 렌더링했습니다.",
     "ts.notice.resourceLimit": "외부 리소스 제한: 웹폰트·이미지 미적용",
+    "ts.notice.jsx.components":
+      "컴포넌트 {count}개를 이름으로 짐작한 요소로 대체했습니다: {list}. 실제 컴포넌트 내부 마크업과 다를 수 있습니다.",
+    "ts.notice.jsx.expressions":
+      "값을 알 수 없는 표현식 {count}개를 코드 그대로 자리표시자 텍스트로 넣었습니다. 실제 문구 길이로 다시 확인하세요.",
+    "ts.notice.jsx.lists": "map으로 그리는 목록 {count}개를 항목 {repeat}개씩 반복해 그렸습니다.",
+    "ts.notice.jsx.spreads":
+      "전개 prop({...props}) {count}개는 값이 호출하는 쪽에 있어 적용하지 않았습니다.",
+    "ts.notice.jsx.dropped": "마크업에 대응이 없는 prop은 제외했습니다: {list}",
+    "ts.notice.tailwind.version": "Tailwind CSS v{version} 기준으로 스타일을 만들었습니다.",
+    "ts.notice.tailwind.unknown":
+      "CSS가 만들어지지 않은 클래스 {count}개: {list}. 프로젝트에서 정의한 토큰이라면 @theme 블록을 CSS 입력 영역에 함께 붙여넣으세요.",
+    "ts.notice.tailwind.failed":
+      "Tailwind 스타일을 만들지 못해 CSS 입력을 그대로 적용했습니다. CSS 문법을 확인해 주세요.",
 
     "ts.summary.preset": "현재 프리셋",
     "ts.summary.viewport": "내부 viewport",
@@ -115,11 +158,31 @@ const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
   },
   en: {
     "ts.tab.html": "HTML or text",
+    "ts.tab.jsx": "JSX or TSX",
     "ts.tab.css": "CSS",
+    "ts.tab.tailwind": "CSS · Tailwind",
     "ts.input.html.label": "HTML or text to check",
     "ts.input.html.placeholder": "Paste <section>...</section> or plain text.",
+    "ts.input.jsx.label": "JSX or TSX to check",
+    "ts.input.jsx.placeholder":
+      "export default function Card() { return <section className=\"...\">...</section> }",
     "ts.input.css.label": "CSS to apply · optional",
     "ts.input.css.placeholder": ".card { max-width: 40rem; }",
+    "ts.input.tailwind.label": "CSS and @theme definitions · optional",
+    "ts.input.tailwind.placeholder": "@theme { --color-brand: #2d5dc8; }",
+
+    "ts.format.legend": "Source format",
+    "ts.format.html": "HTML",
+    "ts.format.jsx": "JSX or TSX",
+    "ts.format.html.sub": "markup",
+    "ts.format.jsx.sub": "React",
+    "ts.format.html.desc":
+      "Reads HTML or plain text as written. Styles come from the CSS field.",
+    "ts.format.jsx.desc":
+      "Reads component syntax without running it and turns it into markup. Expressions whose values are unknown become placeholder text made of the expression itself.",
+    "ts.tailwind.label": "Build styles from Tailwind classes",
+    "ts.tailwind.desc":
+      "Generates Tailwind CSS in your browser for the classes found in the markup. Paste your project @theme and @utility definitions into the CSS field to reuse custom tokens.",
     "ts.action.apply": "Build preview",
     "ts.action.sample": "Load sample",
     "ts.action.reset": "Reset",
@@ -164,6 +227,10 @@ const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
     "ts.error.too-many-elements":
       "The input has more than 10,000 elements. Check one component at a time.",
     "ts.error.parse-failed": "The HTML could not be parsed. Check the markup and try again.",
+    "ts.error.jsx-parse-failed":
+      "The JSX or TSX could not be parsed. Check that brackets and tags are balanced, then try again.",
+    "ts.error.jsx-no-element":
+      "No JSX element was found. Include the part of the component that renders the markup.",
     "ts.error.render-failed": "The preview could not be built. Reduce the input or try again.",
     "ts.error.unsupported":
       "This browser cannot build a sandboxed preview. Try again in a current browser.",
@@ -175,6 +242,19 @@ const CONTROLS: Record<"ko" | "en", Record<string, string>> = {
     "ts.notice.textInput":
       "Treated as plain text and rendered as paragraphs split on blank lines.",
     "ts.notice.resourceLimit": "External resources: web fonts and images not applied",
+    "ts.notice.jsx.components":
+      "Components replaced with elements guessed from their names: {count} ({list}). The real component markup may differ.",
+    "ts.notice.jsx.expressions":
+      "Expressions with unknown values: {count}. Each became placeholder text made of the expression source, so re-check with real copy lengths.",
+    "ts.notice.jsx.lists": "Lists rendered with map: {count}, each repeated as {repeat} items.",
+    "ts.notice.jsx.spreads":
+      "Spread props ({...props}) skipped because their values live in the calling component: {count}.",
+    "ts.notice.jsx.dropped": "Props with no markup equivalent were skipped: {list}",
+    "ts.notice.tailwind.version": "Styles were generated with Tailwind CSS v{version}.",
+    "ts.notice.tailwind.unknown":
+      "Classes that produced no CSS: {count} ({list}). If they come from your own tokens, paste the @theme block into the CSS field.",
+    "ts.notice.tailwind.failed":
+      "Tailwind styles could not be generated, so the CSS field was applied as plain CSS. Check the CSS syntax.",
 
     "ts.summary.preset": "Preset",
     "ts.summary.viewport": "Inner viewport",
@@ -210,15 +290,49 @@ const PRESETS: Preset[] = ["text-200", "reflow-320", "text-spacing"];
 const FRAME_HEIGHT = 520;
 /** 강조 outline 표시용 내부 속성 (측정이 끝난 뒤에만 붙인다) */
 const HIGHLIGHT_ATTR = "data-kf-highlight";
+/** 안내 문구에 나열하는 이름 개수 (전부 늘어놓으면 읽히지 않는다) */
+const NOTICE_LIST_MAX = 4;
+
+/** {key} 자리를 값으로 바꾼다 */
+function fill(template: string, values: Record<string, string | number>): string {
+  return Object.entries(values).reduce(
+    (out, [key, value]) => out.replaceAll(`{${key}}`, String(value)),
+    template,
+  );
+}
+
+/** 이름 목록을 앞의 몇 개만 남겨 한 줄로 만든다 */
+function listOf(values: string[]): string {
+  const head = values.slice(0, NOTICE_LIST_MAX).join(", ");
+  const rest = values.length - NOTICE_LIST_MAX;
+  return rest > 0 ? `${head} +${rest}` : head;
+}
+
+/** Tailwind 모드의 결과 요약 (안내 문구 생성용) */
+type TailwindNotes = {
+  unknown: string[];
+  unknownMore: number;
+  version: string;
+  /** 컴파일에 실패해 CSS 입력을 그대로 적용했다 */
+  failed: boolean;
+};
 
 /** 적용된 source snapshot: 프리셋·viewport 를 바꿔도 이 입력은 그대로 쓴다 */
 type Applied = {
   body: string;
+  /** 그대로 넣을 사용자 CSS. Tailwind 모드에서는 frameworkCss 안에 이미 들어 있다. */
   css: string;
+  /** Tailwind 가 만들어 준 stylesheet (없으면 빈 문자열) */
+  frameworkCss: string;
   kind: InputKind;
   preset: Preset;
   viewport: Viewport;
-  notices: { styleTag: boolean; external: boolean };
+  notices: {
+    styleTag: boolean;
+    external: boolean;
+    jsx: JsxNotes | null;
+    tailwind: TailwindNotes | null;
+  };
   /** 같은 입력을 다시 적용할 때도 effect 가 다시 돌도록 */
   seq: number;
 };
@@ -237,6 +351,8 @@ export default function TextScalingChecker() {
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [tab, setTab] = useState<"html" | "css">("html");
+  const [format, setFormat] = useState<SourceFormat>(DEFAULT_SOURCE_FORMAT);
+  const [tailwind, setTailwind] = useState(false);
   const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
   const [viewport, setViewport] = useState<Viewport>(DEFAULT_VIEWPORT);
   const [applied, setApplied] = useState<Applied | null>(null);
@@ -290,7 +406,12 @@ export default function TextScalingChecker() {
       });
     const loaded = Promise.all([waitLoad(originEl), waitLoad(testEl)]);
 
-    const common = { body: applied.body, css: applied.css, lang };
+    const common = {
+      body: applied.body,
+      css: applied.css,
+      frameworkCss: applied.frameworkCss,
+      lang,
+    };
     originEl.srcdoc = buildSrcdoc({ ...common, viewport: vp.origin });
     testEl.srcdoc = buildSrcdoc({ ...common, viewport: vp.test });
 
@@ -334,7 +455,10 @@ export default function TextScalingChecker() {
   }, [preset, viewport, applied]);
 
   const build = useCallback(
-    (sourceHtml: string, sourceCss: string) => {
+    (sourceHtml: string, sourceCss: string, mode?: { format: SourceFormat; tailwind: boolean }) => {
+      const useFormat = mode?.format ?? format;
+      const useTailwind = mode?.tailwind ?? tailwind;
+
       if (sourceHtml.trim() === "") {
         setErrorType("empty");
         return;
@@ -355,60 +479,138 @@ export default function TextScalingChecker() {
       setErrorType(null);
       setPhase("rendering");
 
-      // 파서(parse5)를 포함한 정제 모듈은 여기서 처음 내려받는다.
+      // 파서(parse5·@babel/parser)와 Tailwind 엔진은 여기서 처음 내려받는다.
       // 페이지의 SEO 본문만 읽고 가는 방문자가 파서 번들을 받지 않게 한다.
       void (async () => {
         try {
           const { detectInputKind, sanitizeHtml, textToParagraphs } = await import(
             "../lib/textscale/sanitize"
           );
-          const kind = detectInputKind(sourceHtml);
+
+          let kind: InputKind;
           let body: string;
           let styleTag = false;
           let external = false;
-          if (kind === "text") {
-            body = textToParagraphs(sourceHtml);
-          } else {
-            const clean = sanitizeHtml(sourceHtml);
+          let classNames: string[] = [];
+          let jsxNotes: JsxNotes | null = null;
+
+          if (useFormat === "jsx") {
+            const { jsxToHtml } = await import("../lib/textscale/jsx");
+            const converted = jsxToHtml(sourceHtml);
+            jsxNotes = converted.notes;
+            // JSX 에서 나온 마크업도 HTML 과 똑같은 정제를 거친다
+            const clean = sanitizeHtml(converted.html);
             if (clean.elementCount > LIMITS.maxElements) {
               setErrorType("too-many-elements");
               setPhase("idle");
               return;
             }
+            kind = "jsx";
             body = clean.html;
             styleTag = clean.hadStyleTag;
             external = clean.hadExternalResource || clean.hadImage;
+            classNames = clean.classNames;
+          } else {
+            kind = detectInputKind(sourceHtml);
+            if (kind === "text") {
+              body = textToParagraphs(sourceHtml);
+            } else {
+              const clean = sanitizeHtml(sourceHtml);
+              if (clean.elementCount > LIMITS.maxElements) {
+                setErrorType("too-many-elements");
+                setPhase("idle");
+                return;
+              }
+              body = clean.html;
+              styleTag = clean.hadStyleTag;
+              external = clean.hadExternalResource || clean.hadImage;
+              classNames = clean.classNames;
+            }
           }
+
+          let frameworkCss = "";
+          let tailwindNotes: TailwindNotes | null = null;
+          if (useTailwind) {
+            const { compileTailwind, TAILWIND_VERSION } = await import(
+              "../lib/textscale/tailwind"
+            );
+            try {
+              const built = await compileTailwind(classNames, sourceCss);
+              frameworkCss = built.css;
+              tailwindNotes = {
+                unknown: built.unknown,
+                unknownMore: built.unknownMore,
+                version: built.version,
+                failed: false,
+              };
+            } catch {
+              // Tailwind 가 읽지 못하는 CSS 라도 검사 자체는 계속한다
+              tailwindNotes = {
+                unknown: [],
+                unknownMore: 0,
+                version: TAILWIND_VERSION,
+                failed: true,
+              };
+            }
+          }
+
           setApplied({
             body,
-            css: sourceCss,
+            // Tailwind 가 사용자 CSS 까지 함께 컴파일했다면 중복으로 넣지 않는다
+            css: frameworkCss ? "" : sourceCss,
+            frameworkCss,
             kind,
             preset,
             viewport,
-            notices: { styleTag, external: external || cssRequestsExternal(sourceCss) },
+            notices: {
+              styleTag,
+              external: external || cssRequestsExternal(sourceCss),
+              jsx: jsxNotes,
+              tailwind: tailwindNotes,
+            },
             seq: ++seqRef.current,
           });
-        } catch {
-          setErrorType("parse-failed"); // 이전 정상 결과는 유지한다
+        } catch (error) {
+          // 이전 정상 결과는 유지한다
+          setErrorType(error instanceof PreviewError ? error.type : "parse-failed");
           setPhase("idle");
         }
       })();
     },
-    [preset, viewport],
+    [format, preset, tailwind, viewport],
   );
 
   function handleApply() {
     build(html, css);
   }
 
+  /** 소스 형식을 바꾸면 입력 의미가 달라지므로 결과를 다시 적용해야 한다.
+   *  JSX 를 고르면 Tailwind 를 함께 켠다: React 화면은 대부분 이 조합이다. */
+  function handleFormat(next: SourceFormat) {
+    if (next === format) return;
+    setFormat(next);
+    if (next === "jsx") setTailwind(true);
+    setErrorType(null);
+    if (applied) setDirty(true);
+  }
+
+  function handleTailwind(next: boolean) {
+    setTailwind(next);
+    setErrorType(null);
+    if (applied) setDirty(true);
+  }
+
   function handleSample() {
     if ((html.trim() || css.trim()) && !window.confirm(t("ts.confirm.sample"))) return;
-    const nextHtml = sampleHtml(lang);
-    const nextCss = sampleCss();
+    const isJsx = format === "jsx";
+    const nextHtml = isJsx ? sampleJsx(lang) : sampleHtml(lang);
+    const nextCss = isJsx ? sampleTailwindCss() : sampleCss();
+    const nextTailwind = isJsx ? true : tailwind;
     setHtml(nextHtml);
     setCss(nextCss);
+    setTailwind(nextTailwind);
     setTab("html");
-    build(nextHtml, nextCss);
+    build(nextHtml, nextCss, { format, tailwind: nextTailwind });
   }
 
   function handleReset() {
@@ -416,6 +618,8 @@ export default function TextScalingChecker() {
     setHtml("");
     setCss("");
     setTab("html");
+    setFormat(DEFAULT_SOURCE_FORMAT);
+    setTailwind(false);
     setPreset(DEFAULT_PRESET);
     setViewport(DEFAULT_VIEWPORT);
     setApplied(null);
@@ -450,10 +654,55 @@ export default function TextScalingChecker() {
     el.scrollIntoView({ block: "center", inline: "nearest" });
   }
 
+  /** 안내 문구는 적용된 snapshot 에서 매번 다시 만든다 (언어 전환을 따라가야 한다) */
   const notices: string[] = [];
   if (applied?.notices.styleTag) notices.push(t("ts.notice.styleTag"));
   if (applied?.notices.external) notices.push(t("ts.notice.external"));
   if (applied?.kind === "text") notices.push(t("ts.notice.textInput"));
+
+  const jsxNotes = applied?.notices.jsx;
+  if (jsxNotes) {
+    if (jsxNotes.components.length > 0) {
+      notices.push(
+        fill(t("ts.notice.jsx.components"), {
+          count: jsxNotes.components.length,
+          list: listOf(jsxNotes.components),
+        }),
+      );
+    }
+    if (jsxNotes.expressions > 0) {
+      notices.push(fill(t("ts.notice.jsx.expressions"), { count: jsxNotes.expressions }));
+    }
+    if (jsxNotes.lists > 0) {
+      notices.push(
+        fill(t("ts.notice.jsx.lists"), { count: jsxNotes.lists, repeat: LIST_REPEAT }),
+      );
+    }
+    if (jsxNotes.spreads > 0) {
+      notices.push(fill(t("ts.notice.jsx.spreads"), { count: jsxNotes.spreads }));
+    }
+    if (jsxNotes.dropped.length > 0) {
+      notices.push(fill(t("ts.notice.jsx.dropped"), { list: listOf(jsxNotes.dropped) }));
+    }
+  }
+
+  const tailwindNotes = applied?.notices.tailwind;
+  if (tailwindNotes) {
+    if (tailwindNotes.failed) {
+      notices.push(t("ts.notice.tailwind.failed"));
+    } else {
+      notices.push(fill(t("ts.notice.tailwind.version"), { version: tailwindNotes.version }));
+      if (tailwindNotes.unknown.length > 0) {
+        const shown = tailwindNotes.unknown.join(", ");
+        notices.push(
+          fill(t("ts.notice.tailwind.unknown"), {
+            count: tailwindNotes.unknown.length + tailwindNotes.unknownMore,
+            list: shown,
+          }),
+        );
+      }
+    }
+  }
 
   const status = (() => {
     if (phase === "rendering") return t("ts.state.rendering");
@@ -467,14 +716,26 @@ export default function TextScalingChecker() {
   const shown = result ?? null;
   const frameW = Math.round(viewports.test * fit);
 
+  /* 입력 영역의 이름은 선택한 소스 형식·Tailwind 사용 여부를 따라간다 */
+  const sourceTab = t(format === "jsx" ? "ts.tab.jsx" : "ts.tab.html");
+  const sourceLabel = t(format === "jsx" ? "ts.input.jsx.label" : "ts.input.html.label");
+  const sourcePlaceholder = t(
+    format === "jsx" ? "ts.input.jsx.placeholder" : "ts.input.html.placeholder",
+  );
+  const styleTab = t(tailwind ? "ts.tab.tailwind" : "ts.tab.css");
+  const styleLabel = t(tailwind ? "ts.input.tailwind.label" : "ts.input.css.label");
+  const stylePlaceholder = t(
+    tailwind ? "ts.input.tailwind.placeholder" : "ts.input.css.placeholder",
+  );
+
   return (
     <>
       <PageHead slug={SLUG} />
 
       <div className="ts-work">
-        {/* 입력: HTML·텍스트 / CSS 두 탭 */}
+        {/* 입력: 소스(HTML·텍스트 또는 JSX·TSX) / CSS 두 탭 */}
         <div className="ts-editor">
-          <div className="ts-tabs" role="group" aria-label={t("ts.input.html.label")}>
+          <div className="ts-tabs" role="group" aria-label={sourceLabel}>
             {(["html", "css"] as const).map((key) => (
               <button
                 key={key}
@@ -482,7 +743,7 @@ export default function TextScalingChecker() {
                 aria-pressed={tab === key}
                 onClick={() => setTab(key)}
               >
-                {t(`ts.tab.${key}`)}
+                {key === "html" ? sourceTab : styleTab}
               </button>
             ))}
             <span className="ts-tab-spacer" />
@@ -503,8 +764,8 @@ export default function TextScalingChecker() {
             className="ts-code"
             hidden={tab !== "html"}
             spellCheck={false}
-            aria-label={t("ts.input.html.label")}
-            placeholder={t("ts.input.html.placeholder")}
+            aria-label={sourceLabel}
+            placeholder={sourcePlaceholder}
             value={html}
             onChange={(e) => {
               setHtml(e.target.value);
@@ -516,8 +777,8 @@ export default function TextScalingChecker() {
             className="ts-code"
             hidden={tab !== "css"}
             spellCheck={false}
-            aria-label={t("ts.input.css.label")}
-            placeholder={t("ts.input.css.placeholder")}
+            aria-label={styleLabel}
+            placeholder={stylePlaceholder}
             value={css}
             onChange={(e) => {
               setCss(e.target.value);
@@ -536,15 +797,45 @@ export default function TextScalingChecker() {
               {t("ts.action.apply")}
             </button>
             <span className="ts-count">
-              HTML {html.length.toLocaleString()} / {LIMITS.maxHtmlChars.toLocaleString()}
+              {sourceTab} {html.length.toLocaleString()} /{" "}
+              {LIMITS.maxHtmlChars.toLocaleString()}
               {" · "}
               CSS {css.length.toLocaleString()} / {LIMITS.maxCssChars.toLocaleString()}
             </span>
           </div>
         </div>
 
-        {/* 프리셋·viewport 제어 */}
+        {/* 소스 형식·프리셋·viewport 제어 */}
         <div className="ts-controls">
+          <fieldset className="ts-control-group">
+            <legend>{t("ts.format.legend")}</legend>
+            <div className="ts-choices">
+              {SOURCE_FORMATS.map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  aria-pressed={format === key}
+                  onClick={() => handleFormat(key)}
+                >
+                  <b>{t(`ts.format.${key}`)}</b>
+                  <span>{t(`ts.format.${key}.sub`)}</span>
+                </button>
+              ))}
+            </div>
+            <label className="ts-switch">
+              <input
+                type="checkbox"
+                checked={tailwind}
+                onChange={(e) => handleTailwind(e.target.checked)}
+              />
+              <span>{t("ts.tailwind.label")}</span>
+            </label>
+            <p className="ts-hint">
+              {t(`ts.format.${format}.desc`)}
+              {tailwind ? ` ${t("ts.tailwind.desc")}` : ""}
+            </p>
+          </fieldset>
+
           <fieldset className="ts-control-group">
             <legend>{t("ts.preset.legend")}</legend>
             <div className="ts-choices">

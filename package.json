@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "test": "node --import tsx --test \"app/lib/**/__tests__/*.test.ts\"",
-    "validate:content": "node --import tsx scripts/validate-content.ts"
+    "validate:content": "node --import tsx scripts/validate-content.ts",
+    "gen:tailwind-css": "node --import tsx scripts/gen-tailwind-css.ts"
   },
   "dependencies": {
+    "@babel/parser": "^8.0.5",
     "@next/third-parties": "^15.5.19",
     "@types/culori": "^4.0.1",
     "@zxing/browser": "^0.2.1",
@@ -27,7 +29,8 @@
     "pdfjs-dist": "^6.1.200",
     "qrcode": "^1.5.4",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.4",
@@ -36,7 +39,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "playwright-core": "^1.61.1",
-    "tailwindcss": "^4.1.4",
     "tsx": "^4.19.2",
     "typescript": "^5"
   }

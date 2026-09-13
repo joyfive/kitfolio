@@ -31,7 +31,19 @@ export const PRESET_CRITERION: Record<Preset, { sc: string; level: "AA" }> = {
 };
 
 /** 입력 유형: 유효한 시작 태그 후보가 없으면 일반 텍스트로 처리한다 */
-export type InputKind = "html" | "text";
+export type InputKind = "html" | "text" | "jsx";
+
+/** 붙여넣는 소스의 형식. 파싱 경로를 고르는 사용자 선택값이다. */
+export type SourceFormat = "html" | "jsx";
+
+export const SOURCE_FORMATS: SourceFormat[] = ["html", "jsx"];
+export const DEFAULT_SOURCE_FORMAT: SourceFormat = "html";
+
+/** JSX 의 `items.map(...)` 을 몇 번 그릴 것인가.
+ *  목록이 한 줄일 때와 여러 줄일 때의 리플로가 다르므로 1개만 그리면
+ *  실제 화면과 어긋난다. 안내 문구도 같은 값을 써야 해서 여기 둔다
+ *  (변환 모듈은 파서를 끌어오므로 상수만 쓰는 쪽이 함께 받지 않게 한다). */
+export const LIST_REPEAT = 3;
 
 /** 감지 규칙 ID (기획서 7.3) */
 export type RuleId =
@@ -118,6 +130,8 @@ export type PreviewErrorType =
   | "css-too-long"
   | "too-many-elements"
   | "parse-failed"
+  | "jsx-parse-failed"
+  | "jsx-no-element"
   | "render-failed"
   | "unsupported";
 

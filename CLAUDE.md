@@ -403,6 +403,16 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > 2026-09-11 웹접근성 도구 4종(명도대비 검사기·색각이상 시뮬레이터·HTML 접근성 검사기·
 > 텍스트 확대·간격 검사기)을 추가해 현재 25종이다.
 
+> 2026-09-13: 텍스트 확대·간격 검사기에 **JSX·TSX 소스 형식**과 **Tailwind CSS 모드** 추가.
+> 도구 수는 그대로 25종(기존 페이지 확장). JSX 는 `@babel/parser` 로 **구문만 읽어**
+> 마크업으로 바꾸고(`app/lib/textscale/jsx.ts`, 실행하지 않는다), Tailwind 는
+> `tailwindcss` 의 `compile()` 을 **브라우저 안에서** 돌려 마크업에 실제로 쓰인 클래스만
+> CSS 로 만든다(`app/lib/textscale/tailwind.ts`). CDN 스크립트·빌드 서버를 부르지 않으므로
+> "입력한 코드는 페이지 밖으로 나가지 않는다"는 전제가 그대로 유지된다.
+> 두 모듈 모두 동적 import 로만 로드해 SEO 본문만 읽는 방문자는 파서·엔진 번들을 받지 않는다.
+> Tailwind 기본 stylesheet 는 `npm run gen:tailwind-css` 로 굽는다
+> (`app/lib/textscale/tailwind-css.ts` · tailwindcss 버전을 올리면 다시 실행).
+
 > 현재 `app/lib/content.ts` 레지스트리에 `ready: true`로 등록되어 KO(루트)·EN(`/en`)
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
 > 실제 구현 현황은 이 표가 우선한다.
@@ -418,7 +428,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 7 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
 | 8 | 명도대비 검사기 / Color Contrast Checker | `/color-contrast-checker` | `/en/color-contrast-checker` | 전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다. |
 | 9 | 색각이상 시뮬레이터 / Color Blindness Simulator | `/color-blindness-simulator` | `/en/color-blindness-simulator` | 시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다. |
-| 10 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
+| 10 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
 | 11 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
 | 12 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
 | 13 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
@@ -549,6 +559,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 ```
 npm run validate:content   # indexable 도구 콘텐츠 품질 게이트
 npm test                   # node --test + tsx (app/lib/**/__tests__/*.test.ts)
+npm run gen:tailwind-css   # 텍스트 확대 검사기의 Tailwind 기본 stylesheet 재생성
 ```
 - 계산 테스트는 **타 계산기와 총액을 하드코딩 비교하지 않는다.**
   각 항목의 공식 산식으로 검증하고, 요율 상수·기간 경계를 따로 검사한다.
