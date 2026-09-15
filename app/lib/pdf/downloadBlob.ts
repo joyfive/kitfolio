@@ -1,19 +1,10 @@
 /* ============================================================
-   Blob 다운로드 헬퍼. Object URL 을 만들고 클릭 후 즉시 정리합니다.
+   PDF 도구용 다운로드 헬퍼.
+   일반 Blob 다운로드는 도구 공통 모듈(lib/downloadBlob)에 있고,
+   여기에는 PDF 전용 변환·파일명 규칙만 둔다.
    ============================================================ */
 
-export function downloadBlob(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.rel = "noopener";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  // 브라우저가 다운로드를 시작할 시간을 준 뒤 메모리 해제
-  setTimeout(() => URL.revokeObjectURL(url), 4000);
-}
+export { downloadBlob } from "../downloadBlob";
 
 /** Uint8Array (pdf-lib 출력) → application/pdf Blob */
 export function pdfBytesToBlob(bytes: Uint8Array): Blob {

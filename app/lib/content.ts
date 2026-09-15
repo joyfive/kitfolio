@@ -7612,6 +7612,328 @@ export const TOOLS: Tool[] = [
       en: { title: "PDF Tools", subtitle: "Merge, split, rotate and delete PDF pages in one place" },
     },
   },
+  // ── Design ── 이미지 최적화 (포맷·품질만 조절, 픽셀 크기는 유지) ──
+  {
+    slug: "image-optimizer",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer"],
+    ico: "IMG",
+    ready: true,
+    indexable: true,
+    badge: "Canvas",
+    name: { ko: "이미지 최적화", en: "Image Optimizer" },
+    relatedTools: ["open-graph-preview", "css-gradient", "qr-code-generator"],
+    seo: {
+      ko: {
+        title: "이미지 최적화 | PNG·JPG·WebP 용량 줄이기",
+        description:
+          "PNG, JPG, WebP 이미지의 원본 크기는 그대로 유지하면서 포맷과 품질을 조절해 파일 용량을 줄입니다. 여러 장을 한 번에 처리하고 개별 또는 ZIP으로 받을 수 있으며, 이미지가 서버로 업로드되지 않고 브라우저에서 바로 처리되는 무료 이미지 최적화 도구입니다.",
+        keywords: [
+          "이미지 최적화",
+          "이미지 용량 줄이기",
+          "이미지 압축",
+          "WebP 변환",
+          "PNG WebP 변환",
+          "JPG WebP 변환",
+          "PNG JPG 변환",
+          "웹 이미지 최적화",
+          "사진 용량 줄이기",
+        ],
+      },
+      en: {
+        title: "Image Optimizer | Compress PNG, JPG & WebP",
+        description:
+          "Optimize PNG, JPG, and WebP images without changing their pixel dimensions. Adjust image format and quality to reduce file size, process several images at once, and download them individually or as a ZIP, with all processing performed locally in your browser and no image uploads.",
+        keywords: [
+          "image optimizer",
+          "image compressor",
+          "compress image",
+          "WebP converter",
+          "PNG to WebP",
+          "JPG to WebP",
+          "PNG to JPG",
+          "optimize images for web",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다.",
+        description:
+          "PNG, JPG, WebP 이미지의 원본 크기는 그대로 유지하면서 포맷과 품질을 조절해 파일 용량을 줄입니다. 여러 장에 같은 설정을 적용해 한 번에 처리하고, 원본과 결과 용량을 비교한 뒤 개별 또는 ZIP으로 받을 수 있습니다. 이미지는 서버로 업로드되지 않고 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "PNG·JPG·WebP 이미지 추가",
+          "출력 포맷과 품질 선택",
+          "용량 비교 후 개별 또는 ZIP 다운로드",
+        ],
+        aeo: {
+          what: "이미지 최적화 도구는 이미지의 가로·세로 픽셀 크기를 변경하지 않고 포맷 또는 압축 품질을 조절하여 파일 용량을 줄이는 브라우저 도구입니다.",
+          who: "웹사이트, 블로그, 앱 스토어, 포트폴리오 등에 사용할 이미지의 용량을 줄여야 하는 디자이너, 개발자, 콘텐츠 제작자에게 적합합니다.",
+          how: "PNG, JPG 또는 WebP 이미지를 추가하고 출력 포맷과 품질을 선택하면 브라우저에서 이미지를 다시 인코딩하여 결과 파일과 용량 차이를 보여줍니다.",
+          why: "이미지를 외부 서버에 업로드하거나 별도 프로그램을 설치하지 않고도 웹에 사용할 이미지의 파일 용량을 빠르게 줄일 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "이미지 최적화는 가장 작은 파일을 만드는 일이 아니다",
+            body: [
+              "이미지 최적화는 단순히 파일 용량을 가장 작게 만드는 작업이 아닙니다. 이미지가 사용되는 목적에 맞는 포맷과 품질을 선택하면서 필요한 화질을 유지하고, 전송해야 하는 데이터의 양을 줄이는 과정입니다.",
+              "이 도구는 이미지의 가로·세로 픽셀 크기를 변경하지 않습니다. 원본 이미지의 크기를 유지한 상태에서 출력 포맷과 압축 품질만 바꿔 더 작은 파일을 만듭니다. 픽셀 크기 자체를 줄이거나 특정 비율로 잘라야 한다면 별도의 리사이즈·크롭 도구가 필요합니다.",
+            ],
+          },
+          {
+            heading: "PNG, JPG, WebP 중 어떤 포맷을 선택해야 하나요?",
+            body: [
+              "이미지 포맷마다 적합한 용도가 다릅니다. 가장 작은 파일을 만드는 포맷을 일률적으로 선택하기보다 이미지의 특성과 사용 환경을 고려해야 합니다.",
+              "WebP는 웹사이트에 사용할 이미지라면 우선 고려할 수 있는 포맷입니다. 사진과 그래픽 이미지 모두에 쓸 수 있고 손실·무손실 압축과 투명도를 지원합니다. 기존 PNG나 JPG를 WebP로 바꾸면 비슷한 시각적 품질에서 파일 크기가 줄어드는 경우가 많습니다. 웹사이트 콘텐츠 이미지, 랜딩 페이지 이미지, 썸네일과 카드 이미지, 제품·배경 이미지가 여기에 해당합니다.",
+              "JPG는 사진처럼 색상과 명암 변화가 많은 이미지에 적합합니다. 압축 품질을 조절해 파일 크기를 크게 줄일 수 있지만 투명 배경을 지원하지 않습니다. 사진과 인물 이미지, 풍경 이미지, 투명 배경이 필요 없는 이미지에 맞습니다. PNG나 WebP의 투명 영역을 JPG로 바꾸면 투명도를 유지할 수 없고, 이 도구는 해당 영역을 흰색 배경으로 처리합니다.",
+              "PNG는 로고, 아이콘, UI 캡처처럼 선명한 경계나 투명 배경이 중요한 이미지에 적합합니다. 무손실 포맷이라 이미지 정보를 유지하는 데 유리하지만 사진처럼 복잡한 이미지에서는 파일 크기가 커질 수 있습니다. 파일 크기보다 정확한 표현이 중요하다면 PNG를 유지하는 편이 낫습니다.",
+            ],
+          },
+          {
+            heading: "이미지 품질은 몇으로 설정해야 하나요?",
+            body: [
+              "WebP와 JPG의 품질 값은 무조건 높다고 좋은 것도, 낮다고 좋은 것도 아닙니다. 품질을 낮추면 일반적으로 파일 크기가 줄어들지만 압축 흔적이나 디테일 손실이 눈에 띌 수 있습니다. 반대로 지나치게 높은 품질은 사용자가 차이를 거의 느끼지 못하면서 파일 크기만 키웁니다. 이 도구의 기본 품질 값은 80입니다.",
+              "출발점은 이렇게 잡습니다. 90~100은 이미지 품질을 우선해야 할 때, 75~89는 일반적인 웹 이미지, 60~74는 썸네일처럼 용량 절감이 더 중요할 때, 60 미만은 화질 저하를 직접 확인한 뒤에 쓰는 구간입니다.",
+              "이 값은 절대적인 화질 기준이 아닙니다. 이미지 내용과 인코딩 방식에 따라 같은 품질 값에서도 결과가 달라지므로, 최종 파일 크기와 실제 이미지를 함께 확인하는 것이 중요합니다.",
+            ],
+          },
+          {
+            heading: "이미지 용량은 얼마나 줄여야 하나요?",
+            body: [
+              "모든 웹 이미지에 적용할 수 있는 하나의 정답은 없습니다. 필요한 파일 크기는 이미지의 실제 픽셀 크기, 콘텐츠의 복잡도, 페이지에서 차지하는 중요도와 사용 환경에 따라 달라집니다.",
+              "특정 KB 이하로 만드는 것을 목표로 하기보다 다음 순서로 판단하는 편이 좋습니다. 먼저 필요한 이미지의 픽셀 크기가 이미 결정되어 있는지 확인하고, 사용 목적에 적합한 포맷을 선택합니다. WebP 또는 JPG라면 품질을 조절한 뒤 원본과 결과의 시각적 차이를 확인하고, 눈에 띄는 품질 저하가 없다면 더 작은 파일을 사용합니다.",
+              "이미지 최적화의 목적은 최소 용량이 아니라, 필요한 품질을 만족하는 최소한의 용량을 찾는 것입니다.",
+            ],
+          },
+          {
+            heading: "이미지 용량이 웹사이트에 왜 중요한가요?",
+            body: [
+              "웹페이지를 열 때 브라우저는 HTML과 CSS, JavaScript뿐 아니라 페이지에 표시되는 이미지도 함께 내려받습니다. 이미지 파일이 크거나 이미지가 많은 페이지에서는 사용자가 받아야 하는 데이터의 양이 늘어납니다. 특히 모바일 네트워크나 느린 연결 환경에서는 이미지가 표시되기까지 더 오래 걸립니다.",
+              "웹 이미지 최적화는 페이지가 전송하는 데이터 감소, 이미지 다운로드 시간 감소, 모바일 데이터 사용량 감소, 이미지가 많은 페이지의 로딩 부담 감소와 연결됩니다.",
+              "다만 이미지 파일을 최적화하는 것만으로 모든 웹 성능 문제가 해결되지는 않습니다. 실제 성능은 이미지가 표시되는 방식, 로딩 전략, 캐시, CDN 등 여러 요소의 영향을 함께 받습니다.",
+            ],
+          },
+          {
+            heading: "이미지 크기와 이미지 용량은 무엇이 다른가요?",
+            body: [
+              "이미지 작업에서 '크기'는 서로 다른 두 의미로 쓰입니다. 이미지 크기(dimensions)는 1200 × 630 px처럼 이미지를 구성하는 가로·세로 픽셀 수이고, 파일 용량(file size)은 842 KB처럼 파일이 저장 공간이나 네트워크에서 차지하는 데이터의 양입니다.",
+              "이 도구가 바꾸는 대상은 파일 용량입니다. 1200 × 630 PNG 1.84 MB를 넣으면 1200 × 630 WebP 214 KB가 나오는 식으로, 픽셀 크기는 그대로 두고 용량만 줄입니다. 가로·세로 픽셀을 바꾸거나 특정 비율로 잘라야 한다면 별도의 리사이즈·크롭 도구를 사용해야 합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "큰 PNG 스크린샷을 웹용 WebP로",
+            input: "1920 × 1080 PNG 1.84 MB · 출력 WebP · 품질 80",
+            result: "1920 × 1080 WebP 214 KB · 절감 1.63 MB (88.4%)",
+            note: "사진이나 그라디언트가 많은 PNG는 WebP로 바꿀 때 절감폭이 가장 큽니다. 픽셀 크기는 그대로입니다.",
+          },
+          {
+            title: "투명 배경 로고를 JPG로 저장",
+            input: "투명 배경 PNG · 출력 JPG · 품질 85",
+            result: "투명 영역이 흰색으로 채워진 JPG",
+            note: "흰색이 아닌 배경 위에 얹을 로고라면 JPG 대신 WebP나 PNG를 선택해야 경계가 드러나지 않습니다.",
+          },
+          {
+            title: "이미 압축된 작은 JPG를 다시 저장",
+            input: "82 KB JPG · 출력 JPG · 품질 95",
+            result: "104 KB JPG · 원본보다 22 KB 큼",
+            note: "이미 압축된 이미지를 높은 품질로 다시 인코딩하면 커질 수 있습니다. 결과가 커지면 원본을 그대로 쓰거나 품질을 낮춰 다시 시도하세요.",
+          },
+          {
+            title: "블로그 이미지 12장을 한 번에",
+            input: "PNG·JPG 섞인 12장 · 출력 WebP · 품질 75",
+            result: "12개 결과를 kitfolio-optimized-images.zip 한 파일로 다운로드",
+            note: "모든 파일에 같은 설정이 적용됩니다. 특정 이미지만 다른 품질이 필요하면 그 파일만 따로 처리하세요.",
+          },
+        ],
+        limitations: [
+          "가로·세로 픽셀 크기와 비율은 바꾸지 않습니다. 이미지를 더 작은 픽셀 크기로 줄이거나 특정 비율로 자르려면 별도의 리사이즈·크롭 도구가 필요합니다.",
+          "최적화한다고 항상 용량이 줄지는 않습니다. 이미 잘 압축된 이미지나 이미지 특성과 맞지 않는 포맷을 고르면 결과가 원본보다 커질 수 있고, 이 경우 도구는 절감률 대신 '원본보다 N 큼'으로 표시합니다.",
+          "PNG 출력은 브라우저의 무손실 인코더를 그대로 씁니다. 전용 PNG 최적화 프로그램만큼 줄어들지 않으며, 원본보다 커지는 경우도 있습니다.",
+          "재인코딩 과정에서 EXIF, 촬영 정보, 색 프로파일 같은 메타데이터는 결과 파일에 남지 않습니다. EXIF 회전 정보는 픽셀에 미리 적용해 보이는 방향을 유지합니다.",
+          "처리는 기기 메모리 안에서 이루어집니다. 파일당 50MB, 한 변 16383px, 전체 100메가픽셀까지를 상한으로 두지만, 기기 사양에 따라 그 이하에서도 실패할 수 있습니다. 한 변 상한은 WebP가 표현할 수 있는 최대 크기이며, 이보다 큰 이미지는 결과가 조용히 잘리지 않도록 아예 받지 않습니다.",
+          "GIF, SVG, AVIF, HEIC 등 PNG·JPG·WebP가 아닌 형식은 입력·출력 모두 지원하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Reduce PNG, JPG and WebP file size by changing format and quality, never the pixel dimensions.",
+        description:
+          "Optimize PNG, JPG, and WebP images without changing their pixel dimensions. Adjust the output format and quality to reduce file size, apply the same settings to several images at once, compare original and optimized sizes, and download results individually or as a ZIP. All processing happens locally in your browser and no image is ever uploaded.",
+        howItWorks: [
+          "Add PNG, JPG or WebP images",
+          "Pick an output format and quality",
+          "Compare sizes, then download one file or a ZIP",
+        ],
+        aeo: {
+          what: "Image Optimizer is a browser-based tool that reduces image file size by changing the format or compression quality without changing the image's pixel dimensions.",
+          who: "It is designed for designers, developers, and content creators who need smaller image files for websites, blogs, app stores, portfolios, and other digital products.",
+          how: "Add PNG, JPG, or WebP images, choose an output format and quality, and the tool re-encodes the images locally in your browser while showing the resulting file size.",
+          why: "It lets you reduce image file sizes without uploading images to an external server or installing separate image-editing software.",
+        },
+        guide: [
+          {
+            heading: "Optimization is not about making the smallest possible file",
+            body: [
+              "Image optimization is not simply the process of making a file as small as possible. It means choosing a format and quality level suited to the image's purpose while preserving acceptable visual quality and reducing the amount of data that must be transferred.",
+              "This tool does not change an image's width or height in pixels. It creates a new file by changing the output format and, where applicable, the compression quality, while preserving the original dimensions. Changing the pixel dimensions or cropping to a ratio needs a separate resizing tool.",
+            ],
+          },
+          {
+            heading: "Which format should I choose: PNG, JPG, or WebP?",
+            body: [
+              "Each image format is suited to different content. Instead of choosing one format solely because it produces the smallest file, consider the image itself and where it will be used.",
+              "WebP is a strong first option for images used on websites. It supports both lossy and lossless compression as well as transparency, making it useful for photographs and graphics alike. Converting a PNG or JPG to WebP can often reduce file size while keeping similar visual quality. It suits website content images, landing-page images, thumbnails and cards, and product or background images.",
+              "JPG is well suited to photographs and images with many color and tonal variations. Its adjustable compression can substantially reduce file size, but it does not support transparency. It suits photographs and portraits, landscape images, and anything that does not need a transparent background. When a transparent PNG or WebP is converted to JPG, this tool fills the transparent areas with white.",
+              "PNG is useful when crisp edges, exact pixel reproduction, or transparency matters, as with logos, icons, and interface captures. Its lossless compression preserves image data but can produce large files for complex photographic content. Keeping PNG may be appropriate when faithful reproduction matters more than the smallest file.",
+            ],
+          },
+          {
+            heading: "What image quality should I use?",
+            body: [
+              "A higher WebP or JPG quality value is not always better, and a lower value is not always appropriate. Lower values generally reduce file size but may introduce visible compression artifacts or loss of detail. Very high values can increase file size without producing a difference most viewers can notice. The default quality here is 80.",
+              "As starting points: 90-100 when preserving image quality is the priority, 75-89 for general web images, 60-74 for thumbnails or cases where a smaller file matters more, and below 60 only after checking the visible quality loss yourself.",
+              "These ranges are starting points, not absolute visual standards. Results vary with image content and encoding, so compare both the resulting file size and the actual image.",
+            ],
+          },
+          {
+            heading: "How much should I reduce an image's file size?",
+            body: [
+              "There is no single target that applies to every web image. An appropriate file size depends on the pixel dimensions, visual complexity, importance of the image on the page, and the environment in which it will be viewed.",
+              "Instead of aiming for an arbitrary number of kilobytes, confirm that the required pixel dimensions are already correct, choose a format suited to the image and its use, adjust quality when using WebP or JPG, compare the original and optimized images visually, and use the smaller file when there is no unacceptable loss of quality.",
+              "The goal is not the lowest possible file size. It is the smallest file that still meets the required visual quality.",
+            ],
+          },
+          {
+            heading: "Why does image file size matter for websites?",
+            body: [
+              "When a web page loads, the browser downloads its images along with HTML, CSS, and JavaScript. Large files and image-heavy pages increase the amount of data a visitor must receive. This can make images take longer to appear, especially on mobile or slower connections.",
+              "Optimizing web images can help reduce the amount of data transferred by a page, image download time, mobile data usage, and the loading burden on image-heavy pages.",
+              "Image optimization alone does not solve every performance issue. Delivery method, loading strategy, caching, and CDN configuration also affect real-world performance.",
+            ],
+          },
+          {
+            heading: "What is the difference between image dimensions and file size?",
+            body: [
+              "The word 'size' can refer to two different properties of an image. Image dimensions are the number of horizontal and vertical pixels, such as 1200 × 630 px. File size is the amount of storage or network data used by the file, such as 842 KB.",
+              "This tool changes file size, not dimensions: a 1200 × 630 PNG at 1.84 MB comes back as a 1200 × 630 WebP at 214 KB. Use a separate image resizing or cropping tool when you need to change pixel dimensions or crop to a specific aspect ratio.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A large PNG screenshot converted to WebP for the web",
+            input: "1920 × 1080 PNG at 1.84 MB, output WebP, quality 80",
+            result: "1920 × 1080 WebP at 214 KB, saving 1.63 MB (88.4%)",
+            note: "PNGs full of photographic detail or gradients gain the most from WebP. The pixel dimensions stay identical.",
+          },
+          {
+            title: "Saving a transparent logo as JPG",
+            input: "Transparent PNG, output JPG, quality 85",
+            result: "A JPG whose transparent areas are filled with white",
+            note: "If the logo sits on anything other than a white background, choose WebP or PNG so the fill does not show as a visible box.",
+          },
+          {
+            title: "Re-saving an already compressed JPG",
+            input: "82 KB JPG, output JPG, quality 95",
+            result: "104 KB JPG, 22 KB larger than the original",
+            note: "Re-encoding a compressed image at a high quality can grow it. When the result is larger, keep the original or try a lower quality.",
+          },
+          {
+            title: "Twelve blog images in one pass",
+            input: "12 mixed PNG and JPG files, output WebP, quality 75",
+            result: "All 12 results downloaded together as kitfolio-optimized-images.zip",
+            note: "One setting applies to every file. Process an image separately when it needs a different quality.",
+          },
+        ],
+        limitations: [
+          "Width, height, and aspect ratio are never changed. Reducing the pixel dimensions or cropping to a ratio requires a separate resize and crop tool.",
+          "Optimizing does not always produce a smaller file. An already well-compressed image, or a format that does not match the content, can come out larger, in which case the tool reports how much larger instead of a savings percentage.",
+          "PNG output uses the browser's own lossless encoder. It will not match a dedicated PNG optimizer and can be larger than the original file.",
+          "Re-encoding drops metadata such as EXIF, capture information, and color profiles. EXIF rotation is baked into the pixels first so the image keeps the orientation you see.",
+          "Processing happens in device memory. Limits are 50MB per file, 16383px per side, and 100 megapixels in total, but very large images can still fail below those limits on lower-memory devices. The per-side limit is the largest size WebP can represent, and anything above it is rejected rather than silently cropped.",
+          "Formats other than PNG, JPG, and WebP, such as GIF, SVG, AVIF, and HEIC, are supported neither as input nor as output.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "이미지 크기도 줄어드나요?",
+          answer:
+            "아니요. 이미지의 가로·세로 픽셀 크기는 원본 그대로 유지됩니다. 이 도구는 포맷과 압축 품질을 변경해 파일 용량을 줄입니다.",
+        },
+        {
+          question: "어떤 이미지 포맷을 지원하나요?",
+          answer:
+            "PNG, JPG/JPEG, WebP 이미지를 추가하고 WebP, JPG 또는 PNG 형식으로 저장할 수 있습니다.",
+        },
+        {
+          question: "투명 이미지를 JPG로 바꾸면 어떻게 되나요?",
+          answer:
+            "JPG는 투명 배경을 지원하지 않습니다. PNG 또는 WebP의 투명 영역은 흰색 배경으로 저장됩니다.",
+        },
+        {
+          question: "최적화하면 항상 용량이 줄어드나요?",
+          answer:
+            "아니요. 이미지 내용, 원본 포맷, 기존 압축 상태와 선택한 품질에 따라 결과가 원본보다 커질 수도 있습니다. 처리 후 원본과 결과 용량을 직접 비교할 수 있습니다.",
+        },
+        {
+          question: "여러 이미지를 한 번에 처리할 수 있나요?",
+          answer:
+            "네. 여러 이미지를 추가해 같은 설정으로 처리할 수 있으며, 완료된 결과는 개별 다운로드하거나 ZIP으로 한 번에 받을 수 있습니다.",
+        },
+        {
+          question: "이미지가 서버로 업로드되나요?",
+          answer:
+            "아니요. 이미지 처리는 사용자의 브라우저에서 이루어지며 Kitfolio 서버나 외부 이미지 처리 서비스로 전송되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does Image Optimizer change image dimensions?",
+          answer:
+            "No. The original width and height in pixels are preserved. The tool changes the format or compression quality to reduce file size.",
+        },
+        {
+          question: "Which image formats does Image Optimizer support?",
+          answer:
+            "You can add PNG, JPG/JPEG, and WebP images and save them as WebP, JPG, or PNG files.",
+        },
+        {
+          question: "What happens to transparency when I convert an image to JPG?",
+          answer:
+            "JPG does not support transparency. Transparent areas in PNG or WebP images are saved with a white background.",
+        },
+        {
+          question: "Does image optimization always make a file smaller?",
+          answer:
+            "No. The result can be larger depending on the image content, original format, existing compression, and selected quality. You can compare the original and resulting file sizes after processing.",
+        },
+        {
+          question: "Can I optimize multiple images at once?",
+          answer:
+            "Yes. You can add multiple images, apply the same settings to all of them, and download completed files individually or together in a ZIP file.",
+        },
+        {
+          question: "Are my images uploaded to a server?",
+          answer:
+            "No. Image processing takes place in your browser, and your files are not sent to Kitfolio servers or external image-processing services.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "이미지 최적화",
+        subtitle: "원본 크기는 그대로, 파일 용량만 줄이기",
+      },
+      en: {
+        title: "Image Optimizer",
+        subtitle: "Smaller files, same pixel dimensions",
+      },
+    },
+  },
 ];
 
 /* ---------------- helpers ---------------- */

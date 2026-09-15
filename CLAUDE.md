@@ -79,7 +79,7 @@ PM · Designer · Developer · Job Seeker · Office Worker · Small Business Own
   기능 삭제·redirect·robots.txt 차단은 하지 않는다.
 - **동일 컴포넌트·동일 구조·수식만 다른 파생 페이지는 계열별 대표 1개만 색인한다.**
   (CSS 단위 → `rem-to-px` / 광고 지표 → `roas-calculator` / PDF → `pdf-merge`)
-- 현재 25종 ready 전부 **indexable** (URL 통합으로 파생 페이지가 사라졌고, 남은 도구는
+- 현재 26종 ready 전부 **indexable** (URL 통합으로 파생 페이지가 사라졌고, 남은 도구는
   모두 품질 게이트를 통과한 고유 콘텐츠를 갖췄다). 새 도구는 게이트를 통과할 때까지
   `indexable: false` 로 추가한다.
 
@@ -389,7 +389,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ---
 
-## 구현된 기능 목록 (2026-09-11 기준, 도구 25종)
+## 구현된 기능 목록 (2026-09-15 기준, 도구 26종)
 
 > 2026-07-24: 동일 수식 계산기 통합 · ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
 > **성장률 계산기(`/growth-rate-calculator`)**로, ② 성장 예측(성장 예측 ≡ 복리 성장 동일 수식)을
@@ -401,7 +401,8 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > `/ad-metrics-calculator`, PDF 4종 → `/pdf-tools` 로 각각 한 페이지(`?mode=`)에 병합.
 > 구 URL은 next.config 308 영구 리다이렉트. 이 통합으로 도구 수가 37종에서 21종이 되었고,
 > 2026-09-11 웹접근성 도구 4종(명도대비 검사기·색각이상 시뮬레이터·HTML 접근성 검사기·
-> 텍스트 확대·간격 검사기)을 추가해 현재 25종이다.
+> 텍스트 확대·간격 검사기)을 추가해 25종이 되었다.
+> 2026-09-15 이미지 최적화(`/image-optimizer`)를 추가해 현재 26종이다.
 
 > 현재 `app/lib/content.ts` 레지스트리에 `ready: true`로 등록되어 KO(루트)·EN(`/en`)
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
@@ -434,6 +435,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | 23 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
 | 24 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
 | 25 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
+| 26 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
 
 ---
 
@@ -511,6 +513,13 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   **단, AdSense 사이트 승인은 아직 안 받음 → 실제 광고 미노출 상태.**
   (2026-08 "가치가 별로 없는 콘텐츠" 사유로 반려 → 색인 정책·콘텐츠 품질 게이트로 대응)
 - **GA4**: `G-BW26VT6W47`. `@next/third-parties` `<GoogleAnalytics>` 로 연동 (GTM 미사용).
+- **커스텀 이벤트**: `app/lib/analytics.ts` 의 `trackEvent()` 가 단일 출처 (2026-09-15 도입).
+  이름은 전 도구 공통 접두사 `tool_` + 동사이고, 도구 구분은 이벤트 이름이 아니라 `slug`
+  파라미터로 한다: `tool_view` · `tool_input` · `tool_run` · `tool_result` · `tool_error` ·
+  `tool_download`. 도구가 늘어도 이벤트 이름은 늘지 않는다.
+  **파일명·입력 내용·Object URL 등 사용자 데이터를 식별할 수 있는 값은 어떤 파라미터로도
+  보내지 않는다.** 용량 같은 수치는 버킷(구간)으로 변환해 보낸다.
+  현재 계측된 도구: 이미지 최적화. 다른 도구는 아직 페이지뷰만 수집한다.
 - **쿠팡 파트너스**: 전역 배너 렌더 **제거됨** (2026-08-18). AdSense 재심사 중에는
   콘텐츠 가치 평가와 무관한 제휴 요소를 전 페이지에 노출하지 않는다.
   `app/components/CoupangBanner.tsx` 는 승인 이후 선택적 재사용을 위해 파일만 보존.

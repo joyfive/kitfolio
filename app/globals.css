@@ -4320,3 +4320,184 @@ textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
 @media (prefers-reduced-motion: reduce) {
   .ts-tabs > button, .ts-choices button { transition: none; }
 }
+
+/* ============================================================
+   이미지 최적화 (Image Optimizer): Canvas 테마
+   좌 = 업로드·출력 설정(화이트) · 우 = 파일 목록·결과(그레이)
+   ============================================================ */
+
+.io-work {
+  display: grid; grid-template-columns: 1fr; gap: 0;
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-card);
+}
+@media (min-width: 960px) {
+  .io-work { grid-template-columns: 380px 1fr; align-items: start; }
+}
+
+.io-panel { background: #fff; }
+@media (min-width: 960px) {
+  .io-panel { border-right: 1px solid var(--color-blue-gray-200); position: sticky; top: 16px; }
+}
+.io-panel-inner { padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+
+/* ---------- 업로드 ---------- */
+.io-drop {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  min-height: 180px; padding: 24px 18px; text-align: center; cursor: pointer;
+  background: var(--color-blue-gray-50);
+  border: 1.5px dashed var(--color-blue-gray-300); border-radius: var(--radius-lg);
+  transition: border-color .12s ease, background .12s ease;
+}
+.io-drop:hover { border-color: var(--color-blue-primary-400); background: #fff; }
+.io-drop:focus-visible { outline: 2px solid var(--color-blue-primary-400); outline-offset: 2px; }
+.io-drop.is-over { border-color: var(--color-blue-primary-500); background: var(--color-blue-primary-50); }
+.io-drop.is-disabled { opacity: .55; pointer-events: none; }
+.io-drop svg { width: 34px; height: 34px; color: var(--color-blue-gray-400); }
+.io-drop-title { margin: 4px 0 0; font-size: 14px; font-weight: 500; color: var(--color-blue-gray-800); }
+.io-drop-formats {
+  font-family: var(--font-inter); font-size: 11.5px; font-weight: 600;
+  letter-spacing: .02em; color: var(--color-blue-gray-500);
+}
+.io-drop-hint { font-size: 12px; color: var(--color-blue-primary-700); text-decoration: underline; }
+
+.io-limits { margin: 0; font-size: 11.5px; line-height: 1.55; color: var(--color-blue-gray-500); }
+
+/* ---------- 출력 설정 ---------- */
+.io-settings { display: flex; flex-direction: column; gap: 14px; padding-top: 4px; }
+.io-seg { width: 100%; }
+.io-seg button { flex: 1 1 0; justify-content: center; }
+.io-seg button:focus-visible { outline: 2px solid var(--color-blue-primary-400); outline-offset: 1px; }
+
+.io-quality { display: flex; flex-direction: column; gap: 8px; }
+.io-quality-row { display: flex; align-items: center; gap: 12px; }
+.io-quality-row input[type="range"] { flex: 1; accent-color: var(--color-blue-primary-700); }
+.io-quality-value {
+  min-width: 34px; text-align: right;
+  font-family: var(--font-inter); font-size: 14px; font-weight: 500;
+  color: var(--color-blue-gray-900);
+}
+
+.io-note {
+  margin: 0; font-size: 12px; line-height: 1.55; color: var(--color-blue-gray-600);
+}
+.io-note-stale { color: var(--color-blue-primary-800); }
+
+.io-keep {
+  display: flex; align-items: center; gap: 7px; margin: 0;
+  font-size: 12.5px; font-weight: 500; color: var(--color-blue-primary-700);
+}
+.io-keep svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+.io-run { width: 100%; }
+.io-run:disabled { opacity: .5; cursor: not-allowed; }
+
+.io-privacy { margin: 0; font-size: 11.5px; line-height: 1.55; color: var(--color-blue-gray-500); }
+
+.io-alert {
+  margin: 0; font-size: 12.5px; line-height: 1.55; color: #c0504e;
+}
+
+/* ---------- 결과 영역 ---------- */
+.io-results {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 22px; background: var(--color-blue-gray-50);
+}
+.io-results-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+.io-live { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--color-blue-gray-600); min-height: 1em; }
+.io-empty {
+  margin: 0; padding: 32px 18px; text-align: center;
+  font-size: 13px; line-height: 1.65; color: var(--color-blue-gray-500);
+  background: #fff; border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-lg);
+}
+
+.io-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.io-card {
+  display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: start;
+  padding: 12px 14px; background: #fff;
+  border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-lg);
+}
+.io-card.is-error { border-color: #e6bdbc; }
+
+.io-thumb {
+  width: 56px; height: 56px; border-radius: var(--radius-sm); overflow: hidden;
+  background: var(--color-blue-gray-100); display: grid; place-items: center;
+}
+.io-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.io-card-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.io-names { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.io-name {
+  font-size: 13px; font-weight: 500; color: var(--color-blue-gray-900);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+.io-name-out { color: var(--color-blue-primary-700); }
+.io-arrow { color: var(--color-blue-gray-400); font-size: 12px; }
+
+.io-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.io-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-inter); font-size: 11.5px; font-weight: 600;
+  color: var(--color-blue-gray-500);
+}
+.io-status-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  background: var(--color-blue-gray-300);
+}
+.io-status-processing { color: var(--color-blue-primary-700); }
+.io-status-processing .io-status-dot { background: var(--color-blue-primary-500); animation: io-pulse 1s ease-in-out infinite; }
+.io-status-completed { color: var(--color-blue-primary-700); }
+.io-status-completed .io-status-dot { background: var(--color-blue-primary-600); }
+.io-status-error { color: #c0504e; }
+.io-status-error .io-status-dot { background: #d05c58; }
+.io-status-stale { color: #b3791f; }
+.io-status-stale .io-status-dot { background: #d9a23a; }
+
+@keyframes io-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+
+.io-dims { font-family: var(--font-inter); font-size: 11.5px; color: var(--color-blue-gray-500); }
+
+.io-sizes { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 2px; }
+.io-size {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-family: var(--font-inter); font-size: 13px; font-weight: 500; color: var(--color-blue-gray-900);
+}
+.io-size-label {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  color: var(--color-blue-gray-400);
+}
+.io-delta {
+  font-family: var(--font-inter); font-size: 12.5px; font-weight: 600;
+  color: var(--color-blue-primary-700);
+}
+.io-delta.is-larger { color: #b3791f; }
+.io-delta.is-same { color: var(--color-blue-gray-500); }
+
+.io-card-actions { display: flex; align-items: center; gap: 6px; }
+.io-icon-btn {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: var(--radius-sm);
+  color: var(--color-blue-gray-500); background: transparent; transition: background .12s ease, color .12s ease;
+}
+.io-icon-btn:hover { background: var(--color-blue-gray-100); color: var(--color-blue-gray-800); }
+.io-icon-btn:disabled { opacity: .4; cursor: not-allowed; }
+.io-icon-btn svg { width: 14px; height: 14px; }
+
+.io-bulk { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.io-bulk .btn { width: 100%; }
+@media (min-width: 640px) { .io-bulk .btn { width: auto; align-self: flex-start; } }
+
+.io-device-hint {
+  margin: 6px 0 0; font-size: 11.5px; line-height: 1.55; color: var(--color-blue-gray-500);
+}
+
+/* 모바일: 카드 안의 액션을 아래로 흘려보낸다 */
+@media (max-width: 520px) {
+  .io-card { grid-template-columns: 48px 1fr; }
+  .io-thumb { width: 48px; height: 48px; }
+  .io-card-actions { grid-column: 1 / -1; justify-content: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .io-status-processing .io-status-dot { animation: none; }
+  .io-drop, .io-icon-btn { transition: none; }
+}
