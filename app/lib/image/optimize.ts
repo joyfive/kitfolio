@@ -16,6 +16,7 @@ import {
 } from "./imageFormats";
 import { ImageError } from "./imageErrors";
 import { withinPixelLimits } from "./imageLimits";
+import { canvasContext, canvasToBlob, createCanvas } from "./canvas";
 
 /** 디코딩된 원본 이미지 */
 export type DecodedImage = {
@@ -56,33 +57,6 @@ export async function decodeImage(file: Blob): Promise<DecodedImage> {
   return { bitmap, width, height };
 }
 
-/** 캔버스 생성: OffscreenCanvas 가 있으면 우선 사용 (메인 스레드 DOM 부담 감소) */
-function createCanvas(width: number, height: number): OffscreenCanvas | HTMLCanvasElement {
-  if (typeof OffscreenCanvas !== "undefined") return new OffscreenCanvas(width, height);
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  return canvas;
-}
-
-/** 캔버스를 Blob 으로 인코딩 (OffscreenCanvas / HTMLCanvasElement 양쪽 지원) */
-async function canvasToBlob(
-  canvas: OffscreenCanvas | HTMLCanvasElement,
-  mime: string,
-  quality: number | undefined,
-): Promise<Blob> {
-  if ("convertToBlob" in canvas) {
-    return canvas.convertToBlob({ type: mime, quality });
-  }
-  return new Promise<Blob>((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new ImageError("encode-failed"))),
-      mime,
-      quality,
-    );
-  });
-}
-
 /**
  * 디코딩된 비트맵을 지정한 포맷·품질로 인코딩한다.
  * 캔버스 크기는 항상 원본 픽셀 크기와 같으므로 dimensions 는 변하지 않는다.
@@ -94,11 +68,7 @@ export async function encodeImage(
 ): Promise<Blob> {
   const { bitmap, width, height } = image;
   const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext("2d") as
-    | OffscreenCanvasRenderingContext2D
-    | CanvasRenderingContext2D
-    | null;
-  if (!ctx) throw new ImageError("encode-failed");
+  const ctx = canvasContext(canvas, "encode-failed");
 
   // JPG 는 알파 채널이 없다. 투명 영역이 검게 저장되지 않도록 흰색을 먼저 깐다.
   if (!supportsAlpha(format)) {

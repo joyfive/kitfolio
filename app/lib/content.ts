@@ -7623,7 +7623,7 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "Canvas",
     name: { ko: "이미지 최적화", en: "Image Optimizer" },
-    relatedTools: ["open-graph-preview", "css-gradient", "qr-code-generator"],
+    relatedTools: ["image-resizer-cropper", "open-graph-preview", "css-gradient"],
     seo: {
       ko: {
         title: "이미지 최적화 | PNG·JPG·WebP 용량 줄이기",
@@ -7931,6 +7931,359 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Image Optimizer",
         subtitle: "Smaller files, same pixel dimensions",
+      },
+    },
+  },
+  {
+    slug: "image-resizer-cropper",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "office-worker"],
+    ico: "W×H",
+    ready: true,
+    indexable: true,
+    badge: "Canvas",
+    name: { ko: "이미지 리사이즈·크롭", en: "Image Resizer & Cropper" },
+    relatedTools: ["image-optimizer", "open-graph-preview", "css-gradient"],
+    seo: {
+      ko: {
+        title: "이미지 리사이즈·크롭 | 사진 크기 조절과 자르기",
+        description:
+          "PNG, JPG, WebP 이미지를 원하는 픽셀 크기로 조절하거나 1:1, 4:3, 16:9 비율로 자릅니다. 비율을 잠그고 가로·세로를 바꾸거나 남길 영역을 골라 결과 픽셀 크기를 직접 지정할 수 있고, 이미지가 서버로 업로드되지 않고 브라우저에서 바로 처리되는 무료 이미지 리사이즈·크롭 도구입니다.",
+        keywords: [
+          "이미지 리사이즈",
+          "이미지 크기 조절",
+          "이미지 자르기",
+          "사진 크기 조절",
+          "이미지 사이즈 변경",
+          "이미지 픽셀 변경",
+          "이미지 비율 자르기",
+          "사진 자르기",
+          "이미지 1:1 자르기",
+          "이미지 16:9 자르기",
+          "온라인 이미지 리사이즈",
+        ],
+      },
+      en: {
+        title: "Image Resizer & Cropper | Resize and Crop Images Online",
+        description:
+          "Resize PNG, JPG, and WebP images to exact pixel dimensions or crop them to common aspect ratios such as 1:1, 4:3, and 16:9. Lock the aspect ratio while changing width and height, choose exactly which area to keep, and set the output size yourself. All image processing happens locally in your browser with no uploads.",
+        keywords: [
+          "image resizer",
+          "crop image",
+          "image cropper",
+          "resize image online",
+          "change image dimensions",
+          "resize image pixels",
+          "crop image online",
+          "crop image to aspect ratio",
+          "square image crop",
+          "resize PNG JPG WebP",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다.",
+        description:
+          "PNG, JPG, WebP 이미지를 원하는 픽셀 크기로 조절하거나 1:1, 4:3, 16:9 비율로 자릅니다. 비율을 잠그고 가로·세로를 바꾸거나 남길 영역을 골라 결과 픽셀 크기를 직접 지정할 수 있습니다. 이미지는 서버로 업로드되지 않고 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "PNG·JPG·WebP 이미지 추가",
+          "Resize 또는 Crop에서 크기와 비율 설정",
+          "결과 크기 확인 후 다운로드",
+        ],
+        aeo: {
+          what: "이미지 리사이즈·크롭 도구는 이미지의 가로·세로 픽셀 크기를 변경하거나 원하는 비율과 영역으로 잘라 새 이미지 파일을 만드는 브라우저 도구입니다.",
+          who: "웹사이트, SNS, 프로필, 썸네일, 문서 등에 사용할 이미지를 정확한 크기나 비율로 준비해야 하는 디자이너, 메이커, 콘텐츠 제작자에게 적합합니다.",
+          how: "PNG, JPG 또는 WebP 이미지를 추가하고 Resize나 Crop 모드를 선택한 뒤 크기와 비율을 설정하면 브라우저에서 결과를 생성해 다운로드할 수 있습니다.",
+          why: "별도 이미지 편집 프로그램을 설치하거나 파일을 외부 서버에 업로드하지 않고도 필요한 이미지 규격을 빠르게 만들 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "리사이즈와 크롭 중 무엇을 선택해야 하나요?",
+            body: [
+              "이미지 리사이즈와 크롭은 모두 결과 이미지의 크기를 바꾸지만 목적은 다릅니다. 리사이즈는 이미지 전체를 유지하면서 픽셀 수를 조절하고, 크롭은 필요한 구도와 비율을 만들기 위해 일부 영역을 제거합니다. 먼저 결과에서 전체 장면이 필요한지, 특정 영역만 남겨야 하는지 판단하면 적합한 모드를 고르기 쉽습니다.",
+              "이미지 전체가 결과에 남아야 한다면 Resize를 사용합니다. 예를 들어 2400 × 1600 px 사진 전체를 1200 × 800 px로 줄이면 구도와 3:2 비율은 유지되고 픽셀 수만 감소합니다.",
+              "정해진 프레임에 맞추기 위해 이미지 일부를 제거해도 된다면 Crop을 사용합니다. 가로 사진을 정사각형 프로필 이미지로 만들 때는 1:1 영역을 선택하고 피사체가 중앙에 오도록 위치를 조절합니다. 같은 원본이라도 Resize는 2400 × 1600을 1200 × 800으로 줄여 전체 장면을 남기고, Crop은 같은 원본에서 1080 × 1080 영역만 남깁니다.",
+              "이미지를 억지로 다른 비율의 width와 height에 맞추면 늘어나거나 눌립니다. 비율이 다른 결과가 필요할 때는 비율 잠금을 해제하기보다 먼저 Crop으로 구도를 맞추는 편이 자연스럽습니다.",
+            ],
+          },
+          {
+            heading: "가로세로 비율을 유지해야 하는 이유",
+            body: [
+              "가로세로 비율은 width와 height의 관계입니다. 1200 × 800과 600 × 400은 픽셀 수는 다르지만 모두 3:2 비율입니다. 원본 비율을 유지해 리사이즈하면 인물이나 사물이 원래 형태대로 보입니다.",
+              "비율 잠금을 해제하고 1200 × 800 이미지를 1200 × 630으로 직접 바꾸면 가로 방향으로 눌린 결과가 됩니다. 1200 × 630이 필요하다면 1.90:1에 해당하는 영역을 자르거나, 해당 규격에 가까운 프리셋에서 위치를 조절하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "어떤 크롭 비율을 선택해야 하나요?",
+            body: [
+              "비율은 사용처의 프레임을 기준으로 선택합니다. Free는 규격 없이 불필요한 가장자리만 제거할 때, 1:1은 정사각형 프로필·아바타·일부 피드 이미지에, 4:3은 일반적인 콘텐츠 이미지와 프레젠테이션 소재에 적합합니다.",
+              "3:2는 사진 비율을 유지한 인쇄·웹 이미지에, 16:9는 영상 썸네일·와이드 배너·프레젠테이션 화면에, 9:16은 세로형 스토리와 숏폼용 이미지에 주로 쓰입니다.",
+              "원형 프로필 이미지는 파일 자체가 원형이 아니라 정사각형입니다. 표시하는 서비스가 화면에서 둘레를 둥글게 깎아 보여줄 뿐이므로, 1:1로 자르고 중요한 부분을 중앙에 두면 됩니다.",
+              "플랫폼 규격은 바뀔 수 있으므로 제출 전에 해당 서비스의 현재 권장 픽셀 크기를 확인합니다. 이 도구의 프리셋은 구도를 잡는 비율이며, 실제 제출 규격은 Output width와 height로 맞춥니다.",
+            ],
+          },
+          {
+            heading: "픽셀 크기는 어떻게 정해야 하나요?",
+            body: [
+              "먼저 이미지가 실제로 표시되거나 제출될 크기를 확인합니다. 결과 width와 height를 필요 이상으로 크게 만들면 파일과 처리 부담이 커지고, 너무 작게 만들면 확대해서 볼 때 흐릿해질 수 있습니다.",
+              "판단 순서는 다음과 같습니다. 사용할 서비스나 디자인의 요구 규격을 확인하고, 같은 비율이라면 요구되는 실제 픽셀 크기를 Output에 입력합니다. 여러 크기로 사용한다면 가장 큰 실제 사용 크기를 기준으로 결과를 만들고 작은 버전은 별도로 생성합니다. 마지막으로 결과 미리보기에서 텍스트와 가장자리의 선명도를 확인합니다.",
+              "웹의 CSS 표시 크기와 이미지 파일의 픽셀 크기는 다른 개념입니다. 브라우저에서 300px 너비로 보이더라도 고밀도 화면을 위해 더 큰 이미지가 필요할 수 있으므로, 프로젝트가 요구하는 이미지 정책이 있다면 그 기준을 우선합니다.",
+            ],
+          },
+          {
+            heading: "원본보다 이미지를 크게 만들어도 되나요?",
+            body: [
+              "기술적으로는 가능하지만 화질이 좋아지는 것은 아닙니다. 확대 과정은 기존 픽셀 사이의 값을 계산해 더 많은 픽셀을 만들 뿐, 원본에 없던 머리카락이나 글자 가장자리 같은 디테일을 복원하지 못합니다.",
+              "작은 로고나 UI 캡처를 크게 만들면 경계가 흐려질 수 있고, 작은 사진은 뭉개짐이 눈에 띌 수 있습니다. 가능하면 필요한 결과 크기 이상의 원본을 사용하고, 확대가 불가피하다면 결과를 실제 사용 크기로 확인합니다.",
+            ],
+          },
+          {
+            heading: "자를 때 피사체가 어색해지지 않게 하려면",
+            body: [
+              "비율 프리셋을 선택한 뒤 크롭 박스를 바로 확정하지 말고, 중요한 피사체와 텍스트가 경계에 너무 가까운지 확인합니다. 프로필 이미지는 중앙에 얼굴을 두되 머리나 턱이 잘리지 않도록 여유를 남기고, 썸네일은 작은 화면에서도 주제가 식별되는지 확인합니다.",
+              "텍스트가 포함된 이미지는 글자의 일부가 잘리지 않는지 특히 주의합니다. 여러 플랫폼에서 이미지 가장자리를 추가로 가리는 경우가 있으므로, 로고와 핵심 텍스트를 프레임 끝에 붙이지 않는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "PNG, JPG, WebP 중 무엇으로 저장해야 하나요?",
+            body: [
+              "출력 포맷은 이미지의 내용과 사용할 환경을 기준으로 정합니다. PNG는 투명 배경, 로고, 아이콘, 텍스트가 포함된 그래픽처럼 선명한 경계가 중요할 때 쓰고, JPG는 투명도가 필요 없는 사진처럼 색 변화가 많은 이미지에 적합합니다.",
+              "WebP는 웹사이트에서 사진과 그래픽을 효율적으로 쓰고 싶을 때 선택하며, Original은 제출처가 원본과 같은 포맷을 요구하거나 별도 변환이 필요하지 않을 때 씁니다.",
+              "이 도구의 중심 목적은 픽셀 크기와 크롭 영역 조절입니다. 파일 용량을 비교하며 줄이는 것이 목적이라면 결과를 만든 뒤 이미지 최적화 도구를 사용합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "가로 사진을 정사각형 프로필로",
+            input: "4032 × 3024 JPG · Crop · 비율 1:1 · 결과 1080 × 1080",
+            result: "profile-cropped-1080x1080.jpg",
+            note: "1:1 프리셋을 고르면 현재 선택 영역의 중심을 유지한 정사각형이 만들어집니다. 얼굴이 중앙에 오도록 영역을 끌어 옮긴 뒤 결과 크기만 1080으로 바꿉니다.",
+          },
+          {
+            title: "블로그 대표 이미지를 정해진 규격으로",
+            input: "2400 × 1600 PNG · Resize · 비율 잠금 · 가로 1200",
+            result: "1200 × 800 · 배율 50% · hero-1200x800.png",
+            note: "비율 잠금이 켜져 있으면 가로만 입력해도 세로가 원본 비율로 계산됩니다. 50% 빠른 선택으로도 같은 결과가 나옵니다.",
+          },
+          {
+            title: "투명 배경 로고를 JPG로 저장",
+            input: "투명 배경 PNG · Resize · 출력 JPG · 품질 90",
+            result: "투명 영역이 흰색으로 채워진 JPG",
+            note: "흰색이 아닌 배경 위에 얹을 로고라면 JPG 대신 PNG나 WebP로 저장해야 경계가 드러나지 않습니다.",
+          },
+          {
+            title: "세로형 숏폼 썸네일 만들기",
+            input: "1920 × 1080 PNG · Crop · 비율 9:16 · 결과 1080 × 1920",
+            result: "1080 × 1920 · thumb-cropped-1080x1920.png",
+            note: "가로 원본에서 9:16을 고르면 선택 영역이 좌우로 좁아집니다. 이때 결과를 1080 × 1920으로 지정하면 선택 영역보다 커져 확대 안내가 함께 표시됩니다.",
+          },
+        ],
+        limitations: [
+          "한 번에 이미지 한 장만 편집합니다. 여러 장을 같은 설정으로 한 번에 리사이즈하는 일괄 처리는 지원하지 않습니다.",
+          "회전·반전, 배경색 선택, 여백 추가, 밝기·대비 같은 보정은 다루지 않습니다. 이 도구가 바꾸는 것은 픽셀 크기와 남길 영역뿐입니다.",
+          "원형 마스크 자체를 파일 모양으로 저장하지는 않습니다. 원형 프로필은 1:1로 자른 정사각형 파일로 준비합니다.",
+          "원본보다 크게 만들 수는 있지만 없던 디테일이 생기지는 않습니다. 확대할수록 경계가 흐려질 수 있습니다.",
+          "결과는 새로 인코딩된 파일입니다. EXIF, 촬영 정보, 색 프로파일 같은 메타데이터는 남지 않으며, EXIF 회전 정보는 픽셀에 미리 적용해 보이는 방향을 유지합니다.",
+          "처리는 기기 메모리 안에서 이뤄집니다. 파일 50MB, 한 변 16383px, 전체 100메가픽셀을 입력·출력 상한으로 두지만, 기기 사양에 따라 그 이하에서도 실패할 수 있습니다.",
+          "GIF, SVG, AVIF, HEIC 등 PNG·JPG·WebP가 아닌 형식은 입력·출력 모두 지원하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Resize an image to exact pixel dimensions, or crop it to ratios such as 1:1 and 16:9.",
+        description:
+          "Resize PNG, JPG, and WebP images to exact pixel dimensions or crop them to common aspect ratios such as 1:1, 4:3, and 16:9. Lock the aspect ratio while changing width and height, choose exactly which area of the image to keep, and set the output size yourself. Your image is processed in your browser and is never uploaded.",
+        howItWorks: [
+          "Add a PNG, JPG or WebP image",
+          "Set the size or crop ratio in Resize or Crop",
+          "Check the output dimensions, then download",
+        ],
+        aeo: {
+          what: "Image Resizer & Cropper is a browser-based tool that changes an image's pixel dimensions or creates a new image from a selected area and aspect ratio.",
+          who: "It is designed for designers, makers, and content creators who need images with exact dimensions or aspect ratios for websites, social media, profiles, thumbnails, and documents.",
+          how: "Add a PNG, JPG, or WebP image, choose Resize or Crop, set the dimensions or crop ratio, and download the result created locally in your browser.",
+          why: "It lets you prepare images to a required size without installing an image editor or uploading files to an external server.",
+        },
+        guide: [
+          {
+            heading: "Should I resize or crop an image?",
+            body: [
+              "Resizing and cropping can both change the dimensions of the resulting image, but they solve different problems. Resizing keeps the complete image and changes its pixel count. Cropping removes part of the image to create a particular composition or aspect ratio. Start by deciding whether the whole scene must remain or only a selected area is needed.",
+              "Use Resize when the complete image must remain visible. Resizing a 2400 × 1600 px photo to 1200 × 800 px preserves the composition and its 3:2 aspect ratio while reducing the pixel dimensions.",
+              "Use Crop when part of the image can be removed to fit a required frame. To create a square profile image from a landscape photo, select a 1:1 area and position the subject within it. From the same source, Resize turns 2400 × 1600 into 1200 × 800 with the full scene intact, while Crop keeps only a 1080 × 1080 region.",
+              "Forcing an image into width and height values with a different ratio stretches or squeezes it. When you need a different aspect ratio, crop the composition instead of simply unlocking the ratio.",
+            ],
+          },
+          {
+            heading: "Why should I preserve the aspect ratio?",
+            body: [
+              "Aspect ratio describes the relationship between width and height. 1200 × 800 and 600 × 400 have different pixel counts but share a 3:2 ratio. Preserving that ratio keeps people and objects in their original proportions.",
+              "Changing a 1200 × 800 image directly to 1200 × 630 with the ratio unlocked distorts the image. If you need 1200 × 630, crop a region with the required 1.90:1 ratio and then set the output dimensions.",
+            ],
+          },
+          {
+            heading: "Which crop ratio should I choose?",
+            body: [
+              "Choose a ratio based on the shape required by the destination. Free removes unwanted edges without a fixed format, 1:1 suits square profiles, avatars, and some feed images, and 4:3 suits general content images and presentation assets.",
+              "3:2 keeps a photographic ratio for print and web, 16:9 suits video thumbnails, wide banners, and presentation screens, and 9:16 suits vertical stories and short-form media.",
+              "A circular profile picture is still a square file. The destination service draws the round mask on screen, so crop to 1:1 and keep the important part centered.",
+              "Platform requirements can change, so check the destination's current pixel specifications before submitting an image. The preset defines the crop shape; use Output width and height to match the exact required dimensions.",
+            ],
+          },
+          {
+            heading: "How should I choose image dimensions in pixels?",
+            body: [
+              "First check the size at which the image will be displayed or submitted. Making the file much larger than necessary adds processing and file weight, while an image that is too small may look blurry when enlarged.",
+              "Check the required dimensions in the destination service or design, then enter those exact pixel dimensions while keeping the required ratio. If several sizes are needed, create the largest practical version first and generate smaller versions separately. Finally, inspect text and sharp edges in the result preview.",
+              "CSS display size and image pixel dimensions are different. An image displayed at 300 CSS pixels may use a larger source on a high-density screen. Follow the image policy of the destination project when one exists.",
+            ],
+          },
+          {
+            heading: "Can I make an image larger than the original?",
+            body: [
+              "Yes, but increasing the pixel dimensions does not improve the original detail. Upscaling estimates new pixels between existing ones; it cannot recover details that were never present in the source.",
+              "Small logos and UI captures may develop soft edges, and small photos may look blurred. Use a source at least as large as the required output whenever possible, and inspect an upscaled result at its actual display size.",
+            ],
+          },
+          {
+            heading: "How can I avoid awkward crops?",
+            body: [
+              "After choosing a ratio, check whether important subjects or text are too close to the crop boundary. Leave enough room around a face so the head and chin are not clipped, and make sure a thumbnail remains understandable at a small size.",
+              "Be especially careful with text inside an image. Some destinations may cover or trim the edges, so keep logos and essential text away from the frame boundary.",
+            ],
+          },
+          {
+            heading: "Should I save the result as PNG, JPG, or WebP?",
+            body: [
+              "Choose the output format based on the image and destination. PNG suits transparent backgrounds, logos, icons, UI captures, and graphics with sharp text, while JPG suits photographs with no transparency requirement.",
+              "WebP is an efficient choice for delivering both photos and graphics on the web, and Original keeps the incoming format for destinations that require it or when no conversion is needed.",
+              "This tool focuses on pixel dimensions and crop regions. If the next goal is to compare and reduce file size, send the result to Image Optimizer.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A landscape photo turned into a square profile picture",
+            input: "4032 × 3024 JPG, Crop, 1:1 ratio, output 1080 × 1080",
+            result: "profile-cropped-1080x1080.jpg",
+            note: "Choosing 1:1 builds the largest square that keeps the current selection centered. Drag the area so the face sits in the middle, then set the output size to 1080.",
+          },
+          {
+            title: "A blog hero image resized to a fixed width",
+            input: "2400 × 1600 PNG, Resize, ratio locked, width 1200",
+            result: "1200 × 800 at 50% scale, hero-1200x800.png",
+            note: "With the ratio locked, entering only the width calculates the height from the original proportions. The 50% quick preset produces the same result.",
+          },
+          {
+            title: "Saving a transparent logo as JPG",
+            input: "Transparent PNG, Resize, output JPG, quality 90",
+            result: "A JPG whose transparent areas are filled with white",
+            note: "If the logo sits on anything other than a white background, save it as PNG or WebP so the fill does not show as a visible box.",
+          },
+          {
+            title: "Building a vertical short-form thumbnail",
+            input: "1920 × 1080 PNG, Crop, 9:16 ratio, output 1080 × 1920",
+            result: "1080 × 1920, thumb-cropped-1080x1920.png",
+            note: "A 9:16 crop of a landscape source is narrow, so asking for 1080 × 1920 upscales it and the tool shows the upscaling notice alongside the output size.",
+          },
+        ],
+        limitations: [
+          "One image is edited at a time. Batch resizing several files with the same settings is not supported.",
+          "Rotation, flipping, background color, added padding, and adjustments such as brightness or contrast are out of scope. This tool changes pixel dimensions and the area you keep, nothing else.",
+          "A circular mask is never saved as the shape of the file. Prepare round profile pictures as square 1:1 crops.",
+          "You can make an image larger than the original, but upscaling cannot add detail that was not captured. Edges get softer the further you push it.",
+          "The result is a newly encoded file. Metadata such as EXIF, capture information, and color profiles is not carried over; EXIF rotation is baked into the pixels first so the image keeps the orientation you see.",
+          "Processing happens in device memory. Limits are 50MB per file and 16383px per side and 100 megapixels for both input and output, but very large images can still fail below those limits on lower-memory devices.",
+          "Formats other than PNG, JPG, and WebP, such as GIF, SVG, AVIF, and HEIC, are supported neither as input nor as output.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "이미지 리사이즈와 크롭은 무엇이 다른가요?",
+          answer:
+            "리사이즈는 이미지 전체를 유지한 채 가로·세로 픽셀 수를 바꿉니다. 크롭은 이미지에서 남길 영역을 선택해 바깥 부분을 제거합니다.",
+        },
+        {
+          question: "원본 비율을 유지하면서 크기를 바꿀 수 있나요?",
+          answer:
+            "네. Resize 모드의 비율 잠금은 기본으로 켜져 있으며, width나 height 중 하나를 바꾸면 다른 값이 원본 비율에 맞게 자동 계산됩니다.",
+        },
+        {
+          question: "어떤 비율로 이미지를 자를 수 있나요?",
+          answer:
+            "자유 비율과 1:1, 4:3, 3:2, 16:9, 9:16 프리셋을 제공합니다. 선택한 비율 안에서 남길 위치를 직접 조절할 수 있습니다.",
+        },
+        {
+          question: "이미지를 크게 만들면 화질도 좋아지나요?",
+          answer:
+            "아니요. 출력 픽셀 수는 늘릴 수 있지만 원본에 없던 디테일이 생기지는 않습니다. 원본보다 크게 확대하면 이미지가 흐릿해질 수 있습니다.",
+        },
+        {
+          question: "어떤 이미지 포맷을 지원하나요?",
+          answer:
+            "PNG, JPG/JPEG, WebP 이미지를 불러오고 PNG, JPG 또는 WebP로 저장할 수 있습니다. 투명 이미지를 JPG로 저장하면 투명 영역은 흰색이 됩니다.",
+        },
+        {
+          question: "휴대폰으로 찍은 사진의 방향도 그대로 유지되나요?",
+          answer:
+            "네. 미리보기와 크롭 좌표 모두 EXIF 회전이 적용된 표시 방향을 기준으로 계산되므로, 화면에서 보는 방향 그대로 결과가 저장됩니다.",
+        },
+        {
+          question: "이미지가 서버로 업로드되나요?",
+          answer:
+            "아니요. 이미지는 사용자의 브라우저에서 처리되며 Kitfolio 서버나 외부 이미지 처리 서비스로 전송되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the difference between resizing and cropping an image?",
+          answer:
+            "Resizing changes the width and height in pixels while keeping the entire image. Cropping removes areas outside the region you choose to keep.",
+        },
+        {
+          question: "Can I resize an image without changing its aspect ratio?",
+          answer:
+            "Yes. Aspect ratio lock is enabled by default in Resize mode. Changing either width or height automatically calculates the other dimension from the original ratio.",
+        },
+        {
+          question: "Which aspect ratios can I use for cropping?",
+          answer:
+            "You can crop freely or choose 1:1, 4:3, 3:2, 16:9, or 9:16. After choosing a ratio, you can move the crop area to control which part of the image remains.",
+        },
+        {
+          question: "Does making an image larger improve its quality?",
+          answer:
+            "No. You can increase the output dimensions, but resizing cannot create detail that is missing from the original. Upscaling may make the result look blurry.",
+        },
+        {
+          question: "Which image formats are supported?",
+          answer:
+            "You can open PNG, JPG/JPEG, and WebP images and save the result as PNG, JPG, or WebP. Transparent areas are filled with white when the result is saved as JPG.",
+        },
+        {
+          question: "Do photos taken on a phone keep their orientation?",
+          answer:
+            "Yes. Both the preview and the crop coordinates use the display orientation with EXIF rotation applied, so the result is saved the way you see it on screen.",
+        },
+        {
+          question: "Is my image uploaded to a server?",
+          answer:
+            "No. Your image is processed in your browser and is not sent to Kitfolio servers or external image-processing services.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "이미지 리사이즈·크롭",
+        subtitle: "원하는 픽셀 크기와 비율로 바로 조절하세요",
+      },
+      en: {
+        title: "Image Resizer & Cropper",
+        subtitle: "Resize and crop images to exact dimensions",
       },
     },
   },
