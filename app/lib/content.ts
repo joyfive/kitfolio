@@ -418,13 +418,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "왜 만드나요",
             body: [
               "좋은 도구는 작은 마찰을 없애 하루의 흐름을 지켜 줍니다. Kitfolio의 목표는 콘텐츠를 많이 발행하는 것이 아니라, 반복되는 업무 문제를 무료로·빠르게·프라이버시를 지키며 풀 수 있는 실용적인 도구를 하나씩 늘려가는 것입니다.",
-              "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.",
+              `Kitfolio는 ${LEGAL_OPERATOR.ko.name}에서 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.`,
             ],
           },
           {
             heading: "누가 운영하나요",
             body: [
-              "Kitfolio는 **joyfive**라는 이름으로 활동하는 한 사람이 기획·개발·운영·콘텐츠 작성을 모두 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영자 개인에게 있습니다.",
+              `Kitfolio는 **${LEGAL_OPERATOR.ko.name}**에서 운영하며, 기획·개발·운영·콘텐츠 작성을 직접 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영 주체에 있습니다.`,
               "소스코드는 [GitHub 저장소](https://github.com/joyfive/kitfolio)에서 공개되어 있어, 각 도구가 실제로 어떻게 계산하는지 직접 확인할 수 있습니다. 문의는 아래 이메일로 받으며 운영자가 직접 답변합니다.",
             ],
           },
@@ -479,13 +479,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "Why we build it",
             body: [
               "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
-              "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.",
+              `Kitfolio is planned and run by ${LEGAL_OPERATOR.en.name}, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.`,
             ],
           },
           {
             heading: "Who runs Kitfolio",
             body: [
-              "Kitfolio is planned, built, operated and written by one person, working under the name **joyfive**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the maker personally.",
+              `Kitfolio is planned, built, operated and written by **${LEGAL_OPERATOR.en.name}**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the operator.`,
               "The source code is public in the [GitHub repository](https://github.com/joyfive/kitfolio), so you can check exactly how each tool calculates. Questions go to the email address below and are answered directly.",
             ],
           },
@@ -550,7 +550,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "연락 방법",
             body: [
-              "아래 이메일 주소로 메시지를 보내주세요. 개인이 운영하는 서비스라 답변에 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.",
+              "아래 이메일 주소로 메시지를 보내주세요. 소규모로 운영하는 서비스라 답변에 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.",
             ],
           },
         ],
@@ -573,7 +573,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "How to reach us",
             body: [
-              "Please send a message to the email address below. As a service run by one person, replies may take a little time: thank you for your patience.",
+              "Please send a message to the email address below. As a small operation, replies may take a little time: thank you for your patience.",
             ],
           },
         ],
