@@ -351,7 +351,7 @@ export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
  *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
 export const LEGAL_OPERATOR = {
   ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
-  en: { name: "VIVASPACE", rep: "Gippeum Oh", repTitle: "Representative" },
+  en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
 } as const;
 
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
@@ -600,7 +600,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침",
         intro:
-          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.name}(${LEGAL_OPERATOR.ko.repTitle} ${LEGAL_OPERATOR.ko.rep})가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
+          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.name}가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
         sections: [
           {
             heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
@@ -652,7 +652,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Privacy Policy",
         intro:
-          `Kitfolio ("we", "our", or "the Website") is operated by ${LEGAL_OPERATOR.en.name} (${LEGAL_OPERATOR.en.repTitle}: ${LEGAL_OPERATOR.en.rep}). We value the privacy of our users and comply with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.`,
+          `Kitfolio ("we", "our", or "the Website") is operated by ${LEGAL_OPERATOR.en.name}. We value the privacy of our users and comply with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.`,
         sections: [
           {
             heading: "1. What You Enter Into the Tools Is Never Transmitted",
@@ -721,7 +721,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "이용약관",
         intro:
-          `본 약관은 ${LEGAL_OPERATOR.ko.name}(${LEGAL_OPERATOR.ko.repTitle} ${LEGAL_OPERATOR.ko.rep}, 이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
+          `본 약관은 ${LEGAL_OPERATOR.ko.name}(이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
         sections: [
           {
             heading: "제1조 (서비스의 제공 및 변경)",
@@ -765,7 +765,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Terms of Service",
         intro:
-          `These Terms of Service ("Terms") govern the use of the web tools and services (the "Service") provided by Kitfolio ("we", "our", or "the Website"), operated by ${LEGAL_OPERATOR.en.name} (${LEGAL_OPERATOR.en.repTitle}: ${LEGAL_OPERATOR.en.rep}), defining the rights, obligations, and responsibilities of both users and the Website.`,
+          `These Terms of Service ("Terms") govern the use of the web tools and services (the "Service") provided by Kitfolio ("we", "our", or "the Website"), operated by ${LEGAL_OPERATOR.en.name}, defining the rights, obligations, and responsibilities of both users and the Website.`,
         sections: [
           {
             heading: "Article 1 (Provision and Modification of Services)",
