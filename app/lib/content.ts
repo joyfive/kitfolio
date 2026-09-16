@@ -344,7 +344,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
    본문 문자열은 최소 인라인 마크업 지원: **굵게**, [라벨](url).
    ============================================================ */
-export const LEGAL_EMAIL = "joy_five@kakao.com";
+export const LEGAL_EMAIL = "support@kitfolio.app";
 export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
 
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
