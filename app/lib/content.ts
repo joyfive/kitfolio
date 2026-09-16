@@ -149,16 +149,26 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
-/** 사이트 운영자: 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
+/** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
+ *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
+export const LEGAL_OPERATOR = {
+  ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
+  en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
+} as const;
+
+/** 기본 작성자: 블로그 author · About 페이지 · JSON-LD 가 공유하는 단일 출처.
  *
- *  실명을 공개하지 않되, **일관된 운영자명과 역할, 책임 주체**는 항상 확인되게 한다.
- *  (AdSense 심사·E-E-A-T 관점에서 "누가 쓰고 누가 책임지는가"가 드러나야 한다) */
+ *  사이트의 글은 개인 바이라인이 아니라 **운영 주체(법인) 명의로 발행**한다.
+ *  그래도 "누가 쓰고 누가 책임지는가"는 항상 확인되어야 하므로
+ *  (AdSense 심사·E-E-A-T 관점) 상호·역할·About 링크를 항상 함께 노출한다. */
 export const AUTHOR = {
-  /** 일관된 운영자명: 리포지토리·연락처와 동일한 식별자 */
-  name: "joyfive",
+  /** 작성자명: 약관·개인정보처리방침의 운영 주체와 같은 상호를 쓴다 */
+  name: LEGAL_OPERATOR.en.name,
+  /** JSON-LD author 의 @type. 조직 명의 발행이므로 Organization 이다. */
+  type: "Organization",
   /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
   path: "/about",
-  role: { ko: "Kitfolio 운영자", en: "Maker of Kitfolio" },
+  role: { ko: "Kitfolio 운영 주체", en: "Operator of Kitfolio" },
 } as const;
 
 /** 허브 카드 등에서 쓰는 레이아웃 표시 라벨 */
@@ -346,13 +356,6 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    ============================================================ */
 export const LEGAL_EMAIL = "support@kitfolio.app";
 export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
-
-/** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
- *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
-export const LEGAL_OPERATOR = {
-  ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
-  en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
-} as const;
 
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
