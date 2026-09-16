@@ -347,6 +347,13 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
 export const LEGAL_EMAIL = "support@kitfolio.app";
 export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
 
+/** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
+ *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
+export const LEGAL_OPERATOR = {
+  ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
+  en: { name: "VIVASPACE", rep: "Gippeum Oh", repTitle: "Representative" },
+} as const;
+
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
 
@@ -593,7 +600,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침",
         intro:
-          "Kitfolio(이하 '본 사이트')는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.",
+          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.name}(${LEGAL_OPERATOR.ko.repTitle} ${LEGAL_OPERATOR.ko.rep})가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
         sections: [
           {
             heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
@@ -631,7 +638,11 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "5. 개인정보 보호책임자 및 문의처",
             body: [
-              "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.",
+              `본 사이트는 ${LEGAL_OPERATOR.ko.name}가 운영하며, 개인정보 처리에 관한 업무를 총괄해서 책임지고 관련 불만 처리 및 피해 구제를 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.`,
+              `**성명:** ${LEGAL_OPERATOR.ko.rep}`,
+              `**직책:** ${LEGAL_OPERATOR.ko.repTitle}`,
+              `**연락처:** ${LEGAL_EMAIL}`,
+              "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 위 이메일로 연락해 주시기 바랍니다.",
             ],
           },
         ],
@@ -641,7 +652,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Privacy Policy",
         intro:
-          "Kitfolio (\"we\", \"our\", or \"the Website\") values the privacy of our users and complies with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.",
+          `Kitfolio ("we", "our", or "the Website") is operated by ${LEGAL_OPERATOR.en.name} (${LEGAL_OPERATOR.en.repTitle}: ${LEGAL_OPERATOR.en.rep}). We value the privacy of our users and comply with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.`,
         sections: [
           {
             heading: "1. What You Enter Into the Tools Is Never Transmitted",
@@ -677,9 +688,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "5. Contact",
+            heading: "5. Privacy Officer and Contact",
             body: [
-              "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address below.",
+              `The Website is operated by ${LEGAL_OPERATOR.en.name}, which oversees all personal data processing and designates the privacy officer below to handle related complaints and remedies.`,
+              `**Name:** ${LEGAL_OPERATOR.en.rep}`,
+              `**Title:** ${LEGAL_OPERATOR.en.repTitle}`,
+              `**Contact:** ${LEGAL_EMAIL}`,
+              "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address above.",
             ],
           },
         ],
@@ -706,7 +721,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "이용약관",
         intro:
-          "본 약관은 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.",
+          `본 약관은 ${LEGAL_OPERATOR.ko.name}(${LEGAL_OPERATOR.ko.repTitle} ${LEGAL_OPERATOR.ko.rep}, 이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
         sections: [
           {
             heading: "제1조 (서비스의 제공 및 변경)",
@@ -733,7 +748,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "제4조 (지적재산권)",
             body: [
-              "본 사이트의 디자인·로고·소스코드 구조 및 콘텐츠 레지스트리에 대한 지적재산권은 본 사이트 운영자에게 있습니다.",
+              `본 사이트의 디자인·로고·소스코드 구조 및 콘텐츠 레지스트리에 대한 지적재산권은 운영 주체인 ${LEGAL_OPERATOR.ko.name}에 있습니다.`,
               "이용자는 본 사이트의 서비스를 복제·수정·배포하여 상업적으로 재판매하는 행위를 할 수 없습니다.",
             ],
           },
@@ -750,7 +765,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Terms of Service",
         intro:
-          "These Terms of Service (\"Terms\") govern the use of the web tools and services (the \"Service\") provided by Kitfolio (\"we\", \"our\", or \"the Website\"), defining the rights, obligations, and responsibilities of both users and the Website.",
+          `These Terms of Service ("Terms") govern the use of the web tools and services (the "Service") provided by Kitfolio ("we", "our", or "the Website"), operated by ${LEGAL_OPERATOR.en.name} (${LEGAL_OPERATOR.en.repTitle}: ${LEGAL_OPERATOR.en.rep}), defining the rights, obligations, and responsibilities of both users and the Website.`,
         sections: [
           {
             heading: "Article 1 (Provision and Modification of Services)",
@@ -777,7 +792,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "Article 4 (Intellectual Property)",
             body: [
-              "All intellectual property rights concerning the Website's design, logo, source code structure, and content registry belong to the owner of Kitfolio.",
+              `All intellectual property rights concerning the Website's design, logo, source code structure, and content registry belong to ${LEGAL_OPERATOR.en.name}, the operator of Kitfolio.`,
               "Users are prohibited from copying, modifying, or distributing the Service for commercial resale.",
             ],
           },
