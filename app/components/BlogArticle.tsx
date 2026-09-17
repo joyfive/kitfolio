@@ -43,7 +43,9 @@ export default function BlogArticle({
               {formatDate(meta.updated, lang)}
             </span>
           )}
-          <span className="kf-article-author">@{meta.author}</span>
+          <span className="kf-article-author">
+            {meta.authorType === "Person" ? `@${meta.author}` : meta.author}
+          </span>
         </div>
         <h1>{meta.title}</h1>
         {meta.description && <p className="kf-article-lead">{meta.description}</p>}

@@ -6,7 +6,7 @@ import { localizedHref } from "../lib/content";
 import { LangProvider, routeLang, useT, type Lang } from "../lib/i18n";
 import { LogoMark } from "./Logo";
 
-const FEEDBACK_EMAIL = "joy_five@kakao.com";
+const FEEDBACK_EMAIL = "support@kitfolio.app";
 const GITHUB_URL = "https://github.com/joyfive/kitfolio";
 
 /** 전 페이지 공통 푸터 (루트 layout.tsx에서 렌더). 언어는 URL에서 도출.
@@ -47,7 +47,7 @@ function FooterInner({ lang }: { lang: Lang }) {
 
         {/* 2행: 카피라이트(좌) ↔ 외부 링크(우) */}
         <div className="foot-row">
-          <p className="foot-copy">© 2026 Kitfolio. All rights reserved.</p>
+          <p className="foot-copy">© 2026 VIVASPACE. All rights reserved.</p>
           <nav className="foot-ext" aria-label="Links">
             <Link href={localizedHref(lang, "/blog")}>
               {lang === "ko" ? "블로그" : "Blog"}

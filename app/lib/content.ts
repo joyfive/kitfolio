@@ -149,16 +149,26 @@ export const SITE = {
   url: "https://kitfolio.app",
 };
 
-/** 사이트 운영자: 블로그 author(Person) · About 페이지 · JSON-LD 가 공유하는 단일 출처.
+/** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
+ *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
+export const LEGAL_OPERATOR = {
+  ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
+  en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
+} as const;
+
+/** 기본 작성자: 블로그 author · About 페이지 · JSON-LD 가 공유하는 단일 출처.
  *
- *  실명을 공개하지 않되, **일관된 운영자명과 역할, 책임 주체**는 항상 확인되게 한다.
- *  (AdSense 심사·E-E-A-T 관점에서 "누가 쓰고 누가 책임지는가"가 드러나야 한다) */
+ *  사이트의 글은 개인 바이라인이 아니라 **운영 주체(법인) 명의로 발행**한다.
+ *  그래도 "누가 쓰고 누가 책임지는가"는 항상 확인되어야 하므로
+ *  (AdSense 심사·E-E-A-T 관점) 상호·역할·About 링크를 항상 함께 노출한다. */
 export const AUTHOR = {
-  /** 일관된 운영자명: 리포지토리·연락처와 동일한 식별자 */
-  name: "joyfive",
+  /** 작성자명: 약관·개인정보처리방침의 운영 주체와 같은 상호를 쓴다 */
+  name: LEGAL_OPERATOR.en.name,
+  /** JSON-LD author 의 @type. 조직 명의 발행이므로 Organization 이다. */
+  type: "Organization",
   /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
   path: "/about",
-  role: { ko: "Kitfolio 운영자", en: "Maker of Kitfolio" },
+  role: { ko: "Kitfolio 운영 주체", en: "Operator of Kitfolio" },
 } as const;
 
 /** 허브 카드 등에서 쓰는 레이아웃 표시 라벨 */
@@ -344,8 +354,21 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
    본문 문자열은 최소 인라인 마크업 지원: **굵게**, [라벨](url).
    ============================================================ */
-export const LEGAL_EMAIL = "joy_five@kakao.com";
-export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
+export const LEGAL_EMAIL = "support@kitfolio.app";
+/** 약관·개인정보처리방침 시행일자 (최근 개정일).
+ *  2026-08-16 개정: 운영 주체를 VIVASPACE 로 명시하고 문의처를 통일했다. */
+export const LEGAL_EFFECTIVE = { ko: "2026년 8월 16일", en: "August 16, 2026" };
+
+/** 소개·문의 페이지의 최종 업데이트일. 시행일자와 성격이 달라 따로 관리한다.
+ *  (약관은 개정 시점, 안내 페이지는 내용을 마지막으로 손본 시점) */
+export const LEGAL_UPDATED = { ko: "2026년 9월 17일", en: "September 17, 2026" };
+
+/** 문서별 날짜 선택: 약관·방침은 시행일자, 안내 페이지는 최종 업데이트일. */
+export function legalDateOf(slug: LegalSlug, lang: Lang): string {
+  return slug === "privacy-policy" || slug === "terms-of-service"
+    ? LEGAL_EFFECTIVE[lang]
+    : LEGAL_UPDATED[lang];
+}
 
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
@@ -411,13 +434,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "왜 만드나요",
             body: [
               "좋은 도구는 작은 마찰을 없애 하루의 흐름을 지켜 줍니다. Kitfolio의 목표는 콘텐츠를 많이 발행하는 것이 아니라, 반복되는 업무 문제를 무료로·빠르게·프라이버시를 지키며 풀 수 있는 실용적인 도구를 하나씩 늘려가는 것입니다.",
-              "Kitfolio는 개인이 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.",
+              `Kitfolio는 ${LEGAL_OPERATOR.ko.name}에서 직접 기획하고 운영하는 프로젝트이며, 실제 업무에서 필요하다고 느낀 도구를 우선 만듭니다. 도구 제안이나 의견은 언제든 환영합니다: 문의 페이지를 통해 연락해 주세요.`,
             ],
           },
           {
             heading: "누가 운영하나요",
             body: [
-              "Kitfolio는 **joyfive**라는 이름으로 활동하는 한 사람이 기획·개발·운영·콘텐츠 작성을 모두 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영자 개인에게 있습니다.",
+              `Kitfolio는 **${LEGAL_OPERATOR.ko.name}**에서 운영하며, 기획·개발·운영·콘텐츠 작성을 직접 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영 주체에 있습니다.`,
               "소스코드는 [GitHub 저장소](https://github.com/joyfive/kitfolio)에서 공개되어 있어, 각 도구가 실제로 어떻게 계산하는지 직접 확인할 수 있습니다. 문의는 아래 이메일로 받으며 운영자가 직접 답변합니다.",
             ],
           },
@@ -472,13 +495,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             heading: "Why we build it",
             body: [
               "Good tools remove small frictions and protect the flow of your day. Kitfolio's goal is not to publish a lot of content, but to keep adding practical tools that solve recurring work problems for free, fast, and privately.",
-              "Kitfolio is planned and run by an individual maker, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.",
+              `Kitfolio is planned and run by ${LEGAL_OPERATOR.en.name}, prioritizing tools that were genuinely needed in real work. Tool suggestions and feedback are always welcome: please reach out via the Contact page.`,
             ],
           },
           {
             heading: "Who runs Kitfolio",
             body: [
-              "Kitfolio is planned, built, operated and written by one person, working under the name **joyfive**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the maker personally.",
+              `Kitfolio is planned, built, operated and written by **${LEGAL_OPERATOR.en.name}**. There are no outside contributors and no syndicated or auto-generated content, so responsibility for every tool and every article on the site rests with the operator.`,
               "The source code is public in the [GitHub repository](https://github.com/joyfive/kitfolio), so you can check exactly how each tool calculates. Questions go to the email address below and are answered directly.",
             ],
           },
@@ -543,7 +566,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "연락 방법",
             body: [
-              "아래 이메일 주소로 메시지를 보내주세요. 개인이 운영하는 서비스라 답변에 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.",
+              "아래 이메일 주소로 메시지를 보내주세요. 소규모로 운영하는 서비스라 답변에 다소 시간이 걸릴 수 있는 점 양해 부탁드립니다.",
             ],
           },
         ],
@@ -566,7 +589,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "How to reach us",
             body: [
-              "Please send a message to the email address below. As a service run by one person, replies may take a little time: thank you for your patience.",
+              "Please send a message to the email address below. As a small operation, replies may take a little time: thank you for your patience.",
             ],
           },
         ],
@@ -593,7 +616,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침",
         intro:
-          "Kitfolio(이하 '본 사이트')는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.",
+          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.name}가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
         sections: [
           {
             heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
@@ -631,7 +654,11 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "5. 개인정보 보호책임자 및 문의처",
             body: [
-              "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 아래 이메일로 연락해 주시기 바랍니다.",
+              `본 사이트는 ${LEGAL_OPERATOR.ko.name}가 운영하며, 개인정보 처리에 관한 업무를 총괄해서 책임지고 관련 불만 처리 및 피해 구제를 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.`,
+              `**성명:** ${LEGAL_OPERATOR.ko.rep}`,
+              `**직책:** ${LEGAL_OPERATOR.ko.repTitle}`,
+              `**연락처:** ${LEGAL_EMAIL}`,
+              "본 사이트 이용 중 발생하는 개인정보 보호 관련 문의는 위 이메일로 연락해 주시기 바랍니다.",
             ],
           },
         ],
@@ -641,7 +668,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Privacy Policy",
         intro:
-          "Kitfolio (\"we\", \"our\", or \"the Website\") values the privacy of our users and complies with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.",
+          `Kitfolio ("we", "our", or "the Website") is operated by ${LEGAL_OPERATOR.en.name}. We value the privacy of our users and comply with applicable data protection laws. This Privacy Policy explains how we handle information when you visit and use our website.`,
         sections: [
           {
             heading: "1. What You Enter Into the Tools Is Never Transmitted",
@@ -677,9 +704,13 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
             ],
           },
           {
-            heading: "5. Contact",
+            heading: "5. Privacy Officer and Contact",
             body: [
-              "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address below.",
+              `The Website is operated by ${LEGAL_OPERATOR.en.name}, which oversees all personal data processing and designates the privacy officer below to handle related complaints and remedies.`,
+              `**Name:** ${LEGAL_OPERATOR.en.rep}`,
+              `**Title:** ${LEGAL_OPERATOR.en.repTitle}`,
+              `**Contact:** ${LEGAL_EMAIL}`,
+              "If you have any questions or concerns regarding this Privacy Policy, please contact us at the email address above.",
             ],
           },
         ],
@@ -706,7 +737,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "이용약관",
         intro:
-          "본 약관은 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.",
+          `본 약관은 ${LEGAL_OPERATOR.ko.name}(이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
         sections: [
           {
             heading: "제1조 (서비스의 제공 및 변경)",
@@ -733,7 +764,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "제4조 (지적재산권)",
             body: [
-              "본 사이트의 디자인·로고·소스코드 구조 및 콘텐츠 레지스트리에 대한 지적재산권은 본 사이트 운영자에게 있습니다.",
+              `본 사이트의 디자인·로고·소스코드 구조 및 콘텐츠 레지스트리에 대한 지적재산권은 운영 주체인 ${LEGAL_OPERATOR.ko.name}에 있습니다.`,
               "이용자는 본 사이트의 서비스를 복제·수정·배포하여 상업적으로 재판매하는 행위를 할 수 없습니다.",
             ],
           },
@@ -750,7 +781,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "Terms of Service",
         intro:
-          "These Terms of Service (\"Terms\") govern the use of the web tools and services (the \"Service\") provided by Kitfolio (\"we\", \"our\", or \"the Website\"), defining the rights, obligations, and responsibilities of both users and the Website.",
+          `These Terms of Service ("Terms") govern the use of the web tools and services (the "Service") provided by Kitfolio ("we", "our", or "the Website"), operated by ${LEGAL_OPERATOR.en.name}, defining the rights, obligations, and responsibilities of both users and the Website.`,
         sections: [
           {
             heading: "Article 1 (Provision and Modification of Services)",
@@ -777,7 +808,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "Article 4 (Intellectual Property)",
             body: [
-              "All intellectual property rights concerning the Website's design, logo, source code structure, and content registry belong to the owner of Kitfolio.",
+              `All intellectual property rights concerning the Website's design, logo, source code structure, and content registry belong to ${LEGAL_OPERATOR.en.name}, the operator of Kitfolio.`,
               "Users are prohibited from copying, modifying, or distributing the Service for commercial resale.",
             ],
           },
@@ -3875,6 +3906,431 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Text Scaling & Spacing Checker",
         subtitle: "Compare 200% text, 320px reflow and WCAG spacing side by side",
+      },
+    },
+  },
+  {
+    slug: "accessibility-checklist",
+    layout: "card",
+    cat: "design",
+    targets: ["pm", "designer", "developer"],
+    ico: "☑",
+    ready: true,
+    indexable: true,
+    verifiedAt: "2026-09-12",
+    badge: "Clean SaaS",
+    name: { ko: "웹접근성 체크리스트 빌더", en: "Web Accessibility Checklist Builder" },
+    // 네 검사 도구보다 앞 단계에서 쓰는 도구라, 항목에서 각 검사 도구로 내려보낸다.
+    relatedTools: [
+      "html-accessibility-checker",
+      "color-contrast-checker",
+      "color-blindness-simulator",
+      "text-scaling-checker",
+    ],
+    seo: {
+      ko: {
+        title: "웹접근성 체크리스트 빌더 | KWCAG·WCAG 2.2 검사항목",
+        description:
+          "KWCAG 2.2 33개 검사항목 또는 WCAG 2.2 Level A·AA 기준을 고르고 서비스 기능에 맞는 웹접근성 체크리스트를 만드세요. 기획·디자인·퍼블리싱 역할과 검토 상태, 메모, 근거 URL을 브라우저에 저장하고 Markdown·CSV로 내보낼 수 있습니다. 로그인과 업로드 없이 전부 브라우저에서 처리됩니다.",
+        keywords: [
+          "웹접근성 체크리스트",
+          "KWCAG 2.2 검사항목",
+          "WCAG 2.2 체크리스트",
+          "한국형 웹 콘텐츠 접근성 지침",
+          "웹접근성 점검표",
+          "웹접근성 인증 준비",
+          "접근성 QA",
+          "접근성 검사 항목",
+          "WCAG AA 체크리스트",
+          "접근성 검수 체크리스트",
+          "웹접근성 33개 항목",
+        ],
+      },
+      en: {
+        title: "Web Accessibility Checklist Builder | WCAG 2.2",
+        description:
+          "Choose WCAG 2.2 Level A or AA, or the 33 KWCAG 2.2 requirements, and generate an accessibility checklist that matches the features your product actually has. Assign planning, design, and development roles, track review status, notes, and evidence in your browser, and export the result as Markdown or CSV. No sign-in and no upload.",
+        keywords: [
+          "web accessibility checklist",
+          "wcag 2.2 checklist",
+          "accessibility qa checklist",
+          "accessibility audit checklist",
+          "wcag aa checklist",
+          "website accessibility testing plan",
+          "wcag level a criteria list",
+          "kwcag 2.2 requirements",
+          "accessibility review tracker",
+          "accessibility checklist generator",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다.",
+        description:
+          "적용 기준과 목표 레벨, 테스트 환경, 서비스가 가진 기능을 선택하면 기획·디자인·퍼블리싱 담당이 함께 관리할 수 있는 접근성 검토 목록을 만듭니다. 항목마다 실무 질문과 확인 방법, 완료 근거 예시를 제공하고 상태·메모·근거 URL을 기록할 수 있습니다. 결과는 이 브라우저에만 저장되며 Markdown 또는 CSV로 내보내 전달합니다.",
+        howItWorks: [
+          "기준·목표 레벨·테스트 환경과 서비스 기능 선택",
+          "항목별 상태·메모·근거 URL 기록과 역할·축 필터",
+          "Markdown 복사·다운로드 또는 CSV 다운로드",
+        ],
+        aeo: {
+          what: "웹접근성 체크리스트 빌더는 KWCAG 2.2 또는 WCAG 2.2 기준을 프로젝트에서 실행할 수 있는 검토 항목으로 구성하고, 역할·진행 상태·메모·근거를 관리해 Markdown이나 CSV로 내보내는 브라우저 도구입니다.",
+          who: "프로젝트 착수부터 출시 전 QA까지 접근성 업무를 나눠야 하는 PM, 서비스 기획자, 디자이너, 퍼블리셔, 프론트엔드 개발자와 QA 담당자에게 적합합니다.",
+          how: "적용 기준, WCAG 목표 레벨, 테스트 환경과 서비스 기능을 선택하면 항목이 생성됩니다. 각 항목에서 상태와 메모·근거를 기록하고 역할이나 검사 축으로 필터링한 뒤 문서로 내보냅니다.",
+          why: "기준 번호만 있는 긴 목록을 역할과 실행 단계에 맞게 바꾸고, 프로젝트에 없는 기능을 해당 없음 후보로 확인하며, 검토 이력과 이슈를 한 형식으로 전달할 수 있기 때문입니다.",
+        },
+        guide: [
+          {
+            heading: "웹접근성 체크리스트는 어떻게 시작해야 하나요?",
+            body: [
+              "웹접근성 체크리스트는 출시 직전 QA에서 갑자기 꺼내는 문서가 아닙니다. 대체 텍스트의 작성 책임, 색상 시스템, 키보드 인터랙션, 오류 안내와 인증 방식처럼 구조를 바꾸는 항목은 기획과 설계 단계에서 결정해야 수정 비용이 낮습니다. 프로젝트를 시작할 때 기준과 담당을 정하고, 디자인 리뷰와 구현 QA에서 같은 목록을 업데이트하는 방식이 효율적입니다.",
+              "첫 단계는 적용 기준을 정하는 것입니다. 국내 웹 프로젝트에서 KWCAG 2.2를 기준으로 사전 점검할지, 국제 기준인 WCAG 2.2의 A 또는 AA를 목표로 할지 팀 안에서 명시해야 합니다. 두 기준은 공통된 원칙이 많지만 번호와 구성, 일부 세부 항목이 같지 않습니다. 따라서 하나를 다른 하나의 단순 번역본으로 취급하면 누락이나 잘못된 완료 판단이 생길 수 있습니다.",
+            ],
+          },
+          {
+            heading: "KWCAG 2.2와 WCAG 2.2는 무엇이 다른가요?",
+            body: [
+              "KWCAG 2.2는 국내 웹 콘텐츠 접근성 표준으로 4개 원칙, 14개 지침, 33개 검사항목을 제시합니다. A·AA·AAA 등급을 사용하지 않습니다. 국내 웹 접근성 품질인증 전문가 심사의 항목도 33개지만, 체크리스트에서 한 번 통과를 선택했다고 실제 인증 준수율이 되는 것은 아닙니다. 인증은 선정된 표본 페이지와 콘텐츠를 기준으로 별도 산정하며 사용자 심사도 포함합니다.",
+              "WCAG 2.2는 성공 기준을 A, AA, AAA로 나눕니다. Level AA를 목표로 하면 AA 항목만 고르는 것이 아니라 A와 AA를 모두 포함해야 합니다. 이 도구는 A 31개와 AA 24개, 합쳐서 55개를 생성하고 실무에서 목표로 삼는 일이 드문 AAA는 제외합니다. WCAG 2.2에서 삭제된 4.1.1 Parsing도 포함하지 않습니다.",
+              "기준 선택이 곧 법적 의무나 인증 범위를 결정하는 것은 아닙니다. 조직의 계약 조건, 발주 규격, 정책과 최신 심사 기준을 별도로 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "민간과 공공을 선택하면 왜 항목이 달라지지 않나요?",
+            body: [
+              "접근성은 사용자의 이용 가능성을 다루는 품질 기준입니다. 사이트 운영 주체가 민간인지 공공인지에 따라 적용 법령, 발주 조건, 인증 필요성은 달라질 수 있지만 버튼이 키보드로 동작해야 하는지, 이미지에 적절한 대체 텍스트가 필요한지 같은 기술 검토 항목을 임의로 제거할 근거는 되지 않습니다.",
+              "그래서 이 도구의 운영 유형 선택은 보고서의 프로젝트 정보와 안내 문구에만 반영합니다. 공공·품질인증 준비를 고르면 공식 심사를 대체하지 않는다는 경고를 더 분명히 보여줍니다. 실제 항목의 적용 가능성은 사이트가 영상, 인증, 시간 제한, 드래그 같은 기능을 갖는지에 따라 판단합니다.",
+            ],
+          },
+          {
+            heading: "목표 레벨은 어떻게 선택하나요?",
+            body: [
+              "WCAG A는 기본적인 접근 장벽을 다루지만, 일반적인 제품 품질 목표로는 AA를 권장합니다. AA를 선택하면 텍스트 명도대비, 리플로, 텍스트 간격, 비텍스트 명도대비, 가려지지 않는 초점, 최소 타겟 크기 같은 항목이 추가됩니다. 다만 목표 레벨은 계약이나 정책에 따라 정해야 하므로 도구가 대신 결정하지 않습니다.",
+              "레벨을 A에서 AA로 올리면 이미 기록한 A 항목의 상태와 메모는 그대로 두고 AA 항목만 미검토로 추가됩니다. 반대로 AA에서 A로 내리면 기록이 남은 AA 항목이 사라지므로 몇 개가 삭제되는지 먼저 확인합니다. KWCAG 2.2 모드에서는 레벨을 선택하지 않습니다. 33개 전체를 만든 뒤 실제 기능에 따라 해당 없음 여부를 검토합니다.",
+            ],
+          },
+          {
+            heading: "서비스 기능 질문은 왜 필요한가요?",
+            body: [
+              "모든 사이트에 녹화 영상, 실시간 방송, 로그인, 시간 제한, 드래그 기능이 있는 것은 아닙니다. 정적인 체크리스트는 이런 항목을 전부 보여주거나 반대로 너무 일찍 제외합니다. 기능 질문은 적용되지 않을 가능성이 높은 항목을 표시해 검토 순서를 줄이는 장치입니다.",
+              "하지만 선택 결과만으로 항목을 삭제하면 안 됩니다. 예를 들어 팀이 자동 재생 콘텐츠가 없다고 답했어도 광고, 외부 위젯, 운영 단계의 캐러셀이 추가될 수 있습니다. 그래서 이 도구는 해당 없음 후보만 표시하고 최종 판단은 사용자가 이유를 확인한 뒤 선택하도록 합니다. 키보드 사용 보장, 이름·역할·값, 웹 애플리케이션 접근성처럼 범위가 넓은 항목은 어떤 답변에서도 후보가 되지 않습니다.",
+            ],
+          },
+          {
+            heading: "역할 태그는 책임을 어떻게 나누나요?",
+            body: [
+              "기획 담당은 오류 문구, 시간 제한, 인증, 중복 입력, 도움 정보 같은 절차를 정의합니다. 디자인 담당은 색, 대비, 초점 표현, 타겟 크기와 색 이외의 단서를 설계합니다. 퍼블리싱·개발 담당은 의미 구조, 키보드 동작, ARIA 상태와 실제 인터랙션을 구현합니다.",
+              "한 항목에 역할이 여러 개 붙는 것은 책임이 불명확해서가 아닙니다. 접근성 문제는 한 단계에서만 해결되지 않기 때문입니다. 예를 들어 폼 레이블은 기획자가 이름을 정하고, 디자이너가 시각적 라벨을 배치하며, 개발자가 입력 요소와 연결해야 합니다. 팀에서는 역할 태그를 작업을 넘기는 순서로 사용하고 최종 검토 책임자를 별도로 합의하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "진행률과 통과 상태는 어떻게 해석해야 하나요?",
+            body: [
+              "검토 진행률은 팀이 몇 개 항목을 살펴봤는지 보여주는 작업 관리 수치입니다. 접근성 준수율이나 공식 합격 가능성이 아닙니다. 통과는 현재 프로젝트 범위와 확인한 화면에서 문제를 발견하지 못했다는 기록일 뿐, 모든 페이지와 보조기술 조합에서 완전한 준수를 보장하지 않습니다.",
+              "이슈는 실패 선언이 아니라 수정 작업의 시작점입니다. 메모에 영향 화면, 재현 방법, 수정 담당과 재검수 조건을 남기면 체크리스트가 단순 보고용 표가 아니라 실행 가능한 백로그가 됩니다. 해당 없음에는 적용되지 않는 이유를 적어 나중에 기능이 추가됐을 때 다시 판단할 수 있게 해야 합니다.",
+              "진행률의 분모는 전체 항목에서 해당 없음을 뺀 수입니다. 모든 항목을 해당 없음으로 두면 100%가 되는 대신 검토할 항목이 없다고 표시합니다. 분모가 없는데 완료처럼 보이는 숫자를 만들지 않기 위해서입니다.",
+            ],
+          },
+          {
+            heading: "자동 검사 도구와 수동 검수는 어떻게 조합하나요?",
+            body: [
+              "자동 검사기는 마크업 누락, 일부 대비 값, 특정 속성과 구조를 빠르게 찾는 데 유용합니다. 하지만 대체 텍스트가 상황에 적절한지, 초점 순서가 사용 흐름과 맞는지, 오류 설명이 이해 가능한지, 색 외 단서가 충분한지는 사람의 판단이 필요합니다.",
+              "권장 순서는 이렇습니다. 기획 단계에서 서비스 기능과 절차 관련 항목을 분류하고, 디자인 리뷰에서 명도대비·색각 구분·타겟 크기·초점 표현을 확인합니다. 구현 중에는 HTML 구조와 키보드 동작을 검사하고, 확대·리플로·텍스트 간격을 실제 렌더링으로 확인합니다. 그다음 스크린리더와 키보드만 사용한 주요 과업 테스트를 수행하고, 발견한 이슈를 수정한 뒤 다른 화면에 같은 패턴이 없는지 회귀 검수합니다.",
+              "Kitfolio의 개별 검사 도구는 이 중 디자인 리뷰와 구현 검사 단계를 돕습니다. 체크리스트는 각 도구의 결과를 자동으로 가져오지 않습니다. 검사한 범위와 수정 링크를 메모나 근거 URL에 직접 남겨야 나중에 무엇을 근거로 통과했는지 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "Markdown과 CSV는 언제 사용하나요?",
+            body: [
+              "Markdown은 GitHub Issue, 저장소 문서, Notion 본문처럼 사람이 읽고 리뷰하는 문서에 적합합니다. 축별 제목과 항목별 상태·메모가 계층적으로 정리됩니다. CSV는 스프레드시트에서 담당별로 필터링하거나 이슈 수를 집계할 때 유용하며, 한국어 Excel에서 깨지지 않도록 UTF-8 BOM을 붙여 내보냅니다.",
+              "두 형식 모두 화면 필터와 상관없이 현재 체크리스트 전체를 포함합니다. 받는 사람이 빠진 항목을 알 수 없기 때문입니다. 중요한 프로젝트라면 브라우저 저장만 믿지 말고 정기적으로 파일을 내려받아 보관하세요. 브라우저 데이터 삭제나 다른 기기 사용 시 로컬 상태는 복원되지 않습니다.",
+            ],
+          },
+          {
+            heading: "품질인증 준비에 사용할 때 주의할 점",
+            body: [
+              "이 도구는 심사 준비 범위를 정리하는 데 사용할 수 있지만 품질인증 심사표 자체가 아닙니다. 공식 심사는 페이지 표본 선정, 콘텐츠 단위 판정, 항목별 준수율 산정, 사용자 심사 등 별도 절차를 사용합니다. 심사를 준비한다면 신청 시점의 최신 표준심사 지침과 인증기관 안내를 확인해야 합니다.",
+              "체크리스트에서 모든 항목을 통과로 표시했더라도 이를 인증 통과나 준수율 100%로 보고하지 마세요. 내부 문서에는 사전 검토 완료와 검사 범위, 사용한 브라우저·보조기술, 날짜를 함께 기록하는 표현이 정확합니다.",
+            ],
+          },
+          {
+            heading: "배포 전 권장 운영 방식",
+            body: [
+              "프로젝트 착수 시점에는 기준·목표·주요 기능·역할을 정합니다. 와이어프레임 리뷰에서 정보 구조, 오류 절차, 인증, 시간 제한을 확인하고, UI 리뷰에서 색·대비·포커스·타겟과 상태 표현을 확인합니다. 구현 QA에서는 키보드, 의미 구조, 이름·역할·값, 상태 메시지를 확인하고, 출시 전에는 주요 과업을 실제 브라우저와 보조기술로 반복합니다. 출시 후에는 신규 컴포넌트와 운영 콘텐츠가 추가될 때 관련 항목을 다시 엽니다.",
+              "접근성은 한 번 완료하고 닫는 인증 스티커가 아니라 제품 변경과 함께 유지해야 하는 품질 조건입니다. 체크리스트의 가장 중요한 값도 완벽해 보이는 숫자가 아니라, 누가 무엇을 언제 다시 확인할지 남기는 데 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "국내 공공 리뉴얼 사전 점검",
+            input:
+              "프로젝트명 고객센터 리뉴얼 · 기준 KWCAG 2.2 · 환경 반응형 웹 · 운영 공공·품질인증 준비 · 기능은 입력 폼과 복합 UI만 있음",
+            result:
+              "33개 항목 생성. 자막 제공, 자동 재생 금지, 정지 기능 제공, 응답시간 조절, 단일 포인터 입력 지원, 동작 기반 작동, 표의 구성, 고정된 참조 위치 정보, 접근 가능한 인증까지 9개가 해당 없음 후보로 표시됩니다",
+            note: "후보 9개는 목록에서 사라지지 않고 배지만 붙습니다. 영상이나 캐러셀이 운영 중에 추가될 수 있으므로 실제 화면을 본 뒤 직접 해당 없음을 선택해야 분모에서 빠집니다. 키보드 사용 보장처럼 범위가 넓은 항목은 어떤 응답에서도 후보가 되지 않습니다.",
+          },
+          {
+            title: "WCAG 목표를 A에서 AA로 올리기",
+            input:
+              "WCAG 2.2 Level A로 31개를 만들고 1.1.1을 통과로, 2.1.1을 이슈로 기록한 뒤 설정 변경에서 레벨을 AA로 변경",
+            result:
+              "항목이 55개로 늘고 1.1.1 통과와 2.1.1 이슈 기록은 그대로 유지됩니다. 새로 들어온 AA 24개는 전부 미검토 상태입니다",
+            note: "AA 목표는 A를 포함하므로 다시 만들 필요가 없습니다. 반대로 AA에서 A로 내리면 기록이 남은 AA 항목이 몇 개 삭제되는지 먼저 확인 대화상자로 알려줍니다.",
+          },
+          {
+            title: "진행률과 이슈 목록 전달",
+            input:
+              "55개 중 통과 10 · 이슈 3 · 검토 중 3 · 해당 없음 2 로 기록한 뒤 이슈 먼저 정렬로 확인하고 Markdown 다운로드",
+            result:
+              "검토 진행률 30%. 분모는 55에서 해당 없음 2를 뺀 53이고 분자는 검토 중·통과·이슈를 더한 16입니다",
+            note: "30%는 작업 진행 상황이지 준수율이 아닙니다. 내보낸 Markdown에는 축별 제목 아래 상태·메모·근거·공식 출처가 항목마다 들어가므로 이슈 3건을 그대로 수정 백로그로 옮길 수 있습니다.",
+          },
+        ],
+        limitations: [
+          "사이트를 크롤링하거나 자동으로 진단하지 않습니다. URL을 넣어 점수를 받는 도구가 아니라 검토해야 할 항목을 만들고 기록을 남기는 도구입니다.",
+          "품질인증 합격 여부를 예측하지 않고 인증마크를 발급하지도 않습니다. 공식 심사는 표본 페이지 선정, 항목별 준수율 산정, 전문가 심사와 사용자 심사를 별도로 수행합니다.",
+          "민간·공공 구분이나 법적 의무 여부를 판정하지 않습니다. 운영 유형 선택은 프로젝트 정보와 안내 문구에만 반영됩니다.",
+          "WCAG는 Level A와 AA만 제공하고 AAA는 포함하지 않습니다. WCAG 2.2에서 제거된 4.1.1 Parsing도 포함하지 않습니다.",
+          "모바일 네이티브 앱 접근성 항목은 다루지 않습니다. 웹과 모바일 웹을 기준으로 작성돼 있습니다.",
+          "한 번에 한 프로젝트만 저장합니다. 새 체크리스트를 만들면 이전 기록은 이 브라우저에서 사라지므로 먼저 내보내야 합니다.",
+          "브라우저 로컬 저장이라 다른 기기·다른 브라우저와 동기화되지 않고, 시크릿 모드 종료나 브라우저 데이터 삭제 후에는 복구할 수 없습니다.",
+          "연결된 네 가지 검사 도구의 결과를 자동으로 가져오지 않습니다. 도구로 이동해 확인한 내용은 직접 메모와 근거 URL에 남겨야 합니다.",
+        ],
+        sources: [
+          { label: "W3C · WCAG 2.2 Recommendation", url: "https://www.w3.org/TR/WCAG22/" },
+          {
+            label: "W3C · How to Meet WCAG 2.2 Quick Reference",
+            url: "https://www.w3.org/WAI/WCAG22/quickref/",
+          },
+          {
+            label: "한국정보접근성인증평가원 · 한국형 웹 콘텐츠 접근성 지침 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=22592",
+          },
+          {
+            label: "한국정보접근성인증평가원 · 정보통신접근성 품질인증 표준심사 지침 (2025-01-01 시행)",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=35560",
+          },
+        ],
+      },
+      en: {
+        card: "Turn KWCAG or WCAG 2.2 requirements into a project checklist with roles, status and evidence.",
+        description:
+          "Pick a standard, a WCAG target level, a test environment, and the features your product actually has, then get a review list that planning, design, and development can share. Every item carries a practical question, how to check it, and what evidence to record, alongside a status, a note, and an evidence URL. Everything stays in this browser and exports as Markdown or CSV.",
+        howItWorks: [
+          "Choose the standard, target level, environment and product features",
+          "Record status, notes and evidence, and filter by role or axis",
+          "Copy or download Markdown, or download CSV",
+        ],
+        aeo: {
+          what: "A web accessibility checklist builder is a browser tool that turns KWCAG 2.2 or WCAG 2.2 requirements into project review tasks, tracks roles, status, notes, and evidence, and exports the checklist as Markdown or CSV.",
+          who: "It is designed for product managers, designers, front-end developers, publishers, and QA specialists coordinating accessibility work from planning through release review.",
+          how: "Choose a standard, WCAG target level, test environment, and the features present in your product. Review the generated items, record status and evidence, filter the list, and export it.",
+          why: "It converts standards into actionable, role-based tasks, highlights likely non-applicable items without hiding them, preserves local progress, and creates a consistent handoff document.",
+        },
+        guide: [
+          {
+            heading: "How should you start a web accessibility checklist?",
+            body: [
+              "An accessibility checklist should begin before release QA. Decisions about alternative text ownership, color systems, keyboard interaction, error recovery, and authentication can affect product structure, and resolving them during planning and design is usually cheaper than fixing them after implementation.",
+              "Start by naming the standard and target the project will use. Then keep the same checklist through requirements, design review, implementation, and release testing so that decisions and evidence stay connected to the criteria they belong to.",
+            ],
+          },
+          {
+            heading: "How are KWCAG 2.2 and WCAG 2.2 different?",
+            body: [
+              "KWCAG 2.2 is a Korean web content accessibility standard organized into four principles, 14 guidelines, and 33 requirements. It does not use A, AA, and AAA levels. WCAG 2.2 organizes success criteria into those three conformance levels, and a WCAG AA target includes both Level A and Level AA criteria.",
+              "The standards overlap in purpose, but their numbering, grouping, and some requirements differ. Do not treat one as a direct translation of the other. This builder keeps them as separate datasets: KWCAG generates all 33 requirements, while WCAG generates 31 Level A criteria, or 55 criteria when AA is selected. Level AAA is out of scope, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+            ],
+          },
+          {
+            heading: "Why does organization type not remove requirements?",
+            body: [
+              "Public and private organizations may have different legal, procurement, or certification obligations, but organization type alone does not determine whether a control needs a keyboard interface or an image needs an appropriate text alternative. The selection is therefore recorded as project context and changes the guidance shown, not the technical checklist.",
+              "Product features are far more useful for identifying likely non-applicable items. Media, authentication, time limits, gestures, and motion input each flag a specific set of criteria for review.",
+            ],
+          },
+          {
+            heading: "How should you choose a WCAG target level?",
+            body: [
+              "Level A covers foundational barriers. Level AA adds requirements commonly used as a product accessibility target, including minimum contrast, reflow, text spacing, non-text contrast, focus that is not obscured, and minimum target size. The correct target may be set by policy, contract, or regulation, so the builder does not decide it for the team.",
+              "Raising the target from A to AA keeps the status and notes you already recorded on Level A items and adds the AA criteria as not started. Lowering it back to A removes AA items, so the builder first tells you how many of them already carry a record. KWCAG mode has no level control and always includes all 33 requirements.",
+            ],
+          },
+          {
+            heading: "Why are some items marked as not applicable candidates?",
+            body: [
+              "A product without prerecorded media may not need a caption review, and a product without authentication may not need an authentication criterion. However, a setup answer is not enough to prove that a requirement is inapplicable. Embedded content, an advertisement, or a feature added after launch can change the scope at any time.",
+              "The builder therefore highlights candidates but keeps them visible and inside the progress denominator. A reviewer must explicitly choose Not applicable and should record the reason. Broad criteria such as keyboard operation, name, role, value, and overall web application accessibility are never flagged as candidates, because no single feature answer can rule them out.",
+            ],
+          },
+          {
+            heading: "How should roles share accessibility work?",
+            body: [
+              "Planning roles define flows such as error recovery, timing, authentication, redundant entry, and help. Designers specify color, contrast, focus presentation, target size, and non-color cues. Developers implement semantics, keyboard behavior, programmatic names, roles, values, and status announcements.",
+              "Many criteria need more than one role. A form label, for example, is named during planning, positioned during design, and associated with its input during implementation. Treat role tags as a handoff path and agree on one final reviewer for each product area.",
+            ],
+          },
+          {
+            heading: "What does review progress mean?",
+            body: [
+              "Review progress measures workflow completion. It is not a conformance score, an accessibility percentage, or a certification prediction. Passed means no issue was found in the reviewed scope; it does not prove that every page, state, browser, and assistive technology combination conforms.",
+              "Use Issue to start remediation work, and record the affected screen, reproduction steps, owner, and retest condition in the note. Record a reason for every Not applicable decision so it can be reconsidered when the product changes.",
+              "The denominator is the total number of items minus the ones you marked Not applicable. When every item is Not applicable the builder reports that there is nothing to review instead of showing 100%, because a full bar with no denominator reads as completion that never happened.",
+            ],
+          },
+          {
+            heading: "How should automated and manual tests be combined?",
+            body: [
+              "Automated checks can find missing markup, some contrast problems, and specific structural failures. Human review is still needed to judge alternative text quality, logical focus order, understandable errors, complete non-color cues, and real task completion.",
+              "A practical sequence is to classify product features and process requirements during planning, review contrast, color differentiation, target size, and focus design next, inspect HTML structure and keyboard behavior during implementation, test resizing, reflow, and text spacing in the rendered interface, complete key tasks with keyboard-only and screen reader workflows, then fix issues and run regression checks across reused patterns.",
+              "The individual Kitfolio checkers support the design review and implementation steps. The checklist never collects their output automatically, so record what you tested and link the fix in the note and evidence fields.",
+            ],
+          },
+          {
+            heading: "When should you use Markdown or CSV export?",
+            body: [
+              "Markdown works well for repository documentation, issues, and readable review notes, grouping items under each review axis with their status, notes, and sources. CSV is useful for spreadsheet filtering, ownership views, and issue counts, and it carries a UTF-8 byte order mark so Korean text opens correctly in Excel.",
+              "Both exports contain the complete current checklist regardless of the filters on screen, because the person receiving the file cannot tell which items were hidden. Browser storage is convenient but it is not a durable backup, so export important work regularly, especially before clearing browser data or moving to another device.",
+            ],
+          },
+          {
+            heading: "Can this checklist be used for Korean accessibility certification?",
+            body: [
+              "It can organize pre-review work, but it is not the official assessment sheet and cannot predict certification. Formal assessment can include page sampling, content-level evaluation, item-level conformance calculations, and user testing. Always confirm the current assessment instructions at the time of application.",
+              "Describe the output as a pre-review record together with the scope you tested, the browsers and assistive technology you used, and the date. Do not describe it as proof of certification or as 100% conformance.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Pre-review for a Korean public sector redesign",
+            input:
+              "Project Support center redesign, standard KWCAG 2.2, responsive web, public sector or certification prep, with only forms and composite UI answered as present",
+            result:
+              "33 items generated. Nine appear as not applicable candidates: captions, no automatic audio playback, pause control, adjustable response time, single pointer input, motion actuation, table structure, fixed reference location, and accessible authentication",
+            note: "Those nine stay in the list with a badge rather than disappearing. Video or a carousel can be added after launch, so they leave the denominator only when a reviewer looks at the real screens and selects Not applicable. Broad items such as keyboard accessibility are never flagged, whatever you answer.",
+          },
+          {
+            title: "Raising a WCAG target from A to AA",
+            input:
+              "Build 31 Level A items, mark 1.1.1 as Passed and 2.1.1 as Issue, then change the target level to AA in the settings card",
+            result:
+              "The list grows to 55 items while the 1.1.1 pass and the 2.1.1 issue stay exactly as recorded. The 24 newly added AA criteria all start as Not started",
+            note: "An AA target includes Level A, so there is no need to rebuild. Going back down to A instead asks for confirmation and names how many AA items with a record would be deleted.",
+          },
+          {
+            title: "Handing over progress and an issue list",
+            input:
+              "Of 55 items: 10 passed, 3 issues, 3 in review, 2 not applicable, sorted with Issues first, then exported as Markdown",
+            result:
+              "Review progress 30%. The denominator is 55 minus the 2 not applicable items, and the numerator is the 16 items in review, passed, or flagged as issues",
+            note: "30% describes workflow, not conformance. The exported Markdown lists status, note, evidence, and the official source under each axis heading, so the three issues move straight into a remediation backlog.",
+          },
+        ],
+        limitations: [
+          "It does not crawl a site or run an automated audit. You do not enter a URL and receive a score; you generate the items to review and keep the record.",
+          "It does not predict a certification result or issue any conformance mark. Formal assessment runs its own sampling, item-level scoring, expert review, and user testing.",
+          "It does not decide whether a legal obligation applies to your organization. The organization type only changes project context and the guidance shown.",
+          "WCAG coverage is Level A and AA only. Level AAA is excluded, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+          "Mobile native app accessibility is out of scope. The requirements are written for web and mobile web.",
+          "Only one project is stored at a time. Starting a new checklist removes the previous record from this browser, so export it first.",
+          "Local browser storage does not sync across devices or browsers, and it cannot be recovered after clearing site data or closing a private window.",
+          "Results from the four linked checkers are never imported automatically. Anything you verify in those tools has to be written back into the note and evidence fields yourself.",
+        ],
+        sources: [
+          { label: "W3C · WCAG 2.2 Recommendation", url: "https://www.w3.org/TR/WCAG22/" },
+          {
+            label: "W3C · How to Meet WCAG 2.2 Quick Reference",
+            url: "https://www.w3.org/WAI/WCAG22/quickref/",
+          },
+          {
+            label: "Korean Web Content Accessibility Guidelines 2.2",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=22592",
+          },
+          {
+            label:
+              "Korean ICT Accessibility Quality Certification Standard Assessment Guidelines (effective 2025-01-01)",
+            url: "https://www.wa.or.kr/board/view.asp?BoardID=0004&sn=35560",
+          },
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "웹접근성 체크리스트는 자동 검사 결과인가요?",
+          answer:
+            "아닙니다. 표준 항목을 프로젝트 업무로 관리하기 위한 도구입니다. 일부 항목은 연결된 검사 도구로 확인할 수 있지만 최종 판단에는 실제 화면, 키보드와 보조기술을 사용한 수동 검수가 필요합니다.",
+        },
+        {
+          question: "WCAG 2.2에서 AA를 선택하면 A 항목도 포함되나요?",
+          answer:
+            "네. AA 목표는 Level A와 Level AA 성공 기준을 함께 포함합니다. 이 도구에서는 A 31개와 AA 24개, 총 55개 기준을 생성합니다. AAA는 제공하지 않고, WCAG 2.2에서 제거된 4.1.1 Parsing도 포함하지 않습니다.",
+        },
+        {
+          question: "KWCAG 2.2에도 A와 AA 레벨이 있나요?",
+          answer:
+            "아닙니다. KWCAG 2.2는 4개 원칙, 14개 지침, 33개 검사항목으로 구성되며 A·AA·AAA 레벨을 사용하지 않습니다. 그래서 KWCAG를 선택하면 레벨 입력이 사라지고 33개 전체가 생성됩니다.",
+        },
+        {
+          question: "공공기관을 선택하면 체크 항목이 더 많아지나요?",
+          answer:
+            "운영 유형만으로 기술 항목을 추가하거나 제거하지 않습니다. 공공·품질인증 준비 선택은 안내와 내보내기 정보에 반영되며, 실제 항목 적용 가능성은 서비스 기능과 공식 요구사항을 확인해 판단해야 합니다.",
+        },
+        {
+          question: "체크리스트 데이터는 어디에 저장되나요?",
+          answer:
+            "현재 브라우저의 로컬 저장소에만 저장되고 서버로 전송되지 않습니다. 프로젝트명, 메모, 근거 URL은 분석 이벤트에도 포함하지 않습니다. 브라우저 데이터를 삭제하거나 다른 기기를 사용하면 복원되지 않으므로 중요한 결과는 Markdown 또는 CSV로 내려받으세요.",
+        },
+        {
+          question: "모든 항목을 통과로 표시하면 웹 접근성 인증을 받을 수 있나요?",
+          answer:
+            "아닙니다. 이 결과는 내부 사전 검토 기록이며 공식 인증 판정이 아닙니다. 실제 인증은 최신 심사 지침에 따른 표본 선정, 전문가 심사와 사용자 심사 등 별도 절차를 거칩니다. 진행률도 준수율이 아니라 검토한 항목의 비율입니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does this accessibility checklist automatically audit my website?",
+          answer:
+            "No. It organizes standards into project review tasks. Linked tools can help inspect selected issues, but conformance still requires testing the rendered product with keyboard and assistive technology workflows.",
+        },
+        {
+          question: "Does WCAG 2.2 Level AA include Level A criteria?",
+          answer:
+            "Yes. An AA target includes all Level A and Level AA success criteria. The builder generates 31 A criteria and 24 AA criteria, for a total of 55. Level AAA is not offered, and 4.1.1 Parsing is excluded because it was removed in WCAG 2.2.",
+        },
+        {
+          question: "Does KWCAG 2.2 use A and AA levels?",
+          answer:
+            "No. KWCAG 2.2 is organized into four principles, 14 guidelines, and 33 requirements without A, AA, or AAA levels. Choosing KWCAG hides the level control and generates all 33 requirements.",
+        },
+        {
+          question: "Does choosing a public organization add more checklist items?",
+          answer:
+            "No items are added or removed based only on organization type. The choice changes project context and certification guidance. Applicability still depends on product features and current official requirements.",
+        },
+        {
+          question: "Where is my checklist data stored?",
+          answer:
+            "It stays in local browser storage and is not sent to a server. The project name, notes, and evidence URLs are never included in analytics either. Export important work as Markdown or CSV, because clearing browser data or changing devices will remove access to the saved state.",
+        },
+        {
+          question: "Does a completed checklist prove accessibility certification?",
+          answer:
+            "No. It is a pre-review workflow record, not a formal conformance or certification decision. Formal assessment uses its own sampling, expert review, user testing, and scoring procedures, and review progress reports how much you reviewed rather than how much conforms.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "웹접근성 체크리스트 빌더",
+        subtitle: "KWCAG·WCAG 2.2 항목을 역할·상태·근거와 함께 관리",
+      },
+      en: {
+        title: "Web Accessibility Checklist Builder",
+        subtitle: "Turn WCAG 2.2 criteria into a tracked, exportable review list",
       },
     },
   },
@@ -7694,6 +8150,681 @@ export const TOOLS: Tool[] = [
     og: {
       ko: { title: "PDF 도구", subtitle: "PDF 병합·분할·회전·페이지 삭제를 한 페이지에서" },
       en: { title: "PDF Tools", subtitle: "Merge, split, rotate and delete PDF pages in one place" },
+    },
+  },
+  // ── Design ── 이미지 최적화 (포맷·품질만 조절, 픽셀 크기는 유지) ──
+  {
+    slug: "image-optimizer",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer"],
+    ico: "IMG",
+    ready: true,
+    indexable: true,
+    badge: "Canvas",
+    name: { ko: "이미지 최적화", en: "Image Optimizer" },
+    relatedTools: ["image-resizer-cropper", "open-graph-preview", "css-gradient"],
+    seo: {
+      ko: {
+        title: "이미지 최적화 | PNG·JPG·WebP 용량 줄이기",
+        description:
+          "PNG, JPG, WebP 이미지의 원본 크기는 그대로 유지하면서 포맷과 품질을 조절해 파일 용량을 줄입니다. 여러 장을 한 번에 처리하고 개별 또는 ZIP으로 받을 수 있으며, 이미지가 서버로 업로드되지 않고 브라우저에서 바로 처리되는 무료 이미지 최적화 도구입니다.",
+        keywords: [
+          "이미지 최적화",
+          "이미지 용량 줄이기",
+          "이미지 압축",
+          "WebP 변환",
+          "PNG WebP 변환",
+          "JPG WebP 변환",
+          "PNG JPG 변환",
+          "웹 이미지 최적화",
+          "사진 용량 줄이기",
+        ],
+      },
+      en: {
+        title: "Image Optimizer | Compress PNG, JPG & WebP",
+        description:
+          "Optimize PNG, JPG, and WebP images without changing their pixel dimensions. Adjust image format and quality to reduce file size, process several images at once, and download them individually or as a ZIP, with all processing performed locally in your browser and no image uploads.",
+        keywords: [
+          "image optimizer",
+          "image compressor",
+          "compress image",
+          "WebP converter",
+          "PNG to WebP",
+          "JPG to WebP",
+          "PNG to JPG",
+          "optimize images for web",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다.",
+        description:
+          "PNG, JPG, WebP 이미지의 원본 크기는 그대로 유지하면서 포맷과 품질을 조절해 파일 용량을 줄입니다. 여러 장에 같은 설정을 적용해 한 번에 처리하고, 원본과 결과 용량을 비교한 뒤 개별 또는 ZIP으로 받을 수 있습니다. 이미지는 서버로 업로드되지 않고 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "PNG·JPG·WebP 이미지 추가",
+          "출력 포맷과 품질 선택",
+          "용량 비교 후 개별 또는 ZIP 다운로드",
+        ],
+        aeo: {
+          what: "이미지 최적화 도구는 이미지의 가로·세로 픽셀 크기를 변경하지 않고 포맷 또는 압축 품질을 조절하여 파일 용량을 줄이는 브라우저 도구입니다.",
+          who: "웹사이트, 블로그, 앱 스토어, 포트폴리오 등에 사용할 이미지의 용량을 줄여야 하는 디자이너, 개발자, 콘텐츠 제작자에게 적합합니다.",
+          how: "PNG, JPG 또는 WebP 이미지를 추가하고 출력 포맷과 품질을 선택하면 브라우저에서 이미지를 다시 인코딩하여 결과 파일과 용량 차이를 보여줍니다.",
+          why: "이미지를 외부 서버에 업로드하거나 별도 프로그램을 설치하지 않고도 웹에 사용할 이미지의 파일 용량을 빠르게 줄일 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "이미지 최적화는 가장 작은 파일을 만드는 일이 아니다",
+            body: [
+              "이미지 최적화는 단순히 파일 용량을 가장 작게 만드는 작업이 아닙니다. 이미지가 사용되는 목적에 맞는 포맷과 품질을 선택하면서 필요한 화질을 유지하고, 전송해야 하는 데이터의 양을 줄이는 과정입니다.",
+              "이 도구는 이미지의 가로·세로 픽셀 크기를 변경하지 않습니다. 원본 이미지의 크기를 유지한 상태에서 출력 포맷과 압축 품질만 바꿔 더 작은 파일을 만듭니다. 픽셀 크기 자체를 줄이거나 특정 비율로 잘라야 한다면 별도의 리사이즈·크롭 도구가 필요합니다.",
+            ],
+          },
+          {
+            heading: "PNG, JPG, WebP 중 어떤 포맷을 선택해야 하나요?",
+            body: [
+              "이미지 포맷마다 적합한 용도가 다릅니다. 가장 작은 파일을 만드는 포맷을 일률적으로 선택하기보다 이미지의 특성과 사용 환경을 고려해야 합니다.",
+              "WebP는 웹사이트에 사용할 이미지라면 우선 고려할 수 있는 포맷입니다. 사진과 그래픽 이미지 모두에 쓸 수 있고 손실·무손실 압축과 투명도를 지원합니다. 기존 PNG나 JPG를 WebP로 바꾸면 비슷한 시각적 품질에서 파일 크기가 줄어드는 경우가 많습니다. 웹사이트 콘텐츠 이미지, 랜딩 페이지 이미지, 썸네일과 카드 이미지, 제품·배경 이미지가 여기에 해당합니다.",
+              "JPG는 사진처럼 색상과 명암 변화가 많은 이미지에 적합합니다. 압축 품질을 조절해 파일 크기를 크게 줄일 수 있지만 투명 배경을 지원하지 않습니다. 사진과 인물 이미지, 풍경 이미지, 투명 배경이 필요 없는 이미지에 맞습니다. PNG나 WebP의 투명 영역을 JPG로 바꾸면 투명도를 유지할 수 없고, 이 도구는 해당 영역을 흰색 배경으로 처리합니다.",
+              "PNG는 로고, 아이콘, UI 캡처처럼 선명한 경계나 투명 배경이 중요한 이미지에 적합합니다. 무손실 포맷이라 이미지 정보를 유지하는 데 유리하지만 사진처럼 복잡한 이미지에서는 파일 크기가 커질 수 있습니다. 파일 크기보다 정확한 표현이 중요하다면 PNG를 유지하는 편이 낫습니다.",
+            ],
+          },
+          {
+            heading: "이미지 품질은 몇으로 설정해야 하나요?",
+            body: [
+              "WebP와 JPG의 품질 값은 무조건 높다고 좋은 것도, 낮다고 좋은 것도 아닙니다. 품질을 낮추면 일반적으로 파일 크기가 줄어들지만 압축 흔적이나 디테일 손실이 눈에 띌 수 있습니다. 반대로 지나치게 높은 품질은 사용자가 차이를 거의 느끼지 못하면서 파일 크기만 키웁니다. 이 도구의 기본 품질 값은 80입니다.",
+              "출발점은 이렇게 잡습니다. 90~100은 이미지 품질을 우선해야 할 때, 75~89는 일반적인 웹 이미지, 60~74는 썸네일처럼 용량 절감이 더 중요할 때, 60 미만은 화질 저하를 직접 확인한 뒤에 쓰는 구간입니다.",
+              "이 값은 절대적인 화질 기준이 아닙니다. 이미지 내용과 인코딩 방식에 따라 같은 품질 값에서도 결과가 달라지므로, 최종 파일 크기와 실제 이미지를 함께 확인하는 것이 중요합니다.",
+            ],
+          },
+          {
+            heading: "이미지 용량은 얼마나 줄여야 하나요?",
+            body: [
+              "모든 웹 이미지에 적용할 수 있는 하나의 정답은 없습니다. 필요한 파일 크기는 이미지의 실제 픽셀 크기, 콘텐츠의 복잡도, 페이지에서 차지하는 중요도와 사용 환경에 따라 달라집니다.",
+              "특정 KB 이하로 만드는 것을 목표로 하기보다 다음 순서로 판단하는 편이 좋습니다. 먼저 필요한 이미지의 픽셀 크기가 이미 결정되어 있는지 확인하고, 사용 목적에 적합한 포맷을 선택합니다. WebP 또는 JPG라면 품질을 조절한 뒤 원본과 결과의 시각적 차이를 확인하고, 눈에 띄는 품질 저하가 없다면 더 작은 파일을 사용합니다.",
+              "이미지 최적화의 목적은 최소 용량이 아니라, 필요한 품질을 만족하는 최소한의 용량을 찾는 것입니다.",
+            ],
+          },
+          {
+            heading: "이미지 용량이 웹사이트에 왜 중요한가요?",
+            body: [
+              "웹페이지를 열 때 브라우저는 HTML과 CSS, JavaScript뿐 아니라 페이지에 표시되는 이미지도 함께 내려받습니다. 이미지 파일이 크거나 이미지가 많은 페이지에서는 사용자가 받아야 하는 데이터의 양이 늘어납니다. 특히 모바일 네트워크나 느린 연결 환경에서는 이미지가 표시되기까지 더 오래 걸립니다.",
+              "웹 이미지 최적화는 페이지가 전송하는 데이터 감소, 이미지 다운로드 시간 감소, 모바일 데이터 사용량 감소, 이미지가 많은 페이지의 로딩 부담 감소와 연결됩니다.",
+              "다만 이미지 파일을 최적화하는 것만으로 모든 웹 성능 문제가 해결되지는 않습니다. 실제 성능은 이미지가 표시되는 방식, 로딩 전략, 캐시, CDN 등 여러 요소의 영향을 함께 받습니다.",
+            ],
+          },
+          {
+            heading: "이미지 크기와 이미지 용량은 무엇이 다른가요?",
+            body: [
+              "이미지 작업에서 '크기'는 서로 다른 두 의미로 쓰입니다. 이미지 크기(dimensions)는 1200 × 630 px처럼 이미지를 구성하는 가로·세로 픽셀 수이고, 파일 용량(file size)은 842 KB처럼 파일이 저장 공간이나 네트워크에서 차지하는 데이터의 양입니다.",
+              "이 도구가 바꾸는 대상은 파일 용량입니다. 1200 × 630 PNG 1.84 MB를 넣으면 1200 × 630 WebP 214 KB가 나오는 식으로, 픽셀 크기는 그대로 두고 용량만 줄입니다. 가로·세로 픽셀을 바꾸거나 특정 비율로 잘라야 한다면 별도의 리사이즈·크롭 도구를 사용해야 합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "큰 PNG 스크린샷을 웹용 WebP로",
+            input: "1920 × 1080 PNG 1.84 MB · 출력 WebP · 품질 80",
+            result: "1920 × 1080 WebP 214 KB · 절감 1.63 MB (88.4%)",
+            note: "사진이나 그라디언트가 많은 PNG는 WebP로 바꿀 때 절감폭이 가장 큽니다. 픽셀 크기는 그대로입니다.",
+          },
+          {
+            title: "투명 배경 로고를 JPG로 저장",
+            input: "투명 배경 PNG · 출력 JPG · 품질 85",
+            result: "투명 영역이 흰색으로 채워진 JPG",
+            note: "흰색이 아닌 배경 위에 얹을 로고라면 JPG 대신 WebP나 PNG를 선택해야 경계가 드러나지 않습니다.",
+          },
+          {
+            title: "이미 압축된 작은 JPG를 다시 저장",
+            input: "82 KB JPG · 출력 JPG · 품질 95",
+            result: "104 KB JPG · 원본보다 22 KB 큼",
+            note: "이미 압축된 이미지를 높은 품질로 다시 인코딩하면 커질 수 있습니다. 결과가 커지면 원본을 그대로 쓰거나 품질을 낮춰 다시 시도하세요.",
+          },
+          {
+            title: "블로그 이미지 12장을 한 번에",
+            input: "PNG·JPG 섞인 12장 · 출력 WebP · 품질 75",
+            result: "12개 결과를 kitfolio-optimized-images.zip 한 파일로 다운로드",
+            note: "모든 파일에 같은 설정이 적용됩니다. 특정 이미지만 다른 품질이 필요하면 그 파일만 따로 처리하세요.",
+          },
+        ],
+        limitations: [
+          "가로·세로 픽셀 크기와 비율은 바꾸지 않습니다. 이미지를 더 작은 픽셀 크기로 줄이거나 특정 비율로 자르려면 별도의 리사이즈·크롭 도구가 필요합니다.",
+          "최적화한다고 항상 용량이 줄지는 않습니다. 이미 잘 압축된 이미지나 이미지 특성과 맞지 않는 포맷을 고르면 결과가 원본보다 커질 수 있고, 이 경우 도구는 절감률 대신 '원본보다 N 큼'으로 표시합니다.",
+          "PNG 출력은 브라우저의 무손실 인코더를 그대로 씁니다. 전용 PNG 최적화 프로그램만큼 줄어들지 않으며, 원본보다 커지는 경우도 있습니다.",
+          "재인코딩 과정에서 EXIF, 촬영 정보, 색 프로파일 같은 메타데이터는 결과 파일에 남지 않습니다. EXIF 회전 정보는 픽셀에 미리 적용해 보이는 방향을 유지합니다.",
+          "처리는 기기 메모리 안에서 이루어집니다. 파일당 50MB, 한 변 16383px, 전체 100메가픽셀까지를 상한으로 두지만, 기기 사양에 따라 그 이하에서도 실패할 수 있습니다. 한 변 상한은 WebP가 표현할 수 있는 최대 크기이며, 이보다 큰 이미지는 결과가 조용히 잘리지 않도록 아예 받지 않습니다.",
+          "GIF, SVG, AVIF, HEIC 등 PNG·JPG·WebP가 아닌 형식은 입력·출력 모두 지원하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Reduce PNG, JPG and WebP file size by changing format and quality, never the pixel dimensions.",
+        description:
+          "Optimize PNG, JPG, and WebP images without changing their pixel dimensions. Adjust the output format and quality to reduce file size, apply the same settings to several images at once, compare original and optimized sizes, and download results individually or as a ZIP. All processing happens locally in your browser and no image is ever uploaded.",
+        howItWorks: [
+          "Add PNG, JPG or WebP images",
+          "Pick an output format and quality",
+          "Compare sizes, then download one file or a ZIP",
+        ],
+        aeo: {
+          what: "Image Optimizer is a browser-based tool that reduces image file size by changing the format or compression quality without changing the image's pixel dimensions.",
+          who: "It is designed for designers, developers, and content creators who need smaller image files for websites, blogs, app stores, portfolios, and other digital products.",
+          how: "Add PNG, JPG, or WebP images, choose an output format and quality, and the tool re-encodes the images locally in your browser while showing the resulting file size.",
+          why: "It lets you reduce image file sizes without uploading images to an external server or installing separate image-editing software.",
+        },
+        guide: [
+          {
+            heading: "Optimization is not about making the smallest possible file",
+            body: [
+              "Image optimization is not simply the process of making a file as small as possible. It means choosing a format and quality level suited to the image's purpose while preserving acceptable visual quality and reducing the amount of data that must be transferred.",
+              "This tool does not change an image's width or height in pixels. It creates a new file by changing the output format and, where applicable, the compression quality, while preserving the original dimensions. Changing the pixel dimensions or cropping to a ratio needs a separate resizing tool.",
+            ],
+          },
+          {
+            heading: "Which format should I choose: PNG, JPG, or WebP?",
+            body: [
+              "Each image format is suited to different content. Instead of choosing one format solely because it produces the smallest file, consider the image itself and where it will be used.",
+              "WebP is a strong first option for images used on websites. It supports both lossy and lossless compression as well as transparency, making it useful for photographs and graphics alike. Converting a PNG or JPG to WebP can often reduce file size while keeping similar visual quality. It suits website content images, landing-page images, thumbnails and cards, and product or background images.",
+              "JPG is well suited to photographs and images with many color and tonal variations. Its adjustable compression can substantially reduce file size, but it does not support transparency. It suits photographs and portraits, landscape images, and anything that does not need a transparent background. When a transparent PNG or WebP is converted to JPG, this tool fills the transparent areas with white.",
+              "PNG is useful when crisp edges, exact pixel reproduction, or transparency matters, as with logos, icons, and interface captures. Its lossless compression preserves image data but can produce large files for complex photographic content. Keeping PNG may be appropriate when faithful reproduction matters more than the smallest file.",
+            ],
+          },
+          {
+            heading: "What image quality should I use?",
+            body: [
+              "A higher WebP or JPG quality value is not always better, and a lower value is not always appropriate. Lower values generally reduce file size but may introduce visible compression artifacts or loss of detail. Very high values can increase file size without producing a difference most viewers can notice. The default quality here is 80.",
+              "As starting points: 90-100 when preserving image quality is the priority, 75-89 for general web images, 60-74 for thumbnails or cases where a smaller file matters more, and below 60 only after checking the visible quality loss yourself.",
+              "These ranges are starting points, not absolute visual standards. Results vary with image content and encoding, so compare both the resulting file size and the actual image.",
+            ],
+          },
+          {
+            heading: "How much should I reduce an image's file size?",
+            body: [
+              "There is no single target that applies to every web image. An appropriate file size depends on the pixel dimensions, visual complexity, importance of the image on the page, and the environment in which it will be viewed.",
+              "Instead of aiming for an arbitrary number of kilobytes, confirm that the required pixel dimensions are already correct, choose a format suited to the image and its use, adjust quality when using WebP or JPG, compare the original and optimized images visually, and use the smaller file when there is no unacceptable loss of quality.",
+              "The goal is not the lowest possible file size. It is the smallest file that still meets the required visual quality.",
+            ],
+          },
+          {
+            heading: "Why does image file size matter for websites?",
+            body: [
+              "When a web page loads, the browser downloads its images along with HTML, CSS, and JavaScript. Large files and image-heavy pages increase the amount of data a visitor must receive. This can make images take longer to appear, especially on mobile or slower connections.",
+              "Optimizing web images can help reduce the amount of data transferred by a page, image download time, mobile data usage, and the loading burden on image-heavy pages.",
+              "Image optimization alone does not solve every performance issue. Delivery method, loading strategy, caching, and CDN configuration also affect real-world performance.",
+            ],
+          },
+          {
+            heading: "What is the difference between image dimensions and file size?",
+            body: [
+              "The word 'size' can refer to two different properties of an image. Image dimensions are the number of horizontal and vertical pixels, such as 1200 × 630 px. File size is the amount of storage or network data used by the file, such as 842 KB.",
+              "This tool changes file size, not dimensions: a 1200 × 630 PNG at 1.84 MB comes back as a 1200 × 630 WebP at 214 KB. Use a separate image resizing or cropping tool when you need to change pixel dimensions or crop to a specific aspect ratio.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A large PNG screenshot converted to WebP for the web",
+            input: "1920 × 1080 PNG at 1.84 MB, output WebP, quality 80",
+            result: "1920 × 1080 WebP at 214 KB, saving 1.63 MB (88.4%)",
+            note: "PNGs full of photographic detail or gradients gain the most from WebP. The pixel dimensions stay identical.",
+          },
+          {
+            title: "Saving a transparent logo as JPG",
+            input: "Transparent PNG, output JPG, quality 85",
+            result: "A JPG whose transparent areas are filled with white",
+            note: "If the logo sits on anything other than a white background, choose WebP or PNG so the fill does not show as a visible box.",
+          },
+          {
+            title: "Re-saving an already compressed JPG",
+            input: "82 KB JPG, output JPG, quality 95",
+            result: "104 KB JPG, 22 KB larger than the original",
+            note: "Re-encoding a compressed image at a high quality can grow it. When the result is larger, keep the original or try a lower quality.",
+          },
+          {
+            title: "Twelve blog images in one pass",
+            input: "12 mixed PNG and JPG files, output WebP, quality 75",
+            result: "All 12 results downloaded together as kitfolio-optimized-images.zip",
+            note: "One setting applies to every file. Process an image separately when it needs a different quality.",
+          },
+        ],
+        limitations: [
+          "Width, height, and aspect ratio are never changed. Reducing the pixel dimensions or cropping to a ratio requires a separate resize and crop tool.",
+          "Optimizing does not always produce a smaller file. An already well-compressed image, or a format that does not match the content, can come out larger, in which case the tool reports how much larger instead of a savings percentage.",
+          "PNG output uses the browser's own lossless encoder. It will not match a dedicated PNG optimizer and can be larger than the original file.",
+          "Re-encoding drops metadata such as EXIF, capture information, and color profiles. EXIF rotation is baked into the pixels first so the image keeps the orientation you see.",
+          "Processing happens in device memory. Limits are 50MB per file, 16383px per side, and 100 megapixels in total, but very large images can still fail below those limits on lower-memory devices. The per-side limit is the largest size WebP can represent, and anything above it is rejected rather than silently cropped.",
+          "Formats other than PNG, JPG, and WebP, such as GIF, SVG, AVIF, and HEIC, are supported neither as input nor as output.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "이미지 크기도 줄어드나요?",
+          answer:
+            "아니요. 이미지의 가로·세로 픽셀 크기는 원본 그대로 유지됩니다. 이 도구는 포맷과 압축 품질을 변경해 파일 용량을 줄입니다.",
+        },
+        {
+          question: "어떤 이미지 포맷을 지원하나요?",
+          answer:
+            "PNG, JPG/JPEG, WebP 이미지를 추가하고 WebP, JPG 또는 PNG 형식으로 저장할 수 있습니다.",
+        },
+        {
+          question: "투명 이미지를 JPG로 바꾸면 어떻게 되나요?",
+          answer:
+            "JPG는 투명 배경을 지원하지 않습니다. PNG 또는 WebP의 투명 영역은 흰색 배경으로 저장됩니다.",
+        },
+        {
+          question: "최적화하면 항상 용량이 줄어드나요?",
+          answer:
+            "아니요. 이미지 내용, 원본 포맷, 기존 압축 상태와 선택한 품질에 따라 결과가 원본보다 커질 수도 있습니다. 처리 후 원본과 결과 용량을 직접 비교할 수 있습니다.",
+        },
+        {
+          question: "여러 이미지를 한 번에 처리할 수 있나요?",
+          answer:
+            "네. 여러 이미지를 추가해 같은 설정으로 처리할 수 있으며, 완료된 결과는 개별 다운로드하거나 ZIP으로 한 번에 받을 수 있습니다.",
+        },
+        {
+          question: "이미지가 서버로 업로드되나요?",
+          answer:
+            "아니요. 이미지 처리는 사용자의 브라우저에서 이루어지며 Kitfolio 서버나 외부 이미지 처리 서비스로 전송되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Does Image Optimizer change image dimensions?",
+          answer:
+            "No. The original width and height in pixels are preserved. The tool changes the format or compression quality to reduce file size.",
+        },
+        {
+          question: "Which image formats does Image Optimizer support?",
+          answer:
+            "You can add PNG, JPG/JPEG, and WebP images and save them as WebP, JPG, or PNG files.",
+        },
+        {
+          question: "What happens to transparency when I convert an image to JPG?",
+          answer:
+            "JPG does not support transparency. Transparent areas in PNG or WebP images are saved with a white background.",
+        },
+        {
+          question: "Does image optimization always make a file smaller?",
+          answer:
+            "No. The result can be larger depending on the image content, original format, existing compression, and selected quality. You can compare the original and resulting file sizes after processing.",
+        },
+        {
+          question: "Can I optimize multiple images at once?",
+          answer:
+            "Yes. You can add multiple images, apply the same settings to all of them, and download completed files individually or together in a ZIP file.",
+        },
+        {
+          question: "Are my images uploaded to a server?",
+          answer:
+            "No. Image processing takes place in your browser, and your files are not sent to Kitfolio servers or external image-processing services.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "이미지 최적화",
+        subtitle: "원본 크기는 그대로, 파일 용량만 줄이기",
+      },
+      en: {
+        title: "Image Optimizer",
+        subtitle: "Smaller files, same pixel dimensions",
+      },
+    },
+  },
+  {
+    slug: "image-resizer-cropper",
+    layout: "canvas",
+    cat: "design",
+    targets: ["designer", "developer", "office-worker"],
+    ico: "W×H",
+    ready: true,
+    indexable: true,
+    badge: "Canvas",
+    name: { ko: "이미지 리사이즈·크롭", en: "Image Resizer & Cropper" },
+    relatedTools: ["image-optimizer", "open-graph-preview", "css-gradient"],
+    seo: {
+      ko: {
+        title: "이미지 리사이즈·크롭 | 사진 크기 조절과 자르기",
+        description:
+          "PNG, JPG, WebP 이미지를 원하는 픽셀 크기로 조절하거나 1:1, 4:3, 16:9 비율로 자릅니다. 비율을 잠그고 가로·세로를 바꾸거나 남길 영역을 골라 결과 픽셀 크기를 직접 지정할 수 있고, 이미지가 서버로 업로드되지 않고 브라우저에서 바로 처리되는 무료 이미지 리사이즈·크롭 도구입니다.",
+        keywords: [
+          "이미지 리사이즈",
+          "이미지 크기 조절",
+          "이미지 자르기",
+          "사진 크기 조절",
+          "이미지 사이즈 변경",
+          "이미지 픽셀 변경",
+          "이미지 비율 자르기",
+          "사진 자르기",
+          "이미지 1:1 자르기",
+          "이미지 16:9 자르기",
+          "온라인 이미지 리사이즈",
+        ],
+      },
+      en: {
+        title: "Image Resizer & Cropper | Resize and Crop Images Online",
+        description:
+          "Resize PNG, JPG, and WebP images to exact pixel dimensions or crop them to common aspect ratios such as 1:1, 4:3, and 16:9. Lock the aspect ratio while changing width and height, choose exactly which area to keep, and set the output size yourself. All image processing happens locally in your browser with no uploads.",
+        keywords: [
+          "image resizer",
+          "crop image",
+          "image cropper",
+          "resize image online",
+          "change image dimensions",
+          "resize image pixels",
+          "crop image online",
+          "crop image to aspect ratio",
+          "square image crop",
+          "resize PNG JPG WebP",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다.",
+        description:
+          "PNG, JPG, WebP 이미지를 원하는 픽셀 크기로 조절하거나 1:1, 4:3, 16:9 비율로 자릅니다. 비율을 잠그고 가로·세로를 바꾸거나 남길 영역을 골라 결과 픽셀 크기를 직접 지정할 수 있습니다. 이미지는 서버로 업로드되지 않고 브라우저 안에서만 처리됩니다.",
+        howItWorks: [
+          "PNG·JPG·WebP 이미지 추가",
+          "Resize 또는 Crop에서 크기와 비율 설정",
+          "결과 크기 확인 후 다운로드",
+        ],
+        aeo: {
+          what: "이미지 리사이즈·크롭 도구는 이미지의 가로·세로 픽셀 크기를 변경하거나 원하는 비율과 영역으로 잘라 새 이미지 파일을 만드는 브라우저 도구입니다.",
+          who: "웹사이트, SNS, 프로필, 썸네일, 문서 등에 사용할 이미지를 정확한 크기나 비율로 준비해야 하는 디자이너, 메이커, 콘텐츠 제작자에게 적합합니다.",
+          how: "PNG, JPG 또는 WebP 이미지를 추가하고 Resize나 Crop 모드를 선택한 뒤 크기와 비율을 설정하면 브라우저에서 결과를 생성해 다운로드할 수 있습니다.",
+          why: "별도 이미지 편집 프로그램을 설치하거나 파일을 외부 서버에 업로드하지 않고도 필요한 이미지 규격을 빠르게 만들 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "리사이즈와 크롭 중 무엇을 선택해야 하나요?",
+            body: [
+              "이미지 리사이즈와 크롭은 모두 결과 이미지의 크기를 바꾸지만 목적은 다릅니다. 리사이즈는 이미지 전체를 유지하면서 픽셀 수를 조절하고, 크롭은 필요한 구도와 비율을 만들기 위해 일부 영역을 제거합니다. 먼저 결과에서 전체 장면이 필요한지, 특정 영역만 남겨야 하는지 판단하면 적합한 모드를 고르기 쉽습니다.",
+              "이미지 전체가 결과에 남아야 한다면 Resize를 사용합니다. 예를 들어 2400 × 1600 px 사진 전체를 1200 × 800 px로 줄이면 구도와 3:2 비율은 유지되고 픽셀 수만 감소합니다.",
+              "정해진 프레임에 맞추기 위해 이미지 일부를 제거해도 된다면 Crop을 사용합니다. 가로 사진을 정사각형 프로필 이미지로 만들 때는 1:1 영역을 선택하고 피사체가 중앙에 오도록 위치를 조절합니다. 같은 원본이라도 Resize는 2400 × 1600을 1200 × 800으로 줄여 전체 장면을 남기고, Crop은 같은 원본에서 1080 × 1080 영역만 남깁니다.",
+              "이미지를 억지로 다른 비율의 width와 height에 맞추면 늘어나거나 눌립니다. 비율이 다른 결과가 필요할 때는 비율 잠금을 해제하기보다 먼저 Crop으로 구도를 맞추는 편이 자연스럽습니다.",
+            ],
+          },
+          {
+            heading: "가로세로 비율을 유지해야 하는 이유",
+            body: [
+              "가로세로 비율은 width와 height의 관계입니다. 1200 × 800과 600 × 400은 픽셀 수는 다르지만 모두 3:2 비율입니다. 원본 비율을 유지해 리사이즈하면 인물이나 사물이 원래 형태대로 보입니다.",
+              "비율 잠금을 해제하고 1200 × 800 이미지를 1200 × 630으로 직접 바꾸면 가로 방향으로 눌린 결과가 됩니다. 1200 × 630이 필요하다면 1.90:1에 해당하는 영역을 자르거나, 해당 규격에 가까운 프리셋에서 위치를 조절하는 것이 좋습니다.",
+            ],
+          },
+          {
+            heading: "어떤 크롭 비율을 선택해야 하나요?",
+            body: [
+              "비율은 사용처의 프레임을 기준으로 선택합니다. Free는 규격 없이 불필요한 가장자리만 제거할 때, 1:1은 정사각형 프로필·아바타·일부 피드 이미지에, 4:3은 일반적인 콘텐츠 이미지와 프레젠테이션 소재에 적합합니다.",
+              "3:2는 사진 비율을 유지한 인쇄·웹 이미지에, 16:9는 영상 썸네일·와이드 배너·프레젠테이션 화면에, 9:16은 세로형 스토리와 숏폼용 이미지에 주로 쓰입니다.",
+              "원형 프로필 이미지는 파일 자체가 원형이 아니라 정사각형입니다. 표시하는 서비스가 화면에서 둘레를 둥글게 깎아 보여줄 뿐이므로, 1:1로 자르고 중요한 부분을 중앙에 두면 됩니다.",
+              "플랫폼 규격은 바뀔 수 있으므로 제출 전에 해당 서비스의 현재 권장 픽셀 크기를 확인합니다. 이 도구의 프리셋은 구도를 잡는 비율이며, 실제 제출 규격은 Output width와 height로 맞춥니다.",
+            ],
+          },
+          {
+            heading: "픽셀 크기는 어떻게 정해야 하나요?",
+            body: [
+              "먼저 이미지가 실제로 표시되거나 제출될 크기를 확인합니다. 결과 width와 height를 필요 이상으로 크게 만들면 파일과 처리 부담이 커지고, 너무 작게 만들면 확대해서 볼 때 흐릿해질 수 있습니다.",
+              "판단 순서는 다음과 같습니다. 사용할 서비스나 디자인의 요구 규격을 확인하고, 같은 비율이라면 요구되는 실제 픽셀 크기를 Output에 입력합니다. 여러 크기로 사용한다면 가장 큰 실제 사용 크기를 기준으로 결과를 만들고 작은 버전은 별도로 생성합니다. 마지막으로 결과 미리보기에서 텍스트와 가장자리의 선명도를 확인합니다.",
+              "웹의 CSS 표시 크기와 이미지 파일의 픽셀 크기는 다른 개념입니다. 브라우저에서 300px 너비로 보이더라도 고밀도 화면을 위해 더 큰 이미지가 필요할 수 있으므로, 프로젝트가 요구하는 이미지 정책이 있다면 그 기준을 우선합니다.",
+            ],
+          },
+          {
+            heading: "원본보다 이미지를 크게 만들어도 되나요?",
+            body: [
+              "기술적으로는 가능하지만 화질이 좋아지는 것은 아닙니다. 확대 과정은 기존 픽셀 사이의 값을 계산해 더 많은 픽셀을 만들 뿐, 원본에 없던 머리카락이나 글자 가장자리 같은 디테일을 복원하지 못합니다.",
+              "작은 로고나 UI 캡처를 크게 만들면 경계가 흐려질 수 있고, 작은 사진은 뭉개짐이 눈에 띌 수 있습니다. 가능하면 필요한 결과 크기 이상의 원본을 사용하고, 확대가 불가피하다면 결과를 실제 사용 크기로 확인합니다.",
+            ],
+          },
+          {
+            heading: "자를 때 피사체가 어색해지지 않게 하려면",
+            body: [
+              "비율 프리셋을 선택한 뒤 크롭 박스를 바로 확정하지 말고, 중요한 피사체와 텍스트가 경계에 너무 가까운지 확인합니다. 프로필 이미지는 중앙에 얼굴을 두되 머리나 턱이 잘리지 않도록 여유를 남기고, 썸네일은 작은 화면에서도 주제가 식별되는지 확인합니다.",
+              "텍스트가 포함된 이미지는 글자의 일부가 잘리지 않는지 특히 주의합니다. 여러 플랫폼에서 이미지 가장자리를 추가로 가리는 경우가 있으므로, 로고와 핵심 텍스트를 프레임 끝에 붙이지 않는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "PNG, JPG, WebP 중 무엇으로 저장해야 하나요?",
+            body: [
+              "출력 포맷은 이미지의 내용과 사용할 환경을 기준으로 정합니다. PNG는 투명 배경, 로고, 아이콘, 텍스트가 포함된 그래픽처럼 선명한 경계가 중요할 때 쓰고, JPG는 투명도가 필요 없는 사진처럼 색 변화가 많은 이미지에 적합합니다.",
+              "WebP는 웹사이트에서 사진과 그래픽을 효율적으로 쓰고 싶을 때 선택하며, Original은 제출처가 원본과 같은 포맷을 요구하거나 별도 변환이 필요하지 않을 때 씁니다.",
+              "이 도구의 중심 목적은 픽셀 크기와 크롭 영역 조절입니다. 파일 용량을 비교하며 줄이는 것이 목적이라면 결과를 만든 뒤 이미지 최적화 도구를 사용합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "가로 사진을 정사각형 프로필로",
+            input: "4032 × 3024 JPG · Crop · 비율 1:1 · 결과 1080 × 1080",
+            result: "profile-cropped-1080x1080.jpg",
+            note: "1:1 프리셋을 고르면 현재 선택 영역의 중심을 유지한 정사각형이 만들어집니다. 얼굴이 중앙에 오도록 영역을 끌어 옮긴 뒤 결과 크기만 1080으로 바꿉니다.",
+          },
+          {
+            title: "블로그 대표 이미지를 정해진 규격으로",
+            input: "2400 × 1600 PNG · Resize · 비율 잠금 · 가로 1200",
+            result: "1200 × 800 · 배율 50% · hero-1200x800.png",
+            note: "비율 잠금이 켜져 있으면 가로만 입력해도 세로가 원본 비율로 계산됩니다. 50% 빠른 선택으로도 같은 결과가 나옵니다.",
+          },
+          {
+            title: "투명 배경 로고를 JPG로 저장",
+            input: "투명 배경 PNG · Resize · 출력 JPG · 품질 90",
+            result: "투명 영역이 흰색으로 채워진 JPG",
+            note: "흰색이 아닌 배경 위에 얹을 로고라면 JPG 대신 PNG나 WebP로 저장해야 경계가 드러나지 않습니다.",
+          },
+          {
+            title: "세로형 숏폼 썸네일 만들기",
+            input: "1920 × 1080 PNG · Crop · 비율 9:16 · 결과 1080 × 1920",
+            result: "1080 × 1920 · thumb-cropped-1080x1920.png",
+            note: "가로 원본에서 9:16을 고르면 선택 영역이 좌우로 좁아집니다. 이때 결과를 1080 × 1920으로 지정하면 선택 영역보다 커져 확대 안내가 함께 표시됩니다.",
+          },
+        ],
+        limitations: [
+          "한 번에 이미지 한 장만 편집합니다. 여러 장을 같은 설정으로 한 번에 리사이즈하는 일괄 처리는 지원하지 않습니다.",
+          "회전·반전, 배경색 선택, 여백 추가, 밝기·대비 같은 보정은 다루지 않습니다. 이 도구가 바꾸는 것은 픽셀 크기와 남길 영역뿐입니다.",
+          "원형 마스크 자체를 파일 모양으로 저장하지는 않습니다. 원형 프로필은 1:1로 자른 정사각형 파일로 준비합니다.",
+          "원본보다 크게 만들 수는 있지만 없던 디테일이 생기지는 않습니다. 확대할수록 경계가 흐려질 수 있습니다.",
+          "결과는 새로 인코딩된 파일입니다. EXIF, 촬영 정보, 색 프로파일 같은 메타데이터는 남지 않으며, EXIF 회전 정보는 픽셀에 미리 적용해 보이는 방향을 유지합니다.",
+          "처리는 기기 메모리 안에서 이뤄집니다. 파일 50MB, 한 변 16383px, 전체 100메가픽셀을 입력·출력 상한으로 두지만, 기기 사양에 따라 그 이하에서도 실패할 수 있습니다.",
+          "GIF, SVG, AVIF, HEIC 등 PNG·JPG·WebP가 아닌 형식은 입력·출력 모두 지원하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Resize an image to exact pixel dimensions, or crop it to ratios such as 1:1 and 16:9.",
+        description:
+          "Resize PNG, JPG, and WebP images to exact pixel dimensions or crop them to common aspect ratios such as 1:1, 4:3, and 16:9. Lock the aspect ratio while changing width and height, choose exactly which area of the image to keep, and set the output size yourself. Your image is processed in your browser and is never uploaded.",
+        howItWorks: [
+          "Add a PNG, JPG or WebP image",
+          "Set the size or crop ratio in Resize or Crop",
+          "Check the output dimensions, then download",
+        ],
+        aeo: {
+          what: "Image Resizer & Cropper is a browser-based tool that changes an image's pixel dimensions or creates a new image from a selected area and aspect ratio.",
+          who: "It is designed for designers, makers, and content creators who need images with exact dimensions or aspect ratios for websites, social media, profiles, thumbnails, and documents.",
+          how: "Add a PNG, JPG, or WebP image, choose Resize or Crop, set the dimensions or crop ratio, and download the result created locally in your browser.",
+          why: "It lets you prepare images to a required size without installing an image editor or uploading files to an external server.",
+        },
+        guide: [
+          {
+            heading: "Should I resize or crop an image?",
+            body: [
+              "Resizing and cropping can both change the dimensions of the resulting image, but they solve different problems. Resizing keeps the complete image and changes its pixel count. Cropping removes part of the image to create a particular composition or aspect ratio. Start by deciding whether the whole scene must remain or only a selected area is needed.",
+              "Use Resize when the complete image must remain visible. Resizing a 2400 × 1600 px photo to 1200 × 800 px preserves the composition and its 3:2 aspect ratio while reducing the pixel dimensions.",
+              "Use Crop when part of the image can be removed to fit a required frame. To create a square profile image from a landscape photo, select a 1:1 area and position the subject within it. From the same source, Resize turns 2400 × 1600 into 1200 × 800 with the full scene intact, while Crop keeps only a 1080 × 1080 region.",
+              "Forcing an image into width and height values with a different ratio stretches or squeezes it. When you need a different aspect ratio, crop the composition instead of simply unlocking the ratio.",
+            ],
+          },
+          {
+            heading: "Why should I preserve the aspect ratio?",
+            body: [
+              "Aspect ratio describes the relationship between width and height. 1200 × 800 and 600 × 400 have different pixel counts but share a 3:2 ratio. Preserving that ratio keeps people and objects in their original proportions.",
+              "Changing a 1200 × 800 image directly to 1200 × 630 with the ratio unlocked distorts the image. If you need 1200 × 630, crop a region with the required 1.90:1 ratio and then set the output dimensions.",
+            ],
+          },
+          {
+            heading: "Which crop ratio should I choose?",
+            body: [
+              "Choose a ratio based on the shape required by the destination. Free removes unwanted edges without a fixed format, 1:1 suits square profiles, avatars, and some feed images, and 4:3 suits general content images and presentation assets.",
+              "3:2 keeps a photographic ratio for print and web, 16:9 suits video thumbnails, wide banners, and presentation screens, and 9:16 suits vertical stories and short-form media.",
+              "A circular profile picture is still a square file. The destination service draws the round mask on screen, so crop to 1:1 and keep the important part centered.",
+              "Platform requirements can change, so check the destination's current pixel specifications before submitting an image. The preset defines the crop shape; use Output width and height to match the exact required dimensions.",
+            ],
+          },
+          {
+            heading: "How should I choose image dimensions in pixels?",
+            body: [
+              "First check the size at which the image will be displayed or submitted. Making the file much larger than necessary adds processing and file weight, while an image that is too small may look blurry when enlarged.",
+              "Check the required dimensions in the destination service or design, then enter those exact pixel dimensions while keeping the required ratio. If several sizes are needed, create the largest practical version first and generate smaller versions separately. Finally, inspect text and sharp edges in the result preview.",
+              "CSS display size and image pixel dimensions are different. An image displayed at 300 CSS pixels may use a larger source on a high-density screen. Follow the image policy of the destination project when one exists.",
+            ],
+          },
+          {
+            heading: "Can I make an image larger than the original?",
+            body: [
+              "Yes, but increasing the pixel dimensions does not improve the original detail. Upscaling estimates new pixels between existing ones; it cannot recover details that were never present in the source.",
+              "Small logos and UI captures may develop soft edges, and small photos may look blurred. Use a source at least as large as the required output whenever possible, and inspect an upscaled result at its actual display size.",
+            ],
+          },
+          {
+            heading: "How can I avoid awkward crops?",
+            body: [
+              "After choosing a ratio, check whether important subjects or text are too close to the crop boundary. Leave enough room around a face so the head and chin are not clipped, and make sure a thumbnail remains understandable at a small size.",
+              "Be especially careful with text inside an image. Some destinations may cover or trim the edges, so keep logos and essential text away from the frame boundary.",
+            ],
+          },
+          {
+            heading: "Should I save the result as PNG, JPG, or WebP?",
+            body: [
+              "Choose the output format based on the image and destination. PNG suits transparent backgrounds, logos, icons, UI captures, and graphics with sharp text, while JPG suits photographs with no transparency requirement.",
+              "WebP is an efficient choice for delivering both photos and graphics on the web, and Original keeps the incoming format for destinations that require it or when no conversion is needed.",
+              "This tool focuses on pixel dimensions and crop regions. If the next goal is to compare and reduce file size, send the result to Image Optimizer.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A landscape photo turned into a square profile picture",
+            input: "4032 × 3024 JPG, Crop, 1:1 ratio, output 1080 × 1080",
+            result: "profile-cropped-1080x1080.jpg",
+            note: "Choosing 1:1 builds the largest square that keeps the current selection centered. Drag the area so the face sits in the middle, then set the output size to 1080.",
+          },
+          {
+            title: "A blog hero image resized to a fixed width",
+            input: "2400 × 1600 PNG, Resize, ratio locked, width 1200",
+            result: "1200 × 800 at 50% scale, hero-1200x800.png",
+            note: "With the ratio locked, entering only the width calculates the height from the original proportions. The 50% quick preset produces the same result.",
+          },
+          {
+            title: "Saving a transparent logo as JPG",
+            input: "Transparent PNG, Resize, output JPG, quality 90",
+            result: "A JPG whose transparent areas are filled with white",
+            note: "If the logo sits on anything other than a white background, save it as PNG or WebP so the fill does not show as a visible box.",
+          },
+          {
+            title: "Building a vertical short-form thumbnail",
+            input: "1920 × 1080 PNG, Crop, 9:16 ratio, output 1080 × 1920",
+            result: "1080 × 1920, thumb-cropped-1080x1920.png",
+            note: "A 9:16 crop of a landscape source is narrow, so asking for 1080 × 1920 upscales it and the tool shows the upscaling notice alongside the output size.",
+          },
+        ],
+        limitations: [
+          "One image is edited at a time. Batch resizing several files with the same settings is not supported.",
+          "Rotation, flipping, background color, added padding, and adjustments such as brightness or contrast are out of scope. This tool changes pixel dimensions and the area you keep, nothing else.",
+          "A circular mask is never saved as the shape of the file. Prepare round profile pictures as square 1:1 crops.",
+          "You can make an image larger than the original, but upscaling cannot add detail that was not captured. Edges get softer the further you push it.",
+          "The result is a newly encoded file. Metadata such as EXIF, capture information, and color profiles is not carried over; EXIF rotation is baked into the pixels first so the image keeps the orientation you see.",
+          "Processing happens in device memory. Limits are 50MB per file and 16383px per side and 100 megapixels for both input and output, but very large images can still fail below those limits on lower-memory devices.",
+          "Formats other than PNG, JPG, and WebP, such as GIF, SVG, AVIF, and HEIC, are supported neither as input nor as output.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "이미지 리사이즈와 크롭은 무엇이 다른가요?",
+          answer:
+            "리사이즈는 이미지 전체를 유지한 채 가로·세로 픽셀 수를 바꿉니다. 크롭은 이미지에서 남길 영역을 선택해 바깥 부분을 제거합니다.",
+        },
+        {
+          question: "원본 비율을 유지하면서 크기를 바꿀 수 있나요?",
+          answer:
+            "네. Resize 모드의 비율 잠금은 기본으로 켜져 있으며, width나 height 중 하나를 바꾸면 다른 값이 원본 비율에 맞게 자동 계산됩니다.",
+        },
+        {
+          question: "어떤 비율로 이미지를 자를 수 있나요?",
+          answer:
+            "자유 비율과 1:1, 4:3, 3:2, 16:9, 9:16 프리셋을 제공합니다. 선택한 비율 안에서 남길 위치를 직접 조절할 수 있습니다.",
+        },
+        {
+          question: "이미지를 크게 만들면 화질도 좋아지나요?",
+          answer:
+            "아니요. 출력 픽셀 수는 늘릴 수 있지만 원본에 없던 디테일이 생기지는 않습니다. 원본보다 크게 확대하면 이미지가 흐릿해질 수 있습니다.",
+        },
+        {
+          question: "어떤 이미지 포맷을 지원하나요?",
+          answer:
+            "PNG, JPG/JPEG, WebP 이미지를 불러오고 PNG, JPG 또는 WebP로 저장할 수 있습니다. 투명 이미지를 JPG로 저장하면 투명 영역은 흰색이 됩니다.",
+        },
+        {
+          question: "휴대폰으로 찍은 사진의 방향도 그대로 유지되나요?",
+          answer:
+            "네. 미리보기와 크롭 좌표 모두 EXIF 회전이 적용된 표시 방향을 기준으로 계산되므로, 화면에서 보는 방향 그대로 결과가 저장됩니다.",
+        },
+        {
+          question: "이미지가 서버로 업로드되나요?",
+          answer:
+            "아니요. 이미지는 사용자의 브라우저에서 처리되며 Kitfolio 서버나 외부 이미지 처리 서비스로 전송되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the difference between resizing and cropping an image?",
+          answer:
+            "Resizing changes the width and height in pixels while keeping the entire image. Cropping removes areas outside the region you choose to keep.",
+        },
+        {
+          question: "Can I resize an image without changing its aspect ratio?",
+          answer:
+            "Yes. Aspect ratio lock is enabled by default in Resize mode. Changing either width or height automatically calculates the other dimension from the original ratio.",
+        },
+        {
+          question: "Which aspect ratios can I use for cropping?",
+          answer:
+            "You can crop freely or choose 1:1, 4:3, 3:2, 16:9, or 9:16. After choosing a ratio, you can move the crop area to control which part of the image remains.",
+        },
+        {
+          question: "Does making an image larger improve its quality?",
+          answer:
+            "No. You can increase the output dimensions, but resizing cannot create detail that is missing from the original. Upscaling may make the result look blurry.",
+        },
+        {
+          question: "Which image formats are supported?",
+          answer:
+            "You can open PNG, JPG/JPEG, and WebP images and save the result as PNG, JPG, or WebP. Transparent areas are filled with white when the result is saved as JPG.",
+        },
+        {
+          question: "Do photos taken on a phone keep their orientation?",
+          answer:
+            "Yes. Both the preview and the crop coordinates use the display orientation with EXIF rotation applied, so the result is saved the way you see it on screen.",
+        },
+        {
+          question: "Is my image uploaded to a server?",
+          answer:
+            "No. Your image is processed in your browser and is not sent to Kitfolio servers or external image-processing services.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "이미지 리사이즈·크롭",
+        subtitle: "원하는 픽셀 크기와 비율로 바로 조절하세요",
+      },
+      en: {
+        title: "Image Resizer & Cropper",
+        subtitle: "Resize and crop images to exact dimensions",
+      },
     },
   },
 ];
