@@ -28,8 +28,11 @@ coverAlt: 이미지 대체 텍스트   # (선택)
 relatedTools: growth-rate-calculator, cagr-calculator   # (선택) 관련 도구 slug, 쉼표 구분
 tags: 성장률, 지표            # (선택) 태그, 쉼표 구분
 
-author: joyfive             # (선택) 생략 시 사이트 운영자(content.ts AUTHOR)
-authorRole: Kitfolio 운영자   # (선택) 생략 시 AUTHOR.role
+author: VIVASPACE           # (선택) 생략 시 운영 주체(content.ts AUTHOR)
+authorType: Organization    # (선택) Person | Organization
+                            #        생략 시: author 를 직접 적었으면 Person,
+                            #        안 적었으면 AUTHOR.type = Organization
+authorRole: Kitfolio 운영 주체 # (선택) 생략 시 AUTHOR.role · Person 일 때만 JSON-LD 에 나간다
 reviewedAt: 2026-08-18      # (선택) 내용을 마지막으로 사실 확인한 날짜
 sources: 국세청 · 근로소득 간이세액표|https://www.nts.go.kr/...   # (선택) 공식 출처
 ---
