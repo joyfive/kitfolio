@@ -355,7 +355,20 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    본문 문자열은 최소 인라인 마크업 지원: **굵게**, [라벨](url).
    ============================================================ */
 export const LEGAL_EMAIL = "support@kitfolio.app";
-export const LEGAL_EFFECTIVE = { ko: "2026년 7월 1일", en: "July 1, 2026" };
+/** 약관·개인정보처리방침 시행일자 (최근 개정일).
+ *  2026-08-16 개정: 운영 주체를 VIVASPACE 로 명시하고 문의처를 통일했다. */
+export const LEGAL_EFFECTIVE = { ko: "2026년 8월 16일", en: "August 16, 2026" };
+
+/** 소개·문의 페이지의 최종 업데이트일. 시행일자와 성격이 달라 따로 관리한다.
+ *  (약관은 개정 시점, 안내 페이지는 내용을 마지막으로 손본 시점) */
+export const LEGAL_UPDATED = { ko: "2026년 9월 17일", en: "September 17, 2026" };
+
+/** 문서별 날짜 선택: 약관·방침은 시행일자, 안내 페이지는 최종 업데이트일. */
+export function legalDateOf(slug: LegalSlug, lang: Lang): string {
+  return slug === "privacy-policy" || slug === "terms-of-service"
+    ? LEGAL_EFFECTIVE[lang]
+    : LEGAL_UPDATED[lang];
+}
 
 export const LEGAL_SLUGS = ["about", "contact", "privacy-policy", "terms-of-service"] as const;
 export type LegalSlug = (typeof LEGAL_SLUGS)[number];
