@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import {
   LEGAL,
   LEGAL_EMAIL,
-  LEGAL_EFFECTIVE,
+  legalDateOf,
   type Lang,
   type LegalSlug,
 } from "../lib/content";
@@ -61,7 +61,7 @@ export default function LegalPage({
         </div>
         <div>
           <dt>{doc.effectiveLabel}</dt>
-          <dd>{LEGAL_EFFECTIVE[lang]}</dd>
+          <dd>{legalDateOf(slug, lang)}</dd>
         </div>
       </dl>
     </article>

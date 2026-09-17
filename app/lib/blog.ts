@@ -20,8 +20,10 @@
    tags:         태그1, 태그2           (선택, 쉼표 구분)
 
    ── 신뢰 정보 필드 (선택) ────────────────────────────────
-   author:       <작성자명>             (생략 시 사이트 운영자 AUTHOR)
-   authorRole:   <역할>                 (생략 시 AUTHOR.role)
+   author:       <작성자명>             (생략 시 운영 주체 AUTHOR)
+   authorType:   Person | Organization  (생략 시: author 를 직접 적었으면 Person,
+                                         안 적었으면 AUTHOR.type = Organization)
+   authorRole:   <역할>                 (생략 시 AUTHOR.role · Person 일 때만 JSON-LD 에 나간다)
    reviewedAt:   YYYY-MM-DD            (내용을 마지막으로 사실 확인한 날짜)
    sources:      라벨|URL, 라벨|URL     (공식 출처, 쉼표 구분 / 라벨과 URL은 | 로 구분)
 
@@ -49,8 +51,10 @@ export type PostMeta = {
   coverAlt?: string;
   relatedTools: string[];
   tags: string[];
-  /** 작성자명: 프론트매터 author 또는 사이트 운영자 */
+  /** 작성자명: 프론트매터 author 또는 운영 주체 */
   author: string;
+  /** JSON-LD author 의 @type. 사람 이름을 조직으로 표기하지 않기 위해 구분한다. */
+  authorType: "Person" | "Organization";
   /** 작성자 역할: 프론트매터 authorRole 또는 AUTHOR.role */
   authorRole: string;
   /** 내용을 마지막으로 사실 확인한 날짜 (선택) */
@@ -174,6 +178,16 @@ function metaFromData(
     relatedTools: toList(data.relatedTools),
     tags: toList(data.tags),
     author: data.author?.trim() || AUTHOR.name,
+    // 프론트매터에 author 를 따로 적었다면 보통 사람 이름이므로 Person 으로 본다.
+    // authorType 을 명시하면 그 값이 항상 우선한다.
+    authorType:
+      data.authorType?.trim() === "Person"
+        ? "Person"
+        : data.authorType?.trim() === "Organization"
+          ? "Organization"
+          : data.author?.trim()
+            ? "Person"
+            : AUTHOR.type,
     authorRole: data.authorRole?.trim() || AUTHOR.role[lang],
     reviewedAt: data.reviewedAt || undefined,
     sources: toSources(data.sources),
@@ -300,12 +314,12 @@ export function postJsonLd(meta: PostMeta) {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     image: meta.cover ? abs(meta.cover) : undefined,
-    // 작성자(사람)와 발행자(조직)를 분리한다: 둘 다 Organization 이면
-    // "누가 썼는가"가 드러나지 않는다.
+    // 기본 글은 운영 주체(조직) 명의로 발행하고, 개별 기고자가 있는 글만
+    // Person 으로 표기한다. jobTitle 은 Person 에만 있는 속성이라 조건부로 넣는다.
     author: {
-      "@type": "Person",
+      "@type": meta.authorType,
       name: meta.author,
-      jobTitle: meta.authorRole,
+      ...(meta.authorType === "Person" ? { jobTitle: meta.authorRole } : {}),
       url: abs(AUTHOR.path),
     },
     publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
@@ -313,7 +327,7 @@ export function postJsonLd(meta: PostMeta) {
     ...(meta.reviewedAt
       ? {
           lastReviewed: meta.reviewedAt,
-          reviewedBy: { "@type": "Person", name: meta.author },
+          reviewedBy: { "@type": meta.authorType, name: meta.author },
         }
       : {}),
     ...(meta.sources.length

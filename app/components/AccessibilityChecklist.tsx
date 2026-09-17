@@ -6,7 +6,9 @@ import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
 import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
+import { trackEvent } from "../lib/analytics";
 import { localizedHref } from "../lib/content";
+import { downloadBlob } from "../lib/downloadBlob";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import {
   changeTargetLevel,
@@ -353,6 +355,8 @@ export default function AccessibilityChecklist() {
   const [openAxes, setOpenAxes] = useState<Set<Axis>>(new Set());
 
   const nameRef = useRef<HTMLInputElement>(null);
+  /** tool_input 을 프로젝트당 한 번만 보내기 위한 플래그 */
+  const engagedRef = useRef(false);
   const announce = useCallback((message: string) => {
     setLive("");
     // 같은 문구가 연속으로 나와도 보조기술이 다시 읽도록 한 tick 비운다.
@@ -361,6 +365,8 @@ export default function AccessibilityChecklist() {
 
   useEffect(() => {
     const result = loadProject();
+    // 프로젝트명·메모·근거 URL 은 어떤 파라미터로도 보내지 않는다.
+    trackEvent("tool_view", { slug: SLUG, locale: lang, has_saved_project: result.kind === "ok" });
     if (result.kind === "ok") {
       setProject(result.project);
       setRestoredName(result.project.projectName);
@@ -384,7 +390,11 @@ export default function AccessibilityChecklist() {
   /* 500ms debounce 저장. 실패해도 화면 상태는 그대로 두고 배너만 띄운다. */
   useEffect(() => {
     if (!project) return;
-    const id = window.setTimeout(() => setSaveError(!saveProject(project)), 500);
+    const id = window.setTimeout(() => {
+      const failed = !saveProject(project);
+      setSaveError(failed);
+      if (failed) trackEvent("tool_error", { slug: SLUG, stage: "save", error_type: "storage" });
+    }, 500);
     return () => window.clearTimeout(id);
   }, [project]);
 
@@ -458,6 +468,11 @@ export default function AccessibilityChecklist() {
   }, [filterActive, visibleIds, groups]);
 
   function patchItem(id: string, patch: { status?: Status; note?: string; evidenceUrl?: string }) {
+    // 첫 상태 변경 한 번만 보낸다. 메모 타이핑마다 이벤트를 쌓지 않는다.
+    if (patch.status && !engagedRef.current) {
+      engagedRef.current = true;
+      trackEvent("tool_input", { slug: SLUG, standard: project?.standard ?? "none" });
+    }
     setProject((prev) => {
       if (!prev) return prev;
       const now = new Date().toISOString();
@@ -517,57 +532,69 @@ export default function AccessibilityChecklist() {
         features: draft.features,
       }),
     );
+    trackEvent("tool_run", {
+      slug: SLUG,
+      standard: draft.standard,
+      target_level: level ?? "none",
+      environment: draft.environment,
+      organization: draft.organization,
+      item_count: previewCount,
+    });
     setSetupOpen(false);
     setNameError(false);
     setLoadError(false);
     setRestoredName(null);
   }
 
-  const download = useCallback(
-    (content: string, filename: string, mime: string) => {
+  /** 내보내기 공통: 내용 생성과 다운로드 실패를 한곳에서 처리한다. */
+  const exportAs = useCallback(
+    (format: "markdown" | "csv") => {
+      if (!project) return;
       try {
-        const blob = new Blob([content], { type: mime });
-        const href = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = href;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.setTimeout(() => URL.revokeObjectURL(href), 1000);
+        const ext = format === "markdown" ? "md" : "csv";
+        const mime = format === "markdown" ? "text/markdown" : "text/csv";
+        const body = format === "markdown" ? toMarkdown(project, lang) : toCsv(project, lang);
+        downloadBlob(
+          new Blob([body], { type: `${mime};charset=utf-8` }),
+          exportFilename(project, lang, ext),
+        );
+        trackEvent("tool_download", {
+          slug: SLUG,
+          download_type: format,
+          standard: project.standard,
+          target_level: project.targetLevel ?? "none",
+          item_count: progress.total,
+          issue_count: progress.issue,
+        });
       } catch {
         announce(t("ac.error.download"));
+        trackEvent("tool_error", { slug: SLUG, stage: "export", error_type: format });
       }
     },
-    [announce, t],
+    [project, lang, progress.total, progress.issue, announce, t],
   );
-
-  function downloadMarkdown() {
-    if (!project) return;
-    download(
-      toMarkdown(project, lang),
-      exportFilename(project, lang, "md"),
-      "text/markdown;charset=utf-8",
-    );
-  }
-
-  function downloadCsv() {
-    if (!project) return;
-    download(toCsv(project, lang), exportFilename(project, lang, "csv"), "text/csv;charset=utf-8");
-  }
 
   async function copyMarkdown() {
     if (!project) return;
     try {
       await navigator.clipboard.writeText(toMarkdown(project, lang));
       announce(t("ac.export.copied"));
+      trackEvent("tool_download", {
+        slug: SLUG,
+        download_type: "clipboard",
+        standard: project.standard,
+        item_count: progress.total,
+        issue_count: progress.issue,
+      });
     } catch {
       announce(t("ac.error.copy"));
+      trackEvent("tool_error", { slug: SLUG, stage: "copy", error_type: "clipboard" });
     }
   }
 
   function resetAll() {
     clearProject();
+    engagedRef.current = false;
     setProject(null);
     setDraft(emptyDraft(lang));
     setResetOpen(false);
@@ -1166,10 +1193,10 @@ export default function AccessibilityChecklist() {
               <button type="button" className="ac-btn is-primary" onClick={copyMarkdown}>
                 {t("ac.export.copyMd")}
               </button>
-              <button type="button" className="ac-btn" onClick={downloadMarkdown}>
+              <button type="button" className="ac-btn" onClick={() => exportAs("markdown")}>
                 {t("ac.export.downloadMd")}
               </button>
-              <button type="button" className="ac-btn" onClick={downloadCsv}>
+              <button type="button" className="ac-btn" onClick={() => exportAs("csv")}>
                 {t("ac.export.downloadCsv")}
               </button>
               <button
@@ -1188,7 +1215,7 @@ export default function AccessibilityChecklist() {
                   <button type="button" className="ac-btn" onClick={() => setResetOpen(false)}>
                     {t("ac.setup.cancel")}
                   </button>
-                  <button type="button" className="ac-btn" onClick={downloadMarkdown}>
+                  <button type="button" className="ac-btn" onClick={() => exportAs("markdown")}>
                     {t("ac.export.downloadMd")}
                   </button>
                   <button type="button" className="ac-btn is-danger" onClick={resetAll}>

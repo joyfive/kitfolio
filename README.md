@@ -33,7 +33,7 @@
   (guide 2섹션 · examples · limitations · faq · relatedTools · og, **ko/en 양쪽**)을
   통과해야 합니다. 글자 수가 아니라 필수 콘텐츠 구조의 존재 여부로 판정합니다.
 
-## 구현된 기능 (도구 26종)
+## 구현된 기능 (도구 28종)
 
 각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ/AEO를
 `app/lib/content.ts` 레지스트리에서 단일 출처로 관리합니다. 허브(`/`, `/en`)는 전체 도구의
@@ -67,6 +67,8 @@
 | 24 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
 | 25 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
 | 26 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
+| 27 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
+| 28 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
 
 ## 디렉토리 구조
 
