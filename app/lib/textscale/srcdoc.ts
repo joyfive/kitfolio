@@ -82,6 +82,9 @@ export type SrcdocOptions = {
   body: string;
   /** 사용자 CSS (빈 문자열 허용) */
   css: string;
+  /** 프레임워크가 만들어 준 stylesheet (Tailwind 모드의 컴파일 결과).
+   *  이 값이 있으면 사용자 CSS 는 이미 그 안에 포함돼 있다. */
+  frameworkCss?: string;
   /** 내부 layout viewport (CSS px) */
   viewport: Viewport | number;
   lang: string;
@@ -94,7 +97,8 @@ export type SrcdocOptions = {
  * 화면 맞춤 배율은 iframe 바깥 wrapper 의 transform 으로만 적용해서
  * 내부 layout·media query·측정값이 배율에 영향을 받지 않게 한다.
  */
-export function buildSrcdoc({ body, css, viewport, lang }: SrcdocOptions): string {
+export function buildSrcdoc({ body, css, frameworkCss, viewport, lang }: SrcdocOptions): string {
+  const generatedCss = frameworkCss ? neutralizeStyleEnd(frameworkCss) : "";
   const userCss = neutralizeStyleEnd(stripCssResources(css));
   return [
     "<!doctype html>",
@@ -104,6 +108,7 @@ export function buildSrcdoc({ body, css, viewport, lang }: SrcdocOptions): strin
     '<meta charset="utf-8">',
     `<meta name="viewport" content="width=${viewport}, initial-scale=1">`,
     `<style>${BASE_CSS}</style>`,
+    generatedCss ? `<style>${generatedCss}</style>` : "",
     userCss ? `<style>${userCss}</style>` : "",
     "</head>",
     "<body>",

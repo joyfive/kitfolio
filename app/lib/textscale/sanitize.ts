@@ -92,6 +92,9 @@ export type SanitizeResult = {
   hadExternalResource: boolean;
   /** 이미지가 중립 placeholder 로 바뀌었다 */
   hadImage: boolean;
+  /** 마크업에 등장한 클래스 이름 (중복 제거).
+   *  Tailwind 모드에서 어떤 utility 의 CSS 를 만들지 정하는 후보가 된다. */
+  classNames: string[];
 };
 
 /**
@@ -143,6 +146,7 @@ export function sanitizeHtml(source: string): SanitizeResult {
   let hadImage = false;
   let elementCount = 0;
   let nextId = 0;
+  const classNames = new Set<string>();
 
   (function walk(parent: ParentNode) {
     // 제거하면서 순회하므로 복사본을 돈다
@@ -165,6 +169,7 @@ export function sanitizeHtml(source: string): SanitizeResult {
 
       if (scrubAttributes(child)) hadExternalResource = true;
       if (name === "img" || name === "picture") hadImage = true;
+      collectClassNames(child, classNames);
 
       elementCount += 1;
       child.attrs.push({ name: NODE_ID_ATTR, value: `n${nextId++}` });
@@ -180,7 +185,17 @@ export function sanitizeHtml(source: string): SanitizeResult {
     hadStyleTag,
     hadExternalResource,
     hadImage,
+    classNames: [...classNames],
   };
+}
+
+/** class 속성의 토큰을 모은다. img placeholder 처럼 도구가 붙인 클래스는 뺀다. */
+function collectClassNames(el: Element, into: Set<string>) {
+  const value = el.attrs.find((a) => a.name === "class")?.value;
+  if (!value) return;
+  for (const token of value.split(/\s+/)) {
+    if (token && token !== IMG_PLACEHOLDER_CLASS) into.add(token);
+  }
 }
 
 function removeChild(parent: ParentNode, child: ChildNode) {

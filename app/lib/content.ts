@@ -3414,7 +3414,7 @@ export const TOOLS: Tool[] = [
     ico: "200%",
     ready: true,
     indexable: true,
-    verifiedAt: "2026-09-11",
+    verifiedAt: "2026-09-13",
     badge: "Canvas",
     name: { ko: "텍스트 확대·간격 검사기", en: "Text Scaling & Spacing Checker" },
     // 확대 문제가 구조에서 비롯될 때의 다음 검사, 단위 조정, 색상 검사 순서로 잇는다.
@@ -3423,7 +3423,7 @@ export const TOOLS: Tool[] = [
       ko: {
         title: "웹접근성 텍스트 확대 검사기 | 200%·간격 테스트",
         description:
-          "HTML과 CSS를 붙여넣어 웹접근성 텍스트 확대를 검사하세요. 200% 글자 확대, 320px 리플로와 WCAG 텍스트 간격을 원본과 나란히 비교하고 가로 오버플로·고정 영역의 내용 잘림 후보를 확인할 수 있습니다. 입력한 코드는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
+          "HTML·CSS는 물론 JSX·TSX와 Tailwind 클래스를 그대로 붙여넣어 웹접근성 텍스트 확대를 검사하세요. 200% 글자 확대, 320px 리플로와 WCAG 텍스트 간격을 원본과 나란히 비교하고 가로 오버플로·고정 영역의 내용 잘림 후보를 확인할 수 있습니다. 입력한 코드는 서버로 전송되지 않고 브라우저에서만 처리됩니다.",
         keywords: [
           "웹접근성 텍스트 확대",
           "웹접근성 글자 크기",
@@ -3437,12 +3437,16 @@ export const TOOLS: Tool[] = [
           "WCAG 1.4.12",
           "텍스트 확대 검사기",
           "HTML 확대 테스트",
+          "JSX 접근성 검사",
+          "React 텍스트 확대 검사",
+          "Tailwind 접근성 검사",
+          "Tailwind 리플로 테스트",
         ],
       },
       en: {
         title: "Text Scaling & Spacing Checker | WCAG Reflow Test",
         description:
-          "Paste HTML and CSS to test 200% text resizing, a 320 CSS pixel reflow viewport, and WCAG text spacing overrides side by side. The checker highlights horizontal overflow, clipped text, fixed containers, and nowrap candidates while processing your source locally in the browser without sign-in or upload.",
+          "Paste HTML and CSS, or JSX and TSX with Tailwind classes, to test 200% text resizing, a 320 CSS pixel reflow viewport, and WCAG text spacing overrides side by side. The checker highlights horizontal overflow, clipped text, fixed containers, and nowrap candidates while processing your source locally in the browser without sign-in or upload.",
         keywords: [
           "text scaling checker",
           "wcag text resize test",
@@ -3455,24 +3459,28 @@ export const TOOLS: Tool[] = [
           "letter spacing accessibility",
           "line height accessibility",
           "html css accessibility preview",
+          "jsx accessibility checker",
+          "react text resize test",
+          "tailwind accessibility test",
+          "tailwind reflow checker",
         ],
       },
     },
     content: {
       ko: {
-        card: "HTML·CSS에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다.",
+        card: "HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다.",
         description:
-          "HTML과 CSS에 200% 텍스트 확대, 320 CSS px 리플로, WCAG 간격값을 적용해 보세요. 원본과 비교하며 고정된 카드, 버튼, 문단과 반응형 레이아웃에서 내용이 사라지는 위치를 찾을 수 있습니다. 붙여넣은 코드는 정제 후 스크립트 없이 격리된 미리보기에서만 렌더링되며, 외부 이미지·웹폰트·stylesheet는 불러오지 않습니다.",
+          "HTML과 CSS는 물론 React 컴포넌트의 JSX·TSX와 Tailwind 클래스에도 200% 텍스트 확대, 320 CSS px 리플로, WCAG 간격값을 적용해 보세요. 원본과 비교하며 고정된 카드, 버튼, 문단과 반응형 레이아웃에서 내용이 사라지는 위치를 찾을 수 있습니다. 컴포넌트 코드는 실행하지 않고 구문만 읽어 마크업으로 바꾸며, Tailwind 스타일도 브라우저 안에서 만듭니다. 붙여넣은 코드는 정제 후 스크립트 없이 격리된 미리보기에서만 렌더링되고, 외부 이미지·웹폰트·stylesheet는 불러오지 않습니다.",
         howItWorks: [
-          "HTML 또는 텍스트와 필요한 CSS 입력",
+          "소스 형식(HTML·텍스트 또는 JSX·TSX) 선택 후 코드와 CSS 입력",
           "텍스트 200%·리플로 320px·텍스트 간격 중 선택",
           "원본과 비교하고 오버플로·잘림 후보와 수동 확인 항목 점검",
         ],
         aeo: {
-          what: "텍스트 확대·간격 검사기는 HTML과 CSS에 웹접근성 확대·리플로·간격 조건을 적용해 원본과 비교하는 브라우저 도구입니다.",
-          who: "200% 글자 확대, 320px 반응형 재배치와 사용자 텍스트 간격 변경을 검수하는 퍼블리셔, 개발자, 디자이너와 QA 담당자를 위한 도구입니다.",
-          how: "안전하게 격리된 preview에 텍스트 200%, 320 CSS px viewport 또는 WCAG 간격값을 적용하고 오버플로·잘림 후보를 측정합니다.",
-          why: "고정 width·height, 줄바꿈 차단과 좁은 control 때문에 확대 시 정보나 기능이 사라지는 문제를 배포 전에 찾기 위해 사용합니다.",
+          what: "텍스트 확대·간격 검사기는 HTML·CSS나 JSX·TSX와 Tailwind 클래스에 웹접근성 확대·리플로·간격 조건을 적용해 원본과 비교하는 브라우저 도구입니다.",
+          who: "200% 글자 확대, 320px 반응형 재배치와 사용자 텍스트 간격 변경을 검수하는 퍼블리셔, React 개발자, 디자이너와 QA 담당자를 위한 도구입니다.",
+          how: "JSX는 실행하지 않고 구문만 읽어 마크업으로 바꾸고, 마크업에 쓰인 Tailwind 클래스로 CSS를 만든 뒤, 격리된 preview에 텍스트 200%·320 CSS px viewport·WCAG 간격값을 적용해 오버플로와 잘림 후보를 측정합니다.",
+          why: "고정 width·height, 줄바꿈 차단과 좁은 control 때문에 확대 시 정보나 기능이 사라지는 문제를 컴포넌트 단계에서, 배포 전에 찾기 위해 사용합니다.",
         },
         guide: [
           {
@@ -3503,6 +3511,15 @@ export const TOOLS: Tool[] = [
               "WCAG 1.4.12는 줄 높이 글자 크기의 1.5배, 문단 뒤 간격 2배, 글자 간격 0.12배, 단어 간격 0.16배를 동시에 적용했을 때 콘텐츠나 기능 손실이 없어야 한다고 설명합니다.",
               "이 값을 사이트의 기본 typography로 반드시 사용하라는 기준은 아닙니다. 사용자가 자신의 읽기 필요에 맞춰 author style을 덮어쓸 수 있어야 하고, 그 결과 문구·버튼·입력창·tooltip이 잘리거나 사라지지 않아야 한다는 뜻입니다. 검사기는 현재 값이 기준보다 이미 크다면 줄이지 않고 네 속성만 확대합니다.",
               "언어와 문자 체계에 따라 일부 간격 속성의 효과는 다릅니다. 한글은 띄어쓰기가 있는 문장에서 word-spacing 영향이 나타나지만, 실제 문구가 짧거나 공백이 없다면 차이가 작을 수 있습니다. 한국어·영어·숫자가 섞인 실제 서비스 문구로 확인하는 편이 안전합니다.",
+            ],
+          },
+          {
+            heading: "JSX·TSX와 Tailwind 화면은 어떻게 검사하나요?",
+            body: [
+              "React 프로젝트의 화면은 HTML 파일로 존재하지 않습니다. 브라우저에서 완성된 마크업을 복사해 오려면 이미 화면을 띄운 뒤여야 하고, 그때는 이미 수정 비용이 커진 상태입니다. 소스 형식을 JSX·TSX로 바꾸면 컴포넌트 코드를 그대로 붙여넣어 확대·리플로·간격을 컴포넌트 단계에서 확인할 수 있습니다.",
+              "이 도구는 붙여넣은 코드를 실행하지 않습니다. 구문만 읽어 트리를 만들고 거기서 마크업을 조립합니다. className은 class로, style 객체는 CSS 문자열로 바꾸고, cn()·clsx()로 조립한 클래스는 문자열 부분을 모읍니다. 삼항 연산자는 서로 충돌하는 클래스가 함께 붙지 않도록 앞 분기를 사용합니다. 값을 알 수 없는 표현식은 비우지 않고 식 자체를 자리표시자 텍스트로 넣습니다. 글자가 사라지면 확대 검사에서 가장 중요한 길이 정보가 함께 사라지기 때문입니다.",
+              "Tailwind 클래스로 스타일 만들기를 켜면 마크업에 실제로 쓰인 클래스만 골라 브라우저 안에서 Tailwind CSS를 만듭니다. CDN 스크립트나 빌드 서버를 부르지 않으므로 입력한 코드가 페이지 밖으로 나가지 않는다는 전제는 그대로입니다. 프로젝트가 정의한 색·간격 토큰이 있다면 @theme 블록을 CSS 입력 영역에 함께 붙여넣으세요. CSS가 만들어지지 않은 클래스는 결과 아래 안내로 따로 알려 줍니다.",
+              "대신 컴포넌트 내부는 알 수 없습니다. 직접 만든 컴포넌트는 이름으로 짐작할 수 있으면 대응 요소(Button은 button, Link는 a)로, 아니면 스타일이 걸린 컨테이너로 그립니다. map으로 그리는 목록은 항목 3개로 반복해 좁은 화면에서 줄바꿈이 어떻게 일어나는지 볼 수 있게 합니다. 실제 데이터 길이와 컴포넌트 내부 마크업은 운영 화면에서 다시 확인하세요.",
             ],
           },
           {
@@ -3566,10 +3583,21 @@ export const TOOLS: Tool[] = [
               "후보 1개. section 에서 CLIP-001: clientHeight 228px 안에 콘텐츠가 260px. 문단의 line-height 는 28.8px에서 36px로, margin-bottom 은 6px에서 32px로, letter-spacing 은 0에서 1.92px로 늘어납니다",
             note: "글자 크기는 그대로인데 간격만 넓혀도 카드를 넘칩니다. 확대와 간격은 서로 다른 조건이라 프리셋을 나눠 각각 확인해야 하는 이유입니다.",
           },
+          {
+            title: "Tailwind 컴포넌트를 JSX 그대로 검사",
+            input:
+              "소스 형식 JSX·TSX · Tailwind 클래스로 스타일 만들기 켬 · 예시 불러오기로 채운 ReleaseSummaryCard (h-[230px] w-[560px] overflow-hidden · 배지 줄에 whitespace-nowrap) · CSS 영역에 @theme { --color-brand: #2d5dc8 } · 프리셋 리플로 320px",
+            result:
+              "후보 2개. 문서 전체에서 REFLOW-001 페이지 가로 오버플로(scrollWidth 560px · clientWidth 320px), section 에서 REFLOW-002 화면 밖으로 벗어난 요소. 안내에 표현식 4개를 자리표시자로 바꿨고 map 목록 1개를 항목 3개로 그렸다고 표시됩니다",
+            note: "w-[560px] 하나가 320px 화면을 넘기는 원인입니다. @theme 를 함께 붙여넣었기 때문에 프로젝트 전용 토큰인 text-brand 도 미인식 클래스로 잡히지 않고 실제 색으로 그려집니다.",
+          },
         ],
         limitations: [
           "실제 브라우저 확대를 그대로 복제하지 않습니다. 텍스트 200%는 계산된 글자 크기만 두 배로 만드는 보수적인 stress test이고, full-page zoom은 여백·이미지·media query까지 함께 바꿉니다. 최종 확인은 실제 브라우저의 확대 기능으로 해야 합니다.",
-          "JavaScript를 실행하지 않습니다. React hydration, 스크립트로 열리는 모달, 런타임에 바뀌는 클래스와 동적 상태는 재현되지 않으므로 정적 HTML과 CSS로 검사합니다.",
+          "JavaScript를 실행하지 않습니다. JSX·TSX도 구문만 읽어 마크업으로 바꿉니다. React hydration, 스크립트로 열리는 모달, 런타임에 바뀌는 클래스와 동적 상태는 재현되지 않습니다.",
+          "직접 만든 컴포넌트의 내부 마크업은 알 수 없습니다. 이름으로 짐작되는 것(Button·Link·Image 등)은 대응 요소로, 나머지는 스타일이 걸린 컨테이너로 그리거나 자식만 남깁니다. 전개 prop({...props})의 값도 호출하는 쪽에 있어 적용하지 않습니다.",
+          "표현식의 실제 값은 알 수 없습니다. {user.name} 같은 부분은 식 자체를 자리표시자 텍스트로 넣으므로 실제 문구 길이와 다릅니다. map 목록은 항목 3개로 고정해 반복합니다.",
+          "Tailwind 스타일은 이 도구에 포함된 기본 테마 기준으로 만듭니다. 프로젝트의 tailwind.config·플러그인·@theme 정의를 CSS 입력 영역에 함께 붙여넣지 않으면 해당 클래스는 CSS가 만들어지지 않고 안내에만 표시됩니다.",
           "외부 웹폰트·이미지·stylesheet를 불러오지 않습니다. 시스템 글꼴로 렌더링되므로 실제 운영 화면과 줄바꿈 위치가 달라질 수 있고, 이미지는 크기만 유지한 중립 placeholder로 표시됩니다.",
           "겹침은 자동으로 판정하지 않습니다. 두 텍스트가 실제로 겹쳤는지, 겹침 때문에 기능이 가려졌는지는 preview를 눈으로 확인해야 합니다.",
           "지도·데이터 표·다이어그램이 리플로 예외에 해당하는지 자동으로 분류하지 않습니다. 수평 스크롤 영역은 후보로만 표시하고 예외 여부는 사람이 판단합니다.",
@@ -3601,22 +3629,30 @@ export const TOOLS: Tool[] = [
             label: "MDN · Content Security Policy",
             url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
           },
+          {
+            label: "React · Writing Markup with JSX",
+            url: "https://react.dev/learn/writing-markup-with-jsx",
+          },
+          {
+            label: "Tailwind CSS · Theme variables",
+            url: "https://tailwindcss.com/docs/theme",
+          },
         ],
       },
       en: {
-        card: "Apply 200% text, 320px reflow and WCAG spacing to HTML and CSS, side by side with the original.",
+        card: "Apply 200% text, 320px reflow and WCAG spacing to HTML, CSS, JSX, TSX and Tailwind classes, side by side with the original.",
         description:
-          "Apply 200% text resizing, a 320 CSS pixel reflow viewport, or WCAG text spacing values to an HTML and CSS sample. Compare the original and test views to find fixed containers, controls, and responsive layouts that lose content. Your source is sanitized and rendered only inside an isolated preview with scripts disabled, and external images, fonts and stylesheets are never loaded.",
+          "Apply 200% text resizing, a 320 CSS pixel reflow viewport, or WCAG text spacing values to an HTML and CSS sample, or to a React component written in JSX or TSX with Tailwind classes. Compare the original and test views to find fixed containers, controls, and responsive layouts that lose content. Component code is never executed: only its syntax is read and turned into markup, and Tailwind styles are generated in your browser. Your source is sanitized and rendered only inside an isolated preview with scripts disabled, and external images, fonts and stylesheets are never loaded.",
         howItWorks: [
-          "Paste HTML or plain text and optional CSS",
+          "Choose the source format (HTML or JSX and TSX) and paste the code plus optional CSS",
           "Choose 200% text, 320px reflow, or WCAG text spacing",
           "Compare both previews and inspect overflow, clipping and manual checks",
         ],
         aeo: {
-          what: "A text scaling and spacing checker applies accessibility resize, reflow, and spacing conditions to HTML and CSS and compares the result with the original.",
-          who: "It is for HTML authors, front-end developers, designers, and QA testers reviewing 200% text resize, 320px reflow, and user spacing overrides.",
-          how: "It renders sanitized source in isolated previews, applies one WCAG-related preset, and measures horizontal overflow and likely clipped text.",
-          why: "It helps teams find fixed dimensions, blocked wrapping, and narrow controls that can hide content or functionality when text is enlarged or spaced out.",
+          what: "A text scaling and spacing checker applies accessibility resize, reflow, and spacing conditions to HTML and CSS, or to JSX and TSX with Tailwind classes, and compares the result with the original.",
+          who: "It is for HTML authors, React developers, designers, and QA testers reviewing 200% text resize, 320px reflow, and user spacing overrides.",
+          how: "It converts JSX syntax into markup without executing it, generates CSS for the Tailwind classes it finds, renders the result in isolated previews, applies one WCAG-related preset, and measures horizontal overflow and likely clipped text.",
+          why: "It helps teams find fixed dimensions, blocked wrapping, and narrow controls that can hide content or functionality when text is enlarged or spaced out, while the screen is still a component.",
         },
         guide: [
           {
@@ -3647,6 +3683,15 @@ export const TOOLS: Tool[] = [
               "WCAG 1.4.12 describes four values that must be applicable together without loss of content or functionality: line height at least 1.5 times the font size, space after paragraphs at least 2 times, letter spacing at least 0.12 times, and word spacing at least 0.16 times.",
               "These are not mandatory default typography values. The requirement is that a user can override author styles to these values without clipping text or losing controls. The checker leaves an existing value unchanged when it is already larger and modifies only the four relevant properties.",
               "Some properties have different effects across languages and writing systems. Test realistic product strings, including mixed text, numbers, and longer localized labels.",
+            ],
+          },
+          {
+            heading: "How do you check JSX, TSX and Tailwind screens?",
+            body: [
+              "A React screen does not exist as an HTML file. Copying finished markup out of the browser means the screen already runs somewhere, and by then a layout fix costs more. Switching the source format to JSX or TSX lets you paste component code directly and check resizing, reflow and spacing while the screen is still a component.",
+              "The code is never executed. Only its syntax is read into a tree, and the markup is assembled from that tree. className becomes class, a style object becomes a CSS string, and classes assembled with cn() or clsx() are collected from their string parts. A ternary uses the first branch so that conflicting classes are not applied together. Expressions whose values are unknown are not blanked out: the expression source itself becomes placeholder text, because removing the words would also remove the length that resize testing depends on.",
+              "Turning on Tailwind class styling generates Tailwind CSS in your browser for exactly the classes found in the markup. No CDN script and no build server is contacted, so the promise that your code never leaves the page still holds. If your project defines its own color or spacing tokens, paste the @theme block into the CSS field as well. Classes that produced no CSS are listed in a notice under the result.",
+              "What the tool cannot know is what is inside your components. A component is rendered as the element its name suggests where that is clear (Button becomes button, Link becomes a), and otherwise as a styled container. Mapped lists are repeated three times so you can see how a row of items wraps on a narrow screen. Re-check real data lengths and real component markup in the running app.",
             ],
           },
           {
@@ -3710,10 +3755,21 @@ export const TOOLS: Tool[] = [
               "One candidate. CLIP-001 on section: 260px of content inside a 228px clientHeight. Paragraph line height goes from 28.8px to 36px, margin-bottom from 6px to 32px, and letter spacing from 0 to 1.92px",
             note: "Font size never changed, yet wider spacing alone overflows the card. Resizing and spacing are separate conditions, which is why each has its own preset.",
           },
+          {
+            title: "Checking a Tailwind component as JSX",
+            input:
+              "Source format JSX or TSX, Tailwind class styling on, the ReleaseSummaryCard loaded by Load sample (h-[230px] w-[560px] overflow-hidden, whitespace-nowrap on the badge row), @theme { --color-brand: #2d5dc8 } in the CSS field, preset 320px reflow",
+            result:
+              "Two candidates. REFLOW-001 page horizontal overflow on the document (scrollWidth 560px, clientWidth 320px) and REFLOW-002 on section. Notices report four expressions turned into placeholders and one mapped list rendered as three items",
+            note: "A single w-[560px] is what breaks the 320px viewport. Because the @theme block was pasted along with the component, the project-only token text-brand is not reported as unknown and renders in its real color.",
+          },
         ],
         limitations: [
           "This is not a copy of real browser zoom. The 200% text preset doubles computed font sizes only, while full-page zoom also scales spacing, images and media query behavior. Confirm the final result with the browser's own zoom.",
-          "JavaScript is not executed. React hydration, script-opened dialogs, runtime class changes and dynamic state are not reproduced, so the check covers static HTML and CSS.",
+          "JavaScript is not executed. JSX and TSX are read as syntax only and turned into markup. React hydration, script-opened dialogs, runtime class changes and dynamic state are not reproduced.",
+          "The markup inside your own components is unknown. Components whose names suggest an element (Button, Link, Image and similar) are rendered as that element; the rest become styled containers or are replaced by their children. Spread props ({...props}) are skipped because their values live in the calling component.",
+          "Real expression values are unknown. A part such as {user.name} becomes placeholder text made of the expression source, so its length differs from the real copy, and mapped lists are always repeated three times.",
+          "Tailwind styles are generated from the default theme bundled with this tool. Unless your tailwind.config, plugins or @theme definitions are pasted into the CSS field, those classes produce no CSS and are only listed in a notice.",
           "External web fonts, images and stylesheets are never loaded. System fonts change where lines break compared with production, and images appear as neutral placeholders that keep only their dimensions.",
           "Overlap is not detected automatically. Whether two pieces of text actually overlap, and whether that overlap hides functionality, has to be judged by looking at the preview.",
           "Maps, data tables and diagrams are not automatically classified as reflow exceptions. Horizontal scroll regions are listed as candidates and a person decides whether the exception applies.",
@@ -3745,6 +3801,14 @@ export const TOOLS: Tool[] = [
             label: "MDN · Content Security Policy",
             url: "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy",
           },
+          {
+            label: "React · Writing Markup with JSX",
+            url: "https://react.dev/learn/writing-markup-with-jsx",
+          },
+          {
+            label: "Tailwind CSS · Theme variables",
+            url: "https://tailwindcss.com/docs/theme",
+          },
         ],
       },
     },
@@ -3771,14 +3835,24 @@ export const TOOLS: Tool[] = [
             "rem과 em은 사용자 기본 글자 크기와 컴포넌트 내부 비율을 반영하는 데 유용하지만 자동 해결책은 아닙니다. px도 브라우저 확대로 커질 수 있고, rem을 사용해도 고정 height나 숨김 overflow가 있으면 문구가 잘릴 수 있으므로 실제 결과를 검사해야 합니다.",
         },
         {
-          question: "React JSX나 실행 중인 웹페이지를 검사할 수 있나요?",
+          question: "React JSX나 TSX 컴포넌트를 그대로 검사할 수 있나요?",
           answer:
-            "1차 버전은 브라우저가 해석할 수 있는 정적 HTML과 CSS만 지원합니다. JSX, JavaScript 상태, 외부 font와 실제 운영 페이지는 재현하지 않으므로 렌더링된 HTML을 사용하고 마지막에는 실제 브라우저에서 다시 테스트하세요.",
+            "네. 소스 형식을 JSX·TSX로 바꾸고 컴포넌트 코드를 붙여넣으면 됩니다. 코드는 실행하지 않고 구문만 읽어 마크업으로 바꿉니다. 다만 JavaScript 상태, 컴포넌트 내부 마크업과 실제 데이터 값은 재현하지 않으므로 마지막에는 실제 브라우저에서 다시 테스트하세요.",
         },
         {
-          question: "입력한 HTML과 CSS가 서버로 전송되나요?",
+          question: "Tailwind 클래스로 만든 화면도 검사할 수 있나요?",
           answer:
-            "아닙니다. 정제, preview 생성과 측정은 브라우저에서 이루어집니다. 입력 원문, 요소 경로와 화면 문구는 Kitfolio 서버에 저장하거나 분석 이벤트로 전송하지 않습니다.",
+            "네. Tailwind 클래스로 스타일 만들기를 켜면 마크업에 쓰인 클래스만 골라 브라우저 안에서 Tailwind CSS를 만들어 미리보기에 적용합니다. 프로젝트가 @theme 로 정의한 색·간격 토큰을 쓰고 있다면 그 블록을 CSS 입력 영역에 함께 붙여넣으세요. CSS가 만들어지지 않은 클래스는 결과 아래 안내에 이름이 표시됩니다.",
+        },
+        {
+          question: "{user.name} 같은 표현식은 어떻게 그려지나요?",
+          answer:
+            "값을 알 수 없으므로 식 자체를 자리표시자 텍스트로 넣습니다. 빈칸으로 지우면 확대 검사에서 가장 중요한 글자 길이가 사라지기 때문입니다. 자리표시자 길이는 실제 문구와 다르므로 가장 긴 실제 문구로 한 번 더 확인하는 편이 안전합니다. 목록을 그리는 map 은 항목 3개로 반복해 좁은 화면의 줄바꿈을 볼 수 있게 합니다.",
+        },
+        {
+          question: "입력한 코드가 서버로 전송되나요?",
+          answer:
+            "아닙니다. 정제, JSX 변환, Tailwind CSS 생성, preview 렌더링과 측정이 모두 브라우저에서 이루어집니다. Tailwind 도 CDN 스크립트나 빌드 서버를 부르지 않습니다. 입력 원문, 요소 경로와 화면 문구는 Kitfolio 서버에 저장하거나 분석 이벤트로 전송하지 않습니다.",
         },
       ],
       en: [
@@ -3803,14 +3877,24 @@ export const TOOLS: Tool[] = [
             "Relative units can help text and related dimensions respond to user settings, but they do not guarantee success. Browser zoom can enlarge px text, while a rem-based component can still clip content because of fixed height or hidden overflow. Test the rendered outcome.",
         },
         {
-          question: "Can I test React JSX or a live website?",
+          question: "Can I test a React JSX or TSX component directly?",
           answer:
-            "The first release accepts static HTML and CSS that a browser can render. It does not execute JSX, JavaScript state, external fonts, or a deployed site. Use rendered HTML for this preview and complete the review in the real browser afterward.",
+            "Yes. Switch the source format to JSX or TSX and paste the component. The code is never executed: its syntax is read and turned into markup. JavaScript state, the markup inside your components, and real data values are not reproduced, so finish the review in the real browser.",
         },
         {
-          question: "Is my HTML or CSS sent to a server?",
+          question: "Does it work with Tailwind classes?",
           answer:
-            "No. Sanitization, preview rendering, and measurement run in your browser. The source, element paths, and visible copy are not uploaded to or stored by Kitfolio and are not included in analytics events.",
+            "Yes. Turn on Tailwind class styling and the checker generates Tailwind CSS in your browser for the classes it finds in the markup, then applies it to both previews. If your project defines color or spacing tokens with @theme, paste that block into the CSS field too. Classes that produced no CSS are named in a notice under the result.",
+        },
+        {
+          question: "How are expressions such as {user.name} rendered?",
+          answer:
+            "Their values are unknown, so the expression source itself becomes placeholder text. Blanking it out would remove the text length that resize testing depends on. Placeholder length differs from real copy, so re-check with your longest real string. A mapped list is repeated as three items so you can see how the row wraps on a narrow screen.",
+        },
+        {
+          question: "Is my code sent to a server?",
+          answer:
+            "No. Sanitization, JSX conversion, Tailwind CSS generation, preview rendering, and measurement all run in your browser, and the Tailwind step contacts no CDN script or build server. The source, element paths, and visible copy are not uploaded to or stored by Kitfolio and are not included in analytics events.",
         },
       ],
     },

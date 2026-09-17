@@ -4187,6 +4187,16 @@ textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
 .ts-choices button:disabled { opacity: .45; cursor: not-allowed; }
 .ts-hint { margin: 10px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--color-blue-gray-700); }
 
+/* Tailwind 사용 여부: 형식 선택과 한 묶음이라 같은 fieldset 안에 둔다 */
+.ts-switch {
+  display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--color-blue-gray-900);
+}
+.ts-switch input {
+  width: 16px; height: 16px; margin: 0; flex: none;
+  accent-color: var(--color-blue-primary-700); cursor: pointer;
+}
+
 /* preview 무대: 원본 · 검사 2열 */
 .ts-stage { grid-area: stage; display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 760px) { .ts-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
