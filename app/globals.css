@@ -1773,6 +1773,46 @@ p.sv-hint { margin-top: -8px; }
 .sv-formula-calc.is-final { color: var(--color-blue-primary-700); font-weight: 600; }
 
 /* ============================================================
+   프리랜서 3.3% 계산기 (퇴직금 계산기의 sv-/fw- 카드 구조 재사용)
+   ============================================================ */
+.ft-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.ft-chip {
+  padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 500;
+  background: #fff; color: var(--color-blue-gray-700);
+  border: 1px solid var(--color-blue-gray-200); cursor: pointer;
+}
+.ft-chip:hover { border-color: var(--color-blue-primary-300); color: var(--color-blue-primary-700); }
+.ft-chip.is-active {
+  background: var(--color-blue-primary-100); color: var(--color-blue-primary-700);
+  border-color: var(--color-blue-primary-200);
+}
+.ft-note {
+  margin: 0; padding: 11px 14px; border-radius: var(--radius-md);
+  background: var(--color-blue-primary-50); border: 1px solid var(--color-blue-primary-100);
+  font-size: 12.5px; line-height: 1.6; color: var(--color-blue-gray-800); text-wrap: pretty;
+}
+.ft-compare {
+  background: #fff; border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg); padding: 16px 18px 14px;
+}
+.ft-compare h3 {
+  margin: 0 0 10px; font-size: 13px; font-weight: 700;
+  letter-spacing: -0.01em; color: var(--color-blue-gray-900);
+}
+.ft-compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ft-compare-cell {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px;
+  border-radius: var(--radius-md); background: var(--color-blue-gray-50);
+  border: 1px solid var(--color-blue-gray-100);
+}
+.ft-compare-cell.is-current { border-color: var(--color-blue-primary-200); background: var(--color-blue-primary-50); }
+.ft-compare-cell .k { font-size: 12px; color: var(--color-blue-gray-600); }
+.ft-compare-cell .v { font-size: 16px; font-weight: 500; color: var(--color-blue-gray-900); }
+.ft-compare p {
+  margin: 10px 0 0; font-size: 12px; line-height: 1.6; color: var(--color-blue-gray-600);
+}
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */
