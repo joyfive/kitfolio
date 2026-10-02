@@ -33,7 +33,7 @@
   (guide 2섹션 · examples · limitations · faq · relatedTools · og, **ko/en 양쪽**)을
   통과해야 합니다. 글자 수가 아니라 필수 콘텐츠 구조의 존재 여부로 판정합니다.
 
-## 구현된 기능 (도구 29종)
+## 구현된 기능 (도구 30종)
 
 각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ/AEO를
 `app/lib/content.ts` 레지스트리에서 단일 출처로 관리합니다. 허브(`/`, `/en`)는 전체 도구의
@@ -56,20 +56,21 @@
 | 13 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
 | 14 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
 | 15 | 프리랜서 3.3% 계산기 / Korea Freelancer Tax Calculator (3.3%) | `/freelancer-tax-calculator` | `/en/freelancer-tax-calculator` | 외주비·강연료에서 3.3%·8.8% 원천징수 후 실수령액과, 원하는 실수령액에 맞는 지급액을 계산. |
-| 16 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
-| 17 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
-| 18 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 19 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
-| 20 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
-| 21 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
-| 22 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
-| 23 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
-| 24 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
-| 25 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
-| 26 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
-| 27 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
-| 28 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
-| 29 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
+| 16 | 연차 계산기 / Korea Annual Leave Calculator | `/annual-leave-calculator` | `/en/annual-leave-calculator` | 입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교. |
+| 17 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
+| 18 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
+| 19 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
+| 20 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 21 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
+| 22 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
+| 23 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 24 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
+| 25 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| 26 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 27 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 28 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
+| 29 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
+| 30 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
 
 ## 디렉토리 구조
 

@@ -29,7 +29,7 @@
 | 순서 | 도구 | 가칭 slug | 점수 | 타겟 | 상태 |
 |---|---|---|---|---|---|
 | 1 | 프리랜서 3.3% 계산기 (사업소득 · 기타소득 8.8%) | `freelancer-tax-calculator` | 24 | designer · developer · pm · office-worker | ✅ v1 배포 대기 · indexable 승격 전 ([기획서](./freelancer-tax-calculator.md)) |
-| 2 | 연차 계산기 | `annual-leave-calculator` | 24 | office-worker · pm · job-seeker | ⬜ |
+| 2 | 연차 계산기 | `annual-leave-calculator` | 24 | office-worker · pm · job-seeker | ✅ v1 배포 대기 · indexable 승격 전 ([기획서](./annual-leave-calculator.md)) |
 | 3 | 부가세 계산기 (일반 · 간이과세) | `vat-calculator` | 23 | small-business-owner | ⬜ 조건부 |
 | 4 | 실업급여 계산기 | `unemployment-benefit-calculator` | 21 | office-worker · job-seeker | ⬜ |
 | 5 | 종합소득세 계산기 | `income-tax-calculator` | 20 | small-business-owner · 프리랜서 | ⏸ 보류 |

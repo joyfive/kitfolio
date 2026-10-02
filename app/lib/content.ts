@@ -38,6 +38,7 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 // 퇴직금 계산기도 같은 이유로 출처·검증일을 정책 데이터 레이어에서 가져온다.
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
+import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
 
 export type Lang = "ko" | "en";
 
@@ -5432,6 +5433,310 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Korea Freelancer Tax Calculator",
         subtitle: "3.3% and 8.8% withholding, net pay and reverse",
+      },
+    },
+  },
+  {
+    slug: "annual-leave-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "pm", "job-seeker", "small-business-owner"],
+    ico: "15d",
+    ready: true,
+    indexable: false,
+    verifiedAt: ANNUAL_LEAVE_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "연차 계산기", en: "Korea Annual Leave Calculator" },
+    relatedTools: ["severance-pay-calculator", "flex-work-calculator", "salary-calculator"],
+    seo: {
+      ko: {
+        title: "연차 계산기 | 입사일·회계연도 기준 연차 개수와 퇴사 정산",
+        description:
+          "입사일과 기준일을 넣으면 근로기준법 제60조에 따라 지금까지 생긴 연차와 다음 발생일, 소멸 예정일을 계산합니다. 1년 미만 월 단위 연차와 3년차부터 붙는 가산 연차, 회계연도 기준 비례 연차를 반영하고, 퇴사할 때 입사일 기준과 회계연도 기준의 차이를 정산 일수로 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "연차 계산기",
+          "연차 개수 계산",
+          "1년 미만 연차",
+          "회계연도 연차 계산",
+          "퇴사 연차 정산",
+          "3년차 연차",
+          "연차수당 계산",
+          "단시간 근로자 연차",
+          "근로기준법 제60조",
+        ],
+      },
+      en: {
+        title: "Korea Annual Leave Calculator | Days Earned by Start Date",
+        description:
+          "Enter your start date to see the annual paid leave you have earned under Article 60 of Korea's Labor Standards Act, when the next days accrue and when they expire. It covers monthly leave in the first year, extra days from the third year, pro rata leave on a calendar-year basis and part-time hours, and shows the shortfall to settle when you leave. Everything runs in your browser.",
+        keywords: [
+          "korea annual leave calculator",
+          "korea annual leave days",
+          "labor standards act article 60",
+          "korea paid leave first year",
+          "korea annual leave calendar year",
+          "korea unused leave pay",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교.",
+        description:
+          "입사일과 기준일을 넣으면 근로기준법 제60조에 따라 지금까지 생긴 연차와 다음 발생일, 소멸 예정일을 계산합니다. 1년 미만 월 단위 연차와 3년차부터 붙는 가산 연차, 회계연도 기준 비례 연차를 반영하고, 퇴사할 때 입사일 기준과 회계연도 기준의 차이를 정산 일수로 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "입사일 기준 또는 회계연도 기준 선택",
+          "입사일과 기준일(또는 마지막 근무일) 입력",
+          "남은 연차·발생 내역·다음 발생일과 정산 차이 확인",
+        ],
+        aeo: {
+          what: "연차 계산기는 입사일과 기준일로 근로기준법 제60조에 따라 발생한 연차 유급휴가 일수, 다음 발생일, 소멸 예정일을 계산하고 입사일 기준과 회계연도 기준을 비교하는 도구입니다.",
+          who: "올해 쓸 수 있는 연차를 확인하려는 직장인, 퇴사나 이직 전 남은 연차와 연차수당을 확인하려는 사람, 직원 연차를 부여하는 소규모 회사의 인사·총무 담당자를 위한 도구입니다.",
+          how: "입사 후 1년 미만에는 1개월 개근마다 1일(최대 11일), 1년을 채운 다음 날 15일, 그 뒤 2년마다 1일을 더해 25일까지 계산합니다. 기간은 민법 제160조에 따라 입사일에서 다시 세고, 회계연도 기준은 15 × 입사 연도 재직일수 ÷ 365 로 비례 연차를 계산합니다.",
+          why: "연차는 기간을 채운 다음 날 재직해야 생기고 1년 미만 연차는 입사 1년이 되면 소멸하는 등 날짜 규칙이 까다롭습니다. 회사가 회계연도 기준으로 부여했다면 퇴사할 때 부족한 일수를 수당으로 정산받아야 하므로, 휴가 계획과 퇴사 전 확인에 씁니다.",
+        },
+        guide: [
+          {
+            heading: "연차는 언제 며칠 생기나요",
+            body: [
+              "입사 후 1년이 되기 전에는 1개월을 개근할 때마다 1일의 유급휴가가 생깁니다(근로기준법 제60조 제2항). 1년이 되기 전까지 11번 생기므로 최대 11일입니다. 예를 들어 3월 1일에 입사했다면 4월 1일부터 다음 해 2월 1일까지 매월 1일씩 생깁니다.",
+              "1년 동안 80% 이상 출근하면 1년을 채운 다음 날 15일이 생깁니다(제60조 제1항). 2017년 개정 전에는 1년차에 쓴 연차를 이 15일에서 뺐지만, 2018년 5월 29일 시행된 개정으로 이 규정이 삭제되어 지금은 1년차 11일과 2년차 15일을 따로 받습니다. 입사 후 2년 동안 최대 26일입니다.",
+              "3년 이상 근속하면 최초 1년을 넘는 근속 2년마다 1일이 더해집니다(제60조 제4항). 근속 3년을 채우면 16일, 5년이면 17일이 되고, 21년부터는 한도인 25일입니다.",
+              "기간은 달력으로 셉니다(민법 제160조). 1월 31일에 입사했다면 2월에는 31일이 없으므로 첫 1개월은 2월 말일에 끝나고 3월 1일에 첫 연차가 생깁니다. 계산기는 매번 입사일에서 다시 세어 말일 입사자도 날짜가 밀리지 않게 합니다.",
+            ],
+          },
+          {
+            heading: "입사일 기준과 회계연도 기준은 무엇이 다른가요",
+            body: [
+              "연차는 사람마다 입사일을 기준으로 계산하는 것이 원칙입니다. 다만 노사가 합의하면 관리 편의를 위해 매년 1월 1일에 전 직원 연차를 한꺼번에 부여하는 회계연도 기준을 쓸 수 있습니다.",
+              "회계연도 기준에서 연도 중에 입사한 사람은 다음 해 1월 1일에 15일 × 입사 연도 재직일수 ÷ 365 만큼을 비례해서 받고, 1년 미만 월 단위 연차는 이와 별도로 계속 생깁니다. 7월 1일 입사자라면 입사 연도에 184일을 일했으므로 다음 해 1월 1일에 약 7.56일을 받습니다.",
+              "회계연도 기준으로 받은 연차가 퇴사할 때 입사일 기준으로 계산한 연차보다 적으면, 회사는 부족한 일수만큼 수당으로 보상해야 합니다(고용노동부 2018년 설명자료). 계산기의 '두 기준의 총 발생 비교'와 퇴사 예정 모드가 이 차이를 보여줍니다.",
+            ],
+          },
+          {
+            heading: "1년만 일하고 퇴사하면 15일을 받나요",
+            body: [
+              "연차는 기간을 채운 다음 날 재직하고 있어야 생깁니다. 대법원은 1년 기간제 근로자가 1년을 채우고 바로 근로관계가 끝나면 15일의 연차는 생기지 않는다고 보았고(대법원 2021다227100), 고용노동부도 같은 취지로 해석을 바꾸었습니다.",
+              "그래서 3월 1일에 입사해 다음 해 2월 28일까지 일하고 퇴사하면 1년 미만 월 단위 연차 11일만 생깁니다. 하루 더 일해 3월 1일까지 재직하면 15일이 함께 생깁니다. 계산기에서 '퇴사 예정'을 고르고 마지막 근무일을 넣으면 이 경계가 그대로 반영됩니다.",
+              "월 단위 연차도 같습니다. 입사 후 1개월이 끝나는 날 퇴사하면 그 달의 1일은 생기지 않고, 다음 날까지 재직해야 생깁니다.",
+            ],
+          },
+          {
+            heading: "연차는 언제 소멸하고, 못 쓴 연차는 수당으로 받나요",
+            body: [
+              "연차는 생긴 날부터 1년 동안 쓰지 않으면 소멸합니다. 1년 미만 월 단위 연차는 2020년 개정으로 입사 후 1년이 되는 날까지만 쓸 수 있습니다. 회사 사정으로 쓰지 못한 경우에는 소멸하지 않습니다.",
+              "쓰지 못하고 소멸한 연차는 1일 통상임금을 기준으로 미사용 연차수당을 청구할 수 있습니다. 다만 회사가 근로기준법 제61조의 절차대로 서면으로 사용을 촉진했는데도 쓰지 않았다면 보상 의무가 없습니다.",
+              "아직 쓸 수 있는 기간이 남은 연차를 연말에 미리 수당으로 일괄 정산하는 것은 허용되지 않습니다. 퇴사하면 남은 연차는 쓸 수 없게 되므로 그 일수만큼 수당으로 받습니다. 연차수당은 퇴직금의 평균임금에도 반영됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "2025년 3월 입사자의 2026년 10월 연차",
+            input: "입사일 기준 · 입사일 2025-03-01 · 기준일 2026-10-01",
+            result: "지금까지 발생 26일 · 월 단위 11일은 2026-02-28 소멸 · 지금 쓸 수 있는 연차 15일 · 다음 발생 2027-03-01 15일",
+            note: "1년 미만에 생긴 11일은 입사 1년이 되는 날까지만 쓸 수 있습니다. 2026년 3월 1일에 생긴 15일은 2027년 2월 28일까지 씁니다.",
+          },
+          {
+            title: "7월 입사자의 회계연도 비례 연차",
+            input: "회계연도 기준 · 입사일 2025-07-01 · 기준일 2026-07-01",
+            result: "월 단위 11일(2025-08-01 ~ 2026-06-01) · 2026-01-01 비례 연차 7.56일 · 합계 18.56일 · 2027-01-01 15일",
+            note: "15 × 184 ÷ 365 = 7.56일입니다. 소수점은 회사 규정에 따라 처리하되 근로자에게 불리하지 않게 해야 합니다.",
+          },
+          {
+            title: "1년 계약이 끝나 퇴사하는 경우",
+            input: "입사일 기준 · 입사일 2025-03-01 · 퇴사 예정 · 마지막 근무일 2026-02-28",
+            result: "발생 11일 · 15일은 발생하지 않음",
+            note: "마지막 근무일이 2026-03-01 이면 1년을 채운 다음 날 재직하므로 15일이 함께 생겨 26일이 됩니다.",
+          },
+          {
+            title: "근속 10년차와 주 20시간 단시간 근로자",
+            input: "입사일 2016-03-02 · 기준일 2026-03-02 · 주 40시간 / 같은 조건에서 주 20시간",
+            result: "근속 10년 정기 연차 19일(가산 4일) / 단시간 근로자는 15일 기준 60시간 단위로 계산",
+            note: "단시간 근로자는 통상 근로자 연차일수 × (소정근로시간 ÷ 통상 근로자 소정근로시간) × 8시간으로 시간 단위 연차를 받고, 1시간 미만은 1시간으로 봅니다.",
+          },
+        ],
+        sources: ANNUAL_LEAVE_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "근로기준법이 정한 최소 연차만 계산합니다. 회사 취업규칙이나 단체협약이 더 많은 휴가를 정했다면 그 기준이 우선합니다.",
+          "출근율은 '매년 80% 이상'을 기본으로 하고, 80% 미만인 해는 하나만 지정해 개근 월 수로 계산합니다. 일 단위 출근 기록과 출근으로 보는 기간(업무상 재해·출산전후휴가·육아휴직 등)의 세부 계산은 반영하지 않습니다.",
+          "2017년 5월 29일 이전 입사자에게 적용됐을 수 있는 옛 차감 규정은 반영하지 않고 현행 규정으로 계산합니다.",
+          "회계연도 기준의 가산 연차는 1월 1일까지 채운 입사일 기준 근속 연수로 계산합니다. 회사마다 가산 시작 연도를 다르게 운영할 수 있습니다.",
+          "단시간 근로자는 시행령 [별표 2] 산식으로 시간 단위만 계산하며, 회사별 소정근로시간 구조나 시간 단위 사용 방식은 반영하지 않습니다.",
+          "연차수당은 입력한 1일 통상임금으로 단순 계산합니다. 통상임금 산정과 수당 지급일은 계산하지 않습니다.",
+        ],
+      },
+      en: {
+        card: "Annual leave earned from your start date in Korea, the next accrual and expiry, and the calendar-year shortfall when you leave.",
+        description:
+          "Enter your start date to see the annual paid leave you have earned under Article 60 of Korea's Labor Standards Act, when the next days accrue and when they expire. It covers monthly leave in the first year, extra days from the third year, pro rata leave on a calendar-year basis and part-time hours, and shows the shortfall to settle when you leave. Everything runs in your browser.",
+        howItWorks: [
+          "Choose the hire date or calendar-year basis",
+          "Enter your start date and an as-of date (or last working day)",
+          "See remaining leave, accrual history, the next accrual and any shortfall",
+        ],
+        aeo: {
+          what: "A Korea Annual Leave Calculator works out the annual paid leave earned under Article 60 of Korea's Labor Standards Act from a start date, along with the next accrual date and expiry dates, and compares the hire date and calendar-year bases.",
+          who: "It is for employees in Korea checking how much leave they can take this year, people checking remaining leave and leave pay before resigning, and HR or office staff at small companies who grant leave.",
+          how: "In the first year it adds 1 day per fully attended month (up to 11), then 15 days the day after one year is completed, plus 1 more day every 2 years up to 25. Periods are counted on the calendar from the start date under Article 160 of the Civil Act, and the calendar-year basis gives pro rata leave of 15 × days worked in the start year ÷ 365.",
+          why: "Leave only accrues if you are still employed the day after a period ends, and first-year leave expires on your first anniversary, so the date rules are easy to get wrong. If your employer grants leave by calendar year, any shortfall against the hire date basis must be paid out when you leave.",
+        },
+        guide: [
+          {
+            heading: "When leave accrues and how much",
+            body: [
+              "Before the first anniversary, you earn 1 day of paid leave for each month of full attendance (Labor Standards Act, Art. 60(2)). That happens 11 times before the year ends, so up to 11 days. Starting on 1 March, for example, a day is added on the 1st of each month from 1 April to 1 February.",
+              "With at least 80% attendance over the year, 15 days accrue the day after the year is completed (Art. 60(1)). Before an amendment that took effect on 29 May 2018, first-year days used were deducted from these 15; that rule was removed, so the first year's 11 days and the second year's 15 are now separate, up to 26 days over two years.",
+              "From three years of service, 1 day is added for every 2 years beyond the first (Art. 60(4)). Three years gives 16 days, five years 17, and from 21 years the 25-day cap applies.",
+              "Periods follow the calendar (Civil Act, Art. 160). If you start on 31 January, February has no 31st, so the first month ends on the last day of February and the first day of leave accrues on 1 March. The calculator counts from the start date each time so month-end starters do not drift.",
+            ],
+          },
+          {
+            heading: "Hire date basis vs calendar-year basis",
+            body: [
+              "Leave is calculated from each employee's start date by default. With agreement from employees, an employer may instead grant everyone's leave on 1 January each year for simpler administration.",
+              "On the calendar-year basis, someone who joined mid-year receives 15 days × days worked in the start year ÷ 365 on the following 1 January, while first-year monthly leave keeps accruing separately. A 1 July starter worked 184 days in the start year, so receives about 7.56 days on 1 January.",
+              "If calendar-year leave adds up to less than hire date leave when you leave, the employer must pay out the shortfall (Ministry of Employment and Labor guide, 2018). The comparison and the leaving mode in the calculator show that difference.",
+            ],
+          },
+          {
+            heading: "Do you get 15 days after working exactly one year?",
+            body: [
+              "Leave accrues only if you are still employed the day after the period ends. Korea's Supreme Court held that a worker on a one-year fixed-term contract whose employment ends right at one year does not earn the 15 days (Supreme Court 2021Da227100), and the Ministry of Employment and Labor updated its interpretation to match.",
+              "So someone who starts on 1 March and works until 28 February the next year earns only the 11 monthly days. Working one more day, through 1 March, adds the 15 days. Choose 'Leaving' and enter your last working day to see this boundary.",
+              "Monthly leave works the same way: leaving on the last day of a month of service does not earn that month's day unless you are still employed the next day.",
+            ],
+          },
+          {
+            heading: "When leave expires and whether unused leave is paid",
+            body: [
+              "Leave expires if not used within one year of accruing. Since a 2020 amendment, first-year monthly leave can only be used until the first anniversary. Leave you could not take because of the employer does not expire.",
+              "Leave that expires unused can be claimed as pay based on the daily ordinary wage. The employer owes nothing, however, if it formally promoted the leave in writing under Article 61 and you still did not use it.",
+              "Paying out leave at year end while it can still be used is not allowed. When you leave the company, the remaining days can no longer be taken, so they are paid out. Leave pay also feeds into the average wage used for severance pay.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "October 2026 balance for a March 2025 starter",
+            input: "Hire date basis · start 2025-03-01 · as of 2026-10-01",
+            result: "26 days earned · 11 monthly days expired on 2026-02-28 · 15 days available · next 15 days on 2027-03-01",
+            note: "The 11 first-year days can only be used until the first anniversary. The 15 days that accrued on 1 March 2026 can be used until 28 February 2027.",
+          },
+          {
+            title: "Pro rata leave for a July starter",
+            input: "Calendar-year basis · start 2025-07-01 · as of 2026-07-01",
+            result: "11 monthly days (2025-08-01 to 2026-06-01) · 7.56 pro rata days on 2026-01-01 · 18.56 days in total · 15 days on 2027-01-01",
+            note: "15 × 184 ÷ 365 = 7.56 days. The employer's rules decide the rounding, but it must not leave the employee worse off.",
+          },
+          {
+            title: "Leaving when a one-year contract ends",
+            input: "Hire date basis · start 2025-03-01 · leaving · last working day 2026-02-28",
+            result: "11 days earned · the 15 days do not accrue",
+            note: "With a last working day of 2026-03-01 you are employed the day after the year ends, so the 15 days accrue too, for 26 in total.",
+          },
+          {
+            title: "Ten years of service, and a 20-hour part-timer",
+            input: "Start 2016-03-02 · as of 2026-03-02 · 40 hours a week / same dates at 20 hours a week",
+            result: "19 days for year 10 (4 extra) / the part-timer's 15 days become 60 hours",
+            note: "Part-time workers receive leave in hours: full-time days × (contracted hours ÷ full-time hours) × 8, with any part of an hour counted as a full hour.",
+          },
+        ],
+        sources: ANNUAL_LEAVE_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "It calculates only the statutory minimum. If your company's rules or collective agreement give more leave, those apply.",
+          "Attendance is assumed to be at least 80% every year, and one year under 80% can be set with its number of fully attended months. Daily attendance records and the detail of periods treated as attendance (work injury, maternity leave, parental leave and so on) are not modelled.",
+          "An older deduction rule that may have applied to people who started on or before 29 May 2017 is not modelled; current rules are used.",
+          "On the calendar-year basis, extra days for long service use full years from the start date completed by 1 January. Employers may start the extra days in a different year.",
+          "Part-time leave is calculated in hours with the Annex 2 formula only. Company-specific hour patterns and how hourly leave is taken are not modelled.",
+          "Leave pay is a simple multiplication by the daily ordinary wage you enter. The ordinary wage itself and the payment date are not calculated.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "입사 1년 미만이면 연차가 며칠인가요?",
+          answer:
+            "1개월을 개근할 때마다 1일씩 생겨 1년이 되기 전까지 최대 11일입니다. 이 11일은 입사 후 1년이 되는 날까지 써야 하고, 1년을 채운 다음 날 생기는 15일과는 별개입니다.",
+        },
+        {
+          question: "3년차 연차는 며칠인가요?",
+          answer:
+            "근속 3년을 채운 다음 날 16일이 생깁니다. 최초 1년을 넘는 근속 2년마다 1일씩 더해지므로 근속 1·2년은 15일, 3·4년은 16일, 5·6년은 17일이고, 21년부터는 한도인 25일입니다.",
+        },
+        {
+          question: "1년만 일하고 퇴사하면 15일을 받나요?",
+          answer:
+            "아니요. 연차는 1년을 채운 다음 날 재직하고 있어야 생기므로, 정확히 1년 일하고 퇴사하면 1년 미만 월 단위 연차 11일만 생깁니다(대법원 2021다227100). 1년을 채운 다음 날까지 재직하면 15일이 함께 생깁니다.",
+        },
+        {
+          question: "회사가 회계연도 기준으로 연차를 주면 손해인가요?",
+          answer:
+            "연도 중 입사자는 첫해에 비례 연차를 받아 시기에 따라 적어 보일 수 있습니다. 하지만 퇴사할 때 회계연도 기준으로 받은 연차가 입사일 기준보다 적으면 회사는 부족한 일수를 수당으로 보상해야 합니다. 계산기의 두 기준 비교에서 차이를 확인할 수 있습니다.",
+        },
+        {
+          question: "못 쓴 연차는 수당으로 받을 수 있나요?",
+          answer:
+            "연차는 생긴 날부터 1년 안에 쓰지 않으면 소멸하고, 소멸한 연차는 1일 통상임금 기준으로 수당을 청구할 수 있습니다. 회사가 근로기준법 제61조에 따라 서면으로 사용을 촉진했는데도 쓰지 않았다면 보상 의무가 없습니다. 퇴사하면 남은 연차는 수당으로 정산합니다.",
+        },
+        {
+          question: "5인 미만 회사나 아르바이트도 연차가 있나요?",
+          answer:
+            "상시 근로자 4명 이하 사업장에는 연차 규정이 적용되지 않습니다. 4주 평균 주 15시간 미만으로 일하는 경우도 적용되지 않습니다. 주 15시간 이상인 단시간 근로자는 통상 근로자 연차를 소정근로시간 비율로 줄여 시간 단위로 받습니다.",
+        },
+        {
+          question: "입력한 날짜가 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 날짜와 금액은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "How much leave do I get in my first year in Korea?",
+          answer:
+            "One day for each month of full attendance, up to 11 days before your first anniversary. Those days must be used by the first anniversary and are separate from the 15 days that accrue the day after the first year ends.",
+        },
+        {
+          question: "How many days do I get in my third year?",
+          answer:
+            "16 days accrue the day after three years of service. One day is added for every 2 years beyond the first, so years 1 and 2 give 15 days, years 3 and 4 give 16, years 5 and 6 give 17, and from year 21 the cap of 25 applies.",
+        },
+        {
+          question: "Do I get 15 days if I leave after exactly one year?",
+          answer:
+            "No. Leave accrues only if you are still employed the day after the year ends, so working exactly one year and leaving earns only the 11 monthly days (Supreme Court 2021Da227100). Staying employed through the day after the anniversary adds the 15 days.",
+        },
+        {
+          question: "Am I worse off if my employer uses the calendar year?",
+          answer:
+            "Mid-year starters receive pro rata leave in the first year, so the balance can look lower at times. But if calendar-year leave adds up to less than hire date leave when you leave, the employer must pay out the shortfall. The comparison in the calculator shows the difference.",
+        },
+        {
+          question: "Is unused leave paid out?",
+          answer:
+            "Leave expires if not used within a year of accruing, and expired leave can be claimed as pay based on the daily ordinary wage. The employer owes nothing if it formally promoted the leave in writing under Article 61 and you still did not use it. Remaining leave is paid out when you leave the company.",
+        },
+        {
+          question: "Do small businesses and part-timers get annual leave?",
+          answer:
+            "Annual leave rules do not apply at workplaces with 4 or fewer regular employees, or to people working under 15 hours a week on a 4-week average. Part-timers working 15 hours or more receive full-time leave scaled by their hours, counted in hours.",
+        },
+        {
+          question: "Are the dates I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "연차 계산기",
+        subtitle: "입사일·회계연도 기준 연차와 퇴사 정산 차이",
+      },
+      en: {
+        title: "Korea Annual Leave Calculator",
+        subtitle: "Days earned, next accrual and the calendar-year shortfall",
       },
     },
   },
