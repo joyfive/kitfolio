@@ -1813,6 +1813,51 @@ p.sv-hint { margin-top: -8px; }
 }
 
 /* ============================================================
+   연차 계산기 (퇴직금·프리랜서 계산기의 sv-/fw-/ft- 카드 구조 재사용)
+   발생 내역은 표 하나로: 소멸분은 흐리게, 다음 발생은 점선으로 구분
+   ============================================================ */
+/* 결과 표·긴 영문 레이블의 최소 폭이 1fr 열을 넓혀 모바일에서 가로 스크롤이 생기지 않게 한다 */
+.al-work { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .al-work { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+.al-work .fw-row-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.al-work .fw-field-input input { min-width: 0; }
+.al-select {
+  flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
+  font: inherit; font-size: 14px; color: var(--color-blue-gray-900); cursor: pointer;
+}
+.al-table-wrap { overflow-x: auto; margin: 0 -4px; }
+.al-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.al-table th {
+  text-align: left; font-weight: 600; color: var(--color-blue-gray-500);
+  padding: 6px 4px 8px; border-bottom: 1px solid var(--color-blue-gray-200); white-space: nowrap;
+}
+.al-table td {
+  padding: 9px 4px; border-bottom: 1px solid var(--color-blue-gray-100);
+  color: var(--color-blue-gray-800); vertical-align: top;
+}
+.al-table td.num { font-family: var(--font-inter); white-space: nowrap; }
+.al-table .r { text-align: right; }
+.al-table td.r { font-weight: 600; color: var(--color-blue-gray-900); }
+.al-table tr.is-expired td { color: var(--color-blue-gray-400); }
+.al-table tr.is-expired td.r { color: var(--color-blue-gray-400); font-weight: 500; text-decoration: line-through; }
+.al-table tr.is-upcoming td { border-top: 1px dashed var(--color-blue-primary-200); color: var(--color-blue-primary-700); }
+.al-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+  font-size: 11px; font-weight: 500; background: var(--color-blue-gray-100); color: var(--color-blue-gray-600);
+}
+.al-table tr.is-upcoming .al-tag { background: var(--color-blue-primary-100); color: var(--color-blue-primary-700); }
+.al-foot {
+  margin: 10px 0 0; font-size: 11.5px; line-height: 1.55;
+  color: var(--color-blue-gray-500); text-wrap: pretty;
+}
+.al-sub { display: none; }
+@media (max-width: 559px) {
+  .al-table .al-exp { display: none; }
+  .al-sub { display: block; margin-top: 2px; font-size: 11px; color: var(--color-blue-gray-400); }
+}
+.ft-note a { color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */
