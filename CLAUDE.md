@@ -79,11 +79,12 @@ PM · Designer · Developer · Job Seeker · Office Worker · Small Business Own
   기능 삭제·redirect·robots.txt 차단은 하지 않는다.
 - **동일 컴포넌트·동일 구조·수식만 다른 파생 페이지는 계열별 대표 1개만 색인한다.**
   (CSS 단위 → `rem-to-px` / 광고 지표 → `roas-calculator` / PDF → `pdf-merge`)
-- 현재 ready 30종 중 28종이 **indexable** (URL 통합으로 파생 페이지가 사라졌고, 남은 도구는
+- 현재 ready 31종 중 28종이 **indexable** (URL 통합으로 파생 페이지가 사라졌고, 남은 도구는
   모두 품질 게이트를 통과한 고유 콘텐츠를 갖췄다). 새 도구는 게이트를 통과할 때까지
   `indexable: false` 로 추가한다. 2026-10-01 추가한 프리랜서 3.3% 계산기는 게이트 구조를
   갖췄지만 배포 후 노출을 보고 승격하기 위해 `indexable: false` 로 두었다.
   2026-10-02 추가한 연차 계산기도 같은 이유로 `indexable: false` 다 (게이트 구조는 통과).
+  2026-10-20 추가한 KST UTC 변환기도 같은 이유로 `indexable: false` 다 (게이트 구조는 통과).
 
 #### 콘텐츠 품질 게이트 (하드 게이트)
 
@@ -391,7 +392,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ---
 
-## 구현된 기능 목록 (2026-10-02 기준, 도구 30종)
+## 구현된 기능 목록 (2026-10-20 기준, 도구 31종)
 
 > 2026-07-24: 동일 수식 계산기 통합 · ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
 > **성장률 계산기(`/growth-rate-calculator`)**로, ② 성장 예측(성장 예측 ≡ 복리 성장 동일 수식)을
@@ -415,12 +416,19 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > 사업소득 3.3% · 기타소득 8.8% 를 `?mode=` 탭으로 전환하고, 실수령액에서 최소 지급액을
 > 10원 절사까지 반영해 역산한다. 세율·근거 조문은 `app/lib/freelancer/policy.ts`,
 > 출처·검증일은 `app/lib/freelancer/sources.ts` 가 단일 출처다.
-> 2026-10-02 로드맵 2번으로 연차 계산기(`/annual-leave-calculator`)를 더해 현재 30종이다.
+> 2026-10-02 로드맵 2번으로 연차 계산기(`/annual-leave-calculator`)를 더해 30종이 되었다.
 > 입사일 기준 · 회계연도 기준을 `?mode=hire|fiscal` 탭으로 전환하고, 기간은 민법 제160조로
 > 입사일에서 다시 센다("1년 + 1일" 발생 규칙 · 1년 미만 연차는 입사 1년에 소멸). 퇴사 예정이면
 > 두 기준의 총 발생을 비교해 정산 차이를 보여준다. 단시간 근로자는 시행령 [별표 2] 로 시간 단위.
 > 일수 규칙은 `app/lib/annualleave/policy.ts`, 출처·검증일은 `app/lib/annualleave/sources.ts`,
 > 기획·법령 대조 기록은 `docs/plans/annual-leave-calculator.md`.
+> 2026-10-20 KST UTC 변환기(`/kst-utc-converter`)를 더해 현재 31종이다.
+> UTC → KST · KST → UTC 단건 변환과 같은 화면의 언어별 변환 코드(JavaScript · TypeScript ·
+> Python · Java · Go · C#)를 제공한다. KST 는 UTC+09:00 고정(과거 표준시·서머타임 재현 제외).
+> 시간대 없는 입력은 고른 입력 시간대로 읽고, 문자열의 시간대가 다르면 오류로 안내한다.
+> 함수 본문은 입력과 무관한 재사용 코드이고 현재 입력은 호출 예제·예상 출력에만 들어간다.
+> 변환 엔진은 `app/lib/kstutc/convert.ts`, 코드 예제는 `app/lib/kstutc/snippets.ts`,
+> 출처·검증일은 `app/lib/kstutc/sources.ts`. 첫 출시에서 일괄 변환·CSV·SQL·세계 시간대·코드 실행은 제외.
 
 > 2026-09-13: 텍스트 확대·간격 검사기에 **JSX·TSX 소스 형식**과 **Tailwind CSS 모드** 추가.
 > 기존 페이지 확장이라 도구 수는 늘지 않는다. JSX 는 `@babel/parser` 로 **구문만 읽어**
@@ -440,34 +448,35 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 |---|---|---|---|---|
 | 1 | JSON 포매터 / JSON Formatter | `/json-formatter` | `/en/json-formatter` | JSON 문자열을 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지와 유효성 검사 포함. |
 | 2 | 슬랙 타임스탬프 변환기 / Slack Timestamp Converter | `/slack-timestamp-converter` | `/en/slack-timestamp-converter` | Unix 타임스탬프 ↔ 날짜 ↔ Slack date 구문 양방향 변환. 현재 타임스탬프 실시간 표시. |
-| 3 | CSS 단위 변환기 / CSS Unit Converter | `/css-unit-converter` | `/en/css-unit-converter` | rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서. |
-| 4 | HTML 접근성 검사기 / HTML Accessibility Checker | `/html-accessibility-checker` | `/en/html-accessibility-checker` | HTML을 붙여넣어 헤딩·랜드마크·alt·label·탭 순서를 정적으로 점검하고 수정 위치를 확인합니다. |
-| 5 | 그라디언트 생성기 / CSS Gradient | `/css-gradient` | `/en/css-gradient` | linear·radial·conic 그라디언트를 시각적으로 편집하고 CSS 코드를 즉시 복사. |
-| 6 | Tailwind 팔레트 생성기 / Tailwind Palette | `/tailwind-palette-generator` | `/en/tailwind-palette-generator` | 베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사. |
-| 7 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
-| 8 | 명도대비 검사기 / Color Contrast Checker | `/color-contrast-checker` | `/en/color-contrast-checker` | 전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다. |
-| 9 | 색각이상 시뮬레이터 / Color Blindness Simulator | `/color-blindness-simulator` | `/en/color-blindness-simulator` | 시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다. |
-| 10 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
-| 11 | 웹접근성 체크리스트 빌더 / Web Accessibility Checklist Builder | `/accessibility-checklist` | `/en/accessibility-checklist` | KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다. |
-| 12 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
-| 13 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
-| 14 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
-| 15 | 프리랜서 3.3% 계산기 / Korea Freelancer Tax Calculator (3.3%) | `/freelancer-tax-calculator` | `/en/freelancer-tax-calculator` | 외주비·강연료에서 3.3%·8.8% 원천징수 후 실수령액과, 원하는 실수령액에 맞는 지급액을 계산. |
-| 16 | 연차 계산기 / Korea Annual Leave Calculator | `/annual-leave-calculator` | `/en/annual-leave-calculator` | 입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교. |
-| 17 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
-| 18 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
-| 19 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 20 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
-| 21 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
-| 22 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
-| 23 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
-| 24 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
-| 25 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
-| 26 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
-| 27 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
-| 28 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
-| 29 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
-| 30 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
+| 3 | KST UTC 변환기 / KST ↔ UTC Converter | `/kst-utc-converter` | `/en/kst-utc-converter` | 한국 시간(KST)과 UTC를 양방향 변환하고, 언어별 변환 함수 코드를 함께 복사합니다. |
+| 4 | CSS 단위 변환기 / CSS Unit Converter | `/css-unit-converter` | `/en/css-unit-converter` | rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서. |
+| 5 | HTML 접근성 검사기 / HTML Accessibility Checker | `/html-accessibility-checker` | `/en/html-accessibility-checker` | HTML을 붙여넣어 헤딩·랜드마크·alt·label·탭 순서를 정적으로 점검하고 수정 위치를 확인합니다. |
+| 6 | 그라디언트 생성기 / CSS Gradient | `/css-gradient` | `/en/css-gradient` | linear·radial·conic 그라디언트를 시각적으로 편집하고 CSS 코드를 즉시 복사. |
+| 7 | Tailwind 팔레트 생성기 / Tailwind Palette | `/tailwind-palette-generator` | `/en/tailwind-palette-generator` | 베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사. |
+| 8 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
+| 9 | 명도대비 검사기 / Color Contrast Checker | `/color-contrast-checker` | `/en/color-contrast-checker` | 전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다. |
+| 10 | 색각이상 시뮬레이터 / Color Blindness Simulator | `/color-blindness-simulator` | `/en/color-blindness-simulator` | 시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다. |
+| 11 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
+| 12 | 웹접근성 체크리스트 빌더 / Web Accessibility Checklist Builder | `/accessibility-checklist` | `/en/accessibility-checklist` | KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다. |
+| 13 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
+| 14 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
+| 15 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
+| 16 | 프리랜서 3.3% 계산기 / Korea Freelancer Tax Calculator (3.3%) | `/freelancer-tax-calculator` | `/en/freelancer-tax-calculator` | 외주비·강연료에서 3.3%·8.8% 원천징수 후 실수령액과, 원하는 실수령액에 맞는 지급액을 계산. |
+| 17 | 연차 계산기 / Korea Annual Leave Calculator | `/annual-leave-calculator` | `/en/annual-leave-calculator` | 입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교. |
+| 18 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
+| 19 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
+| 20 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
+| 21 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 22 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
+| 23 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
+| 24 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 25 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
+| 26 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| 27 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 28 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 29 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
+| 30 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
+| 31 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
 
 ---
 

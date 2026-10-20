@@ -39,6 +39,7 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
+import { KST_UTC_SOURCES, KST_UTC_VERIFIED_AT } from "./kstutc/sources";
 
 export type Lang = "ko" | "en";
 
@@ -1077,7 +1078,7 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
-    relatedTools: ["json-formatter", "character-counter", "tailwind-palette-generator"],
+    relatedTools: ["kst-utc-converter", "json-formatter", "character-counter"],
     seo: {
       ko: {
         title: "슬랙 타임스탬프 변환기 | Unix 시간·날짜 변환기",
@@ -1268,6 +1269,254 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Slack Timestamp Converter",
         subtitle: "Convert Slack Unix Timestamps into readable dates",
+      },
+    },
+  },
+  {
+    slug: "kst-utc-converter",
+    layout: "ide",
+    cat: "dev",
+    targets: ["developer", "pm"],
+    ico: "+9",
+    ready: true,
+    // 2026-10-20 추가: 게이트 구조는 갖췄지만 배포 후 노출을 보고 승격한다.
+    indexable: false,
+    verifiedAt: KST_UTC_VERIFIED_AT,
+    badge: "IDE / Editor",
+    name: { ko: "KST UTC 변환기", en: "KST ↔ UTC Converter" },
+    relatedTools: ["slack-timestamp-converter", "json-formatter", "time-calculator"],
+    seo: {
+      ko: {
+        title: "KST UTC 변환기 | 한국 시간 ↔ UTC 변환 + 코드 예제",
+        description:
+          "한국 표준시(KST)와 UTC를 양방향으로 변환합니다. API·DB·로그에 찍힌 시각을 붙여넣으면 날짜·시간, ISO 8601 형식, 전날·다음 날 여부를 바로 보여주고, JavaScript·TypeScript·Python·Java·Go·C# 변환 함수와 호출 예제를 함께 제공합니다. 모든 변환은 브라우저 안에서 처리되며 입력값은 서버로 전송되지 않습니다.",
+        keywords: [
+          "KST UTC 변환",
+          "UTC KST 변환",
+          "한국 시간 UTC 변환",
+          "UTC 한국시간",
+          "KST 변환기",
+          "UTC 9시간",
+          "ISO 8601 변환",
+          "시간대 변환 코드",
+        ],
+      },
+      en: {
+        title: "KST to UTC Converter | Korea Time ↔ UTC with Code",
+        description:
+          "Convert Korea Standard Time (KST) to UTC and back. Paste a time from an API, database or log to see the date and time, ISO 8601 format and whether the day changes, along with reusable conversion functions in JavaScript, TypeScript, Python, Java, Go and C#. Everything runs in your browser and nothing you enter is uploaded.",
+        keywords: [
+          "kst to utc",
+          "utc to kst",
+          "korea time to utc",
+          "kst converter",
+          "korea standard time",
+          "utc+9",
+          "iso 8601 converter",
+          "timezone conversion code",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "한국 시간(KST)과 UTC를 양방향 변환하고, 언어별 변환 함수 코드를 함께 복사합니다.",
+        description:
+          "한국 표준시(KST)와 UTC를 양방향으로 변환합니다. API·DB·로그에 찍힌 시각을 붙여넣으면 날짜·시간, ISO 8601 형식, 전날·다음 날 여부를 바로 보여주고, JavaScript·TypeScript·Python·Java·Go·C# 변환 함수와 호출 예제를 함께 제공합니다. 모든 변환은 브라우저 안에서 처리되며 입력값은 서버로 전송되지 않습니다.",
+        howItWorks: ["변환 방향 선택 후 날짜·시간 입력", "결과 시각·ISO 형식·날짜 변화 확인", "언어 탭에서 변환 함수 복사"],
+        aeo: {
+          what: "KST UTC 변환기는 한국 표준시(KST, UTC+09:00)와 협정 세계시(UTC)를 양방향으로 변환하고, 같은 변환을 코드로 옮길 수 있도록 언어별 함수를 함께 제공하는 도구입니다.",
+          who: "API 응답·DB 값·서버 로그의 UTC 시각을 한국 시간으로 확인해야 하는 개발자·QA·PM을 위한 도구입니다.",
+          how: "입력 시간대를 고르고 날짜·시간이나 ISO 8601 문자열을 넣으면 9시간을 더하거나 빼서 결과 시각, ISO 형식, 날짜가 바뀌는지를 바로 보여주고, 그 값을 넣은 호출 예제와 예상 출력을 코드로 생성합니다.",
+          why: "9시간 차이를 머릿속으로 계산하다가 날짜가 바뀌는 구간에서 하루를 틀리는 실수를 막고, 확인한 결과를 그대로 코드에 옮길 수 있기 때문입니다.",
+        },
+        guide: [
+          {
+            heading: "KST는 UTC보다 정확히 9시간 빠릅니다",
+            body: [
+              "한국 표준시(KST)는 표준시에 관한 법률에 따라 동경 135도 자오선을 기준으로 하며, UTC에 9시간을 더한 UTC+09:00입니다. 현재 한국은 서머타임을 시행하지 않으므로 1년 내내 차이가 9시간으로 같습니다. 그래서 UTC → KST는 9시간을 더하고, KST → UTC는 9시간을 빼면 됩니다.",
+              "헷갈리는 지점은 날짜입니다. UTC 15시 이후는 한국에서 이미 다음 날이고, 한국 오전 9시 전은 UTC로 아직 전날입니다. 예를 들어 UTC 2026-10-20 18:30은 한국 시간으로 2026-10-21 03:30입니다. 이 도구는 결과 옆에 전날·같은 날·다음 날을 따로 표시해 일자 집계나 배치 기준일을 잘못 잡는 일을 줄입니다.",
+            ],
+          },
+          {
+            heading: "시간대 표기와 ISO 8601 읽는 법",
+            body: [
+              "ISO 8601은 `2026-10-20T12:30:00.000Z`처럼 날짜와 시간을 T로 잇고 끝에 시간대를 붙이는 형식입니다. 끝의 `Z`는 UTC(오프셋 0)를, `+09:00`은 UTC보다 9시간 빠른 시각, 즉 KST를 뜻합니다. 두 문자열 `2026-10-20T12:30:00Z`와 `2026-10-20T21:30:00+09:00`은 표기만 다를 뿐 같은 순간입니다.",
+              "시간대 표기가 없는 `2026-10-20 12:30` 같은 값은 그것만으로는 어느 시간대인지 알 수 없습니다. 이 도구는 이런 입력을 화면에서 고른 입력 시간대로 해석합니다. 반대로 문자열에 `Z`·`UTC`·`+09:00`·`KST` 같은 표기가 있는데 고른 시간대와 다르면, 조용히 한쪽을 택하지 않고 오류로 알려줍니다.",
+            ],
+          },
+          {
+            heading: "코드로 옮길 때는 시간대가 붙은 값으로 주고받으세요",
+            body: [
+              "언어별 코드 탭의 함수는 시간대가 붙은 ISO 8601 문자열을 받아 반대 시간대의 ISO 8601 문자열을 돌려줍니다. 시간대 없는 문자열을 그대로 파싱하면 언어마다 서버의 로컬 시간대나 UTC 중 하나로 다르게 해석해, 같은 코드가 개발 PC와 서버에서 9시간 차이 나는 결과를 내기 쉽습니다.",
+              "함수 본문은 입력값과 상관없이 같은 재사용 코드이고, 지금 입력한 값은 호출 예제와 예상 출력 주석에만 들어갑니다. 함수만 복사해 프로젝트에 넣거나, 전체 예제를 복사해 바로 실행해 결과를 대조할 수 있습니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "서버 로그의 UTC 시각을 한국 시간으로 확인",
+            input: "UTC → KST · 2026-10-20T18:30:05Z",
+            result: "2026-10-21 03:30:05 KST · 다음 날",
+            note: "로그는 10월 20일로 찍혀 있지만 한국 기준으로는 21일 새벽입니다. 일자별 장애 집계를 한국 날짜로 낸다면 21일에 넣어야 합니다.",
+          },
+          {
+            title: "한국 시간 배포 일정을 UTC 크론으로 옮기기",
+            input: "KST → UTC · 2026-10-21 08:00",
+            result: "2026-10-20T23:00:00.000Z · 전날",
+            note: "한국 오전 8시 배포는 UTC 기준 전날 23시입니다. UTC로 동작하는 스케줄러에는 요일과 날짜까지 하루 앞당겨 등록해야 합니다.",
+          },
+          {
+            title: "DB의 마이크로초 값을 붙여넣은 경우",
+            input: "UTC → KST · 2026-10-20 12:30:05.123456+00",
+            result: "2026-10-20T21:30:05.123+09:00 · 밀리초 아래 자리 버림 안내",
+            note: "PostgreSQL 같은 DB는 마이크로초까지 저장합니다. 이 도구는 밀리초까지 계산하고 그 아래 자리는 버린 뒤 버렸다는 사실을 함께 알려줍니다.",
+          },
+        ],
+        limitations: [
+          "KST는 항상 UTC+09:00으로 계산합니다. 1954~1961년의 UTC+08:30 표준시와 1987·1988년 서머타임처럼 과거에 쓰였던 다른 오프셋은 재현하지 않으므로, 그 시기의 기록을 변환할 때는 결과를 따로 확인해야 합니다.",
+          "UTC와 KST 두 시간대만 다룹니다. +05:30이나 -07:00 같은 다른 오프셋이 붙은 값은 오류로 안내하며, 세계 시간대 변환은 지원하지 않습니다.",
+          "시간은 밀리초(3자리)까지 계산합니다. 마이크로초·나노초 자리는 버리며, 윤초(23:59:60)는 입력할 수 없습니다.",
+          "Unix 타임스탬프 숫자는 입력으로 받지 않습니다. 1718071200 같은 값은 슬랙 타임스탬프 변환기에서 날짜로 바꾼 뒤 사용하세요.",
+          "코드 예제는 시간대가 붙은 ISO 8601 문자열을 입력으로 가정합니다. 시간대 없는 문자열을 넘기면 언어에 따라 오류가 나거나 실행 환경의 로컬 시간대로 해석될 수 있습니다.",
+        ],
+        sources: KST_UTC_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+      },
+      en: {
+        card: "Convert Korea time (KST) to UTC and back, and copy conversion functions for six languages.",
+        description:
+          "Convert Korea Standard Time (KST) to UTC and back. Paste a time from an API, database or log to see the date and time, ISO 8601 format and whether the day changes, along with reusable conversion functions in JavaScript, TypeScript, Python, Java, Go and C#. Everything runs in your browser and nothing you enter is uploaded.",
+        howItWorks: ["Pick a direction and enter a date and time", "Check the result, ISO format and day change", "Copy the function from a language tab"],
+        aeo: {
+          what: "A KST to UTC Converter converts between Korea Standard Time (KST, UTC+09:00) and Coordinated Universal Time (UTC) in both directions, and provides the same conversion as reusable code in several languages.",
+          who: "It is for developers, QA engineers and PMs who need to read UTC times from API responses, database values or server logs in Korea time.",
+          how: "Choose the input timezone and enter a date and time or an ISO 8601 string. The tool adds or subtracts nine hours, shows the result, its ISO form and whether the date changes, and generates a call example with the expected output.",
+          why: "It prevents off-by-one-day mistakes around midnight when doing the nine-hour shift in your head, and lets you move a checked result straight into code.",
+        },
+        guide: [
+          {
+            heading: "KST is exactly nine hours ahead of UTC",
+            body: [
+              "Korea Standard Time is based on the 135° E meridian under Korea's Act on Standard Time, which makes it UTC+09:00. Korea does not currently observe daylight saving time, so the gap is nine hours all year. UTC to KST adds nine hours; KST to UTC subtracts nine.",
+              "The date is where people slip. Any time after 15:00 UTC is already the next day in Korea, and any time before 09:00 in Korea is still the previous day in UTC. For example, 2026-10-20 18:30 UTC is 2026-10-21 03:30 in Korea. The tool labels each result as the previous day, same day or next day so daily reports and batch dates land on the right day.",
+            ],
+          },
+          {
+            heading: "Reading timezone markers and ISO 8601",
+            body: [
+              "ISO 8601 joins the date and time with a T and ends with a timezone, as in `2026-10-20T12:30:00.000Z`. A trailing `Z` means UTC (offset zero) and `+09:00` means nine hours ahead of UTC, which is KST. `2026-10-20T12:30:00Z` and `2026-10-20T21:30:00+09:00` are the same instant written two ways.",
+              "A value with no marker, such as `2026-10-20 12:30`, does not say which timezone it is in. The tool reads such input in the timezone you picked on screen. If the string does carry a marker like `Z`, `UTC`, `+09:00` or `KST` that disagrees with your pick, the tool reports an error instead of silently choosing one.",
+            ],
+          },
+          {
+            heading: "Pass values with a timezone when you move to code",
+            body: [
+              "The functions in the language tabs take an ISO 8601 string with a timezone and return an ISO 8601 string in the other timezone. Parsing a string without a timezone is interpreted differently across languages, either as the machine's local time or as UTC, which is how the same code ends up nine hours apart on a laptop and a server.",
+              "The function body is the same reusable code whatever you enter. Your current input only goes into the call example and the expected output comment, so you can copy just the function into a project or copy the full example to run and compare.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Reading a UTC server log in Korea time",
+            input: "UTC → KST · 2026-10-20T18:30:05Z",
+            result: "2026-10-21 03:30:05 KST · next day",
+            note: "The log says October 20, but in Korea it is early on the 21st. A daily incident report kept in Korea dates belongs on the 21st.",
+          },
+          {
+            title: "Moving a Korea-time deploy to a UTC cron",
+            input: "KST → UTC · 2026-10-21 08:00",
+            result: "2026-10-20T23:00:00.000Z · previous day",
+            note: "An 8 AM deploy in Korea is 23:00 UTC the day before. A scheduler that runs in UTC needs the date and weekday moved back by one.",
+          },
+          {
+            title: "Pasting a microsecond value from a database",
+            input: "UTC → KST · 2026-10-20 12:30:05.123456+00",
+            result: "2026-10-20T21:30:05.123+09:00 · notice that digits below milliseconds were dropped",
+            note: "Databases such as PostgreSQL store microseconds. The tool calculates to the millisecond, drops the rest and tells you it did.",
+          },
+        ],
+        limitations: [
+          "KST is always calculated as UTC+09:00. Offsets used in the past, such as UTC+08:30 from 1954 to 1961 and daylight saving time in 1987 and 1988, are not reproduced, so check results for records from those periods separately.",
+          "Only UTC and KST are handled. Values with another offset such as +05:30 or -07:00 are reported as errors, and conversion between other world timezones is not supported.",
+          "Times are calculated to the millisecond (three digits). Microsecond and nanosecond digits are dropped, and leap seconds (23:59:60) cannot be entered.",
+          "Unix timestamp numbers are not accepted as input. Convert a value like 1718071200 to a date with the Slack Timestamp Converter first.",
+          "The code examples assume an ISO 8601 string with a timezone. Passing a string without one may raise an error or be read in the runtime's local timezone, depending on the language.",
+        ],
+        sources: KST_UTC_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "UTC를 한국 시간으로 바꾸려면 몇 시간을 더하나요?",
+          answer:
+            "9시간을 더합니다. 한국 표준시는 UTC+09:00이고 서머타임이 없어 1년 내내 같습니다. UTC 15시 이후는 한국에서 다음 날이 되므로, 날짜까지 함께 바뀌는지 확인해야 합니다.",
+        },
+        {
+          question: "끝에 Z나 +09:00이 붙은 값도 넣을 수 있나요?",
+          answer:
+            "네. Z·UTC·GMT·+00:00은 UTC로, KST·+09:00·+0900은 한국 시간으로 읽습니다. 다만 화면에서 고른 입력 시간대와 다르면 오류로 안내합니다. 예를 들어 'KST → UTC'를 고르고 Z가 붙은 값을 넣으면 변환하지 않습니다.",
+        },
+        {
+          question: "어떤 날짜·시간 형식을 인식하나요?",
+          answer:
+            "2026-10-20 12:30, 2026-10-20T12:30:05.123Z, 2026/10/20 12:30, 2026.10.20 같은 형식을 인식합니다. 초와 시간은 생략할 수 있고 생략하면 0으로 봅니다. 밀리초 아래 자리는 버리고, Unix 타임스탬프 숫자는 받지 않습니다.",
+        },
+        {
+          question: "코드 예제의 함수는 입력값에 따라 바뀌나요?",
+          answer:
+            "아니요. 함수 본문은 재사용할 수 있도록 항상 같고, 지금 입력한 값은 호출 예제와 예상 출력 주석에만 들어갑니다. 변환 방향을 바꾸면 그 방향의 함수로 바뀝니다.",
+        },
+        {
+          question: "과거 날짜도 정확하게 변환되나요?",
+          answer:
+            "항상 UTC+09:00으로 계산합니다. 한국은 1954~1961년에 UTC+08:30을, 1987·1988년 여름에는 서머타임을 쓴 적이 있어 그 시기의 실제 기록과는 다를 수 있습니다.",
+        },
+        {
+          question: "입력한 값이 서버로 전송되나요?",
+          answer: "아니요. 변환과 코드 생성은 모두 브라우저 안에서 처리되며 입력한 값은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "How many hours do I add to convert UTC to Korea time?",
+          answer:
+            "Add nine hours. Korea Standard Time is UTC+09:00 with no daylight saving time, so the gap is the same all year. Any time after 15:00 UTC is already the next day in Korea, so check whether the date changes too.",
+        },
+        {
+          question: "Can I enter values ending in Z or +09:00?",
+          answer:
+            "Yes. Z, UTC, GMT and +00:00 are read as UTC, and KST, +09:00 and +0900 as Korea time. If the marker disagrees with the input timezone picked on screen, you get an error. For example, a value ending in Z is not converted while 'KST → UTC' is selected.",
+        },
+        {
+          question: "Which date and time formats are recognized?",
+          answer:
+            "Formats like 2026-10-20 12:30, 2026-10-20T12:30:05.123Z, 2026/10/20 12:30 and 2026.10.20. Seconds and the whole time part are optional and default to zero. Digits below milliseconds are dropped, and Unix timestamp numbers are not accepted.",
+        },
+        {
+          question: "Does the function in the code example change with my input?",
+          answer:
+            "No. The function body stays the same so you can reuse it, and your input only goes into the call example and the expected output comment. Switching the direction switches to the function for that direction.",
+        },
+        {
+          question: "Are historical dates converted correctly?",
+          answer:
+            "The tool always uses UTC+09:00. Korea used UTC+08:30 from 1954 to 1961 and daylight saving time in the summers of 1987 and 1988, so results for those periods may differ from records made at the time.",
+        },
+        {
+          question: "Is anything I enter sent to a server?",
+          answer: "No. Conversion and code generation both run in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "KST UTC 변환기",
+        subtitle: "한국 시간과 UTC를 양방향 변환하고 코드로 복사",
+      },
+      en: {
+        title: "KST ↔ UTC Converter",
+        subtitle: "Convert Korea time and UTC, then copy the code",
       },
     },
   },
