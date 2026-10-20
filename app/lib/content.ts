@@ -40,6 +40,7 @@ import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
 import { KST_UTC_SOURCES, KST_UTC_VERIFIED_AT } from "./kstutc/sources";
+import { SLACKMSG_SOURCES, SLACKMSG_VERIFIED_AT } from "./slackmsg/sources";
 
 export type Lang = "ko" | "en";
 
@@ -1078,7 +1079,7 @@ export const TOOLS: Tool[] = [
     indexable: true,
     badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
-    relatedTools: ["kst-utc-converter", "json-formatter", "character-counter"],
+    relatedTools: ["kst-utc-converter", "slack-message-builder", "json-formatter"],
     seo: {
       ko: {
         title: "슬랙 타임스탬프 변환기 | Unix 시간·날짜 변환기",
@@ -1517,6 +1518,261 @@ export const TOOLS: Tool[] = [
       en: {
         title: "KST ↔ UTC Converter",
         subtitle: "Convert Korea time and UTC, then copy the code",
+      },
+    },
+  },
+
+  // ── Slack Message Builder (Developer) ─────────────────────────
+  // 2026-10-20 추가. 기획: docs/plans/slack-message-builder.md
+  {
+    slug: "slack-message-builder",
+    layout: "ide",
+    cat: "dev",
+    targets: ["developer", "pm"],
+    ico: "{#}",
+    ready: true,
+    // 게이트 구조는 갖췄지만 배포 후 노출을 보고 승격한다.
+    indexable: false,
+    verifiedAt: SLACKMSG_VERIFIED_AT,
+    badge: "IDE / Editor",
+    name: { ko: "슬랙 메시지 빌더", en: "Slack Message Builder" },
+    relatedTools: ["slack-timestamp-converter", "json-formatter", "kst-utc-converter"],
+    seo: {
+      ko: {
+        title: "슬랙 메시지 빌더 | Block Kit JSON·API 코드 생성",
+        description:
+          "슬랙 봇 메시지를 에디터에서 쓰듯 작성하면 슬랙 미리보기와 함께 Block Kit JSON, chat.postMessage curl, Node.js, Python, Incoming Webhook 코드를 바로 만들어 줍니다. mrkdwn 서식과 멘션·링크 이스케이프, 블록 한도 검사까지 처리합니다. 로그인과 토큰 입력이 필요 없고 작성한 내용은 서버로 전송되지 않습니다.",
+        keywords: [
+          "슬랙 메시지 빌더",
+          "슬랙 봇 메시지 만들기",
+          "슬랙 블록킷",
+          "Block Kit 빌더",
+          "슬랙 웹훅 메시지",
+          "chat.postMessage 예제",
+          "슬랙 mrkdwn",
+          "슬랙 알림 메시지 포맷",
+        ],
+      },
+      en: {
+        title: "Slack Message Builder | Block Kit JSON & API Code",
+        description:
+          "Write a Slack bot message in an editor and get a Slack-style preview with Block Kit JSON, chat.postMessage curl, Node.js, Python and incoming webhook code ready to paste. Handles mrkdwn formatting, mention and link escaping, and Block Kit limit checks. No login and no token needed, and nothing you write is sent to a server.",
+        keywords: [
+          "slack message builder",
+          "slack block kit builder",
+          "block kit json generator",
+          "slack webhook message format",
+          "chat.postMessage blocks example",
+          "slack mrkdwn",
+          "slack bot message json",
+          "slack notification template",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "슬랙 봇 메시지를 에디터로 작성하고 Block Kit JSON과 curl·Node.js·Python 호출 코드로 변환합니다.",
+        description:
+          "슬랙 봇 메시지를 에디터에서 쓰듯 작성하면 슬랙 미리보기와 함께 Block Kit JSON, chat.postMessage curl, Node.js, Python, Incoming Webhook 코드를 바로 만들어 줍니다. mrkdwn 서식과 멘션·링크 이스케이프, 블록 한도 검사까지 처리합니다. 로그인과 토큰 입력이 필요 없고 작성한 내용은 서버로 전송되지 않습니다.",
+        howItWorks: ["템플릿을 고르거나 블록을 추가해 메시지 작성", "미리보기와 한도 경고로 모양 확인", "JSON·curl·Node.js·Python 탭에서 코드 복사"],
+        aeo: {
+          what: "슬랙 메시지 빌더는 에디터로 작성한 슬랙 봇 메시지를 Block Kit JSON과 API 호출 코드(curl·Node.js·Python·Incoming Webhook)로 변환하는 도구입니다.",
+          who: "배포·장애 알림 봇을 만드는 개발자, 릴리즈 노트·공지 봇을 운영하는 PM, 사내 자동화에 슬랙 알림을 붙이는 실무자를 위한 도구입니다.",
+          how: "제목·텍스트·필드·버튼 같은 블록을 쌓고 툴바로 mrkdwn 서식을 넣으면, 블록마다 Block Kit 블록 하나로 직렬화하면서 특수 문자를 이스케이프하고 한도를 검사한 뒤 언어별 호출 코드에 그 페이로드를 넣어 줍니다.",
+          why: "Block Kit JSON을 손으로 쓰다 생기는 따옴표·이스케이프 실수와 한도 초과 오류를 줄이고, 로그인 없이 바로 붙여 넣을 수 있는 코드를 얻기 위해서입니다.",
+        },
+        guide: [
+          {
+            heading: "Block Kit은 블록을 쌓아 메시지를 만드는 형식입니다",
+            body: [
+              "슬랙 API로 보내는 메시지는 최상위 `text`와 `blocks` 배열로 이뤄집니다. `blocks`의 각 항목이 화면의 한 덩어리이며, 이 도구는 자주 쓰는 블록을 에디터 블록으로 하나씩 대응시켰습니다. 텍스트는 `section`, 제목은 `header`, 구분선은 `divider`, 두 칸 키·값은 `section`의 `fields`, 작은 회색 글씨는 `context`, 버튼 묶음은 `actions`, 텍스트 옆 버튼 하나는 `section`의 `accessory`가 됩니다.",
+              "블록은 메시지당 50개까지 넣을 수 있고, 블록마다 글자 수 한도가 따로 있습니다. 섹션 텍스트는 3,000자, 필드는 10개·각 2,000자, 제목은 150자, 버튼 텍스트는 75자입니다. 한도를 넘으면 슬랙이 요청을 거부하므로, 이 도구는 해당 블록 옆과 출력 아래에 바로 표시합니다.",
+            ],
+          },
+          {
+            heading: "mrkdwn은 마크다운과 문법이 다릅니다",
+            body: [
+              "슬랙 메시지 서식인 mrkdwn에서 굵게는 `*텍스트*`(별표 하나), 기울임은 `_텍스트_`, 취소선은 `~텍스트~`입니다. 일반 마크다운처럼 `**굵게**`를 쓰면 별표가 그대로 보입니다. 링크는 `<https://example.com|표시 텍스트>`, 사용자 멘션은 `<@U0123456789>`, 채널은 `<#C0123456789>`처럼 꺾쇠로 감쌉니다. 목록 문법은 따로 없어 `•` 문자를 줄 앞에 넣습니다.",
+              "꺾쇠가 특별한 뜻을 가지므로 본문의 `&`, `<`, `>`는 `&amp;`, `&lt;`, `&gt;`로 바꿔 보내야 합니다. 이 도구는 직접 입력한 문장의 특수 문자만 바꾸고, 툴바로 넣은 링크·멘션·날짜 토큰은 그대로 둡니다. 그래서 `a < b` 같은 문장과 `<@U0123456789>` 멘션이 한 텍스트 안에 있어도 둘 다 의도대로 보입니다.",
+            ],
+          },
+          {
+            heading: "chat.postMessage와 Incoming Webhook 중 무엇을 쓸까",
+            body: [
+              "chat.postMessage는 봇 토큰(`xoxb-`)으로 호출하며 `channel`에 채널 ID를 넣어 원하는 곳에 보냅니다. 응답으로 메시지의 `ts`를 받으므로 스레드 답글이나 메시지 수정으로 이어가기 좋습니다. Incoming Webhook은 앱 설정에서 만든 URL 하나로 정해진 채널에만 보내며, 채널·아이콘·이름을 바꿀 수 없는 대신 토큰 관리가 필요 없습니다.",
+              "어느 쪽이든 토큰과 웹훅 URL은 비밀 값입니다. 이 도구의 코드는 `SLACK_BOT_TOKEN`과 `SLACK_WEBHOOK_URL` 환경 변수를 읽도록 만들어져 있고, 페이지에는 토큰 입력란이 없습니다. 실제 토큰을 브라우저 도구에 붙여넣는 습관을 만들지 않기 위해서입니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "배포 완료 알림",
+            input: "제목 + 텍스트 + 필드 4칸(환경·버전·배포자·소요 시간) + 버튼 2개(변경 사항 링크 · 롤백)",
+            result: "blocks 5개 · 대체 텍스트 \"v2.4.0 배포 완료 · production 환경에 배포되었습니다...\"",
+            note: "링크 버튼은 `url`, 롤백 버튼은 `action_id`와 `value`를 가집니다. 롤백처럼 클릭을 처리해야 하는 버튼은 앱의 Interactivity 설정과 응답 서버가 따로 필요합니다.",
+          },
+          {
+            title: "장애 알림에 담당자 멘션",
+            input: "텍스트에 `<!here>`와 `<@U0123456789>` 삽입 + 대시보드 링크 버튼(accessory)",
+            result: "section.text 에 토큰이 이스케이프되지 않고 그대로 들어감",
+            note: "멘션은 이름이 아니라 멤버 ID로 써야 알림이 갑니다. 슬랙 프로필의 \"멤버 ID 복사\"로 ID를 얻을 수 있습니다.",
+          },
+          {
+            title: "본문에 비교 기호가 있는 문장",
+            input: "텍스트 \"p95 > 3s & 오류율 < 1%\"",
+            result: "\"p95 &gt; 3s &amp; 오류율 &lt; 1%\" 로 직렬화",
+            note: "이스케이프하지 않으면 슬랙이 `<` 뒤를 링크·멘션 토큰으로 읽으려다 문장 일부가 사라질 수 있습니다.",
+          },
+        ],
+        limitations: [
+          "메시지 모양과 코드만 만들고 실제로 보내지는 않습니다. 브라우저에서 토큰으로 API를 부르면 토큰이 노출되므로 발송 기능은 넣지 않았습니다.",
+          "버튼 클릭을 처리하려면 앱의 Interactivity 설정과 요청을 받을 서버가 필요합니다. 링크 버튼도 클릭 시 상호작용 요청이 발생합니다.",
+          "멘션·채널은 이름을 ID로 바꾸지 못합니다. API를 호출하지 않으므로 멤버 ID·채널 ID를 직접 넣어야 합니다.",
+          "미리보기는 구조 확인용 근사치입니다. 실제 모양은 데스크톱·모바일 클라이언트와 테마에 따라 다르므로 최종 확인은 공식 Block Kit Builder나 테스트 채널에서 하세요.",
+          "셀렉트 메뉴·날짜 선택기 같은 버튼 외 인터랙티브 요소, 모달·App Home, rich_text 블록 출력, 기존 JSON 불러오기는 지원하지 않습니다.",
+          "이미지는 공개 URL만 쓸 수 있습니다. 미리보기는 그 URL에서 이미지를 직접 불러옵니다.",
+        ],
+        sources: SLACKMSG_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+      },
+      en: {
+        card: "Write a Slack bot message in an editor and turn it into Block Kit JSON and curl, Node.js and Python code.",
+        description:
+          "Write a Slack bot message in an editor and get a Slack-style preview with Block Kit JSON, chat.postMessage curl, Node.js, Python and incoming webhook code ready to paste. Handles mrkdwn formatting, mention and link escaping, and Block Kit limit checks. No login and no token needed, and nothing you write is sent to a server.",
+        howItWorks: ["Pick a template or add blocks to write your message", "Check the preview and limit warnings", "Copy code from the JSON, curl, Node.js or Python tab"],
+        aeo: {
+          what: "A Slack Message Builder turns a Slack bot message written in an editor into Block Kit JSON and API call code for curl, Node.js, Python and incoming webhooks.",
+          who: "It is for developers building deploy and incident alert bots, PMs running release note and announcement bots, and anyone adding Slack notifications to internal automation.",
+          how: "You stack blocks such as headers, text, fields and buttons and add mrkdwn formatting from a toolbar. Each block is serialized to one Block Kit block with special characters escaped and limits checked, and the payload is placed into call code for each language.",
+          why: "It avoids the quoting, escaping and limit errors that come from writing Block Kit JSON by hand, and gives you code you can paste right away without logging in.",
+        },
+        guide: [
+          {
+            heading: "Block Kit builds a message from stacked blocks",
+            body: [
+              "A message sent through the Slack API has a top-level `text` and a `blocks` array. Each item in `blocks` is one visual chunk, and this tool maps the common ones to editor blocks: text is a `section`, a header is `header`, a rule is `divider`, two-column key-value pairs are `section` `fields`, small grey text is `context`, a row of buttons is `actions`, and a single button beside text is a `section` `accessory`.",
+              "A message can hold up to 50 blocks, and each block has its own character limits: 3,000 for section text, 10 fields of 2,000 characters each, 150 for a header and 75 for button text. Slack rejects requests that go over, so the tool flags the block right away and lists the problem under the output.",
+            ],
+          },
+          {
+            heading: "mrkdwn is not Markdown",
+            body: [
+              "In mrkdwn, Slack's message format, bold is `*text*` with a single asterisk, italic is `_text_` and strikethrough is `~text~`. Writing `**bold**` as in Markdown shows the asterisks. Links are wrapped in angle brackets as `<https://example.com|label>`, user mentions as `<@U0123456789>` and channels as `<#C0123456789>`. There is no list syntax, so put a `•` at the start of each line.",
+              "Because angle brackets have meaning, `&`, `<` and `>` in your text must be sent as `&amp;`, `&lt;` and `&gt;`. The tool escapes only the characters you typed and leaves link, mention and date tokens from the toolbar alone, so a sentence like `a < b` and a `<@U0123456789>` mention can sit in the same text and both render as intended.",
+            ],
+          },
+          {
+            heading: "chat.postMessage or an incoming webhook?",
+            body: [
+              "chat.postMessage is called with a bot token (`xoxb-`) and takes a channel ID in `channel`, so you can post anywhere the bot has access. It returns the message `ts`, which you need for thread replies and later edits. An incoming webhook is a single URL created in the app settings that posts to one fixed channel. You cannot change its channel, icon or name, but there is no token to manage.",
+              "Both the token and the webhook URL are secrets. The generated code reads them from the `SLACK_BOT_TOKEN` and `SLACK_WEBHOOK_URL` environment variables, and the page has no token field, so you never get into the habit of pasting real tokens into a browser tool.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Deploy notification",
+            input: "Header + text + 4 fields (environment, version, deployed by, duration) + 2 buttons (changes link, roll back)",
+            result: "5 blocks · fallback text \"v2.4.0 deployed · Deployed to production...\"",
+            note: "The link button has a `url`, and the roll back button has an `action_id` and `value`. Buttons whose clicks you handle need Interactivity enabled in the app and a server to receive the request.",
+          },
+          {
+            title: "Incident alert that mentions the on-call engineer",
+            input: "`<!here>` and `<@U0123456789>` in the text + dashboard link button as an accessory",
+            result: "The tokens go into section.text as is, without escaping",
+            note: "Mentions need the member ID, not the display name, to notify anyone. Use \"Copy member ID\" in the Slack profile to get it.",
+          },
+          {
+            title: "A sentence with comparison signs",
+            input: "Text \"p95 > 3s & error rate < 1%\"",
+            result: "Serialized as \"p95 &gt; 3s &amp; error rate &lt; 1%\"",
+            note: "Without escaping, Slack tries to read what follows `<` as a link or mention token and part of the sentence can disappear.",
+          },
+        ],
+        limitations: [
+          "The tool builds the message and code but does not send anything. Calling the API from a browser with a token would expose it, so sending is left out on purpose.",
+          "Handling button clicks requires Interactivity in your app and a server to receive requests. Link buttons also trigger an interaction request when clicked.",
+          "Mentions and channels cannot be looked up by name. The tool makes no API calls, so enter member IDs and channel IDs yourself.",
+          "The preview is an approximation for checking structure. Real rendering differs between desktop and mobile clients and themes, so do a final check in the official Block Kit Builder or a test channel.",
+          "Interactive elements other than buttons (select menus, date pickers), modals and App Home, rich_text block output, and importing existing JSON are not supported.",
+          "Images must use a public URL. The preview loads the image directly from that URL.",
+        ],
+        sources: SLACKMSG_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "슬랙 웹훅으로 보내는 메시지 형식은 어떻게 되나요?",
+          answer:
+            "JSON 본문에 최상위 `text`와 `blocks` 배열을 넣어 웹훅 URL로 POST 합니다. Webhook 탭의 curl 코드가 그 형식 그대로이며, 웹훅은 채널이 정해져 있어 `channel` 값을 넣지 않습니다.",
+        },
+        {
+          question: "blocks가 있는데 text(대체 텍스트)도 꼭 넣어야 하나요?",
+          answer:
+            "넣는 편이 좋습니다. 블록이 있으면 화면에는 블록이 보이지만 푸시 알림·잠금 화면·스크린 리더는 `text`를 씁니다. 이 도구는 제목과 첫 텍스트로 자동 생성하고, 직접 고칠 수도 있습니다.",
+        },
+        {
+          question: "**굵게** 를 썼는데 별표가 그대로 보여요.",
+          answer:
+            "슬랙 mrkdwn의 굵게는 별표 하나인 `*굵게*`입니다. 툴바의 B 버튼이나 Ctrl/Cmd + B를 쓰면 올바른 문법으로 감싸 줍니다.",
+        },
+        {
+          question: "사용자를 멘션하려면 어떻게 하나요?",
+          answer:
+            "`<@멤버ID>` 형식으로 넣어야 알림이 갑니다. 툴바의 @ 버튼을 누르면 자리표시 ID가 선택된 상태로 들어가니, 슬랙 프로필의 \"멤버 ID 복사\"로 얻은 값으로 바꿔 넣으세요. 이름(@홍길동)으로는 멘션되지 않습니다.",
+        },
+        {
+          question: "버튼을 눌렀는데 아무 일도 일어나지 않아요.",
+          answer:
+            "버튼 클릭은 앱의 Interactivity 설정에 등록한 서버로 요청이 갑니다. 이 도구는 메시지 모양만 만들기 때문에 클릭을 처리하는 서버는 따로 구현해야 합니다. 링크 버튼은 서버 없이도 링크를 엽니다.",
+        },
+        {
+          question: "토큰이나 작성한 메시지가 서버로 전송되나요?",
+          answer:
+            "아니요. 토큰 입력란이 없고, 생성한 코드는 환경 변수에서 토큰을 읽습니다. 메시지 작성·미리보기·코드 생성은 모두 브라우저 안에서 처리됩니다. Block Kit Builder 링크를 누를 때만 블록 JSON이 주소에 담겨 Slack 사이트로 이동합니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the message format for a Slack incoming webhook?",
+          answer:
+            "POST a JSON body with a top-level `text` and a `blocks` array to the webhook URL. The curl code in the Webhook tab uses exactly that format, and it has no `channel` because a webhook is tied to one channel.",
+        },
+        {
+          question: "Do I still need text (fallback text) if I send blocks?",
+          answer:
+            "You should include it. With blocks, the message shows the blocks, but push notifications, lock screens and screen readers use `text`. The tool generates it from the header and first text, and you can edit it.",
+        },
+        {
+          question: "I wrote **bold** and the asterisks show up. Why?",
+          answer:
+            "Bold in Slack mrkdwn uses a single asterisk: `*bold*`. The B button in the toolbar or Ctrl/Cmd + B wraps text with the right syntax.",
+        },
+        {
+          question: "How do I mention a user?",
+          answer:
+            "Use `<@MEMBER_ID>` so the person is notified. The @ button inserts a placeholder ID already selected, so replace it with the value from \"Copy member ID\" in their Slack profile. A display name like @jane does not mention anyone.",
+        },
+        {
+          question: "I clicked a button and nothing happened.",
+          answer:
+            "Button clicks are sent to the server registered in your app's Interactivity settings. This tool only builds the message, so you need to implement the server that handles clicks. Link buttons open their link without a server.",
+        },
+        {
+          question: "Is my token or message sent to a server?",
+          answer:
+            "No. There is no token field, and the generated code reads the token from an environment variable. Writing, previewing and generating code all run in your browser. Only when you click the Block Kit Builder link does the block JSON travel in the address to the Slack site.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "슬랙 메시지 빌더",
+        subtitle: "에디터로 쓰고 Block Kit JSON과 API 코드로 복사",
+      },
+      en: {
+        title: "Slack Message Builder",
+        subtitle: "Write a message, copy Block Kit JSON and API code",
       },
     },
   },

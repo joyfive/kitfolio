@@ -1,7 +1,7 @@
 # 기획서: 슬랙 메시지 빌더 (2026-10-20 초안)
 
-> 상태: 📝 기획 · 미착수 · 출시 시 `indexable: false` 로 추가하고 노출을 본 뒤 승격
-> Slack 공식 문서 대조: **미완료** (3.4 의 제한값은 착수 전에 docs.slack.dev 원문과 대조한다)
+> 상태: ✅ v1 구현 (2026-10-20) · `indexable: false` · 배포 후 노출 확인 뒤 승격
+> Slack 공식 문서 대조: 2026-10-20 (docs.slack.dev 원문은 이 환경에서 직접 열리지 않아 공식 페이지 검색 결과로 대조. context 10개 · actions 25개는 SDK 기준값으로 미대조)
 
 ## 1. 한 줄 정의
 
@@ -81,23 +81,23 @@ contenteditable 기반 리치 에디터는 하루 구현 범위를 넘고 붙여
 - 기본값: 블록에서 **자동 생성** (헤더 + 첫 텍스트 블록, mrkdwn 기호 제거, 150자 내외로 자름)
 - 사용자가 직접 고치면 자동 생성을 멈추고 "자동으로 되돌리기" 버튼을 보여준다.
 
-### 3.4 제한값 검사 (착수 전 공식 문서 대조 필요)
+### 3.4 제한값 검사 (2026-10-20 대조)
 
 생성 즉시 아래를 검사해 블록 옆과 출력 상단에 경고로 띄운다. 초과해도 코드는 만든다 (막지 않고 알린다).
 
-| 대상 | 제한 (초안 · 대조 전) |
+| 대상 | 제한 |
 |---|---|
-| 메시지당 블록 | 50개 |
-| `section.text` | 3,000자 |
-| `section.fields` | 10개 · 각 2,000자 |
-| `header.text` | 150자 |
+| 메시지당 블록 | 50개 ✅ (모달·App Home 100개) |
+| `section.text` | 3,000자 ✅ |
+| `section.fields` | 10개 · 각 2,000자 ✅ |
+| `header.text` | 150자 ✅ |
 | `context.elements` | 10개 |
 | `actions.elements` | 25개 |
-| 버튼 텍스트 | 75자 |
-| `action_id` | 255자 · 메시지 안에서 고유 |
-| 버튼 `value` | 2,000자 |
-| URL (`url` · `image_url`) | 3,000자 |
-| 최상위 `text` | 4,000자 권장 (넘으면 잘림) |
+| 버튼 텍스트 | 75자 ✅ |
+| `action_id` | 255자 ✅ · **같은 블록 안에서** 고유 (문서 기준으로 정정) |
+| 버튼 `value` | 2,000자 ✅ |
+| URL (`url` · `image_url`) | 3,000자 ✅ · 이미지 `alt_text` 2,000자 ✅ |
+| 최상위 `text` | 4,000자 권장 ✅ (하드 한도 40,000자를 넘으면 잘림) |
 
 - 이 값은 외부 기준이므로 `app/lib/slackmsg/limits.ts` 한 곳에 두고, `sources.ts` 의 `verifiedAt` 과 함께 관리한다.
 
@@ -220,10 +220,10 @@ app/en/slack-message-builder/page.tsx (+ opengraph-image.tsx)
 
 ## 9. 착수 전 체크
 
-- [ ] 3.4 제한값을 docs.slack.dev Block Kit 레퍼런스 원문과 대조, `verifiedAt` 기록
-- [ ] mrkdwn 이스케이프·링크·날짜 문법 원문 대조
-- [ ] chat.postMessage 의 `text` 누락 경고 동작 · Incoming Webhook 의 `channel` 무시 여부 대조
+- [x] 3.4 제한값을 Slack 공식 문서와 대조, `verifiedAt` 기록 (context · actions 개수는 미대조)
+- [x] mrkdwn 이스케이프(& < > 만 엔티티로) 대조
+- [x] chat.postMessage: `text` 는 blocks 가 있으면 필수는 아니고 알림용 대체 텍스트로 쓰인다 · Incoming Webhook 은 채널·아이콘·이름을 덮어쓸 수 없다
 - [ ] `@slack/web-api` · `slack_sdk` 현재 메이저 버전의 호출 시그니처 확인
 - [ ] 공식 Block Kit Builder 의 URL 해시 열기 방식이 지금도 동작하는지 확인
 - [ ] 키워드 검색량 확인 (영문 중심 · 네이버는 보조)
-- [ ] 8장 결정 항목 합의
+- [x] 8장 결정 항목 합의: 전부 제안안 (slug `slack-message-builder` · JSON 가져오기 v2 · section + mrkdwn · 5탭 · 개발 카테고리)

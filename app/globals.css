@@ -1156,6 +1156,147 @@ textarea#text::placeholder { color: var(--color-blue-gray-300); }
 .ku-code-scroll { display: flex; overflow: auto; max-height: 560px; }
 
 /* ============================================================
+   Slack Message Builder (IDE theme)
+   블록 에디터(화이트) → 미리보기·코드 탭(다크). 미리보기 카드는 슬랙처럼 라이트.
+   ============================================================ */
+/* overflow: clip 은 모서리는 자르되 스크롤 컨테이너를 만들지 않아 출력 고정(sticky)이 동작한다 */
+.sm-ide { height: auto; overflow: clip; }
+.sm-ide .panes { align-items: stretch; }
+.sm-bar { flex-wrap: wrap; row-gap: 8px; }
+.sm-tpls { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* 에디터 패널 */
+.sm-in-body { overflow: visible; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.sm-empty { padding: 24px 12px; text-align: center; font-size: 13px; color: var(--color-blue-gray-500); border: 1px dashed var(--color-blue-gray-200); border-radius: var(--radius-md); }
+.sm-blocks { display: flex; flex-direction: column; gap: 10px; list-style: none; padding: 0; margin: 0; }
+.sm-block { border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-md); background: #fff; }
+.sm-block.has-error { border-color: #e2a3a1; }
+.sm-block-head { display: flex; align-items: center; gap: 8px; padding: 6px 8px 6px 10px; border-bottom: 1px solid var(--color-blue-gray-100); background: var(--color-blue-gray-50); border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.sm-block-head .spacer { flex: 1; }
+.sm-block-no { font-family: var(--font-mono); font-size: 11px; color: var(--color-blue-gray-400); min-width: 14px; }
+.sm-block-type { font-size: 13px; font-weight: 500; color: var(--color-blue-gray-800); }
+.sm-block-kit { font-family: var(--font-mono); font-size: 11px; color: var(--color-blue-gray-400); }
+.sm-block-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.sm-block-issues { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: #c0504e; list-style: none; margin: 0; }
+.sm-icon-btn { width: 26px; height: 26px; flex-shrink: 0; border-radius: 5px; font-size: 13px; color: var(--color-blue-gray-500); display: inline-flex; align-items: center; justify-content: center; }
+.sm-icon-btn:hover:not(:disabled) { background: var(--color-blue-gray-100); color: var(--color-blue-gray-900); }
+.sm-icon-btn:disabled { opacity: .35; cursor: default; }
+
+.sm-label { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-blue-gray-600); }
+.sm-hint { font-size: 12px; color: var(--color-blue-gray-500); }
+.sm-input {
+  width: 100%; height: 36px; padding: 0 10px; font-size: 14px; color: var(--color-blue-gray-900);
+  background: #fff; border: 1px solid var(--color-blue-gray-200); border-radius: var(--radius-sm); outline: none;
+}
+.sm-input.kf-mono { font-family: var(--font-mono); font-size: 13px; }
+.sm-input:focus, .sm-textarea:focus { border-color: var(--color-blue-primary-500); box-shadow: 0 0 0 3px var(--color-blue-primary-100); }
+.sm-header-in { font-weight: 700; font-size: 15px; }
+.sm-textarea {
+  width: 100%; min-height: 72px; max-height: 320px; field-sizing: content; resize: vertical;
+  padding: 8px 10px; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; color: var(--color-blue-gray-900);
+  background: #fff; border: 1px solid var(--color-blue-gray-200); border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  outline: none; caret-color: var(--color-blue-primary-600);
+}
+.sm-textarea::placeholder { color: var(--color-blue-gray-300); }
+.sm-md.is-compact .sm-textarea { min-height: 52px; }
+.sm-md-bar { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; border: 1px solid var(--color-blue-gray-200); border-bottom: 0; border-radius: var(--radius-sm) var(--radius-sm) 0 0; background: var(--color-blue-gray-50); }
+.sm-md-btn { min-width: 26px; height: 24px; padding: 0 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: var(--color-blue-gray-600); }
+.sm-md-btn:hover { background: var(--color-blue-gray-100); color: var(--color-blue-gray-900); }
+.sm-md-bold { font-weight: 700; }
+.sm-md-italic { font-style: italic; }
+.sm-md-strike { text-decoration: line-through; }
+.sm-fallback-in { min-height: 52px; border-radius: var(--radius-sm); }
+
+.sm-fields { display: flex; flex-direction: column; gap: 6px; }
+.sm-field { display: flex; gap: 4px; align-items: flex-start; }
+.sm-field .sm-md { flex: 1; min-width: 0; }
+.sm-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 560px) { .sm-grid { grid-template-columns: 1fr 1fr; } }
+.sm-tf { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.sm-tf-lbl { font-size: 12px; color: var(--color-blue-gray-600); }
+.sm-buttons { display: flex; flex-direction: column; gap: 8px; }
+.sm-btn-ed { padding: 10px; border: 1px solid var(--color-blue-gray-100); border-radius: var(--radius-sm); background: var(--color-blue-gray-50); display: flex; flex-direction: column; gap: 6px; }
+.sm-link-btn { align-self: flex-start; font-size: 12.5px; font-weight: 500; color: var(--color-blue-primary-700); padding: 2px 0; }
+.sm-link-btn:hover { text-decoration: underline; }
+.sm-btn-remove { color: #c0504e; }
+
+.sm-add { display: flex; flex-direction: column; gap: 6px; }
+.sm-add-lbl { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-blue-gray-400); }
+.sm-add-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+@media (max-width: 559px) {
+  .sm-add-chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .sm-add-chips::-webkit-scrollbar { display: none; }
+}
+.sm-chip { height: 30px; padding: 0 11px; border-radius: 999px; white-space: nowrap; font-size: 12.5px; font-weight: 500; color: var(--color-blue-gray-700); background: #fff; border: 1px solid var(--color-blue-gray-200); }
+.sm-chip:hover { border-color: var(--color-blue-primary-400); color: var(--color-blue-primary-700); background: var(--color-blue-primary-50); }
+
+.sm-fallback { display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid var(--color-blue-gray-100); }
+.sm-fallback-head { display: flex; align-items: center; gap: 10px; }
+.sm-auto { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; background: var(--color-blue-primary-100); color: var(--color-blue-primary-700); }
+.sm-privacy { font-size: 12px; color: var(--color-blue-gray-500); }
+
+/* 출력 패널 */
+.sm-out-head { padding: 0 6px; overflow-x: auto; scrollbar-width: none; }
+.sm-out-head::-webkit-scrollbar { display: none; }
+.sm-tabs { display: flex; gap: 2px; }
+.sm-tab { height: 26px; padding: 0 10px; border-radius: 5px; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--color-blue-gray-400); }
+.sm-tab:hover { color: var(--color-blue-gray-100); background: var(--color-blue-gray-800); }
+.sm-tab.is-active { background: var(--color-blue-primary-700); color: #fff; }
+.sm-out-body { overflow: visible; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 360px; }
+.sm-out-note { font-size: 12px; color: var(--color-blue-gray-500); }
+.sm-builder { align-self: flex-start; font-family: var(--font-mono); font-size: 12.5px; font-weight: 500; color: var(--color-blue-primary-300); }
+.sm-builder:hover { text-decoration: underline; }
+.sm-code-body { padding: 0; gap: 0; }
+.sm-code-opts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 0.5px solid var(--color-blue-gray-800); }
+.sm-code-opts .spacer { flex: 1; }
+.sm-opt { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--color-blue-gray-400); }
+.sm-opt-in { width: 150px; height: 28px; padding: 0 8px; font-family: var(--font-mono); font-size: 12px; color: var(--color-blue-gray-100); background: var(--color-blue-gray-900); border: 1px solid var(--color-blue-gray-800); border-radius: 5px; outline: none; }
+.sm-opt-in:focus { border-color: var(--color-blue-primary-500); }
+.sm-opt-in::placeholder { color: var(--color-blue-gray-600); }
+.sm-check input { accent-color: var(--color-blue-primary-500); }
+.sm-env { padding: 8px 14px 0; font-size: 12px; color: var(--color-blue-gray-500); }
+.sm-code-scroll { display: flex; overflow: auto; max-height: 640px; }
+/* 에디터가 길어져도 출력이 화면에 남도록 데스크톱에서 고정 */
+@media (min-width: 960px) {
+  .sm-out-sticky { position: sticky; top: 56px; }
+  .sm-code-scroll { max-height: calc(100vh - 200px); }
+}
+
+/* 슬랙 미리보기 (라이트 카드) */
+.sm-slack { display: flex; gap: 10px; padding: 14px 16px; background: #fff; border-radius: var(--radius-md); color: #1d1c1d; font-size: 15px; line-height: 1.47; }
+.sm-slack-avatar { width: 36px; height: 36px; flex-shrink: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; background: var(--color-blue-primary-600); }
+.sm-slack-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.sm-slack-meta { display: flex; align-items: center; gap: 6px; font-size: 15px; }
+.sm-slack-app { padding: 0 4px; border-radius: 3px; font-size: 10px; font-weight: 700; color: #616061; background: #e8e8e8; }
+.sm-slack-time { font-size: 12px; color: #616061; }
+.sm-p-md { overflow-wrap: anywhere; }
+.sm-p-line, .sm-p-quote { white-space: pre-wrap; }
+.sm-p-quote { padding-left: 10px; border-left: 4px solid #dddddd; }
+.sm-p-pre { margin: 4px 0; padding: 8px; font-family: var(--font-mono); font-size: 12px; white-space: pre-wrap; background: #f8f8f8; border: 1px solid #e2e2e2; border-radius: 4px; }
+.sm-p-code { padding: 1px 3px; font-family: var(--font-mono); font-size: 12px; color: #c01343; background: #f6f6f6; border: 1px solid #e2e2e2; border-radius: 3px; }
+.sm-p-md a { color: #1264a3; }
+.sm-p-mention { padding: 0 2px; border-radius: 3px; color: #1264a3; background: #e8f5fa; }
+.sm-p-header { font-size: 18px; font-weight: 700; }
+.sm-p-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+.sm-p-context { font-size: 12px; color: #616061; }
+.sm-p-divider { border: 0; border-top: 1px solid #dddddd; margin: 4px 0; }
+.sm-p-image figcaption { font-size: 13px; color: #616061; margin-bottom: 4px; }
+.sm-p-image img { max-width: 100%; max-height: 240px; border-radius: 6px; }
+.sm-p-image-ph { padding: 24px; text-align: center; font-size: 12px; color: #616061; background: #f4f4f4; border-radius: 6px; }
+.sm-p-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.sm-p-accessory { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.sm-p-accessory .sm-p-section { flex: 1; min-width: 0; }
+.sm-p-btn { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; flex-shrink: 0; font-size: 13px; font-weight: 700; color: #1d1c1d; background: #fff; border: 1px solid #c4c4c4; border-radius: 4px; white-space: nowrap; }
+.sm-p-btn.is-primary { color: #fff; background: #007a5a; border-color: #007a5a; }
+.sm-p-btn.is-danger { color: #e01e5a; border-color: #e01e5a; }
+
+/* 경고 목록 */
+.sm-issues { display: flex; flex-direction: column; gap: 4px; padding: 10px 16px; margin: 0; list-style: none; border-top: 1px solid var(--color-blue-gray-100); background: #fff; font-size: 12.5px; }
+.sm-issue.is-error { color: #c0504e; }
+.sm-issue.is-warn { color: var(--color-blue-gray-600); }
+.sm-issue-where { display: inline-block; min-width: 72px; margin-right: 8px; font-family: var(--font-mono); font-size: 11.5px; color: var(--color-blue-gray-400); }
+
+/* ============================================================
    Tailwind Palette Generator (Canvas)
    ============================================================ */
 .pal-work { display: flex; flex-direction: column; gap: 22px; }
