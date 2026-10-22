@@ -39,6 +39,7 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
+import { UNEMPLOYMENT_SOURCES, UNEMPLOYMENT_VERIFIED_AT } from "./unemployment/sources";
 import { KST_UTC_SOURCES, KST_UTC_VERIFIED_AT } from "./kstutc/sources";
 import { SLACKMSG_SOURCES, SLACKMSG_VERIFIED_AT } from "./slackmsg/sources";
 
@@ -5319,7 +5320,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: SEVERANCE_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "퇴직금 계산기", en: "Severance Pay Calculator" },
-    relatedTools: ["salary-calculator", "flex-work-calculator"],
+    relatedTools: ["salary-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
     seo: {
       ko: {
         title: "퇴직금 계산기 | 평균임금으로 예상 퇴직금 계산",
@@ -5952,7 +5953,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: ANNUAL_LEAVE_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "연차 계산기", en: "Korea Annual Leave Calculator" },
-    relatedTools: ["severance-pay-calculator", "flex-work-calculator", "salary-calculator"],
+    relatedTools: ["severance-pay-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
     seo: {
       ko: {
         title: "연차 계산기 | 입사일·회계연도 기준 연차 개수와 퇴사 정산",
@@ -6242,6 +6243,329 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Korea Annual Leave Calculator",
         subtitle: "Days earned, next accrual and the calendar-year shortfall",
+      },
+    },
+  },
+  {
+    slug: "unemployment-benefit-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "job-seeker", "small-business-owner"],
+    ico: "60%",
+    ready: true,
+    indexable: false,
+    verifiedAt: UNEMPLOYMENT_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "실업급여 계산기", en: "Korea Unemployment Benefit Calculator" },
+    relatedTools: ["severance-pay-calculator", "annual-leave-calculator", "salary-calculator"],
+    seo: {
+      ko: {
+        title: "실업급여 계산기 | 2026 상한액·하한액 반영 구직급여 금액과 수급 기간",
+        description:
+          "퇴직 전 3개월 임금과 이직일 당시 나이, 고용보험 가입기간을 넣으면 고용보험법에 따라 구직급여 1일 금액과 받을 수 있는 일수, 총액을 계산합니다. 2026년 상한액 68,100원과 하한액 66,048원을 적용하고, 수급기간 12개월 안에 다 받으려면 언제까지 신청해야 하는지와 조기재취업수당까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "실업급여 계산기",
+          "구직급여 계산",
+          "실업급여 상한액",
+          "실업급여 하한액",
+          "실업급여 기간",
+          "소정급여일수",
+          "실업급여 조건",
+          "실업급여 신청 기한",
+          "조기재취업수당",
+        ],
+      },
+      en: {
+        title: "Korea Unemployment Benefit Calculator | Daily Amount and Days",
+        description:
+          "Enter your last three months of pay, your age on the day you left and how long you were insured to estimate Korea's job-seeking (unemployment) benefit under the Employment Insurance Act: the daily amount, the number of days and the total. It applies the 2026 cap of KRW 68,100 and floor of KRW 66,048, shows the last day to apply to receive every day within the 12-month benefit period, and estimates the early reemployment allowance. Everything runs in your browser.",
+        keywords: [
+          "korea unemployment benefit calculator",
+          "korea job seeking benefit",
+          "korea unemployment benefit amount",
+          "korea unemployment benefit 2026",
+          "employment insurance act korea",
+          "korea unemployment benefit days",
+          "early reemployment allowance korea",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "퇴직 전 임금·나이·가입기간으로 구직급여 1일 금액과 총액, 다 받기 위한 신청 마감일을 계산합니다.",
+        description:
+          "퇴직 전 3개월 임금과 이직일 당시 나이, 고용보험 가입기간을 넣으면 고용보험법에 따라 구직급여 1일 금액과 받을 수 있는 일수, 총액을 계산합니다. 2026년 상한액 68,100원과 하한액 66,048원을 적용하고, 수급기간 12개월 안에 다 받으려면 언제까지 신청해야 하는지와 조기재취업수당까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "마지막 근무일과 퇴직 전 3개월 임금을 입력",
+          "고용보험 가입기간·나이·이직 사유를 선택",
+          "1일 금액·일수·총액과 신청 마감일을 확인",
+        ],
+        aeo: {
+          what: "실업급여 계산기는 고용보험법에 따라 구직급여 1일 금액(구직급여일액)과 소정급여일수, 예상 총 수급액을 계산하고, 수급기간 안에 다 받기 위한 신청 마감일을 알려주는 도구입니다.",
+          who: "퇴사나 계약 만료를 앞둔 직장인, 권고사직 조건을 비교하는 사람, 이직 준비자, 퇴사자에게 실업급여를 안내하는 소규모 회사 담당자가 씁니다.",
+          how: "퇴직 전 3개월 평균임금의 60%를 1일 금액으로 하되 2026년 이직자는 하루 68,100원을 넘지 않고, 최저임금 × 1일 소정근로시간 × 80%(8시간 기준 66,048원)보다 적지 않게 맞춥니다. 받을 수 있는 일수는 이직일 당시 나이(50세 기준)와 피보험기간으로 [별표 1]에서 120~270일 중 정합니다.",
+          why: "2026년에는 하한과 상한의 차이가 2,052원뿐이라 대부분 하한 또는 상한을 받고, 이직일 다음 날부터 12개월이 지나면 남은 일수가 있어도 지급이 끝납니다. 퇴사 전 생활비를 계획하고 신청 시기를 놓치지 않으려고 씁니다.",
+        },
+        guide: [
+          {
+            heading: "실업급여 1일 금액은 어떻게 정해지나요",
+            body: [
+              "실업급여의 중심인 구직급여는 이직 전 평균임금을 기초일액으로 삼아 그 60%를 하루 금액으로 줍니다(고용보험법 제45조 · 제46조). 평균임금은 마지막 근무일 이전 3개월 동안 받은 임금 총액을 그 기간의 달력 일수로 나눈 금액이며, 퇴직금을 계산할 때와 같은 방식입니다. 통상임금이 평균임금보다 크면 통상임금을 씁니다.",
+              "기초일액에는 상한이 있습니다. 2026년 1월 1일 이후 이직한 사람은 113,500원이 상한이라 하루 금액은 113,500 × 60% = 68,100원을 넘지 않습니다. 2025년까지 이직한 사람은 상한 110,000원, 하루 66,000원입니다.",
+              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다.",
+              "그래서 2026년에는 하한 66,048원과 상한 68,100원 사이가 2,052원뿐입니다. 하루 8시간 근로자는 평균임금이 110,080원 미만(3개월 92일 기준 월 약 338만 원 미만)이면 하한을, 113,500원 이상(월 약 348만 원 이상)이면 상한을 받습니다. 계산기는 결과에 어느 구간인지 표시합니다.",
+            ],
+          },
+          {
+            heading: "실업급여는 며칠 받나요",
+            body: [
+              "받을 수 있는 날 수(소정급여일수)는 이직일 당시 나이와 피보험기간으로 정해집니다(제50조 [별표 1]). 50세 미만은 피보험기간 1년 미만 120일, 1~3년 150일, 3~5년 180일, 5~10년 210일, 10년 이상 240일입니다.",
+              "50세 이상과 장애인은 같은 구간에서 120일, 180일, 210일, 240일, 270일입니다. 나이는 이직일 기준이라 퇴사 직후 50세가 되어도 이직일에 49세였다면 50세 미만 기준을 씁니다.",
+              "피보험기간은 고용보험에 가입한 총기간입니다. 이전 직장의 가입기간도 합산할 수 있지만, 이전에 실업급여를 받았다면 그때까지의 기간은 다시 합산하지 않습니다. 정확한 기간은 고용24의 피보험자격 이력에서 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "받을 수 있는 조건: 180일은 6개월이 아닙니다",
+            body: [
+              "이직일 이전 18개월 동안 피보험단위기간이 180일 이상이어야 합니다(제40조). 피보험단위기간은 달력 일수가 아니라 보수를 받은 날을 셉니다. 주 5일 근무자는 무급휴무일(보통 토요일)이 빠지고 유급 주휴일은 들어가 주당 약 6일이 되므로, 180일을 채우려면 약 7개월이 필요합니다.",
+              "이직 사유도 중요합니다. 권고사직, 경영상 해고, 계약 기간 만료, 폐업처럼 본인 뜻과 달리 일을 그만둔 경우가 대상입니다. 스스로 그만두었다면 임금 체불, 통근이 어려워진 이사, 질병처럼 시행규칙 [별표 2]가 정한 정당한 사유가 있을 때만 받을 수 있습니다.",
+              "수급 자격은 고용센터가 이직 사유와 가입 이력을 확인해 결정합니다. 계산기는 자격을 판정하지 않고, 입력한 조건에서의 예상 금액과 확인할 점을 보여줍니다.",
+            ],
+          },
+          {
+            heading: "언제까지 신청해야 다 받을 수 있나요",
+            body: [
+              "구직급여는 이직일 다음 날부터 12개월 안에서만 지급됩니다(제48조). 이 기간이 지나면 소정급여일수가 남아 있어도 지급이 끝나므로, 신청이 늦으면 그만큼 받지 못합니다.",
+              "신청하면 처음 7일은 대기기간이라 지급하지 않습니다(제49조). 그래서 다 받을 수 있는 마지막 신청일은 수급기간 만료일에서 소정급여일수와 대기기간 7일을 거꾸로 뺀 날입니다. 270일 대상자는 이직 다음 날부터 이 날까지 여유가 약 88일뿐입니다.",
+              "실제 지급은 1~4주마다 실업 인정을 받은 날 단위로 이뤄져 하루 이틀 차이가 날 수 있습니다. 신청은 퇴사 후 되도록 빨리 고용24에서 구직 등록을 하고 수급자격 인정 신청을 하는 것이 안전합니다.",
+            ],
+          },
+          {
+            heading: "재취업하면 남은 실업급여는 어떻게 되나요",
+            body: [
+              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 계산기에 재취업 예정일을 넣으면 그 날 기준 남은 일수와 예상 수당을 보여줍니다.",
+              "이직 전 사업주에게 다시 고용되거나 최근에 조기재취업수당을 받은 이력이 있으면 대상에서 빠지는 등 세부 요건이 있습니다. 실제 지급 여부는 고용센터에서 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "논의 중인 제도 개편",
+            body: [
+              "2026년 9월 고용보험위원회에 구직급여를 무급휴일을 뺀 주 6일 기준으로 지급하고, 상한액을 하한액에 연동하는 개편안이 보고되었습니다. 총 지급액과 소정급여일수는 그대로지만 매달 받는 금액이 줄고 받는 달력 기간이 늘어나는 방식입니다.",
+              "개편은 법령 개정과 시행일 확정이 남아 있어 계산기는 현행 기준으로만 계산합니다. 시행일이 정해지면 그 날 이후 이직자에게 새 기준을 적용하도록 갱신합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "월 300만 원 · 35세 · 4년 2개월 근무 · 권고사직",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 9,000,000원 · 1일 8시간 · 피보험기간 4년 2개월 · 50세 미만",
+            result: "1일 66,048원(하한 적용) · 180일 · 총 11,888,640원 · 월 환산 1,849,344원 · 신청 마감 권장 2027-04-28",
+            note: "평균임금은 9,000,000 ÷ 92일 = 97,826원이고 60%는 58,695원이라 하한 66,048원이 적용됩니다.",
+          },
+          {
+            title: "월 400만 원 · 52세 · 12년 근무 · 계약 만료",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 12,000,000원 · 피보험기간 12년 · 50세 이상",
+            result: "1일 68,100원(상한 적용) · 270일 · 총 18,387,000원 · 신청 마감 권장 2027-01-28 (이직 다음 날부터 88일)",
+            note: "수급기간은 2026-11-01 ~ 2027-10-31 입니다. 270일과 대기기간 7일을 받으려면 늦어도 2027년 1월 28일에는 신청해야 합니다.",
+          },
+          {
+            title: "1일 4시간 단시간 근로자",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 3,600,000원 · 1일 4시간 · 피보험기간 2년 · 50세 미만",
+            result: "1일 33,024원(하한 적용) · 150일 · 총 4,953,600원",
+            note: "하한은 10,320원 × 4시간 × 80% = 33,024원으로 소정근로시간에 비례해 낮아집니다.",
+          },
+          {
+            title: "30일 받고 재취업한 경우의 조기재취업수당",
+            input: "첫 번째 예시 · 신청일 2026-11-01 · 재취업 예정일 2026-12-08",
+            result: "30일 지급 · 남은 150일 · 조기재취업수당 4,953,600원",
+            note: "남은 150일 × 66,048원 × 1/2 입니다. 재취업 후 12개월 이상 계속 일해야 하는 등 세부 요건이 있습니다.",
+          },
+        ],
+        sources: UNEMPLOYMENT_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "수급 여부는 고용센터가 이직 사유와 가입 이력을 확인해 결정합니다. 계산기는 자격을 판정하지 않습니다.",
+          "피보험단위기간 180일은 근무 기간과 주 근무일수로 추정한 값입니다. 정확한 일수는 고용24 피보험자격 이력에서 확인해야 합니다.",
+          "일용근로자, 이직 전 3개월 안에 자격을 두 번 이상 취득한 경우의 예외 산식, 예술인·노무제공자·자영업자 고용보험은 반영하지 않습니다.",
+          "개별·특별·훈련연장급여와 조기재취업수당 외의 취업촉진수당은 계산하지 않습니다.",
+          "2024년 1월 1일 이후 이직자만 계산합니다. 논의 중인 주 6일 지급·반복수급 감액 등 개편안은 시행 전이라 반영하지 않습니다.",
+          "실제 지급은 실업 인정일 단위로 이뤄져 날짜와 월별 금액이 계산과 조금 다를 수 있습니다.",
+        ],
+      },
+      en: {
+        card: "Korea's job-seeking benefit from your last pay, age and insured period: daily amount, total and the last day to apply.",
+        description:
+          "Enter your last three months of pay, your age on the day you left and how long you were insured to estimate Korea's job-seeking (unemployment) benefit under the Employment Insurance Act: the daily amount, the number of days and the total. It applies the 2026 cap of KRW 68,100 and floor of KRW 66,048, shows the last day to apply to receive every day within the 12-month benefit period, and estimates the early reemployment allowance. Everything runs in your browser.",
+        howItWorks: [
+          "Enter your last working day and pay for the last three months",
+          "Choose your insured period, age group and reason for leaving",
+          "See the daily amount, days, total and the last day to apply",
+        ],
+        aeo: {
+          what: "A Korea Unemployment Benefit Calculator estimates the daily job-seeking benefit, the number of benefit days and the total under Korea's Employment Insurance Act, and shows the last day to apply to receive every day within the benefit period.",
+          who: "It is for employees in Korea who are resigning or reaching the end of a contract, people comparing a recommended resignation offer, job seekers, and staff at small companies who explain the benefit to departing employees.",
+          how: "The daily amount is 60% of the average daily wage over the last three months, capped at KRW 68,100 for people who left on or after 1 January 2026 and never below minimum wage × daily contracted hours × 80% (KRW 66,048 for 8 hours). The number of days, 120 to 270, comes from Annex 1 by age on the leaving date (50 or over) and insured period.",
+          why: "In 2026 the floor and cap are only KRW 2,052 apart, so most people get one or the other, and payment stops 12 months after the day after leaving even if days remain. People use it to plan living costs before leaving and to avoid applying too late.",
+        },
+        guide: [
+          {
+            heading: "How the daily amount is set",
+            body: [
+              "The job-seeking benefit, the core of Korea's unemployment benefit, pays 60% of a base daily wage, which is the average wage before leaving (Employment Insurance Act, Arts. 45 and 46). The average wage is total pay over the three months before the last working day divided by the calendar days in that period, the same method used for severance pay. If the ordinary wage is higher, it is used instead.",
+              "The base daily wage is capped. For people who left on or after 1 January 2026 the cap is KRW 113,500, so the daily amount never exceeds 113,500 × 60% = KRW 68,100. For people who left in 2025 or earlier the cap was KRW 110,000, or KRW 66,000 a day.",
+              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024.",
+              "That leaves only KRW 2,052 between the 2026 floor and cap. For an 8-hour worker, an average daily wage under KRW 110,080 (about KRW 3.38 million a month over a 92-day period) gets the floor, and KRW 113,500 or more (about KRW 3.48 million a month) gets the cap. The result shows which band applies.",
+            ],
+          },
+          {
+            heading: "How many days you can receive",
+            body: [
+              "The number of benefit days depends on your age on the leaving date and your insured period (Art. 50, Annex 1). Under 50: 120 days for under 1 year, 150 for 1-3 years, 180 for 3-5 years, 210 for 5-10 years and 240 for 10 years or more.",
+              "People aged 50 or over and people with disabilities get 120, 180, 210, 240 and 270 days for the same periods. Age is taken on the leaving date, so turning 50 just after leaving does not change the row.",
+              "The insured period is your total time covered by employment insurance. Earlier jobs can be added, but time before a previous benefit claim is not counted again. Your exact record is on Work24.",
+            ],
+          },
+          {
+            heading: "Eligibility: 180 days is not six months",
+            body: [
+              "You need at least 180 insured unit days in the 18 months before leaving (Art. 40). Unit days count days that were paid, not calendar days. A five-day worker loses the unpaid day off (usually Saturday) but keeps the paid weekly holiday, about 6 days a week, so reaching 180 takes about seven months.",
+              "The reason for leaving matters too. Recommended resignation, dismissal for business reasons, the end of a fixed-term contract and closure qualify. If you resigned, you qualify only with a justified reason listed in Annex 2 of the Enforcement Rule, such as unpaid wages, a move that makes commuting impractical or illness.",
+              "The job center decides eligibility after checking the reason and your insurance record. The calculator does not decide it; it shows the estimate for the conditions you enter and what to check.",
+            ],
+          },
+          {
+            heading: "The last day to apply and still receive every day",
+            body: [
+              "The benefit is paid only within 12 months from the day after you leave (Art. 48). Once that period ends, payment stops even if benefit days remain, so applying late costs you days.",
+              "The first 7 days after you apply are a waiting period with no payment (Art. 49). The last day to apply and still receive every day is therefore the end of the benefit period minus your benefit days and the 7-day wait. Someone with 270 days has only about 88 days of slack from the day after leaving.",
+              "Payments are made on certification days every one to four weeks, so dates can differ by a day or two. Registering as a job seeker on Work24 and applying soon after leaving is the safe choice.",
+            ],
+          },
+          {
+            heading: "What happens if you find a job early",
+            body: [
+              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). Enter a reemployment date to see the remaining days and the estimated allowance.",
+              "Detailed conditions apply, such as being rehired by your previous employer or having received the allowance recently. The job center confirms whether it is paid.",
+            ],
+          },
+          {
+            heading: "Reforms under discussion",
+            body: [
+              "In September 2026 a reform plan was reported to Korea's Employment Insurance Committee: pay the benefit on a 6-day week that excludes the unpaid day off, and link the cap to the floor. The total and the number of benefit days stay the same, but each month pays less and the payments stretch over a longer period.",
+              "The reform still needs legislation and a start date, so the calculator uses the current rules only. It will be updated to apply the new rules to people who leave after the start date.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "KRW 3 million a month · age 35 · 4 years 2 months · recommended resignation",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 9,000,000 · 8 hours a day · insured 4 years 2 months · under 50",
+            result: "KRW 66,048 a day (floor) · 180 days · total KRW 11,888,640 · about KRW 1,849,344 a month · apply by 2027-04-28",
+            note: "The average daily wage is 9,000,000 ÷ 92 days = KRW 97,826 and 60% of it is KRW 58,695, so the floor of KRW 66,048 applies.",
+          },
+          {
+            title: "KRW 4 million a month · age 52 · 12 years · contract ended",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 12,000,000 · insured 12 years · 50 or over",
+            result: "KRW 68,100 a day (cap) · 270 days · total KRW 18,387,000 · apply by 2027-01-28 (88 days after the day after leaving)",
+            note: "The benefit period runs from 2026-11-01 to 2027-10-31. To fit 270 days plus the 7-day wait, apply by 28 January 2027 at the latest.",
+          },
+          {
+            title: "Part-timer working 4 hours a day",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 3,600,000 · 4 hours a day · insured 2 years · under 50",
+            result: "KRW 33,024 a day (floor) · 150 days · total KRW 4,953,600",
+            note: "The floor is 10,320 × 4 hours × 80% = KRW 33,024, scaled to contracted hours.",
+          },
+          {
+            title: "Early reemployment allowance after 30 days",
+            input: "First example · applied 2026-11-01 · new job from 2026-12-08",
+            result: "30 days paid · 150 days left · allowance KRW 4,953,600",
+            note: "150 remaining days × KRW 66,048 × 1/2. Conditions apply, such as staying in the new job for 12 months or more.",
+          },
+        ],
+        sources: UNEMPLOYMENT_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "The job center decides eligibility after checking your reason for leaving and insurance record. The calculator does not decide it.",
+          "The 180 insured unit days are estimated from months worked and days per week. Check the exact count in your Work24 record.",
+          "Daily workers, the special formula for people who gained coverage twice or more in the three months before leaving, and insurance for artists, platform and special-type workers and the self-employed are not covered.",
+          "Extended benefits and employment promotion allowances other than the early reemployment allowance are not calculated.",
+          "Only people who left on or after 1 January 2024 are covered. Reforms under discussion, such as 6-day payment and cuts for repeated claims, are not applied before they take effect.",
+          "Payments are made on certification days, so actual dates and monthly amounts can differ slightly.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "2026년 실업급여는 하루 최대 얼마, 최소 얼마인가요?",
+          answer:
+            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아집니다.",
+        },
+        {
+          question: "자진퇴사해도 실업급여를 받을 수 있나요?",
+          answer:
+            "원칙적으로 받을 수 없습니다. 다만 임금 체불, 통근이 어려워진 이사, 질병, 직장 내 괴롭힘처럼 고용보험법 시행규칙 [별표 2]가 정한 정당한 사유가 있으면 받을 수 있고, 고용센터가 사유를 확인해 결정합니다.",
+        },
+        {
+          question: "6개월 일하면 실업급여를 받을 수 있나요?",
+          answer:
+            "보통은 부족합니다. 이직 전 18개월 동안 피보험단위기간 180일이 필요한데, 이 기간은 보수를 받은 날만 세므로 주 5일 근무자는 주당 약 6일씩 쌓여 약 7개월이 필요합니다.",
+        },
+        {
+          question: "실업급여는 언제까지 신청해야 하나요?",
+          answer:
+            "이직일 다음 날부터 12개월이 지나면 남은 일수가 있어도 지급이 끝납니다. 신청 후 7일은 대기기간이므로, 만료일에서 소정급여일수와 7일을 뺀 날까지 신청해야 다 받을 수 있습니다. 계산기가 이 날짜를 알려줍니다.",
+        },
+        {
+          question: "실업급여를 받다가 재취업하면 어떻게 되나요?",
+          answer:
+            "재취업하면 구직급여는 끝나지만, 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다.",
+        },
+        {
+          question: "입력한 임금이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 날짜와 금액은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What are the maximum and minimum daily unemployment benefits in Korea in 2026?",
+          answer:
+            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8.",
+        },
+        {
+          question: "Can I get the benefit if I resign voluntarily?",
+          answer:
+            "Generally no. You can if you have a justified reason listed in Annex 2 of the Enforcement Rule of the Employment Insurance Act, such as unpaid wages, a move that makes commuting impractical, illness or workplace harassment. The job center checks the reason and decides.",
+        },
+        {
+          question: "Is six months of work enough?",
+          answer:
+            "Usually not. You need 180 insured unit days in the 18 months before leaving, and only paid days count, so a five-day worker builds about 6 days a week and needs about seven months.",
+        },
+        {
+          question: "When do I have to apply?",
+          answer:
+            "Payment stops 12 months after the day after you leave, even if days remain. The first 7 days after applying are a waiting period, so apply by the end of the benefit period minus your benefit days and 7 days to receive everything. The calculator shows that date.",
+        },
+        {
+          question: "What happens if I find a job while receiving the benefit?",
+          answer:
+            "The benefit stops, but if you start the new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance.",
+        },
+        {
+          question: "Is the pay I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "실업급여 계산기",
+        subtitle: "2026 상한·하한 반영 1일 금액과 신청 마감일",
+      },
+      en: {
+        title: "Korea Unemployment Benefit Calculator",
+        subtitle: "Daily amount, benefit days and the last day to apply",
       },
     },
   },

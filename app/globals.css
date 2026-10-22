@@ -2072,6 +2072,26 @@ p.sv-hint { margin-top: -8px; }
 .ft-note a { color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ============================================================
+   실업급여 계산기 (퇴직금·연차 계산기의 sv-/fw-/al- 카드 구조 재사용)
+   1일 금액이 하한·비례·상한 중 어디인지 배지로, 놓치는 일수는 경고색으로
+   ============================================================ */
+.ub-work { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .ub-work { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+.ub-work .fw-row-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ub-work .fw-field-input input { min-width: 0; }
+.ub-band {
+  display: inline-block; padding: 1px 8px; border-radius: 999px;
+  font-size: 11px; font-weight: 500; background: var(--color-blue-gray-100); color: var(--color-blue-gray-700);
+}
+.ub-band.is-cap, .ub-band.is-floor { background: var(--color-blue-primary-100); color: var(--color-blue-primary-700); }
+.ub-monthly {
+  margin: -4px 0 0; font-size: 12.5px; color: var(--color-blue-gray-600);
+}
+.ub-monthly strong { font-weight: 500; color: var(--color-blue-gray-900); margin-left: 4px; }
+.ub-lost .k, .ub-lost .v, .ub-warn-text { color: #c0504e; }
+.al-tag.ub-tag-warn { background: #fee2e2; color: #c0504e; }
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */
