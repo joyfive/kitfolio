@@ -2072,6 +2072,37 @@ p.sv-hint { margin-top: -8px; }
 .ft-note a { color: var(--color-blue-primary-700); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ============================================================
+   종합소득세 계산기 (sv-/fw-/ft-/al- 카드·표 구조 재사용)
+   방식 비교 표: 신고할 수 없는 방식은 흐리게, 보고 있는 방식은 primary 배경
+   ============================================================ */
+.it-work { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .it-work { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+.it-work .fw-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.it-work .fw-field-input input { min-width: 0; }
+.it-work .fw-field-input input:disabled { color: var(--color-blue-gray-400); background: transparent; }
+.it-sub {
+  margin: 6px 0 -4px; padding-top: 14px; border-top: 1px solid var(--color-blue-gray-100);
+  font-size: 12.5px; font-weight: 600; color: var(--color-blue-gray-700);
+}
+.it-advanced { border-top: 1px solid var(--color-blue-gray-100); padding-top: 14px; }
+.it-advanced summary {
+  cursor: pointer; font-size: 13px; font-weight: 500; color: var(--color-blue-primary-700);
+}
+.it-advanced .fw-form { padding: 14px 0 0; }
+.it-table tbody tr { cursor: pointer; }
+.it-table tbody tr.is-expired { cursor: default; }
+.it-table tbody tr:focus-visible { outline: 2px solid var(--color-blue-primary-400); outline-offset: -2px; }
+.it-table tr.is-current td { background: var(--color-blue-primary-50); }
+.it-table tr.it-off td { color: var(--color-blue-gray-400); }
+.it-table tr.it-off td.r { color: var(--color-blue-gray-400); font-weight: 500; }
+.it-table .it-best { background: var(--color-blue-primary-100); color: var(--color-blue-primary-700); }
+.it-table .it-muted { color: var(--color-blue-gray-400); }
+@media (max-width: 559px) {
+  .it-work .fw-row-3 { grid-template-columns: minmax(0, 1fr); }
+  .it-table .it-hide-sm { display: none; }
+}
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */

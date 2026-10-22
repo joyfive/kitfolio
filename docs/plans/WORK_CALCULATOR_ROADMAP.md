@@ -32,7 +32,7 @@
 | 2 | 연차 계산기 | `annual-leave-calculator` | 24 | office-worker · pm · job-seeker | ✅ v1 배포 대기 · indexable 승격 전 ([기획서](./annual-leave-calculator.md)) |
 | 3 | 부가세 계산기 (일반 · 간이과세) | `vat-calculator` | 23 | small-business-owner | ⬜ 조건부 |
 | 4 | 실업급여 계산기 | `unemployment-benefit-calculator` | 21 | office-worker · job-seeker | ⬜ |
-| 5 | 종합소득세 계산기 (인적용역 프리랜서 5월 신고) | `income-tax-calculator` | 20 | designer · developer · pm · small-business-owner | 🚧 기획 초안 ([기획서](./income-tax-calculator.md)) |
+| 5 | 종합소득세 계산기 (인적용역 프리랜서 5월 신고) | `income-tax-calculator` | 20 | designer · developer · pm · small-business-owner | ✅ v1 배포 대기 · indexable 승격 전 ([기획서](./income-tax-calculator.md)) |
 
 **범례:** ⬜ 대기 · 🚧 진행 중 · ✅ 배포 · ⏸ 보류 · ❌ 제외
 
@@ -56,11 +56,11 @@
 - 구직급여일액 상한 · 하한(최저임금 연동)이 해마다 바뀌므로 기간 테이블이 필수다.
 - 소정급여일수(나이 · 가입기간)를 표로 관리한다.
 
-**5. 종합소득세 계산기 (2026-10-20 보류 해제 · 기획 중)**
+**5. 종합소득세 계산기 (2026-10-20 보류 해제 · 2026-10-22 v1 구현)**
 - 보류 사유: 공제 항목이 많아 정확도 위험이 크고 하루 안에 구현하기 어렵다. 홈택스 모의계산과 경쟁해야 한다.
 - 해제 조건: 대상을 3.3% 인적용역 프리랜서의 사업소득 하나로, 공제를 인적공제 · 국민연금 · 표준세액공제로 좁힌다.
   차별점은 단순경비율 · 기준경비율 · 간편장부 방식 비교와 환급/추가 납부 한 줄이다.
-- 2027년 5월 신고 시즌 전에 색인을 쌓기 위해 3 · 4번보다 먼저 진행할지 기획서 8장에서 결정한다.
+- 2027년 5월 신고 시즌 전에 색인을 쌓기 위해 3 · 4번보다 먼저 진행했다 (2026-10-22 v1 구현).
 
 ### 제외
 
