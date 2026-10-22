@@ -6873,7 +6873,7 @@ export const TOOLS: Tool[] = [
             body: [
               "실업급여의 중심인 구직급여는 이직 전 평균임금을 기초일액으로 삼아 그 60%를 하루 금액으로 줍니다(고용보험법 제45조 · 제46조). 평균임금은 마지막 근무일 이전 3개월 동안 받은 임금 총액을 그 기간의 달력 일수로 나눈 금액이며, 퇴직금을 계산할 때와 같은 방식입니다. 통상임금이 평균임금보다 크면 통상임금을 씁니다.",
               "기초일액에는 상한이 있습니다. 2026년 1월 1일 이후 이직한 사람은 113,500원이 상한이라 하루 금액은 113,500 × 60% = 68,100원을 넘지 않습니다. 2025년까지 이직한 사람은 상한 110,000원, 하루 66,000원입니다.",
-              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다.",
+              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다. 1일 소정근로시간에 1시간 미만 끝수가 있으면 올림해서, 7.5시간이면 8시간으로 계산합니다.",
               "그래서 2026년에는 하한 66,048원과 상한 68,100원 사이가 2,052원뿐입니다. 하루 8시간 근로자는 평균임금이 110,080원 미만(3개월 92일 기준 월 약 338만 원 미만)이면 하한을, 113,500원 이상(월 약 348만 원 이상)이면 상한을 받습니다. 계산기는 결과에 어느 구간인지 표시합니다.",
             ],
           },
@@ -6904,7 +6904,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "재취업하면 남은 실업급여는 어떻게 되나요",
             body: [
-              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 계산기에 재취업 예정일을 넣으면 그 날 기준 남은 일수와 예상 수당을 보여줍니다.",
+              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 재취업은 실업 신고일부터 14일이 지난 뒤여야 합니다. 지급이 시작되는 대기기간 7일과는 별개 요건이라, 대기기간이 끝난 직후 재취업해도 14일 전이면 대상이 아닙니다. 계산기에 재취업 예정일을 넣으면 두 요건을 확인하고 남은 일수와 예상 수당을 보여줍니다.",
               "이직 전 사업주에게 다시 고용되거나 최근에 조기재취업수당을 받은 이력이 있으면 대상에서 빠지는 등 세부 요건이 있습니다. 실제 지급 여부는 고용센터에서 확인해야 합니다.",
             ],
           },
@@ -6973,7 +6973,7 @@ export const TOOLS: Tool[] = [
             body: [
               "The job-seeking benefit, the core of Korea's unemployment benefit, pays 60% of a base daily wage, which is the average wage before leaving (Employment Insurance Act, Arts. 45 and 46). The average wage is total pay over the three months before the last working day divided by the calendar days in that period, the same method used for severance pay. If the ordinary wage is higher, it is used instead.",
               "The base daily wage is capped. For people who left on or after 1 January 2026 the cap is KRW 113,500, so the daily amount never exceeds 113,500 × 60% = KRW 68,100. For people who left in 2025 or earlier the cap was KRW 110,000, or KRW 66,000 a day.",
-              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024.",
+              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024. Part hours in the daily contracted hours round up, so 7.5 hours counts as 8.",
               "That leaves only KRW 2,052 between the 2026 floor and cap. For an 8-hour worker, an average daily wage under KRW 110,080 (about KRW 3.38 million a month over a 92-day period) gets the floor, and KRW 113,500 or more (about KRW 3.48 million a month) gets the cap. The result shows which band applies.",
             ],
           },
@@ -7004,7 +7004,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "What happens if you find a job early",
             body: [
-              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). Enter a reemployment date to see the remaining days and the estimated allowance.",
+              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). The new job must also start after 14 days have passed since you registered as unemployed. That is a separate rule from the 7-day waiting period, so a job that starts right after the waiting period but within 14 days does not qualify. Enter a reemployment date to check both rules and see the remaining days and the estimated allowance.",
               "Detailed conditions apply, such as being rehired by your previous employer or having received the allowance recently. The job center confirms whether it is paid.",
             ],
           },
@@ -7078,7 +7078,7 @@ export const TOOLS: Tool[] = [
         {
           question: "실업급여를 받다가 재취업하면 어떻게 되나요?",
           answer:
-            "재취업하면 구직급여는 끝나지만, 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다.",
+            "재취업하면 구직급여는 끝나지만, 실업 신고일부터 14일이 지난 뒤 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다. 14일 요건은 대기기간 7일과 별개입니다.",
         },
         {
           question: "입력한 임금이 서버로 전송되나요?",
@@ -7110,7 +7110,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What happens if I find a job while receiving the benefit?",
           answer:
-            "The benefit stops, but if you start the new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance.",
+            "The benefit stops, but if the new job starts more than 14 days after you registered as unemployed, with at least half of your benefit days left, and you stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance. The 14-day rule is separate from the 7-day waiting period.",
         },
         {
           question: "Is the pay I enter sent to a server?",

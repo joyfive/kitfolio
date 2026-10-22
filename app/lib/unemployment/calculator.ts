@@ -5,6 +5,7 @@
    기초일액    = max(1일 평균임금, 1일 통상임금), 상한 적용      (고용보험법 제45조)
    60% 금액    = floor(min(기초일액, 상한) × 60%)               (제46조)
    하한        = floor(최저임금 시급 × 1일 소정근로시간 × 80%)   (제46조)
+                 소정근로시간은 1시간 미만 끝수를 올림하고 최대 8시간
    구직급여일액 = max(60% 금액, 하한)
    총 예상액   = 구직급여일액 × 소정급여일수                      ([별표 1])
 
@@ -133,6 +134,12 @@ export type EarlyReemployment = {
   paidDays: number;
   remainingDays: number;
   /** 남은 일수가 소정급여일수의 1/2 이상인가 */
+  enoughRemaining: boolean;
+  /** 실업 신고일부터 14일이 지나기 전에 재취업했는가 */
+  tooSoon: boolean;
+  /** 14일 요건을 채우는 가장 이른 재취업일 */
+  earliestDate: string;
+  /** 두 요건을 모두 채웠는가 */
   eligible: boolean;
   amount: number;
 };
@@ -194,7 +201,9 @@ export function dailyBenefit(
 ): DailyBenefit {
   const usedOrdinaryWage = ordinaryDaily > averageDaily;
   const baseDaily = usedOrdinaryWage ? ordinaryDaily : averageDaily;
-  const floorHours = Math.min(pos(dailyHours) || policy.maxFloorHours, policy.maxFloorHours);
+  // 1시간 미만 끝수는 올림 (7.5시간 → 8시간). 입력 소수 오차로 7시간이 8시간이 되지 않게 여유를 둔다.
+  const hours = pos(dailyHours) ? Math.ceil(pos(dailyHours) - 1e-9) : policy.maxFloorHours;
+  const floorHours = Math.min(hours, policy.maxFloorHours);
   // 원 미만 절사. 정수 연산으로 부동소수 오차를 피한다 (113,500 × 0.6 = 68,100).
   const pct = (n: number, rate: number) => Math.floor((n * Math.round(rate * 100)) / 100);
   const floor = pct(policy.minWageHourly * floorHours, policy.floorRate);
@@ -347,11 +356,16 @@ export function calculateUnemployment(
       benefitDays,
     );
     const remainingDays = benefitDays - paidDays;
-    const eligible = remainingDays >= benefitDays * EARLY_REEMPLOYMENT.minRemainingRatio;
+    const enoughRemaining = remainingDays >= benefitDays * EARLY_REEMPLOYMENT.minRemainingRatio;
+    const tooSoon = diffDays(applyBase, reemploy) < EARLY_REEMPLOYMENT.minDaysAfterApply;
+    const eligible = enoughRemaining && !tooSoon;
     early = {
       date: toIso(reemploy),
       paidDays,
       remainingDays,
+      enoughRemaining,
+      tooSoon,
+      earliestDate: toIso(addDays(applyBase, EARLY_REEMPLOYMENT.minDaysAfterApply)),
       eligible,
       amount: eligible
         ? Math.floor(remainingDays * benefit.daily * EARLY_REEMPLOYMENT.payRatio)

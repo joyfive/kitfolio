@@ -50,6 +50,20 @@ export const UNEMPLOYMENT_SOURCES: {
   },
   {
     label: {
+      ko: "국가법령정보센터 · 고용노동부 행정규칙 (구직급여 하한액 산정의 1일 소정근로시간: 1시간 미만 올림)",
+      en: "Korean Law Information Center · Ministry of Employment and Labor administrative rule (daily contracted hours for the benefit floor: part hours round up)",
+    },
+    url: "https://www.law.go.kr/LSW/admRulInfoP.do?admRulSeq=2100000232090",
+  },
+  {
+    label: {
+      ko: "고용24 · 조기재취업수당 안내 (실업 신고일부터 14일 경과 후 재취업)",
+      en: "Work24 · Early reemployment allowance guide (new job after 14 days from registering as unemployed)",
+    },
+    url: "https://ei.work24.go.kr/ei/eih/eg/pb/pbPersonBnef/retrievePb0208Info.do",
+  },
+  {
+    label: {
       ko: "고용24 · 구직급여 안내",
       en: "Work24 · Job-seeking benefit guide",
     },
