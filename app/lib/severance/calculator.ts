@@ -16,16 +16,25 @@
    사용자가 직접 환산하지 않도록 한다).
    평균임금 산정기간은 퇴직일 직전 3개월: [퇴직일 - 3개월, 마지막 근무일].
 
+   평균임금 산정은 app/lib/wage/average.ts 공용 엔진을 쓴다
+   (실업급여 계산기의 구직급여 기초일액과 같은 계산).
+
    모든 계산은 브라우저 안에서만 이루어진다. 서버 전송 없음.
    ============================================================ */
+
+import {
+  averageDailyWage,
+  diffDays,
+  parseDate,
+  toIso,
+} from "../wage/average";
+
+export { toIso };
 
 /** 법정 퇴직금 지급 요건: 계속근로기간 1년 이상 */
 export const MIN_SERVICE_DAYS = 365;
 /** 법정 퇴직금 지급 요건: 4주 평균 1주 소정근로시간 15시간 이상 */
 export const MIN_WEEKLY_HOURS = 15;
-
-/** 평균임금에 반영하는 상여금·연차수당 비율 (3개월분) */
-const THREE_MONTH_SHARE = 3 / 12;
 
 export type SeveranceInput = {
   /** 입사일 (YYYY-MM-DD) */
@@ -80,48 +89,6 @@ export type SeveranceResult = {
   reasons: IneligibleReason[];
 };
 
-const MS_PER_DAY = 86_400_000;
-
-/** "YYYY-MM-DD" → UTC 자정 Date (타임존 영향 제거) */
-function parseDate(iso: string): Date | null {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
-  if (!m) return null;
-  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
-  const dt = new Date(Date.UTC(y, mo - 1, d));
-  if (
-    dt.getUTCFullYear() !== y ||
-    dt.getUTCMonth() !== mo - 1 ||
-    dt.getUTCDate() !== d
-  ) {
-    return null;
-  }
-  return dt;
-}
-
-/** Date → "YYYY-MM-DD" */
-export function toIso(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-/** 두 날짜 사이의 일수 (b - a) */
-function diffDays(a: Date, b: Date): number {
-  return Math.round((b.getTime() - a.getTime()) / MS_PER_DAY);
-}
-
-function addDays(d: Date, n: number): Date {
-  return new Date(d.getTime() + n * MS_PER_DAY);
-}
-
-/** n개월 이동. 이동한 달에 같은 일자가 없으면 그 달의 말일로 맞춘다.
- *  (5월 31일에서 3개월 전 → 2월 28일. 자동 이월로 3월로 넘어가지 않게 한다) */
-function addMonths(d: Date, n: number): Date {
-  const y = d.getUTCFullYear();
-  const m = d.getUTCMonth() + n;
-  const day = d.getUTCDate();
-  const lastDay = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
-  return new Date(Date.UTC(y, m, Math.min(day, lastDay)));
-}
-
 /** 두 날짜 사이를 연·월·일로 분해 (from 포함, to 미포함 = 재직일수와 같은 기준) */
 function splitDuration(from: Date, to: Date) {
   let years = to.getUTCFullYear() - from.getUTCFullYear();
@@ -158,30 +125,20 @@ export function calculateSeverance(
   if (!join || !lastWork) return null;
   if (diffDays(join, lastWork) < 0) return null;
 
-  const wage3m = toNumber(input.wage3m);
-  if (wage3m <= 0) return null;
+  const avg = averageDailyWage({
+    lastWork,
+    join,
+    wage3m: input.wage3m,
+    annualBonus: input.annualBonus,
+    annualLeaveAllowance: input.annualLeaveAllowance,
+    dailyOrdinaryWage: input.dailyOrdinaryWage,
+  });
+  if (!avg) return null;
 
   // 퇴직일 = 마지막 근무일 다음 날
-  const retire = addDays(lastWork, 1);
+  const retire = avg.eventDate;
   const serviceDays = diffDays(join, retire);
-
-  // 평균임금 산정기간: 퇴직일 직전 3개월. 입사일보다 앞설 수는 없다.
-  const threeMonthsBefore = addMonths(retire, -3);
-  const periodStartDate =
-    diffDays(join, threeMonthsBefore) < 0 ? join : threeMonthsBefore;
-  const periodDays = diffDays(periodStartDate, retire);
-  if (periodDays <= 0) return null;
-
-  const bonusApplied = Math.round(toNumber(input.annualBonus) * THREE_MONTH_SHARE);
-  const leaveApplied = Math.round(
-    toNumber(input.annualLeaveAllowance) * THREE_MONTH_SHARE,
-  );
-  const wageTotal = wage3m + bonusApplied + leaveApplied;
-
-  const averageDailyWage = Math.round(wageTotal / periodDays);
-  const ordinary = Math.round(toNumber(input.dailyOrdinaryWage));
-  const usedOrdinaryWage = ordinary > averageDailyWage;
-  const appliedDailyWage = usedOrdinaryWage ? ordinary : averageDailyWage;
+  const appliedDailyWage = avg.appliedDailyWage;
 
   const severance = Math.round((appliedDailyWage * 30 * serviceDays) / 365);
 
@@ -195,15 +152,15 @@ export function calculateSeverance(
     retireDate: toIso(retire),
     service: splitDuration(join, retire),
     serviceDays,
-    periodStart: toIso(periodStartDate),
-    periodEnd: toIso(lastWork),
-    periodDays,
-    bonusApplied,
-    leaveApplied,
-    wageTotal,
-    averageDailyWage,
+    periodStart: toIso(avg.periodStart),
+    periodEnd: toIso(avg.periodEnd),
+    periodDays: avg.periodDays,
+    bonusApplied: avg.bonusApplied,
+    leaveApplied: avg.leaveApplied,
+    wageTotal: avg.wageTotal,
+    averageDailyWage: avg.averageDailyWage,
     appliedDailyWage,
-    usedOrdinaryWage,
+    usedOrdinaryWage: avg.usedOrdinaryWage,
     severance,
     eligible: reasons.length === 0,
     reasons,
