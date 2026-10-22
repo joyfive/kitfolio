@@ -39,7 +39,9 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
 import { INCOMETAX_SOURCES, INCOMETAX_VERIFIED_AT } from "./incometax/sources";
+import { VAT_SOURCES, VAT_VERIFIED_AT } from "./vat/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
+import { UNEMPLOYMENT_SOURCES, UNEMPLOYMENT_VERIFIED_AT } from "./unemployment/sources";
 import { KST_UTC_SOURCES, KST_UTC_VERIFIED_AT } from "./kstutc/sources";
 import { SLACKMSG_SOURCES, SLACKMSG_VERIFIED_AT } from "./slackmsg/sources";
 
@@ -5320,7 +5322,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: SEVERANCE_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "퇴직금 계산기", en: "Severance Pay Calculator" },
-    relatedTools: ["salary-calculator", "flex-work-calculator"],
+    relatedTools: ["salary-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
     seo: {
       ko: {
         title: "퇴직금 계산기 | 평균임금으로 예상 퇴직금 계산",
@@ -5675,7 +5677,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: FREELANCER_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "프리랜서 3.3% 계산기", en: "Korea Freelancer Tax Calculator (3.3%)" },
-    relatedTools: ["salary-calculator", "severance-pay-calculator", "income-tax-calculator"],
+    relatedTools: ["income-tax-calculator", "vat-calculator", "salary-calculator"],
     seo: {
       ko: {
         title: "프리랜서 3.3% 계산기 | 실수령액·역산·8.8% 기타소득",
@@ -6208,6 +6210,300 @@ export const TOOLS: Tool[] = [
     },
   },
   {
+    slug: "vat-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["small-business-owner", "designer", "developer", "office-worker"],
+    ico: "VAT",
+    ready: true,
+    indexable: false,
+    verifiedAt: VAT_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "부가세 계산기", en: "Korea VAT Calculator" },
+    relatedTools: ["freelancer-tax-calculator", "salary-calculator", "ad-metrics-calculator"],
+    seo: {
+      ko: {
+        title: "부가세 계산기 | 부가세 포함·별도 역산 · 간이과세 납부세액",
+        description:
+          "공급가액을 넣으면 부가세 10%와 합계를, 부가세 포함 합계를 넣으면 공급가액을 역산합니다. 영수증 방식과 세금계산서 방식에서 1원이 달라지는 이유까지 보여주고, 간이과세자는 업종별 부가가치율·매입공제·카드 발행세액공제·납부 면제 기준으로 실제 낼 부가세를 계산합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "부가세 계산기",
+          "부가세 계산",
+          "부가세 포함 금액 계산",
+          "부가세 별도 계산",
+          "부가세 역산",
+          "공급가액 계산",
+          "간이과세자 부가세 계산",
+          "간이과세 납부면제",
+          "간이과세자 부가가치율",
+        ],
+      },
+      en: {
+        title: "Korea VAT Calculator | VAT Included, Excluded and Simplified",
+        description:
+          "Enter a supply value to get 10% Korean VAT and the total, or enter a VAT-inclusive total to work back to the supply value, including why receipts and tax invoices can differ by 1 won. Simplified taxpayers get the VAT they actually owe from the value-added ratio, purchase and card credits and the payment exemption. Everything runs in your browser.",
+        keywords: [
+          "korea vat calculator",
+          "korean vat 10% calculator",
+          "vat included price korea",
+          "reverse vat calculator korea",
+          "korea simplified taxpayer vat",
+          "korea vat exemption 48 million",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "공급가액과 부가세 포함 합계를 서로 계산하고, 간이과세자의 업종별 납부세액과 납부 면제 여부를 계산.",
+        description:
+          "공급가액을 넣으면 부가세 10%와 합계를, 부가세 포함 합계를 넣으면 공급가액을 역산합니다. 영수증 방식과 세금계산서 방식에서 1원이 달라지는 이유까지 보여주고, 간이과세자는 업종별 부가가치율·매입공제·카드 발행세액공제·납부 면제 기준으로 실제 낼 부가세를 계산합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "일반과세 또는 간이과세 탭 선택",
+          "공급가액·합계금액, 또는 업종과 연 매출·매입 입력",
+          "부가세와 합계(또는 공급가액), 간이과세 납부세액과 면제 여부 확인",
+        ],
+        aeo: {
+          what: "부가세 계산기는 공급가액과 부가세 포함 합계금액을 서로 바꿔 계산하고, 간이과세자라면 업종별 부가가치율로 실제 납부할 부가가치세와 납부 면제 여부를 계산하는 도구입니다.",
+          who: "견적서와 세금계산서를 쓰는 1인 사업자와 사업자등록한 프리랜서, 카드 영수증의 공급가액을 확인하는 실무 담당자, 그리고 부가세 신고 전에 납부액을 미리 알고 싶은 간이과세자를 위한 도구입니다.",
+          how: "일반과세는 공급가액에 세율 10%를 곱해 부가세를 구하고, 합계에서는 100/110을 곱해 공급가액을 역산합니다. 간이과세는 공급대가에 업종별 부가가치율과 10%를 곱한 뒤 매입공제 0.5%와 카드 발행세액공제를 빼고, 연 매출이 4,800만 원 미만이면 납부 면제로 표시합니다.",
+          why: "합계를 1.1로 나눈 값은 반올림 방식과 계산 순서에 따라 1원씩 달라지고, 간이과세자의 부가세는 매출의 10%가 아니라 1.5~4% 수준이라 단순 계산과 크게 다릅니다. 견적·세금계산서 금액과 신고 전 납부액을 몇 초 만에 확인할 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "부가세 포함과 별도는 어떻게 다른가요",
+            body: [
+              "부가가치세의 과세표준은 공급가액이고, 공급가액에는 부가가치세가 포함되지 않습니다(부가가치세법 제29조). 세율은 10%이므로(제30조) 공급가액 100만 원짜리 거래의 부가세는 10만 원, 받는 돈의 합계는 110만 원입니다. 견적서의 '부가세 별도 100만 원'은 실제로 110만 원을 받는다는 뜻입니다.",
+              "'부가세 포함 100만 원'은 합계가 100만 원이라는 뜻이라 공급가액은 909,091원, 부가세는 90,909원입니다. 같은 100만 원이라도 별도인지 포함인지에 따라 받는 금액이 9만 원 넘게 달라지므로, 견적과 계약서에는 어느 쪽인지 반드시 적어 두는 편이 안전합니다.",
+              "간이과세자에게는 '공급대가'라는 말이 자주 나옵니다. 공급대가는 부가세를 포함한 금액으로, 간이과세자의 과세표준과 각종 기준 금액(1억 400만 원·4,800만 원)은 모두 공급대가 기준입니다.",
+            ],
+          },
+          {
+            heading: "합계에서 공급가액을 구할 때 1원이 달라지는 이유",
+            body: [
+              "부가세가 포함되었는지 분명하지 않은 금액은 110분의 100을 곱해 공급가액을 구합니다(부가가치세법 제29조 제7항). 다만 법은 1원 미만을 어떻게 처리할지는 정하지 않아, 실무에서는 두 가지 방식이 함께 쓰입니다.",
+              "영수증·카드 단말기는 보통 합계를 고정하고 합계 × 100 ÷ 110을 반올림해 공급가액을 정한 뒤, 나머지를 부가세로 둡니다. 세금계산서는 공급가액을 먼저 정하고 그 10%에서 1원 미만을 버려 부가세를 붙입니다. 합계 99,999원이면 영수증 방식은 공급가액 90,908원, 세금계산서 방식은 90,909원이 되어 1원이 다릅니다.",
+              "세금계산서 방식으로는 정확히 만들 수 없는 합계도 있습니다. 1원 미만을 버리는 경우 공급가액 19원은 합계 20원, 20원은 22원이 되어 합계 21원을 만드는 공급가액은 없습니다. 금액이 맞지 않을 때는 계산기가 가장 가까운 합계를 함께 보여줍니다.",
+              "컴퓨터에서 합계를 1.1로 나누면 110,000 ÷ 1.1이 99,999.99999로 계산되는 부동소수점 오차도 생깁니다. 이 계산기는 금액을 원 단위 정수로만 다뤄 이런 오차가 없습니다.",
+            ],
+          },
+          {
+            heading: "간이과세자는 부가세를 어떻게 계산하나요",
+            body: [
+              "간이과세자의 납부세액은 공급대가 × 업종별 부가가치율 × 10%입니다(부가가치세법 제63조 제2항). 부가가치율은 소매업·음식점업 15%, 제조업 20%, 숙박업 25%, 건설업·운수업·정보통신업과 그 밖의 서비스업 30%, 금융·전문서비스·부동산임대업 등 40%로 정해져 있습니다(시행령 제111조 제2항). 그래서 매출 대비 실제 부담은 1.5~4%입니다.",
+              "세금계산서나 카드 영수증을 받은 매입이 있으면 그 공급대가의 0.5%를 납부세액에서 뺍니다(제63조 제3항). 신용카드·현금영수증으로 발행한 매출은 1.3%(연 1,000만 원 한도, 2026년 12월 31일까지)를 공제받을 수 있습니다(제46조). 2027년부터는 1%·연 500만 원으로 돌아갑니다.",
+              "공제 합계가 납부세액보다 많아도 남는 금액은 돌려받지 않습니다(제63조 제6항). 매입이 많은 달에 환급을 받을 수 있는 일반과세자와 가장 크게 다른 점입니다.",
+            ],
+          },
+          {
+            heading: "납부 면제와 과세유형 전환은 언제 일어나나요",
+            body: [
+              "간이과세자는 한 해(1월~12월) 공급대가 합계가 4,800만 원 미만이면 납부 의무가 면제됩니다(부가가치세법 제69조 제1항). 면제되는 것은 납부뿐이라 신고는 해야 합니다. 면제 대상이 실수로 납부했다면 돌려받습니다(같은 조 제4항).",
+              "올해 새로 시작했거나 휴업·폐업한 경우에는 실제 영업한 기간의 공급대가를 12개월로 환산해 4,800만 원 미만인지 판단하고, 1개월 미만은 1개월로 셉니다(같은 조 제3항). 6개월 동안 2,500만 원을 벌었다면 연 5,000만 원으로 보아 면제 대상이 아닙니다.",
+              "간이과세는 직전 연도 공급대가가 1억 400만 원 미만인 개인사업자에게 적용됩니다(제61조 제1항, 시행령 제109조 제1항). 기준을 넘긴 해가 끝나도 바로 바뀌지 않고 다음 해 7월 1일부터 일반과세자로 전환됩니다. 부동산임대업과 과세유흥장소는 기준이 4,800만 원이고, 도매업·전문자격사업 등 일부 업종은 매출과 관계없이 간이과세를 적용받지 못합니다(시행령 제109조 제2항).",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "견적 100만 원, 부가세 별도",
+            input: "일반과세 · 공급가액 → 합계 · 1,000,000원",
+            result: "부가세 100,000원 · 합계 1,100,000원",
+            note: "견적서에 '부가세 별도'로 적으면 받는 돈은 110만 원입니다. 세금계산서에도 공급가액 100만 원과 세액 10만 원이 나뉘어 적힙니다.",
+          },
+          {
+            title: "카드 영수증 99,999원의 공급가액",
+            input: "일반과세 · 합계 → 공급가액 · 99,999원 · 1원 미만 절사",
+            result: "영수증 방식 공급가액 90,908원 · 부가세 9,091원 / 세금계산서 방식 공급가액 90,909원 · 부가세 9,090원",
+            note: "같은 합계에서 공급가액이 1원 다릅니다. 장부와 세금계산서 금액이 1원씩 맞지 않을 때 대부분 이 차이입니다.",
+          },
+          {
+            title: "정보통신업 간이과세자, 연 매출 6,000만 원",
+            input: "간이과세 · 정보통신업(30%) · 매출 60,000,000원 · 세금계산서 매입 22,000,000원",
+            result: "납부세액 1,800,000원 · 매입공제 110,000원 · 납부할 부가세 1,690,000원",
+            note: "같은 매출·매입을 일반과세자로 계산하면 매출세액에서 매입세액을 뺀 3,454,540원입니다. 간이과세자의 부담이 절반 수준입니다.",
+          },
+          {
+            title: "연 매출 4,500만 원 음식점",
+            input: "간이과세 · 음식점업(15%) · 매출 45,000,000원 · 매입 15,000,000원",
+            result: "공제 후 세액 600,000원 · 연 매출 4,800만 원 미만이라 납부 면제",
+            note: "납부는 면제되지만 다음 해 1월 확정신고는 해야 합니다. 매출이 4,800만 원을 넘는 해에는 같은 계산으로 나온 금액을 냅니다.",
+          },
+        ],
+        sources: VAT_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "일반과세자의 분기별 신고 세액(그 기간 전체 매출세액 − 매입세액)은 계산하지 않습니다. 일반과세 탭은 거래 한 건의 공급가액·부가세·합계 계산에 쓰는 도구입니다.",
+          "의제매입세액공제, 전자세금계산서 발급세액공제, 재고납부세액, 가산세는 반영하지 않습니다.",
+          "간이과세는 업종 하나만 계산합니다. 둘 이상의 업종을 겸영하면 업종별로 나눠 계산한 금액의 합계가 납부세액입니다(부가가치세법 제63조 제2항).",
+          "영세율·면세 거래와 과세·면세 겸영 사업자의 안분 계산은 다루지 않습니다.",
+          "업종은 시행령의 부가가치율 표 구분 기준으로 고릅니다. 실제 업종 판정과 간이과세 배제 업종 해당 여부는 한국표준산업분류와 재정경제부령에 따르므로 사업자등록증의 업태·종목을 확인해야 합니다.",
+          "카드 발행세액공제는 입력한 카드·현금영수증 매출 전체에 적용합니다. 공제 대상 사업자 요건(부가가치세법 제46조 제1항 제1호)은 따로 확인해야 합니다.",
+        ],
+      },
+      en: {
+        card: "Convert between supply value and VAT-inclusive totals, and estimate a simplified taxpayer's VAT and payment exemption in Korea.",
+        description:
+          "Enter a supply value to get 10% Korean VAT and the total, or enter a VAT-inclusive total to work back to the supply value, including why receipts and tax invoices can differ by 1 won. Simplified taxpayers get the VAT they actually owe from the value-added ratio, purchase and card credits and the payment exemption. Everything runs in your browser.",
+        howItWorks: [
+          "Choose the general or simplified taxpayer tab",
+          "Enter a supply value or total, or your business type with annual sales and purchases",
+          "See VAT and the total (or supply value), or the simplified VAT and whether you are exempt",
+        ],
+        aeo: {
+          what: "A Korea VAT Calculator converts between a supply value and a VAT-inclusive total at Korea's 10% VAT rate, and for simplified taxpayers calculates the VAT actually owed from the business type's value-added ratio and whether payment is exempt.",
+          who: "It is for sole proprietors and VAT-registered freelancers in Korea who write quotes and tax invoices, staff who check the supply value on card receipts, and simplified taxpayers who want to know their VAT before filing.",
+          how: "For general taxpayers it multiplies the supply value by 10% to get VAT, and multiplies a total by 100/110 to get the supply value. For simplified taxpayers it multiplies sales by the value-added ratio and 10%, subtracts the 0.5% purchase credit and the card credit, and flags payment as exempt when annual sales are under 48 million won.",
+          why: "Dividing a total by 1.1 can be off by 1 won depending on rounding and order, and a simplified taxpayer's VAT is around 1.5% to 4% of sales rather than 10%. It answers both in seconds before you quote, invoice or file.",
+        },
+        guide: [
+          {
+            heading: "VAT included vs VAT excluded",
+            body: [
+              "In Korea the VAT tax base is the supply value, which does not include VAT (VAT Act, Art. 29). The rate is 10% (Art. 30), so a deal with a supply value of 1,000,000 won carries 100,000 won of VAT and a total of 1,100,000 won. A quote of '1,000,000 won, VAT excluded' means you actually collect 1,100,000 won.",
+              "'1,000,000 won, VAT included' means the total is 1,000,000 won, so the supply value is 909,091 won and the VAT 90,909 won. The same headline figure differs by over 90,000 won depending on which you mean, so state it on quotes and contracts.",
+              "For simplified taxpayers the term 'supply price including VAT' (gongkeup daega) comes up often. It is the amount with VAT included, and both the simplified tax base and the thresholds (104 million and 48 million won) are measured on it.",
+            ],
+          },
+          {
+            heading: "Why the supply value can differ by 1 won",
+            body: [
+              "When it is unclear whether an amount includes VAT, the supply value is that amount times 100/110 (VAT Act, Art. 29(7)). The law does not say how to treat fractions of a won, so two methods are used in practice.",
+              "Receipts and card terminals usually fix the total, round total × 100 ÷ 110 to set the supply value and leave the rest as VAT. Tax invoices set the supply value first and add 10% of it with anything under 1 won dropped. For a total of 99,999 won the receipt method gives a supply value of 90,908 won and the invoice method 90,909 won.",
+              "Some totals cannot be produced by the invoice method at all. Rounding down, a supply value of 19 won gives a total of 20 and 20 gives 22, so nothing produces 21. When that happens the calculator shows the nearest totals you can make.",
+              "Dividing by 1.1 in a computer also introduces floating-point error: 110,000 ÷ 1.1 comes out as 99,999.99999. This calculator works only in whole won, so that error never appears.",
+            ],
+          },
+          {
+            heading: "How a simplified taxpayer's VAT is calculated",
+            body: [
+              "A simplified taxpayer's tax is sales including VAT × the business type's value-added ratio × 10% (VAT Act, Art. 63(2)). The ratios are 15% for retail and restaurants, 20% for manufacturing, 25% for lodging, 30% for construction, transport, information and communications and other services, and 40% for finance, professional services, real estate leasing and similar (Enforcement Decree, Art. 111(2)). The real burden is about 1.5% to 4% of sales.",
+              "Purchases backed by tax invoices or card receipts reduce the tax by 0.5% of their VAT-inclusive amount (Art. 63(3)). Sales paid by credit card or cash receipt earn a 1.3% credit, capped at 10 million won a year, through December 31, 2026 (Art. 46). From 2027 it returns to 1% with a 5 million won cap.",
+              "If the credits exceed the tax, the excess is not refunded (Art. 63(6)). That is the biggest difference from general taxpayers, who can get a refund in a period with heavy purchases.",
+            ],
+          },
+          {
+            heading: "Payment exemption and switching taxpayer type",
+            body: [
+              "A simplified taxpayer whose sales for the year (January to December) are under 48 million won is exempt from paying (VAT Act, Art. 69(1)). Only payment is exempt: you still have to file. If you pay while exempt, the tax office refunds it (Art. 69(4)).",
+              "If you opened, suspended or closed during the year, sales for the months you operated are scaled to 12 months, with a partial month counted as one (Art. 69(3)). Earning 25 million won in six months counts as 50 million a year, so you are not exempt.",
+              "Simplified taxation applies to individuals whose previous-year sales were under 104 million won (Art. 61(1), Enforcement Decree Art. 109(1)). Crossing it does not switch you right away: you become a general taxpayer from July 1 of the following year. The threshold is 48 million won for real estate leasing and taxable entertainment venues, and some businesses, such as wholesale and licensed professions, cannot use simplified taxation at any size (Enforcement Decree, Art. 109(2)).",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A 1,000,000 won quote, VAT excluded",
+            input: "General · supply value → total · 1,000,000 won",
+            result: "VAT 100,000 won · total 1,100,000 won",
+            note: "Quoting 'VAT excluded' means you collect 1,100,000 won. The tax invoice shows the supply value and the VAT on separate lines.",
+          },
+          {
+            title: "The supply value of a 99,999 won card receipt",
+            input: "General · total → supply value · 99,999 won · round down",
+            result: "Receipt method: supply 90,908 · VAT 9,091 / Invoice method: supply 90,909 · VAT 9,090",
+            note: "The same total gives supply values 1 won apart. When books and tax invoices disagree by a won, this is usually why.",
+          },
+          {
+            title: "Simplified taxpayer in information and communications, 60 million won sales",
+            input: "Simplified · information and communications (30%) · sales 60,000,000 · invoiced purchases 22,000,000",
+            result: "Tax 1,800,000 · purchase credit 110,000 · VAT to pay 1,690,000 won",
+            note: "The same sales and purchases as a general taxpayer give output VAT minus input VAT of 3,454,540 won, roughly double.",
+          },
+          {
+            title: "A restaurant with 45 million won annual sales",
+            input: "Simplified · restaurant (15%) · sales 45,000,000 · purchases 15,000,000",
+            result: "Tax after credits 600,000 won · sales under 48 million won, so payment is exempt",
+            note: "Payment is exempt, but the January return still has to be filed. In a year when sales pass 48 million won, the same calculation is what you pay.",
+          },
+        ],
+        sources: VAT_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "It does not compute a general taxpayer's quarterly return (all output VAT minus all input VAT for the period). The general tab is for the supply value, VAT and total of a single deal.",
+          "The deemed input credit, e-invoice issuance credit, inventory tax adjustment and penalties are not included.",
+          "Simplified taxation is calculated for one business type. With several business types, the tax is the sum calculated per type (VAT Act, Art. 63(2)).",
+          "Zero-rated and exempt supplies, and apportionment for businesses with both taxable and exempt sales, are not covered.",
+          "Business types follow the groups in the decree's value-added ratio table. The actual classification and whether a business is barred from simplified taxation follow the Korean Standard Industrial Classification and ministry rules, so check the type on your business registration.",
+          "The card credit is applied to all card and cash receipt sales entered. Whether your business qualifies (VAT Act, Art. 46(1)(1)) must be checked separately.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "부가세 포함 110만 원이면 공급가액은 얼마인가요?",
+          answer:
+            "공급가액 1,000,000원, 부가세 100,000원입니다. 부가세 포함 금액에 100/110을 곱하면 공급가액이 나옵니다. 금액에 따라 1원 미만이 생기면 영수증 방식과 세금계산서 방식의 공급가액이 1원 다를 수 있으며, 계산기의 '합계 → 공급가액'에서 두 결과를 함께 볼 수 있습니다.",
+        },
+        {
+          question: "부가세 별도와 부가세 포함은 무엇이 다른가요?",
+          answer:
+            "부가세 별도는 적힌 금액이 공급가액이고 10%를 더 받는다는 뜻이고, 부가세 포함은 적힌 금액이 이미 부가세를 포함한 합계라는 뜻입니다. 100만 원을 기준으로 별도면 110만 원을 받고, 포함이면 공급가액 909,091원과 부가세 90,909원으로 나뉩니다.",
+        },
+        {
+          question: "같은 금액인데 왜 공급가액이 1원 다르게 나오나요?",
+          answer:
+            "법은 100/110을 곱하라고만 정하고 1원 미만 처리는 정하지 않아서입니다. 영수증은 합계를 고정하고 공급가액을 반올림하고, 세금계산서는 공급가액의 10%에서 1원 미만을 버려 부가세를 붙입니다. 합계 99,999원이면 공급가액이 90,908원과 90,909원으로 갈립니다.",
+        },
+        {
+          question: "간이과세자 부가세는 얼마나 나오나요?",
+          answer:
+            "매출(공급대가) × 업종별 부가가치율 × 10%에서 매입공제 0.5%와 카드 발행세액공제를 뺀 금액입니다. 부가가치율이 15~40%라 매출 대비 1.5~4% 수준입니다. 예를 들어 정보통신업(30%)에서 연 매출 6,000만 원, 세금계산서 매입 2,200만 원이면 1,690,000원입니다.",
+        },
+        {
+          question: "매출이 4,800만 원 미만이면 신고를 안 해도 되나요?",
+          answer:
+            "아니요. 간이과세자의 연 매출(공급대가)이 4,800만 원 미만이면 납부 의무만 면제되고 신고는 해야 합니다. 올해 개업했거나 휴업·폐업했다면 영업한 기간의 매출을 12개월로 환산해 판단합니다.",
+        },
+        {
+          question: "입력한 금액이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 금액은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the supply value of 1,100,000 won including VAT?",
+          answer:
+            "The supply value is 1,000,000 won and the VAT 100,000 won. Multiply a VAT-inclusive amount by 100/110 to get the supply value. When the result has a fraction of a won, the receipt and tax invoice methods can differ by 1 won; 'Total → supply value' in the calculator shows both.",
+        },
+        {
+          question: "What is the difference between VAT excluded and VAT included?",
+          answer:
+            "VAT excluded means the stated amount is the supply value and 10% is added on top. VAT included means the stated amount already contains VAT. For 1,000,000 won, excluded means you collect 1,100,000 won, while included splits into a 909,091 won supply value and 90,909 won of VAT.",
+        },
+        {
+          question: "Why does the same total give supply values 1 won apart?",
+          answer:
+            "The law only says to multiply by 100/110 and does not say how to treat fractions of a won. Receipts fix the total and round the supply value; tax invoices drop anything under 1 won from 10% of the supply value and add it. For a 99,999 won total the supply value comes out as 90,908 or 90,909 won.",
+        },
+        {
+          question: "How much VAT does a simplified taxpayer pay?",
+          answer:
+            "Sales including VAT × the business type's value-added ratio × 10%, minus the 0.5% purchase credit and the card credit. With ratios of 15% to 40%, that is about 1.5% to 4% of sales. For example, an information and communications business (30%) with 60 million won in sales and 22 million won of invoiced purchases pays 1,690,000 won.",
+        },
+        {
+          question: "If my sales are under 48 million won, do I still need to file?",
+          answer:
+            "Yes. When a simplified taxpayer's annual sales including VAT are under 48 million won, only payment is exempt; the return must still be filed. If you opened, suspended or closed during the year, sales for the months you operated are scaled to 12 months.",
+        },
+        {
+          question: "Is the amount I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "부가세 계산기",
+        subtitle: "부가세 포함·별도 역산과 간이과세 납부세액",
+      },
+      en: {
+        title: "Korea VAT Calculator",
+        subtitle: "VAT included or excluded, and simplified taxpayer VAT",
+      },
+    },
+  },
+  {
     slug: "annual-leave-calculator",
     layout: "card",
     cat: "text",
@@ -6218,7 +6514,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: ANNUAL_LEAVE_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "연차 계산기", en: "Korea Annual Leave Calculator" },
-    relatedTools: ["severance-pay-calculator", "flex-work-calculator", "salary-calculator"],
+    relatedTools: ["severance-pay-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
     seo: {
       ko: {
         title: "연차 계산기 | 입사일·회계연도 기준 연차 개수와 퇴사 정산",
@@ -6508,6 +6804,329 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Korea Annual Leave Calculator",
         subtitle: "Days earned, next accrual and the calendar-year shortfall",
+      },
+    },
+  },
+  {
+    slug: "unemployment-benefit-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["office-worker", "job-seeker", "small-business-owner"],
+    ico: "60%",
+    ready: true,
+    indexable: false,
+    verifiedAt: UNEMPLOYMENT_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "실업급여 계산기", en: "Korea Unemployment Benefit Calculator" },
+    relatedTools: ["severance-pay-calculator", "annual-leave-calculator", "salary-calculator"],
+    seo: {
+      ko: {
+        title: "실업급여 계산기 | 2026 상한액·하한액 반영 구직급여 금액과 수급 기간",
+        description:
+          "퇴직 전 3개월 임금과 이직일 당시 나이, 고용보험 가입기간을 넣으면 고용보험법에 따라 구직급여 1일 금액과 받을 수 있는 일수, 총액을 계산합니다. 2026년 상한액 68,100원과 하한액 66,048원을 적용하고, 수급기간 12개월 안에 다 받으려면 언제까지 신청해야 하는지와 조기재취업수당까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "실업급여 계산기",
+          "구직급여 계산",
+          "실업급여 상한액",
+          "실업급여 하한액",
+          "실업급여 기간",
+          "소정급여일수",
+          "실업급여 조건",
+          "실업급여 신청 기한",
+          "조기재취업수당",
+        ],
+      },
+      en: {
+        title: "Korea Unemployment Benefit Calculator | Daily Amount and Days",
+        description:
+          "Enter your last three months of pay, your age on the day you left and how long you were insured to estimate Korea's job-seeking (unemployment) benefit under the Employment Insurance Act: the daily amount, the number of days and the total. It applies the 2026 cap of KRW 68,100 and floor of KRW 66,048, shows the last day to apply to receive every day within the 12-month benefit period, and estimates the early reemployment allowance. Everything runs in your browser.",
+        keywords: [
+          "korea unemployment benefit calculator",
+          "korea job seeking benefit",
+          "korea unemployment benefit amount",
+          "korea unemployment benefit 2026",
+          "employment insurance act korea",
+          "korea unemployment benefit days",
+          "early reemployment allowance korea",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "퇴직 전 임금·나이·가입기간으로 구직급여 1일 금액과 총액, 다 받기 위한 신청 마감일을 계산합니다.",
+        description:
+          "퇴직 전 3개월 임금과 이직일 당시 나이, 고용보험 가입기간을 넣으면 고용보험법에 따라 구직급여 1일 금액과 받을 수 있는 일수, 총액을 계산합니다. 2026년 상한액 68,100원과 하한액 66,048원을 적용하고, 수급기간 12개월 안에 다 받으려면 언제까지 신청해야 하는지와 조기재취업수당까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "마지막 근무일과 퇴직 전 3개월 임금을 입력",
+          "고용보험 가입기간·나이·이직 사유를 선택",
+          "1일 금액·일수·총액과 신청 마감일을 확인",
+        ],
+        aeo: {
+          what: "실업급여 계산기는 고용보험법에 따라 구직급여 1일 금액(구직급여일액)과 소정급여일수, 예상 총 수급액을 계산하고, 수급기간 안에 다 받기 위한 신청 마감일을 알려주는 도구입니다.",
+          who: "퇴사나 계약 만료를 앞둔 직장인, 권고사직 조건을 비교하는 사람, 이직 준비자, 퇴사자에게 실업급여를 안내하는 소규모 회사 담당자가 씁니다.",
+          how: "퇴직 전 3개월 평균임금의 60%를 1일 금액으로 하되 2026년 이직자는 하루 68,100원을 넘지 않고, 최저임금 × 1일 소정근로시간 × 80%(8시간 기준 66,048원)보다 적지 않게 맞춥니다. 받을 수 있는 일수는 이직일 당시 나이(50세 기준)와 피보험기간으로 [별표 1]에서 120~270일 중 정합니다.",
+          why: "2026년에는 하한과 상한의 차이가 2,052원뿐이라 대부분 하한 또는 상한을 받고, 이직일 다음 날부터 12개월이 지나면 남은 일수가 있어도 지급이 끝납니다. 퇴사 전 생활비를 계획하고 신청 시기를 놓치지 않으려고 씁니다.",
+        },
+        guide: [
+          {
+            heading: "실업급여 1일 금액은 어떻게 정해지나요",
+            body: [
+              "실업급여의 중심인 구직급여는 이직 전 평균임금을 기초일액으로 삼아 그 60%를 하루 금액으로 줍니다(고용보험법 제45조 · 제46조). 평균임금은 마지막 근무일 이전 3개월 동안 받은 임금 총액을 그 기간의 달력 일수로 나눈 금액이며, 퇴직금을 계산할 때와 같은 방식입니다. 통상임금이 평균임금보다 크면 통상임금을 씁니다.",
+              "기초일액에는 상한이 있습니다. 2026년 1월 1일 이후 이직한 사람은 113,500원이 상한이라 하루 금액은 113,500 × 60% = 68,100원을 넘지 않습니다. 2025년까지 이직한 사람은 상한 110,000원, 하루 66,000원입니다.",
+              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다.",
+              "그래서 2026년에는 하한 66,048원과 상한 68,100원 사이가 2,052원뿐입니다. 하루 8시간 근로자는 평균임금이 110,080원 미만(3개월 92일 기준 월 약 338만 원 미만)이면 하한을, 113,500원 이상(월 약 348만 원 이상)이면 상한을 받습니다. 계산기는 결과에 어느 구간인지 표시합니다.",
+            ],
+          },
+          {
+            heading: "실업급여는 며칠 받나요",
+            body: [
+              "받을 수 있는 날 수(소정급여일수)는 이직일 당시 나이와 피보험기간으로 정해집니다(제50조 [별표 1]). 50세 미만은 피보험기간 1년 미만 120일, 1~3년 150일, 3~5년 180일, 5~10년 210일, 10년 이상 240일입니다.",
+              "50세 이상과 장애인은 같은 구간에서 120일, 180일, 210일, 240일, 270일입니다. 나이는 이직일 기준이라 퇴사 직후 50세가 되어도 이직일에 49세였다면 50세 미만 기준을 씁니다.",
+              "피보험기간은 고용보험에 가입한 총기간입니다. 이전 직장의 가입기간도 합산할 수 있지만, 이전에 실업급여를 받았다면 그때까지의 기간은 다시 합산하지 않습니다. 정확한 기간은 고용24의 피보험자격 이력에서 확인할 수 있습니다.",
+            ],
+          },
+          {
+            heading: "받을 수 있는 조건: 180일은 6개월이 아닙니다",
+            body: [
+              "이직일 이전 18개월 동안 피보험단위기간이 180일 이상이어야 합니다(제40조). 피보험단위기간은 달력 일수가 아니라 보수를 받은 날을 셉니다. 주 5일 근무자는 무급휴무일(보통 토요일)이 빠지고 유급 주휴일은 들어가 주당 약 6일이 되므로, 180일을 채우려면 약 7개월이 필요합니다.",
+              "이직 사유도 중요합니다. 권고사직, 경영상 해고, 계약 기간 만료, 폐업처럼 본인 뜻과 달리 일을 그만둔 경우가 대상입니다. 스스로 그만두었다면 임금 체불, 통근이 어려워진 이사, 질병처럼 시행규칙 [별표 2]가 정한 정당한 사유가 있을 때만 받을 수 있습니다.",
+              "수급 자격은 고용센터가 이직 사유와 가입 이력을 확인해 결정합니다. 계산기는 자격을 판정하지 않고, 입력한 조건에서의 예상 금액과 확인할 점을 보여줍니다.",
+            ],
+          },
+          {
+            heading: "언제까지 신청해야 다 받을 수 있나요",
+            body: [
+              "구직급여는 이직일 다음 날부터 12개월 안에서만 지급됩니다(제48조). 이 기간이 지나면 소정급여일수가 남아 있어도 지급이 끝나므로, 신청이 늦으면 그만큼 받지 못합니다.",
+              "신청하면 처음 7일은 대기기간이라 지급하지 않습니다(제49조). 그래서 다 받을 수 있는 마지막 신청일은 수급기간 만료일에서 소정급여일수와 대기기간 7일을 거꾸로 뺀 날입니다. 270일 대상자는 이직 다음 날부터 이 날까지 여유가 약 88일뿐입니다.",
+              "실제 지급은 1~4주마다 실업 인정을 받은 날 단위로 이뤄져 하루 이틀 차이가 날 수 있습니다. 신청은 퇴사 후 되도록 빨리 고용24에서 구직 등록을 하고 수급자격 인정 신청을 하는 것이 안전합니다.",
+            ],
+          },
+          {
+            heading: "재취업하면 남은 실업급여는 어떻게 되나요",
+            body: [
+              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 계산기에 재취업 예정일을 넣으면 그 날 기준 남은 일수와 예상 수당을 보여줍니다.",
+              "이직 전 사업주에게 다시 고용되거나 최근에 조기재취업수당을 받은 이력이 있으면 대상에서 빠지는 등 세부 요건이 있습니다. 실제 지급 여부는 고용센터에서 확인해야 합니다.",
+            ],
+          },
+          {
+            heading: "논의 중인 제도 개편",
+            body: [
+              "2026년 9월 고용보험위원회에 구직급여를 무급휴일을 뺀 주 6일 기준으로 지급하고, 상한액을 하한액에 연동하는 개편안이 보고되었습니다. 총 지급액과 소정급여일수는 그대로지만 매달 받는 금액이 줄고 받는 달력 기간이 늘어나는 방식입니다.",
+              "개편은 법령 개정과 시행일 확정이 남아 있어 계산기는 현행 기준으로만 계산합니다. 시행일이 정해지면 그 날 이후 이직자에게 새 기준을 적용하도록 갱신합니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "월 300만 원 · 35세 · 4년 2개월 근무 · 권고사직",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 9,000,000원 · 1일 8시간 · 피보험기간 4년 2개월 · 50세 미만",
+            result: "1일 66,048원(하한 적용) · 180일 · 총 11,888,640원 · 월 환산 1,849,344원 · 신청 마감 권장 2027-04-28",
+            note: "평균임금은 9,000,000 ÷ 92일 = 97,826원이고 60%는 58,695원이라 하한 66,048원이 적용됩니다.",
+          },
+          {
+            title: "월 400만 원 · 52세 · 12년 근무 · 계약 만료",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 12,000,000원 · 피보험기간 12년 · 50세 이상",
+            result: "1일 68,100원(상한 적용) · 270일 · 총 18,387,000원 · 신청 마감 권장 2027-01-28 (이직 다음 날부터 88일)",
+            note: "수급기간은 2026-11-01 ~ 2027-10-31 입니다. 270일과 대기기간 7일을 받으려면 늦어도 2027년 1월 28일에는 신청해야 합니다.",
+          },
+          {
+            title: "1일 4시간 단시간 근로자",
+            input: "마지막 근무일 2026-10-31 · 3개월 임금 3,600,000원 · 1일 4시간 · 피보험기간 2년 · 50세 미만",
+            result: "1일 33,024원(하한 적용) · 150일 · 총 4,953,600원",
+            note: "하한은 10,320원 × 4시간 × 80% = 33,024원으로 소정근로시간에 비례해 낮아집니다.",
+          },
+          {
+            title: "30일 받고 재취업한 경우의 조기재취업수당",
+            input: "첫 번째 예시 · 신청일 2026-11-01 · 재취업 예정일 2026-12-08",
+            result: "30일 지급 · 남은 150일 · 조기재취업수당 4,953,600원",
+            note: "남은 150일 × 66,048원 × 1/2 입니다. 재취업 후 12개월 이상 계속 일해야 하는 등 세부 요건이 있습니다.",
+          },
+        ],
+        sources: UNEMPLOYMENT_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "수급 여부는 고용센터가 이직 사유와 가입 이력을 확인해 결정합니다. 계산기는 자격을 판정하지 않습니다.",
+          "피보험단위기간 180일은 근무 기간과 주 근무일수로 추정한 값입니다. 정확한 일수는 고용24 피보험자격 이력에서 확인해야 합니다.",
+          "일용근로자, 이직 전 3개월 안에 자격을 두 번 이상 취득한 경우의 예외 산식, 예술인·노무제공자·자영업자 고용보험은 반영하지 않습니다.",
+          "개별·특별·훈련연장급여와 조기재취업수당 외의 취업촉진수당은 계산하지 않습니다.",
+          "2024년 1월 1일 이후 이직자만 계산합니다. 논의 중인 주 6일 지급·반복수급 감액 등 개편안은 시행 전이라 반영하지 않습니다.",
+          "실제 지급은 실업 인정일 단위로 이뤄져 날짜와 월별 금액이 계산과 조금 다를 수 있습니다.",
+        ],
+      },
+      en: {
+        card: "Korea's job-seeking benefit from your last pay, age and insured period: daily amount, total and the last day to apply.",
+        description:
+          "Enter your last three months of pay, your age on the day you left and how long you were insured to estimate Korea's job-seeking (unemployment) benefit under the Employment Insurance Act: the daily amount, the number of days and the total. It applies the 2026 cap of KRW 68,100 and floor of KRW 66,048, shows the last day to apply to receive every day within the 12-month benefit period, and estimates the early reemployment allowance. Everything runs in your browser.",
+        howItWorks: [
+          "Enter your last working day and pay for the last three months",
+          "Choose your insured period, age group and reason for leaving",
+          "See the daily amount, days, total and the last day to apply",
+        ],
+        aeo: {
+          what: "A Korea Unemployment Benefit Calculator estimates the daily job-seeking benefit, the number of benefit days and the total under Korea's Employment Insurance Act, and shows the last day to apply to receive every day within the benefit period.",
+          who: "It is for employees in Korea who are resigning or reaching the end of a contract, people comparing a recommended resignation offer, job seekers, and staff at small companies who explain the benefit to departing employees.",
+          how: "The daily amount is 60% of the average daily wage over the last three months, capped at KRW 68,100 for people who left on or after 1 January 2026 and never below minimum wage × daily contracted hours × 80% (KRW 66,048 for 8 hours). The number of days, 120 to 270, comes from Annex 1 by age on the leaving date (50 or over) and insured period.",
+          why: "In 2026 the floor and cap are only KRW 2,052 apart, so most people get one or the other, and payment stops 12 months after the day after leaving even if days remain. People use it to plan living costs before leaving and to avoid applying too late.",
+        },
+        guide: [
+          {
+            heading: "How the daily amount is set",
+            body: [
+              "The job-seeking benefit, the core of Korea's unemployment benefit, pays 60% of a base daily wage, which is the average wage before leaving (Employment Insurance Act, Arts. 45 and 46). The average wage is total pay over the three months before the last working day divided by the calendar days in that period, the same method used for severance pay. If the ordinary wage is higher, it is used instead.",
+              "The base daily wage is capped. For people who left on or after 1 January 2026 the cap is KRW 113,500, so the daily amount never exceeds 113,500 × 60% = KRW 68,100. For people who left in 2025 or earlier the cap was KRW 110,000, or KRW 66,000 a day.",
+              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024.",
+              "That leaves only KRW 2,052 between the 2026 floor and cap. For an 8-hour worker, an average daily wage under KRW 110,080 (about KRW 3.38 million a month over a 92-day period) gets the floor, and KRW 113,500 or more (about KRW 3.48 million a month) gets the cap. The result shows which band applies.",
+            ],
+          },
+          {
+            heading: "How many days you can receive",
+            body: [
+              "The number of benefit days depends on your age on the leaving date and your insured period (Art. 50, Annex 1). Under 50: 120 days for under 1 year, 150 for 1-3 years, 180 for 3-5 years, 210 for 5-10 years and 240 for 10 years or more.",
+              "People aged 50 or over and people with disabilities get 120, 180, 210, 240 and 270 days for the same periods. Age is taken on the leaving date, so turning 50 just after leaving does not change the row.",
+              "The insured period is your total time covered by employment insurance. Earlier jobs can be added, but time before a previous benefit claim is not counted again. Your exact record is on Work24.",
+            ],
+          },
+          {
+            heading: "Eligibility: 180 days is not six months",
+            body: [
+              "You need at least 180 insured unit days in the 18 months before leaving (Art. 40). Unit days count days that were paid, not calendar days. A five-day worker loses the unpaid day off (usually Saturday) but keeps the paid weekly holiday, about 6 days a week, so reaching 180 takes about seven months.",
+              "The reason for leaving matters too. Recommended resignation, dismissal for business reasons, the end of a fixed-term contract and closure qualify. If you resigned, you qualify only with a justified reason listed in Annex 2 of the Enforcement Rule, such as unpaid wages, a move that makes commuting impractical or illness.",
+              "The job center decides eligibility after checking the reason and your insurance record. The calculator does not decide it; it shows the estimate for the conditions you enter and what to check.",
+            ],
+          },
+          {
+            heading: "The last day to apply and still receive every day",
+            body: [
+              "The benefit is paid only within 12 months from the day after you leave (Art. 48). Once that period ends, payment stops even if benefit days remain, so applying late costs you days.",
+              "The first 7 days after you apply are a waiting period with no payment (Art. 49). The last day to apply and still receive every day is therefore the end of the benefit period minus your benefit days and the 7-day wait. Someone with 270 days has only about 88 days of slack from the day after leaving.",
+              "Payments are made on certification days every one to four weeks, so dates can differ by a day or two. Registering as a job seeker on Work24 and applying soon after leaving is the safe choice.",
+            ],
+          },
+          {
+            heading: "What happens if you find a job early",
+            body: [
+              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). Enter a reemployment date to see the remaining days and the estimated allowance.",
+              "Detailed conditions apply, such as being rehired by your previous employer or having received the allowance recently. The job center confirms whether it is paid.",
+            ],
+          },
+          {
+            heading: "Reforms under discussion",
+            body: [
+              "In September 2026 a reform plan was reported to Korea's Employment Insurance Committee: pay the benefit on a 6-day week that excludes the unpaid day off, and link the cap to the floor. The total and the number of benefit days stay the same, but each month pays less and the payments stretch over a longer period.",
+              "The reform still needs legislation and a start date, so the calculator uses the current rules only. It will be updated to apply the new rules to people who leave after the start date.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "KRW 3 million a month · age 35 · 4 years 2 months · recommended resignation",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 9,000,000 · 8 hours a day · insured 4 years 2 months · under 50",
+            result: "KRW 66,048 a day (floor) · 180 days · total KRW 11,888,640 · about KRW 1,849,344 a month · apply by 2027-04-28",
+            note: "The average daily wage is 9,000,000 ÷ 92 days = KRW 97,826 and 60% of it is KRW 58,695, so the floor of KRW 66,048 applies.",
+          },
+          {
+            title: "KRW 4 million a month · age 52 · 12 years · contract ended",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 12,000,000 · insured 12 years · 50 or over",
+            result: "KRW 68,100 a day (cap) · 270 days · total KRW 18,387,000 · apply by 2027-01-28 (88 days after the day after leaving)",
+            note: "The benefit period runs from 2026-11-01 to 2027-10-31. To fit 270 days plus the 7-day wait, apply by 28 January 2027 at the latest.",
+          },
+          {
+            title: "Part-timer working 4 hours a day",
+            input: "Last working day 2026-10-31 · 3-month pay KRW 3,600,000 · 4 hours a day · insured 2 years · under 50",
+            result: "KRW 33,024 a day (floor) · 150 days · total KRW 4,953,600",
+            note: "The floor is 10,320 × 4 hours × 80% = KRW 33,024, scaled to contracted hours.",
+          },
+          {
+            title: "Early reemployment allowance after 30 days",
+            input: "First example · applied 2026-11-01 · new job from 2026-12-08",
+            result: "30 days paid · 150 days left · allowance KRW 4,953,600",
+            note: "150 remaining days × KRW 66,048 × 1/2. Conditions apply, such as staying in the new job for 12 months or more.",
+          },
+        ],
+        sources: UNEMPLOYMENT_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "The job center decides eligibility after checking your reason for leaving and insurance record. The calculator does not decide it.",
+          "The 180 insured unit days are estimated from months worked and days per week. Check the exact count in your Work24 record.",
+          "Daily workers, the special formula for people who gained coverage twice or more in the three months before leaving, and insurance for artists, platform and special-type workers and the self-employed are not covered.",
+          "Extended benefits and employment promotion allowances other than the early reemployment allowance are not calculated.",
+          "Only people who left on or after 1 January 2024 are covered. Reforms under discussion, such as 6-day payment and cuts for repeated claims, are not applied before they take effect.",
+          "Payments are made on certification days, so actual dates and monthly amounts can differ slightly.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "2026년 실업급여는 하루 최대 얼마, 최소 얼마인가요?",
+          answer:
+            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아집니다.",
+        },
+        {
+          question: "자진퇴사해도 실업급여를 받을 수 있나요?",
+          answer:
+            "원칙적으로 받을 수 없습니다. 다만 임금 체불, 통근이 어려워진 이사, 질병, 직장 내 괴롭힘처럼 고용보험법 시행규칙 [별표 2]가 정한 정당한 사유가 있으면 받을 수 있고, 고용센터가 사유를 확인해 결정합니다.",
+        },
+        {
+          question: "6개월 일하면 실업급여를 받을 수 있나요?",
+          answer:
+            "보통은 부족합니다. 이직 전 18개월 동안 피보험단위기간 180일이 필요한데, 이 기간은 보수를 받은 날만 세므로 주 5일 근무자는 주당 약 6일씩 쌓여 약 7개월이 필요합니다.",
+        },
+        {
+          question: "실업급여는 언제까지 신청해야 하나요?",
+          answer:
+            "이직일 다음 날부터 12개월이 지나면 남은 일수가 있어도 지급이 끝납니다. 신청 후 7일은 대기기간이므로, 만료일에서 소정급여일수와 7일을 뺀 날까지 신청해야 다 받을 수 있습니다. 계산기가 이 날짜를 알려줍니다.",
+        },
+        {
+          question: "실업급여를 받다가 재취업하면 어떻게 되나요?",
+          answer:
+            "재취업하면 구직급여는 끝나지만, 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다.",
+        },
+        {
+          question: "입력한 임금이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 날짜와 금액은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What are the maximum and minimum daily unemployment benefits in Korea in 2026?",
+          answer:
+            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8.",
+        },
+        {
+          question: "Can I get the benefit if I resign voluntarily?",
+          answer:
+            "Generally no. You can if you have a justified reason listed in Annex 2 of the Enforcement Rule of the Employment Insurance Act, such as unpaid wages, a move that makes commuting impractical, illness or workplace harassment. The job center checks the reason and decides.",
+        },
+        {
+          question: "Is six months of work enough?",
+          answer:
+            "Usually not. You need 180 insured unit days in the 18 months before leaving, and only paid days count, so a five-day worker builds about 6 days a week and needs about seven months.",
+        },
+        {
+          question: "When do I have to apply?",
+          answer:
+            "Payment stops 12 months after the day after you leave, even if days remain. The first 7 days after applying are a waiting period, so apply by the end of the benefit period minus your benefit days and 7 days to receive everything. The calculator shows that date.",
+        },
+        {
+          question: "What happens if I find a job while receiving the benefit?",
+          answer:
+            "The benefit stops, but if you start the new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance.",
+        },
+        {
+          question: "Is the pay I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "실업급여 계산기",
+        subtitle: "2026 상한·하한 반영 1일 금액과 신청 마감일",
+      },
+      en: {
+        title: "Korea Unemployment Benefit Calculator",
+        subtitle: "Daily amount, benefit days and the last day to apply",
       },
     },
   },
