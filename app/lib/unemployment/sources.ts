@@ -57,6 +57,13 @@ export const UNEMPLOYMENT_SOURCES: {
   },
   {
     label: {
+      ko: "고용노동부 고객상담센터 · 구직급여 하한액 FAQ (1일 소정근로시간별 하한액 · 4시간 이하 구간)",
+      en: "Ministry of Employment and Labor call center · Benefit floor FAQ (floor by daily contracted hours, 4 hours or less)",
+    },
+    url: "https://1350.moel.go.kr/home/hp/data/faqView.do?faq_idx=1000001176",
+  },
+  {
+    label: {
       ko: "고용24 · 조기재취업수당 안내 (실업 신고일부터 14일 경과 후 재취업)",
       en: "Work24 · Early reemployment allowance guide (new job after 14 days from registering as unemployed)",
     },

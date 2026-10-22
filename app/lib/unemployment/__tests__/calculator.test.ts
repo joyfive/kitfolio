@@ -112,6 +112,15 @@ describe("구직급여일액: 60% · 상한 · 하한", () => {
     assert.equal(dailyBenefit(P2026, 30_000, 0, 8.5).floorHours, 8);
   });
 
+  test("1일 소정근로시간은 최소 4시간으로 본다 (4시간 미만은 4시간)", () => {
+    assert.equal(P2026.minFloorHours, 4);
+    for (const h of [1, 2.5, 3, 3.2, 4]) {
+      assert.equal(dailyBenefit(P2026, 10_000, 0, h).floorHours, 4, String(h));
+      assert.equal(dailyBenefit(P2026, 10_000, 0, h).floor, 33_024, String(h));
+    }
+    assert.equal(dailyBenefit(P2026, 10_000, 0, 4.1).floorHours, 5);
+  });
+
   test("통상임금이 평균임금보다 크면 통상임금을 기초일액으로", () => {
     const b = dailyBenefit(P2026, 100_000, 112_000, 8);
     assert.equal(b.usedOrdinaryWage, true);

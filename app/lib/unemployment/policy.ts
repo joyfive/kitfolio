@@ -12,6 +12,7 @@
    · 구직급여일액 = 기초일액 × 60%                            : 제46조
    · 하한 = 최저임금 시급 × 1일 소정근로시간 × 80%              : 제46조
      1일 소정근로시간의 1시간 미만 끝수는 올림 (7.5시간 → 8시간)  : 고용노동부 행정규칙
+     1일 소정근로시간은 최소 4시간 · 최대 8시간으로 본다          : 고용노동부 1350 안내 · 정책브리핑
    · 소정급여일수                                            : 제50조 [별표 1]
    · 피보험단위기간 기준기간 18개월 · 180일 이상               : 제40조
    · 수급기간 이직일 다음 날부터 12개월                        : 제48조
@@ -40,6 +41,8 @@ export type UnemploymentPolicyPeriod = {
   replacementRate: number;
   /** 하한 비율 (최저임금 대비) */
   floorRate: number;
+  /** 하한 계산에 쓰는 1일 소정근로시간 최소 (4시간 미만은 4시간으로 본다) */
+  minFloorHours: number;
   /** 하한 계산에 쓰는 1일 소정근로시간 최대 */
   maxFloorHours: number;
   /** 1주에 지급하는 날 수 (현행 7) */
@@ -56,6 +59,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 9_860,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },
@@ -68,6 +72,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 10_030,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },
@@ -79,6 +84,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 10_320,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },

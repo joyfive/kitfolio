@@ -6873,7 +6873,7 @@ export const TOOLS: Tool[] = [
             body: [
               "실업급여의 중심인 구직급여는 이직 전 평균임금을 기초일액으로 삼아 그 60%를 하루 금액으로 줍니다(고용보험법 제45조 · 제46조). 평균임금은 마지막 근무일 이전 3개월 동안 받은 임금 총액을 그 기간의 달력 일수로 나눈 금액이며, 퇴직금을 계산할 때와 같은 방식입니다. 통상임금이 평균임금보다 크면 통상임금을 씁니다.",
               "기초일액에는 상한이 있습니다. 2026년 1월 1일 이후 이직한 사람은 113,500원이 상한이라 하루 금액은 113,500 × 60% = 68,100원을 넘지 않습니다. 2025년까지 이직한 사람은 상한 110,000원, 하루 66,000원입니다.",
-              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다. 1일 소정근로시간에 1시간 미만 끝수가 있으면 올림해서, 7.5시간이면 8시간으로 계산합니다.",
+              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다. 1일 소정근로시간에 1시간 미만 끝수가 있으면 올림해서 7.5시간이면 8시간으로 계산하고, 4시간보다 짧아도 4시간으로 봅니다. 그래서 하한은 4시간 기준 33,024원보다 낮아지지 않습니다.",
               "그래서 2026년에는 하한 66,048원과 상한 68,100원 사이가 2,052원뿐입니다. 하루 8시간 근로자는 평균임금이 110,080원 미만(3개월 92일 기준 월 약 338만 원 미만)이면 하한을, 113,500원 이상(월 약 348만 원 이상)이면 상한을 받습니다. 계산기는 결과에 어느 구간인지 표시합니다.",
             ],
           },
@@ -6973,7 +6973,7 @@ export const TOOLS: Tool[] = [
             body: [
               "The job-seeking benefit, the core of Korea's unemployment benefit, pays 60% of a base daily wage, which is the average wage before leaving (Employment Insurance Act, Arts. 45 and 46). The average wage is total pay over the three months before the last working day divided by the calendar days in that period, the same method used for severance pay. If the ordinary wage is higher, it is used instead.",
               "The base daily wage is capped. For people who left on or after 1 January 2026 the cap is KRW 113,500, so the daily amount never exceeds 113,500 × 60% = KRW 68,100. For people who left in 2025 or earlier the cap was KRW 110,000, or KRW 66,000 a day.",
-              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024. Part hours in the daily contracted hours round up, so 7.5 hours counts as 8.",
+              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024. Part hours in the daily contracted hours round up, so 7.5 hours counts as 8, and anything under 4 hours counts as 4, so the floor never drops below the 4-hour KRW 33,024.",
               "That leaves only KRW 2,052 between the 2026 floor and cap. For an 8-hour worker, an average daily wage under KRW 110,080 (about KRW 3.38 million a month over a 92-day period) gets the floor, and KRW 113,500 or more (about KRW 3.48 million a month) gets the cap. The result shows which band applies.",
             ],
           },
@@ -7058,7 +7058,7 @@ export const TOOLS: Tool[] = [
         {
           question: "2026년 실업급여는 하루 최대 얼마, 최소 얼마인가요?",
           answer:
-            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아집니다.",
+            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아지지만, 4시간보다 짧아도 4시간으로 봅니다.",
         },
         {
           question: "자진퇴사해도 실업급여를 받을 수 있나요?",
@@ -7090,7 +7090,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What are the maximum and minimum daily unemployment benefits in Korea in 2026?",
           answer:
-            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8.",
+            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8, but never below the 4-hour level.",
         },
         {
           question: "Can I get the benefit if I resign voluntarily?",

@@ -5,7 +5,7 @@
    기초일액    = max(1일 평균임금, 1일 통상임금), 상한 적용      (고용보험법 제45조)
    60% 금액    = floor(min(기초일액, 상한) × 60%)               (제46조)
    하한        = floor(최저임금 시급 × 1일 소정근로시간 × 80%)   (제46조)
-                 소정근로시간은 1시간 미만 끝수를 올림하고 최대 8시간
+                 소정근로시간은 1시간 미만 끝수를 올림하고 최소 4시간 · 최대 8시간
    구직급여일액 = max(60% 금액, 하한)
    총 예상액   = 구직급여일액 × 소정급여일수                      ([별표 1])
 
@@ -203,7 +203,7 @@ export function dailyBenefit(
   const baseDaily = usedOrdinaryWage ? ordinaryDaily : averageDaily;
   // 1시간 미만 끝수는 올림 (7.5시간 → 8시간). 입력 소수 오차로 7시간이 8시간이 되지 않게 여유를 둔다.
   const hours = pos(dailyHours) ? Math.ceil(pos(dailyHours) - 1e-9) : policy.maxFloorHours;
-  const floorHours = Math.min(hours, policy.maxFloorHours);
+  const floorHours = Math.min(Math.max(hours, policy.minFloorHours), policy.maxFloorHours);
   // 원 미만 절사. 정수 연산으로 부동소수 오차를 피한다 (113,500 × 0.6 = 68,100).
   const pct = (n: number, rate: number) => Math.floor((n * Math.round(rate * 100)) / 100);
   const floor = pct(policy.minWageHourly * floorHours, policy.floorRate);
