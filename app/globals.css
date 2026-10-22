@@ -2092,6 +2092,15 @@ p.sv-hint { margin-top: -8px; }
 .al-tag.ub-tag-warn { background: #fee2e2; color: #c0504e; }
 
 /* ============================================================
+   부가세 계산기 (프리랜서·연차 계산기의 sv-/fw-/ft- 카드 구조 재사용)
+   업종 셀렉트의 긴 옵션이 1fr 열을 넓히지 않도록 최소 폭을 0으로 둔다
+   ============================================================ */
+.vt-work { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .vt-work { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); } }
+.vt-work .fw-field-input input { min-width: 0; }
+.vt-work .al-select { text-overflow: ellipsis; }
+
+/* ============================================================
    Time Calculator (Clean SaaS theme)
    인풋(화이트 박스: 동적 시간 행) + 결과(강조 카드 · 세부 형식)
    ============================================================ */

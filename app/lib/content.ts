@@ -38,6 +38,7 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 // 퇴직금 계산기도 같은 이유로 출처·검증일을 정책 데이터 레이어에서 가져온다.
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
+import { VAT_SOURCES, VAT_VERIFIED_AT } from "./vat/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
 import { UNEMPLOYMENT_SOURCES, UNEMPLOYMENT_VERIFIED_AT } from "./unemployment/sources";
 import { KST_UTC_SOURCES, KST_UTC_VERIFIED_AT } from "./kstutc/sources";
@@ -5675,7 +5676,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: FREELANCER_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "프리랜서 3.3% 계산기", en: "Korea Freelancer Tax Calculator (3.3%)" },
-    relatedTools: ["salary-calculator", "severance-pay-calculator", "time-calculator"],
+    relatedTools: ["salary-calculator", "severance-pay-calculator", "vat-calculator"],
     seo: {
       ko: {
         title: "프리랜서 3.3% 계산기 | 실수령액·역산·8.8% 기타소득",
@@ -5939,6 +5940,300 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Korea Freelancer Tax Calculator",
         subtitle: "3.3% and 8.8% withholding, net pay and reverse",
+      },
+    },
+  },
+  {
+    slug: "vat-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["small-business-owner", "designer", "developer", "office-worker"],
+    ico: "VAT",
+    ready: true,
+    indexable: false,
+    verifiedAt: VAT_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "부가세 계산기", en: "Korea VAT Calculator" },
+    relatedTools: ["freelancer-tax-calculator", "salary-calculator", "ad-metrics-calculator"],
+    seo: {
+      ko: {
+        title: "부가세 계산기 | 부가세 포함·별도 역산 · 간이과세 납부세액",
+        description:
+          "공급가액을 넣으면 부가세 10%와 합계를, 부가세 포함 합계를 넣으면 공급가액을 역산합니다. 영수증 방식과 세금계산서 방식에서 1원이 달라지는 이유까지 보여주고, 간이과세자는 업종별 부가가치율·매입공제·카드 발행세액공제·납부 면제 기준으로 실제 낼 부가세를 계산합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "부가세 계산기",
+          "부가세 계산",
+          "부가세 포함 금액 계산",
+          "부가세 별도 계산",
+          "부가세 역산",
+          "공급가액 계산",
+          "간이과세자 부가세 계산",
+          "간이과세 납부면제",
+          "간이과세자 부가가치율",
+        ],
+      },
+      en: {
+        title: "Korea VAT Calculator | VAT Included, Excluded and Simplified",
+        description:
+          "Enter a supply value to get 10% Korean VAT and the total, or enter a VAT-inclusive total to work back to the supply value, including why receipts and tax invoices can differ by 1 won. Simplified taxpayers get the VAT they actually owe from the value-added ratio, purchase and card credits and the payment exemption. Everything runs in your browser.",
+        keywords: [
+          "korea vat calculator",
+          "korean vat 10% calculator",
+          "vat included price korea",
+          "reverse vat calculator korea",
+          "korea simplified taxpayer vat",
+          "korea vat exemption 48 million",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "공급가액과 부가세 포함 합계를 서로 계산하고, 간이과세자의 업종별 납부세액과 납부 면제 여부를 계산.",
+        description:
+          "공급가액을 넣으면 부가세 10%와 합계를, 부가세 포함 합계를 넣으면 공급가액을 역산합니다. 영수증 방식과 세금계산서 방식에서 1원이 달라지는 이유까지 보여주고, 간이과세자는 업종별 부가가치율·매입공제·카드 발행세액공제·납부 면제 기준으로 실제 낼 부가세를 계산합니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "일반과세 또는 간이과세 탭 선택",
+          "공급가액·합계금액, 또는 업종과 연 매출·매입 입력",
+          "부가세와 합계(또는 공급가액), 간이과세 납부세액과 면제 여부 확인",
+        ],
+        aeo: {
+          what: "부가세 계산기는 공급가액과 부가세 포함 합계금액을 서로 바꿔 계산하고, 간이과세자라면 업종별 부가가치율로 실제 납부할 부가가치세와 납부 면제 여부를 계산하는 도구입니다.",
+          who: "견적서와 세금계산서를 쓰는 1인 사업자와 사업자등록한 프리랜서, 카드 영수증의 공급가액을 확인하는 실무 담당자, 그리고 부가세 신고 전에 납부액을 미리 알고 싶은 간이과세자를 위한 도구입니다.",
+          how: "일반과세는 공급가액에 세율 10%를 곱해 부가세를 구하고, 합계에서는 100/110을 곱해 공급가액을 역산합니다. 간이과세는 공급대가에 업종별 부가가치율과 10%를 곱한 뒤 매입공제 0.5%와 카드 발행세액공제를 빼고, 연 매출이 4,800만 원 미만이면 납부 면제로 표시합니다.",
+          why: "합계를 1.1로 나눈 값은 반올림 방식과 계산 순서에 따라 1원씩 달라지고, 간이과세자의 부가세는 매출의 10%가 아니라 1.5~4% 수준이라 단순 계산과 크게 다릅니다. 견적·세금계산서 금액과 신고 전 납부액을 몇 초 만에 확인할 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "부가세 포함과 별도는 어떻게 다른가요",
+            body: [
+              "부가가치세의 과세표준은 공급가액이고, 공급가액에는 부가가치세가 포함되지 않습니다(부가가치세법 제29조). 세율은 10%이므로(제30조) 공급가액 100만 원짜리 거래의 부가세는 10만 원, 받는 돈의 합계는 110만 원입니다. 견적서의 '부가세 별도 100만 원'은 실제로 110만 원을 받는다는 뜻입니다.",
+              "'부가세 포함 100만 원'은 합계가 100만 원이라는 뜻이라 공급가액은 909,091원, 부가세는 90,909원입니다. 같은 100만 원이라도 별도인지 포함인지에 따라 받는 금액이 9만 원 넘게 달라지므로, 견적과 계약서에는 어느 쪽인지 반드시 적어 두는 편이 안전합니다.",
+              "간이과세자에게는 '공급대가'라는 말이 자주 나옵니다. 공급대가는 부가세를 포함한 금액으로, 간이과세자의 과세표준과 각종 기준 금액(1억 400만 원·4,800만 원)은 모두 공급대가 기준입니다.",
+            ],
+          },
+          {
+            heading: "합계에서 공급가액을 구할 때 1원이 달라지는 이유",
+            body: [
+              "부가세가 포함되었는지 분명하지 않은 금액은 110분의 100을 곱해 공급가액을 구합니다(부가가치세법 제29조 제7항). 다만 법은 1원 미만을 어떻게 처리할지는 정하지 않아, 실무에서는 두 가지 방식이 함께 쓰입니다.",
+              "영수증·카드 단말기는 보통 합계를 고정하고 합계 × 100 ÷ 110을 반올림해 공급가액을 정한 뒤, 나머지를 부가세로 둡니다. 세금계산서는 공급가액을 먼저 정하고 그 10%에서 1원 미만을 버려 부가세를 붙입니다. 합계 99,999원이면 영수증 방식은 공급가액 90,908원, 세금계산서 방식은 90,909원이 되어 1원이 다릅니다.",
+              "세금계산서 방식으로는 정확히 만들 수 없는 합계도 있습니다. 1원 미만을 버리는 경우 공급가액 19원은 합계 20원, 20원은 22원이 되어 합계 21원을 만드는 공급가액은 없습니다. 금액이 맞지 않을 때는 계산기가 가장 가까운 합계를 함께 보여줍니다.",
+              "컴퓨터에서 합계를 1.1로 나누면 110,000 ÷ 1.1이 99,999.99999로 계산되는 부동소수점 오차도 생깁니다. 이 계산기는 금액을 원 단위 정수로만 다뤄 이런 오차가 없습니다.",
+            ],
+          },
+          {
+            heading: "간이과세자는 부가세를 어떻게 계산하나요",
+            body: [
+              "간이과세자의 납부세액은 공급대가 × 업종별 부가가치율 × 10%입니다(부가가치세법 제63조 제2항). 부가가치율은 소매업·음식점업 15%, 제조업 20%, 숙박업 25%, 건설업·운수업·정보통신업과 그 밖의 서비스업 30%, 금융·전문서비스·부동산임대업 등 40%로 정해져 있습니다(시행령 제111조 제2항). 그래서 매출 대비 실제 부담은 1.5~4%입니다.",
+              "세금계산서나 카드 영수증을 받은 매입이 있으면 그 공급대가의 0.5%를 납부세액에서 뺍니다(제63조 제3항). 신용카드·현금영수증으로 발행한 매출은 1.3%(연 1,000만 원 한도, 2026년 12월 31일까지)를 공제받을 수 있습니다(제46조). 2027년부터는 1%·연 500만 원으로 돌아갑니다.",
+              "공제 합계가 납부세액보다 많아도 남는 금액은 돌려받지 않습니다(제63조 제6항). 매입이 많은 달에 환급을 받을 수 있는 일반과세자와 가장 크게 다른 점입니다.",
+            ],
+          },
+          {
+            heading: "납부 면제와 과세유형 전환은 언제 일어나나요",
+            body: [
+              "간이과세자는 한 해(1월~12월) 공급대가 합계가 4,800만 원 미만이면 납부 의무가 면제됩니다(부가가치세법 제69조 제1항). 면제되는 것은 납부뿐이라 신고는 해야 합니다. 면제 대상이 실수로 납부했다면 돌려받습니다(같은 조 제4항).",
+              "올해 새로 시작했거나 휴업·폐업한 경우에는 실제 영업한 기간의 공급대가를 12개월로 환산해 4,800만 원 미만인지 판단하고, 1개월 미만은 1개월로 셉니다(같은 조 제3항). 6개월 동안 2,500만 원을 벌었다면 연 5,000만 원으로 보아 면제 대상이 아닙니다.",
+              "간이과세는 직전 연도 공급대가가 1억 400만 원 미만인 개인사업자에게 적용됩니다(제61조 제1항, 시행령 제109조 제1항). 기준을 넘긴 해가 끝나도 바로 바뀌지 않고 다음 해 7월 1일부터 일반과세자로 전환됩니다. 부동산임대업과 과세유흥장소는 기준이 4,800만 원이고, 도매업·전문자격사업 등 일부 업종은 매출과 관계없이 간이과세를 적용받지 못합니다(시행령 제109조 제2항).",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "견적 100만 원, 부가세 별도",
+            input: "일반과세 · 공급가액 → 합계 · 1,000,000원",
+            result: "부가세 100,000원 · 합계 1,100,000원",
+            note: "견적서에 '부가세 별도'로 적으면 받는 돈은 110만 원입니다. 세금계산서에도 공급가액 100만 원과 세액 10만 원이 나뉘어 적힙니다.",
+          },
+          {
+            title: "카드 영수증 99,999원의 공급가액",
+            input: "일반과세 · 합계 → 공급가액 · 99,999원 · 1원 미만 절사",
+            result: "영수증 방식 공급가액 90,908원 · 부가세 9,091원 / 세금계산서 방식 공급가액 90,909원 · 부가세 9,090원",
+            note: "같은 합계에서 공급가액이 1원 다릅니다. 장부와 세금계산서 금액이 1원씩 맞지 않을 때 대부분 이 차이입니다.",
+          },
+          {
+            title: "정보통신업 간이과세자, 연 매출 6,000만 원",
+            input: "간이과세 · 정보통신업(30%) · 매출 60,000,000원 · 세금계산서 매입 22,000,000원",
+            result: "납부세액 1,800,000원 · 매입공제 110,000원 · 납부할 부가세 1,690,000원",
+            note: "같은 매출·매입을 일반과세자로 계산하면 매출세액에서 매입세액을 뺀 3,454,540원입니다. 간이과세자의 부담이 절반 수준입니다.",
+          },
+          {
+            title: "연 매출 4,500만 원 음식점",
+            input: "간이과세 · 음식점업(15%) · 매출 45,000,000원 · 매입 15,000,000원",
+            result: "공제 후 세액 600,000원 · 연 매출 4,800만 원 미만이라 납부 면제",
+            note: "납부는 면제되지만 다음 해 1월 확정신고는 해야 합니다. 매출이 4,800만 원을 넘는 해에는 같은 계산으로 나온 금액을 냅니다.",
+          },
+        ],
+        sources: VAT_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "일반과세자의 분기별 신고 세액(그 기간 전체 매출세액 − 매입세액)은 계산하지 않습니다. 일반과세 탭은 거래 한 건의 공급가액·부가세·합계 계산에 쓰는 도구입니다.",
+          "의제매입세액공제, 전자세금계산서 발급세액공제, 재고납부세액, 가산세는 반영하지 않습니다.",
+          "간이과세는 업종 하나만 계산합니다. 둘 이상의 업종을 겸영하면 업종별로 나눠 계산한 금액의 합계가 납부세액입니다(부가가치세법 제63조 제2항).",
+          "영세율·면세 거래와 과세·면세 겸영 사업자의 안분 계산은 다루지 않습니다.",
+          "업종은 시행령의 부가가치율 표 구분 기준으로 고릅니다. 실제 업종 판정과 간이과세 배제 업종 해당 여부는 한국표준산업분류와 재정경제부령에 따르므로 사업자등록증의 업태·종목을 확인해야 합니다.",
+          "카드 발행세액공제는 입력한 카드·현금영수증 매출 전체에 적용합니다. 공제 대상 사업자 요건(부가가치세법 제46조 제1항 제1호)은 따로 확인해야 합니다.",
+        ],
+      },
+      en: {
+        card: "Convert between supply value and VAT-inclusive totals, and estimate a simplified taxpayer's VAT and payment exemption in Korea.",
+        description:
+          "Enter a supply value to get 10% Korean VAT and the total, or enter a VAT-inclusive total to work back to the supply value, including why receipts and tax invoices can differ by 1 won. Simplified taxpayers get the VAT they actually owe from the value-added ratio, purchase and card credits and the payment exemption. Everything runs in your browser.",
+        howItWorks: [
+          "Choose the general or simplified taxpayer tab",
+          "Enter a supply value or total, or your business type with annual sales and purchases",
+          "See VAT and the total (or supply value), or the simplified VAT and whether you are exempt",
+        ],
+        aeo: {
+          what: "A Korea VAT Calculator converts between a supply value and a VAT-inclusive total at Korea's 10% VAT rate, and for simplified taxpayers calculates the VAT actually owed from the business type's value-added ratio and whether payment is exempt.",
+          who: "It is for sole proprietors and VAT-registered freelancers in Korea who write quotes and tax invoices, staff who check the supply value on card receipts, and simplified taxpayers who want to know their VAT before filing.",
+          how: "For general taxpayers it multiplies the supply value by 10% to get VAT, and multiplies a total by 100/110 to get the supply value. For simplified taxpayers it multiplies sales by the value-added ratio and 10%, subtracts the 0.5% purchase credit and the card credit, and flags payment as exempt when annual sales are under 48 million won.",
+          why: "Dividing a total by 1.1 can be off by 1 won depending on rounding and order, and a simplified taxpayer's VAT is around 1.5% to 4% of sales rather than 10%. It answers both in seconds before you quote, invoice or file.",
+        },
+        guide: [
+          {
+            heading: "VAT included vs VAT excluded",
+            body: [
+              "In Korea the VAT tax base is the supply value, which does not include VAT (VAT Act, Art. 29). The rate is 10% (Art. 30), so a deal with a supply value of 1,000,000 won carries 100,000 won of VAT and a total of 1,100,000 won. A quote of '1,000,000 won, VAT excluded' means you actually collect 1,100,000 won.",
+              "'1,000,000 won, VAT included' means the total is 1,000,000 won, so the supply value is 909,091 won and the VAT 90,909 won. The same headline figure differs by over 90,000 won depending on which you mean, so state it on quotes and contracts.",
+              "For simplified taxpayers the term 'supply price including VAT' (gongkeup daega) comes up often. It is the amount with VAT included, and both the simplified tax base and the thresholds (104 million and 48 million won) are measured on it.",
+            ],
+          },
+          {
+            heading: "Why the supply value can differ by 1 won",
+            body: [
+              "When it is unclear whether an amount includes VAT, the supply value is that amount times 100/110 (VAT Act, Art. 29(7)). The law does not say how to treat fractions of a won, so two methods are used in practice.",
+              "Receipts and card terminals usually fix the total, round total × 100 ÷ 110 to set the supply value and leave the rest as VAT. Tax invoices set the supply value first and add 10% of it with anything under 1 won dropped. For a total of 99,999 won the receipt method gives a supply value of 90,908 won and the invoice method 90,909 won.",
+              "Some totals cannot be produced by the invoice method at all. Rounding down, a supply value of 19 won gives a total of 20 and 20 gives 22, so nothing produces 21. When that happens the calculator shows the nearest totals you can make.",
+              "Dividing by 1.1 in a computer also introduces floating-point error: 110,000 ÷ 1.1 comes out as 99,999.99999. This calculator works only in whole won, so that error never appears.",
+            ],
+          },
+          {
+            heading: "How a simplified taxpayer's VAT is calculated",
+            body: [
+              "A simplified taxpayer's tax is sales including VAT × the business type's value-added ratio × 10% (VAT Act, Art. 63(2)). The ratios are 15% for retail and restaurants, 20% for manufacturing, 25% for lodging, 30% for construction, transport, information and communications and other services, and 40% for finance, professional services, real estate leasing and similar (Enforcement Decree, Art. 111(2)). The real burden is about 1.5% to 4% of sales.",
+              "Purchases backed by tax invoices or card receipts reduce the tax by 0.5% of their VAT-inclusive amount (Art. 63(3)). Sales paid by credit card or cash receipt earn a 1.3% credit, capped at 10 million won a year, through December 31, 2026 (Art. 46). From 2027 it returns to 1% with a 5 million won cap.",
+              "If the credits exceed the tax, the excess is not refunded (Art. 63(6)). That is the biggest difference from general taxpayers, who can get a refund in a period with heavy purchases.",
+            ],
+          },
+          {
+            heading: "Payment exemption and switching taxpayer type",
+            body: [
+              "A simplified taxpayer whose sales for the year (January to December) are under 48 million won is exempt from paying (VAT Act, Art. 69(1)). Only payment is exempt: you still have to file. If you pay while exempt, the tax office refunds it (Art. 69(4)).",
+              "If you opened, suspended or closed during the year, sales for the months you operated are scaled to 12 months, with a partial month counted as one (Art. 69(3)). Earning 25 million won in six months counts as 50 million a year, so you are not exempt.",
+              "Simplified taxation applies to individuals whose previous-year sales were under 104 million won (Art. 61(1), Enforcement Decree Art. 109(1)). Crossing it does not switch you right away: you become a general taxpayer from July 1 of the following year. The threshold is 48 million won for real estate leasing and taxable entertainment venues, and some businesses, such as wholesale and licensed professions, cannot use simplified taxation at any size (Enforcement Decree, Art. 109(2)).",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A 1,000,000 won quote, VAT excluded",
+            input: "General · supply value → total · 1,000,000 won",
+            result: "VAT 100,000 won · total 1,100,000 won",
+            note: "Quoting 'VAT excluded' means you collect 1,100,000 won. The tax invoice shows the supply value and the VAT on separate lines.",
+          },
+          {
+            title: "The supply value of a 99,999 won card receipt",
+            input: "General · total → supply value · 99,999 won · round down",
+            result: "Receipt method: supply 90,908 · VAT 9,091 / Invoice method: supply 90,909 · VAT 9,090",
+            note: "The same total gives supply values 1 won apart. When books and tax invoices disagree by a won, this is usually why.",
+          },
+          {
+            title: "Simplified taxpayer in information and communications, 60 million won sales",
+            input: "Simplified · information and communications (30%) · sales 60,000,000 · invoiced purchases 22,000,000",
+            result: "Tax 1,800,000 · purchase credit 110,000 · VAT to pay 1,690,000 won",
+            note: "The same sales and purchases as a general taxpayer give output VAT minus input VAT of 3,454,540 won, roughly double.",
+          },
+          {
+            title: "A restaurant with 45 million won annual sales",
+            input: "Simplified · restaurant (15%) · sales 45,000,000 · purchases 15,000,000",
+            result: "Tax after credits 600,000 won · sales under 48 million won, so payment is exempt",
+            note: "Payment is exempt, but the January return still has to be filed. In a year when sales pass 48 million won, the same calculation is what you pay.",
+          },
+        ],
+        sources: VAT_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "It does not compute a general taxpayer's quarterly return (all output VAT minus all input VAT for the period). The general tab is for the supply value, VAT and total of a single deal.",
+          "The deemed input credit, e-invoice issuance credit, inventory tax adjustment and penalties are not included.",
+          "Simplified taxation is calculated for one business type. With several business types, the tax is the sum calculated per type (VAT Act, Art. 63(2)).",
+          "Zero-rated and exempt supplies, and apportionment for businesses with both taxable and exempt sales, are not covered.",
+          "Business types follow the groups in the decree's value-added ratio table. The actual classification and whether a business is barred from simplified taxation follow the Korean Standard Industrial Classification and ministry rules, so check the type on your business registration.",
+          "The card credit is applied to all card and cash receipt sales entered. Whether your business qualifies (VAT Act, Art. 46(1)(1)) must be checked separately.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "부가세 포함 110만 원이면 공급가액은 얼마인가요?",
+          answer:
+            "공급가액 1,000,000원, 부가세 100,000원입니다. 부가세 포함 금액에 100/110을 곱하면 공급가액이 나옵니다. 금액에 따라 1원 미만이 생기면 영수증 방식과 세금계산서 방식의 공급가액이 1원 다를 수 있으며, 계산기의 '합계 → 공급가액'에서 두 결과를 함께 볼 수 있습니다.",
+        },
+        {
+          question: "부가세 별도와 부가세 포함은 무엇이 다른가요?",
+          answer:
+            "부가세 별도는 적힌 금액이 공급가액이고 10%를 더 받는다는 뜻이고, 부가세 포함은 적힌 금액이 이미 부가세를 포함한 합계라는 뜻입니다. 100만 원을 기준으로 별도면 110만 원을 받고, 포함이면 공급가액 909,091원과 부가세 90,909원으로 나뉩니다.",
+        },
+        {
+          question: "같은 금액인데 왜 공급가액이 1원 다르게 나오나요?",
+          answer:
+            "법은 100/110을 곱하라고만 정하고 1원 미만 처리는 정하지 않아서입니다. 영수증은 합계를 고정하고 공급가액을 반올림하고, 세금계산서는 공급가액의 10%에서 1원 미만을 버려 부가세를 붙입니다. 합계 99,999원이면 공급가액이 90,908원과 90,909원으로 갈립니다.",
+        },
+        {
+          question: "간이과세자 부가세는 얼마나 나오나요?",
+          answer:
+            "매출(공급대가) × 업종별 부가가치율 × 10%에서 매입공제 0.5%와 카드 발행세액공제를 뺀 금액입니다. 부가가치율이 15~40%라 매출 대비 1.5~4% 수준입니다. 예를 들어 정보통신업(30%)에서 연 매출 6,000만 원, 세금계산서 매입 2,200만 원이면 1,690,000원입니다.",
+        },
+        {
+          question: "매출이 4,800만 원 미만이면 신고를 안 해도 되나요?",
+          answer:
+            "아니요. 간이과세자의 연 매출(공급대가)이 4,800만 원 미만이면 납부 의무만 면제되고 신고는 해야 합니다. 올해 개업했거나 휴업·폐업했다면 영업한 기간의 매출을 12개월로 환산해 판단합니다.",
+        },
+        {
+          question: "입력한 금액이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 금액은 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What is the supply value of 1,100,000 won including VAT?",
+          answer:
+            "The supply value is 1,000,000 won and the VAT 100,000 won. Multiply a VAT-inclusive amount by 100/110 to get the supply value. When the result has a fraction of a won, the receipt and tax invoice methods can differ by 1 won; 'Total → supply value' in the calculator shows both.",
+        },
+        {
+          question: "What is the difference between VAT excluded and VAT included?",
+          answer:
+            "VAT excluded means the stated amount is the supply value and 10% is added on top. VAT included means the stated amount already contains VAT. For 1,000,000 won, excluded means you collect 1,100,000 won, while included splits into a 909,091 won supply value and 90,909 won of VAT.",
+        },
+        {
+          question: "Why does the same total give supply values 1 won apart?",
+          answer:
+            "The law only says to multiply by 100/110 and does not say how to treat fractions of a won. Receipts fix the total and round the supply value; tax invoices drop anything under 1 won from 10% of the supply value and add it. For a 99,999 won total the supply value comes out as 90,908 or 90,909 won.",
+        },
+        {
+          question: "How much VAT does a simplified taxpayer pay?",
+          answer:
+            "Sales including VAT × the business type's value-added ratio × 10%, minus the 0.5% purchase credit and the card credit. With ratios of 15% to 40%, that is about 1.5% to 4% of sales. For example, an information and communications business (30%) with 60 million won in sales and 22 million won of invoiced purchases pays 1,690,000 won.",
+        },
+        {
+          question: "If my sales are under 48 million won, do I still need to file?",
+          answer:
+            "Yes. When a simplified taxpayer's annual sales including VAT are under 48 million won, only payment is exempt; the return must still be filed. If you opened, suspended or closed during the year, sales for the months you operated are scaled to 12 months.",
+        },
+        {
+          question: "Is the amount I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and nothing you enter is sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "부가세 계산기",
+        subtitle: "부가세 포함·별도 역산과 간이과세 납부세액",
+      },
+      en: {
+        title: "Korea VAT Calculator",
+        subtitle: "VAT included or excluded, and simplified taxpayer VAT",
       },
     },
   },
