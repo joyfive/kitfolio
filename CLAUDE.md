@@ -35,20 +35,36 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 초기에 추가된 Character Counter, CSS Gradient Generator, Slack Timestamp Converter 등은
 브랜드 방향 확정 전 MVP 단계에서 생성된 초기 도구들이다.
 
-### 브랜드 포지셔닝
-- **Brand Message**: *Small tools for modern knowledge workers*
-- **Supporting Message (SEO/AEO)**: *Work calculators, generators and utilities*
-- **제품 정의**: 모던 지식 노동자를 위한 브라우저 기반 마이크로 SaaS 도구 모음.
-  업무·일상 직업 활동에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·포매터·유틸리티.
-  전부 브라우저에서 실행: **No login / No installation / No server-side processing.**
+### 브랜드 포지셔닝 (2026-10-24 개정)
+| 항목 | 내용 |
+|---|---|
+| 제품 정의 | 계산·변환·생성·점검에 필요한 작은 웹 도구 모음 · *Small web tools to calculate, convert, create and check* |
+| 핵심 사용자 | 프로그램을 설치하거나 복잡한 작업을 시작하지 않고, 필요한 결과를 바로 얻으려는 사람 |
+| 제공 가치 | 찾기 쉽고, 사용이 짧고, 결과를 바로 활용할 수 있음 |
+| 브랜드 메시지 | **필요한 도구를 찾아, 하던 일을 계속하세요.** · *Find the tool. Get back to work.* |
 
-### 타겟 유저
-PM · Designer · Developer · Job Seeker · Office Worker · Small Business Owner
+전부 브라우저에서 실행: **No login / No installation / No server-side processing.**
 
-**중요**: 타겟은 URL 카테고리가 **아니다**. 필터링·디스커버리·분석용 **내부 메타데이터 태그**로만 사용.
-```ts
-{ slug: "flex-work-calculator", targets: ["office-worker"] }
-```
+### 타겟 유저 → 직군 타깃 폐기 (2026-10-24)
+서비스 전체 타깃을 직군 목록으로 정의하지 않는다. PM·디자이너·직장인 등은 **개별 도구의 사용 사례**
+(`content.aeo.who` · FAQ)에서만 다룬다. 레지스트리의 `targets` 필드와 허브 직군 필터는 삭제했다.
+
+### 분류: 주제 카테고리(1단) + 작업 태그(2단) (2026-10-24)
+사용자는 직업이 아니라 **지금 해결할 작업**으로 도구를 찾는다. 분류는 해결하는 문제 기준이며,
+직군·화면 테마(Clean·IDE·Canvas)는 탐색 화면에 노출하지 않는다.
+
+- **주제 카테고리 8개 (도구당 정확히 1개)**: 문서·이미지 · QR 코드 · 날짜·시간 · 근무·휴가 · 급여·세금 ·
+  광고·성과 · 코드·웹 제작 · 웹 접근성
+- **작업 태그 7종 (대표 1 + 보조 최대 2)**: 계산 · 변환 · 생성 · 편집 · 검사 · 분석 · 읽기.
+  허브에서는 선택한 카테고리 도구가 가진 작업만 2단 칩으로 보인다. 카드에는 대표 작업 1개.
+- 1단·2단은 **칩 스타일로 depth 구분** (카테고리 = 둥근 pill 채움 · 작업 = 작은 사각 점선/테두리).
+- **검색어(`searchTerms`)**: "계약서 합치기"처럼 작업으로 찾는 말. 허브 검색 전용, 화면 미노출. 검색은 단어 단위 일치.
+- **적용 범위(`scope`)**: 한국 기준·2026년 적용·WCAG 2.2 같은 정보는 탐색 태그가 아니라 도구 상세 eyebrow 에 표시.
+- 허브 필터 상태는 쿼리스트링 `/?cat=&action=` (경로 카테고리 URL 금지 원칙 유지). 도구 상세 eyebrow 의 카테고리는 이 링크로 허브에 돌아간다.
+- **도구명 병기**: KO 화면은 국문명 메인·영문 보조, EN 화면은 영문명 메인·국문 보조. 카드·관련 도구·상세 h1 공통 (`toolNames()`).
+- 화면 템플릿(layout)은 분류와 무관하다. 같은 카테고리 안에서도 작업에 맞는 레이아웃을 고른다.
+- 단일 출처: `CATEGORIES` · `ACTIONS` (`app/lib/content.ts`), 검사 `validateTaxonomy()` (`npm test`).
+  배치 근거·35종 배치표: `docs/plans/taxonomy-recategorization.md`. 신규 도구 분류 절차: `/build-tool` Step 0.5.
 
 ### 사이트 아키텍처
 - **URL은 플랫 구조 유지. 카테고리 기반 URL 도입 금지.** 모든 도구는 1뎁스 라우트.
@@ -135,8 +151,11 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 ```ts
 {
   slug: "slack-timestamp-converter",
-  layout: "ide",                       // 레이아웃 타입
-  targets: ["pm", "developer"],        // 내부 타겟 태그
+  layout: "ide",                       // 레이아웃 타입 (분류와 무관)
+  category: "date-time",               // 주제 카테고리 1개 (허브 1단)
+  actions: ["convert", "generate"],    // 작업 태그 1~3개, 첫 값이 대표 (허브 2단)
+  searchTerms: { ko: [...], en: [...] }, // 작업으로 찾는 검색어 (화면 미노출)
+  scope: { ko, en },                   // 적용 범위 (선택)
   ready: true,                         // 기능 공개
   indexable: false,                    // 검색 색인 (ready 와 별개)
   verifiedAt: "2026-08-18",            // 외부 기준 데이터에 의존하는 도구만
@@ -188,7 +207,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 → generic 유틸리티보다 **실용적인 도구** 우선.
 
 ### 장기 비전
-Kitfolio = **a searchable library of browser-based micro SaaS tools for modern knowledge workers.**
+Kitfolio = **a searchable library of small browser-based tools to calculate, convert, create and check.**
 해자(moat)는 단일 도구가 아니라, 강한 검색 의도 + 무마찰 접근으로 반복 업무 문제를 푸는
 **커지는 실용 도구 컬렉션**이다. 성공 요인: 유용한 도구 · 강한 검색 의도 · 빠른 접근 ·
 일관된 UX · 확장 가능한 메타데이터 관리: 콘텐츠 생산이 아님.
@@ -241,11 +260,13 @@ Kitfolio = **a searchable library of browser-based micro SaaS tools for modern k
 
 ### 테마 분기
 
-| 테마 | 타겟 | 적용 도구 |
+테마(레이아웃)는 **작업 성격**으로 고른다. 직군·카테고리와 연결하지 않으며, 테마 이름은 사용자에게 노출하지 않는다.
+
+| 테마 | 작업 성격 | 예 |
 |------|------|-----------|
-| **IDE / Editor** | 개발자 | JSON Formatter, Base64, URL Encoder, Timestamp, JWT Decoder, Regex Tester, Cron Generator |
-| **Canvas** | 디자이너 | CSS Gradient, Color Picker, Aspect Ratio |
-| **Clean SaaS** | 일반 사용자 | Character Counter, Markdown→HTML, Lorem Ipsum, Image→Base64 |
+| **IDE / Editor** | 텍스트·코드 입력 → 변환된 텍스트·코드 출력 | JSON 포매터, 슬랙 타임스탬프, KST UTC |
+| **Canvas** | 컨트롤 → 실시간 시각 미리보기 | 그라디언트, PDF 도구, 이미지 최적화 |
+| **Clean SaaS** | 폼 입력 → 수치·요약 결과 | 글자 수, 연봉, 연차 |
 
 ---
 
@@ -386,13 +407,13 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ### 공통 헤더 구조
 ```
-[로고마크 + Kitfolio] [전체 도구 | 개발 | 디자인 | 텍스트] ··· [KO/EN 토글]
+[로고마크 + Kitfolio] ··· [블로그] [KO/EN 토글]
 ```
 - 높이: 48px
 - 하단 보더: 0.5px `blue-gray-100`
 - 네비 아이템: 라운드 6px, 액티브 시 `blue-primary-100` 배경
 - 검색·즐겨찾기는 허브 히어로 영역에 배치 (헤더 아님)
-- 모바일: 네비 숨김 (허브는 스티키 카테고리 칩 바로 대체)
+- 분류 탐색(카테고리·작업 칩)은 헤더가 아니라 허브 히어로에 둔다. 모바일은 1단 카테고리를 스티키 칩 바로 노출
 
 ---
 
@@ -556,11 +577,11 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
   (localStorage 토글 아님)
 - **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
-  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATS`(카테고리 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
-  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
+  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATEGORIES`·`ACTIONS`(허브 1단·2단 분류 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
+  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`category`/`actions`/`searchTerms`/`scope`/
   `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
   `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
-  타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
+  AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
   → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
   도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
 - **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
@@ -661,7 +682,7 @@ npm run gen:tailwind-css   # 텍스트 확대 검사기의 Tailwind 기본 style
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
    - [x] 타겟 태그 기반 필터 1단계: 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
-     카테고리 섹션/네비는 유지 (완전 전환 여부는 추후 데이터 보고 결정)
+     → 2026-10-24 폐기: 주제 카테고리(1단) + 작업 태그(2단) 칩으로 대체, `targets` 필드 삭제
 
 0-1. **AdSense Low-value content 대응 (2026-08-18 완료분)**
    - [x] `ready` / `indexable` 분리: sitemap·robots·허브 ItemList JSON-LD 반영 (URL 102 → 60)

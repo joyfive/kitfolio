@@ -22,9 +22,6 @@ export type Dict = Partial<Record<Lang, Record<string, string>>>;
 const COMMON: Record<Lang, Record<string, string>> = {
   en: {
     "nav.all": "All tools",
-    "nav.dev": "Developer",
-    "nav.design": "Design",
-    "nav.text": "Text",
     "header.search": "Search tools…",
     "header.favorites": "Favorites",
     "common.copy": "Copy",
@@ -43,9 +40,6 @@ const COMMON: Record<Lang, Record<string, string>> = {
   },
   ko: {
     "nav.all": "전체 도구",
-    "nav.dev": "개발",
-    "nav.design": "디자인",
-    "nav.text": "텍스트",
     "header.search": "도구 검색…",
     "header.favorites": "즐겨찾기",
     "common.copy": "복사",

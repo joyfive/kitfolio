@@ -40,7 +40,9 @@ function FooterInner({ lang }: { lang: Lang }) {
         {/* 1행: 태그라인 */}
         <div className="foot-row foot-row--top">
           <p className="foot-tagline">
-            Small tools for modern knowledge workers
+            {lang === "ko"
+              ? "필요한 도구를 찾아, 하던 일을 계속하세요."
+              : "Find the tool. Get back to work."}
           </p>
         </div>
 

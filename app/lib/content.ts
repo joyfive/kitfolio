@@ -11,15 +11,17 @@
    ── 구조 ────────────────────────────────────────────────
    ① SITE        : 사이트 상수
    ② HUB         : 허브 · seo(메타) + hero(히어로 카피)
-   ③ CATS        : 카테고리 라벨 (허브 섹션 헤더 · 도구 뱃지)
+   ③ CATEGORIES  : 주제 카테고리 8개 (허브 1단 칩 · 상세 eyebrow · JSON-LD)
+      ACTIONS     : 작업 태그 7종 (허브 2단 칩 · 카드 대표 작업)
    ④ FAQ_SECTION : FAQ 섹션 공통 카피 (인트로·푸터 링크)
    ⑤ TOOLS       : 도구 레지스트리 · 항목 하나에 도구 완결 정의
        ├ slug          : 1뎁스 라우트 (플랫 URL)
        ├ layout        : 디자인 시스템 타입 (card=A · ide=B · canvas=C)
-       ├ cat           : 허브 카테고리 (테마 분기 겸용)
-       ├ targets       : 내부 타겟 태그 (URL 아님 · 필터/분석용)
-       ├ badge         : 뱃지(eyebrow) 텍스트            ── 뱃지 영역
-       ├ name          : h1 (en 메인 + ko 보조 병기)     ── 타이틀 영역
+       ├ category      : 주제 카테고리 1개 (해결하는 문제 기준 · 레이아웃과 무관)
+       ├ actions       : 작업 태그 1~3개 (첫 값이 대표)
+       ├ searchTerms   : { ko, en } 작업으로 찾는 검색어 (화면 미노출 · 허브 검색 전용)
+       ├ scope         : { ko, en } 적용 범위 (예: 대한민국 · 2026년 요율) ── 뱃지 영역
+       ├ name          : h1 (페이지 언어 메인 + 다른 언어 보조 병기) ── 타이틀 영역
        ├ relatedTools  : 관련 도구 slug 목록
        ├ seo           : { ko, en } title·description·keywords (메타데이터)
        ├ content       : { ko, en } card(허브 카드 한 줄) ·
@@ -50,15 +52,27 @@ export type Lang = "ko" | "en";
 /** 디자인 시스템 레이아웃 3종: Type A(Card) · B(IDE) · C(Canvas) */
 export type Layout = "card" | "ide" | "canvas";
 
-/** 내부 타겟 태그: URL 카테고리 아님, 필터링·디스커버리·분석용 */
-export type TargetTag =
-  | "pm"
-  | "designer"
-  | "developer"
-  | "job-seeker"
-  | "office-worker"
-  | "small-business-owner"
-  | "marketer";
+/** 주제 카테고리: 도구가 해결하는 문제. 도구당 정확히 1개.
+ *  URL 이 아니다 (허브 필터 상태는 ?cat= 쿼리). 직군·레이아웃으로 정하지 않는다. */
+export type CategoryId =
+  | "docs-images"
+  | "qr"
+  | "date-time"
+  | "work-leave"
+  | "pay-tax"
+  | "ads-growth"
+  | "code-web"
+  | "accessibility";
+
+/** 작업 태그: 도구가 무엇을 하는가. 대표 1개 + 보조 최대 2개. */
+export type ActionId =
+  | "calculate"
+  | "convert"
+  | "generate"
+  | "edit"
+  | "check"
+  | "analyze"
+  | "read";
 
 export type QA = { question: string; answer: string };
 
@@ -119,8 +133,13 @@ type ToolOg = { title: string; subtitle: string };
 export type Tool = {
   slug: string;
   layout: Layout;
-  cat: "dev" | "design" | "text";
-  targets: TargetTag[];
+  category: CategoryId;
+  /** 첫 값이 대표 작업 (카드에 표시). 허브 2단 필터는 전부를 본다. */
+  actions: [ActionId] | [ActionId, ActionId] | [ActionId, ActionId, ActionId];
+  /** 사용자가 작업으로 입력하는 말 ("계약서 합치기"). 허브 검색 전용, 화면 미노출 */
+  searchTerms: { ko: string[]; en: string[] };
+  /** 적용 범위·기준 (법령·연도·표준). 탐색 태그가 아니라 상세 eyebrow 에 표시 */
+  scope?: { ko: string; en: string };
   ico: string;
   icoClass?: string;
   /** 기능 공개: 사용자가 이 도구를 실제로 쓸 수 있는가.
@@ -136,8 +155,6 @@ export type Tool = {
   indexable: boolean;
   /** 외부 기준 데이터(요율·세법·플랫폼 정책)에 의존하는 도구의 최근 검증일 */
   verifiedAt?: string;
-  /** 뱃지(eyebrow) 보조 텍스트 */
-  badge: string;
   /** h1: 영문 메인 + 국문 보조 병기 */
   name: { ko: string; en: string };
   /** Related Tools 섹션용 slug 목록 */
@@ -201,12 +218,6 @@ export const AUTHOR = {
   role: { ko: "Kitfolio 운영 주체", en: "Operator of Kitfolio" },
 } as const;
 
-/** 허브 카드 등에서 쓰는 레이아웃 표시 라벨 */
-export const LAYOUT_LABEL: Record<Layout, string> = {
-  card: "Clean",
-  ide: "IDE",
-  canvas: "Canvas",
-};
 
 /* ============================================================
    ② HUB: 허브 페이지 (/ , /en)
@@ -214,35 +225,35 @@ export const LAYOUT_LABEL: Record<Layout, string> = {
 export const HUB = {
   seo: {
     ko: {
-      title: "Kitfolio | 일하는 사람을 위한 작은 웹 도구 모음",
+      title: "Kitfolio | 계산·변환·생성·점검을 위한 작은 웹 도구 모음",
       description:
-        "글자 수 카운터, JSON 포매터, 연봉 계산기 등 업무용 계산기·생성기·유틸리티 모음. 설치·가입 없이 브라우저에서 무료로 사용하세요.",
+        "연봉 실수령액, PDF 병합, 사진 용량 줄이기, JSON 정리처럼 자주 하는 작업을 바로 끝내는 작은 웹 도구 모음. 문서·이미지, 날짜·시간, 급여·세금, 코드·웹 등 주제별로 찾고 설치·가입 없이 브라우저에서 무료로 사용하세요.",
       keywords: ["무료 웹 도구", "업무 계산기", "온라인 유틸리티"],
     },
     en: {
-      title: "Kitfolio | Small tools for modern knowledge workers",
+      title: "Kitfolio | Small web tools to calculate, convert, create and check",
       description:
-        "Work calculators, generators and utilities that run entirely in your browser: character counter, JSON formatter, gradient generator and more. No login, no installation, no server-side processing.",
+        "Small web tools that finish everyday tasks fast: take-home pay, merging PDFs, shrinking photos, formatting JSON and more. Browse by topic such as docs and images, date and time, pay and tax, or code and web. No login, no installation, runs in your browser.",
       keywords: ["free web tools", "work calculators", "online utilities"],
     },
   },
   hero: {
     ko: {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
-      h1: { pre: "일하는 사람을 위한 ", accent: "작은 도구들", post: ",\n한 곳에서 빠르게." },
+      h1: { pre: "필요한 ", accent: "도구", post: "를 찾아,\n하던 일을 계속하세요." },
       subtitle:
-        "모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음. 업무에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·유틸리티: 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않고 브라우저 안에서 처리됩니다.",
+        "계산·변환·생성·점검에 필요한 작은 웹 도구 모음. 설치나 가입 없이 열자마자 쓰고, 결과를 바로 가져가세요. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않고 브라우저 안에서 처리됩니다.",
       stat: "개 도구",
     },
     en: {
       eyebrow: "No install · No sign-up · Right in your browser",
       h1: {
-        pre: "Small ",
-        accent: "tools",
-        post: " for modern\nknowledge workers.",
+        pre: "Find the ",
+        accent: "tool",
+        post: ".\nGet back to work.",
       },
       subtitle:
-        "Browser-based micro tools for modern knowledge workers: work calculators, generators, converters and utilities. The text, numbers and files you enter are processed in your browser and never uploaded to Kitfolio's servers.",
+        "Small web tools to calculate, convert, create and check. Nothing to install, no account: open a tool, get the result and keep going. The text, numbers and files you enter are processed in your browser and never uploaded to Kitfolio's servers.",
       stat: " tools",
     },
   },
@@ -252,8 +263,8 @@ export const HUB = {
       heading: "Kitfolio는 어떤 서비스인가요?",
       sections: [
         {
-          h: "일하는 사람을 위한 작은 도구 모음",
-          p: "Kitfolio는 기획자·디자이너·개발자·마케터·구직자·직장인·소상공인이 업무 중 반복해서 마주치는 작은 문제를 빠르게 푸는 브라우저 기반 도구 모음입니다. 글자 수를 세거나, JSON을 정리하거나, 연봉 실수령액을 계산하거나, QR 코드를 만들거나, PDF를 병합하는 것처럼 자주 필요하지만 매번 검색해서 찾기는 번거로운 작업들을 한 곳에 모았습니다. 무거운 프로그램을 설치할 필요도, 회원가입을 할 필요도 없이 페이지를 열면 바로 씁니다.",
+          h: "바로 쓰는 작은 도구 모음",
+          p: "Kitfolio는 프로그램을 설치하거나 복잡한 작업을 시작하지 않고 필요한 결과를 바로 얻으려는 사람을 위한 브라우저 기반 도구 모음입니다. 글자 수를 세거나, JSON을 정리하거나, 연봉 실수령액을 계산하거나, QR 코드를 만들거나, PDF를 병합하는 것처럼 자주 필요하지만 매번 검색해서 찾기는 번거로운 작업들을 한 곳에 모았습니다. 무거운 프로그램을 설치할 필요도, 회원가입을 할 필요도 없이 페이지를 열면 바로 씁니다.",
         },
         {
           h: "모든 처리는 브라우저 안에서",
@@ -261,7 +272,7 @@ export const HUB = {
         },
         {
           h: "필요한 도구를 빠르게 찾기",
-          p: "상단 검색창에 하려는 작업을 입력하거나 직군 필터로 좁혀서 원하는 도구를 바로 찾을 수 있습니다. 각 도구 페이지에는 사용법과 자주 묻는 질문이 함께 정리되어 있어 처음 쓰는 도구도 헤매지 않습니다. Kitfolio는 하나의 거대한 앱이 아니라, 각자 뚜렷한 목적을 가진 작고 실용적인 도구들이 계속 늘어나는 컬렉션입니다.",
+          p: "상단 검색창에 'PDF 합치기', '사진 용량 줄이기'처럼 하려는 작업을 입력하거나, 문서·이미지·급여·세금 같은 주제를 고른 뒤 계산·변환·검사 같은 작업으로 한 번 더 좁혀 원하는 도구를 바로 찾을 수 있습니다. 각 도구 페이지에는 사용법과 자주 묻는 질문이 함께 정리되어 있어 처음 쓰는 도구도 헤매지 않습니다. Kitfolio는 하나의 거대한 앱이 아니라, 각자 뚜렷한 목적을 가진 작고 실용적인 도구들이 계속 늘어나는 컬렉션입니다.",
         },
       ],
     },
@@ -269,8 +280,8 @@ export const HUB = {
       heading: "What is Kitfolio?",
       sections: [
         {
-          h: "Small tools for people who work",
-          p: "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they run into during the workday. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs: tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
+          h: "Small tools you can use right away",
+          p: "Kitfolio is a collection of browser-based tools for anyone who wants a result now, without installing software or starting a complicated workflow. Counting characters, formatting JSON, calculating take-home pay, generating a QR code, merging PDFs: tasks you need often but would rather not search for every time are gathered in one place. There's nothing to install and no account to create; open the page and start using it.",
         },
         {
           h: "Everything runs in your browser",
@@ -278,7 +289,7 @@ export const HUB = {
         },
         {
           h: "Find the right tool fast",
-          p: "Type what you're trying to do into the search box at the top, or narrow the list by role to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app: it's a growing library of small, focused, practical tools, each with a clear purpose.",
+          p: "Type what you're trying to do into the search box at the top, such as 'merge PDFs' or 'shrink a photo', or pick a topic like docs and images or pay and tax and narrow it further by task (calculate, convert, check) to jump straight to the tool you need. Each tool page includes clear how-it-works steps and a set of frequently asked questions, so even a tool you've never used is easy to pick up. Kitfolio isn't one giant app: it's a growing library of small, focused, practical tools, each with a clear purpose.",
         },
       ],
     },
@@ -286,38 +297,72 @@ export const HUB = {
 };
 
 /* ============================================================
-   ③ CATS: 카테고리 라벨
+   ③ CATEGORIES · ACTIONS: 허브 분류 (1단 주제 카테고리 · 2단 작업 태그)
+   순서 = 허브 칩 순서. 라벨은 화면 노출용이라 여기 단일 출처에서만 관리한다.
    ============================================================ */
-export const CATS: {
-  id: "dev" | "design" | "text";
-  navKey: string;
-  label: { ko: { big: string; small: string }; en: { big: string; small: string } };
+export const CATEGORIES: {
+  id: CategoryId;
+  label: { ko: string; en: string };
+  /** JSON-LD WebApplication.applicationCategory */
+  appCategory: string;
 }[] = [
-  {
-    id: "dev",
-    navKey: "nav.dev",
-    label: {
-      ko: { big: "개발", small: "Developer" },
-      en: { big: "Developer", small: "IDE theme" },
-    },
-  },
-  {
-    id: "design",
-    navKey: "nav.design",
-    label: {
-      ko: { big: "디자인", small: "Design" },
-      en: { big: "Design", small: "Canvas theme" },
-    },
-  },
-  {
-    id: "text",
-    navKey: "nav.text",
-    label: {
-      ko: { big: "텍스트", small: "Text" },
-      en: { big: "Text", small: "Clean theme" },
-    },
-  },
+  { id: "docs-images", label: { ko: "문서·이미지", en: "Docs & Images" }, appCategory: "UtilitiesApplication" },
+  { id: "qr", label: { ko: "QR 코드", en: "QR Codes" }, appCategory: "UtilitiesApplication" },
+  { id: "date-time", label: { ko: "날짜·시간", en: "Date & Time" }, appCategory: "UtilitiesApplication" },
+  { id: "work-leave", label: { ko: "근무·휴가", en: "Work Hours & Leave" }, appCategory: "BusinessApplication" },
+  { id: "pay-tax", label: { ko: "급여·세금", en: "Pay & Tax" }, appCategory: "FinanceApplication" },
+  { id: "ads-growth", label: { ko: "광고·성과", en: "Ads & Growth" }, appCategory: "BusinessApplication" },
+  { id: "code-web", label: { ko: "코드·웹 제작", en: "Code & Web" }, appCategory: "DeveloperApplication" },
+  { id: "accessibility", label: { ko: "웹 접근성", en: "Web Accessibility" }, appCategory: "DeveloperApplication" },
 ];
+
+export const ACTIONS: { id: ActionId; label: { ko: string; en: string } }[] = [
+  { id: "calculate", label: { ko: "계산", en: "Calculate" } },
+  { id: "convert", label: { ko: "변환", en: "Convert" } },
+  { id: "generate", label: { ko: "생성", en: "Generate" } },
+  { id: "edit", label: { ko: "편집", en: "Edit" } },
+  { id: "check", label: { ko: "검사", en: "Check" } },
+  { id: "analyze", label: { ko: "분석", en: "Analyze" } },
+  { id: "read", label: { ko: "읽기", en: "Read" } },
+];
+
+export function categoryOf(id: CategoryId) {
+  return CATEGORIES.find((c) => c.id === id)!;
+}
+export function actionOf(id: ActionId) {
+  return ACTIONS.find((a) => a.id === id)!;
+}
+
+/** 도구명 병기: 페이지 언어 이름이 메인, 다른 언어가 보조 (허브 카드·관련 도구·상세 h1 공통) */
+export function toolNames(t: Pick<Tool, "name">, lang: Lang) {
+  const sub: Lang = lang === "ko" ? "en" : "ko";
+  return { main: t.name[lang], sub: t.name[sub], subLang: sub };
+}
+
+/** 허브 분류 필터 링크: 경로가 아니라 쿼리스트링 (플랫 URL 원칙) */
+export function categoryHref(lang: Lang, id: CategoryId) {
+  return localizedHref(lang, "/") + "?cat=" + id;
+}
+
+/** 분류 정합성 검사: npm test (taxonomy.test.ts) 가 호출한다.
+ *  도구당 카테고리 1개 · 작업 태그 1~3개(중복 없음) · searchTerms ko/en 각 2개 이상 ·
+ *  ready 도구가 없는 카테고리 금지(빈 칩 방지). 문제 목록을 반환하고 비어 있으면 통과. */
+export function validateTaxonomy(): string[] {
+  const errs: string[] = [];
+  const catIds = new Set(CATEGORIES.map((c) => c.id));
+  const actIds = new Set(ACTIONS.map((a) => a.id));
+  for (const t of TOOLS) {
+    if (!catIds.has(t.category)) errs.push(`${t.slug}: unknown category ${t.category}`);
+    if (t.actions.length < 1 || t.actions.length > 3) errs.push(`${t.slug}: actions must be 1-3`);
+    if (new Set(t.actions).size !== t.actions.length) errs.push(`${t.slug}: duplicate actions`);
+    for (const a of t.actions) if (!actIds.has(a)) errs.push(`${t.slug}: unknown action ${a}`);
+    for (const l of ["ko", "en"] as const)
+      if ((t.searchTerms?.[l]?.length ?? 0) < 2) errs.push(`${t.slug}: searchTerms.${l} needs 2+`);
+  }
+  for (const c of CATEGORIES)
+    if (!TOOLS.some((t) => t.ready && t.category === c.id)) errs.push(`category ${c.id}: no ready tool`);
+  return errs;
+}
 
 /* ============================================================
    ④ FAQ_SECTION: FAQ 섹션 공통 카피
@@ -366,16 +411,6 @@ export const OG_BADGE = {
   en: "Free · Runs in your browser",
 };
 
-/* 타겟 태그 표시 라벨: 허브 직군 필터 칩 */
-export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
-  pm: { ko: "PM", en: "PM" },
-  designer: { ko: "디자이너", en: "Designer" },
-  developer: { ko: "개발자", en: "Developer" },
-  "job-seeker": { ko: "취업 준비생", en: "Job seeker" },
-  "office-worker": { ko: "직장인", en: "Office worker" },
-  "small-business-owner": { ko: "자영업자", en: "Small business" },
-  marketer: { ko: "마케터", en: "Marketer" },
-};
 
 /* ============================================================
    ⑥ LEGAL: 약관/정책 페이지 (도구 아님, 별도 레지스트리)
@@ -390,7 +425,7 @@ export const LEGAL_EFFECTIVE = { ko: "2026년 8월 16일", en: "August 16, 2026"
 
 /** 소개·문의 페이지의 최종 업데이트일. 시행일자와 성격이 달라 따로 관리한다.
  *  (약관은 개정 시점, 안내 페이지는 내용을 마지막으로 손본 시점) */
-export const LEGAL_UPDATED = { ko: "2026년 9월 17일", en: "September 17, 2026" };
+export const LEGAL_UPDATED = { ko: "2026년 10월 24일", en: "October 24, 2026" };
 
 /** 문서별 날짜 선택: 약관·방침은 시행일자, 안내 페이지는 최종 업데이트일. */
 export function legalDateOf(slug: LegalSlug, lang: Lang): string {
@@ -431,19 +466,19 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "Kitfolio 소개 | 일하는 사람을 위한 작은 웹 도구",
         description:
-          `Kitfolio는 모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 운영 주체 ${LEGAL_OPERATOR.ko.display}를 소개합니다.`,
+          `Kitfolio는 계산·변환·생성·점검에 필요한 작은 웹 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 운영 주체 ${LEGAL_OPERATOR.ko.display}를 소개합니다.`,
       },
       en: {
         title: "About Kitfolio | Small Web Tools for People Who Work",
         description:
-          `Kitfolio is a collection of browser-based micro tools for modern knowledge workers. Learn what the site is for, how it is run, its no-data-collection principle, and ${LEGAL_OPERATOR.en.display}, the company that builds it.`,
+          `Kitfolio is a collection of small web tools to calculate, convert, create and check. Learn what the site is for, how it is run, its no-data-collection principle, and ${LEGAL_OPERATOR.en.display}, the company that builds it.`,
       },
     },
     doc: {
       ko: {
         title: "Kitfolio 소개",
         intro:
-          "Kitfolio는 기획자·디자이너·개발자·마케터·구직자·직장인·소상공인이 업무 중 반복해서 마주치는 작은 문제를 빠르게 푸는 브라우저 기반 도구 모음입니다.",
+          "Kitfolio는 계산·변환·생성·점검에 필요한 작은 웹 도구 모음입니다. 프로그램을 설치하거나 복잡한 작업을 시작하지 않고, 필요한 결과를 바로 얻어 하던 일을 계속할 수 있게 돕습니다.",
         sections: [
           {
             heading: "무엇을 하는 서비스인가요",
@@ -504,7 +539,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       en: {
         title: "About Kitfolio",
         intro:
-          "Kitfolio is a collection of browser-based tools that help PMs, designers, developers, marketers, job seekers, office workers, and small business owners quickly solve the small, repetitive problems they hit during the workday.",
+          "Kitfolio is a collection of small web tools to calculate, convert, create and check. It helps you get the result you need without installing software or starting a complicated workflow, so you can get back to what you were doing.",
         sections: [
           {
             heading: "What the site does",
@@ -887,12 +922,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "json-formatter",
     layout: "ide",
-    cat: "dev",
-    targets: ["developer"],
+    category: "code-web",
+    actions: ["edit", "check"],
+    searchTerms: {
+      ko: ["JSON 들여쓰기", "JSON 한 줄로 압축", "JSON 문법 오류 찾기"],
+      en: ["pretty print json", "minify json", "find json syntax error"],
+    },
     ico: "{ }",
     ready: true,
     indexable: true,
-    badge: "IDE / Editor",
     name: { ko: "JSON 포매터", en: "JSON Formatter" },
     relatedTools: ["slack-timestamp-converter", "tailwind-palette-generator", "character-counter"],
     seo: {
@@ -1097,12 +1135,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "slack-timestamp-converter",
     layout: "ide",
-    cat: "dev",
-    targets: ["pm", "developer"],
+    category: "date-time",
+    actions: ["convert", "generate"],
+    searchTerms: {
+      ko: ["유닉스 시간 날짜로", "슬랙 날짜 표시 만들기", "epoch 변환"],
+      en: ["unix time to date", "slack date token", "epoch converter"],
+    },
     ico: "ts",
     ready: true,
     indexable: true,
-    badge: "IDE / Editor",
     name: { ko: "슬랙 타임스탬프 변환기", en: "Slack Timestamp Converter" },
     relatedTools: ["kst-utc-converter", "slack-message-builder", "json-formatter"],
     seo: {
@@ -1301,14 +1342,18 @@ export const TOOLS: Tool[] = [
   {
     slug: "kst-utc-converter",
     layout: "ide",
-    cat: "dev",
-    targets: ["developer", "pm"],
+    category: "date-time",
+    actions: ["convert"],
+    searchTerms: {
+      ko: ["한국 시간으로 바꾸기", "서버 로그 시간 변환", "UTC 9시간 차이"],
+      en: ["convert UTC to Korea time", "server log time to KST"],
+    },
+    scope: { ko: "UTC+09:00 고정", en: "Fixed UTC+09:00" },
     ico: "+9",
     ready: true,
     // 2026-10-20 추가: 게이트 구조는 갖췄지만 배포 후 노출을 보고 승격한다.
     indexable: false,
     verifiedAt: KST_UTC_VERIFIED_AT,
-    badge: "IDE / Editor",
     name: { ko: "KST UTC 변환기", en: "KST ↔ UTC Converter" },
     relatedTools: ["slack-timestamp-converter", "json-formatter", "time-calculator"],
     seo: {
@@ -1552,14 +1597,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "slack-message-builder",
     layout: "ide",
-    cat: "dev",
-    targets: ["developer", "pm"],
+    category: "code-web",
+    actions: ["generate", "convert"],
+    searchTerms: {
+      ko: ["슬랙 봇 메시지 만들기", "Block Kit JSON", "웹훅 메시지 코드"],
+      en: ["build slack bot message", "block kit json", "slack webhook payload"],
+    },
     ico: "{#}",
     ready: true,
     // 게이트 구조는 갖췄지만 배포 후 노출을 보고 승격한다.
     indexable: false,
     verifiedAt: SLACKMSG_VERIFIED_AT,
-    badge: "IDE / Editor",
     name: { ko: "슬랙 메시지 빌더", en: "Slack Message Builder" },
     relatedTools: ["slack-timestamp-converter", "json-formatter", "kst-utc-converter"],
     seo: {
@@ -1808,12 +1856,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "css-unit-converter",
     layout: "card",
-    cat: "dev",
-    targets: ["developer", "designer"],
+    category: "code-web",
+    actions: ["convert"],
+    searchTerms: {
+      ko: ["rem을 px로", "px를 rem으로", "vw 계산"],
+      en: ["rem to px", "px to rem", "vw to px"],
+    },
     ico: "px",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "CSS 단위 변환기", en: "CSS Unit Converter" },
     relatedTools: ["tailwind-palette-generator", "css-gradient", "json-formatter"],
     seo: {
@@ -2092,13 +2143,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "html-accessibility-checker",
     layout: "ide",
-    cat: "dev",
-    targets: ["developer", "designer", "pm"],
+    category: "accessibility",
+    actions: ["check"],
+    searchTerms: {
+      ko: ["alt 누락 찾기", "label 없는 입력", "헤딩 순서 점검"],
+      en: ["find missing alt", "unlabeled form field", "heading order check"],
+    },
+    scope: { ko: "WCAG 2.2", en: "WCAG 2.2" },
     ico: "a11y",
     ready: true,
     indexable: true,
     verifiedAt: "2026-09-11",
-    badge: "IDE / Editor",
     name: { ko: "HTML 접근성 검사기", en: "HTML Accessibility Checker" },
     // 정적 HTML 검사가 판정하지 못하는 두 영역(렌더링된 색상 대비 · 색상 의존)을
     // 그대로 이어받는 도구만 연결한다. 관련성이 약한 개발 도구를 채워 넣지 않는다.
@@ -2529,13 +2584,16 @@ export const TOOLS: Tool[] = [
   {
     slug: "css-gradient",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer"],
+    category: "code-web",
+    actions: ["generate"],
+    searchTerms: {
+      ko: ["배경 그라디언트 만들기", "CSS 그라데이션 코드"],
+      en: ["make background gradient", "css gradient code"],
+    },
     ico: "",
     icoClass: "ico-grad",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "그라디언트 생성기", en: "CSS Gradient" },
     relatedTools: ["tailwind-palette-generator", "character-counter", "json-formatter"],
     seo: {
@@ -2736,12 +2794,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "tailwind-palette-generator",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer"],
+    category: "code-web",
+    actions: ["generate"],
+    searchTerms: {
+      ko: ["브랜드 색 팔레트", "Tailwind 색상 단계 만들기"],
+      en: ["brand color palette", "tailwind color shades"],
+    },
     ico: "◧",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "Tailwind 팔레트 생성기", en: "Tailwind Palette" },
     relatedTools: ["css-gradient", "json-formatter", "character-counter"],
     seo: {
@@ -2942,12 +3003,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "open-graph-preview",
     layout: "canvas",
-    cat: "design",
-    targets: ["pm", "designer", "developer"],
+    category: "code-web",
+    actions: ["check"],
+    searchTerms: {
+      ko: ["카톡 링크 미리보기", "공유 썸네일 확인", "OG 이미지 크기"],
+      en: ["link preview check", "share thumbnail test", "og image size"],
+    },
     ico: "◧",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "OG 미리보기 테스트", en: "Open Graph Preview Tester" },
     relatedTools: ["css-gradient", "tailwind-palette-generator", "character-counter"],
     seo: {
@@ -3192,13 +3256,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "color-contrast-checker",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer"],
+    category: "accessibility",
+    actions: ["check"],
+    searchTerms: {
+      ko: ["글자색 배경색 대비", "명도대비 4.5:1", "접근성 색상 확인"],
+      en: ["text contrast ratio", "WCAG 4.5:1 check"],
+    },
+    scope: { ko: "WCAG 2.2", en: "WCAG 2.2" },
     ico: "◐",
     ready: true,
     indexable: true,
     verifiedAt: "2026-09-11",
-    badge: "Canvas",
     name: { ko: "명도대비 검사기", en: "Color Contrast Checker" },
     // 색각이상 시뮬레이터가 가장 직접적인 후속 작업이라 open-graph-preview 를 대체한다.
     relatedTools: ["color-blindness-simulator", "tailwind-palette-generator", "css-gradient"],
@@ -3559,13 +3627,16 @@ export const TOOLS: Tool[] = [
   {
     slug: "color-blindness-simulator",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer", "pm"],
+    category: "accessibility",
+    actions: ["check"],
+    searchTerms: {
+      ko: ["적록색약 시뮬레이션", "색맹이 보는 화면", "색약 테스트"],
+      en: ["red green color blindness view", "simulate color blindness"],
+    },
     ico: "◉",
     ready: true,
     indexable: true,
     verifiedAt: "2026-09-11",
-    badge: "Canvas",
     name: { ko: "색각이상 시뮬레이터", en: "Color Blindness Simulator" },
     relatedTools: ["color-contrast-checker", "tailwind-palette-generator", "css-gradient"],
     seo: {
@@ -3941,13 +4012,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "text-scaling-checker",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer", "pm"],
+    category: "accessibility",
+    actions: ["check"],
+    searchTerms: {
+      ko: ["200% 확대 테스트", "줄 간격 접근성", "320px 리플로"],
+      en: ["200% text zoom test", "text spacing check", "320px reflow"],
+    },
+    scope: { ko: "WCAG 2.2", en: "WCAG 2.2" },
     ico: "200%",
     ready: true,
     indexable: true,
     verifiedAt: "2026-09-13",
-    badge: "Canvas",
     name: { ko: "텍스트 확대·간격 검사기", en: "Text Scaling & Spacing Checker" },
     // 확대 문제가 구조에서 비롯될 때의 다음 검사, 단위 조정, 색상 검사 순서로 잇는다.
     relatedTools: ["html-accessibility-checker", "css-unit-converter", "color-contrast-checker"],
@@ -4444,13 +4519,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "accessibility-checklist",
     layout: "card",
-    cat: "design",
-    targets: ["pm", "designer", "developer"],
+    category: "accessibility",
+    actions: ["generate", "check"],
+    searchTerms: {
+      ko: ["웹접근성 점검표", "인증 심사 체크리스트", "KWCAG 항목"],
+      en: ["web accessibility checklist", "KWCAG checklist"],
+    },
+    scope: { ko: "KWCAG 2.2 · WCAG 2.2", en: "KWCAG 2.2 · WCAG 2.2" },
     ico: "☑",
     ready: true,
     indexable: true,
     verifiedAt: "2026-09-12",
-    badge: "Clean SaaS",
     name: { ko: "웹접근성 체크리스트 빌더", en: "Web Accessibility Checklist Builder" },
     // 네 검사 도구보다 앞 단계에서 쓰는 도구라, 항목에서 각 검사 도구로 내려보낸다.
     relatedTools: [
@@ -4870,12 +4949,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "character-counter",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm", "job-seeker"],
+    category: "docs-images",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["자소서 글자 수 세기", "공백 제외 글자 수", "바이트 수 확인"],
+      en: ["count characters for a cover letter", "word count without spaces"],
+    },
     ico: "¶",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "글자 수·단어 수 카운터", en: "Character Counter" },
     relatedTools: ["json-formatter", "slack-timestamp-converter", "css-gradient"],
     seo: {
@@ -5076,13 +5158,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "salary-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "job-seeker", "pm", "developer"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["월급 실수령액", "세후 연봉", "4대보험 공제액"],
+      en: ["monthly take-home pay", "after-tax salary korea"],
+    },
+    scope: { ko: "대한민국 · 2026년 요율", en: "South Korea · 2026 rates" },
     ico: "₩",
     ready: true,
     indexable: true,
     verifiedAt: POLICY_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "연봉 실수령액 계산기", en: "Salary Net Pay Calculator" },
     relatedTools: [
       "growth-rate-calculator",
@@ -5336,15 +5422,19 @@ export const TOOLS: Tool[] = [
   {
     slug: "severance-pay-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "job-seeker", "small-business-owner"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["퇴직금 얼마", "평균임금 계산", "퇴사 퇴직금"],
+      en: ["how much severance", "average wage for severance"],
+    },
+    scope: { ko: "대한민국 근로기준법", en: "South Korea · Labor Standards Act" },
     ico: "₩30",
     ready: true,
     indexable: true,
     verifiedAt: SEVERANCE_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "퇴직금 계산기", en: "Severance Pay Calculator" },
-    relatedTools: ["salary-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
+    relatedTools: ["annual-leave-calculator", "unemployment-benefit-calculator", "salary-calculator"],
     seo: {
       ko: {
         title: "퇴직금 계산기 | 평균임금으로 예상 퇴직금 계산",
@@ -5691,13 +5781,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "freelancer-tax-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["designer", "developer", "pm", "office-worker"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["외주비 실수령액", "3.3% 떼고 얼마", "강연료 세금"],
+      en: ["freelance net pay after 3.3%", "gross-up freelance fee"],
+    },
+    scope: { ko: "대한민국 소득세법", en: "South Korea · Income Tax Act" },
     ico: "3.3",
     ready: true,
     indexable: false,
     verifiedAt: FREELANCER_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "프리랜서 3.3% 계산기", en: "Korea Freelancer Tax Calculator (3.3%)" },
     relatedTools: ["income-tax-calculator", "vat-calculator", "salary-calculator"],
     seo: {
@@ -5969,13 +6063,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "income-tax-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["designer", "developer", "pm", "small-business-owner"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["5월 종소세 환급", "프리랜서 세금 환급", "단순경비율 계산"],
+      en: ["freelancer tax refund in May", "simple expense rate"],
+    },
+    scope: { ko: "대한민국 소득세법", en: "South Korea · Income Tax Act" },
     ico: "Tax",
     ready: true,
     indexable: false,
     verifiedAt: INCOMETAX_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "종합소득세 계산기", en: "Korea Income Tax Calculator for Freelancers" },
     relatedTools: ["freelancer-tax-calculator", "salary-calculator", "severance-pay-calculator"],
     seo: {
@@ -6234,13 +6332,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "vat-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["small-business-owner", "designer", "developer", "office-worker"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["공급가액 역산", "부가세 포함 금액", "간이과세 납부세액"],
+      en: ["price before VAT", "VAT inclusive total", "simplified taxpayer VAT"],
+    },
+    scope: { ko: "대한민국 부가가치세법 · 2026년 기준", en: "South Korea · VAT Act · 2026" },
     ico: "VAT",
     ready: true,
     indexable: false,
     verifiedAt: VAT_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "부가세 계산기", en: "Korea VAT Calculator" },
     relatedTools: ["freelancer-tax-calculator", "salary-calculator", "ad-metrics-calculator"],
     seo: {
@@ -6528,13 +6630,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "annual-leave-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm", "job-seeker", "small-business-owner"],
+    category: "work-leave",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["연차 며칠", "연차 소멸일", "퇴사 시 연차 정산"],
+      en: ["how many annual leave days", "leave expiry date", "leave payout on resignation"],
+    },
+    scope: { ko: "대한민국 근로기준법", en: "South Korea · Labor Standards Act" },
     ico: "15d",
     ready: true,
     indexable: false,
     verifiedAt: ANNUAL_LEAVE_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "연차 계산기", en: "Korea Annual Leave Calculator" },
     relatedTools: ["severance-pay-calculator", "unemployment-benefit-calculator", "flex-work-calculator"],
     seo: {
@@ -6832,13 +6938,17 @@ export const TOOLS: Tool[] = [
   {
     slug: "unemployment-benefit-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "job-seeker", "small-business-owner"],
+    category: "pay-tax",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["실업급여 얼마", "구직급여 신청 마감", "실업급여 기간"],
+      en: ["how much unemployment benefit", "jobseeker allowance deadline"],
+    },
+    scope: { ko: "대한민국 고용보험법 · 2026년 기준", en: "South Korea · Employment Insurance Act · 2026" },
     ico: "60%",
     ready: true,
     indexable: false,
     verifiedAt: UNEMPLOYMENT_VERIFIED_AT,
-    badge: "Clean SaaS",
     name: { ko: "실업급여 계산기", en: "Korea Unemployment Benefit Calculator" },
     relatedTools: ["severance-pay-calculator", "annual-leave-calculator", "salary-calculator"],
     seo: {
@@ -7155,12 +7265,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "flex-work-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm", "developer", "designer"],
+    category: "work-leave",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["이번 달 남은 근무시간", "하루 몇 시간 일해야", "월 소정근로시간"],
+      en: ["remaining work hours this month", "hours per day needed"],
+    },
     ico: "Σh",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "유연근무 잔여시간 계산기", en: "Flex Work Calculator" },
     relatedTools: ["time-calculator", "time-converter", "salary-calculator"],
     seo: {
@@ -7384,12 +7497,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "time-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm", "developer"],
+    category: "date-time",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["근무시간 합계", "시간 더하기", "청구 시간 계산"],
+      en: ["add up hours", "timesheet total", "billable hours"],
+    },
     ico: "±h",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "시간 더하기 빼기 계산기", en: "Time Calculator" },
     relatedTools: ["time-converter", "flex-work-calculator", "slack-timestamp-converter"],
     seo: {
@@ -7590,12 +7706,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "time-converter",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm"],
+    category: "date-time",
+    actions: ["convert"],
+    searchTerms: {
+      ko: ["시간을 일로 바꾸기", "몇 주인지 계산", "근무일 환산"],
+      en: ["hours to days", "convert weeks to hours", "workdays from hours"],
+    },
     ico: "h↔d",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "시간 단위 변환기", en: "Time Converter" },
     relatedTools: ["time-calculator", "flex-work-calculator", "slack-timestamp-converter"],
     seo: {
@@ -7782,12 +7901,16 @@ export const TOOLS: Tool[] = [
   {
     slug: "lunar-solar-converter",
     layout: "card",
-    cat: "text",
-    targets: ["office-worker", "pm", "small-business-owner"],
+    category: "date-time",
+    actions: ["convert"],
+    searchTerms: {
+      ko: ["음력 생일 양력으로", "올해 음력 날짜", "띠 확인"],
+      en: ["lunar birthday to solar", "korean lunar calendar date"],
+    },
+    scope: { ko: "1901~2100년", en: "1901-2100" },
     ico: "☽↔",
     ready: true,
     indexable: true,
-    badge: "Clean SaaS",
     name: { ko: "음력 양력 변환기", en: "Lunar-Solar Converter" },
     relatedTools: ["slack-timestamp-converter", "time-calculator", "flex-work-calculator"],
     seo: {
@@ -8030,12 +8153,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "growth-rate-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["pm", "marketer", "office-worker", "small-business-owner", "developer"],
+    category: "ads-growth",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["전월 대비 증가율", "작년 대비 성장률", "증감률 계산"],
+      en: ["month over month growth", "year over year change", "percent change"],
+    },
     ico: "%↑",
     ready: true,
     indexable: true,
-    badge: "Calculator",
     name: { ko: "성장률 계산기", en: "Growth Rate Calculator" },
     relatedTools: ["cagr-calculator", "ad-budget-pacing-calculator", "funnel-conversion-calculator"],
     seo: {
@@ -8328,12 +8454,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "cagr-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["pm", "small-business-owner", "office-worker"],
+    category: "ads-growth",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["연평균 성장률", "복리 미래값", "몇 년 뒤 매출 예측"],
+      en: ["compound annual growth rate", "future value forecast"],
+    },
     ico: "cagr",
     ready: true,
     indexable: true,
-    badge: "Calculator",
     name: { ko: "CAGR 계산기", en: "CAGR Calculator" },
     relatedTools: ["growth-rate-calculator", "ad-budget-pacing-calculator", "salary-calculator"],
     seo: {
@@ -8578,12 +8707,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "ad-budget-pacing-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
+    category: "ads-growth",
+    actions: ["analyze", "calculate"],
+    searchTerms: {
+      ko: ["광고 예산 소진 속도", "남은 일 예산", "예산 과다 집행"],
+      en: ["ad budget pacing", "daily budget remaining", "overspending check"],
+    },
     ico: "pace",
     ready: true,
     indexable: true,
-    badge: "Marketing Calculator",
     name: { ko: "광고 예산 페이싱 계산기", en: "Ad Budget Pacing Calculator" },
     relatedTools: ["ad-metrics-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
@@ -8795,12 +8927,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "ad-metrics-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["marketer", "small-business-owner", "pm"],
+    category: "ads-growth",
+    actions: ["calculate"],
+    searchTerms: {
+      ko: ["ROAS 계산", "광고 전환당 비용", "클릭률 계산"],
+      en: ["calculate ROAS", "cost per acquisition", "click through rate"],
+    },
     ico: "ADS",
     ready: true,
     indexable: true,
-    badge: "Marketing Calculator",
     name: { ko: "광고 지표 계산기", en: "Ad Metrics Calculator" },
     relatedTools: ["ad-budget-pacing-calculator", "funnel-conversion-calculator", "growth-rate-calculator"],
     seo: {
@@ -9131,12 +9266,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "funnel-conversion-calculator",
     layout: "card",
-    cat: "text",
-    targets: ["marketer", "pm", "small-business-owner"],
+    category: "ads-growth",
+    actions: ["analyze"],
+    searchTerms: {
+      ko: ["단계별 이탈률", "전환 퍼널 분석", "필요 방문자 수"],
+      en: ["funnel drop-off rate", "traffic needed for goal"],
+    },
     ico: "⇢%",
     ready: true,
     indexable: true,
-    badge: "Marketing Calculator",
     name: { ko: "퍼널 전환율 계산기", en: "Funnel Conversion Calculator" },
     relatedTools: ["ad-metrics-calculator", "ad-budget-pacing-calculator", "growth-rate-calculator"],
     seo: {
@@ -9363,12 +9501,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "qr-code-generator",
     layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "designer", "developer", "small-business-owner"],
+    category: "qr",
+    actions: ["generate"],
+    searchTerms: {
+      ko: ["링크 QR 만들기", "명함 QR 코드", "메뉴판 QR"],
+      en: ["make a QR code for a link", "QR code for business card"],
+    },
     ico: "▦",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "QR 코드 생성기", en: "QR Code Generator" },
     relatedTools: ["qr-code-reader", "css-gradient", "open-graph-preview"],
     seo: {
@@ -9615,12 +9756,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "qr-code-reader",
     layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "designer", "developer", "small-business-owner"],
+    category: "qr",
+    actions: ["read"],
+    searchTerms: {
+      ko: ["사진 속 QR 읽기", "QR 링크 확인", "카메라로 QR 스캔"],
+      en: ["read QR from image", "scan QR with camera", "check QR link"],
+    },
     ico: "◲",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "QR 코드 읽기", en: "QR Code Reader" },
     relatedTools: ["qr-code-generator", "open-graph-preview", "css-gradient"],
     seo: {
@@ -9853,12 +9997,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "pdf-tools",
     layout: "canvas",
-    cat: "design",
-    targets: ["office-worker", "pm", "small-business-owner", "designer"],
+    category: "docs-images",
+    actions: ["edit"],
+    searchTerms: {
+      ko: ["계약서 PDF 합치기", "PDF 페이지 나누기", "PDF 한 장 빼기", "PDF 페이지 돌리기"],
+      en: ["merge contract PDFs", "split a PDF", "remove a page from PDF"],
+    },
     ico: "PDF",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "PDF 도구", en: "PDF Tools" },
     relatedTools: ["qr-code-generator", "qr-code-reader", "open-graph-preview"],
     seo: {
@@ -10152,12 +10299,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "image-optimizer",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer"],
+    category: "docs-images",
+    actions: ["edit", "convert"],
+    searchTerms: {
+      ko: ["사진 용량 줄이기", "이미지 압축", "PNG를 WebP로"],
+      en: ["reduce photo file size", "compress image", "convert png to webp"],
+    },
     ico: "IMG",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "이미지 최적화", en: "Image Optimizer" },
     relatedTools: ["image-resizer-cropper", "open-graph-preview", "css-gradient"],
     seo: {
@@ -10473,12 +10623,15 @@ export const TOOLS: Tool[] = [
   {
     slug: "image-resizer-cropper",
     layout: "canvas",
-    cat: "design",
-    targets: ["designer", "developer", "office-worker"],
+    category: "docs-images",
+    actions: ["edit"],
+    searchTerms: {
+      ko: ["프로필 사진 자르기", "사진 크기 줄이기", "1:1 비율로 자르기"],
+      en: ["crop profile photo", "resize image pixels", "crop to 16:9"],
+    },
     ico: "W×H",
     ready: true,
     indexable: true,
-    badge: "Canvas",
     name: { ko: "이미지 리사이즈·크롭", en: "Image Resizer & Cropper" },
     relatedTools: ["image-optimizer", "open-graph-preview", "css-gradient"],
     seo: {
@@ -10873,11 +11026,6 @@ export function aeoQA(slug: string, lang: Lang): QA[] {
   ];
 }
 
-const APP_CATEGORY: Record<Tool["cat"], string> = {
-  dev: "DeveloperApplication",
-  design: "DesignApplication",
-  text: "UtilitiesApplication",
-};
 
 function ogLocale(lang: Lang) {
   return lang === "ko" ? "ko_KR" : "en_US";
@@ -10949,7 +11097,7 @@ export function toolJsonLd(slug: string, lang: Lang) {
     name: t.seo[lang].title!,
     url,
     description: t.seo[lang].description!,
-    applicationCategory: APP_CATEGORY[t.cat],
+    applicationCategory: categoryOf(t.category).appCategory,
     operatingSystem: "Any (web browser)",
     browserRequirements: "Requires JavaScript",
     inLanguage: lang === "ko" ? "ko-KR" : "en-US",

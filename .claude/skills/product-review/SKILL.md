@@ -1,13 +1,14 @@
 ---
 name: product-review
-description: Product-direction review for KitFolio. Use when evaluating a feature, scope, or roadmap decision, when reviewing whether something fits the product vision, or when guarding against feature creep. Tests alignment with "Small tools for modern knowledge workers".
+description: Product-direction review for KitFolio. Use when evaluating a feature, scope, or roadmap decision, when reviewing whether something fits the product vision, or when guarding against feature creep. Tests alignment with "Find the tool. Get back to work." (필요한 도구를 찾아, 하던 일을 계속하세요.).
 ---
 
 # Product Direction Review
 
 When reviewing KitFolio (a feature, a tool, a scope decision), evaluate:
 
-- Is this aligned with "Small tools for modern knowledge workers"?
+- Is this aligned with "Find the tool. Get back to work.": does it get someone a usable result fast, without install or a complicated workflow?
+- Does it fit one of the 8 topic categories? (If not, that is a product decision, not a classification detail.)
 - Does this simplify work?
 - Does it reduce repetitive tasks?
 - Is the UX focused?

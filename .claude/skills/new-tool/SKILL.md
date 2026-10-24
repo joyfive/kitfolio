@@ -8,7 +8,7 @@ description: Checklist and required structure for adding a new KitFolio tool. Us
 Before implementing a new tool, evaluate (all must be "yes"):
 
 1. Does it solve a real recurring problem?
-2. Would modern knowledge workers use it?
+2. Does it give a result someone can use right away, without installing anything or starting a complicated workflow?
 3. Is there search demand?
 4. Can it run entirely in the browser? (no server, no paid/LLM APIs)
 5. Can it be completed within one day?
@@ -19,7 +19,7 @@ Before implementing a new tool, evaluate (all must be "yes"):
 
 Each tool must include:
 - `slug` (flat 1-depth route, e.g. `/aspect-ratio`)
-- classification: exactly one topic `category`, 1-2 `tasks` from that category, 1-3 `actions`, `searchTerms` (procedure: `/build-tool` Step 0.5)
+- classification: exactly one topic `category` (hub 1단), 1-3 `actions` from the fixed 7 (hub 2단, primary first), `searchTerms` (procedure: `/build-tool` Step 0.5)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
 - FAQ (4-6 questions, see `docs/ai/CONTENT_POLICY.md`)
@@ -44,6 +44,6 @@ Do not invent new layout types.
 
 ## Classification gate
 - If the tool fits none of the 8 categories, stop and propose a new one to the user instead of forcing it.
-- If it needs a new task chip, it must be a phrase a user would click ("용량 줄이기"), and the category must still have no empty task.
+- Action tags are fixed at 7 (계산·변환·생성·편집·검사·분석·읽기). Never add one; if none fits, stop and ask.
 
 All user-facing copy is centralized in `app/lib/content.ts`. Never hardcode copy in page components.

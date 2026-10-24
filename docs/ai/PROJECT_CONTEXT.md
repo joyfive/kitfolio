@@ -1,6 +1,6 @@
 # KitFolio Project Context
 
-> **KitFolio is a browser-based collection of practical micro SaaS tools for modern knowledge workers.**
+> **KitFolio is a collection of small web tools to calculate, convert, create and check, all running in the browser.**
 >
 > **The tool is the product. Text exists only to improve discoverability through SEO and AEO.**
 >
@@ -8,15 +8,14 @@
 
 ## Overview
 
-KitFolio is a browser-based micro SaaS collection for modern knowledge workers.
+KitFolio is a collection of small web tools to calculate, convert, create and check.
 
-Brand message:
-> Small tools for modern knowledge workers
+Brand message (2026-10-24):
+> Find the tool. Get back to work. (필요한 도구를 찾아, 하던 일을 계속하세요.)
 
-Supporting message:
-> Work calculators, generators and utilities.
+Core user: anyone who wants a result now, without installing software or starting a complicated workflow. The site is not targeted at a list of job titles; roles appear only as use cases inside individual tools.
 
-The goal is to provide practical utilities that solve small but recurring problems in work and daily professional activities.
+Value: easy to find, short to use, result usable right away.
 
 ## Product Principles
 - Browser-first
@@ -29,8 +28,12 @@ The goal is to provide practical utilities that solve small but recurring proble
 ## Information Architecture
 - Flat 1-depth URL structure
 - Every tool has its own landing page
-- Homepage acts as a discovery hub
+- Homepage acts as a discovery hub: search → topic category (1st-level chip) → action tag (2nd-level chip)
 - Individual tool pages are primary SEO landing pages
+- 8 topic categories (one per tool): Docs & Images · QR Codes · Date & Time · Work Hours & Leave · Pay & Tax · Ads & Growth · Code & Web · Web Accessibility
+- 7 action tags (1 primary + up to 2): calculate · convert · generate · edit · check · analyze · read
+- Hub filter state is a query string (`/?cat=&action=`), never a path
+- Classification is by the problem solved, never by job title or layout. Procedure: `/build-tool` Step 0.5; mapping: `docs/plans/taxonomy-recategorization.md`
 
 ## Design System
 Only three layouts exist:
@@ -38,7 +41,7 @@ Only three layouts exist:
 2. IDE
 3. Canvas
 
-Avoid introducing additional layouts unless absolutely necessary.
+Avoid introducing additional layouts unless absolutely necessary. Layout is chosen by the work and is independent of category.
 
 ## Localization
 All user-facing content is managed centrally (`app/lib/content.ts`).

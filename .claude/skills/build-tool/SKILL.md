@@ -34,7 +34,7 @@ Auto-derived (do NOT edit by hand): hub card (`Hub.tsx`), sitemap (`sitemap.ts`)
 From the feature description, fix these before writing code:
 
 - **slug**: flat, 1-depth, kebab-case, matches search intent (e.g. `meeting-cost-calculator`). No category prefix.
-- **Classification** (category · tasks · actions · searchTerms · scope): follow **Step 0.5** below. Classification describes *the problem the tool solves*, never who uses it or what the screen looks like.
+- **Classification** (category · actions · searchTerms · scope): follow **Step 0.5** below. Classification describes *the problem the tool solves*, never who uses it or what the screen looks like.
 - **layout**: pick by the *work*, independent of category (same category can mix layouts: gradient = canvas, JSON = ide):
   | layout | when | theme |
   |--------|------|-------|
@@ -50,7 +50,7 @@ If any of the 5 `/new-tool` gate questions fail, stop and flag it instead of bui
 
 ## Step 0.5: Classify the tool (automatic, do not ask unless a rule below says so)
 
-Source of truth for ids and labels: `CATEGORIES` in `app/lib/content.ts`. Full rationale and the 35-tool mapping: `docs/plans/taxonomy-recategorization.md`. Show the user the result as one line in your summary (e.g. `급여·세금 › 받을 금액 계산 · 계산`), don't ask for approval.
+Source of truth for ids and labels: `CATEGORIES` and `ACTIONS` in `app/lib/content.ts`. Full rationale and the 35-tool mapping: `docs/plans/taxonomy-recategorization.md`. The hub shows these as two chip depths: **1단 = topic category**, **2단 = action tag** (only the actions that tools in the selected category actually have). Show the user the result as one line in your summary (e.g. `급여·세금 › 계산 · scope: 대한민국 소득세법`), don't ask for approval.
 
 ### 1) Category: exactly one
 
@@ -75,24 +75,7 @@ Tie-breakers already decided (reuse them):
 
 **No match?** Do not invent a category. Stop and propose one to the user with: KO/EN label, one-line definition, the tasks it would hold, and which existing tools (if any) would move. A new category is justified only if a user would look for it by name. Never add a category for a job title, a layout, or a jurisdiction ("한국", "2026").
 
-### 2) Tasks: 1 or 2 from that category's list, first = primary
-
-Pick from `CATEGORIES[category].tasks` only. These are the second-level chips on the hub, so choose the phrase a user would click ("용량 줄이기", not "이미지 처리").
-
-| Category | Task ids |
-|---|---|
-| `docs-images` | `count` 글자 수 확인 · `pdf` PDF 편집 · `compress` 용량 줄이기 · `resize` 크기 조절·자르기 |
-| `qr` | `make` 만들기 · `read` 읽기 |
-| `date-time` | `timezone` 시간대 변환 · `time-math` 시간 계산 · `date-convert` 날짜 변환 |
-| `work-leave` | `hours` 근무시간 계산 · `leave` 연차 확인 |
-| `pay-tax` | `take-home` 받을 금액 계산 · `tax` 세금 계산 · `benefit` 환급·지원 확인 |
-| `ads-growth` | `ad-efficiency` 광고 효율 · `budget` 예산 관리 · `conversion` 전환 분석 · `growth` 성장 분석 |
-| `code-web` | `data` 데이터 정리 · `message` 메시지 작성 · `css-color` CSS·색상 · `share-preview` 공유 미리보기 |
-| `accessibility` | `structure` 구조·레이블 · `color` 색상 · `text` 텍스트 · `checklist` 종합 체크리스트 |
-
-If no task fits, you may add **one** new task to that category in `CATEGORIES` (KO+EN label, user-clickable phrase) and mention it in the summary. Don't create a task that only renames an existing one.
-
-### 3) Actions: primary 1 + up to 2 secondary (internal, not a hub filter)
+### 2) Actions: primary 1 + up to 2 secondary (hub 2단 chip · card shows the primary)
 
 | id | 라벨 | Use when the tool… |
 |---|---|---|
@@ -104,22 +87,22 @@ If no task fits, you may add **one** new task to that category in `CATEGORIES` (
 | `analyze` | 분석 | interprets relationships, differences or efficiency |
 | `read` | 읽기 | extracts content that is encoded or hard to read directly |
 
-Add a secondary action only if the UI has a distinct mode for it (e.g. JSON formatter: `edit` + `check` because it reports syntax errors). Do **not** add `analyze` to every calculator; do not exceed 3.
+Add a secondary action only if the UI has a distinct mode for it (e.g. JSON formatter: `edit` + `check` because it reports syntax errors). Do **not** add `analyze` to every calculator; do not exceed 3. The 2단 filter matches primary *and* secondary actions, so every extra action makes the chip less selective.
 
-### 4) searchTerms: task phrases, KO and EN, at least 2 each
+Do **not** invent new action tags. The 7 are fixed; if a tool truly fits none, stop and ask the user.
 
-Phrases a user types to describe the *job*, not the tool name: "계약서 합치기", "사진 용량 줄이기", "merge contract PDFs". They feed hub search only and are never rendered. Don't duplicate `seo.keywords`.
+### 3) searchTerms: task phrases, KO and EN, at least 2 each
 
-### 5) scope: applicability, not a tag
+Phrases a user types to describe the *job*, not the tool name: "계약서 합치기", "사진 용량 줄이기", "merge contract PDFs". They feed hub search only and are never rendered. Don't duplicate `seo.keywords`. Hub search matches word by word (every word must appear somewhere in name/card/keywords/searchTerms), so "계약서 합치기" finds "계약서 PDF 합치기".
 
-Jurisdiction, effective year, or standard version ("한국 기준 · 2026년 적용", "WCAG 2.2 AA") goes in `scope` (shown in the page head), alongside `verifiedAt`/`sources` when external data is involved. Never encode it in category, tasks or searchTerms.
+### 4) scope: applicability, not a tag
+
+Jurisdiction, effective year, or standard version ("한국 기준 · 2026년 적용", "WCAG 2.2 AA") goes in `scope` (shown in the page head), alongside `verifiedAt`/`sources` when external data is involved. Never encode it in category, actions or searchTerms. Keep it short (e.g. `대한민국 · 2026년 요율` / `South Korea · 2026 rates`, `WCAG 2.2`).
 
 ### Never
 - Classify by job title (PM, 디자이너, 직장인…) or by layout (Clean, IDE, Canvas). Job titles belong only in `content.aeo.who` and FAQ.
 - Put a tool in two categories. Cross-category discovery goes through `relatedTools`.
-- Use category or task in the URL. URLs stay flat (`/<slug>`); hub filter state is a query string (`/?cat=…&task=…`).
-
-> **Migration state.** Until Phase 5 of `docs/plans/taxonomy-recategorization.md` lands, the registry still has the legacy fields `cat` / `targets` / `badge`. While they exist, fill them too so the build passes: `cat` = `ide`→`"dev"`, `canvas`→`"design"`, `card`→`"text"`; `badge` = `"IDE / Editor"` / `"Canvas"` / `"Clean SaaS"` by layout; `targets` = the 1-2 roles from `aeo.who`. If the new fields (`category`, `tasks`, `actions`, `searchTerms`) are not in the `Tool` type yet, record the Step 0.5 result in your summary and in the plan's mapping table so Phase 2 picks it up.
+- Use category or action in the URL. URLs stay flat (`/<slug>`); hub filter state is a query string (`/?cat=…&action=…`).
 
 ---
 
@@ -134,13 +117,12 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
   slug: "<slug>",
   layout: "card" | "ide" | "canvas",          // by the work, not the category
   category: "<category id>",                   // Step 0.5 (1)
-  tasks: ["<primary task>"],                   // Step 0.5 (2), 1-2, from CATEGORIES
-  actions: ["<primary>", "<secondary?>"],      // Step 0.5 (3), 1-3
-  searchTerms: { ko: ["..."], en: ["..."] },   // Step 0.5 (4), hub search only
-  scope: { ko: "...", en: "..." },             // Step 0.5 (5), optional
+  actions: ["<primary>", "<secondary?>"],      // Step 0.5 (2), 1-3, from ACTIONS
+  searchTerms: { ko: ["..."], en: ["..."] },   // Step 0.5 (3), hub search only
+  scope: { ko: "...", en: "..." },             // Step 0.5 (4), optional
   ico: "<glyph>",          // or icoClass: "ico-..."
   ready: true,
-  name: { ko: "<국문명>", en: "<English Name>" },   // en = main h1, ko = secondary
+  name: { ko: "<국문명>", en: "<English Name>" },   // page language = main title, other = secondary (toolNames)
   relatedTools: ["slugA", "slugB", "slugC"],
   seo: {
     ko: { title, description, keywords: [...] },
@@ -172,7 +154,7 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 
 **Tone (see `/branding`):** concise, professional, trustworthy. No hype, no emoji. KO uses Pretendard-style natural Korean; EN is plain and direct. Reinforce speed · usefulness · clarity · "no login / no install / in your browser".
 
-Validate after editing: `slug` and `relatedTools` entries must be real; `category`/`tasks`/`actions` must come from `CATEGORIES` and the action list. `npm test` runs the taxonomy check (one category, 1-2 tasks from that category, 1-3 actions, no empty hub chip) once Phase 1 has landed.
+Validate after editing: `slug` and `relatedTools` entries must be real; `category`/`actions` must come from `CATEGORIES`/`ACTIONS`. `npm test` runs `validateTaxonomy()` (one known category, 1-3 unique actions, searchTerms ko/en ≥2 each, no category without a ready tool).
 
 ---
 
@@ -335,7 +317,7 @@ Append the new tool's row to both tables (or replace the whole table body with t
 - [ ] Registry entry appended, `ready: true`, all ko+en fields filled
 - [ ] `seo.title` keyword-led; `description` ≥150 chars; `keywords` are real search terms
 - [ ] `howItWorks` = 3 steps; `aeo` = What/Who/How/Why; `faq` = 4-6 incl. privacy Q
-- [ ] Classified per Step 0.5: one `category`, 1-2 `tasks` from it, 1-3 `actions`, `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
+- [ ] Classified per Step 0.5: one `category`, 1-3 `actions` (primary first), `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
 - [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs (next-step tool first)
 - [ ] Component created, `PageHead` + work area + `Faq` + `RelatedTools`, client-side only
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
