@@ -34,35 +34,112 @@ Auto-derived (do NOT edit by hand): hub card (`Hub.tsx`), sitemap (`sitemap.ts`)
 From the feature description, fix these before writing code:
 
 - **slug**: flat, 1-depth, kebab-case, matches search intent (e.g. `meeting-cost-calculator`). No category prefix.
-- **cat + layout + badge** (they go together):
-  | cat | layout | badge string | theme |
-  |-----|--------|--------------|-------|
-  | `dev` | `ide` | `"IDE / Editor"` | Input → dark output |
-  | `design` | `canvas` | `"Canvas"` | Controls → live visual |
-  | `text` | `card` | `"Clean SaaS"` | Input + result cards |
-- **targets**: one or more of `pm` · `designer` · `developer` · `job-seeker` · `office-worker` · `small-business-owner` (internal tags, not URLs).
+- **Classification** (category · tasks · actions · searchTerms · scope): follow **Step 0.5** below. Classification describes *the problem the tool solves*, never who uses it or what the screen looks like.
+- **layout**: pick by the *work*, independent of category (same category can mix layouts: gradient = canvas, JSON = ide):
+  | layout | when | theme |
+  |--------|------|-------|
+  | `ide` | text/code in → transformed text/code out | white input → dark output |
+  | `canvas` | controls → live visual preview | white controls → grey checkerboard |
+  | `card` | form inputs → numeric/summary results | white input + result cards |
 - **ico**: a short glyph/character for the card (e.g. `"{ }"`, `"¶"`, `"◧"`), or set `icoClass` for a CSS-drawn icon.
-- **relatedTools**: pick 3 existing slugs (usually same `cat` first, then complementary).
+- **relatedTools**: pick 3 existing slugs: the tool a user needs *next* for the same job first (it may sit in another category, e.g. OG preview ↔ ad metrics), then same-category tools.
 
 If any of the 5 `/new-tool` gate questions fail, stop and flag it instead of building.
 
 ---
 
+## Step 0.5: Classify the tool (automatic, do not ask unless a rule below says so)
+
+Source of truth for ids and labels: `CATEGORIES` in `app/lib/content.ts`. Full rationale and the 35-tool mapping: `docs/plans/taxonomy-recategorization.md`. Show the user the result as one line in your summary (e.g. `급여·세금 › 받을 금액 계산 · 계산`), don't ask for approval.
+
+### 1) Category: exactly one
+
+Walk this list top to bottom and take the **first** match. Judge by the *result the user walks away with*, not by the user's job or the input format.
+
+| # | If the result is… | Category (`id`) |
+|---|---|---|
+| 1 | an amount of money to receive or pay (pay, severance, tax, VAT, benefits) | 급여·세금 `pay-tax` |
+| 2 | working hours or leave days | 근무·휴가 `work-leave` |
+| 3 | a time, time zone, duration, or calendar date (even a developer format like a Slack/Unix timestamp) | 날짜·시간 `date-time` |
+| 4 | an ad, revenue, funnel or growth metric | 광고·성과 `ads-growth` |
+| 5 | a judgment on whether web content meets an accessibility standard (even if it is about colour) | 웹 접근성 `accessibility` |
+| 6 | a QR code made or decoded | QR 코드 `qr` |
+| 7 | code, markup, styles, a web-page asset or a service-integration payload (JSON, CSS, palettes, OG tags, bot messages) | 코드·웹 제작 `code-web` |
+| 8 | a checked or processed text, document or image file | 문서·이미지 `docs-images` |
+
+Tie-breakers already decided (reuse them):
+- Slack timestamp → `date-time` (topic is time, not code).
+- Colour tools: makes a colour asset → `code-web`; checks contrast/vision → `accessibility`.
+- OG preview → `code-web` (it checks page meta tags), linked from marketing tools via `relatedTools`.
+- Annual leave (days) → `work-leave`; severance (money) → `pay-tax`.
+
+**No match?** Do not invent a category. Stop and propose one to the user with: KO/EN label, one-line definition, the tasks it would hold, and which existing tools (if any) would move. A new category is justified only if a user would look for it by name. Never add a category for a job title, a layout, or a jurisdiction ("한국", "2026").
+
+### 2) Tasks: 1 or 2 from that category's list, first = primary
+
+Pick from `CATEGORIES[category].tasks` only. These are the second-level chips on the hub, so choose the phrase a user would click ("용량 줄이기", not "이미지 처리").
+
+| Category | Task ids |
+|---|---|
+| `docs-images` | `count` 글자 수 확인 · `pdf` PDF 편집 · `compress` 용량 줄이기 · `resize` 크기 조절·자르기 |
+| `qr` | `make` 만들기 · `read` 읽기 |
+| `date-time` | `timezone` 시간대 변환 · `time-math` 시간 계산 · `date-convert` 날짜 변환 |
+| `work-leave` | `hours` 근무시간 계산 · `leave` 연차 확인 |
+| `pay-tax` | `take-home` 받을 금액 계산 · `tax` 세금 계산 · `benefit` 환급·지원 확인 |
+| `ads-growth` | `ad-efficiency` 광고 효율 · `budget` 예산 관리 · `conversion` 전환 분석 · `growth` 성장 분석 |
+| `code-web` | `data` 데이터 정리 · `message` 메시지 작성 · `css-color` CSS·색상 · `share-preview` 공유 미리보기 |
+| `accessibility` | `structure` 구조·레이블 · `color` 색상 · `text` 텍스트 · `checklist` 종합 체크리스트 |
+
+If no task fits, you may add **one** new task to that category in `CATEGORIES` (KO+EN label, user-clickable phrase) and mention it in the summary. Don't create a task that only renames an existing one.
+
+### 3) Actions: primary 1 + up to 2 secondary (internal, not a hub filter)
+
+| id | 라벨 | Use when the tool… |
+|---|---|---|
+| `calculate` | 계산 | derives a number or date from input conditions |
+| `convert` | 변환 | re-expresses the same information in another format/unit |
+| `generate` | 생성 | creates a new artifact from input or settings |
+| `edit` | 편집 | changes the structure, size or presentation of existing content |
+| `check` | 검사 | reports whether a standard is met / finds problems |
+| `analyze` | 분석 | interprets relationships, differences or efficiency |
+| `read` | 읽기 | extracts content that is encoded or hard to read directly |
+
+Add a secondary action only if the UI has a distinct mode for it (e.g. JSON formatter: `edit` + `check` because it reports syntax errors). Do **not** add `analyze` to every calculator; do not exceed 3.
+
+### 4) searchTerms: task phrases, KO and EN, at least 2 each
+
+Phrases a user types to describe the *job*, not the tool name: "계약서 합치기", "사진 용량 줄이기", "merge contract PDFs". They feed hub search only and are never rendered. Don't duplicate `seo.keywords`.
+
+### 5) scope: applicability, not a tag
+
+Jurisdiction, effective year, or standard version ("한국 기준 · 2026년 적용", "WCAG 2.2 AA") goes in `scope` (shown in the page head), alongside `verifiedAt`/`sources` when external data is involved. Never encode it in category, tasks or searchTerms.
+
+### Never
+- Classify by job title (PM, 디자이너, 직장인…) or by layout (Clean, IDE, Canvas). Job titles belong only in `content.aeo.who` and FAQ.
+- Put a tool in two categories. Cross-category discovery goes through `relatedTools`.
+- Use category or task in the URL. URLs stay flat (`/<slug>`); hub filter state is a query string (`/?cat=…&task=…`).
+
+> **Migration state.** Until Phase 5 of `docs/plans/taxonomy-recategorization.md` lands, the registry still has the legacy fields `cat` / `targets` / `badge`. While they exist, fill them too so the build passes: `cat` = `ide`→`"dev"`, `canvas`→`"design"`, `card`→`"text"`; `badge` = `"IDE / Editor"` / `"Canvas"` / `"Clean SaaS"` by layout; `targets` = the 1-2 roles from `aeo.who`. If the new fields (`category`, `tasks`, `actions`, `searchTerms`) are not in the `Tool` type yet, record the Step 0.5 result in your summary and in the plan's mapping table so Phase 2 picks it up.
+
+---
+
 ## Step 1: Registry entry (do this first; it drives everything)
 
-Append one `Tool` object to `TOOLS` in `app/lib/content.ts`, in the section matching its `cat` (`// ── Developer/Design/Text ──`). Set **`ready: true`** (a `ready` tool is what makes the page renderable and the card live).
+Append one `Tool` object to `TOOLS` in `app/lib/content.ts`, next to the other tools of the same `category`. Set **`ready: true`** (a `ready` tool is what makes the page renderable and the card live).
 
 Fill **every** field for both `ko` and `en`. Copywriting rules are baked in below: follow them as you write, don't write first and review later.
 
 ```ts
 {
   slug: "<slug>",
-  layout: "card" | "ide" | "canvas",
-  cat: "dev" | "design" | "text",
-  targets: ["..."],
+  layout: "card" | "ide" | "canvas",          // by the work, not the category
+  category: "<category id>",                   // Step 0.5 (1)
+  tasks: ["<primary task>"],                   // Step 0.5 (2), 1-2, from CATEGORIES
+  actions: ["<primary>", "<secondary?>"],      // Step 0.5 (3), 1-3
+  searchTerms: { ko: ["..."], en: ["..."] },   // Step 0.5 (4), hub search only
+  scope: { ko: "...", en: "..." },             // Step 0.5 (5), optional
   ico: "<glyph>",          // or icoClass: "ico-..."
   ready: true,
-  badge: "<badge string from table>",
   name: { ko: "<국문명>", en: "<English Name>" },   // en = main h1, ko = secondary
   relatedTools: ["slugA", "slugB", "slugC"],
   seo: {
@@ -85,7 +162,7 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 
 - **`seo.title`**: ~50-60 chars, lead with the primary keyword (e.g. `"Meeting Cost Calculator | Cost per Meeting"`). This is `<title>`.
 - **`seo.description`**: ≥150 chars, factual, contains the primary keyword + the "runs in your browser, no login/upload" promise. Reused as meta description.
-- **`seo.keywords`**: also feeds the hub search index, so include the real search terms users type, in both languages' arrays as appropriate.
+- **`seo.keywords`**: meta keywords + hub search index: the tool-name style queries ("PDF 병합", "json formatter"). Job-style phrases go in `searchTerms` instead.
 - **`content.card`**: one line for the hub card. Always required (even before `ready`). Plain, benefit-first.
 - **`content.description`**: page lead paragraph; usually equals `seo.description`.
 - **`content.howItWorks`**: exactly **3** short steps (input → action → output). Rendered as numbered chips.
@@ -95,7 +172,7 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 
 **Tone (see `/branding`):** concise, professional, trustworthy. No hype, no emoji. KO uses Pretendard-style natural Korean; EN is plain and direct. Reinforce speed · usefulness · clarity · "no login / no install / in your browser".
 
-Validate after editing: `slug`, `relatedTools` entries, and `targets` must all be real values; `Tool` type will catch shape errors at build.
+Validate after editing: `slug` and `relatedTools` entries must be real; `category`/`tasks`/`actions` must come from `CATEGORIES` and the action list. `npm test` runs the taxonomy check (one category, 1-2 tasks from that category, 1-3 actions, no empty hub chip) once Phase 1 has landed.
 
 ---
 
@@ -258,7 +335,8 @@ Append the new tool's row to both tables (or replace the whole table body with t
 - [ ] Registry entry appended, `ready: true`, all ko+en fields filled
 - [ ] `seo.title` keyword-led; `description` ≥150 chars; `keywords` are real search terms
 - [ ] `howItWorks` = 3 steps; `aeo` = What/Who/How/Why; `faq` = 4-6 incl. privacy Q
-- [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs; `targets` valid
+- [ ] Classified per Step 0.5: one `category`, 1-2 `tasks` from it, 1-3 `actions`, `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
+- [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs (next-step tool first)
 - [ ] Component created, `PageHead` + work area + `Faq` + `RelatedTools`, client-side only
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
 - [ ] 4 route files created (KO/EN page + KO/EN opengraph-image)

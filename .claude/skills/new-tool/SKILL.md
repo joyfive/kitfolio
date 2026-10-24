@@ -19,6 +19,7 @@ Before implementing a new tool, evaluate (all must be "yes"):
 
 Each tool must include:
 - `slug` (flat 1-depth route, e.g. `/aspect-ratio`)
+- classification: exactly one topic `category`, 1-2 `tasks` from that category, 1-3 `actions`, `searchTerms` (procedure: `/build-tool` Step 0.5)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
 - FAQ (4-6 questions, see `docs/ai/CONTENT_POLICY.md`)
@@ -39,6 +40,10 @@ Do not invent new layout types.
 - Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) and flip `ready: true`
 - Control microcopy lives in the component's local `DICT`, not the registry
 - Append `<Faq slug="..." />` at the end of the component
-- Theme by category: dev = IDE / design = Canvas / text = Clean (Card)
+- Layout is chosen by the work (text transform = IDE, live visual = Canvas, form → results = Card), **not** by category. Category is chosen by the problem solved (`/build-tool` Step 0.5), never by job title or layout.
+
+## Classification gate
+- If the tool fits none of the 8 categories, stop and propose a new one to the user instead of forcing it.
+- If it needs a new task chip, it must be a phrase a user would click ("용량 줄이기"), and the category must still have no empty task.
 
 All user-facing copy is centralized in `app/lib/content.ts`. Never hardcode copy in page components.
