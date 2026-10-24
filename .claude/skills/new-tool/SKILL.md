@@ -35,9 +35,14 @@ Each tool must include:
 
 Do not invent new layout types.
 
+## Page or mode tab?
+A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page automatically gets a hub card, sitemap entries, metadata and AEO/FAQ JSON-LD; nothing else is hand-wired (`npm test` → `routes.test.ts` enforces it).
+- New search intent + its own guide/examples/FAQ → **new page**.
+- Same component and structure, only a different formula/unit/operation → **`?mode=` tab on the existing page** (no new card, no sitemap entry). This is how CSS units, ad metrics, PDF tools, VAT, annual leave and freelancer modes work.
+
 ## Implementation footprint (current codebase)
 - `app/<slug>/page.tsx` (KO) + `app/en/<slug>/page.tsx` (EN) + `app/components/<Tool>.tsx`
-- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) and flip `ready: true`
+- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and flip `ready: true`
 - Control microcopy lives in the component's local `DICT`, not the registry
 - Append `<Faq slug="..." />` at the end of the component
 - Layout is chosen by the work (text transform = IDE, live visual = Canvas, form → results = Card), **not** by category. Category is chosen by the problem solved (`/build-tool` Step 0.5), never by job title or layout.

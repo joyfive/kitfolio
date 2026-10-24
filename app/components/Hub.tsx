@@ -8,9 +8,9 @@ import {
   ACTIONS,
   CATEGORIES,
   HUB,
-  TOOLS,
   categoryOf,
   localizedHref,
+  publishedTools,
   type ActionId,
   type CategoryId,
   type Tool,
@@ -38,10 +38,6 @@ const DICT: Dict = {
 // 상태는 쿼리스트링 ?cat=&action= 에 동기화한다 (경로 카테고리 URL 금지).
 const CAT_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
 const ACTION_IDS = new Set<string>(ACTIONS.map((a) => a.id));
-const CAT_ORDER = new Map<string, number>(CATEGORIES.map((c, i) => [c.id, i]));
-const CATALOG = [...TOOLS].sort(
-  (a, b) => CAT_ORDER.get(a.category)! - CAT_ORDER.get(b.category)!,
-);
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -128,8 +124,8 @@ export default function Hub() {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    // 카드 순서 = 카테고리 칩 순서 (같은 카테고리 안에서는 레지스트리 순서 유지)
-    return CATALOG.filter((tool) => {
+    // 카드 = 공개 페이지 단위 (sitemap 과 같은 목록). 순서 = 레지스트리 = 카테고리 순서
+    return publishedTools().filter((tool) => {
       const hay = [
         tool.name.en,
         tool.name.ko,
@@ -161,8 +157,8 @@ export default function Hub() {
 
   // 2단 작업 칩: 선택한 카테고리의 ready 도구가 실제로 가진 작업만 (빈 칩 금지)
   const actionChips = useMemo(() => {
-    const pool = TOOLS.filter(
-      (tool) => tool.ready && (activeCat === "all" || tool.category === activeCat),
+    const pool = publishedTools().filter(
+      (tool) => activeCat === "all" || tool.category === activeCat,
     );
     return ACTIONS.filter((a) => pool.some((tool) => tool.actions.includes(a.id)));
   }, [activeCat]);

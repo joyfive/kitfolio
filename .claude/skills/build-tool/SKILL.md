@@ -7,7 +7,9 @@ description: End-to-end runbook for building a new KitFolio tool/page from a pla
 
 Goal: the user describes a feature in one or two sentences, and you ship a **complete, indexable, bilingual tool** without further hand-holding. This skill is the execution runbook. For the go/no-go gate use `/new-tool`; for deep copy review use `/seo`, `/aeo`, `/branding`.
 
-> **Key architectural fact:** the hub card, search index, sitemap, JSON-LD, OG metadata, and Related Tools are all **auto-generated from the registry** (`app/lib/content.ts`). You never hand-add a hub button · you add a registry entry with `ready: true` and the card appears. So "add a hub button" = "add the registry entry correctly".
+> **Key architectural fact: one tool = one page.** A tool is one standalone URL page (`/<slug>` + `/en/<slug>`) backed by one registry entry in `app/lib/content.ts`. Once the entry is `ready: true` and the 4 route files exist, the hub card, hub search/filter chips, sitemap (KO+EN), hub ItemList JSON-LD, page metadata, WebApplication + FAQPage (AEO/FAQ) JSON-LD, OG image and Related Tools are all **automatic** (`publishedTools()` → `Hub.tsx` · `sitemap.ts` · `hubJsonLd()`; `buildToolMetadata()` · `toolJsonLd()` in the page wrapper). You never hand-add a hub button or a sitemap line.
+>
+> **A `?mode=` tab is not a tool.** If the feature is a variant of an existing tool (same component, same structure, different formula/unit), add a mode tab to that page instead of a new page: it gets no card and no sitemap entry. Only make a new page when it has its own search intent and its own content (guide/examples/FAQ). Ask the user if unsure.
 
 ---
 
@@ -108,7 +110,7 @@ Jurisdiction, effective year, or standard version ("한국 기준 · 2026년 적
 
 ## Step 1: Registry entry (do this first; it drives everything)
 
-Append one `Tool` object to `TOOLS` in `app/lib/content.ts`, next to the other tools of the same `category`. Set **`ready: true`** (a `ready` tool is what makes the page renderable and the card live).
+Insert one `Tool` object into `TOOLS` in `app/lib/content.ts` **at the end of its category block** (the blocks are headed `// ── <카테고리> (<id>) ──` and follow `CATEGORIES` order). Registry order = hub card order = docs table order; the routes test fails if an entry sits in another category's block. Set **`ready: true`** (a `ready` tool is what makes the page renderable and the card live).
 
 Fill **every** field for both `ko` and `en`. Copywriting rules are baked in below: follow them as you write, don't write first and review later.
 
@@ -259,12 +261,15 @@ export default function Image() {
 
 ---
 
-## Step 5: Hub button & discovery = automatic, then verify
+## Step 5: Hub card, sitemap, SEO/AEO = automatic, then verify
 
-Because `Hub.tsx`, `sitemap.ts`, `toolJsonLd`, and `RelatedTools.tsx` all read the registry, the new tool's **hub card, sitemap entries, JSON-LD, and search indexing appear automatically** once the registry entry exists with `ready: true`. Nothing to wire by hand.
+Because `Hub.tsx`, `sitemap.ts` and `hubJsonLd()` all read `publishedTools()`, and the page wrappers call `buildToolMetadata()`/`toolJsonLd()`, the new page's **hub card, sitemap entries (KO+EN, every ready page regardless of `indexable`), ItemList, metadata, and AEO/FAQ JSON-LD appear automatically**. Nothing to wire by hand.
+
+`npm test` (`app/lib/__tests__/routes.test.ts`) fails if the link is broken anywhere: a tool page with no registry entry, a ready entry with no page, a missing KO/EN page or OG image, a wrapper pointing at the wrong slug or language, a component without `PageHead`/`Faq`/`RelatedTools`, a page missing from the sitemap or ItemList, or an entry placed outside its category block. Fix the cause; never weaken the test.
 
 Verify before finishing:
-- `npm run build` (or `npx tsc --noEmit` + `npm run lint`) passes: the `Tool` type and routes compile.
+- `npm test` passes (routes + taxonomy + typography) and `npm run validate:content` passes.
+- `npm run build` (or `npx tsc --noEmit`) passes: the `Tool` type and routes compile.
 - Hub card renders and is searchable (name/card/keywords).
 - `/`<slug> and `/en/`<slug> render with PageHead, working tool, About/FAQ tabs, Related Tools.
 - OG images generate for both languages.
@@ -275,18 +280,19 @@ Verify before finishing:
 
 The hub/sitemap/JSON-LD update themselves, but the **feature-list tables in `README.md` and `CLAUDE.md` are hand-maintained static docs**. A new tool will not show up there on its own. Always do this step before finishing.
 
-Both files contain a "구현된 기능" feature table with the **same 5 columns**:
+Both files contain a "구현된 기능" feature table with the **same 6 columns**, rows in registry (= category) order:
 
-`| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |`
+`| No | 분류 | 기능명 | KO 경로 | EN 경로 | 기능 요약 |`
 
 - **`README.md`**: section heading `## 구현된 기능 (도구 N종)`
 - **`CLAUDE.md`**: section heading `## 구현된 기능 목록 (<date> 기준, 도구 N종)`, placed just above the "도구 로드맵" section.
 
-For the new tool, append **one row to each table**:
+Because rows follow category order, a new tool usually lands mid-table and the numbers after it shift. **Regenerate the whole table** with the snippet below rather than appending by hand. Row values:
 
 | Column | Value |
 |--------|-------|
-| No | next sequential number (current last + 1) |
+| No | position in `publishedTools()` |
+| 분류 | `categoryOf(t.category).label.ko` |
 | 기능명 | `<국문명> / <English Name>` (= registry `name.ko` / `name.en`) |
 | KO 경로 | `` `/<slug>` `` |
 | EN 경로 | `` `/en/<slug>` `` |
@@ -294,21 +300,21 @@ For the new tool, append **one row to each table**:
 
 Then **bump the tool count** in both headings (`N종` → `N+1종`), and refresh the date in the CLAUDE.md heading to today.
 
-To regenerate the canonical row data from the registry instead of hand-copying (recommended: keeps it exact and in registry order):
+Regenerate from the registry (exact, in registry order):
 
 ```bash
 npx tsx -e '
-import { TOOLS } from "./app/lib/content";
-const rows=(TOOLS as any[]).filter(t=>t.ready).map((t,i)=>
-  `| ${i+1} | ${t.name.ko} / ${t.name.en} | \`/${t.slug}\` | \`/en/${t.slug}\` | ${t.content.ko.card} |`);
+import { publishedTools, categoryOf } from "./app/lib/content";
+const rows=publishedTools().map((t,i)=>
+  `| ${i+1} | ${categoryOf(t.category).label.ko} | ${t.name.ko} / ${t.name.en} | \`/${t.slug}\` | \`/en/${t.slug}\` | ${t.content.ko.card} |`);
 console.log(`구현된 기능 (도구 ${rows.length}종)`);
-console.log("| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |");
-console.log("|---|---|---|---|---|");
+console.log("| No | 분류 | 기능명 | KO 경로 | EN 경로 | 기능 요약 |");
+console.log("|---|---|---|---|---|---|");
 console.log(rows.join("\n"));
 '
 ```
 
-Append the new tool's row to both tables (or replace the whole table body with the regenerated output) and update the `N종` count. Keep README and CLAUDE.md in sync: same rows, same count.
+Replace the whole table body in both files with the output and update the `N종` count. Keep README and CLAUDE.md in sync: same rows, same count.
 
 ---
 
@@ -322,5 +328,7 @@ Append the new tool's row to both tables (or replace the whole table body with t
 - [ ] Component created, `PageHead` + work area + `Faq` + `RelatedTools`, client-side only
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
 - [ ] 4 route files created (KO/EN page + KO/EN opengraph-image)
-- [ ] Build/typecheck/lint pass; hub card, sitemap, JSON-LD auto-picked-up
+- [ ] It is a new page (own search intent + own content), not a variant that belongs in an existing tool's `?mode=` tab
+- [ ] Entry sits at the end of its category block in `TOOLS`
+- [ ] `npm test` (routes · taxonomy · typography) and `npm run validate:content` pass; build/typecheck pass; hub card, sitemap, ItemList, JSON-LD auto-picked-up
 - [ ] **Docs updated**: new row appended to the feature table in BOTH `README.md` and `CLAUDE.md`, tool count (`N종`) bumped, CLAUDE.md date refreshed
