@@ -174,11 +174,15 @@ export const LEGAL_OPERATOR = {
   },
 } as const;
 
+/** 문의 이메일: 푸터·약관·문의 페이지·JSON-LD 가 공유하는 단일 출처 */
+export const LEGAL_EMAIL = "support@kitfolio.app";
+
 /** JSON-LD publisher: 서비스 브랜드(Kitfolio)와 운영 주체를 함께 표기한다 */
 export const PUBLISHER_JSONLD = {
   "@type": "Organization",
   name: SITE.name,
   url: SITE.url,
+  email: LEGAL_EMAIL,
   parentOrganization: { "@type": "Organization", name: LEGAL_OPERATOR.en.name },
 } as const;
 
@@ -380,7 +384,6 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    tool 목록)에 넣지 않고 별도 관리한다. 콘텐츠 텍스트는 여기 단일 출처.
    본문 문자열은 최소 인라인 마크업 지원: **굵게**, [라벨](url).
    ============================================================ */
-export const LEGAL_EMAIL = "support@kitfolio.app";
 /** 약관·개인정보처리방침 시행일자 (최근 개정일).
  *  2026-08-16 개정: 운영 주체를 비바스페이스(VIVASPACE)로 명시하고 문의처를 통일했다. */
 export const LEGAL_EFFECTIVE = { ko: "2026년 8월 16일", en: "August 16, 2026" };
@@ -428,12 +431,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "Kitfolio 소개 | 일하는 사람을 위한 작은 웹 도구",
         description:
-          "Kitfolio는 모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 만드는 사람을 소개합니다.",
+          `Kitfolio는 모던 지식 노동자를 위한 브라우저 기반 마이크로 도구 모음입니다. 서비스의 목적, 운영 방식, 개인정보 비수집 원칙과 운영 주체 ${LEGAL_OPERATOR.ko.display}를 소개합니다.`,
       },
       en: {
         title: "About Kitfolio | Small Web Tools for People Who Work",
         description:
-          "Kitfolio is a collection of browser-based micro tools for modern knowledge workers. Learn what the site is for, how it is run, its no-data-collection principle, and who builds it.",
+          `Kitfolio is a collection of browser-based micro tools for modern knowledge workers. Learn what the site is for, how it is run, its no-data-collection principle, and ${LEGAL_OPERATOR.en.display}, the company that builds it.`,
       },
     },
     doc: {
@@ -567,12 +570,12 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "문의하기 | Kitfolio",
         description:
-          "Kitfolio에 대한 도구 제안, 오류 신고, 제휴·광고 문의를 이메일로 보내주세요. 운영자가 직접 확인합니다.",
+          `Kitfolio에 대한 도구 제안, 오류 신고, 제휴·광고 문의를 ${LEGAL_EMAIL} 으로 보내주세요. 운영 주체 ${LEGAL_OPERATOR.ko.display}가 직접 확인합니다.`,
       },
       en: {
         title: "Contact | Kitfolio",
         description:
-          "Send tool suggestions, bug reports, or partnership and advertising inquiries about Kitfolio by email. Messages are read by the maker directly.",
+          `Send tool suggestions, bug reports, or partnership and advertising inquiries about Kitfolio to ${LEGAL_EMAIL}. Messages are read directly by ${LEGAL_OPERATOR.en.display}, the operator.`,
       },
     },
     doc: {
@@ -10982,6 +10985,7 @@ export function hubJsonLd(lang: Lang) {
       url: baseUrl,
       description: HUB.seo[lang].description,
       inLanguage: lang === "ko" ? "ko-KR" : "en-US",
+      publisher: PUBLISHER_JSONLD,
     },
     {
       "@context": "https://schema.org",
