@@ -159,7 +159,7 @@ export const SITE = {
 /** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
  *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
 export const LEGAL_OPERATOR = {
-  ko: { name: "VIVASPACE", rep: "오기쁨", repTitle: "대표" },
+  ko: { name: "비바스페이스", rep: "오기쁨", repTitle: "대표" },
   en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
 } as const;
 
@@ -170,7 +170,7 @@ export const LEGAL_OPERATOR = {
  *  (AdSense 심사·E-E-A-T 관점) 상호·역할·About 링크를 항상 함께 노출한다. */
 export const AUTHOR = {
   /** 작성자명: 약관·개인정보처리방침의 운영 주체와 같은 상호를 쓴다 */
-  name: LEGAL_OPERATOR.en.name,
+  name: { ko: LEGAL_OPERATOR.ko.name, en: LEGAL_OPERATOR.en.name },
   /** JSON-LD author 의 @type. 조직 명의 발행이므로 Organization 이다. */
   type: "Organization",
   /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
@@ -363,7 +363,7 @@ export const TARGET_LABELS: Record<TargetTag, { ko: string; en: string }> = {
    ============================================================ */
 export const LEGAL_EMAIL = "support@kitfolio.app";
 /** 약관·개인정보처리방침 시행일자 (최근 개정일).
- *  2026-08-16 개정: 운영 주체를 VIVASPACE 로 명시하고 문의처를 통일했다. */
+ *  2026-08-16 개정: 운영 주체를 비바스페이스(VIVASPACE)로 명시하고 문의처를 통일했다. */
 export const LEGAL_EFFECTIVE = { ko: "2026년 8월 16일", en: "August 16, 2026" };
 
 /** 소개·문의 페이지의 최종 업데이트일. 시행일자와 성격이 달라 따로 관리한다.

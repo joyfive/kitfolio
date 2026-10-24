@@ -28,7 +28,7 @@ coverAlt: 이미지 대체 텍스트   # (선택)
 relatedTools: growth-rate-calculator, cagr-calculator   # (선택) 관련 도구 slug, 쉼표 구분
 tags: 성장률, 지표            # (선택) 태그, 쉼표 구분
 
-author: VIVASPACE           # (선택) 생략 시 운영 주체(content.ts AUTHOR)
+author: 비바스페이스         # (선택) 생략 시 운영 주체(content.ts AUTHOR)
 authorType: Organization    # (선택) Person | Organization
                             #        생략 시: author 를 직접 적었으면 Person,
                             #        안 적었으면 AUTHOR.type = Organization

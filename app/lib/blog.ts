@@ -177,7 +177,7 @@ function metaFromData(
     coverAlt: data.coverAlt || undefined,
     relatedTools: toList(data.relatedTools),
     tags: toList(data.tags),
-    author: data.author?.trim() || AUTHOR.name,
+    author: data.author?.trim() || AUTHOR.name[lang],
     // 프론트매터에 author 를 따로 적었다면 보통 사람 이름이므로 Person 으로 본다.
     // authorType 을 명시하면 그 값이 항상 우선한다.
     authorType:
