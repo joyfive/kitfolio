@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { ToolName, ToolTags } from "./ToolCardParts";
 import {
-  LAYOUT_LABEL,
   RELATED_SECTION,
   TOOLS,
   getTool,
@@ -40,13 +40,10 @@ export default function RelatedTools({ slug }: { slug: string }) {
                   {tool.ico}
                 </span>
               </div>
-              <div className="tool-name">
-                <span className="tool-en">{tool.name.en}</span>
-                <span className="tool-ko">{tool.name.ko}</span>
-              </div>
+              <ToolName tool={tool} lang={lang} />
               <p className="tool-desc">{tool.content[lang].card}</p>
               <div className="tool-foot">
-                <span className="theme-tag">{LAYOUT_LABEL[tool.layout]}</span>
+                <ToolTags tool={tool} lang={lang} />
                 {tool.ready ? (
                   <span className="tool-go">
                     <span>{t("open")}</span>

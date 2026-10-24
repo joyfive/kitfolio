@@ -34,7 +34,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import type { Metadata } from "next";
-import { AUTHOR, SITE, type Lang } from "./content";
+import { AUTHOR, PUBLISHER_JSONLD, SITE, type Lang } from "./content";
 
 marked.use({ gfm: true, breaks: false });
 
@@ -177,7 +177,7 @@ function metaFromData(
     coverAlt: data.coverAlt || undefined,
     relatedTools: toList(data.relatedTools),
     tags: toList(data.tags),
-    author: data.author?.trim() || AUTHOR.name,
+    author: data.author?.trim() || AUTHOR.name[lang],
     // 프론트매터에 author 를 따로 적었다면 보통 사람 이름이므로 Person 으로 본다.
     // authorType 을 명시하면 그 값이 항상 우선한다.
     authorType:
@@ -322,7 +322,7 @@ export function postJsonLd(meta: PostMeta) {
       ...(meta.authorType === "Person" ? { jobTitle: meta.authorRole } : {}),
       url: abs(AUTHOR.path),
     },
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: PUBLISHER_JSONLD,
     // 사실 확인 날짜가 있으면 검토 기록으로 함께 노출
     ...(meta.reviewedAt
       ? {

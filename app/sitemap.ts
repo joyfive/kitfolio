@@ -1,16 +1,12 @@
 import type { MetadataRoute } from "next";
-import { LEGAL_SLUGS, SITE, TOOLS, localizedHref } from "./lib/content";
+import { LEGAL_SLUGS, SITE, localizedHref, publishedTools } from "./lib/content";
 import { getAllSlugs } from "./lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // sitemap 에는 "검색 랜딩 페이지로 제공할 품질이 확보된" 도구만 넣는다.
-  // indexable=false 도구도 페이지는 정상 동작하고 허브·관련 도구 링크로 접근 가능하다.
-  // 2026-09부터 robots noindex는 전면 폐기했으므로(결정 G) sitemap 제외가
-  // indexable=false 도구에 대한 유일한 "덜 보이는" 신호다: 실제 크롤링·색인
-  // 자체를 막지는 않는다.
-  const toolPaths = TOOLS.filter((t) => t.ready && t.indexable).map(
-    (t) => "/" + t.slug,
-  );
+  // 도구는 페이지 기준: 공개된(ready) 도구 페이지는 전부 넣는다 (2026-10-24).
+  // 허브 카드와 같은 목록(publishedTools)이라 새 도구 페이지는 레지스트리에 추가하는
+  // 순간 카드·sitemap 에 함께 들어온다. ?mode= 탭은 페이지가 아니므로 넣지 않는다.
+  const toolPaths = publishedTools().map((t) => "/" + t.slug);
   const legalPaths = LEGAL_SLUGS.map((s) => "/" + s);
   const blogPaths = ["/blog", ...getAllSlugs().map((s) => "/blog/" + s)];
   const paths = ["/", ...toolPaths, ...blogPaths, ...legalPaths];

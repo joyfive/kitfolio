@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTool, localizedHref, type Lang } from "../lib/content";
+import { getTool, localizedHref, toolNames, type Lang } from "../lib/content";
 import { getPost, formatDate, blogLabel } from "../lib/blog";
 
 /** 단일 아티클 렌더. 서버 컴포넌트: md → HTML 은 blog.ts(marked)에서. */
@@ -91,8 +91,8 @@ export default function BlogArticle({
               >
                 <span className={"tool-ico " + (t.icoClass || "")}>{t.ico}</span>
                 <span className="kf-article-tool-name">
-                  <b>{t.name.en}</b>
-                  <span>{t.name.ko}</span>
+                  <b>{toolNames(t, lang).main}</b>
+                  <span lang={toolNames(t, lang).subLang}>{toolNames(t, lang).sub}</span>
                 </span>
               </Link>
             ))}

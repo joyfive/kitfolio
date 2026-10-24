@@ -3,12 +3,16 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLang, useT, type Dict } from "../lib/i18n";
+import { ToolName, ToolTags } from "./ToolCardParts";
 import {
+  ACTIONS,
+  CATEGORIES,
   HUB,
-  TARGET_LABELS,
-  TOOLS,
+  categoryOf,
   localizedHref,
-  type TargetTag,
+  publishedTools,
+  type ActionId,
+  type CategoryId,
   type Tool,
 } from "../lib/content";
 
@@ -17,27 +21,23 @@ const DICT: Dict = {
   ko: {
     open: "열기",
     empty: "검색 결과가 없습니다.",
-    searchPlaceholder: "어떤 도구가 필요하세요? (예: JSON, 그라디언트, 글자 수)",
-    allTargets: "전체",
+    searchPlaceholder: "하려는 작업을 입력하세요 (예: PDF 합치기, 사진 용량 줄이기)",
+    allCats: "전체",
+    allActions: "모든 작업",
   },
   en: {
     open: "Open",
     empty: "No tools match your search.",
-    searchPlaceholder: "What do you need? (e.g. JSON, gradient, word count)",
-    allTargets: "All",
+    searchPlaceholder: "What do you need to do? (e.g. merge PDFs, shrink a photo)",
+    allCats: "All",
+    allActions: "Any task",
   },
 };
 
-// 허브 분류 = 타겟(직군). 칩/카드 태그가 이 순서를 공유.
-const TARGET_ORDER: TargetTag[] = [
-  "pm",
-  "marketer",
-  "designer",
-  "developer",
-  "job-seeker",
-  "office-worker",
-  "small-business-owner",
-];
+// 허브 분류: 1단 주제 카테고리(CATEGORIES) → 2단 작업 태그(ACTIONS).
+// 상태는 쿼리스트링 ?cat=&action= 에 동기화한다 (경로 카테고리 URL 금지).
+const CAT_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
+const ACTION_IDS = new Set<string>(ACTIONS.map((a) => a.id));
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -66,7 +66,8 @@ export default function Hub() {
   const hero = HUB.hero[lang];
 
   const [query, setQuery] = useState("");
-  const [activeTarget, setActiveTarget] = useState<"all" | TargetTag>("all");
+  const [activeCat, setActiveCat] = useState<"all" | CategoryId>("all");
+  const [activeAction, setActiveAction] = useState<"all" | ActionId>("all");
   const [onlyFav, setOnlyFav] = useState(false);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
@@ -78,11 +79,38 @@ export default function Hub() {
     }
   }, []);
 
-  // 푸터 등에서 /?target=pm 로 진입하면 해당 직군 칩을 선택
+  // 도구 상세의 카테고리 링크(/?cat=pay-tax) 등으로 진입하면 해당 칩을 선택
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search).get("target");
-    if (p && p in TARGET_LABELS) setActiveTarget(p as TargetTag);
+    const q = new URLSearchParams(window.location.search);
+    const c = q.get("cat");
+    const a = q.get("action");
+    if (c && CAT_IDS.has(c)) setActiveCat(c as CategoryId);
+    if (a && ACTION_IDS.has(a)) setActiveAction(a as ActionId);
   }, []);
+
+  function syncQuery(cat: "all" | CategoryId, action: "all" | ActionId) {
+    const q = new URLSearchParams(window.location.search);
+    q.delete("target");
+    if (cat === "all") q.delete("cat");
+    else q.set("cat", cat);
+    if (action === "all") q.delete("action");
+    else q.set("action", action);
+    const qs = q.toString();
+    window.history.replaceState(null, "", window.location.pathname + (qs ? "?" + qs : ""));
+  }
+
+  function selectCat(cat: "all" | CategoryId) {
+    // 카테고리를 바꾸면 2단 작업 선택은 초기화한다 (다른 카테고리에 없는 작업일 수 있음)
+    setActiveCat(cat);
+    setActiveAction("all");
+    setOnlyFav(false);
+    syncQuery(cat, "all");
+  }
+
+  function selectAction(action: "all" | ActionId) {
+    setActiveAction(action);
+    syncQuery(activeCat, action);
+  }
 
   function toggleFav(id: string) {
     setFavs((prev) => {
@@ -96,7 +124,8 @@ export default function Hub() {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return TOOLS.filter((tool) => {
+    // 카드 = 공개 페이지 단위 (sitemap 과 같은 목록). 순서 = 레지스트리 = 카테고리 순서
+    return publishedTools().filter((tool) => {
       const hay = [
         tool.name.en,
         tool.name.ko,
@@ -104,32 +133,44 @@ export default function Hub() {
         tool.content.en.card,
         ...tool.seo.ko.keywords,
         ...tool.seo.en.keywords,
+        ...tool.searchTerms.ko,
+        ...tool.searchTerms.en,
+        categoryOf(tool.category).label.ko,
+        categoryOf(tool.category).label.en,
       ]
         .join(" ")
         .toLowerCase();
-      const matchQ = !q || hay.includes(q);
+      // 단어 단위 일치: "계약서 합치기" 가 "계약서 PDF 합치기" 에도 맞도록 모든 단어가 들어 있으면 통과
+      const matchQ = !q || q.split(/\s+/).every((w) => hay.includes(w));
       const matchFav = !onlyFav || favs.has(tool.slug);
-      const matchTarget =
-        activeTarget === "all" || tool.targets.includes(activeTarget);
-      return matchQ && matchFav && matchTarget;
+      const matchCat = activeCat === "all" || tool.category === activeCat;
+      const matchAction =
+        activeAction === "all" || tool.actions.includes(activeAction);
+      return matchQ && matchFav && matchCat && matchAction;
     });
-  }, [query, onlyFav, favs, activeTarget]);
+  }, [query, onlyFav, favs, activeCat, activeAction]);
 
-  const chips: { key: "all" | TargetTag; label: string }[] = [
-    { key: "all", label: t("allTargets") },
-    ...TARGET_ORDER.map((tag) => ({ key: tag, label: TARGET_LABELS[tag][lang] })),
+  const catChips: { key: "all" | CategoryId; label: string }[] = [
+    { key: "all", label: t("allCats") },
+    ...CATEGORIES.map((c) => ({ key: c.id, label: c.label[lang] })),
   ];
 
-  const ChipBar = ({ className }: { className: string }) => (
-    <div className={className} aria-label="Filter by role">
-      {chips.map((c) => (
+  // 2단 작업 칩: 선택한 카테고리의 ready 도구가 실제로 가진 작업만 (빈 칩 금지)
+  const actionChips = useMemo(() => {
+    const pool = publishedTools().filter(
+      (tool) => activeCat === "all" || tool.category === activeCat,
+    );
+    return ACTIONS.filter((a) => pool.some((tool) => tool.actions.includes(a.id)));
+  }, [activeCat]);
+
+  const CatChips = ({ className }: { className: string }) => (
+    <div className={className} role="group" aria-label={lang === "ko" ? "주제" : "Topic"}>
+      {catChips.map((c) => (
         <button
           key={c.key}
-          className={activeTarget === c.key ? "is-active" : ""}
-          onClick={() => {
-            setActiveTarget(c.key);
-            setOnlyFav(false);
-          }}
+          className={activeCat === c.key ? "is-active" : ""}
+          aria-pressed={activeCat === c.key}
+          onClick={() => selectCat(c.key)}
         >
           {c.label}
         </button>
@@ -139,22 +180,9 @@ export default function Hub() {
 
   return (
     <>
-      {/* 모바일 스티키 칩 바 (≤640px) */}
-      <div className="hub-mcats" aria-label="Roles">
-        <div className="hub-mcats-track">
-          {chips.map((c) => (
-            <button
-              key={c.key}
-              className={activeTarget === c.key ? "is-active" : ""}
-              onClick={() => {
-                setActiveTarget(c.key);
-                setOnlyFav(false);
-              }}
-            >
-              {c.label}
-            </button>
-          ))}
-        </div>
+      {/* 모바일 스티키 칩 바 (≤640px): 1단 주제 카테고리 */}
+      <div className="hub-mcats">
+        <CatChips className="hub-mcats-track" />
       </div>
 
       <section className="hub-hero">
@@ -198,8 +226,26 @@ export default function Hub() {
           </span>
         </div>
 
-        {/* 데스크톱 직군 칩: 선택 시 해당 타겟 도구만 필터링 */}
-        <ChipBar className="hub-targets" />
+        {/* 1단 주제 카테고리 (데스크톱) · 2단 작업 태그 (공통): 스타일로 depth 구분 */}
+        <CatChips className="hub-cats" />
+        <div
+          className="hub-actions"
+          role="group"
+          aria-label={lang === "ko" ? "작업" : "Task"}
+        >
+          {[{ id: "all" as const, label: { ko: t("allActions"), en: t("allActions") } }, ...actionChips].map(
+            (a) => (
+              <button
+                key={a.id}
+                className={activeAction === a.id ? "is-active" : ""}
+                aria-pressed={activeAction === a.id}
+                onClick={() => selectAction(a.id)}
+              >
+                {a.label[lang]}
+              </button>
+            ),
+          )}
+        </div>
       </section>
 
       <div className="cat-grid" id="catalog">
@@ -265,19 +311,10 @@ function ToolCard({
           <StarIcon filled={fav} />
         </button>
       </div>
-      <div className="tool-name">
-        <span className="tool-en">{tool.name.en}</span>
-        <span className="tool-ko">{tool.name.ko}</span>
-      </div>
+      <ToolName tool={tool} lang={lang} />
       <p className="tool-desc">{tool.content[lang].card}</p>
       <div className="tool-foot">
-        <span className="tool-tags">
-          {tool.targets.map((tag) => (
-            <span className="target-tag" key={tag}>
-              {TARGET_LABELS[tag][lang]}
-            </span>
-          ))}
-        </span>
+        <ToolTags tool={tool} lang={lang} />
         <span className="tool-go">
           <span>{openLabel}</span>
           <svg
@@ -293,3 +330,4 @@ function ToolCard({
     </Link>
   );
 }
+

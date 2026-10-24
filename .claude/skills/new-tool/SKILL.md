@@ -8,7 +8,7 @@ description: Checklist and required structure for adding a new KitFolio tool. Us
 Before implementing a new tool, evaluate (all must be "yes"):
 
 1. Does it solve a real recurring problem?
-2. Would modern knowledge workers use it?
+2. Does it give a result someone can use right away, without installing anything or starting a complicated workflow?
 3. Is there search demand?
 4. Can it run entirely in the browser? (no server, no paid/LLM APIs)
 5. Can it be completed within one day?
@@ -19,6 +19,7 @@ Before implementing a new tool, evaluate (all must be "yes"):
 
 Each tool must include:
 - `slug` (flat 1-depth route, e.g. `/aspect-ratio`)
+- classification: exactly one topic `category` (hub 1단), 1-3 `actions` from the fixed 7 (hub 2단, primary first), `searchTerms` (procedure: `/build-tool` Step 0.5)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
 - FAQ (4-6 questions, see `docs/ai/CONTENT_POLICY.md`)
@@ -34,11 +35,20 @@ Each tool must include:
 
 Do not invent new layout types.
 
+## Page or mode tab?
+A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page automatically gets a hub card, sitemap entries, metadata and AEO/FAQ JSON-LD; nothing else is hand-wired (`npm test` → `routes.test.ts` enforces it).
+- New search intent + its own guide/examples/FAQ → **new page**.
+- Same component and structure, only a different formula/unit/operation → **`?mode=` tab on the existing page** (no new card, no sitemap entry). This is how CSS units, ad metrics, PDF tools, VAT, annual leave and freelancer modes work.
+
 ## Implementation footprint (current codebase)
 - `app/<slug>/page.tsx` (KO) + `app/en/<slug>/page.tsx` (EN) + `app/components/<Tool>.tsx`
-- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) and flip `ready: true`
+- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and flip `ready: true`
 - Control microcopy lives in the component's local `DICT`, not the registry
 - Append `<Faq slug="..." />` at the end of the component
-- Theme by category: dev = IDE / design = Canvas / text = Clean (Card)
+- Layout is chosen by the work (text transform = IDE, live visual = Canvas, form → results = Card), **not** by category. Category is chosen by the problem solved (`/build-tool` Step 0.5), never by job title or layout.
+
+## Classification gate
+- If the tool fits none of the 8 categories, stop and propose a new one to the user instead of forcing it.
+- Action tags are fixed at 7 (계산·변환·생성·편집·검사·분석·읽기). Never add one; if none fits, stop and ask.
 
 All user-facing copy is centralized in `app/lib/content.ts`. Never hardcode copy in page components.

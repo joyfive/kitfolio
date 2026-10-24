@@ -35,20 +35,36 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 초기에 추가된 Character Counter, CSS Gradient Generator, Slack Timestamp Converter 등은
 브랜드 방향 확정 전 MVP 단계에서 생성된 초기 도구들이다.
 
-### 브랜드 포지셔닝
-- **Brand Message**: *Small tools for modern knowledge workers*
-- **Supporting Message (SEO/AEO)**: *Work calculators, generators and utilities*
-- **제품 정의**: 모던 지식 노동자를 위한 브라우저 기반 마이크로 SaaS 도구 모음.
-  업무·일상 직업 활동에서 반복되는 작은 문제를 푸는 계산기·생성기·변환기·포매터·유틸리티.
-  전부 브라우저에서 실행: **No login / No installation / No server-side processing.**
+### 브랜드 포지셔닝 (2026-10-24 개정)
+| 항목 | 내용 |
+|---|---|
+| 제품 정의 | 계산·변환·생성·점검에 필요한 작은 웹 도구 모음 · *Small web tools to calculate, convert, create and check* |
+| 핵심 사용자 | 프로그램을 설치하거나 복잡한 작업을 시작하지 않고, 필요한 결과를 바로 얻으려는 사람 |
+| 제공 가치 | 찾기 쉽고, 사용이 짧고, 결과를 바로 활용할 수 있음 |
+| 브랜드 메시지 | **필요한 도구를 찾아, 하던 일을 계속하세요.** · *Find the tool. Get back to work.* |
 
-### 타겟 유저
-PM · Designer · Developer · Job Seeker · Office Worker · Small Business Owner
+전부 브라우저에서 실행: **No login / No installation / No server-side processing.**
 
-**중요**: 타겟은 URL 카테고리가 **아니다**. 필터링·디스커버리·분석용 **내부 메타데이터 태그**로만 사용.
-```ts
-{ slug: "flex-work-calculator", targets: ["office-worker"] }
-```
+### 타겟 유저 → 직군 타깃 폐기 (2026-10-24)
+서비스 전체 타깃을 직군 목록으로 정의하지 않는다. PM·디자이너·직장인 등은 **개별 도구의 사용 사례**
+(`content.aeo.who` · FAQ)에서만 다룬다. 레지스트리의 `targets` 필드와 허브 직군 필터는 삭제했다.
+
+### 분류: 주제 카테고리(1단) + 작업 태그(2단) (2026-10-24)
+사용자는 직업이 아니라 **지금 해결할 작업**으로 도구를 찾는다. 분류는 해결하는 문제 기준이며,
+직군·화면 테마(Clean·IDE·Canvas)는 탐색 화면에 노출하지 않는다.
+
+- **주제 카테고리 8개 (도구당 정확히 1개)**: 문서·이미지 · QR 코드 · 날짜·시간 · 근무·휴가 · 급여·세금 ·
+  광고·성과 · 코드·웹 제작 · 웹 접근성
+- **작업 태그 7종 (대표 1 + 보조 최대 2)**: 계산 · 변환 · 생성 · 편집 · 검사 · 분석 · 읽기.
+  허브에서는 선택한 카테고리 도구가 가진 작업만 2단 칩으로 보인다. 카드에는 대표 작업 1개.
+- 1단·2단은 **칩 스타일로 depth 구분** (카테고리 = 둥근 pill 채움 · 작업 = 작은 사각 점선/테두리).
+- **검색어(`searchTerms`)**: "계약서 합치기"처럼 작업으로 찾는 말. 허브 검색 전용, 화면 미노출. 검색은 단어 단위 일치.
+- **적용 범위(`scope`)**: 한국 기준·2026년 적용·WCAG 2.2 같은 정보는 탐색 태그가 아니라 도구 상세 eyebrow 에 표시.
+- 허브 필터 상태는 쿼리스트링 `/?cat=&action=` (경로 카테고리 URL 금지 원칙 유지). 도구 상세 eyebrow 의 카테고리는 이 링크로 허브에 돌아간다.
+- **도구명 병기**: KO 화면은 국문명 메인·영문 보조, EN 화면은 영문명 메인·국문 보조. 카드·관련 도구·상세 h1 공통 (`toolNames()`).
+- 화면 템플릿(layout)은 분류와 무관하다. 같은 카테고리 안에서도 작업에 맞는 레이아웃을 고른다.
+- 단일 출처: `CATEGORIES` · `ACTIONS` (`app/lib/content.ts`), 검사 `validateTaxonomy()` (`npm test`).
+  배치 근거·35종 배치표: `docs/plans/taxonomy-recategorization.md`. 신규 도구 분류 절차: `/build-tool` Step 0.5.
 
 ### 사이트 아키텍처
 - **URL은 플랫 구조 유지. 카테고리 기반 URL 도입 금지.** 모든 도구는 1뎁스 라우트.
@@ -64,19 +80,38 @@ PM · Designer · Developer · Job Seeker · Office Worker · Small Business Own
   ④ How It Works ⑤ FAQ ⑥ Related Tools ⑦ 구조화 메타데이터 ⑧ 개별 OG 메타데이터
 - 도구 자체가 본질적 가치. SEO 콘텐츠는 발견성(discoverability) 보조.
 
-### 색인 정책: `ready` 와 `indexable` 분리 (2026-08-18 확정)
+### 도구 = 페이지 단위 (2026-10-24 확정)
+
+**도구 하나 = 독립 URL 페이지 하나**(`/<slug>` + `/en/<slug>`) = 레지스트리 항목 하나.
+레지스트리에 `ready: true` 로 넣으면 아래가 전부 **자동**으로 따라온다. 손으로 추가할 곳은 없다.
+
+| 자동 노출 | 출처 |
+|---|---|
+| 허브 카드 · 검색 · 분류 칩 | `publishedTools()` → `Hub.tsx` |
+| sitemap (KO·EN + alternates) | `publishedTools()` → `sitemap.ts` |
+| 허브 ItemList JSON-LD | `publishedTools()` → `hubJsonLd()` |
+| title·description·canonical·hreflang·OG 메타 | `buildToolMetadata()` (페이지 래퍼) |
+| WebApplication + FAQPage(AEO·FAQ) JSON-LD | `toolJsonLd()` (페이지 래퍼) |
+| OG 이미지 · Related Tools · 상세 분류 링크 | `toolOgImage()` · `RelatedTools` · `PageHead` |
+
+- 페이지 안의 `?mode=` 탭(PDF·CSS 단위·부가세·연차·프리랜서 등)은 **별도 도구가 아니다.** 카드·sitemap 항목을 만들지 않는다.
+- 레지스트리 순서 = 카테고리 순서 = 허브 카드·문서 표 순서. 새 도구는 같은 카테고리 묶음 끝에 넣는다.
+- `npm test` 의 `routes.test.ts` 가 연결을 검사한다: 레지스트리에 없는 도구 페이지, 페이지 없는 공개 도구,
+  KO/EN 페이지·OG 이미지 누락, 다른 slug·언어로 연결된 래퍼, PageHead·Faq·RelatedTools 누락,
+  sitemap·ItemList 누락, 카테고리 순서 위반.
+
+### 색인 정책: `ready` 와 `indexable` 분리 (2026-08-18 확정 · 2026-10-24 개정)
 
 > AdSense "가치가 별로 없는 콘텐츠(Low-value content)" 반려 대응.
-> **기능 공개 여부와 검색 색인 여부는 별개다.**
+> **기능 공개 여부와 품질 게이트 통과 여부는 별개다.**
 
 | 필드 | 의미 | 영향 |
 |---|---|---|
-| `ready` | 사용자가 도구를 실제로 쓸 수 있는가 | 허브 목록·검색·필터·Related Tools 노출 |
-| `indexable` | 독립 검색 랜딩 페이지로 낼 품질이 확보됐는가 | sitemap 포함 · robots · 허브 ItemList JSON-LD |
+| `ready` | 사용자가 도구를 실제로 쓸 수 있는가 | 허브 카드·검색·필터·Related Tools · **sitemap · 허브 ItemList JSON-LD** |
+| `indexable` | 독립 검색 랜딩 페이지로 낼 품질이 확보됐는가 | 콘텐츠 품질 게이트 대상 · AdUnit 광고 렌더 가드 |
 
-- `indexable=false` 도구도 **페이지는 정상 동작하고 UI에 그대로 노출된다.**
-  sitemap에서 빠지고 `robots: { index: false, follow: true }` 가 붙을 뿐이다.
-  기능 삭제·redirect·robots.txt 차단은 하지 않는다.
+- 2026-10-24부터 sitemap·ItemList 는 **페이지 기준(`ready`)** 이다. `indexable=false` 도구도 sitemap 에 들어간다.
+  robots noindex 는 2026-09 에 이미 전면 폐기했다. 기능 삭제·redirect·robots.txt 차단도 하지 않는다.
 - **동일 컴포넌트·동일 구조·수식만 다른 파생 페이지는 계열별 대표 1개만 색인한다.**
   (CSS 단위 → `rem-to-px` / 광고 지표 → `roas-calculator` / PDF → `pdf-merge`)
 - 현재 ready 35종 중 28종이 **indexable** (URL 통합으로 파생 페이지가 사라졌고, 남은 도구는
@@ -135,8 +170,11 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 ```ts
 {
   slug: "slack-timestamp-converter",
-  layout: "ide",                       // 레이아웃 타입
-  targets: ["pm", "developer"],        // 내부 타겟 태그
+  layout: "ide",                       // 레이아웃 타입 (분류와 무관)
+  category: "date-time",               // 주제 카테고리 1개 (허브 1단)
+  actions: ["convert", "generate"],    // 작업 태그 1~3개, 첫 값이 대표 (허브 2단)
+  searchTerms: { ko: [...], en: [...] }, // 작업으로 찾는 검색어 (화면 미노출)
+  scope: { ko, en },                   // 적용 범위 (선택)
   ready: true,                         // 기능 공개
   indexable: false,                    // 검색 색인 (ready 와 별개)
   verifiedAt: "2026-08-18",            // 외부 기준 데이터에 의존하는 도구만
@@ -188,7 +226,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 → generic 유틸리티보다 **실용적인 도구** 우선.
 
 ### 장기 비전
-Kitfolio = **a searchable library of browser-based micro SaaS tools for modern knowledge workers.**
+Kitfolio = **a searchable library of small browser-based tools to calculate, convert, create and check.**
 해자(moat)는 단일 도구가 아니라, 강한 검색 의도 + 무마찰 접근으로 반복 업무 문제를 푸는
 **커지는 실용 도구 컬렉션**이다. 성공 요인: 유용한 도구 · 강한 검색 의도 · 빠른 접근 ·
 일관된 UX · 확장 가능한 메타데이터 관리: 콘텐츠 생산이 아님.
@@ -241,11 +279,13 @@ Kitfolio = **a searchable library of browser-based micro SaaS tools for modern k
 
 ### 테마 분기
 
-| 테마 | 타겟 | 적용 도구 |
+테마(레이아웃)는 **작업 성격**으로 고른다. 직군·카테고리와 연결하지 않으며, 테마 이름은 사용자에게 노출하지 않는다.
+
+| 테마 | 작업 성격 | 예 |
 |------|------|-----------|
-| **IDE / Editor** | 개발자 | JSON Formatter, Base64, URL Encoder, Timestamp, JWT Decoder, Regex Tester, Cron Generator |
-| **Canvas** | 디자이너 | CSS Gradient, Color Picker, Aspect Ratio |
-| **Clean SaaS** | 일반 사용자 | Character Counter, Markdown→HTML, Lorem Ipsum, Image→Base64 |
+| **IDE / Editor** | 텍스트·코드 입력 → 변환된 텍스트·코드 출력 | JSON 포매터, 슬랙 타임스탬프, KST UTC |
+| **Canvas** | 컨트롤 → 실시간 시각 미리보기 | 그라디언트, PDF 도구, 이미지 최적화 |
+| **Clean SaaS** | 폼 입력 → 수치·요약 결과 | 글자 수, 연봉, 연차 |
 
 ---
 
@@ -386,17 +426,17 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 ### 공통 헤더 구조
 ```
-[로고마크 + Kitfolio] [전체 도구 | 개발 | 디자인 | 텍스트] ··· [KO/EN 토글]
+[로고마크 + Kitfolio] ··· [블로그] [KO/EN 토글]
 ```
 - 높이: 48px
 - 하단 보더: 0.5px `blue-gray-100`
 - 네비 아이템: 라운드 6px, 액티브 시 `blue-primary-100` 배경
 - 검색·즐겨찾기는 허브 히어로 영역에 배치 (헤더 아님)
-- 모바일: 네비 숨김 (허브는 스티키 카테고리 칩 바로 대체)
+- 분류 탐색(카테고리·작업 칩)은 헤더가 아니라 허브 히어로에 둔다. 모바일은 1단 카테고리를 스티키 칩 바로 노출
 
 ---
 
-## 구현된 기능 목록 (2026-10-22 기준, 도구 35종)
+## 구현된 기능 목록 (2026-10-24 기준, 도구 35종)
 
 > 2026-07-24: 동일 수식 계산기 통합 · ① 퍼센트 변화율/증가율/감소율 · MoM/YoY/QoQ/WoW 성장률(7종)을
 > **성장률 계산기(`/growth-rate-calculator`)**로, ② 성장 예측(성장 예측 ≡ 복리 성장 동일 수식)을
@@ -484,43 +524,43 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > 양 언어로 라이브 중인 도구 전체 목록. 아래 "도구 로드맵"은 초기 기획 단계의 원안이며,
 > 실제 구현 현황은 이 표가 우선한다.
 
-| No | 기능명 | KO 경로 | EN 경로 | 기능 요약 |
-|---|---|---|---|---|
-| 1 | JSON 포매터 / JSON Formatter | `/json-formatter` | `/en/json-formatter` | JSON 문자열을 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지와 유효성 검사 포함. |
-| 2 | 슬랙 타임스탬프 변환기 / Slack Timestamp Converter | `/slack-timestamp-converter` | `/en/slack-timestamp-converter` | Unix 타임스탬프 ↔ 날짜 ↔ Slack date 구문 양방향 변환. 현재 타임스탬프 실시간 표시. |
-| 3 | KST UTC 변환기 / KST ↔ UTC Converter | `/kst-utc-converter` | `/en/kst-utc-converter` | 한국 시간(KST)과 UTC를 양방향 변환하고, 언어별 변환 함수 코드를 함께 복사합니다. |
-| 4 | 슬랙 메시지 빌더 / Slack Message Builder | `/slack-message-builder` | `/en/slack-message-builder` | 슬랙 봇 메시지를 에디터로 작성하고 Block Kit JSON과 curl·Node.js·Python 호출 코드로 변환합니다. |
-| 5 | CSS 단위 변환기 / CSS Unit Converter | `/css-unit-converter` | `/en/css-unit-converter` | rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서. |
-| 6 | HTML 접근성 검사기 / HTML Accessibility Checker | `/html-accessibility-checker` | `/en/html-accessibility-checker` | HTML을 붙여넣어 헤딩·랜드마크·alt·label·탭 순서를 정적으로 점검하고 수정 위치를 확인합니다. |
-| 7 | 그라디언트 생성기 / CSS Gradient | `/css-gradient` | `/en/css-gradient` | linear·radial·conic 그라디언트를 시각적으로 편집하고 CSS 코드를 즉시 복사. |
-| 8 | Tailwind 팔레트 생성기 / Tailwind Palette | `/tailwind-palette-generator` | `/en/tailwind-palette-generator` | 베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사. |
-| 9 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
-| 10 | 명도대비 검사기 / Color Contrast Checker | `/color-contrast-checker` | `/en/color-contrast-checker` | 전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다. |
-| 11 | 색각이상 시뮬레이터 / Color Blindness Simulator | `/color-blindness-simulator` | `/en/color-blindness-simulator` | 시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다. |
-| 12 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
-| 13 | 웹접근성 체크리스트 빌더 / Web Accessibility Checklist Builder | `/accessibility-checklist` | `/en/accessibility-checklist` | KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다. |
-| 14 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
-| 15 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
-| 16 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
-| 17 | 프리랜서 3.3% 계산기 / Korea Freelancer Tax Calculator (3.3%) | `/freelancer-tax-calculator` | `/en/freelancer-tax-calculator` | 외주비·강연료에서 3.3%·8.8% 원천징수 후 실수령액과, 원하는 실수령액에 맞는 지급액을 계산. |
-| 18 | 종합소득세 계산기 / Korea Income Tax Calculator for Freelancers | `/income-tax-calculator` | `/en/income-tax-calculator` | 3.3% 프리랜서의 1년 수입으로 5월 종합소득세 환급·추가 납부액을 계산하고, 단순·기준경비율과 간편장부를 비교. |
-| 19 | 부가세 계산기 / Korea VAT Calculator | `/vat-calculator` | `/en/vat-calculator` | 공급가액과 부가세 포함 합계를 서로 계산하고, 간이과세자의 업종별 납부세액과 납부 면제 여부를 계산. |
-| 20 | 연차 계산기 / Korea Annual Leave Calculator | `/annual-leave-calculator` | `/en/annual-leave-calculator` | 입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교. |
-| 21 | 실업급여 계산기 / Korea Unemployment Benefit Calculator | `/unemployment-benefit-calculator` | `/en/unemployment-benefit-calculator` | 퇴직 전 임금·나이·가입기간으로 구직급여 1일 금액과 총액, 다 받기 위한 신청 마감일을 계산합니다. |
-| 22 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
-| 23 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
-| 24 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
-| 25 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
-| 26 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
-| 27 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
-| 28 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
-| 29 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
-| 30 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
-| 31 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
-| 32 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
-| 33 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
-| 34 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
-| 35 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
+| No | 분류 | 기능명 | KO 경로 | EN 경로 | 기능 요약 |
+|---|---|---|---|---|---|
+| 1 | 문서·이미지 | 글자 수·단어 수 카운터 / Character Counter | `/character-counter` | `/en/character-counter` | 글자·단어·문장·줄 수를 실시간 집계. SNS 글자 수 제한 안내 포함. |
+| 2 | 문서·이미지 | PDF 도구 / PDF Tools | `/pdf-tools` | `/en/pdf-tools` | PDF 병합·분할·회전·페이지 삭제를 탭 전환으로. 모든 처리는 브라우저 안에서. |
+| 3 | 문서·이미지 | 이미지 최적화 / Image Optimizer | `/image-optimizer` | `/en/image-optimizer` | PNG·JPG·WebP의 픽셀 크기는 그대로 두고 포맷과 품질만 조절해 파일 용량을 줄입니다. |
+| 4 | 문서·이미지 | 이미지 리사이즈·크롭 / Image Resizer & Cropper | `/image-resizer-cropper` | `/en/image-resizer-cropper` | 이미지를 원하는 픽셀 크기로 조절하거나 1:1·16:9 같은 비율로 잘라 저장합니다. |
+| 5 | QR 코드 | QR 코드 생성기 / QR Code Generator | `/qr-code-generator` | `/en/qr-code-generator` | 링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다. |
+| 6 | QR 코드 | QR 코드 읽기 / QR Code Reader | `/qr-code-reader` | `/en/qr-code-reader` | QR 이미지를 붙여넣거나 업로드하고 카메라로 스캔해 링크와 내용을 확인합니다. |
+| 7 | 날짜·시간 | KST UTC 변환기 / KST ↔ UTC Converter | `/kst-utc-converter` | `/en/kst-utc-converter` | 한국 시간(KST)과 UTC를 양방향 변환하고, 언어별 변환 함수 코드를 함께 복사합니다. |
+| 8 | 날짜·시간 | 슬랙 타임스탬프 변환기 / Slack Timestamp Converter | `/slack-timestamp-converter` | `/en/slack-timestamp-converter` | Unix 타임스탬프 ↔ 날짜 ↔ Slack date 구문 양방향 변환. 현재 타임스탬프 실시간 표시. |
+| 9 | 날짜·시간 | 시간 더하기 빼기 계산기 / Time Calculator | `/time-calculator` | `/en/time-calculator` | 시간 블록을 자유롭게 더하고 빼서 총 근무시간 계산. 타임시트·청구 시간에 유용. |
+| 10 | 날짜·시간 | 시간 단위 변환기 / Time Converter | `/time-converter` | `/en/time-converter` | 시간·일·주·월·년 단위 즉시 변환. 근무 기준(8h/일)과 캘린더 기준 선택 가능. |
+| 11 | 날짜·시간 | 음력 양력 변환기 / Lunar-Solar Converter | `/lunar-solar-converter` | `/en/lunar-solar-converter` | 양력 ↔ 음력 날짜를 즉시 변환. 1901~2100년 범위, 윤달·갑자·띠 정보 포함. |
+| 12 | 근무·휴가 | 유연근무 잔여시간 계산기 / Flex Work Calculator | `/flex-work-calculator` | `/en/flex-work-calculator` | 유연근무 목표·남은 근무시간과 하루 평균 필요시간을 계산. 휴가 차감·공휴일 반영. |
+| 13 | 근무·휴가 | 연차 계산기 / Korea Annual Leave Calculator | `/annual-leave-calculator` | `/en/annual-leave-calculator` | 입사일로 지금까지 생긴 연차·다음 발생일·소멸일을 계산하고, 회계연도 기준과 퇴사 정산 차이를 비교. |
+| 14 | 급여·세금 | 연봉 실수령액 계산기 / Salary Net Pay Calculator | `/salary-calculator` | `/en/salary-calculator` | 세전 연봉·월급으로 4대보험·세금을 뺀 예상 실수령액과 공제 내역을 즉시 계산. |
+| 15 | 급여·세금 | 퇴직금 계산기 / Severance Pay Calculator | `/severance-pay-calculator` | `/en/severance-pay-calculator` | 입사일과 퇴직 전 3개월 임금으로 1일 평균임금과 예상 퇴직금(세전)을 계산. |
+| 16 | 급여·세금 | 프리랜서 3.3% 계산기 / Korea Freelancer Tax Calculator (3.3%) | `/freelancer-tax-calculator` | `/en/freelancer-tax-calculator` | 외주비·강연료에서 3.3%·8.8% 원천징수 후 실수령액과, 원하는 실수령액에 맞는 지급액을 계산. |
+| 17 | 급여·세금 | 종합소득세 계산기 / Korea Income Tax Calculator for Freelancers | `/income-tax-calculator` | `/en/income-tax-calculator` | 3.3% 프리랜서의 1년 수입으로 5월 종합소득세 환급·추가 납부액을 계산하고, 단순·기준경비율과 간편장부를 비교. |
+| 18 | 급여·세금 | 부가세 계산기 / Korea VAT Calculator | `/vat-calculator` | `/en/vat-calculator` | 공급가액과 부가세 포함 합계를 서로 계산하고, 간이과세자의 업종별 납부세액과 납부 면제 여부를 계산. |
+| 19 | 급여·세금 | 실업급여 계산기 / Korea Unemployment Benefit Calculator | `/unemployment-benefit-calculator` | `/en/unemployment-benefit-calculator` | 퇴직 전 임금·나이·가입기간으로 구직급여 1일 금액과 총액, 다 받기 위한 신청 마감일을 계산합니다. |
+| 20 | 광고·성과 | 광고 지표 계산기 / Ad Metrics Calculator | `/ad-metrics-calculator` | `/en/ad-metrics-calculator` | ROAS·CPA·CPC·CPM·CTR을 탭 전환으로 즉시 계산. 역산 모드로 목표 매출·예상 전환·필요 예산까지. |
+| 21 | 광고·성과 | 광고 예산 페이싱 계산기 / Ad Budget Pacing Calculator | `/ad-budget-pacing-calculator` | `/en/ad-budget-pacing-calculator` | 캠페인 기간 진행률 대비 예산 소진율을 비교해 과다·부족 집행 상태를 즉시 확인. |
+| 22 | 광고·성과 | 퍼널 전환율 계산기 / Funnel Conversion Calculator | `/funnel-conversion-calculator` | `/en/funnel-conversion-calculator` | 마케팅 퍼널 단계별 전환율·이탈률 분석과 목표 달성을 위한 필요 트래픽 역산. |
+| 23 | 광고·성과 | 성장률 계산기 / Growth Rate Calculator | `/growth-rate-calculator` | `/en/growth-rate-calculator` | 이전값·현재값으로 성장률·MoM·YoY 계산. 목표 성장률·필요 증가량·역산·퍼센트 차이도 탭 전환으로. |
+| 24 | 광고·성과 | CAGR 계산기 / CAGR Calculator | `/cagr-calculator` | `/en/cagr-calculator` | 시작값·종료값·기간으로 CAGR 즉시 계산. 탭 전환으로 복리 최종값·미래 예측값도. |
+| 25 | 코드·웹 제작 | JSON 포매터 / JSON Formatter | `/json-formatter` | `/en/json-formatter` | JSON 문자열을 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지와 유효성 검사 포함. |
+| 26 | 코드·웹 제작 | 슬랙 메시지 빌더 / Slack Message Builder | `/slack-message-builder` | `/en/slack-message-builder` | 슬랙 봇 메시지를 에디터로 작성하고 Block Kit JSON과 curl·Node.js·Python 호출 코드로 변환합니다. |
+| 27 | 코드·웹 제작 | CSS 단위 변환기 / CSS Unit Converter | `/css-unit-converter` | `/en/css-unit-converter` | rem·em·vw·%·ms를 px(또는 초)로 즉시 변환. CSS 단위 변환 5종을 한 곳에서. |
+| 28 | 코드·웹 제작 | 그라디언트 생성기 / CSS Gradient | `/css-gradient` | `/en/css-gradient` | linear·radial·conic 그라디언트를 시각적으로 편집하고 CSS 코드를 즉시 복사. |
+| 29 | 코드·웹 제작 | Tailwind 팔레트 생성기 / Tailwind Palette | `/tailwind-palette-generator` | `/en/tailwind-palette-generator` | 베이스 HEX 하나로 Tailwind용 11단계 팔레트(50~950)를 만들고 코드로 복사. |
+| 30 | 코드·웹 제작 | OG 미리보기 테스트 / Open Graph Preview Tester | `/open-graph-preview` | `/en/open-graph-preview` | OG 이미지와 제목·설명이 주요 플랫폼에서 어떻게 보이는지 비교합니다. |
+| 31 | 웹 접근성 | HTML 접근성 검사기 / HTML Accessibility Checker | `/html-accessibility-checker` | `/en/html-accessibility-checker` | HTML을 붙여넣어 헤딩·랜드마크·alt·label·탭 순서를 정적으로 점검하고 수정 위치를 확인합니다. |
+| 32 | 웹 접근성 | 명도대비 검사기 / Color Contrast Checker | `/color-contrast-checker` | `/en/color-contrast-checker` | 전경색·배경색의 WCAG 명도대비를 검사하고, 미달하면 통과하는 색상 후보를 제안합니다. |
+| 33 | 웹 접근성 | 색각이상 시뮬레이터 / Color Blindness Simulator | `/color-blindness-simulator` | `/en/color-blindness-simulator` | 시안·스크린샷을 색각 조건별로 변환해 색상에만 의존한 구분을 찾습니다. |
+| 34 | 웹 접근성 | 텍스트 확대·간격 검사기 / Text Scaling & Spacing Checker | `/text-scaling-checker` | `/en/text-scaling-checker` | HTML·CSS와 JSX·TSX·Tailwind에 200% 확대, 320px 리플로, WCAG 간격을 적용해 원본과 나란히 비교합니다. |
+| 35 | 웹 접근성 | 웹접근성 체크리스트 빌더 / Web Accessibility Checklist Builder | `/accessibility-checklist` | `/en/accessibility-checklist` | KWCAG·WCAG 2.2 항목으로 프로젝트용 체크리스트를 만들고 역할·상태·근거를 관리합니다. |
 
 ---
 
@@ -556,11 +596,11 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
   (localStorage 토글 아님)
 - **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
-  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATS`(카테고리 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
-  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`cat`/`targets`(내부 태그)/`badge`(뱃지)/
+  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATEGORIES`·`ACTIONS`(허브 1단·2단 분류 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
+  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`category`/`actions`/`searchTerms`/`scope`/
   `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
   `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
-  타겟 칩 라벨은 `TARGET_LABELS`, AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
+  AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
   → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
   도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
 - **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
@@ -582,7 +622,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
   공통 렌더러 `app/lib/og.tsx`가 레지스트리 `og.title/subtitle` 소비.
   한글 폰트는 `app/lib/fonts/NotoSansKR-{Bold,Medium}.ttf` (리포 포함, 빌드 시 로컬 로드)
 - JSON-LD: 도구 `WebApplication` + `FAQPage`(FAQ 보유 시), 허브 `WebSite`+`ItemList`
-- `sitemap.xml`(양 언어 + alternates) · `robots.txt` 자동 생성
+- `sitemap.xml`(공개 도구 페이지 전체 · 양 언어 + alternates) · `robots.txt` 자동 생성
 - 구 URL `/tools/slack-timestamp-converter`(±`/en`)는 next.config 영구 리다이렉트로 플랫 URL에 연결
 - 구글 서치콘솔(DNS 인증) · 네이버 서치어드바이저(메타태그 `naver-site-verification`) 등록
 
@@ -612,7 +652,14 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **개인정보처리방침 정합성 원칙**: 실제 사용하는 서비스만 기재한다. 현재 기재 대상은
   Google Analytics · Google AdSense · 웹 폰트 CDN(Google Fonts·jsDelivr) · 호스팅(Vercel).
   "도구에 입력한 콘텐츠는 서버로 전송되지 않는다"와 "사이트 이용 중 아무 통신도 없다"를
-  **혼동해서 쓰지 않는다.**
+  **혼동해서 쓰지 않는다.** GA4 커스텀 이벤트를 새 도구에 붙이거나, localStorage 에 저장하는
+  기능을 추가하거나, 새 외부 서비스를 쓰면 방침 2·3항도 함께 개정한다.
+- **약관·방침 개정 이력** (2026-10-24 도입): 현행 시행일 `LEGAL_REVISION`(content.ts), 이전 버전은
+  `app/lib/legal-archive.ts` 에 당시 문장 그대로 동결. 페이지 상단 개정일자 드롭다운 + 하단 개정 이력,
+  이전 버전 URL `/<slug>/<시행일>`(±`/en`, noindex·sitemap 제외). 개정 절차:
+  ① 현행 doc 을 archive 맨 앞에 당시 값 그대로 옮김 ② 현행 doc 수정 ③ `LEGAL_REVISION` id·summary 갱신.
+  archive 문장은 고치지 않는다. 이용자에게 불리한 약관 변경은 시행 7일 전 게시(약관 제6조).
+  현행 2026-10-24 · 이전 2026-08-16 · 2026-07-01.
 
 ### 데이터 최신성 (요율·세율 등 외부 기준)
 - 기준일에 따라 바뀌는 값은 **연도가 아니라 적용 기간(effectiveFrom/To)** 으로 관리한다.
@@ -661,7 +708,7 @@ npm run gen:tailwind-css   # 텍스트 확대 검사기의 Tailwind 기본 style
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
    - [x] 타겟 태그 기반 필터 1단계: 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
-     카테고리 섹션/네비는 유지 (완전 전환 여부는 추후 데이터 보고 결정)
+     → 2026-10-24 폐기: 주제 카테고리(1단) + 작업 태그(2단) 칩으로 대체, `targets` 필드 삭제
 
 0-1. **AdSense Low-value content 대응 (2026-08-18 완료분)**
    - [x] `ready` / `indexable` 분리: sitemap·robots·허브 ItemList JSON-LD 반영 (URL 102 → 60)

@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { localizedHref } from "../lib/content";
+import { LEGAL_EMAIL, LEGAL_OPERATOR, localizedHref } from "../lib/content";
 import { LangProvider, routeLang, useT, type Lang } from "../lib/i18n";
 import { LogoMark } from "./Logo";
 
-const FEEDBACK_EMAIL = "support@kitfolio.app";
 const GITHUB_URL = "https://github.com/joyfive/kitfolio";
 
 /** 전 페이지 공통 푸터 (루트 layout.tsx에서 렌더). 언어는 URL에서 도출.
@@ -41,13 +40,17 @@ function FooterInner({ lang }: { lang: Lang }) {
         {/* 1행: 태그라인 */}
         <div className="foot-row foot-row--top">
           <p className="foot-tagline">
-            Small tools for modern knowledge workers
+            {lang === "ko"
+              ? "필요한 도구를 찾아, 하던 일을 계속하세요."
+              : "Find the tool. Get back to work."}
           </p>
         </div>
 
         {/* 2행: 카피라이트(좌) ↔ 외부 링크(우) */}
         <div className="foot-row">
-          <p className="foot-copy">© 2026 VIVASPACE. All rights reserved.</p>
+          <p className="foot-copy">
+            © 2026 {LEGAL_OPERATOR[lang].display}. All rights reserved.
+          </p>
           <nav className="foot-ext" aria-label="Links">
             <Link href={localizedHref(lang, "/blog")}>
               {lang === "ko" ? "블로그" : "Blog"}
@@ -64,7 +67,7 @@ function FooterInner({ lang }: { lang: Lang }) {
             <Link href={localizedHref(lang, "/terms-of-service")}>
               {t("foot.terms")}
             </Link>
-            <a href={`mailto:${FEEDBACK_EMAIL}`}>{t("foot.feedback")}</a>
+            <a href={`mailto:${LEGAL_EMAIL}`}>{t("foot.feedback")}</a>
             <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
               GitHub
             </a>
