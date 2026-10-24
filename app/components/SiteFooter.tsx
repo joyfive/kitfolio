@@ -47,11 +47,7 @@ function FooterInner({ lang }: { lang: Lang }) {
         {/* 2행: 카피라이트(좌) ↔ 외부 링크(우) */}
         <div className="foot-row">
           <p className="foot-copy">
-            © 2026{" "}
-            {lang === "ko"
-              ? `${LEGAL_OPERATOR.ko.name}(${LEGAL_OPERATOR.en.name})`
-              : LEGAL_OPERATOR.en.name}
-            . All rights reserved.
+            © 2026 {LEGAL_OPERATOR[lang].display}. All rights reserved.
           </p>
           <nav className="foot-ext" aria-label="Links">
             <Link href={localizedHref(lang, "/blog")}>

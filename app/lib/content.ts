@@ -159,8 +159,27 @@ export const SITE = {
 /** 운영 주체 · 대표자. 약관·개인정보처리방침의 사업자 표시 단일 출처.
  *  문서 본문에 상호·대표자명을 직접 적지 않고 여기서만 관리한다. */
 export const LEGAL_OPERATOR = {
-  ko: { name: "비바스페이스", rep: "오기쁨", repTitle: "대표" },
-  en: { name: "VIVASPACE", rep: "Kibbeum Oh", repTitle: "Representative" },
+  ko: {
+    name: "비바스페이스",
+    /** 첫 언급·푸터·바이라인용 표기: 국문 상호에 영문 상호를 병기한다 */
+    display: "비바스페이스(VIVASPACE)",
+    rep: "오기쁨",
+    repTitle: "대표",
+  },
+  en: {
+    name: "VIVASPACE",
+    display: "VIVASPACE",
+    rep: "Kibbeum Oh",
+    repTitle: "Representative",
+  },
+} as const;
+
+/** JSON-LD publisher: 서비스 브랜드(Kitfolio)와 운영 주체를 함께 표기한다 */
+export const PUBLISHER_JSONLD = {
+  "@type": "Organization",
+  name: SITE.name,
+  url: SITE.url,
+  parentOrganization: { "@type": "Organization", name: LEGAL_OPERATOR.en.name },
 } as const;
 
 /** 기본 작성자: 블로그 author · About 페이지 · JSON-LD 가 공유하는 단일 출처.
@@ -170,7 +189,7 @@ export const LEGAL_OPERATOR = {
  *  (AdSense 심사·E-E-A-T 관점) 상호·역할·About 링크를 항상 함께 노출한다. */
 export const AUTHOR = {
   /** 작성자명: 약관·개인정보처리방침의 운영 주체와 같은 상호를 쓴다 */
-  name: { ko: LEGAL_OPERATOR.ko.name, en: LEGAL_OPERATOR.en.name },
+  name: { ko: LEGAL_OPERATOR.ko.display, en: LEGAL_OPERATOR.en.display },
   /** JSON-LD author 의 @type. 조직 명의 발행이므로 Organization 이다. */
   type: "Organization",
   /** 프로필 대신 운영 정보를 담은 About 페이지를 author.url 로 쓴다 */
@@ -447,7 +466,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
           {
             heading: "누가 운영하나요",
             body: [
-              `Kitfolio는 **${LEGAL_OPERATOR.ko.name}**에서 운영하며, 기획·개발·운영·콘텐츠 작성을 직접 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영 주체에 있습니다.`,
+              `Kitfolio는 **${LEGAL_OPERATOR.ko.display}**에서 운영하며, 기획·개발·운영·콘텐츠 작성을 직접 담당합니다. 외부 기고자나 자동 생성 콘텐츠 공급자는 없으며, 사이트의 모든 도구와 글에 대한 책임은 운영 주체에 있습니다.`,
               "소스코드는 [GitHub 저장소](https://github.com/joyfive/kitfolio)에서 공개되어 있어, 각 도구가 실제로 어떻게 계산하는지 직접 확인할 수 있습니다. 문의는 아래 이메일로 받으며 운영자가 직접 답변합니다.",
             ],
           },
@@ -623,7 +642,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "개인정보처리방침",
         intro:
-          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.name}가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
+          `Kitfolio(이하 '본 사이트')는 ${LEGAL_OPERATOR.ko.display}가 운영합니다. 본 사이트는 이용자의 개인정보를 중요시하며 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 이용자의 개인정보가 어떤 용도와 방식으로 처리되며, 보호를 위해 어떤 조치가 취해지는지 안내합니다.`,
         sections: [
           {
             heading: "1. 도구에 입력한 내용은 서버로 전송되지 않습니다",
@@ -744,7 +763,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
       ko: {
         title: "이용약관",
         intro:
-          `본 약관은 ${LEGAL_OPERATOR.ko.name}(이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
+          `본 약관은 ${LEGAL_OPERATOR.ko.name}(VIVASPACE, 이하 '운영자')가 운영하는 Kitfolio(이하 '본 사이트')가 제공하는 모든 웹 도구 및 서비스(이하 '서비스')의 이용 조건과 절차, 이용자와 본 사이트의 권리·의무 및 책임 사항을 규정합니다.`,
         sections: [
           {
             heading: "제1조 (서비스의 제공 및 변경)",
@@ -10933,7 +10952,7 @@ export function toolJsonLd(slug: string, lang: Lang) {
     inLanguage: lang === "ko" ? "ko-KR" : "en-US",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: PUBLISHER_JSONLD,
   };
   // AEO 명시 문단 + FAQ: 페이지에 보이는 Q&A 전부를 FAQPage로 노출
   const qa = [...aeoQA(slug, lang), ...(t.faq?.[lang] ?? [])];

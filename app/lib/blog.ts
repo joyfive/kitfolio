@@ -34,7 +34,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { marked } from "marked";
 import type { Metadata } from "next";
-import { AUTHOR, SITE, type Lang } from "./content";
+import { AUTHOR, PUBLISHER_JSONLD, SITE, type Lang } from "./content";
 
 marked.use({ gfm: true, breaks: false });
 
@@ -322,7 +322,7 @@ export function postJsonLd(meta: PostMeta) {
       ...(meta.authorType === "Person" ? { jobTitle: meta.authorRole } : {}),
       url: abs(AUTHOR.path),
     },
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: PUBLISHER_JSONLD,
     // 사실 확인 날짜가 있으면 검토 기록으로 함께 노출
     ...(meta.reviewedAt
       ? {
