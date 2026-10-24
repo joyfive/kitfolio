@@ -11,11 +11,14 @@
      2026-01-01 전 이직자는 종전 110,000원                    : 같은 시행령 부칙
    · 구직급여일액 = 기초일액 × 60%                            : 제46조
    · 하한 = 최저임금 시급 × 1일 소정근로시간 × 80%              : 제46조
+     1일 소정근로시간의 1시간 미만 끝수는 올림 (7.5시간 → 8시간)  : 고용노동부 행정규칙
+     1일 소정근로시간은 최소 4시간 · 최대 8시간으로 본다          : 고용노동부 1350 안내 · 정책브리핑
    · 소정급여일수                                            : 제50조 [별표 1]
    · 피보험단위기간 기준기간 18개월 · 180일 이상               : 제40조
    · 수급기간 이직일 다음 날부터 12개월                        : 제48조
    · 대기기간 실업 신고일부터 7일                              : 제49조
    · 조기재취업수당 = 미지급 일수 × 일액 × 1/2                 : 제64조 · 시행령
+     실업 신고일부터 14일이 지난 뒤 재취업해야 대상 (대기기간 7일과 별개) : 고용24 안내
 
    기간은 이직일(마지막 근무일)로 고른다. 개정되면 값을 덮어쓰지 말고
    새 기간 행을 추가합니다. 2026-09-01 고용보험위원회에 보고된 개편안
@@ -38,6 +41,8 @@ export type UnemploymentPolicyPeriod = {
   replacementRate: number;
   /** 하한 비율 (최저임금 대비) */
   floorRate: number;
+  /** 하한 계산에 쓰는 1일 소정근로시간 최소 (4시간 미만은 4시간으로 본다) */
+  minFloorHours: number;
   /** 하한 계산에 쓰는 1일 소정근로시간 최대 */
   maxFloorHours: number;
   /** 1주에 지급하는 날 수 (현행 7) */
@@ -54,6 +59,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 9_860,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },
@@ -66,6 +72,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 10_030,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },
@@ -77,6 +84,7 @@ export const POLICY_PERIODS: UnemploymentPolicyPeriod[] = [
     minWageHourly: 10_320,
     replacementRate: 0.6,
     floorRate: 0.8,
+    minFloorHours: 4,
     maxFloorHours: 8,
     paidDaysPerWeek: 7,
     upperRule: { kind: "fixed" },
@@ -128,4 +136,7 @@ export const EARLY_REEMPLOYMENT = {
   payRatio: 0.5,
   /** 재취업 후 계속 고용돼야 하는 기간 (개월) */
   minEmploymentMonths: 12,
+  /** 실업 신고일부터 이 일수가 지난 뒤 재취업해야 한다 (신고일 = 1일째, 15일째부터 대상).
+   *  대기기간 7일(SCHEDULE.waitingDays)과는 별개 요건이다 (고용24 조기재취업수당 안내) */
+  minDaysAfterApply: 14,
 };

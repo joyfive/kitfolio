@@ -31,7 +31,7 @@ const DICT: Dict = {
     "ub.reason.justified": "정당한 사유가 있는 자진퇴사",
     "ub.reason.voluntary": "단순 자진퇴사",
     "ub.dailyHours": "1일 소정근로시간",
-    "ub.dailyHoursHint": "하한액 계산에 쓰입니다. 8시간을 넘으면 8시간으로 봅니다.",
+    "ub.dailyHoursHint": "하한액 계산에 쓰입니다. 1시간 미만은 올림하고(7.5시간 → 8시간), 4시간보다 짧으면 4시간, 8시간을 넘으면 8시간으로 봅니다.",
     "ub.over50": "이직일 당시 50세 이상",
     "ub.disabled": "장애인 (50세 이상 기준 적용)",
     "ub.birth": "생년월일",
@@ -98,7 +98,8 @@ const DICT: Dict = {
     "ub.earlyRemain": "남은 일수",
     "ub.earlyAmount": "예상 조기재취업수당",
     "ub.earlyNo": "남은 일수가 소정급여일수의 절반 미만이라 대상이 아닙니다.",
-    "ub.earlyNote": "재취업 후 12개월 이상 계속 일해야 하고, 이직 전 사업주에게 다시 고용된 경우 등은 제외됩니다. 재취업일을 넣고 신청일을 비우면 이직 다음 날 신청을 가정합니다.",
+    "ub.earlyTooSoon": "실업 신고일부터 14일이 지나기 전에 재취업하면 대상이 아닙니다 (대기기간 7일과 별개 요건). {date}부터 재취업하면 대상입니다.",
+    "ub.earlyNote": "실업 신고일부터 14일이 지난 뒤 재취업하고, 재취업 후 12개월 이상 계속 일해야 하며, 이직 전 사업주에게 다시 고용된 경우 등은 제외됩니다. 재취업일을 넣고 신청일을 비우면 이직 다음 날 신청을 가정합니다.",
     "ub.detail": "상세 결과",
     "ub.wagePeriod": "평균임금 산정기간",
     "ub.wagePeriodDays": "산정기간 일수",
@@ -138,7 +139,7 @@ const DICT: Dict = {
     "ub.reason.justified": "Resignation with a justified reason",
     "ub.reason.voluntary": "Voluntary resignation",
     "ub.dailyHours": "Daily contracted hours",
-    "ub.dailyHoursHint": "Used for the floor. Anything over 8 hours counts as 8.",
+    "ub.dailyHoursHint": "Used for the floor. Part hours round up (7.5 hours counts as 8), under 4 hours counts as 4 and over 8 hours counts as 8.",
     "ub.over50": "Aged 50 or over on the leaving date",
     "ub.disabled": "Person with a disability (50+ row applies)",
     "ub.birth": "Date of birth",
@@ -205,7 +206,8 @@ const DICT: Dict = {
     "ub.earlyRemain": "Days remaining",
     "ub.earlyAmount": "Estimated allowance",
     "ub.earlyNo": "Fewer than half of your benefit days remain, so the allowance does not apply.",
-    "ub.earlyNote": "You must stay in the new job for 12 months or more, and rehiring by your previous employer is excluded. With no application date, applying the day after leaving is assumed.",
+    "ub.earlyTooSoon": "Starting a new job before 14 days have passed since you registered as unemployed rules out the allowance (a separate rule from the 7-day waiting period). It applies to new jobs from {date}.",
+    "ub.earlyNote": "The new job must start after 14 days from registering as unemployed and last 12 months or more, and rehiring by your previous employer is excluded. With no application date, applying the day after leaving is assumed.",
     "ub.detail": "Breakdown",
     "ub.wagePeriod": "Average wage period",
     "ub.wagePeriodDays": "Days in period",
@@ -687,7 +689,12 @@ export default function UnemploymentBenefitCalculator() {
                       <span className="v num">{formatWon(r.early.amount)}</span>
                     </div>
                   ) : (
-                    <p className="al-foot ub-warn-text">{t("ub.earlyNo")}</p>
+                    <>
+                      {r.early.tooSoon ? (
+                        <p className="al-foot ub-warn-text">{fill(t("ub.earlyTooSoon"), { date: r.early.earliestDate })}</p>
+                      ) : null}
+                      {!r.early.enoughRemaining ? <p className="al-foot ub-warn-text">{t("ub.earlyNo")}</p> : null}
+                    </>
                   )}
                   <p className="al-foot">{t("ub.earlyNote")}</p>
                 </div>

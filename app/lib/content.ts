@@ -38,6 +38,7 @@ import { OFFICIAL_SOURCES, POLICY_VERIFIED_AT } from "./salary/insurance";
 // 퇴직금 계산기도 같은 이유로 출처·검증일을 정책 데이터 레이어에서 가져온다.
 import { SEVERANCE_SOURCES, SEVERANCE_VERIFIED_AT } from "./severance/sources";
 import { FREELANCER_SOURCES, FREELANCER_VERIFIED_AT } from "./freelancer/sources";
+import { INCOMETAX_SOURCES, INCOMETAX_VERIFIED_AT } from "./incometax/sources";
 import { VAT_SOURCES, VAT_VERIFIED_AT } from "./vat/sources";
 import { ANNUAL_LEAVE_SOURCES, ANNUAL_LEAVE_VERIFIED_AT } from "./annualleave/sources";
 import { UNEMPLOYMENT_SOURCES, UNEMPLOYMENT_VERIFIED_AT } from "./unemployment/sources";
@@ -5676,7 +5677,7 @@ export const TOOLS: Tool[] = [
     verifiedAt: FREELANCER_VERIFIED_AT,
     badge: "Clean SaaS",
     name: { ko: "프리랜서 3.3% 계산기", en: "Korea Freelancer Tax Calculator (3.3%)" },
-    relatedTools: ["salary-calculator", "severance-pay-calculator", "vat-calculator"],
+    relatedTools: ["income-tax-calculator", "vat-calculator", "salary-calculator"],
     seo: {
       ko: {
         title: "프리랜서 3.3% 계산기 | 실수령액·역산·8.8% 기타소득",
@@ -5940,6 +5941,271 @@ export const TOOLS: Tool[] = [
       en: {
         title: "Korea Freelancer Tax Calculator",
         subtitle: "3.3% and 8.8% withholding, net pay and reverse",
+      },
+    },
+  },
+  {
+    slug: "income-tax-calculator",
+    layout: "card",
+    cat: "text",
+    targets: ["designer", "developer", "pm", "small-business-owner"],
+    ico: "Tax",
+    ready: true,
+    indexable: false,
+    verifiedAt: INCOMETAX_VERIFIED_AT,
+    badge: "Clean SaaS",
+    name: { ko: "종합소득세 계산기", en: "Korea Income Tax Calculator for Freelancers" },
+    relatedTools: ["freelancer-tax-calculator", "salary-calculator", "severance-pay-calculator"],
+    seo: {
+      ko: {
+        title: "종합소득세 계산기 | 프리랜서 3.3% 환급·추가 납부 예상",
+        description:
+          "3.3%를 떼인 프리랜서가 1년 수입금액을 넣으면 5월 종합소득세 신고에서 환급받을 금액이나 추가로 낼 금액을 계산합니다. 직전연도 수입으로 단순경비율·기준경비율 대상을 판정하고, 간편장부와 나란히 비교해 어느 방식이 유리한지, 실제 경비가 얼마 이상이면 장부가 나은지까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        keywords: [
+          "종합소득세 계산기",
+          "프리랜서 종합소득세",
+          "3.3 환급 계산",
+          "종소세 환급 계산",
+          "종합소득세 환급금 계산",
+          "단순경비율 계산기",
+          "기준경비율 계산",
+          "프리랜서 경비율",
+          "5월 종합소득세",
+          "무기장가산세",
+        ],
+      },
+      en: {
+        title: "Korea Income Tax Calculator for Freelancers | 3.3% Refund",
+        description:
+          "Enter a year of freelance revenue taxed at 3.3% in Korea to estimate the refund or extra payment on the May global income tax return. It checks whether the simple or standard expense rate applies from last year's revenue, compares both with simplified bookkeeping, and shows the actual expenses at which keeping books pays off. Everything runs in your browser.",
+        keywords: [
+          "korea income tax calculator freelancer",
+          "korea comprehensive income tax calculator",
+          "korea 3.3% tax refund",
+          "korea may income tax return",
+          "korea simple expense rate",
+          "korea standard expense rate",
+        ],
+      },
+    },
+    content: {
+      ko: {
+        card: "3.3% 프리랜서의 1년 수입으로 5월 종합소득세 환급·추가 납부액을 계산하고, 단순·기준경비율과 간편장부를 비교.",
+        description:
+          "3.3%를 떼인 프리랜서가 1년 수입금액을 넣으면 5월 종합소득세 신고에서 환급받을 금액이나 추가로 낼 금액을 계산합니다. 직전연도 수입으로 단순경비율·기준경비율 대상을 판정하고, 간편장부와 나란히 비교해 어느 방식이 유리한지, 실제 경비가 얼마 이상이면 장부가 나은지까지 보여줍니다. 모든 계산은 브라우저 안에서만 이루어집니다.",
+        howItWorks: [
+          "올해 수입금액과 직전연도 수입금액 입력",
+          "업종 경비율·부양가족·국민연금 확인 (필요하면 실제 경비 입력)",
+          "방식별 결정세액과 5월 예상 환급·추가 납부액 비교",
+        ],
+        aeo: {
+          what: "종합소득세 계산기는 3.3% 원천징수를 받은 인적용역 프리랜서의 1년 수입금액으로 종합소득세를 계산하고, 이미 떼인 세금과 비교해 5월 신고 때 환급받을 금액 또는 추가로 낼 금액을 보여주는 도구입니다.",
+          who: "외주로 일하는 디자이너·개발자·PM, 강사·작가처럼 사업자등록 없이 3.3%를 떼고 대가를 받는 프리랜서가 5월 신고 전에 결과를 미리 확인할 때 씁니다.",
+          how: "수입금액에서 단순경비율·기준경비율 또는 실제 경비를 빼 사업소득금액을 구하고, 인적공제와 국민연금을 뺀 과세표준에 6%~45% 기본세율을 적용합니다. 표준세액공제와 무기장가산세를 반영한 결정세액에서 원천징수된 3%를 빼 환급 또는 납부액을 구하고, 지방소득세도 같은 방식으로 정산합니다.",
+          why: "직전연도 수입이 기준을 넘으면 단순경비율에서 기준경비율로 바뀌어 같은 수입에도 세금이 크게 달라지고, 장부를 쓰면 유리한지도 경비 규모에 따라 다릅니다. 홈택스에 로그인하기 전에 몇 초 만에 방식별 결과를 비교할 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "3.3%는 왜 5월에 다시 정산되나요",
+            body: [
+              "외주비에서 떼인 3.3%는 소득세 3%와 지방소득세 0.3%를 미리 낸 것입니다. 최종 세금은 다음 해 5월 종합소득세 신고에서 1년 동안의 수입금액, 필요경비, 공제를 모두 반영해 다시 계산합니다. 이렇게 계산한 결정세액이 미리 낸 세금(기납부세액)보다 적으면 차이를 돌려받고, 많으면 추가로 냅니다.",
+              "필요경비가 핵심입니다. 같은 3,000만 원을 벌어도 경비를 얼마로 인정받느냐에 따라 사업소득금액이 1,000만 원이 되기도 하고 2,600만 원이 되기도 합니다. 소득금액이 낮으면 세율 6% 구간에 머물고 공제만으로 세금이 크게 줄어 환급이 나오기 쉽습니다.",
+              "개인지방소득세는 소득세와 따로 계산하지만, 프리랜서의 일반적인 경우 소득세 결정세액의 10% 수준입니다. 원천징수된 0.3%와 비교해 지방소득세도 별도로 환급받거나 추가로 냅니다. 이 계산기는 두 금액을 나눠 보여주고 합계도 함께 표시합니다.",
+            ],
+          },
+          {
+            heading: "단순경비율·기준경비율·간편장부는 어떻게 다른가요",
+            body: [
+              "장부를 쓰지 않은 사업자는 국세청이 업종별로 고시한 경비율로 필요경비를 추정해 신고합니다(추계 신고). 직전연도 수입금액이 인적용역 기준 3,600만 원 미만이거나 올해 처음 시작했다면 단순경비율 대상입니다. 수입금액에 단순경비율을 곱한 만큼을 경비로 보고, 4,000만 원을 넘는 수입에는 더 낮은 초과율을 씁니다.",
+              "단순경비율 대상이 아니면 기준경비율로 신고합니다. 매입비용·임차료·인건비처럼 증빙이 있는 주요경비를 먼저 빼고, 나머지는 수입금액에 기준경비율을 곱한 만큼만 경비로 봅니다. 인적용역 프리랜서는 주요경비가 거의 없고 기준경비율이 단순경비율보다 훨씬 낮아, 같은 수입에도 소득금액이 크게 올라갑니다. 다만 단순경비율로 계산한 소득금액의 일정 배수를 넘지 않도록 상한이 있습니다.",
+              "간편장부는 실제로 쓴 경비를 기록해 수입금액에서 빼는 방식입니다. 노트북·소프트웨어 구독·작업실 임차료·통신비처럼 업무 관련 지출이 많다면 추계보다 유리할 수 있습니다. 이 계산기는 지금 쓸 수 있는 추계 방식과 간편장부가 같아지는 실제 경비 금액을 역산해 장부를 쓸지 판단하도록 돕습니다.",
+            ],
+          },
+          {
+            heading: "수입이 기준을 넘으면 세금이 왜 크게 오르나요",
+            body: [
+              "단순경비율 대상 여부는 올해가 아니라 직전연도 수입금액으로 정합니다. 그래서 작년에 3,600만 원 이상 벌었다면 올해 수입이 줄어도 기준경비율로 신고하고, 작년 수입이 적었다면 올해 수입이 늘어도 단순경비율을 씁니다. 다만 올해 수입이 7,500만 원 이상이면 단순경비율은 쓸 수 없습니다.",
+              "기준경비율로 바뀌면 경비로 인정되는 금액이 수입의 60%대에서 10%대로 떨어지는 경우가 많습니다. 예를 들어 940909 업종 연 수입 3,000만 원이면 단순경비율일 때 약 45만 원을 돌려받지만, 기준경비율이면 약 159만 원을 더 내는 결과가 됩니다. 수입이 기준 근처라면 증빙을 모아 간편장부로 신고하는 편이 나은지 미리 확인하는 것이 좋습니다.",
+              "직전연도 수입이 4,800만 원 이상이고 신규사업자도 아니면 소규모사업자가 아니어서, 장부 없이 추계로 신고할 때 무기장가산세가 붙습니다. 산출세액의 20%와 수입금액의 0.07% 중 큰 금액입니다. 직전연도 수입이 7,500만 원 이상이면 복식부기의무자가 되어 규칙이 더 달라지므로 이 계산기의 범위를 벗어납니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "연 수입 3,000만 원 · 단순경비율",
+            input: "940909 · 올해 수입 30,000,000원 · 직전연도 28,000,000원 · 본인만",
+            result: "사업소득금액 10,770,000원 · 결정세액 486,200원 · 기납부 900,000원 · 소득세 413,800원 + 지방소득세 41,380원 환급 (합계 455,180원)",
+            note: "직전연도 수입이 3,600만 원 미만이라 단순경비율 64.1%를 씁니다. 과세표준이 1,400만 원 이하라 세율 6% 구간에 머물러 미리 낸 3%보다 결정세액이 작습니다.",
+          },
+          {
+            title: "같은 수입, 직전연도 4,000만 원 · 기준경비율",
+            input: "940909 · 올해 수입 30,000,000원 · 직전연도 40,000,000원 · 주요경비 0원",
+            result: "사업소득금액 25,980,000원 · 결정세액 2,342,000원 · 소득세 1,442,000원 + 지방소득세 144,200원 추가 납부 (합계 1,586,200원)",
+            note: "올해 수입은 첫 예제와 같지만 작년 수입 때문에 기준경비율 13.4%를 씁니다. 환급 45만 원이 추가 납부 159만 원으로 바뀝니다. 실제 경비가 약 402만 원 이상이면 간편장부가 더 유리합니다.",
+          },
+          {
+            title: "연 수입 6,000만 원 개발자 · 실제 경비 2,000만 원",
+            input: "올해 수입 60,000,000원 · 직전연도 50,000,000원 · 간편장부 실제 경비 20,000,000원",
+            result: "기준경비율 추가 납부 6,325,520원 (무기장가산세 1,270,080원 포함) · 간편장부 추가 납부 2,909,500원",
+            note: "직전연도 수입이 4,800만 원 이상이라 추계로 신고하면 무기장가산세가 붙습니다. 장부를 쓰면 가산세가 없고 실제 경비도 인정받아 약 342만 원 차이가 납니다.",
+          },
+        ],
+        sources: INCOMETAX_SOURCES.map((x) => ({ label: x.label.ko, url: x.url })),
+        limitations: [
+          "3.3% 원천징수를 받은 인적용역 사업소득 하나만 계산합니다. 근로소득·기타소득·금융소득·연금소득과 합산하는 경우는 반영하지 않습니다.",
+          "공제는 인적공제(기본·경로우대·장애인), 국민연금 보험료, 표준세액공제 7만 원만 반영합니다. 자녀세액공제·노란우산공제·연금저축·IRP·기부금 공제와 결손금 이월은 반영하지 않습니다.",
+          "직전연도 수입금액이 7,500만 원 이상인 복식부기의무자, 성실신고확인대상자는 범위를 벗어납니다.",
+          "경비율은 국세청 고시값이며 업종마다 다릅니다. 기본값은 940909(기타 자영업)이고, 고시가 아직 반영되지 않은 귀속연도는 가장 최근 고시값으로 추정합니다. 홈택스에서 내 업종코드의 값을 확인해 바꿔 넣어야 정확합니다.",
+          "개인지방소득세는 소득세 결정세액의 10%로 근사합니다. 실제 지방소득세는 별도 세율표와 공제로 계산해 몇십 원 차이가 날 수 있습니다.",
+          "원천징수된 세금은 수입금액의 3%로 가정합니다. 원천징수 없이 받은 금액이 섞여 있다면 실제 기납부세액을 직접 입력해야 합니다.",
+        ],
+      },
+      en: {
+        card: "May income tax refund or payment for 3.3% freelancers in Korea, comparing simple and standard expense rates with keeping books.",
+        description:
+          "Enter a year of freelance revenue taxed at 3.3% in Korea to estimate the refund or extra payment on the May global income tax return. It checks whether the simple or standard expense rate applies from last year's revenue, compares both with simplified bookkeeping, and shows the actual expenses at which keeping books pays off. Everything runs in your browser.",
+        howItWorks: [
+          "Enter this year's and last year's revenue",
+          "Check the industry expense rates, dependents and national pension (add actual expenses if you have them)",
+          "Compare the tax due and the estimated May refund or payment for each method",
+        ],
+        aeo: {
+          what: "A Korea Income Tax Calculator for Freelancers estimates global income tax on a year of personal-service revenue that had 3.3% withheld, and compares it with the tax already withheld to show the refund or extra payment due on the May return.",
+          who: "It is for freelance designers, developers and PMs in Korea, and instructors or writers paid with 3.3% withheld without a business registration, who want the result before they file in May.",
+          how: "It subtracts expenses from revenue using the simple expense rate, the standard expense rate or actual expenses, deducts personal allowances and national pension, and applies Korea's 6%-45% basic rates. After the standard tax credit and any bookkeeping penalty it subtracts the 3% withheld to get the refund or payment, and settles local income tax the same way.",
+          why: "Crossing last year's revenue threshold moves a freelancer from the simple to the standard expense rate and can change the result sharply, and whether keeping books pays off depends on how much you actually spend. It compares the methods in seconds, before you log in to Hometax.",
+        },
+        guide: [
+          {
+            heading: "Why the 3.3% is settled again in May",
+            body: [
+              "The 3.3% taken from a freelance fee in Korea is a prepayment of 3% income tax and 0.3% local income tax. The final tax is recalculated on the global income tax return filed in May of the following year, using the whole year's revenue, expenses and deductions. If the tax due is lower than what was withheld you are refunded the difference; if higher, you pay the rest.",
+              "Expenses decide most of it. On the same 30 million won of revenue, business income can be about 10 million or 26 million won depending on how expenses are recognised. Lower income stays in the 6% bracket, where the personal deduction alone cuts the tax enough to produce a refund.",
+              "Local income tax is calculated separately, but for a typical freelancer it is about 10% of the income tax due. It is compared with the 0.3% withheld and refunded or paid on its own. This calculator shows both amounts and their total.",
+            ],
+          },
+          {
+            heading: "Simple rate, standard rate and simplified books",
+            body: [
+              "A business that kept no books files an estimated return, using an expense rate the National Tax Service publishes for each industry. If last year's revenue was under 36 million won for personal services, or you started this year, the simple expense rate applies: revenue times the rate is treated as expenses, with a lower excess rate for revenue above 40 million won.",
+              "Otherwise the standard expense rate applies. Major expenses backed by receipts (purchases, rent, payroll) come off first, and only revenue times the standard rate is allowed on top. Freelancers in personal services have few major expenses and the standard rate is far lower than the simple rate, so income rises sharply. A cap keeps it from exceeding a multiple of the simple-rate income.",
+              "Simplified bookkeeping records what you actually spent and subtracts it from revenue. With significant work costs such as a laptop, software subscriptions, studio rent or phone bills, it can beat an estimated return. This calculator works out the actual expenses at which books match your estimated method, so you can decide whether to keep them.",
+            ],
+          },
+          {
+            heading: "Why the tax jumps when revenue crosses a threshold",
+            body: [
+              "Eligibility for the simple rate depends on last year's revenue, not this year's. If you earned 36 million won or more last year you file at the standard rate even if this year was smaller, and the reverse also holds. If this year's revenue reaches 75 million won, though, the simple rate is not available.",
+              "Moving to the standard rate often drops recognised expenses from the 60% range to the 10% range of revenue. For industry code 940909 with 30 million won of revenue, the simple rate gives a refund of about 455,000 won while the standard rate means paying about 1.59 million won more. Near the threshold, check early whether keeping books with receipts would be better.",
+              "If last year's revenue was 48 million won or more and you are not new, you are not a small business, so an estimated return without books adds a bookkeeping penalty: the larger of 20% of the calculated tax and 0.07% of revenue. From 75 million won of last year's revenue you must keep double-entry books, which follows different rules and is outside this calculator.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "30 million won a year on the simple rate",
+            input: "940909 · revenue 30,000,000 won · last year 28,000,000 won · no dependents",
+            result: "Business income 10,770,000 · tax due 486,200 · withheld 900,000 · refund of 413,800 income tax + 41,380 local tax (455,180 won in total)",
+            note: "Last year's revenue was under 36 million won, so the 64.1% simple rate applies. The tax base stays under 14 million won in the 6% bracket, below the 3% already withheld.",
+          },
+          {
+            title: "Same revenue, 40 million won last year (standard rate)",
+            input: "940909 · revenue 30,000,000 won · last year 40,000,000 won · major expenses 0",
+            result: "Business income 25,980,000 · tax due 2,342,000 · pay 1,442,000 income tax + 144,200 local tax (1,586,200 won in total)",
+            note: "This year's revenue matches the first example, but last year's revenue moves it to the 13.4% standard rate. A 455,000 won refund becomes a 1.59 million won payment. With actual expenses of about 4.02 million won or more, simplified books come out ahead.",
+          },
+          {
+            title: "A developer earning 60 million won with 20 million in expenses",
+            input: "Revenue 60,000,000 won · last year 50,000,000 won · actual expenses 20,000,000 won",
+            result: "Standard rate: pay 6,325,520 won (including a 1,270,080 won penalty) · simplified books: pay 2,909,500 won",
+            note: "Last year's revenue was 48 million won or more, so an estimated return adds the bookkeeping penalty. Keeping books avoids it and counts the real expenses, a difference of about 3.42 million won.",
+          },
+        ],
+        sources: INCOMETAX_SOURCES.map((x) => ({ label: x.label.en, url: x.url })),
+        limitations: [
+          "It covers only personal-service business income with 3.3% withheld. Combining it with salary, other income, financial income or pensions is not included.",
+          "Deductions are limited to personal allowances (basic, aged 70+, disability), national pension contributions and the 70,000 won standard tax credit. Child credits, Yellow Umbrella, pension savings, IRP, donations and loss carry-forwards are not included.",
+          "Double-entry bookkeepers (last year's revenue of 75 million won or more) and taxpayers who need a sincere-filing confirmation are out of scope.",
+          "Expense rates are published by the National Tax Service and differ by industry. The default is code 940909 (other self-employed services), and tax years whose rates are not in the calculator yet use the latest published rates as an estimate. Check your own code on Hometax and enter its values for an accurate result.",
+          "Local income tax is approximated as 10% of the income tax due. The real figure uses its own rate table and credits and can differ by a few tens of won.",
+          "Tax withheld is assumed to be 3% of revenue. If some payments had nothing withheld, enter the actual amount withheld.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "3.3% 떼였는데 5월에 환급받을 수 있나요?",
+          answer:
+            "수입이 크지 않고 다른 소득이 없으며 단순경비율 대상이라면 환급받는 경우가 많습니다. 예를 들어 940909 업종 연 수입 3,000만 원이면 결정세액이 약 49만 원이라 미리 낸 90만 원 중 소득세 약 41만 원과 지방소득세 약 4만 원을 돌려받습니다. 기준경비율 대상이거나 수입이 많으면 추가로 낼 수 있습니다.",
+        },
+        {
+          question: "단순경비율 대상인지 어떻게 아나요?",
+          answer:
+            "직전연도 수입금액으로 정합니다. 인적용역 프리랜서는 직전연도 수입이 3,600만 원 미만이면 단순경비율, 그 이상이면 기준경비율입니다. 올해 처음 시작했다면 올해 수입이 7,500만 원 미만일 때 단순경비율을 씁니다. 올해 수입이 7,500만 원 이상이면 누구도 단순경비율을 쓸 수 없습니다.",
+        },
+        {
+          question: "장부를 안 쓰면 손해인가요?",
+          answer:
+            "경비 규모에 따라 다릅니다. 단순경비율은 수입의 60%대를 경비로 보므로 실제 경비가 그보다 적으면 추계가 유리합니다. 기준경비율 대상이 되면 인정 경비가 크게 줄어 장부가 유리해지는 경우가 많고, 직전연도 수입이 4,800만 원 이상이면 추계 신고에 무기장가산세도 붙습니다. 계산기의 손익분기 경비를 확인해 보세요.",
+        },
+        {
+          question: "지방소득세 환급은 따로 받나요?",
+          answer:
+            "지방소득세는 소득세와 별도로 정산됩니다. 원천징수된 0.3%와 실제 지방소득세의 차이를 지방자치단체에서 환급받거나 추가로 냅니다. 홈택스에서 종합소득세를 신고하면 위택스 지방소득세 신고로 이어져 함께 처리할 수 있습니다.",
+        },
+        {
+          question: "근로소득도 있으면 이 계산기를 써도 되나요?",
+          answer:
+            "이 계산기는 3.3% 사업소득만 있는 경우를 계산합니다. 근로소득이 함께 있으면 두 소득을 합산해 더 높은 세율 구간이 적용되고 연말정산 세액도 반영해야 하므로 결과가 달라집니다. 이런 경우는 홈택스 신고 화면이나 세무 전문가를 통해 확인하세요.",
+        },
+        {
+          question: "입력한 금액이 서버로 전송되나요?",
+          answer:
+            "아니요. 모든 계산은 브라우저 안에서만 이루어지며, 입력한 수입·경비·가족 정보는 서버로 전송되거나 저장되지 않습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Can I get a refund in May after 3.3% was withheld?",
+          answer:
+            "Often, if revenue is modest, you have no other income and the simple expense rate applies. For industry code 940909 and 30 million won of revenue, the tax due is about 490,000 won, so of the 900,000 won withheld about 410,000 won of income tax and 40,000 won of local tax come back. On the standard rate or with higher revenue you may owe more.",
+        },
+        {
+          question: "How do I know whether the simple expense rate applies?",
+          answer:
+            "It depends on last year's revenue. For personal-service freelancers, under 36 million won last year means the simple rate, and 36 million or more means the standard rate. If you started this year, the simple rate applies when this year's revenue is under 75 million won. No one can use the simple rate once this year's revenue reaches 75 million won.",
+        },
+        {
+          question: "Do I lose out by not keeping books?",
+          answer:
+            "It depends on your expenses. The simple rate treats roughly 60% or more of revenue as expenses, so if you spent less, an estimated return wins. On the standard rate recognised expenses drop sharply and books often win, and with last year's revenue at 48 million won or more an estimated return also adds a bookkeeping penalty. Check the break-even expenses in the calculator.",
+        },
+        {
+          question: "Is local income tax refunded separately?",
+          answer:
+            "Yes. Local income tax is settled separately from income tax: the difference between the 0.3% withheld and the real local tax is refunded or paid through the local government. Filing on Hometax links to the Wetax local income tax return so both can be handled together.",
+        },
+        {
+          question: "Can I use this if I also have a salary?",
+          answer:
+            "This calculator covers only 3.3% business income. With a salary as well, both incomes are combined into a higher bracket and the year-end settlement has to be taken into account, so the result is different. Check those cases on Hometax or with a tax professional.",
+        },
+        {
+          question: "Is what I enter sent to a server?",
+          answer:
+            "No. Every calculation runs in your browser, and the revenue, expenses and family details you enter are never sent to or stored on a server.",
+        },
+      ],
+    },
+    og: {
+      ko: {
+        title: "종합소득세 계산기",
+        subtitle: "3.3% 프리랜서의 5월 환급과 경비율 비교",
+      },
+      en: {
+        title: "Korea Income Tax Calculator",
+        subtitle: "3.3% freelancer refund and expense-rate comparison",
       },
     },
   },
@@ -6607,7 +6873,7 @@ export const TOOLS: Tool[] = [
             body: [
               "실업급여의 중심인 구직급여는 이직 전 평균임금을 기초일액으로 삼아 그 60%를 하루 금액으로 줍니다(고용보험법 제45조 · 제46조). 평균임금은 마지막 근무일 이전 3개월 동안 받은 임금 총액을 그 기간의 달력 일수로 나눈 금액이며, 퇴직금을 계산할 때와 같은 방식입니다. 통상임금이 평균임금보다 크면 통상임금을 씁니다.",
               "기초일액에는 상한이 있습니다. 2026년 1월 1일 이후 이직한 사람은 113,500원이 상한이라 하루 금액은 113,500 × 60% = 68,100원을 넘지 않습니다. 2025년까지 이직한 사람은 상한 110,000원, 하루 66,000원입니다.",
-              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다.",
+              "하한도 있습니다. 하루 금액이 이직일 당시 최저임금 × 1일 소정근로시간 × 80%보다 적으면 이 금액을 줍니다. 2026년 최저임금 10,320원, 하루 8시간 근로자라면 66,048원입니다. 소정근로시간이 4시간이면 하한도 33,024원으로 줄어듭니다. 1일 소정근로시간에 1시간 미만 끝수가 있으면 올림해서 7.5시간이면 8시간으로 계산하고, 4시간보다 짧아도 4시간으로 봅니다. 그래서 하한은 4시간 기준 33,024원보다 낮아지지 않습니다.",
               "그래서 2026년에는 하한 66,048원과 상한 68,100원 사이가 2,052원뿐입니다. 하루 8시간 근로자는 평균임금이 110,080원 미만(3개월 92일 기준 월 약 338만 원 미만)이면 하한을, 113,500원 이상(월 약 348만 원 이상)이면 상한을 받습니다. 계산기는 결과에 어느 구간인지 표시합니다.",
             ],
           },
@@ -6638,7 +6904,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "재취업하면 남은 실업급여는 어떻게 되나요",
             body: [
-              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 계산기에 재취업 예정일을 넣으면 그 날 기준 남은 일수와 예상 수당을 보여줍니다.",
+              "소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면, 남은 일수에 해당하는 구직급여의 절반을 조기재취업수당으로 받을 수 있습니다(제64조). 재취업은 실업 신고일부터 14일이 지난 뒤여야 합니다. 지급이 시작되는 대기기간 7일과는 별개 요건이라, 대기기간이 끝난 직후 재취업해도 14일 전이면 대상이 아닙니다. 계산기에 재취업 예정일을 넣으면 두 요건을 확인하고 남은 일수와 예상 수당을 보여줍니다.",
               "이직 전 사업주에게 다시 고용되거나 최근에 조기재취업수당을 받은 이력이 있으면 대상에서 빠지는 등 세부 요건이 있습니다. 실제 지급 여부는 고용센터에서 확인해야 합니다.",
             ],
           },
@@ -6707,7 +6973,7 @@ export const TOOLS: Tool[] = [
             body: [
               "The job-seeking benefit, the core of Korea's unemployment benefit, pays 60% of a base daily wage, which is the average wage before leaving (Employment Insurance Act, Arts. 45 and 46). The average wage is total pay over the three months before the last working day divided by the calendar days in that period, the same method used for severance pay. If the ordinary wage is higher, it is used instead.",
               "The base daily wage is capped. For people who left on or after 1 January 2026 the cap is KRW 113,500, so the daily amount never exceeds 113,500 × 60% = KRW 68,100. For people who left in 2025 or earlier the cap was KRW 110,000, or KRW 66,000 a day.",
-              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024.",
+              "There is also a floor. If the daily amount is below the minimum wage on the leaving date × daily contracted hours × 80%, the floor is paid. With the 2026 minimum wage of KRW 10,320 and an 8-hour day that is KRW 66,048. With a 4-hour day the floor drops to KRW 33,024. Part hours in the daily contracted hours round up, so 7.5 hours counts as 8, and anything under 4 hours counts as 4, so the floor never drops below the 4-hour KRW 33,024.",
               "That leaves only KRW 2,052 between the 2026 floor and cap. For an 8-hour worker, an average daily wage under KRW 110,080 (about KRW 3.38 million a month over a 92-day period) gets the floor, and KRW 113,500 or more (about KRW 3.48 million a month) gets the cap. The result shows which band applies.",
             ],
           },
@@ -6738,7 +7004,7 @@ export const TOOLS: Tool[] = [
           {
             heading: "What happens if you find a job early",
             body: [
-              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). Enter a reemployment date to see the remaining days and the estimated allowance.",
+              "If you take a new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining benefit as an early reemployment allowance (Art. 64). The new job must also start after 14 days have passed since you registered as unemployed. That is a separate rule from the 7-day waiting period, so a job that starts right after the waiting period but within 14 days does not qualify. Enter a reemployment date to check both rules and see the remaining days and the estimated allowance.",
               "Detailed conditions apply, such as being rehired by your previous employer or having received the allowance recently. The job center confirms whether it is paid.",
             ],
           },
@@ -6792,7 +7058,7 @@ export const TOOLS: Tool[] = [
         {
           question: "2026년 실업급여는 하루 최대 얼마, 최소 얼마인가요?",
           answer:
-            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아집니다.",
+            "2026년 1월 1일 이후 이직자는 하루 최대 68,100원(기초일액 상한 113,500원 × 60%), 최소 66,048원(최저임금 10,320원 × 8시간 × 80%)입니다. 1일 소정근로시간이 8시간보다 짧으면 하한도 비례해서 낮아지지만, 4시간보다 짧아도 4시간으로 봅니다.",
         },
         {
           question: "자진퇴사해도 실업급여를 받을 수 있나요?",
@@ -6812,7 +7078,7 @@ export const TOOLS: Tool[] = [
         {
           question: "실업급여를 받다가 재취업하면 어떻게 되나요?",
           answer:
-            "재취업하면 구직급여는 끝나지만, 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다.",
+            "재취업하면 구직급여는 끝나지만, 실업 신고일부터 14일이 지난 뒤 소정급여일수의 절반 이상을 남기고 재취업해 12개월 이상 계속 일하면 남은 금액의 절반을 조기재취업수당으로 받을 수 있습니다. 14일 요건은 대기기간 7일과 별개입니다.",
         },
         {
           question: "입력한 임금이 서버로 전송되나요?",
@@ -6824,7 +7090,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What are the maximum and minimum daily unemployment benefits in Korea in 2026?",
           answer:
-            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8.",
+            "For people who left on or after 1 January 2026, the maximum is KRW 68,100 a day (base cap KRW 113,500 × 60%) and the minimum is KRW 66,048 (minimum wage KRW 10,320 × 8 hours × 80%). The floor is lower for daily contracted hours under 8, but never below the 4-hour level.",
         },
         {
           question: "Can I get the benefit if I resign voluntarily?",
@@ -6844,7 +7110,7 @@ export const TOOLS: Tool[] = [
         {
           question: "What happens if I find a job while receiving the benefit?",
           answer:
-            "The benefit stops, but if you start the new job with at least half of your benefit days left and stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance.",
+            "The benefit stops, but if the new job starts more than 14 days after you registered as unemployed, with at least half of your benefit days left, and you stay for 12 months or more, you can receive half of the remaining amount as an early reemployment allowance. The 14-day rule is separate from the 7-day waiting period.",
         },
         {
           question: "Is the pay I enter sent to a server?",

@@ -103,6 +103,24 @@ describe("구직급여일액: 60% · 상한 · 하한", () => {
     assert.equal(dailyBenefit(P2026, 30_000, 0, 10).floorHours, 8);
   });
 
+  test("1일 소정근로시간의 1시간 미만 끝수는 올림 (7.5시간 → 8시간)", () => {
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 7.5).floorHours, 8);
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 7.5).floor, Math.floor(10_320 * 8 * 0.8));
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 4.2).floorHours, 5);
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 4.2).floor, Math.floor(10_320 * 5 * 0.8));
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 7).floorHours, 7);
+    assert.equal(dailyBenefit(P2026, 30_000, 0, 8.5).floorHours, 8);
+  });
+
+  test("1일 소정근로시간은 최소 4시간으로 본다 (4시간 미만은 4시간)", () => {
+    assert.equal(P2026.minFloorHours, 4);
+    for (const h of [1, 2.5, 3, 3.2, 4]) {
+      assert.equal(dailyBenefit(P2026, 10_000, 0, h).floorHours, 4, String(h));
+      assert.equal(dailyBenefit(P2026, 10_000, 0, h).floor, 33_024, String(h));
+    }
+    assert.equal(dailyBenefit(P2026, 10_000, 0, 4.1).floorHours, 5);
+  });
+
   test("통상임금이 평균임금보다 크면 통상임금을 기초일액으로", () => {
     const b = dailyBenefit(P2026, 100_000, 112_000, 8);
     assert.equal(b.usedOrdinaryWage, true);
@@ -273,9 +291,41 @@ describe("조기재취업수당", () => {
     assert.equal(r.early!.amount, 0);
   });
 
+  test("실업 신고일부터 14일이 지나기 전 재취업은 대상이 아니다 (대기기간 7일과 별개)", () => {
+    // 신청 2026-11-01 = 1일째 → 14일째 2026-11-14 까지 재취업하면 제외, 2026-11-15 부터 대상
+    const before = calc({ applyDate: "2026-11-01", reemployDate: "2026-11-14" }).early!;
+    assert.equal(before.tooSoon, true);
+    assert.equal(before.enoughRemaining, true);
+    assert.equal(before.eligible, false);
+    assert.equal(before.amount, 0);
+    assert.equal(before.earliestDate, "2026-11-15");
+    const after = calc({ applyDate: "2026-11-01", reemployDate: "2026-11-15" }).early!;
+    assert.equal(after.tooSoon, false);
+    assert.equal(after.eligible, true);
+    assert.equal(after.amount, Math.floor(after.remainingDays * calc({}).benefit.daily * 0.5));
+  });
+
+  test("대기기간(7일)이 끝난 직후라도 14일 전이면 제외", () => {
+    // 지급 시작 2026-11-08 다음 날 재취업
+    const e = calc({ applyDate: "2026-11-01", reemployDate: "2026-11-09" }).early!;
+    assert.equal(e.tooSoon, true);
+    assert.equal(e.eligible, false);
+  });
+
+  test("신청일을 비우면 이직 다음 날 신청을 가정해 14일을 센다", () => {
+    const r = calc({ reemployDate: "2026-12-31" });
+    assert.equal(r.early!.earliestDate, toIsoPlus(r.schedule.periodStart, 14));
+  });
+
   test("정확히 절반 남으면 대상", () => {
     const r = calc({ applyDate: "2026-11-01", reemployDate: "2027-02-06" });
     assert.equal(r.early!.remainingDays, 90);
     assert.equal(r.early!.eligible, true);
   });
 });
+
+function toIsoPlus(iso: string, days: number): string {
+  const d = new Date(iso + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
