@@ -1158,10 +1158,10 @@ export const TOOLS: Tool[] = [
         keywords: ["글자 수 세기", "단어 수 카운터", "글자수 제한", "글자수 세기", "공백 포함 글자수", "공백 제외 글자수", "자소서 글자수 세기", "글자수 바이트 계산", "단어 수 세기"],
       },
       en: {
-        title: "Character & Word Counter",
+        title: "Character Counter | Word Count With and Without Spaces",
         description:
           "Type or paste text and it counts characters, words, sentences, lines and paragraphs in real time. See counts with and without spaces, estimated reading time, and character limits for X, Threads, Instagram and more. Everything runs in your browser.",
-        keywords: ["character counter", "word counter", "letter count"],
+        keywords: ["character counter", "word counter", "letter count", "character count with spaces", "character count without spaces", "korean character counter", "byte counter"],
       },
     },
     content: {
@@ -1378,13 +1378,10 @@ export const TOOLS: Tool[] = [
         keywords: ["PDF 도구", "PDF 병합", "PDF 분할", "PDF 회전", "PDF 페이지 삭제", "PDF 합치기", "PDF 나누기", "온라인 PDF 편집", "PDF 페이지 나누기", "PDF 페이지 빼기", "PDF 순서 바꿔 합치기"],
       },
       en: {
-        title: "PDF Tools | Merge, Split, Rotate, Delete Pages",
+        title: "Merge PDF Without Uploading | Split, Rotate, Delete Pages",
         description:
           "Switch tabs to merge, split, rotate, or delete pages from a PDF, all on one page. Combine several PDFs in your order, split by page or range, rotate in 90-degree steps, or remove pages you don't need. Every file is processed entirely in your browser and never uploaded to a server.",
-        keywords: [
-          "PDF tools", "merge PDF", "split PDF", "rotate PDF", "delete PDF pages",
-          "combine PDF", "PDF editor online",
-        ],
+        keywords: ["PDF tools", "merge PDF", "split PDF", "rotate PDF", "delete PDF pages", "combine PDF", "PDF editor online", "merge pdf without uploading", "combine pdf without upload", "private pdf merge", "split pdf pages"],
       },
     },
     content: {
@@ -1677,19 +1674,10 @@ export const TOOLS: Tool[] = [
         keywords: ["이미지 최적화", "이미지 용량 줄이기", "이미지 압축", "WebP 변환", "PNG WebP 변환", "JPG WebP 변환", "PNG JPG 변환", "웹 이미지 최적화", "사진 용량 줄이기", "JPG 용량 줄이기", "PNG 용량 줄이기", "사진 용량 압축"],
       },
       en: {
-        title: "Image Optimizer | Compress PNG, JPG & WebP",
+        title: "Compress Images Without Uploading | PNG, JPG & WebP",
         description:
           "Optimize PNG, JPG, and WebP images without changing their pixel dimensions. Adjust image format and quality to reduce file size, process several images at once, and download them individually or as a ZIP, with all processing performed locally in your browser and no image uploads.",
-        keywords: [
-          "image optimizer",
-          "image compressor",
-          "compress image",
-          "WebP converter",
-          "PNG to WebP",
-          "JPG to WebP",
-          "PNG to JPG",
-          "optimize images for web",
-        ],
+        keywords: ["image optimizer", "image compressor", "compress image", "WebP converter", "PNG to WebP", "JPG to WebP", "PNG to JPG", "optimize images for web", "compress image without uploading", "reduce image file size", "bulk image compressor"],
       },
     },
     content: {
@@ -1991,21 +1979,10 @@ export const TOOLS: Tool[] = [
         keywords: ["이미지 리사이즈", "이미지 크기 조절", "이미지 자르기", "사진 크기 조절", "이미지 사이즈 변경", "이미지 픽셀 변경", "이미지 비율 자르기", "사진 자르기", "이미지 1:1 자르기", "이미지 16:9 자르기", "온라인 이미지 리사이즈", "사진 사이즈 줄이기", "이미지 사이즈 조절"],
       },
       en: {
-        title: "Image Resizer & Cropper | Resize and Crop Images Online",
+        title: "Resize Image to Exact Pixels | Crop to 1:1, 4:3, 16:9",
         description:
           "Resize PNG, JPG, and WebP images to exact pixel dimensions or crop them to common aspect ratios such as 1:1, 4:3, and 16:9. Lock the aspect ratio while changing width and height, choose exactly which area to keep, and set the output size yourself. All image processing happens locally in your browser with no uploads.",
-        keywords: [
-          "image resizer",
-          "crop image",
-          "image cropper",
-          "resize image online",
-          "change image dimensions",
-          "resize image pixels",
-          "crop image online",
-          "crop image to aspect ratio",
-          "square image crop",
-          "resize PNG JPG WebP",
-        ],
+        keywords: ["image resizer", "crop image", "image cropper", "resize image online", "change image dimensions", "resize image pixels", "crop image online", "crop image to aspect ratio", "square image crop", "resize PNG JPG WebP", "resize image to exact pixels", "crop image to 16:9", "crop image 1:1"],
       },
     },
     content: {
@@ -2338,21 +2315,10 @@ export const TOOLS: Tool[] = [
         keywords: ["QR 코드 생성기", "QR 만들기", "링크 QR 코드", "QR 코드 PNG", "QR 코드 SVG", "하트 QR 코드", "하트 QR", "감성 QR 생성", "디자인 QR 생성", "QR 디자인", "디자인 QR", "청첩장 QR 코드", "QR 코드 모양", "QR 코드 색상 변경", "QR코드 만들기", "큐알코드 만들기", "QR코드 생성", "링크 QR코드 만들기"],
       },
       en: {
-        title: "QR Code Generator | Custom Shapes, Colors, PNG and SVG",
+        title: "Free QR Code Generator | No Sign-Up, Custom Shapes, PNG & SVG",
         description:
           "Create a QR code from a URL and customize its color, recognition quality, and overall shape: square, rounded, arch, or heart. Arch and heart are styled codes that add decoration around an intact QR core and lock error correction to maximum for reliable scanning. The result is re-decoded in your browser before you download it as PNG or SVG, and your URL is never sent to a server.",
-        keywords: [
-          "QR code generator",
-          "custom QR code",
-          "QR code PNG",
-          "QR code SVG",
-          "colored QR code",
-          "heart QR code",
-          "styled QR code",
-          "design QR code",
-          "heart shaped QR code",
-          "QR code shape",
-        ],
+        keywords: ["QR code generator", "custom QR code", "QR code PNG", "QR code SVG", "colored QR code", "heart QR code", "styled QR code", "design QR code", "heart shaped QR code", "QR code shape", "free qr code generator", "qr code generator no sign up", "qr code that does not expire", "qr code generator svg"],
       },
     },
     content: {
@@ -2512,6 +2478,11 @@ export const TOOLS: Tool[] = [
             "웹 게시나 일반 문서에는 PNG가 편리하며, 인쇄물이나 크기 조절이 필요한 디자인 작업에는 확대해도 선명한 SVG가 적합합니다.",
         },
         {
+          question: "여기서 만든 QR 코드는 유효기간이 있나요?",
+          answer:
+            "없습니다. 링크가 QR 패턴 안에 그대로 들어가고 중간에 리디렉션이나 단축 URL을 거치지 않아, 만료될 계정이나 구독이 없습니다. 연결된 페이지가 살아 있는 한 계속 인식됩니다. 대신 나중에 연결 주소를 바꿀 수는 없으니, 다른 주소가 필요하면 QR 코드를 새로 만드세요.",
+        },
+        {
           question: "만든 QR 코드가 다른 기기에서도 항상 인식되나요?",
           answer:
             "생성 결과는 현재 브라우저에서 다시 판독해 확인하지만 모든 카메라와 환경의 인식을 보장하지는 않습니다. 실제 사용 전 인쇄물이나 대상 기기에서 추가로 테스트해 주세요.",
@@ -2537,6 +2508,11 @@ export const TOOLS: Tool[] = [
           question: "Should I download PNG or SVG?",
           answer:
             "PNG is convenient for websites and documents. SVG is better for print and design work because it remains sharp when resized.",
+        },
+        {
+          question: "Do QR codes made here expire?",
+          answer:
+            "No. The link is written directly into the QR pattern, with no redirect or short link in between, so there is no account or subscription that can lapse. The code keeps working as long as the page it points to stays online. The trade-off is that you cannot change the destination later: to point somewhere else, create a new code.",
         },
         {
           question: "Will the generated QR code work with every scanner?",
@@ -2578,17 +2554,10 @@ export const TOOLS: Tool[] = [
         keywords: ["QR 코드 읽기", "QR 코드 스캔", "QR 이미지 인식", "QR 코드 업로드", "카메라 QR 코드", "QR 링크 확인", "QR코드 읽기", "사진으로 QR코드 읽기", "QR코드 이미지 스캔", "큐알코드 스캔"],
       },
       en: {
-        title: "QR Code Reader | Paste, Upload, or Scan with Camera",
+        title: "Scan QR Code From Image | Upload, Paste or Use Camera",
         description:
           "Read a QR code from a pasted image, uploaded file, or device camera. Review the decoded content before opening or copying a URL. Images and camera video are processed locally in your browser and are not sent to a server.",
-        keywords: [
-          "QR code reader",
-          "QR code scanner",
-          "scan QR from image",
-          "upload QR code",
-          "camera QR scanner",
-          "read QR code online",
-        ],
+        keywords: ["QR code reader", "QR code scanner", "scan QR from image", "upload QR code", "camera QR scanner", "read QR code online", "scan qr code from image", "read qr code from screenshot", "qr code reader from photo"],
       },
     },
     content: {
@@ -2824,19 +2793,10 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "KST to UTC Converter | Korea Time ↔ UTC with Code",
+        title: "KST to UTC Converter | Korea Time to UTC (UTC+9) with Code",
         description:
           "Convert Korea Standard Time (KST) to UTC and back. Paste a time from an API, database or log to see the date and time, ISO 8601 format and whether the day changes, along with reusable conversion functions in JavaScript, TypeScript, Python, Java, Go and C#. Everything runs in your browser and nothing you enter is uploaded.",
-        keywords: [
-          "kst to utc",
-          "utc to kst",
-          "korea time to utc",
-          "kst converter",
-          "korea standard time",
-          "utc+9",
-          "iso 8601 converter",
-          "timezone conversion code",
-        ],
+        keywords: ["kst to utc", "utc to kst", "korea time to utc", "kst converter", "korea standard time", "utc+9", "iso 8601 converter", "timezone conversion code", "seoul time to utc", "korea time zone converter"],
       },
     },
     content: {
@@ -3064,10 +3024,10 @@ export const TOOLS: Tool[] = [
         keywords: ["슬랙 타임스탬프", "유닉스 타임스탬프", "타임스탬프 변환", "슬랙 날짜", "unix time 변환", "타임스탬프 변환기", "유닉스 시간 변환", "epoch 변환", "timestamp 날짜 변환"],
       },
       en: {
-        title: "Slack Timestamp Converter | Convert Unix Time to Date",
+        title: "Slack Timestamp Converter | Unix Epoch to Date and Slack Date Format",
         description:
           "Convert Slack Unix timestamps into readable dates and times. Supports UTC, local timezone, relative time, and Slack date syntax generation.",
-        keywords: ["slack timestamp", "unix timestamp", "timestamp converter", "slack date format", "unix time to date"],
+        keywords: ["slack timestamp", "unix timestamp", "timestamp converter", "slack date format", "unix time to date", "epoch converter", "unix timestamp to date", "epoch to date", "slack date formatting"],
       },
     },
     content: {
@@ -3271,10 +3231,10 @@ export const TOOLS: Tool[] = [
         keywords: ["시간 더하기 계산기", "시간 빼기 계산기", "근무시간 합산", "타임시트 계산기", "시간 계산", "시간 계산기", "시간 합계 계산", "분 더하기 계산기"],
       },
       en: {
-        title: "Time Calculator | Add and Subtract Hours Minutes",
+        title: "Hours and Minutes Calculator | Add and Subtract Time, Decimal Hours",
         description:
           "Add or subtract multiple time blocks to calculate total work hours. Perfect for timesheets, billing hours, overtime and break calculations. Results shown in H:M:S, decimal hours, minutes and seconds all at once. Everything runs in your browser.",
-        keywords: ["time calculator", "add subtract hours minutes", "timesheet calculator", "hours minutes calculator", "work hours calculator"],
+        keywords: ["time calculator", "add subtract hours minutes", "timesheet calculator", "hours minutes calculator", "work hours calculator", "hours and minutes calculator", "decimal hours calculator", "timesheet hours calculator"],
       },
     },
     content: {
@@ -3480,10 +3440,10 @@ export const TOOLS: Tool[] = [
         keywords: ["시간 단위 변환", "시간 일 주 변환기", "시간 변환기", "hours to days", "분 시간 변환", "시간 분 변환", "시간 일 환산", "근무일 환산"],
       },
       en: {
-        title: "Time Converter | Hours to Days, Weeks, Months",
+        title: "Time Converter | Hours to Days, Weeks and Work Days",
         description:
           "Convert between seconds, minutes, hours, days, weeks, months and years instantly. Choose calendar basis (24h/day) or work basis (8h/day, 5d/week) to calculate project durations and work hour conversions. Everything runs in your browser.",
-        keywords: ["time converter", "hours to days converter", "hours to weeks", "time unit converter", "hours days weeks months calculator"],
+        keywords: ["time converter", "hours to days converter", "hours to weeks", "time unit converter", "hours days weeks months calculator", "hours to work days", "convert hours to days 8 hour workday"],
       },
     },
     content: {
@@ -3676,18 +3636,10 @@ export const TOOLS: Tool[] = [
         keywords: ["음력 양력 변환", "음력 변환기", "양력 음력 변환", "음력 날짜 변환", "음력 양력 계산기", "음력 계산기", "윤달 계산", "음력 생일 계산", "음력 생일 양력 변환", "양력 음력 계산기"],
       },
       en: {
-        title: "Lunar-Solar Date Converter | 1901 to 2100",
+        title: "Korean Lunar Calendar Converter | Lunar to Solar Date (1901-2100)",
         description:
           "Convert solar (Gregorian) dates to Korean lunar dates and vice versa. Covers 1901-2100, handles intercalation (leap) months, and displays the traditional Korean ganzhi year name. Runs entirely in your browser: no login, no installation.",
-        keywords: [
-          "lunar solar converter",
-          "korean lunar calendar",
-          "lunar date converter",
-          "solar to lunar",
-          "lunar to solar",
-          "korean calendar converter",
-          "intercalation month",
-        ],
+        keywords: ["lunar solar converter", "korean lunar calendar", "lunar date converter", "solar to lunar", "lunar to solar", "korean calendar converter", "intercalation month", "korean lunar birthday", "lunar birthday converter", "korean lunar calendar converter"],
       },
     },
     content: {
@@ -3872,6 +3824,11 @@ export const TOOLS: Tool[] = [
             "In lunar-input mode, a leap-month toggle appears when the selected month has an intercalation counterpart in that year. Turning it on converts the intercalation-month date to the correct Gregorian date. In solar-to-lunar mode, the result automatically indicates whether the date falls in an intercalation month.",
         },
         {
+          question: "How do I find my Korean lunar birthday on this year's calendar?",
+          answer:
+            "Switch to lunar input, enter this year with the month and day of your lunar birthday, and the converter returns this year's Gregorian date. A lunar birthday lands on a different solar date every year, so check it again each year. If you were born in a leap month, you can only convert to that leap month in years that have it; in other years the birthday is usually kept on the regular month.",
+        },
+        {
           question: "What date range is supported?",
           answer:
             "Solar dates from January 1, 1901 to December 31, 2100 are supported, along with all corresponding lunar dates within that range.",
@@ -3923,16 +3880,10 @@ export const TOOLS: Tool[] = [
         keywords: ["유연근무 계산기", "남은 근무시간 계산기", "근무시간 계산기", "유연근무제", "목표 근무시간", "월 근무시간 계산", "월 근로시간 계산", "선택근무제 계산기", "근무시간 채우기 계산"],
       },
       en: {
-        title: "Flex Work Calculator | Remaining Work Hours",
+        title: "Flexible Working Hours Calculator | Remaining Hours This Month",
         description:
           "Calculate this month's target hours, remaining hours, remaining business days and the daily average you need under a flexible work schedule. It deducts annual, half-day and hourly leave, factors in public holidays, and shows whether you're ahead or behind. Everything runs in your browser.",
-        keywords: [
-          "flex work calculator",
-          "remaining work hours calculator",
-          "flexible work hours calculator",
-          "monthly target hours",
-          "work hours calculator",
-        ],
+        keywords: ["flex work calculator", "remaining work hours calculator", "flexible work hours calculator", "monthly target hours", "work hours calculator", "flexible working hours calculator", "hours left this month calculator"],
       },
     },
     content: {
@@ -4464,17 +4415,10 @@ export const TOOLS: Tool[] = [
         keywords: ["연봉 실수령액 계산기", "실수령액 계산기", "월급 실수령액", "연봉 계산기", "세후 연봉 계산", "4대보험 계산기", "연봉 실수령", "2026 연봉 실수령액", "연봉 실수령액표", "세후 월급 계산기", "연봉 4000 실수령액", "연봉 3000 실수령액"],
       },
       en: {
-        title: "Salary Net Pay Calculator | Korea Take-Home Pay",
+        title: "Korea Salary Calculator 2026 | Take-Home Pay After Tax",
         description:
           "Enter your gross annual salary or monthly pay and instantly see estimated monthly and yearly take-home pay after Korea's four major insurances and income & local taxes, with a full deduction breakdown. Adjust non-taxable amount, dependents, children and withholding rate. Everything runs in your browser.",
-        keywords: [
-          "salary net pay calculator",
-          "korea take-home pay calculator",
-          "net salary calculator korea",
-          "after tax salary korea",
-          "korean income tax calculator",
-          "monthly net pay",
-        ],
+        keywords: ["salary net pay calculator", "korea take-home pay calculator", "net salary calculator korea", "after tax salary korea", "korean income tax calculator", "monthly net pay", "korea salary calculator", "korean salary after tax", "korea net salary 2026"],
       },
     },
     content: {
@@ -4655,6 +4599,11 @@ export const TOOLS: Tool[] = [
       ],
       en: [
         {
+          question: "What is the monthly take-home pay on a 30, 40 or 50 million won salary in Korea?",
+          answer:
+            "Running this calculator with second-half 2026 rates, KRW 200,000 of monthly non-taxable pay, one dependent (yourself) and 100% withholding gives a monthly take-home of about KRW 2.24 million on a 30 million won salary, 2.59 million on 35 million, 2.91 million on 40 million, 3.55 million on 50 million and 4.19 million on 60 million. Dependents, children and non-taxable pay change the income tax, so enter your own details to recalculate.",
+        },
+        {
           question: "Can the result differ from my actual payslip?",
           answer:
             "Yes. This is an estimate based on Korea's four-insurance rates and an approximation of the simplified withholding tax table. It does not account for company-specific non-taxable items, bonuses, mid-year joining/leaving, year-end settlement or extra deductions, so it can differ from your real payslip.",
@@ -4729,17 +4678,10 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Severance Pay Calculator | Korea Statutory Severance",
+        title: "Korea Severance Pay Calculator | Statutory Retirement Pay",
         description:
           "Enter your start date, last working day and the gross wages from your final three months to estimate statutory severance pay in Korea. The calculator shows the average daily wage, the days of continuous service and the full formula behind the result, and the guide explains DB and DC retirement plans, IRP accounts and how retirement income is taxed. Everything runs in your browser.",
-        keywords: [
-          "severance pay calculator",
-          "korea severance pay",
-          "retirement pay calculator korea",
-          "average wage calculator korea",
-          "statutory severance korea",
-          "korean severance formula",
-        ],
+        keywords: ["severance pay calculator", "korea severance pay", "retirement pay calculator korea", "average wage calculator korea", "statutory severance korea", "korean severance formula", "korea retirement pay calculator"],
       },
     },
     content: {
@@ -6256,13 +6198,10 @@ export const TOOLS: Tool[] = [
         keywords: ["광고 지표 계산기", "ROAS 계산기", "CPA 계산기", "CPC 계산기", "CPM 계산기", "CTR 계산기", "광고 수익률 계산", "손익분기 ROAS", "return on ad spend calculator", "ROAS 계산 방법", "광고 수익률 계산기"],
       },
       en: {
-        title: "Ad Metrics Calculator | ROAS, CPA, CPC, CPM, CTR",
+        title: "ROAS Calculator | CPA, CPC, CPM and CTR Calculator",
         description:
           "Switch tabs to calculate ROAS, CPA, CPC, CPM, and CTR, five ad metrics, on one page. Beyond the direct calculation, reverse-calculate target revenue, allowable budget, expected conversions (clicks, impressions), or the required budget. Add a gross margin percentage to see break-even ROAS. Every calculation runs in your browser.",
-        keywords: [
-          "ad metrics calculator", "ROAS calculator", "CPA calculator", "CPC calculator", "CPM calculator", "CTR calculator",
-          "return on ad spend calculator", "break even ROAS", "advertising ROI calculator",
-        ],
+        keywords: ["ad metrics calculator", "ROAS calculator", "CPA calculator", "CPC calculator", "CPM calculator", "CTR calculator", "return on ad spend calculator", "break even ROAS", "advertising ROI calculator", "roas formula", "how to calculate roas"],
       },
     },
     content: {
@@ -6819,17 +6758,10 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Funnel Conversion Calculator | Marketing Funnel Analysis & Reverse Planning",
+        title: "Funnel Conversion Calculator | Drop-Off and Required Traffic",
         description:
           "Calculate stage-by-stage conversion rates and drop-off rates for your marketing funnel, then reverse-calculate how many visitors you need at each stage to hit your final conversion target. Includes ad, lead, and commerce funnel presets. Add, remove, and rename stages freely. Everything runs in your browser.",
-        keywords: [
-          "funnel conversion calculator",
-          "reverse funnel calculator",
-          "conversion funnel planner",
-          "required traffic calculator",
-          "funnel drop off calculator",
-          "marketing funnel calculator",
-        ],
+        keywords: ["funnel conversion calculator", "reverse funnel calculator", "conversion funnel planner", "required traffic calculator", "funnel drop off calculator", "marketing funnel calculator", "funnel conversion rate calculator"],
       },
     },
     content: {
@@ -7045,14 +6977,10 @@ export const TOOLS: Tool[] = [
         keywords: ["성장률 계산기", "퍼센트 증감률 계산기", "변화율 계산기", "증가율 계산기", "감소율 계산기", "MoM 계산기", "YoY 계산기", "QoQ 계산기", "WoW 계산기", "목표 성장률 계산기", "필요 증가량 계산기", "역산 계산기", "퍼센트 차이 계산기", "growth rate calculator", "percentage change calculator", "증감률 계산기", "증감률 계산", "전년 대비 증감률", "퍼센트 증가 계산"],
       },
       en: {
-        title: "Growth Rate Calculator | MoM, YoY, Goal, Reverse, % Diff",
+        title: "Percentage Change Calculator | Growth Rate, MoM and YoY",
         description:
           "Enter a previous and current value to instantly calculate growth rate, percentage change, difference, and multiplier. Beyond MoM, YoY, QoQ, and WoW growth, switch tabs on the same page to find the growth rate needed to hit a goal, the required increase, the reverse-calculated original value, or a plain percent difference. Works for revenue, users, traffic, or any metric, entirely in your browser.",
-        keywords: [
-          "growth rate calculator", "percentage change calculator", "percentage increase calculator",
-          "percentage decrease calculator", "MoM growth calculator", "YoY growth calculator",
-          "goal growth calculator", "required growth calculator", "reverse growth calculator", "percent difference calculator",
-        ],
+        keywords: ["growth rate calculator", "percentage change calculator", "percentage increase calculator", "percentage decrease calculator", "MoM growth calculator", "YoY growth calculator", "goal growth calculator", "required growth calculator", "reverse growth calculator", "percent difference calculator", "percent change calculator", "year over year growth calculator"],
       },
     },
     content: {
@@ -7590,10 +7518,10 @@ export const TOOLS: Tool[] = [
         keywords: ["JSON 포매터", "JSON 정렬", "JSON 유효성 검사", "JSON 뷰어", "JSON 보기 좋게 정렬", "JSON beautify", "JSON validator", "JSON 압축"],
       },
       en: {
-        title: "JSON Formatter & Validator",
+        title: "JSON Formatter & Validator | Beautify JSON in Your Browser",
         description:
           "Paste a JSON string and it is instantly formatted with indentation and syntax highlighting. Syntax errors are pinpointed by line and column, and you can minify to a single line too. Everything runs entirely in your browser.",
-        keywords: ["json formatter", "json beautifier", "json validator"],
+        keywords: ["json formatter", "json beautifier", "json validator", "json viewer", "json pretty print", "format json online", "json minify"],
       },
     },
     content: {
@@ -8063,10 +7991,10 @@ export const TOOLS: Tool[] = [
         keywords: ["css 단위 변환기", "rem to px", "em to px", "vw to px", "ms to s", "px to rem", "px rem 변환", "rem px 계산", "px to rem 변환"],
       },
       en: {
-        title: "CSS Unit Converter | rem, em, vw, %, ms to px",
+        title: "PX to REM Converter | rem, em, vw and % to px",
         description:
           "Convert five common CSS relative units, rem, em, vw, percent and ms, to pixels (or seconds) instantly. Set the base value each unit depends on (root font size, parent font size, viewport width) and copy the result in one click. Everything runs entirely in your browser.",
-        keywords: ["css unit converter", "rem to px", "em to px", "vw to px", "ms to s", "px to rem"],
+        keywords: ["css unit converter", "rem to px", "em to px", "vw to px", "ms to s", "px to rem", "px to rem converter", "rem to px converter"],
       },
     },
     content: {
@@ -8351,10 +8279,10 @@ export const TOOLS: Tool[] = [
         keywords: ["CSS 그라디언트", "그라디언트 생성기", "linear gradient", "CSS 그라데이션", "그라데이션 만들기", "그라데이션 코드", "gradient generator"],
       },
       en: {
-        title: "CSS Gradient Generator",
+        title: "CSS Gradient Generator | Linear, Radial and Conic",
         description:
           "Edit linear, radial and conic gradients visually. Drag the stops to set colors and positions, tune the angle and center, then copy the finished CSS. Everything runs in your browser.",
-        keywords: ["css gradient generator", "linear gradient", "conic gradient"],
+        keywords: ["css gradient generator", "linear gradient", "conic gradient", "radial gradient generator", "conic gradient generator", "css background gradient"],
       },
     },
     content: {
@@ -8560,10 +8488,10 @@ export const TOOLS: Tool[] = [
         keywords: ["Tailwind 팔레트 생성기", "Tailwind 색상 생성", "11단계 색상 팔레트", "테일윈드 컬러", "tailwind color generator", "tailwind 색상 팔레트"],
       },
       en: {
-        title: "Tailwind Palette Generator | 11 shades from one HEX",
+        title: "Tailwind Color Palette Generator | 50-950 Shades from One HEX",
         description:
           "Enter a single base color (HEX) and instantly generate an 11-shade Tailwind palette (50-950). Click any shade to copy it, or copy the whole palette as a Tailwind v4 @theme block, v3 config or CSS variables. Everything runs in your browser.",
-        keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette"],
+        keywords: ["tailwind palette generator", "tailwind color shades", "11 color palette", "tailwind color generator", "tailwind v4 colors", "tailwind custom color palette"],
       },
     },
     content: {
@@ -8777,18 +8705,10 @@ export const TOOLS: Tool[] = [
         ],
       },
       en: {
-        title: "Open Graph Preview Tester | Compare Social Link Cards",
+        title: "Open Graph Preview | Check Link Previews for X, Facebook, KakaoTalk",
         description:
           "Preview an Open Graph image, title, and description across KakaoTalk, Facebook, X, Threads, LinkedIn, Naver Blog, and Notion. Upload an image, enter an image URL, or render SVG and HTML/CSS code directly in your browser without sending files to a server.",
-        keywords: [
-          "Open Graph preview",
-          "OG image tester",
-          "social media preview",
-          "link card preview",
-          "Facebook link preview",
-          "X card preview",
-          "LinkedIn post preview",
-        ],
+        keywords: ["Open Graph preview", "OG image tester", "social media preview", "link card preview", "Facebook link preview", "X card preview", "LinkedIn post preview", "og image preview", "kakaotalk link preview"],
       },
     },
     content: {

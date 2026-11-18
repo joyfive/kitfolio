@@ -19,7 +19,7 @@ AdSense "가치가 별로 없는 콘텐츠" 4차 대응. 콘텐츠 고유성은 
 - 페이지당 핵심 검색어 1개를 title 앞에 둔다. 사람들이 붙여 쓰는 표기(글자수 · QR코드 · 그라데이션)를 그대로 쓴다.
 - h1(`name`)과 허브 카드 이름은 바꾸지 않는다. 검색 결과에 보이는 title 만 검색어 쪽으로 옮긴다.
 - 키워드를 본문에 끼워 넣지 않는다. 질문형 검색어는 FAQ 질문 문장으로만 받는다.
-- 이번 범위는 KO 만. EN 은 손대지 않았다.
+- KO 를 먼저 바꾸고, EN 은 같은 PR 에서 별도 기준(아래 "변경 목록 (EN)")으로 바꿨다.
 
 ## 변경 목록 (KO)
 
@@ -58,7 +58,53 @@ description 변경: character-counter(자소서·바이트 반영), css-gradient
 연봉 FAQ 숫자는 이 저장소의 `calculateSalary()` 로 계산한 값이다
 (기준일 2026-11-18 · 비과세 20만 · 본인 1명 · 원천징수 100%). 요율이 바뀌면 이 답변도 같이 고친다.
 
-## 바꾸지 않은 도구
+## 변경 목록 (EN)
+
+영문 검색은 범용 도구 키워드(character counter · merge PDF · compress image · QR code generator · JSON formatter)를
+오래된 대형 사이트가 차지하고 있어 신규 도메인이 같은 키워드로 경쟁하기 어렵다(추정). 그래서 EN 은 방향을 둘로 나눴다.
+
+- **범용 도구:** 이 사이트만 내세울 수 있는 조건을 title 에 붙인다. 업로드 없음(without uploading) · 가입 없음(no sign-up) · 정확한 픽셀 지정처럼 검색어에 실제로 붙는 수식어를 쓴다.
+- **한국 특화·틈새 도구:** "Korea" · "Korean" · "Slack" · "Tailwind" 처럼 경쟁이 얕은 한정어를 title 앞에 둔다.
+
+| 도구 | 새 title |
+|---|---|
+| character-counter | Character Counter \| Word Count With and Without Spaces |
+| pdf-tools | Merge PDF Without Uploading \| Split, Rotate, Delete Pages |
+| image-optimizer | Compress Images Without Uploading \| PNG, JPG & WebP |
+| image-resizer-cropper | Resize Image to Exact Pixels \| Crop to 1:1, 4:3, 16:9 |
+| qr-code-generator | Free QR Code Generator \| No Sign-Up, Custom Shapes, PNG & SVG |
+| qr-code-reader | Scan QR Code From Image \| Upload, Paste or Use Camera |
+| kst-utc-converter | KST to UTC Converter \| Korea Time to UTC (UTC+9) with Code |
+| slack-timestamp-converter | Slack Timestamp Converter \| Unix Epoch to Date and Slack Date Format |
+| time-calculator | Hours and Minutes Calculator \| Add and Subtract Time, Decimal Hours |
+| time-converter | Time Converter \| Hours to Days, Weeks and Work Days |
+| lunar-solar-converter | Korean Lunar Calendar Converter \| Lunar to Solar Date (1901-2100) |
+| flex-work-calculator | Flexible Working Hours Calculator \| Remaining Hours This Month |
+| salary-calculator | Korea Salary Calculator 2026 \| Take-Home Pay After Tax |
+| severance-pay-calculator | Korea Severance Pay Calculator \| Statutory Retirement Pay |
+| ad-metrics-calculator | ROAS Calculator \| CPA, CPC, CPM and CTR Calculator |
+| funnel-conversion-calculator | Funnel Conversion Calculator \| Drop-Off and Required Traffic |
+| growth-rate-calculator | Percentage Change Calculator \| Growth Rate, MoM and YoY |
+| json-formatter | JSON Formatter & Validator \| Beautify JSON in Your Browser |
+| css-unit-converter | PX to REM Converter \| rem, em, vw and % to px |
+| css-gradient | CSS Gradient Generator \| Linear, Radial and Conic |
+| tailwind-palette-generator | Tailwind Color Palette Generator \| 50-950 Shades from One HEX |
+| open-graph-preview | Open Graph Preview \| Check Link Previews for X, Facebook, KakaoTalk |
+
+키워드는 각 도구에 위 표기에 맞춰 2~4개씩 추가했다. 연차 · 프리랜서 · 종합소득세 · 부가세 · 실업급여 · CAGR · 광고 예산 페이싱 ·
+슬랙 메시지 빌더 · 웹 접근성 5종은 title 이 이미 "Korea" 한정어나 정확한 도구명으로 시작해 바꾸지 않았다.
+
+### FAQ 추가 (EN · KO 공통 1건 포함)
+
+| 도구 | 추가 질문 |
+|---|---|
+| qr-code-generator | Do QR codes made here expire? · 여기서 만든 QR 코드는 유효기간이 있나요? (KO 도 추가) |
+| lunar-solar-converter | How do I find my Korean lunar birthday on this year's calendar? |
+| salary-calculator | What is the monthly take-home pay on a 30, 40 or 50 million won salary in Korea? |
+
+QR 만료 답변의 근거: 생성기는 입력 URL 을 그대로 QR 패턴에 넣고 외부 호출·단축 URL 이 없다 (`app/lib/qr/`).
+
+## 바꾸지 않은 도구 (KO)
 
 - 웹 접근성 5종 · OG 미리보기 · 퇴직금 · 광고 예산 페이싱 · 퍼널 전환율 · KST UTC · 슬랙 메시지 빌더:
   title 이 이미 핵심 검색어로 시작한다.
