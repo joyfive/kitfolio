@@ -5591,3 +5591,44 @@ textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
 @media (prefers-reduced-motion: reduce) {
   .irc-drop, .irc-chip, .irc-icon-btn { transition: none; }
 }
+
+/* ── 업무 프롬프트 (/prompts) ──
+   목록·상세는 블로그 클래스(kf-blog-*, kf-article-*)를 그대로 쓰고,
+   제목 썸네일 · 코드 블록 복사 버튼 · 메뉴 경로 확인일만 추가한다. */
+.kf-prompt-thumb {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  padding: 20px 28px; text-align: center;
+  background:
+    radial-gradient(120% 120% at 100% 0%, var(--color-blue-primary-100), transparent 60%),
+    var(--color-blue-gray-50);
+  border-bottom: 1px solid var(--color-blue-gray-100);
+}
+.kf-prompt-thumb-title {
+  font-size: 20px; font-weight: 700; line-height: 1.35; letter-spacing: -0.02em;
+  color: var(--color-blue-gray-950); word-break: keep-all;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.kf-prompt-thumb-badge {
+  position: absolute; left: 14px; bottom: 12px;
+  font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 999px;
+  color: var(--color-blue-primary-700); background: var(--color-blue-primary-100);
+}
+.kf-prompt-pre { position: relative; }
+/* 프롬프트는 그대로 붙여 넣을 문장이라 가로 스크롤 대신 줄바꿈해서 다 보여준다 */
+.kf-prompt-pre pre {
+  white-space: pre-wrap; word-break: break-word; padding-right: 76px;
+  /* 한글 프롬프트가 고정폭 대체 글꼴로 벌어지지 않게 한글은 Pretendard 로 */
+  font-family: "JetBrains Mono", "Pretendard", monospace;
+}
+.kf-prompt-copy {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+  color: var(--color-blue-gray-200); background: var(--color-blue-gray-900);
+  border: 1px solid var(--color-blue-gray-700);
+}
+.kf-prompt-copy:hover { color: #fff; border-color: var(--color-blue-primary-400); }
+.kf-prompt-uinote {
+  margin: 24px 0 0; padding: 12px 14px; border-radius: 10px;
+  font-size: 13px; line-height: 1.6; color: var(--color-blue-gray-600);
+  background: var(--color-blue-gray-100);
+}
