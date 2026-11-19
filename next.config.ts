@@ -1,4 +1,24 @@
 import type { NextConfig } from "next";
+import fs from "node:fs";
+import path from "node:path";
+
+/**
+ * 업무 프롬프트 목록(/prompts · /en/prompts)은 그 언어로 공개된 글이 있을 때만 존재해야 한다.
+ * 정적 페이지에서 notFound() 를 부르면 200 + noindex(소프트 404)로 나가므로,
+ * 글이 없는 언어는 빌드 시점에 그 언어 허브로 임시 리다이렉트한다.
+ * 판정 규칙은 app/lib/prompts.ts 와 같다: <slug>.<lang>.md, "_" 시작 제외,
+ * 프로덕션에서는 draft: true 제외.
+ */
+function hasPublishedPrompts(lang: "ko" | "en"): boolean {
+  const dir = path.join(process.cwd(), "content", "prompts");
+  if (!fs.existsSync(dir)) return false;
+  const prod = process.env.NODE_ENV === "production";
+  return fs.readdirSync(dir).some((f) => {
+    if (!new RegExp(`^[a-z0-9][a-z0-9-]*\\.${lang}\\.md$`).test(f)) return false;
+    if (!prod) return true;
+    return !/^draft:\s*true\s*$/m.test(fs.readFileSync(path.join(dir, f), "utf8"));
+  });
+}
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -72,7 +92,13 @@ const nextConfig: NextConfig = {
       { source: `/en/${slug}`, destination: `/en/css-unit-converter?mode=${mode}`, permanent: true },
     ]);
 
+    const emptyPromptRedirects = [
+      ...(hasPublishedPrompts("ko") ? [] : [{ source: "/prompts", destination: "/", permanent: false }]),
+      ...(hasPublishedPrompts("en") ? [] : [{ source: "/en/prompts", destination: "/en", permanent: false }]),
+    ];
+
     return [
+      ...emptyPromptRedirects,
       // 구 2뎁스 URL → 플랫 URL (제품 방향: 모든 도구는 1뎁스 라우트)
       {
         source: "/tools/slack-timestamp-converter",

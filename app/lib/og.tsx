@@ -152,3 +152,10 @@ export function toolOgImage(slug: string, lang: Lang) {
 export function hubOgImage(lang: Lang) {
   return renderOg(SITE.name, HUB.seo[lang].title, OG_BADGE[lang]);
 }
+
+/** 업무 프롬프트 OG 이미지: 대표 이미지 없이 글 제목으로 만든다 (목록 썸네일과 같은 규칙) */
+export function promptOgImage(title: string, lang: Lang) {
+  return renderOg(title, "", PROMPT_OG_BADGE[lang]);
+}
+
+const PROMPT_OG_BADGE = { ko: "업무 프롬프트", en: "Work prompt" } as const;

@@ -5,6 +5,7 @@ import { LangProvider } from "./lib/i18n";
 import { HUB, SITE } from "./lib/content";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
+import { getPromptSlugs } from "./lib/prompts";
 
 const ADSENSE_CLIENT = "ca-pub-7537584957079478";
 const GA_ID = "G-BW26VT6W47";
@@ -56,7 +57,10 @@ export default function RootLayout({
       <body>
         {/* 공통 레이아웃: 헤더 / 본문(max 1216px) / 푸터.
             헤더·푸터는 URL에서 언어를 스스로 도출한다. */}
-        <SiteHeader />
+        {/* 업무 프롬프트 메뉴는 그 언어로 공개된 글이 있을 때만 보인다 */}
+        <SiteHeader
+          promptLangs={{ ko: getPromptSlugs("ko").length > 0, en: getPromptSlugs("en").length > 0 }}
+        />
         <main className="kf-main">
           {/* 루트 = KO. /en 서브트리가 LangProvider lang="en"으로 덮어씀 */}
           <LangProvider lang="ko">{children}</LangProvider>
