@@ -54,6 +54,7 @@ export type PromptMeta = {
 export type PromptPost = {
   meta: PromptMeta;
   html: string;
+  primaryPrompt: string | null;
   /** 본문에서 쓴 메뉴 경로 (확인일 안내용) */
   uiPaths: UiPathUse[];
 };
@@ -111,11 +112,18 @@ export function getPrompt(slug: string, lang: Lang): PromptPost | null {
   const r = readMeta(slug, lang);
   if (!r) return null;
   const { text, used } = resolveUiPaths(r.body, lang, `content/prompts/${slug}.${lang}.md`);
-  const html = (marked.parse(fixCjkEmphasis(text)) as string).replace(
-    /<a /g,
-    '<a target="_blank" rel="noopener noreferrer" ',
-  );
-  return { meta: r.meta, html, uiPaths: used };
+  const tokens = marked.lexer(fixCjkEmphasis(text));
+  const primaryIndex = tokens.findIndex((token) => token.type === "code" && /^ {0,3}(?:`{3,}|~{3,})/.test(token.raw));
+  let primaryPrompt: string | null = null;
+  if (primaryIndex !== -1) {
+    primaryPrompt = (tokens[primaryIndex] as { text: string }).text;
+    const previous = tokens[primaryIndex - 1];
+    const isPromptHeading =
+      previous?.type === "heading" && /^(프롬프트|prompt)$/i.test(previous.text);
+    tokens.splice(isPromptHeading ? primaryIndex - 1 : primaryIndex, isPromptHeading ? 2 : 1);
+  }
+  const html = marked.parser(tokens).replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
+  return { meta: r.meta, html, primaryPrompt, uiPaths: used };
 }
 
 /** 글이 쓴 메뉴 경로 중 가장 오래된 확인일 (없으면 null) */

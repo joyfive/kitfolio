@@ -2,13 +2,14 @@ import Link from "next/link";
 import { getTool, localizedHref, toolNames, type Lang } from "../lib/content";
 import { formatDate } from "../lib/blog";
 import { getPrompt, oldestUiVerifiedAt, promptLabel } from "../lib/prompts";
+import PrimaryPrompt from "./PrimaryPrompt";
 import PromptCopyButtons from "./PromptCopyButtons";
 
 /** 업무 프롬프트 상세. 블로그 아티클과 같은 읽기 레이아웃 + 게재일 + 코드 블록 복사 버튼. */
 export default function PromptArticle({ slug, lang }: { slug: string; lang: Lang }) {
   const post = getPrompt(slug, lang);
   if (!post) return null;
-  const { meta, html, uiPaths } = post;
+  const { meta, html, primaryPrompt, uiPaths } = post;
   const l = promptLabel(lang);
   const verified = oldestUiVerifiedAt(uiPaths);
   const services = [...new Set(uiPaths.map((u) => u.service))].join(", ");
@@ -47,6 +48,8 @@ export default function PromptArticle({ slug, lang }: { slug: string; lang: Lang
         <h1>{meta.title}</h1>
         {meta.description && <p className="kf-article-lead">{meta.description}</p>}
       </header>
+
+      {primaryPrompt !== null && <PrimaryPrompt text={primaryPrompt} lang={lang} />}
 
       <div id={bodyId} className="kf-article-body" dangerouslySetInnerHTML={{ __html: html }} />
       <PromptCopyButtons targetId={bodyId} copyLabel={l.copy} copiedLabel={l.copied} />

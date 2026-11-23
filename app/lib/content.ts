@@ -240,20 +240,20 @@ export const HUB = {
   hero: {
     ko: {
       eyebrow: "설치 없이 · 가입 없이 · 브라우저에서 바로",
-      h1: { pre: "필요한 ", accent: "도구", post: "를 찾아,\n하던 일을 계속하세요." },
+      h1: { pre: "", accent: "PDF 합치기", post: "부터 연봉 계산까지" },
       subtitle:
-        "계산·변환·생성·점검에 필요한 작은 웹 도구 모음. 설치나 가입 없이 열자마자 쓰고, 결과를 바로 가져가세요. 도구에 입력한 텍스트·숫자·파일은 Kitfolio 서버로 업로드되지 않고 브라우저 안에서 처리됩니다.",
+        "설치와 가입 없이 쓰는 웹 도구 모음. 입력한 자료는 브라우저에서 처리합니다.",
       stat: "개 도구",
     },
     en: {
       eyebrow: "No install · No sign-up · Right in your browser",
       h1: {
-        pre: "Find the ",
-        accent: "tool",
-        post: ".\nGet back to work.",
+        pre: "From ",
+        accent: "merging PDFs",
+        post: " to estimating take-home pay",
       },
       subtitle:
-        "Small web tools to calculate, convert, create and check. Nothing to install, no account: open a tool, get the result and keep going. The text, numbers and files you enter are processed in your browser and never uploaded to Kitfolio's servers.",
+        "Web tools with no setup or sign-up. Your inputs are processed in your browser.",
       stat: " tools",
     },
   },
@@ -7529,7 +7529,7 @@ export const TOOLS: Tool[] = [
         card: "JSON 문자열을 들여쓰기·색상 강조로 포맷팅. 문법 오류 감지와 유효성 검사 포함.",
         description:
           "JSON 문자열을 붙여넣으면 들여쓰기와 색상 강조로 즉시 정리하고, 문법 오류가 있으면 줄·열 위치까지 짚어 유효성을 검사합니다. 한 줄로 압축(minify)할 수도 있어요. 모든 처리는 브라우저 안에서만 이루어집니다.",
-        howItWorks: ["왼쪽 칸에 JSON 붙여넣기", "자동 포맷 · 유효성 확인", "오른쪽 결과 복사"],
+        howItWorks: ["입력 칸에 JSON 붙여넣기", "자동 포맷 · 유효성 확인", "정리된 결과 복사"],
         aeo: {
           what: "JSON 포매터는 한 줄로 뭉치거나 어지럽게 섞인 JSON 문자열을 들여쓰기와 색상 강조가 적용된 읽기 쉬운 형태로 정리하고, 동시에 문법 오류를 검사해주는 도구입니다.",
           who: "API 응답과 설정 파일을 다루는 개발자, 로그·데이터 페이로드를 확인해야 하는 PM과 데이터 작업자를 위한 도구입니다.",

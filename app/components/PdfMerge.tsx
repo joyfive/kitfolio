@@ -13,8 +13,8 @@ import { downloadBlob, pdfBytesToBlob, safePdfName } from "../lib/pdf/downloadBl
 
 const DICT: Dict = {
   ko: {
-    "m.drop": "PDF 파일을 여기로 끌어다 놓거나 선택하세요",
-    "m.dropHint": "여러 파일 선택 가능 · 최대 30개 · 파일당 100MB",
+    "m.drop": "PDF 파일 선택",
+    "m.dropHint": "여기에 끌어다 놓을 수도 있어요 · 최대 30개 · 파일당 100MB",
     "m.add": "파일 추가",
     "m.clearAll": "전체 초기화",
     "m.files": "파일 목록",
@@ -36,8 +36,8 @@ const DICT: Dict = {
     "m.order": "병합 순서",
   },
   en: {
-    "m.drop": "Drag PDF files here, or choose files",
-    "m.dropHint": "Select multiple files · up to 30 · 100MB each",
+    "m.drop": "Choose PDF files",
+    "m.dropHint": "Or drag files here · up to 30 · 100 MB each",
     "m.add": "Add files",
     "m.clearAll": "Clear all",
     "m.files": "Files",
@@ -209,7 +209,7 @@ export default function PdfMerge() {
 
   return (
     <>
-      <div className="pdf-work pdf-work-merge">
+      <div className={`pdf-work pdf-work-merge${files.length === 0 ? " pdf-work-start" : ""}`}>
         {/* 좌: 파일 목록 · 순서 설정 */}
         <div className="pdf-panel">
           <div className="pdf-panel-inner">
@@ -221,6 +221,10 @@ export default function PdfMerge() {
               disabled={state === "processing"}
             />
 
+            {warn && (
+              <div className="pdf-status pdf-status-warn" role="status">{warn}</div>
+            )}
+            {files.length === 0 && <PdfProcessingStatus state={state} error={error} processingLabel={t("m.running")} />}
             {files.length > 0 && (
               <>
                 <div className="pdf-list-head">
@@ -301,7 +305,7 @@ export default function PdfMerge() {
         </div>
 
         {/* 우: 병합 결과 */}
-        <div className="pdf-result-panel">
+        {files.length > 0 && <div className="pdf-result-panel">
           <div className="pdf-result-inner">
             <span className="field-label">{t("m.result")}</span>
 
@@ -333,16 +337,11 @@ export default function PdfMerge() {
               autoComplete="off"
             />
 
-            {warn && (
-              <div className="pdf-status pdf-status-warn" role="status">
-                {warn}
-              </div>
-            )}
             <PdfProcessingStatus state={state} error={error} processingLabel={t("m.running")} />
 
             <button
               type="button"
-              className="btn btn-primary pdf-run"
+              className={`btn ${result ? "btn-outline" : "btn-primary"} pdf-run`}
               onClick={run}
               disabled={files.length < 2 || state === "processing"}
             >
@@ -350,14 +349,17 @@ export default function PdfMerge() {
             </button>
 
             {result && (
-              <button type="button" className="btn btn-outline pdf-download" onClick={download}>
-                {t("m.download")}
-              </button>
+              <div className="pdf-ready">
+                <p role="status">{result.name}</p>
+                <button type="button" className="btn btn-primary pdf-download" onClick={download}>
+                  {t("m.download")}
+                </button>
+              </div>
             )}
 
             <p className="pdf-memory-hint">{t("m.memoryHint")}</p>
           </div>
-        </div>
+        </div>}
       </div>
     </>
   );

@@ -12,6 +12,8 @@ import { useT, type Dict } from "../lib/i18n";
 const DICT: Dict = {
   ko: {
     "json.indent": "들여쓰기",
+    "json.live": "입력하면 자동 정리",
+    "json.copyFailed": "복사할 수 없습니다. 결과를 직접 선택해 주세요.",
     "json.format": "포맷",
     "json.minify": "압축",
     "json.status.idle": "입력 대기 중",
@@ -22,6 +24,8 @@ const DICT: Dict = {
   },
   en: {
     "json.indent": "Indent",
+    "json.live": "Updates as you type",
+    "json.copyFailed": "Could not copy. Select the result to copy it manually.",
     "json.format": "Format",
     "json.minify": "Minify",
     "json.status.idle": "Waiting for input",
@@ -88,6 +92,7 @@ export default function JsonFormatter() {
   const [text, setText] = useState(SAMPLE);
   const [indent, setIndent] = useState("2");
   const [mode, setMode] = useState<"format" | "minify">("format");
+  const [copyFailed, setCopyFailed] = useState(false);
   const [copied, setCopied] = useState(false);
   const inGutterRef = useRef<HTMLDivElement>(null);
 
@@ -155,10 +160,13 @@ export default function JsonFormatter() {
 
   async function copyOut() {
     if (!result.plain) return;
+    setCopyFailed(false);
     try {
       await navigator.clipboard.writeText(result.plain);
     } catch {
-      /* ignore */
+      setCopied(false);
+      setCopyFailed(true);
+      return;
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
@@ -168,12 +176,12 @@ export default function JsonFormatter() {
     <>
       <PageHead slug="json-formatter" />
 
-      <div className="ide">
+      <div className="ide json-ide">
           <div className="ide-bar">
             <div className="ide-title">
               <span className="dot" />
               <span className="name">JSON Formatter</span>
-              <span className="path">/json-formatter</span>
+              <span className="path">{t("json.live")}</span>
             </div>
             <div className="spacer" />
             <label className="field">
@@ -192,7 +200,8 @@ export default function JsonFormatter() {
               </select>
             </label>
             <button
-              className="btn-ide primary"
+              className="btn-ide"
+              aria-pressed={mode === "format"}
               onClick={() => setMode("format")}
             >
               <svg
@@ -205,7 +214,7 @@ export default function JsonFormatter() {
               </svg>
               <span>{t("json.format")}</span>
             </button>
-            <button className="btn-ide" onClick={() => setMode("minify")}>
+            <button className="btn-ide" aria-pressed={mode === "minify"} onClick={() => setMode("minify")}>
               <span>{t("json.minify")}</span>
             </button>
           </div>
@@ -270,8 +279,9 @@ export default function JsonFormatter() {
                 <span className="spacer" />
                 <span className="pane-meta">{result.outMeta}</span>
                 <button
-                  className={"pane-act" + (copied ? " copied-flash" : "")}
+                  className={"pane-act pane-copy" + (copied ? " copied-flash" : "")}
                   onClick={copyOut}
+                  disabled={!result.plain}
                 >
                   {copied ? t("common.copied") : t("common.copy")}
                 </button>
@@ -288,11 +298,11 @@ export default function JsonFormatter() {
             </div>
           </div>
 
-          <div className="ide-status">
+          <div className="ide-status" role="status">
             <span className={"status-pill " + result.status}>
               <span>{t(statusKey)}</span>
             </span>
-            <span className="err-detail">{result.errDetail}</span>
+            <span className="err-detail">{copyFailed ? t("json.copyFailed") : result.errDetail}</span>
             <span className="spacer" />
             <span>{result.sizeInfo}</span>
           </div>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useLang, useT, type Dict } from "../lib/i18n";
-import { ToolName, ToolTags } from "./ToolCardParts";
 import {
   ACTIONS,
   CATEGORIES,
@@ -19,16 +18,28 @@ import {
 // 허브 화면 UI 마이크로카피만 로컬 dict. 카피·라벨·검색 색인은 content.ts.
 const DICT: Dict = {
   ko: {
-    open: "열기",
+    searchLabel: "도구 검색",
+    narrow: "작업으로 좁히기",
+    reset: "검색·필터 초기화",
+    emptyFavorites: "조건에 맞는 즐겨찾기가 없습니다. 도구 옆 별표로 추가할 수 있어요.",
+    quick: "대표 작업",
+    privacy: "처리 방식",
+    favorite: "즐겨찾기",
     empty: "검색 결과가 없습니다.",
-    searchPlaceholder: "하려는 작업을 입력하세요 (예: PDF 합치기, 사진 용량 줄이기)",
+    searchPlaceholder: "예: PDF 합치기",
     allCats: "전체",
     allActions: "모든 작업",
   },
   en: {
-    open: "Open",
+    searchLabel: "Search tools",
+    narrow: "Filter by task",
+    reset: "Clear search and filters",
+    emptyFavorites: "No matching favorites. Use the star beside a tool to save it.",
+    quick: "Quick tasks",
+    privacy: "How data is handled",
+    favorite: "Favorite",
     empty: "No tools match your search.",
-    searchPlaceholder: "What do you need to do? (e.g. merge PDFs, shrink a photo)",
+    searchPlaceholder: "e.g. merge PDFs",
     allCats: "All",
     allActions: "Any task",
   },
@@ -38,6 +49,13 @@ const DICT: Dict = {
 // 상태는 쿼리스트링 ?cat=&action= 에 동기화한다 (경로 카테고리 URL 금지).
 const CAT_IDS = new Set<string>(CATEGORIES.map((c) => c.id));
 const ACTION_IDS = new Set<string>(ACTIONS.map((a) => a.id));
+
+const QUICK_TASKS = [
+  { slug: "pdf-tools", mark: "PDF", ko: "PDF 합치기", en: "Merge PDFs" },
+  { slug: "image-optimizer", mark: "IMG", ko: "사진 용량 줄이기", en: "Shrink an image" },
+  { slug: "salary-calculator", mark: "₩", ko: "연봉 실수령액 계산", en: "Estimate take-home pay" },
+  { slug: "json-formatter", mark: "{ }", ko: "JSON 정리", en: "Format JSON" },
+] as const;
 
 const FAV_KEY = "kitfolio-favs";
 
@@ -68,6 +86,7 @@ export default function Hub() {
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<"all" | CategoryId>("all");
   const [activeAction, setActiveAction] = useState<"all" | ActionId>("all");
+  const [actionsOpen, setActionsOpen] = useState(false);
   const [onlyFav, setOnlyFav] = useState(false);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
@@ -85,7 +104,10 @@ export default function Hub() {
     const c = q.get("cat");
     const a = q.get("action");
     if (c && CAT_IDS.has(c)) setActiveCat(c as CategoryId);
-    if (a && ACTION_IDS.has(a)) setActiveAction(a as ActionId);
+    if (a && ACTION_IDS.has(a)) {
+      setActiveAction(a as ActionId);
+      setActionsOpen(true);
+    }
   }, []);
 
   function syncQuery(cat: "all" | CategoryId, action: "all" | ActionId) {
@@ -104,6 +126,7 @@ export default function Hub() {
     setActiveCat(cat);
     setActiveAction("all");
     setOnlyFav(false);
+    setActionsOpen(false);
     syncQuery(cat, "all");
   }
 
@@ -117,7 +140,11 @@ export default function Hub() {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
-      localStorage.setItem(FAV_KEY, JSON.stringify([...next]));
+      try {
+        localStorage.setItem(FAV_KEY, JSON.stringify([...next]));
+      } catch {
+        // Keep favorites usable for this session when storage is unavailable.
+      }
       return next;
     });
   }
@@ -163,171 +190,135 @@ export default function Hub() {
     return ACTIONS.filter((a) => pool.some((tool) => tool.actions.includes(a.id)));
   }, [activeCat]);
 
-  const CatChips = ({ className }: { className: string }) => (
-    <div className={className} role="group" aria-label={lang === "ko" ? "주제" : "Topic"}>
-      {catChips.map((c) => (
-        <button
-          key={c.key}
-          className={activeCat === c.key ? "is-active" : ""}
-          aria-pressed={activeCat === c.key}
-          onClick={() => selectCat(c.key)}
-        >
-          {c.label}
-        </button>
-      ))}
-    </div>
-  );
+  const filtered = Boolean(query.trim() || onlyFav || activeCat !== "all" || activeAction !== "all");
+  const groups = filtered
+    ? [{ key: "results", title: null, tools: visible }]
+    : CATEGORIES.map((category) => ({
+        key: category.id,
+        title: category.label[lang],
+        tools: visible.filter((tool) => tool.category === category.id),
+      })).filter((group) => group.tools.length > 0);
+
+  function resetFilters() {
+    setQuery("");
+    selectCat("all");
+  }
 
   return (
     <>
-      {/* 모바일 스티키 칩 바 (≤640px): 1단 주제 카테고리 */}
-      <div className="hub-mcats">
-        <CatChips className="hub-mcats-track" />
-      </div>
-
       <section className="hub-hero">
-        <span className="hub-eyebrow">{hero.eyebrow}</span>
-        <h1>
-          {hero.h1.pre}
-          <span className="accent">{hero.h1.accent}</span>
-          {hero.h1.post.split("\n").map((part, i) =>
-            i === 0 ? (
-              part
-            ) : (
-              <span key={i}>
-                <br />
-                {part}
-              </span>
-            ),
-          )}
-        </h1>
-        <p>{hero.subtitle}</p>
+        <h1>{hero.h1.pre}<span className="accent">{hero.h1.accent}</span>{hero.h1.post}</h1>
+        <p>{hero.subtitle} <Link href={localizedHref(lang, "/privacy-policy")}>{t("privacy")}</Link></p>
         <div className="hub-herobar">
           <label className="hub-bigsearch">
             <SearchIcon />
+            <span className="sr-only">{t("searchLabel")}</span>
             <input
-              type="text"
+              type="search"
               placeholder={t("searchPlaceholder")}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </label>
           <button
+            type="button"
             className={"hub-favbtn" + (onlyFav ? " is-active" : "")}
+            aria-pressed={onlyFav}
+            aria-label={t("header.favorites")}
             title={t("header.favorites")}
-            onClick={() => setOnlyFav((v) => !v)}
+            onClick={() => setOnlyFav((value) => !value)}
           >
             <StarIcon filled={onlyFav} />
             <span>{t("header.favorites")}</span>
           </button>
-          <span className="hub-stat">
-            <b>{visible.length}</b>
-            {hero.stat}
-          </span>
         </div>
 
-        {/* 1단 주제 카테고리 (데스크톱) · 2단 작업 태그 (공통): 스타일로 depth 구분 */}
-        <CatChips className="hub-cats" />
-        <div
-          className="hub-actions"
-          role="group"
-          aria-label={lang === "ko" ? "작업" : "Task"}
-        >
-          {[{ id: "all" as const, label: { ko: t("allActions"), en: t("allActions") } }, ...actionChips].map(
-            (a) => (
+        {!filtered && (
+          <nav className="hub-quick" aria-label={t("quick")}>
+            {QUICK_TASKS.map((task) => (
+              <Link key={task.slug} href={localizedHref(lang, "/" + task.slug)}>
+                <span className="hub-mark" aria-hidden="true">{task.mark}</span>
+                {task[lang]}
+              </Link>
+            ))}
+          </nav>
+        )}
+
+        <div className="hub-filters">
+          <div className="hub-cats" role="group" aria-label={lang === "ko" ? "주제" : "Topic"}>
+            {catChips.map((category) => (
               <button
-                key={a.id}
-                className={activeAction === a.id ? "is-active" : ""}
-                aria-pressed={activeAction === a.id}
-                onClick={() => selectAction(a.id)}
+                key={category.key}
+                type="button"
+                className={activeCat === category.key ? "is-active" : ""}
+                aria-pressed={activeCat === category.key}
+                onClick={() => selectCat(category.key)}
               >
-                {a.label[lang]}
+                {category.label}
               </button>
-            ),
-          )}
+            ))}
+          </div>
+          <button type="button" className="hub-narrow" aria-expanded={actionsOpen}
+            aria-controls="hub-task-filters" onClick={() => setActionsOpen((open) => !open)}>
+            {t("narrow")}{activeAction !== "all" && ` · ${ACTIONS.find((action) => action.id === activeAction)?.label[lang]}`}
+          </button>
+          <div id="hub-task-filters" className="hub-actions" hidden={!actionsOpen}
+            role="group" aria-label={lang === "ko" ? "작업" : "Task"}>
+            <button type="button" aria-pressed={activeAction === "all"} onClick={() => selectAction("all")}>
+              {t("allActions")}
+            </button>
+            {actionChips.map((action) => (
+              <button key={action.id} type="button" aria-pressed={activeAction === action.id}
+                onClick={() => selectAction(action.id)}>
+                {action.label[lang]}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
-      <div className="cat-grid" id="catalog">
-        {visible.map((tool) => (
-          <ToolCard
-            key={tool.slug}
-            tool={tool}
-            lang={lang}
-            href={localizedHref(lang, "/" + tool.slug)}
-            fav={favs.has(tool.slug)}
-            onFav={() => toggleFav(tool.slug)}
-            openLabel={t("open")}
-          />
+      <div id="catalog">
+        <div className="hub-results">
+          <span className="hub-stat" role="status"><b>{visible.length}</b>{hero.stat}</span>
+          {filtered && <button type="button" onClick={resetFilters}>{t("reset")}</button>}
+        </div>
+        {groups.map((group) => (
+          <div key={group.key} className="hub-group">
+            {group.title && <h2>{group.title}</h2>}
+            <div className="cat-grid">
+              {group.tools.map((tool) => (
+                <div key={tool.slug} className="hub-tool">
+                  <Link className="hub-tool-link" href={localizedHref(lang, "/" + tool.slug)}>
+                    <span className="hub-mark" aria-hidden="true">{tool.ico || "CSS"}</span>
+                    <div>
+                      <strong>{tool.name[lang]}</strong>
+                      <p>{tool.content[lang].card}</p>
+                      {filtered && activeCat === "all" && <small>{categoryOf(tool.category).label[lang]}</small>}
+                    </div>
+                    <span className="hub-arrow" aria-hidden="true">→</span>
+                  </Link>
+                  <button type="button" className="hub-tool-fav" aria-pressed={favs.has(tool.slug)}
+                    aria-label={`${t("favorite")}: ${tool.name[lang]}`}
+                    onClick={() => toggleFav(tool.slug)}>
+                    <StarIcon filled={favs.has(tool.slug)} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
+        {visible.length === 0 && <p className="hub-empty">{t(onlyFav ? "emptyFavorites" : "empty")}</p>}
       </div>
 
-      {visible.length === 0 && <div className="hub-empty">{t("empty")}</div>}
-
-      {/* 허브 하단 설명 콘텐츠: 사이트 성격 소개 (SEO·AEO 본문) */}
-      <section className="hub-about" aria-label={HUB.about[lang].heading}>
-        <h2>{HUB.about[lang].heading}</h2>
-        <div className="hub-about-grid">
-          {HUB.about[lang].sections.map((s, i) => (
-            <div className="hub-about-card" key={i}>
-              <h3>{s.h}</h3>
-              <p>{s.p}</p>
-            </div>
-          ))}
-        </div>
+      <section className="hub-about" aria-labelledby="hub-about-heading">
+        <h2 id="hub-about-heading">{HUB.about[lang].heading}</h2>
+        {HUB.about[lang].sections.map((section) => (
+          <div className="hub-about-section" key={section.h}>
+            <h3>{section.h}</h3>
+            <p>{section.p}</p>
+          </div>
+        ))}
       </section>
     </>
   );
 }
-
-function ToolCard({
-  tool,
-  lang,
-  href,
-  fav,
-  onFav,
-  openLabel,
-}: {
-  tool: Tool;
-  lang: "ko" | "en";
-  href: string;
-  fav: boolean;
-  onFav: () => void;
-  openLabel: string;
-}) {
-  return (
-    <Link className="tool is-ready" href={href}>
-      <div className="tool-top">
-        <span className={"tool-ico " + (tool.icoClass || "")}>{tool.ico}</span>
-        <button
-          className={"tool-fav" + (fav ? " is-on" : "")}
-          title="즐겨찾기"
-          aria-label="Favorite"
-          onClick={(e) => {
-            e.preventDefault();
-            onFav();
-          }}
-        >
-          <StarIcon filled={fav} />
-        </button>
-      </div>
-      <ToolName tool={tool} lang={lang} />
-      <p className="tool-desc">{tool.content[lang].card}</p>
-      <div className="tool-foot">
-        <ToolTags tool={tool} lang={lang} />
-        <span className="tool-go">
-          <span>{openLabel}</span>
-          <svg
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <path d="M3 8h10M9 4l4 4-4 4" />
-          </svg>
-        </span>
-      </div>
-    </Link>
-  );
-}
-

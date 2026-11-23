@@ -6,6 +6,7 @@ import { useLang } from "../lib/i18n";
 /** 가이드 섹션 공통 카피: 예제·제약·출처 블록 헤딩 */
 const LABEL = {
   ko: {
+    how: "사용 방법",
     examples: "실전 사용 예",
     limitations: "이 도구로 할 수 없는 것 · 주의할 점",
     sources: "참고한 공식 자료",
@@ -14,6 +15,7 @@ const LABEL = {
     result: "결과",
   },
   en: {
+    how: "How to use this tool",
     examples: "Worked examples",
     limitations: "What this tool can't do, and what to watch for",
     sources: "Official sources",
@@ -34,12 +36,18 @@ export default function ToolGuide({ slug }: { slug: string }) {
   const { guide, examples, limitations, sources } = copy;
   const l = LABEL[lang];
 
-  if (!guide?.length && !examples?.length && !limitations?.length && !sources?.length) {
-    return null;
-  }
-
   return (
-    <section className="kf-guide" aria-label="Guide">
+    <section className="kf-guide" aria-label={l.how}>
+      <details className="kf-guide-intro">
+        <summary>{l.how}</summary>
+        <p>{copy.description}</p>
+        {copy.howItWorks?.length ? (
+          <ol>
+            {copy.howItWorks.map((step) => <li key={step}>{step}</li>)}
+          </ol>
+        ) : null}
+      </details>
+
       {guide?.map((sec, i) => (
         <div className="kf-guide-sec" key={i}>
           <h2>{sec.heading}</h2>

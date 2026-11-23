@@ -20,35 +20,23 @@ export default function BlogList({ lang }: { lang: Lang }) {
         </p>
       ) : (
         <div className="kf-blog-grid">
-          {posts.map((p) => (
+          {posts.map((p, i) => (
             <Link
               key={p.slug}
               className="kf-blog-card"
               href={localizedHref(lang, `/blog/${p.slug}`)}
             >
-              <div className="kf-blog-cover">
-                {p.cover ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={p.cover} alt={p.coverAlt ?? p.title} loading="lazy" />
-                ) : (
-                  <span className="kf-blog-cover-ph" aria-hidden />
-                )}
-              </div>
+              {p.cover && (
+                <div className="kf-blog-cover">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={p.cover} alt="" loading={i < 3 ? "eager" : "lazy"} />
+                </div>
+              )}
               <div className="kf-blog-cardbody">
-                <time className="kf-blog-date" dateTime={p.date}>
-                  {formatDate(p.date, lang)}
-                </time>
+                {p.tags[0] && <span className="kf-blog-topic">{p.tags[0]}</span>}
                 <h2>{p.title}</h2>
                 <p>{p.description}</p>
-                {p.tags.length > 0 && (
-                  <span className="kf-blog-tags">
-                    {p.tags.map((t) => (
-                      <span className="kf-blog-tag" key={t}>
-                        {t}
-                      </span>
-                    ))}
-                  </span>
-                )}
+                <time className="kf-blog-date" dateTime={p.date}>{formatDate(p.date, lang)}</time>
               </div>
             </Link>
           ))}

@@ -215,7 +215,7 @@ export default function SalaryCalculator() {
               </div>
             </div>
 
-            <label className="fw-field">
+            <label className="fw-field sc-amount">
               <span className="fw-field-lbl">{t("sc.amount")}</span>
               <span className="fw-field-input">
                 <input
@@ -233,75 +233,74 @@ export default function SalaryCalculator() {
               </span>
             </label>
 
-            <label className="fw-field">
-              <span className="fw-field-lbl">{t("sc.nonTaxable")}</span>
-              <span className="fw-field-input">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={nonTaxable}
-                  onChange={(e) => setNonTaxable(withCommas(e.target.value))}
-                />
-                <span className="fw-field-suffix">{t("sc.won")}</span>
-              </span>
-            </label>
+            <details className="sc-options">
+              <summary>
+                <strong>{lang === "ko" ? "추가 설정" : "Additional settings"}</strong>
+                <span>{t("sc.nonTaxable")} {nonTaxable || "0"}{t("sc.won")} · {t("sc.dependents")} {dependents} · {t("sc.children")} {children} · {withholding}%</span>
+              </summary>
+              <div className="sc-options-fields">
+                <label className="fw-field">
+                  <span className="fw-field-lbl">{t("sc.nonTaxable")}</span>
+                  <span className="fw-field-input">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={nonTaxable}
+                      onChange={(e) => setNonTaxable(withCommas(e.target.value))}
+                    />
+                    <span className="fw-field-suffix">{t("sc.won")}</span>
+                  </span>
+                </label>
 
-            <div className="fw-row fw-row-2">
-              <div className="fw-field">
-                <span className="fw-field-lbl">
-                  {t("sc.dependents")}
-                  <span className="sc-lbl-sub"> · {t("sc.dependentsSub")}</span>
-                </span>
-                <Stepper
-                  value={dependents}
-                  min={1}
-                  onChange={setDependents}
-                  suffix={t("sc.people")}
-                />
-              </div>
-              <div className="fw-field">
-                <span className="fw-field-lbl">{t("sc.children")}</span>
-                <Stepper
-                  value={children}
-                  min={0}
-                  onChange={setChildren}
-                  suffix={t("sc.people")}
-                />
-              </div>
-            </div>
+                <div className="fw-row fw-row-2">
+                  <div className="fw-field">
+                    <span className="fw-field-lbl">
+                      {t("sc.dependents")}
+                      <span className="sc-lbl-sub"> · {t("sc.dependentsSub")}</span>
+                    </span>
+                    <Stepper
+                      value={dependents}
+                      min={1}
+                      onChange={setDependents}
+                      suffix={t("sc.people")}
+                    />
+                  </div>
+                  <div className="fw-field">
+                    <span className="fw-field-lbl">{t("sc.children")}</span>
+                    <Stepper
+                      value={children}
+                      min={0}
+                      onChange={setChildren}
+                      suffix={t("sc.people")}
+                    />
+                  </div>
+                </div>
 
-            <div className="fw-field">
-              <span className="fw-field-lbl">{t("sc.withholding")}</span>
-              <div className="seg sc-seg">
-                {([80, 100, 120] as const).map((r) => (
-                  <button
-                    key={r}
-                    className={withholding === r ? "is-active" : ""}
-                    onClick={() => setWithholding(r)}
-                  >
-                    {r}%
-                  </button>
-                ))}
+                <div className="fw-field">
+                  <span className="fw-field-lbl">{t("sc.withholding")}</span>
+                  <div className="seg sc-seg">
+                    {([80, 100, 120] as const).map((r) => (
+                      <button
+                        key={r}
+                        className={withholding === r ? "is-active" : ""}
+                        onClick={() => setWithholding(r)}
+                      >
+                        {r}%
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </div>
+            </details>
           </div>
         </div>
 
         {/* ── 결과 ── */}
         <div className="fw-results">
           {!hasInput || invalid ? (
-            <div className="sc-placeholder">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <path d="M3 10h18M7 15h4" />
-              </svg>
-              <p>{invalid ? t("sc.invalid") : t("sc.empty")}</p>
-            </div>
+            <p className="sc-start-note" role="status">
+              {invalid ? t("sc.invalid") : t("sc.empty")}
+            </p>
           ) : (
             result && (
               <>

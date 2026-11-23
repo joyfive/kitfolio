@@ -15,7 +15,8 @@ export default function BlogArticle({
   const { meta, html } = post;
   const l = blogLabel(lang);
 
-  const related = meta.relatedTools
+  const isPdfGuide = slug === "pdf-tasks-in-browser";
+  const related = (isPdfGuide ? ["pdf-tools"] : meta.relatedTools)
     .map((s) => {
       try {
         return getTool(s);
@@ -49,9 +50,19 @@ export default function BlogArticle({
         </div>
         <h1>{meta.title}</h1>
         {meta.description && <p className="kf-article-lead">{meta.description}</p>}
+        {related[0] && (
+          <Link className="kf-article-start" href={localizedHref(lang, "/" + related[0].slug)}>
+            {lang === "ko" ? "도구 써보기" : "Try the tool"} · {toolNames(related[0], lang).main} <span aria-hidden="true">→</span>
+          </Link>
+        )}
       </header>
 
-      {meta.cover && (
+      {isPdfGuide ? (
+        <div className="kf-pdf-example">
+          <strong>{lang === "ko" ? "예시 · 회의 자료 합치기" : "Example · Combine meeting materials"}</strong>
+          <p><code>01-agenda.pdf</code> + <code>02-notes.pdf</code> → <code>meeting.pdf</code></p>
+        </div>
+      ) : meta.cover && (
         <div className="kf-article-cover">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={meta.cover} alt={meta.coverAlt ?? meta.title} />

@@ -4,8 +4,7 @@ import Link from "next/link";
 import { categoryHref, categoryOf, getTool, toolNames } from "../lib/content";
 import { useLang } from "../lib/i18n";
 
-/** 페이지 헤더(뱃지·제목·설명·How It Works): 모든 테마 공통 스타일.
- *  텍스트는 전부 content.ts 레지스트리에서 가져온다. */
+/** 작업을 시작하는 데 필요한 제목과 짧은 소개. */
 export default function PageHead({ slug }: { slug: string }) {
   const { lang } = useLang();
   const c = getTool(slug);
@@ -22,26 +21,13 @@ export default function PageHead({ slug }: { slug: string }) {
         </Link>
         {c.scope && (
           <>
-            <span className="ph-sep">·</span>
+            <span className="ph-sep" aria-hidden="true">·</span>
             <span className="ph-scope">{c.scope[lang]}</span>
           </>
         )}
       </span>
-      <h1>
-        {names.main}{" "}
-        <span className="ph-sub" lang={names.subLang}>
-          {names.sub}
-        </span>
-      </h1>
-      <p className="ph-lead">{copy.description}</p>
-      <div className="ph-how">
-        {copy.howItWorks?.map((s, i) => (
-          <span className="ph-step" key={i}>
-            <b>{i + 1}</b>
-            <span>{s}</span>
-          </span>
-        ))}
-      </div>
+      <h1>{names.main}</h1>
+      <p className="ph-lead">{copy.card}</p>
     </div>
   );
 }
