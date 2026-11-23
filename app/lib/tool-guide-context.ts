@@ -1,0 +1,41 @@
+/** The concrete task that introduces each guide. Detailed steps and worked examples live in content.ts. */
+export const TOOL_GUIDE_CONTEXT = {
+  "character-counter": ["게시물이나 지원서에 글자 수 제한이 있다면, 작성한 문장을 붙여 넣고 그 서비스가 공백을 포함해 세는지 확인하세요.", "When a post or application has a character limit, paste a draft and check whether the destination counts spaces."],
+  "image-optimizer": ["웹이나 메일에 넣을 이미지가 너무 무거울 때, 같은 크기의 이미지를 다른 형식이나 품질로 저장해 보세요.", "When an image is too large for a website or email, try saving it at the same dimensions with a different format or quality."],
+  "image-resizer-cropper": ["프로필 사진의 비율이나 제출 이미지의 가로·세로 크기를 맞추려면 원하는 비율과 픽셀 값을 정하세요.", "Start with the required aspect ratio and pixel dimensions when preparing a profile photo or submission image."],
+  "qr-code-generator": ["안내문이나 포스터에서 웹페이지로 연결하려면 열어야 할 주소부터 입력하세요. 인쇄 전에 내려받은 코드를 휴대폰으로 읽어 보세요.", "Start with the destination URL for a poster or sign. Scan the exported code with a phone before printing."],
+  "qr-code-reader": ["메신저로 받은 QR 이미지를 열어야 한다면 이미지 파일이나 클립보드를, 눈앞의 코드를 읽으려면 카메라를 사용하세요.", "Use an image file or the clipboard for a code someone sent you. Use the camera for a code in front of you."],
+  "kst-utc-converter": ["해외 동료에게 한국 시간으로 잡은 일정을 보낼 때는 시각과 함께 날짜가 바뀌는지 확인하세요.", "When sharing a meeting scheduled in Korean time, check the converted date as well as the time."],
+  "slack-timestamp-converter": ["슬랙 메시지에서 보는 사람의 시간대로 약속 시각을 보여주려면 이벤트 시각을 슬랙 날짜 형식으로 바꾸세요.", "Convert an event time to Slack's date syntax to display it in each reader's time zone."],
+  "time-calculator": ["여러 작업의 소요 시간을 더하고 중간 휴식 시간을 빼야 할 때, 각 시간을 별도 줄에 입력하세요.", "Enter each work interval on a separate row to add work time and subtract breaks."],
+  "time-converter": ["소요 시간을 다른 단위로 보고할 때 사용합니다. 근무일이 포함되면 하루를 몇 시간으로 계산하는지 먼저 확인하세요.", "Use this to report a duration in a different unit. Check the hours-per-day setting when converting workdays."],
+  "lunar-solar-converter": ["음력 생일이나 기념일을 달력에 넣으려면 해당 연도를 기준으로 변환하고 윤달 여부를 확인하세요.", "Convert a lunar birthday or anniversary for the intended year and check whether it falls in a leap month."],
+  "flex-work-calculator": ["월말까지 필요한 근무 시간을 알고 싶다면 해당 월과 지금까지 실제로 일한 시간부터 확인하세요.", "To plan the rest of the month, start with the month you want to review and the hours you have already worked."],
+  "annual-leave-calculator": ["휴가를 잡거나 퇴사 전 잔여 연차를 확인할 때, 회사가 적용하는 산정 기준과 조회 날짜를 먼저 고르세요.", "Before booking leave or checking the balance before departure, choose the accrual basis your workplace uses and the date to check."],
+  "salary-calculator": ["입사 제안을 비교할 때는 세전 금액을 같은 기준으로 입력하고, 매달 실제로 받을 예상 금액을 나란히 비교하세요.", "When comparing job offers, enter the gross amounts on the same basis and compare the estimated monthly take-home pay."],
+  "severance-pay-calculator": ["퇴사 전 예상 퇴직금을 보려면 입사일과 마지막 근무일, 퇴직 직전 3개월의 급여 자료를 준비하세요.", "To estimate severance before leaving, gather your start and last work dates and pay records for the preceding three months."],
+  "freelancer-tax-calculator": ["외주료나 강연료를 정산할 때 세금 공제 후 받을 금액을 확인하거나, 목표 실수령액에서 필요한 지급액을 계산하세요.", "When settling a freelance fee or honorarium, check the amount after withholding or work back from a target net payment."],
+  "income-tax-calculator": ["5월 신고 전에 수입과 이미 낸 세금을 모아 두면, 신고 방식별 예상 납부액이나 환급액을 비교할 수 있어요.", "Gather income and tax already paid before filing to compare estimated payments or refunds across the available calculation methods."],
+  "vat-calculator": ["견적 금액에 부가세를 더하거나 영수증 합계에서 공급가액을 구할 때, 가진 금액이 세금 포함인지 먼저 확인하세요.", "Before adding VAT to a quote or finding the pre-tax amount on a receipt, check whether your starting amount already includes VAT."],
+  "unemployment-benefit-calculator": ["퇴직 후 계획을 세울 때 마지막 근무일과 임금·가입 정보를 바탕으로 예상 지급액과 신청 기한을 확인하세요.", "When planning after a job ends, use your last work date, wages, and insurance history to check estimated benefits and filing deadlines."],
+  "ad-metrics-calculator": ["캠페인 보고서를 만들 때 광고비, 매출, 노출처럼 같은 기간에 집계한 수치를 사용하세요.", "For a campaign report, use spend, revenue, and impression counts from the same reporting period."],
+  "ad-budget-pacing-calculator": ["월 중간에 광고비를 너무 빨리 쓰고 있는지 보려면 총예산, 집행 기간, 현재까지 지출액을 함께 입력하세요.", "To see whether spend is running too fast mid-campaign, enter the total budget, campaign dates, and spend to date."],
+  "funnel-conversion-calculator": ["방문에서 구매까지 어디에서 가장 많이 이탈하는지 볼 때, 같은 집단의 단계별 인원수를 입력하세요.", "To find the biggest drop-off between visits and purchases, use stage counts from the same group."],
+  "growth-rate-calculator": ["보고서의 전월 대비 변화를 구할 때 지난달 값과 이번 달 값을 같은 단위로 준비하세요.", "To report month-over-month change, use the same unit for both the previous and current value."],
+  "cagr-calculator": ["여러 해에 걸친 성장률을 연평균으로 비교하거나, 일정한 성장률을 가정해 몇 년 뒤 값을 추정할 때 사용하세요.", "Use this to compare annualized growth across several years or to project a later value at a constant growth rate."],
+  "json-formatter": ["로그에서 복사한 JSON이 한 줄이라 읽기 어렵다면 입력 칸에 붙여 넣고, 정리된 결과나 오류 위치를 확인하세요.", "Paste one-line JSON from a log into the input to read the formatted result or find a syntax error."],
+  "slack-message-builder": ["배포 알림을 만들 때 제목, 메시지 본문, 필요한 링크를 블록으로 조합하고 채널에 올리기 전에 미리 보세요.", "For a deployment notice, assemble the title, body, and links in blocks and preview the message before posting it."],
+  "css-unit-converter": ["시안의 px 값을 CSS의 상대 단위로 옮길 때 변환 기준이 루트 글자 크기인지, 부모나 뷰포트 크기인지 먼저 확인하세요.", "When converting pixels in a design to relative CSS units, establish whether the reference is the root font, parent size, or viewport."],
+  "css-gradient": ["웹 배경에 색을 점진적으로 섞으려면 방향과 색상 정지점을 맞춘 뒤 나온 CSS를 스타일에 붙이세요.", "To blend colors in a background, adjust the direction and stops, then paste the generated CSS into your styles."],
+  "tailwind-palette-generator": ["브랜드 색 하나로 버튼·배경·경계의 여러 톤이 필요할 때 기준 HEX로 색 단계를 만들고 쓰려는 코드 형식을 선택하세요.", "Turn a brand HEX into shades for buttons, backgrounds, and borders, then choose the code format your project uses."],
+  "open-graph-preview": ["페이지 링크를 공유하기 전에 이미지가 잘리거나 제목이 너무 길어지는지 플랫폼별로 비교하세요.", "Before sharing a URL, compare how platforms crop the image and where a long title may be truncated."],
+  "html-accessibility-checker": ["PR에 올릴 마크업에서 빠진 레이블이나 잘못된 제목 구조를 먼저 찾아보고, 발견한 위치를 팀과 공유하세요.", "Before opening a PR, check markup for missing labels or heading problems and share the findings with your team."],
+  "color-contrast-checker": ["본문, 버튼 글자, 아이콘이 배경에서 잘 구별되는지 보려면 실제 사용할 전경색과 배경색의 조합을 검사하세요.", "Check the exact foreground and background pair your design uses for text, button labels, or icons."],
+  "color-blindness-simulator": ["상태나 범주를 색만으로 구분하는 화면이라면 시안을 올려 여러 색각 유형에서 구별되는지 비교하세요.", "If a design distinguishes states or categories by color alone, compare the same screenshot under several color-vision conditions."],
+  "text-scaling-checker": ["본문이 커지거나 화면이 좁아졌을 때 카드·버튼의 글자가 잘리는지, 원본과 확대 결과를 나란히 보세요.", "Compare the original and scaled view to spot cards or buttons whose labels may be clipped at larger text sizes or narrower widths."],
+  "accessibility-checklist": ["출시 전 점검 범위를 정하고 항목별 담당자, 결과, 근거를 프로젝트 기록으로 남길 때 사용하세요.", "Use this to scope a pre-release review and record owners, results, and evidence for each check."],
+} as const;
+
+export function toolGuideContext(slug: string, lang: "ko" | "en") {
+  return TOOL_GUIDE_CONTEXT[slug as keyof typeof TOOL_GUIDE_CONTEXT]?.[lang === "ko" ? 0 : 1];
+}

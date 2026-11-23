@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import PageHead from "./PageHead";
@@ -262,7 +261,6 @@ export default function CharacterCounter() {
       </div>
 
       <ToolGuide slug="character-counter" />
-      <Faq slug="character-counter" />
       <RelatedTools slug="character-counter" />
     </>
   );

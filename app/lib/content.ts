@@ -13,7 +13,6 @@
    ② HUB         : 허브 · seo(메타) + hero(히어로 카피)
    ③ CATEGORIES  : 주제 카테고리 8개 (허브 1단 칩 · 상세 eyebrow · JSON-LD)
       ACTIONS     : 작업 태그 7종 (허브 2단 칩 · 카드 대표 작업)
-   ④ FAQ_SECTION : FAQ 섹션 공통 카피 (인트로·푸터 링크)
    ⑤ TOOLS       : 도구 레지스트리 · 항목 하나에 도구 완결 정의
        ├ slug          : 1뎁스 라우트 (플랫 URL)
        ├ layout        : 디자인 시스템 타입 (card=A · ide=B · canvas=C)
@@ -111,8 +110,7 @@ type ToolCopy = {
   description?: string;
   /** How It Works: 3단계 사용 가이드 (ready 도구만) */
   howItWorks?: string[];
-  /** AEO 명시 문단: What is / Who is it for / How does it work / Why use it.
-   *  본문(ToolAbout 섹션)과 FAQPage JSON-LD 양쪽에 노출: ready 도구만 */
+  /** 도구별 정의, 대상, 작동 방식과 사용 이유를 정리한 편집용 원문. */
   aeo?: { what: string; who: string; how: string; why: string };
   /** 심화 가이드: 대표(간판) 도구에 한해 렌더하는 긴 산문 콘텐츠.
    *  사용 맥락·실전 예시·팁 등 고유 본문으로 페이지 가치를 보강한다.
@@ -363,41 +361,6 @@ export function validateTaxonomy(): string[] {
     if (!TOOLS.some((t) => t.ready && t.category === c.id)) errs.push(`category ${c.id}: no ready tool`);
   return errs;
 }
-
-/* ============================================================
-   ④ FAQ_SECTION: FAQ 섹션 공통 카피
-   ============================================================ */
-/* FAQ / About 통합 섹션: 탭(칩) 라벨 + 인트로 카피 */
-export const FAQ_SECTION = {
-  ko: {
-    tab: "자주 묻는 질문",
-    title: "무엇이든 물어보세요",
-    sub: "이 도구를 쓰면서 가장 많이 받는 질문들을 모았습니다.",
-    more: "찾는 답이 없나요?",
-    moreLink: "피드백 보내기 →",
-  },
-  en: {
-    tab: "FAQ",
-    title: "Ask us anything",
-    sub: "The questions we hear most often about this tool.",
-    more: "Didn’t find what you’re looking for?",
-    moreLink: "Send feedback →",
-  },
-};
-
-/* AEO(About this tool) 섹션: What is / Who for / How / Why */
-export const AEO_SECTION = {
-  ko: {
-    tab: "이 도구에 대하여",
-    title: "이 도구에 대하여",
-    sub: "이 도구가 무엇인지, 누구에게·어떻게·왜 필요한지 한눈에 정리했습니다.",
-  },
-  en: {
-    tab: "About this tool",
-    title: "About this tool",
-    sub: "What it is, who it's for, how it works and why you'd use it.",
-  },
-};
 
 /* Related Tools 섹션 공통 카피 */
 export const RELATED_SECTION = {
@@ -1573,16 +1536,6 @@ export const TOOLS: Tool[] = [
     faq: {
       ko: [
         {
-          question: "네 가지 작업을 각각 다른 페이지에서 찾아야 하나요?",
-          answer:
-            "아니요. 상단 탭에서 병합·분할·회전·페이지 삭제 중 원하는 작업을 누르면 같은 페이지 안에서 바로 전환됩니다. URL은 ?mode= 쿼리로 현재 선택한 작업을 반영하지만, 검색 색인용 대표 URL(canonical)은 항상 /pdf-tools 하나입니다.",
-        },
-        {
-          question: "업로드한 PDF가 서버로 전송되나요?",
-          answer:
-            "아니요. 병합·분할·회전·페이지 삭제 모두 브라우저 안에서만 처리되며, 업로드한 파일은 어떤 서버로도 전송되거나 저장되지 않습니다.",
-        },
-        {
           question: "탭을 바꾸면 업로드했던 파일이 사라지나요?",
           answer:
             "네. 각 작업은 파일 상태를 독립적으로 관리하므로, 예를 들어 회전 탭에서 업로드한 파일은 분할 탭으로 넘어가면 유지되지 않습니다. 작업을 마친 뒤 다음 작업으로 넘어가려면 결과를 다운로드한 파일을 다시 업로드하세요.",
@@ -1609,16 +1562,6 @@ export const TOOLS: Tool[] = [
         },
       ],
       en: [
-        {
-          question: "Do I need to visit a different page for each of the four tasks?",
-          answer:
-            "No. Click Merge, Split, Rotate, or Delete Pages in the tabs above and it switches instantly on the same page. The URL reflects the current task via a ?mode= query, but the canonical URL used for search indexing is always the single /pdf-tools.",
-        },
-        {
-          question: "Are my uploaded PDFs sent to a server?",
-          answer:
-            "No. Merge, split, rotate, and delete pages all run entirely in your browser. Uploaded files are never transmitted or stored on a server.",
-        },
         {
           question: "Does switching tabs clear the file I uploaded?",
           answer:
@@ -7563,7 +7506,7 @@ export const TOOLS: Tool[] = [
           {
             title: "로그에서 복사한 한 줄짜리 API 응답 읽기",
             input: "{\"id\":1042,\"user\":{\"name\":\"김서연\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}",
-            result: "2단 들여쓰기로 펼쳐지고 user 객체와 roles 배열이 각각 접을 수 있는 블록으로 표시됩니다.",
+            result: "2칸 들여쓰기로 정리되어 user 객체와 roles 배열의 중첩 구조가 보입니다.",
             note: "터미널 로그나 브라우저 네트워크 탭에서 복사한 응답은 개행이 없어 눈으로 구조를 파악하기 어렵습니다. 붙여넣기만 하면 어떤 필드가 어느 깊이에 있는지 바로 보입니다.",
           },
           {
@@ -7628,7 +7571,7 @@ export const TOOLS: Tool[] = [
           {
             title: "Reading a one-line API response copied from a log",
             input: "{\"id\":1042,\"user\":{\"name\":\"Seoyeon Kim\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}",
-            result: "Expanded with two-space indentation; the user object and roles array each become a collapsible block.",
+            result: "Two-space indentation shows how the user object and roles array are nested.",
             note: "Responses copied from a terminal log or the browser network tab have no line breaks, so the shape is hard to see. Pasting it shows immediately which field sits at which depth.",
           },
           {
@@ -11079,37 +11022,6 @@ export function localizedHref(lang: Lang, path: string): string {
   return path === "/" ? "/en" : "/en" + path;
 }
 
-/** 마지막 글자 받침 여부 (한국어 조사 선택용) */
-function hasJongseong(word: string): boolean {
-  const code = word.charCodeAt(word.length - 1);
-  if (code < 0xac00 || code > 0xd7a3) return false;
-  return (code - 0xac00) % 28 > 0;
-}
-
-/** AEO 명시 문단을 Q&A 목록으로 변환: ToolAbout 섹션과 FAQPage JSON-LD가 공유.
- *  질문에 도구 이름을 포함해 AI 검색 질의("What is a …?")와 직접 매칭되게 한다. */
-export function aeoQA(slug: string, lang: Lang): QA[] {
-  const t = getTool(slug);
-  const aeo = t.content[lang].aeo;
-  if (!aeo) return [];
-  if (lang === "ko") {
-    const p = hasJongseong(t.name.ko) ? "이란" : "란";
-    return [
-      { question: `${t.name.ko}${p} 어떤 도구인가요?`, answer: aeo.what },
-      { question: "누구를 위한 도구인가요?", answer: aeo.who },
-      { question: "어떻게 동작하나요?", answer: aeo.how },
-      { question: "왜 사용하나요?", answer: aeo.why },
-    ];
-  }
-  return [
-    { question: `What is ${t.name.en}?`, answer: aeo.what },
-    { question: "Who is it for?", answer: aeo.who },
-    { question: "How does it work?", answer: aeo.how },
-    { question: "Why use it?", answer: aeo.why },
-  ];
-}
-
-
 function ogLocale(lang: Lang) {
   return lang === "ko" ? "ko_KR" : "en_US";
 }
@@ -11188,8 +11100,7 @@ export function toolJsonLd(slug: string, lang: Lang) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     publisher: PUBLISHER_JSONLD,
   };
-  // AEO 명시 문단 + FAQ: 페이지에 보이는 Q&A 전부를 FAQPage로 노출
-  const qa = [...aeoQA(slug, lang), ...(t.faq?.[lang] ?? [])];
+  const qa = t.faq?.[lang] ?? [];
   if (qa.length === 0) return app;
   return [
     app,

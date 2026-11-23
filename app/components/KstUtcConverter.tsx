@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -344,7 +343,6 @@ export default function KstUtcConverter() {
       )}
 
       <ToolGuide slug="kst-utc-converter" />
-      <Faq slug="kst-utc-converter" />
       <RelatedTools slug="kst-utc-converter" />
     </>
   );

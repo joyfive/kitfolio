@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -732,7 +731,6 @@ export default function IncomeTaxCalculator() {
       </div>
 
       <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
       <RelatedTools slug={SLUG} />
     </>
   );

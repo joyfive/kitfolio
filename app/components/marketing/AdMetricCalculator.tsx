@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import PageHead from "../PageHead";
-import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
 import AdMetricTabs from "./AdMetricTabs";
@@ -356,6 +355,24 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
   ];
 
   const hasCurrency = metricKey !== "ctr";
+  const modeLabel = t(`${p}.mode${mode}`);
+  const planExamples = {
+    roas: { B: ["spend", 100, "targetRoas", "300%", "targetRevenue", 300], C: ["targetRevenue", 300, "targetRoas", "300%", "allowBudget", 100] },
+    cpa: { B: ["budget", 100, "targetCpa", 5, "conversions", 20], C: ["targetConversions", 20, "targetCpa", 5, "budget", 100] },
+    cpc: { B: ["budget", 100, "targetCpc", 2, "clicks", 50], C: ["targetClicks", 50, "targetCpc", 2, "budget", 100] },
+    cpm: { B: ["budget", 100, "targetCpm", 5, "impressions", 20000], C: ["targetImpressions", 20000, "targetCpm", 5, "budget", 100] },
+    ctr: { B: ["impressions", 1000, "targetCtr", "2%", "clicks", 20], C: ["clicks", 20, "targetCtr", "2%", "impressions", 1000] },
+  } as const;
+  const planExample = mode === "A" ? undefined : planExamples[metricKey][mode];
+  const number = new Intl.NumberFormat(lang);
+  const currentExample = planExample ? {
+    title: modeLabel,
+    input: [planExample[0], planExample[2]].map((key, index) => {
+      const value = index === 0 ? planExample[1] : planExample[3];
+      return `${t(`${p}.${key}`)} ${typeof value === "number" ? number.format(value) : value}`;
+    }).join(" · "),
+    result: `${modeLabel} ${number.format(planExample[5])}`,
+  } : undefined;
 
   return (
     <>
@@ -475,8 +492,15 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
         </div>
       </div>
 
-      <ToolGuide slug={slug} />
-      <Faq slug={slug} />
+      <ToolGuide
+        slug={slug}
+        modeLabel={`${metricKey.toUpperCase()} · ${modeLabel}`}
+        exampleIndex={{ roas: 0, cpa: 2, cpc: 3, cpm: 4, ctr: 5 }[metricKey]}
+        currentExample={currentExample}
+        steps={planExample && (lang === "ko"
+          ? [`${modeLabel} 선택`, `${t(`${p}.${planExample[0]}`)}와 ${t(`${p}.${planExample[2]}`)} 입력`, "계산 결과와 계산식 확인 후 복사"]
+          : [`Select ${modeLabel}`, `Enter ${t(`${p}.${planExample[0]}`)} and ${t(`${p}.${planExample[2]}`)}`, "Check the result and formula, then copy the result"])}
+      />
       <RelatedTools slug={slug} />
     </>
   );

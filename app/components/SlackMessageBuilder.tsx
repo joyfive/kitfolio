@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -485,7 +484,6 @@ export default function SlackMessageBuilder() {
       </div>
 
       <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
       <RelatedTools slug={SLUG} />
     </>
   );

@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import PageHead from "./PageHead";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -385,8 +384,18 @@ export default function UnitConverter() {
         </div>
       </div>
 
-      <ToolGuide slug={slug} />
-      <Faq slug={slug} />
+      <ToolGuide
+        slug={slug}
+        modeLabel={`${fromUnit} → ${toUnit}`}
+        steps={lang === "ko"
+          ? [`${fromLabel} 입력`, ...(cfg.extraLabel ? [`${cfg.extraLabel.ko} 확인`] : []), `${toUnit} 결과 확인 및 복사`]
+          : [`Enter ${fromLabel}`, ...(cfg.extraLabel ? [`Check ${cfg.extraLabel.en}`] : []), `Check and copy the result in ${toUnit}`]}
+        currentExample={{
+          title: `${fromUnit} → ${toUnit}`,
+          input: [`${cfg.defaultInput} ${fromUnit}`, cfg.extraLabel && `${cfg.extraLabel[lang]}: ${cfg.extraDefault}`].filter(Boolean).join(" · "),
+          result: `${fmt((isSwapped ? calcBackward : calcForward)(mode, cfg.defaultInput, cfg.extraDefault ?? 0))} ${toUnit}`,
+        }}
+      />
       <RelatedTools slug={slug} />
     </>
   );

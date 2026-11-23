@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -15,6 +14,10 @@ const DICT: Dict = {
     "json.live": "입력하면 자동 정리",
     "json.copyFailed": "복사할 수 없습니다. 결과를 직접 선택해 주세요.",
     "json.format": "포맷",
+    "guide.paste": "입력 칸에 JSON 붙여넣기",
+    "guide.minify": "압축을 선택해 불필요한 공백과 줄바꿈 제거",
+    "guide.copy": "오류가 없다면 결과 복사",
+    "guide.minifyExample": "요청 본문을 한 줄로 줄이기",
     "json.minify": "압축",
     "json.status.idle": "입력 대기 중",
     "json.status.valid": "유효한 JSON",
@@ -27,6 +30,10 @@ const DICT: Dict = {
     "json.live": "Updates as you type",
     "json.copyFailed": "Could not copy. Select the result to copy it manually.",
     "json.format": "Format",
+    "guide.paste": "Paste JSON into the input",
+    "guide.minify": "Select Minify to remove extra whitespace and line breaks",
+    "guide.copy": "Copy the result after checking for errors",
+    "guide.minifyExample": "Put a request body on one line",
     "json.minify": "Minify",
     "json.status.idle": "Waiting for input",
     "json.status.valid": "Valid JSON",
@@ -308,8 +315,18 @@ export default function JsonFormatter() {
           </div>
       </div>
 
-      <ToolGuide slug="json-formatter" />
-      <Faq slug="json-formatter" />
+      <ToolGuide
+        slug="json-formatter"
+        modeLabel={t(mode === "format" ? "json.format" : "json.minify")}
+        steps={mode === "minify" ? [
+          t("guide.paste"), t("guide.minify"), t("guide.copy"),
+        ] : undefined}
+        currentExample={mode === "minify" ? {
+          title: t("guide.minifyExample"),
+          input: '{ "ok": true, "count": 2 }',
+          result: '{"ok":true,"count":2}',
+        } : undefined}
+      />
       <RelatedTools slug="json-formatter" />
     </>
   );

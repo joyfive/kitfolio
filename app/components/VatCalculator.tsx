@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -822,8 +821,7 @@ export default function VatCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
+      <ToolGuide slug={SLUG} modeLabel={mode === "simplified" ? t("vt.tab.simplified") : t(`vt.dir.${direction}`)} exampleIndex={mode === "simplified" ? 2 : direction === "reverse" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

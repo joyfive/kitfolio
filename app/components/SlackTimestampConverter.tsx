@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -257,7 +256,6 @@ export default function SlackTimestampConverter() {
       </div>
 
       <ToolGuide slug="slack-timestamp-converter" />
-      <Faq slug="slack-timestamp-converter" />
       <RelatedTools slug="slack-timestamp-converter" />
     </>
   );

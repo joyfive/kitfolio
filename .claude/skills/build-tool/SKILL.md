@@ -1,13 +1,13 @@
 ---
 name: build-tool
-description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description · registry entry, component, routes, OG, hub card, SEO/AEO copy, source structure, and the README/CLAUDE.md feature-list update. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool with docs updated.
+description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description · registry entry, component, routes, OG, hub card, bilingual usage guide, FAQ, background and SEO copy, source structure, and the README/CLAUDE.md feature-list update. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool with docs updated.
 ---
 
 # Build a KitFolio Tool (end-to-end)
 
-Goal: the user describes a feature in one or two sentences, and you ship a **complete, indexable, bilingual tool** without further hand-holding. This skill is the execution runbook. For the go/no-go gate use `/new-tool`; for deep copy review use `/seo`, `/aeo`, `/branding`.
+Goal: the user describes a feature in one or two sentences, and you ship a **complete bilingual tool** without further hand-holding. This skill is the execution runbook. For the go/no-go gate use `/new-tool`; for deep copy review use `/seo`, `/aeo`, `/branding`.
 
-> **Key architectural fact: one tool = one page.** A tool is one standalone URL page (`/<slug>` + `/en/<slug>`) backed by one registry entry in `app/lib/content.ts`. Once the entry is `ready: true` and the 4 route files exist, the hub card, hub search/filter chips, sitemap (KO+EN), hub ItemList JSON-LD, page metadata, WebApplication + FAQPage (AEO/FAQ) JSON-LD, OG image and Related Tools are all **automatic** (`publishedTools()` → `Hub.tsx` · `sitemap.ts` · `hubJsonLd()`; `buildToolMetadata()` · `toolJsonLd()` in the page wrapper). You never hand-add a hub button or a sitemap line.
+> **Key architectural fact: one tool = one page.** A tool is one standalone URL page (`/<slug>` + `/en/<slug>`) backed by one registry entry in `app/lib/content.ts`. Once the entry is `ready: true` and the 4 route files exist, the hub card, hub search/filter chips, sitemap (KO+EN), hub ItemList JSON-LD, page metadata, WebApplication + FAQPage (displayed FAQ only) JSON-LD, OG image and Related Tools are all **automatic** (`publishedTools()` → `Hub.tsx` · `sitemap.ts` · `hubJsonLd()`; `buildToolMetadata()` · `toolJsonLd()` in the page wrapper). You never hand-add a hub button or a sitemap line.
 >
 > **A `?mode=` tab is not a tool.** If the feature is a variant of an existing tool (same component, same structure, different formula/unit), add a mode tab to that page instead of a new page: it gets no card and no sitemap entry. Only make a new page when it has its own search intent and its own content (guide/examples/FAQ). Ask the user if unsure.
 
@@ -17,7 +17,7 @@ Goal: the user describes a feature in one or two sentences, and you ship a **com
 
 For a tool with slug `<slug>` and component `<Comp>`:
 
-1. **Registry entry** → append to `TOOLS` in `app/lib/content.ts` (the Single Source of Truth)
+1. **Registry and guide content** → append to `TOOLS` in `app/lib/content.ts` and add a bilingual use case in `app/lib/tool-guide-context.ts`
 2. **Component** → `app/components/<Comp>.tsx` (`"use client"`, the actual tool UI)
 3. **Work-area styles** → add tool-specific CSS to `app/globals.css` (common `.kf-*` styles already exist; the input/output area is tool-specific)
 4. **KO route** → `app/<slug>/page.tsx` + `app/<slug>/opengraph-image.tsx`
@@ -25,7 +25,7 @@ For a tool with slug `<slug>` and component `<Comp>`:
 6. **Verify** → typecheck/build; confirm hub card, sitemap, JSON-LD all picked it up automatically
 7. **Docs** → append the tool to the feature-list tables in `README.md` and `CLAUDE.md` (this is NOT auto-generated: see Step 6)
 
-Auto-derived (do NOT edit by hand): hub card (`Hub.tsx`), sitemap (`sitemap.ts`), JSON-LD (`toolJsonLd`), Related Tools (`RelatedTools.tsx`), search index (uses `name`/`card`/`keywords`).
+Auto-derived (do NOT edit by hand): hub card (`Hub.tsx`), sitemap (`sitemap.ts`), JSON-LD (`toolJsonLd`), Related Tools (`RelatedTools.tsx`), search index (uses `name`/`card`/`keywords`/`searchTerms`).
 
 **NOT auto-derived: you must edit by hand:** the feature-list tables in `README.md` and `CLAUDE.md`. These are static docs, not generated from the registry, so a new tool will NOT appear there unless you do Step 6.
 
@@ -102,7 +102,7 @@ Phrases a user types to describe the *job*, not the tool name: "계약서 합치
 Jurisdiction, effective year, or standard version ("한국 기준 · 2026년 적용", "WCAG 2.2 AA") goes in `scope` (shown in the page head), alongside `verifiedAt`/`sources` when external data is involved. Never encode it in category, actions or searchTerms. Keep it short (e.g. `대한민국 · 2026년 요율` / `South Korea · 2026 rates`, `WCAG 2.2`).
 
 ### Never
-- Classify by job title (PM, 디자이너, 직장인…) or by layout (Clean, IDE, Canvas). Job titles belong only in `content.aeo.who` and FAQ.
+- Classify by job title (PM, 디자이너, 직장인…) or by layout (Clean, IDE, Canvas). Use job titles in copy only when they clarify a concrete use case.
 - Put a tool in two categories. Cross-category discovery goes through `relatedTools`.
 - Use category or action in the URL. URLs stay flat (`/<slug>`); hub filter state is a query string (`/?cat=…&action=…`).
 
@@ -124,15 +124,22 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
   scope: { ko: "...", en: "..." },             // Step 0.5 (4), optional
   ico: "<glyph>",          // or icoClass: "ico-..."
   ready: true,
-  name: { ko: "<국문명>", en: "<English Name>" },   // page language = main title, other = secondary (toolNames)
+  indexable: false,          // promote separately under the indexing policy in CLAUDE.md
+  name: { ko: "<국문명>", en: "<English Name>" },   // PageHead shows the current locale
   relatedTools: ["slugA", "slugB", "slugC"],
   seo: {
     ko: { title, description, keywords: [...] },
     en: { title, description, keywords: [...] },
   },
   content: {
-    ko: { card, description, howItWorks: [s1, s2, s3], aeo: { what, who, how, why } },
-    en: { card, description, howItWorks: [s1, s2, s3], aeo: { what, who, how, why } },
+    ko: {
+      card, description, howItWorks: [s1, s2, s3], aeo: { what, who, how, why },
+      examples: [{ title, input, result, note }],
+      guide: [{ heading, body: [paragraph] }],
+      limitations: [limit],
+      sources: [{ label, url }], // official sources when applicable, with verifiedAt on the tool
+    },
+    en: { /* same fields with English copy */ },
   },
   faq: { ko: [ {question, answer}, ... ], en: [ ... ] },   // 4-6 each
   og: {
@@ -147,11 +154,14 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 - **`seo.title`**: ~50-60 chars, lead with the primary keyword (e.g. `"Meeting Cost Calculator | Cost per Meeting"`). This is `<title>`.
 - **`seo.description`**: ≥150 chars, factual, contains the primary keyword + the "runs in your browser, no login/upload" promise. Reused as meta description.
 - **`seo.keywords`**: meta keywords + hub search index: the tool-name style queries ("PDF 병합", "json formatter"). Job-style phrases go in `searchTerms` instead.
-- **`content.card`**: one line for the hub card. Always required (even before `ready`). Plain, benefit-first.
-- **`content.description`**: page lead paragraph; usually equals `seo.description`.
-- **`content.howItWorks`**: exactly **3** short steps (input → action → output). Rendered as numbered chips.
-- **`content.aeo`**: four factual sentences answering **What / Who / How / Why**. `aeoQA()` turns these into questions that include the tool name (e.g. "What is a Meeting Cost Calculator?") for direct AI-query matching, and they also go into the `FAQPage` JSON-LD. Keep them concise and declarative · no marketing voice.
-- **`faq`**: 4-6 Q&A per language. Always include a privacy/"is my data sent to a server?" question (answer: everything runs in the browser). Cover the top real questions about edge cases, formats, limits.
+- **`content.card`**: one sentence that names the result. `PageHead` and the hub card display it.
+- **`content.description`**: detailed editorial description, usually aligned with the SEO description. The first screen uses `content.card`.
+- **Guide use case**: add `"<slug>": [situationKo, situationEn]` to `TOOL_GUIDE_CONTEXT` in `app/lib/tool-guide-context.ts`. Describe a specific task in each language, such as reducing a photo to fit a submission limit.
+- **`content.howItWorks`**: 2-4 steps using labels and actions the reader can find in the tool. Cover the first input, the action or automatic processing, and what to check, copy or download.
+- **`content.examples`**: supply at least one worked scenario with `title`, actual `input`, and expected `result`. Verify against the tool. Add a `note` when assumptions or interpretation matter. The first example is featured and the rest are expandable.
+- **`content.guide` / `limitations` / `sources`**: write background that helps users interpret results or compare options. Keep critical accuracy and applicability notices near the relevant input or result as well. For externally governed rules or data, give primary sources and `verifiedAt`. `npm run validate:content` checks the additional minimums for indexable tools.
+- **`content.aeo`**: retain factual What/Who/How/Why editorial fields for indexable validation. Put useful definitions, scenarios, instructions and reasoning in the relevant visible sections. The fields are not rendered as a second FAQ tab.
+- **`faq`**: generally 4-6 focused questions per language. Cover unresolved blockers, limits, and recovery. Put general privacy information near sensitive inputs and keep a FAQ entry when it adds useful detail. Only the visible `faq` items feed `FAQPage`.
 - **`og.title` / `og.subtitle`**: short, used for the dynamic 1200×630 OG image and OpenGraph meta. Subtitle = the one-line value prop.
 
 **Tone (see `/branding`):** concise, professional, trustworthy. No hype, no emoji. KO uses Pretendard-style natural Korean; EN is plain and direct. Reinforce speed · usefulness · clarity · "no login / no install / in your browser".
@@ -162,14 +172,14 @@ Validate after editing: `slug` and `relatedTools` entries must be real; `categor
 
 ## Step 2: Component
 
-Create `app/components/<Comp>.tsx`. It is a `"use client"` component that renders `PageHead` → the tool work area → `Faq` → `RelatedTools`. All page copy comes from the registry; only **control microcopy** (button/label text) lives in a local `DICT`.
+Create `app/components/<Comp>.tsx`. It is a `"use client"` component that renders `PageHead` → the tool work area → `ToolGuide` → `RelatedTools`. `PageHead` provides the `#tool` target and the shortcut to `#guide`. `ToolGuide` renders the shared desktop/mobile navigation, usage guide, FAQ and background via `ToolSupport`. Control labels live in a bilingual local `DICT`.
 
 ```tsx
 "use client";
 
 import { useState } from "react"; // + useMemo/useEffect as needed
 import PageHead from "./PageHead";
-import Faq from "./Faq";
+import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 
@@ -191,12 +201,14 @@ export default function <Comp>() {
         {/* input/output area: theme per layout (see below) */}
       </div>
 
-      <Faq slug="<slug>" />
+      <ToolGuide slug="<slug>" />
       <RelatedTools slug="<slug>" />
     </>
   );
 }
 ```
+
+For a mode-driven page, pass `modeLabel`, mode-specific `steps`, and either `exampleIndex` or `currentExample` to `ToolGuide` when a mode changes inputs or outputs. Derive those props from the existing tool state. See `JsonFormatter.tsx` and `UnitConverter.tsx`. For a custom full workflow, see `PdfTools.tsx` and `app/lib/pdf/workflow-copy.ts`. Use `toolAnchor={false}` on `PageHead` only when the custom workspace already owns a single `#tool` target.
 
 Reference implementations to copy structure/idiom from:
 - **card** (text): `CharacterCounter.tsx`
@@ -209,12 +221,12 @@ Rules: client-side only; no DB, no paid/LLM APIs, free APIs only; use `common.*`
 
 ## Step 3: Work-area styles
 
-The common shell (`.kf-pagehead`, `.kf-faq`, `.kf-related`, hub `.tool` cards) is already styled in `app/globals.css`. The **input/output work area is tool-specific**: add its styles to `app/globals.css` using the design tokens (`--color-blue-gray-*`, `--color-blue-primary-*`). Follow the per-theme color guidance in the root `CLAUDE.md`:
+The common shell (`.kf-pagehead`, `.kf-support`, `.kf-related`, hub `.hub-tool` cards) is already styled in `app/globals.css`. The **input/output work area is tool-specific**: add its styles to `app/globals.css` using the design tokens (`--color-blue-gray-*`, `--color-blue-primary-*`). Follow the per-theme color guidance in the root `CLAUDE.md`:
 - ide: white input panel + `blue-gray-950` dark output panel
 - canvas: white controls + grey checkerboard preview
 - card: white input card + result card(s), one primary metric highlighted
 
-Mobile: input min-height 240px, max 600px; stack input-over-output below ~960px.
+Keep the real tool first. On desktop use shared sticky help navigation beside the reading column. On mobile keep the navigation inline below the tool, stack the work area, and preserve readable results and 44px primary touch targets. The 240-600px input-height range applies to editors, not ordinary form fields. See [the renewed page layout](../../../docs/plans/tool-page-content-design.md).
 
 ---
 
@@ -263,16 +275,17 @@ export default function Image() {
 
 ## Step 5: Hub card, sitemap, SEO/AEO = automatic, then verify
 
-Because `Hub.tsx`, `sitemap.ts` and `hubJsonLd()` all read `publishedTools()`, and the page wrappers call `buildToolMetadata()`/`toolJsonLd()`, the new page's **hub card, sitemap entries (KO+EN, every ready page regardless of `indexable`), ItemList, metadata, and AEO/FAQ JSON-LD appear automatically**. Nothing to wire by hand.
+Because `Hub.tsx`, `sitemap.ts` and `hubJsonLd()` all read `publishedTools()`, and the page wrappers call `buildToolMetadata()`/`toolJsonLd()`, the new page's **hub card, sitemap entries (KO+EN, every ready page regardless of `indexable`), ItemList, metadata, and WebApplication/visible-FAQ JSON-LD appear automatically**. Nothing to wire by hand.
 
-`npm test` (`app/lib/__tests__/routes.test.ts`) fails if the link is broken anywhere: a tool page with no registry entry, a ready entry with no page, a missing KO/EN page or OG image, a wrapper pointing at the wrong slug or language, a component without `PageHead`/`Faq`/`RelatedTools`, a page missing from the sitemap or ItemList, or an entry placed outside its category block. Fix the cause; never weaken the test.
+`npm test` (`app/lib/__tests__/routes.test.ts`) fails if the link is broken anywhere: a tool page with no registry entry, a ready entry with no page, a missing KO/EN page or OG image, a wrapper pointing at the wrong slug or language, a component without `PageHead`, the shared guide structure, or `RelatedTools`, a page missing from the sitemap or ItemList, or an entry placed outside its category block. Fix the cause; never weaken the test.
 
 Verify before finishing:
 - `npm test` passes (routes + taxonomy + typography) and `npm run validate:content` passes.
 - `npm run build` (or `npx tsc --noEmit`) passes: the `Tool` type and routes compile.
-- Hub card renders and is searchable (name/card/keywords).
-- `/`<slug> and `/en/`<slug> render with PageHead, working tool, About/FAQ tabs, Related Tools.
-- OG images generate for both languages.
+- In each locale, check the card name, icon, result-led summary, and primary action; find it by both the tool name and a task phrase, then verify the category and action filters.
+- Open `/<slug>` and `/en/<slug>` at 320, 390, and 1440px. Confirm tool → guide → FAQ → background, visible output, correct anchors, intact input/result state, and no horizontal overflow.
+- Use the keyboard to jump to the guide, return to the tool, and open an FAQ. Reproduce the featured example and verify any mode changes update the guidance. Confirm the visible FAQ questions and answers match `FAQPage` in each locale.
+- In both locales, review the unique title and description, canonical and hreflang links, and OG image using the [SEO checklist](../seo/SKILL.md). Review visible answers and structured data using the [AEO checklist](../aeo/SKILL.md).
 
 ---
 
@@ -322,10 +335,10 @@ Replace the whole table body in both files with the output and update the `N종`
 
 - [ ] Registry entry appended, `ready: true`, all ko+en fields filled
 - [ ] `seo.title` keyword-led; `description` ≥150 chars; `keywords` are real search terms
-- [ ] `howItWorks` = 3 steps; `aeo` = What/Who/How/Why; `faq` = 4-6 incl. privacy Q
+- [ ] Both locales have a guide use case, 2-4 actionable steps, a verified input/result example, background, and real FAQ questions. Check `aeo` and other indexable fields where required.
 - [ ] Classified per Step 0.5: one `category`, 1-3 `actions` (primary first), `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
 - [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs (next-step tool first)
-- [ ] Component created, `PageHead` + work area + `Faq` + `RelatedTools`, client-side only
+- [ ] Component created, `PageHead` + work area + `ToolGuide` + `RelatedTools`, client-side only
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
 - [ ] 4 route files created (KO/EN page + KO/EN opengraph-image)
 - [ ] It is a new page (own search intent + own content), not a variant that belongs in an existing tool's `?mode=` tab

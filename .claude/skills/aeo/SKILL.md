@@ -1,24 +1,19 @@
 ---
 name: aeo
-description: AEO (Answer Engine Optimization) review for KitFolio tool pages. Use when writing or reviewing the What/Who/How/Why explanation block, FAQ content, or structured data intended for AI-powered search. Optimize content for AI retrieval, not marketing copy.
+description: Review Kitfolio tool explanations, visible FAQ and structured data for clear, factual answers in Korean and English.
 ---
 
 # AEO Review
 
-Each tool page must explicitly answer:
-- **What** is this tool?
-- **Who** is it for?
-- **How** does it work?
-- **Why** should someone use it?
+Write clear answers within the renewed detail page structure. Review both locales.
 
-## Guidelines
-- Prefer concise, factual language. No marketing fluff.
-- Write content for AI retrieval, not for persuasion. The objective is to maximize answer quality in AI-powered search systems.
-- Phrase questions so they directly match likely AI queries: include the tool name, e.g. "What is a Slack Timestamp Converter?"
-- The same explanation must appear both in **visible body content** and in **structured data**.
+- **What** does it do? Name the result in the title and short introduction.
+- **Who** needs it? Describe a concrete task in the guide use case.
+- **How** do they get the result? Use steps that match the live controls and an input-to-result example.
+- **Why** does the distinction matter? Explain interpretation, tradeoffs or limitations in Background when useful.
 
-## Structured data
-- FAQPage schema (JSON-LD)
-- SoftwareApplication / WebApplication schema (JSON-LD)
+## Visible answers and structured data
 
-In the current codebase: the `content.aeo` field (rendered via `aeoQA()`) and the `faq` field both feed `toolJsonLd()`, which emits a combined `FAQPage`. The "About this tool" tab and the FAQ tab share the same accordion. Keep all of this in `app/lib/content.ts`.
+Use FAQ for blockers, errors and exceptions. Keep every answer available through the on-page FAQ. Compare the displayed questions and answers with the `FAQPage` entries from `toolJsonLd()` for both languages. Keep `WebApplication` metadata factual and consistent with the tool.
+
+`content.aeo` is editorial data retained for the indexable content check. The standalone About tab was removed, and those four editorial answers do not appear as additional FAQ schema. See [the page content design](../../../docs/plans/tool-page-content-design.md).

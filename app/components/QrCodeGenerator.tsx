@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import QrToolTabs from "./QrToolTabs";
@@ -461,7 +460,6 @@ export default function QrCodeGenerator() {
       </div>
 
       <ToolGuide slug="qr-code-generator" />
-      <Faq slug="qr-code-generator" />
       <RelatedTools slug="qr-code-generator" />
     </>
   );

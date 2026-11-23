@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { buildReport } from "../lib/a11y/report";
@@ -723,7 +722,6 @@ export default function HtmlAccessibilityChecker() {
       </section>
 
       <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
       <RelatedTools slug={SLUG} />
     </>
   );

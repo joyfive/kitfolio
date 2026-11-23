@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { trackEvent } from "../lib/analytics";
@@ -1195,8 +1194,7 @@ export default function ImageResizerCropper() {
         </section>
       )}
 
-      <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
+      <ToolGuide slug={SLUG} modeLabel={t(mode === "resize" ? "irc.modeResize" : "irc.modeCrop")} exampleIndex={mode === "resize" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

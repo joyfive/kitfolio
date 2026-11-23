@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useT, type Dict } from "../lib/i18n";
 import {
@@ -721,8 +720,7 @@ export default function ColorContrastChecker() {
         {live}
       </p>
 
-      <ToolGuide slug="color-contrast-checker" />
-      <Faq slug="color-contrast-checker" />
+      <ToolGuide slug="color-contrast-checker" modeLabel={t(`cc.tab.${mode}`)} exampleIndex={mode === "palette" ? 2 : 0} />
       <RelatedTools slug="color-contrast-checker" />
     </>
   );

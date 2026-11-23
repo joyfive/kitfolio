@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { trackEvent } from "../lib/analytics";
@@ -718,7 +717,6 @@ export default function ImageOptimizer() {
       </div>
 
       <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
       <RelatedTools slug={SLUG} />
     </>
   );

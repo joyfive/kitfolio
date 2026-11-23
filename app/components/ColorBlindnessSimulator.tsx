@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { localizedHref } from "../lib/content";
@@ -531,7 +530,6 @@ export default function ColorBlindnessSimulator() {
       </p>
 
       <ToolGuide slug="color-blindness-simulator" />
-      <Faq slug="color-blindness-simulator" />
       <RelatedTools slug="color-blindness-simulator" />
     </>
   );

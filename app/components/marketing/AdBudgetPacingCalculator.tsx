@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect } from "react";
 import PageHead from "../PageHead";
-import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
@@ -331,7 +330,6 @@ export default function AdBudgetPacingCalculator() {
       </div>
 
       <ToolGuide slug="ad-budget-pacing-calculator" />
-      <Faq slug="ad-budget-pacing-calculator" />
       <RelatedTools slug="ad-budget-pacing-calculator" />
     </>
   );
