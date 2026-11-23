@@ -67,7 +67,7 @@ export type Post = { meta: PostMeta; html: string };
 
 /** 아주 단순한 프론트매터 파서: key: value, 리스트는 쉼표 구분.
  *  아티클은 신뢰된 소스(리포 커밋)이므로 최소 파서로 충분하다. */
-function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
+export function parseFrontmatter(raw: string): { data: Record<string, string>; body: string } {
   const m = /^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/.exec(raw);
   if (!m) return { data: {}, body: raw };
   const data: Record<string, string> = {};
@@ -137,7 +137,7 @@ export function fixCjkEmphasis(md: string): string {
     .join("");
 }
 
-function toList(v?: string): string[] {
+export function toList(v?: string): string[] {
   if (!v) return [];
   return v
     .replace(/^\[|\]$/g, "")

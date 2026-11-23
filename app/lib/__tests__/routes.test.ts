@@ -18,8 +18,8 @@ import { CATEGORIES, LEGAL_SLUGS, SITE, TOOLS, hubJsonLd, publishedTools } from 
 import sitemap from "../../sitemap.ts";
 
 const APP = path.join(process.cwd(), "app");
-// 도구가 아닌 페이지: 소개·문의·약관 · 블로그 · EN 루트(app/en/page.tsx = EN 허브)
-const NON_TOOL_ROUTES = new Set<string>([...LEGAL_SLUGS, "blog", "en"]);
+// 도구가 아닌 페이지: 소개·문의·약관 · 블로그 · 업무 프롬프트 · EN 루트(app/en/page.tsx = EN 허브)
+const NON_TOOL_ROUTES = new Set<string>([...LEGAL_SLUGS, "blog", "prompts", "en"]);
 
 function pageDirs(base: string): string[] {
   return fs
