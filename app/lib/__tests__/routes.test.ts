@@ -14,7 +14,8 @@ import { test, describe } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { CATEGORIES, LEGAL_SLUGS, SITE, TOOLS, hubJsonLd, publishedTools } from "../content.ts";
+import { CATEGORIES, LEGAL_SLUGS, SITE, TOOLS, hubJsonLd, publishedTools, toolJsonLd } from "../content.ts";
+import { toolGuideContext } from "../tool-guide-context.ts";
 import sitemap from "../../sitemap.ts";
 
 const APP = path.join(process.cwd(), "app");
@@ -75,8 +76,28 @@ describe("페이지 ↔ 레지스트리", () => {
         assert.ok(fs.readFileSync(og, "utf8").includes(`toolOgImage("${t.slug}", "${lang}")`), `${og}: toolOgImage("${t.slug}", "${lang}")`);
       }
       const comp = componentSource(path.join(APP, t.slug, "page.tsx"));
-      for (const part of ["<PageHead", "<Faq", "<RelatedTools"])
+      for (const part of ["<PageHead", "<RelatedTools"])
         assert.ok(comp.includes(part), `${t.slug}: 컴포넌트에 ${part} 없음`);
+      assert.ok(comp.includes("<ToolSupport"), `${t.slug}: ToolSupport 연결 없음`);
+      if (t.slug !== "pdf-tools") assert.ok(comp.includes("<ToolGuide"), `${t.slug}: ToolGuide 연결 없음`);
+      for (const lang of ["ko", "en"] as const) {
+        if (t.slug !== "pdf-tools") {
+          assert.ok(toolGuideContext(t.slug, lang)?.trim(), `${t.slug}/${lang}: 실제 사용 상황 누락`);
+        }
+        const copy = t.content[lang];
+        assert.ok(copy.howItWorks && copy.howItWorks.length >= 2, `${t.slug}/${lang}: 사용 순서 누락`);
+        assert.ok(copy.examples?.every((example) => example.title && example.input && example.result) && copy.examples.length > 0,
+          `${t.slug}/${lang}: 입력과 결과를 포함한 예시 누락`);
+        assert.ok(copy.guide?.length, `${t.slug}/${lang}: 배경 설명 누락`);
+        const jsonLd = toolJsonLd(t.slug, lang);
+        assert.ok(Array.isArray(jsonLd));
+        const faq = jsonLd.find((entry) => entry["@type"] === "FAQPage");
+        assert.ok(faq && "mainEntity" in faq);
+        assert.deepEqual(
+          faq.mainEntity.map((entry) => ({ question: entry.name, answer: entry.acceptedAnswer.text })),
+          t.faq?.[lang],
+        );
+      }
     });
   }
 });

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { clampChroma, formatHex } from "culori";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -457,7 +456,6 @@ export default function CssGradient() {
       </div>
 
       <ToolGuide slug="css-gradient" />
-      <Faq slug="css-gradient" />
       <RelatedTools slug="css-gradient" />
     </>
   );

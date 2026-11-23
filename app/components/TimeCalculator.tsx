@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import PageHead from "./PageHead";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -278,7 +277,6 @@ export default function TimeCalculator() {
       </div>
 
       <ToolGuide slug="time-calculator" />
-      <Faq slug="time-calculator" />
       <RelatedTools slug="time-calculator" />
     </>
   );

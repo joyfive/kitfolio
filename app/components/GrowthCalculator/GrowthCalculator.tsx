@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import PageHead from "../PageHead";
-import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
@@ -156,6 +155,17 @@ export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthM
     if (!allFilled || error) return null;
     return compute(mode, numericInputs);
   }, [mode, numericInputs, allFilled, error]);
+
+  const tabLabel = cfg.tabs.find((tab) => tab.mode === mode)?.label[lang];
+  const fieldNames = cfg.inputs.map(({ label }) => label[lang]).join(" · ");
+  const output = cfg.outputs.find((item) => item.primary) ?? cfg.outputs[0];
+  const preset = cfg.examples[0];
+  const sampleValue = preset ? compute(mode, preset.inputs)?.[output.key] : undefined;
+  const guideExample = preset && typeof sampleValue === "number" && output.format !== "direction" ? {
+    title: preset.label[lang],
+    input: cfg.inputs.map(({ key, label }) => `${label[lang]} ${fmtNum(preset.inputs[key])}`).join(" · "),
+    result: `${output.label[lang]} ${formatValue(sampleValue, output.format)}`,
+  } : undefined;
 
   async function handleCopy(key: string, displayValue: string) {
     try { await navigator.clipboard.writeText(displayValue); } catch { /* ignore */ }
@@ -341,8 +351,14 @@ export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthM
         </div>
       </div>
 
-      <ToolGuide slug={cfg.slug} />
-      <Faq slug={cfg.slug} />
+      <ToolGuide
+        slug={cfg.slug}
+        modeLabel={tabLabel}
+        currentExample={guideExample}
+        steps={lang === "ko"
+          ? [`${tabLabel} 탭 선택`, `${fieldNames} 입력`, `${output.label[lang]} 확인 후 결과 복사`]
+          : [`Choose ${tabLabel}`, `Enter ${fieldNames}`, `Check ${output.label[lang]} and copy the result`]}
+      />
       <RelatedTools slug={cfg.slug} />
     </>
   );

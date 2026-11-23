@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -746,8 +745,7 @@ export default function AnnualLeaveCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
+      <ToolGuide slug={SLUG} modeLabel={t(`al.tab.${mode}`)} exampleIndex={mode === "hire" ? 0 : 1} />
       <RelatedTools slug={SLUG} />
     </>
   );

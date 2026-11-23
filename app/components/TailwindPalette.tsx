@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { clampChroma, formatHex, oklch } from "culori";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -278,7 +277,6 @@ export default function TailwindPalette() {
       </div>
 
       <ToolGuide slug="tailwind-palette-generator" />
-      <Faq slug="tailwind-palette-generator" />
       <RelatedTools slug="tailwind-palette-generator" />
     </>
   );

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { trackEvent } from "../lib/analytics";
 import { localizedHref } from "../lib/content";
@@ -1242,7 +1241,6 @@ export default function AccessibilityChecklist() {
       </section>
 
       <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
       <RelatedTools slug={SLUG} />
     </>
   );

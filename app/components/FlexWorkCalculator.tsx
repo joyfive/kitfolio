@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -473,7 +472,6 @@ export default function FlexWorkCalculator() {
       </div>
 
       <ToolGuide slug="flex-work-calculator" />
-      <Faq slug="flex-work-calculator" />
       <RelatedTools slug="flex-work-calculator" />
     </>
   );

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { NODE_ID_ATTR } from "../lib/textscale/nodeId";
@@ -1031,8 +1030,7 @@ export default function TextScalingChecker() {
         </div>
       </section>
 
-      <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
+      <ToolGuide slug={SLUG} modeLabel={t(`ts.preset.${preset}`)} exampleIndex={preset === "reflow-320" ? 1 : preset === "text-spacing" ? 2 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

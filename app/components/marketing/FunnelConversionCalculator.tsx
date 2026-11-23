@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import PageHead from "../PageHead";
-import Faq from "../Faq";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
@@ -548,8 +547,7 @@ export default function FunnelConversionCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug="funnel-conversion-calculator" />
-      <Faq slug="funnel-conversion-calculator" />
+      <ToolGuide slug="funnel-conversion-calculator" exampleIndex={mode === "reverse" ? 1 : 0} />
       <RelatedTools slug="funnel-conversion-calculator" />
     </>
   );

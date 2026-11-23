@@ -2,7 +2,7 @@
 
 > **KitFolio is a collection of small web tools to calculate, convert, create and check, all running in the browser.**
 >
-> **The tool is the product. Text exists only to improve discoverability through SEO and AEO.**
+> **The tool comes first. Guide, FAQ, and background help users complete the task and understand the result.**
 >
 > **Prefer many small, focused utilities over a few complex applications.**
 
@@ -44,7 +44,7 @@ Only three layouts exist:
 Avoid introducing additional layouts unless absolutely necessary. Layout is chosen by the work and is independent of category.
 
 ## Localization
-All user-facing content is managed centrally (`app/lib/content.ts`).
+Tool content is managed in `app/lib/content.ts`. Bilingual guide situations live in `app/lib/tool-guide-context.ts`, and control labels live in localized UI data.
 Supported locales:
 - ko
 - en
@@ -52,12 +52,7 @@ Supported locales:
 Every new tool must provide both language sets.
 
 ## Content Philosophy
-KitFolio is NOT a CMS. Text exists only to support:
-- SEO
-- AEO
-- Tool explanation
-
-The tool itself is the product.
+The detail page follows Tool → Guide → FAQ → Background. Use `/build-tool` and the [detail page design](../plans/tool-page-content-design.md) to add both languages. Keep the on-page FAQ and FAQPage structured data aligned.
 
 ## Core Rule
 Never optimize for content production. Always optimize for solving a real user problem.

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import PageHead from "./PageHead";
-import Faq from "./Faq";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useT, type Dict } from "../lib/i18n";
@@ -254,7 +253,6 @@ export default function TimeConverter() {
         </div>
       </div>
       <ToolGuide slug="time-converter" />
-      <Faq slug="time-converter" />
       <RelatedTools slug="time-converter" />
     </>
   );

@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -487,8 +486,7 @@ export default function FreelancerTaxCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} />
-      <Faq slug={SLUG} />
+      <ToolGuide slug={SLUG} modeLabel={t(`ft.dir.${direction}`)} exampleIndex={mode === "other" ? 2 : direction === "reverse" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

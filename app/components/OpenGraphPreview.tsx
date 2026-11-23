@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import PageHead from "./PageHead";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import { useLang, useT, type Dict } from "../lib/i18n";
@@ -704,7 +703,6 @@ export default function OpenGraphPreview() {
       </section>
 
       <ToolGuide slug="open-graph-preview" />
-      <Faq slug="open-graph-preview" />
       <RelatedTools slug="open-graph-preview" />
     </>
   );

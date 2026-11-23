@@ -35,8 +35,8 @@
 
 ## 구현된 기능 (도구 35종)
 
-각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ/AEO를
-`app/lib/content.ts` 레지스트리에서 단일 출처로 관리합니다. 허브(`/`, `/en`)는 전체 도구의
+각 도구는 KO(루트)·EN(`/en`) 양 언어로 서버 렌더되며, 메타데이터·JSON-LD·OG·FAQ와 상세 설명을
+`app/lib/content.ts` 레지스트리에서 관리합니다. 가이드의 사용 상황은 `app/lib/tool-guide-context.ts`에 둡니다. 허브(`/`, `/en`)는 전체 도구의
 검색·필터·디스커버리 진입점입니다.
 
 | No | 분류 | 기능명 | KO 경로 | EN 경로 | 기능 요약 |
@@ -125,6 +125,6 @@ npm run validate:content  # indexable 도구 콘텐츠 품질 게이트 (실패 
 
 - 컬러/폰트 토큰은 스펙의 `@theme` 토큰명(`--color-blue-primary-700` 등)을 그대로 사용
 - 레이아웃은 **960px 기준 자동 반응형** (이상 좌우분할 · 미만 상하분할): 토글 없이 시스템 판단
-- 모든 도구 페이지에 공통 타이틀+설명+사용 가이드(`.kf-pagehead`): 개별 인입 대비
+- 도구 상세는 공통 헤더 → 작업 영역 → 사용 가이드 → FAQ → 배경 설명 순서로 배치합니다. 신규 도구는 [`/build-tool` 스킬](.claude/skills/build-tool/SKILL.md)과 [상세 페이지 콘텐츠 설계](docs/plans/tool-page-content-design.md)를 따릅니다.
 - 폰트(Pretendard·Inter·JetBrains Mono)는 현재 CDN 로드: 핸드오프 권고대로 추후 로컬 폰트
   (`next/font`)로 교체 권장

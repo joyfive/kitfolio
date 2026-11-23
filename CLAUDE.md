@@ -11,12 +11,12 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 이 문서가 제품 방향의 단일 출처(SoT)다. 작업 유형에 따라 아래 스킬·문서를 함께 사용한다.
 
 **호출 가능한 Skill** (`.claude/skills/`): 작업 시 `/skill-name` 으로 호출
-- `/build-tool`: 신규 도구/페이지 end-to-end 구현 런북 (레지스트리·컴포넌트·라우트·OG·허브 카드·SEO/AEO 카피). "새로운 기능/페이지 추가" 요청 시 사용
+- `/build-tool`: 신규 도구/페이지 end-to-end 구현 런북 (레지스트리·컴포넌트·라우트·OG·허브 카드·한/영 가이드·FAQ·SEO). "새로운 기능/페이지 추가" 요청 시 사용
 - `/new-tool`: 신규 도구 추가 체크리스트 + 필수 구조 (5개 평가 기준은 하드 게이트)
 - `/product-review`: 제품 방향·스코프 리뷰 (feature creep 방지)
 - `/branding`: 브랜딩·톤 가드레일
 - `/seo`: 도구 페이지 SEO 리뷰 체크리스트
-- `/aeo`: What/Who/How/Why + 구조화 데이터 AEO 리뷰
+- `/aeo`: 화면의 실제 답변과 구조화 데이터 검토
 
 **참고 컨텍스트 문서** (`docs/ai/`)
 - `PROJECT_CONTEXT.md`: 영문 요약 컨텍스트 (이 파일의 영문판)
@@ -77,7 +77,7 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 - 각 도구 페이지가 구체적인 검색 의도 1개를 타겟. 사용자는 "Kitfolio"를 검색하지 않는다.
   "Character Counter", "Flex Work Calculator", "Resume Bullet Generator"를 검색한다.
 - **도구 페이지 필수 구성**: ① Tool Title ② Tool Description ③ 동작하는 도구 UI
-  ④ How It Works ⑤ FAQ ⑥ Related Tools ⑦ 구조화 메타데이터 ⑧ 개별 OG 메타데이터
+  ④ 사용 가이드와 예시 ⑤ FAQ ⑥ 배경 설명 ⑦ Related Tools ⑧ 구조화·OG 메타데이터
 - 도구 자체가 본질적 가치. SEO 콘텐츠는 발견성(discoverability) 보조.
 
 ### 도구 = 페이지 단위 (2026-10-24 확정)
@@ -91,7 +91,7 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 | sitemap (KO·EN + alternates) | `publishedTools()` → `sitemap.ts` |
 | 허브 ItemList JSON-LD | `publishedTools()` → `hubJsonLd()` |
 | title·description·canonical·hreflang·OG 메타 | `buildToolMetadata()` (페이지 래퍼) |
-| WebApplication + FAQPage(AEO·FAQ) JSON-LD | `toolJsonLd()` (페이지 래퍼) |
+| WebApplication + FAQPage(화면에 표시하는 FAQ) JSON-LD | `toolJsonLd()` (페이지 래퍼) |
 | OG 이미지 · Related Tools · 상세 분류 링크 | `toolOgImage()` · `RelatedTools` · `PageHead` |
 
 - 페이지 안의 `?mode=` 탭(PDF·CSS 단위·부가세·연차·프리랜서 등)은 **별도 도구가 아니다.** 카드·sitemap 항목을 만들지 않는다.
@@ -197,8 +197,8 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
   content: {
     ko: {
       card, description, howItWorks, aeo,
-      guide:       [{ heading, body[] }],        // 심화 산문 · indexable 필수
-      examples:    [{ title, input, result, note }], // 실전 예제 · indexable 필수
+      guide:       [{ heading, body: [...] }],   // 배경 설명 · 모든 도구
+      examples:    [{ title, input, result, note }], // 입출력 실전 예시 · 모든 도구
       limitations: ["엣지케이스·제약"],             // indexable 필수
       sources:     [{ label, url }],             // 공식 출처 (외부 기준 의존 시)
     },
@@ -209,7 +209,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 }
 ```
 
-- `guide`/`examples`/`limitations`/`sources` 는 `ToolGuide` 컴포넌트가 렌더한다.
+- 기본 상세 구성은 `PageHead → 작업 영역 → ToolGuide → RelatedTools`. `ToolGuide`는 `ToolSupport`를 통해 사용 가이드 → FAQ → 배경 설명을 렌더한다. 각 도구의 한/영 사용 상황은 `app/lib/tool-guide-context.ts`에 등록한다.
 - `sources` 는 **기관·표준 1차 자료만.** 개인 블로그·타사 계산기 금지.
   `sources` 가 있으면 `verifiedAt` 도 필수 (품질 게이트가 검사).
 
@@ -219,7 +219,7 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 
 ### 메타데이터 철학
 - 콘텐츠를 **아티클이 아니라 메타데이터로** 취급한다.
-- ❌ Tool + Content = Content Platform → ⭕ **Tool + Metadata = Searchable Tool**
+- 도구를 먼저 제공하고, 상세 콘텐츠는 사용과 결과 해석을 돕는다.
 - 도구가 제품이고, 텍스트는 발견을 돕는다.
 
 ### OG 전략
@@ -327,8 +327,8 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
 5. **페이지 헤더 / 뱃지 / 설명 영역**: 모든 테마 공통 스타일 · `PageHead` 컴포넌트(`.kf-pagehead`) 사용.
 6. **페이지 구성**: 좌측 = 인풋 / 우측 = 출력 기준. 단, 디자인(Canvas) 도구는 기능에 따라
    유동적으로 적용. 모바일은 상하 배치 (인풋 위 → 출력 아래).
-7. **인풋 높이**: 모든 인풋은 모바일에서 height 최솟값 240px, 콘텐츠에 따라 유동적으로 늘어나되
-   최대 600px로 제한.
+7. **인풋 높이**: 모바일 텍스트 편집기는 최소 240px에서 콘텐츠에 따라 최대 600px까지 늘어난다.
+   일반 폼 필드는 해당 입력에 맞는 크기를 사용한다.
 
 ---
 
@@ -611,26 +611,14 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 - **다국어 = URL 기반**: KO는 루트(`/json-formatter`), EN은 `/en/json-formatter`.
   각 URL이 서버에서 해당 언어로 렌더 → 양국어 모두 색인 + `hreflang` 연결.
   (localStorage 토글 아님)
-- **콘텐츠 레지스트리 단일 출처**: `app/lib/content.ts` 한 파일에서 렌더링 콘텐츠 텍스트(KO·EN) 전부 관리.
-  ① `SITE` ② `HUB`(seo + hero 카피) ③ `CATEGORIES`·`ACTIONS`(허브 1단·2단 분류 라벨) ④ `FAQ_SECTION`(FAQ 섹션 공통 카피)
-  ⑤ `TOOLS`: 권장 스키마 적용: `slug`/`layout`(card·ide·canvas)/`category`/`actions`/`searchTerms`/`scope`/
-  `name`(h1)/`relatedTools`/`seo{ko,en}`(title·description·keywords)/`content{ko,en}`(card·description·howItWorks·**aeo**)/
-  `faq{ko,en}`(question·answer)/`og{ko,en}`(title·subtitle). 화면 텍스트 영역과 필드 1:1 매핑.
-  AEO Q&A 변환은 `aeoQA()` (탭형 `Faq` 본문과 JSON-LD가 공유).
-  → 메타데이터·화면 카피·JSON-LD·허브 검색 색인에 전부 재사용. **콘텐츠 수정은 이 파일만 고치면 됨.**
-  도구 50개로 늘어도 이 파일에 50개 × 2개 언어 세트를 추가하는 구조.
-- **UI 마이크로카피는 콘텐츠 레지스트리에서 제외** (기능/버튼/인풋 텍스트):
-  전역 공통(헤더 네비·푸터·복사/지우기 버튼)은 `lib/i18n.tsx`의 `COMMON`,
-  도구별 컨트롤 라벨은 각 컴포넌트의 로컬 `DICT`.
-- **FAQ / About(AEO)**: 도구 상세 페이지마다 공통 `Faq` 컴포넌트(`<Faq slug="..." />`) 렌더.
-  **칩 탭으로 "이 도구에 대하여"(AEO: What/Who/How/Why) ↔ "자주 묻는 질문"(FAQ)** 전환 · 두 탭 모두
-  동일한 `.kf-faq` 아코디언(한 번에 하나만 열림, 1번 기본 오픈). 콘텐츠는 `content.ts`의 `content.aeo`(→`aeoQA()`)와
-  `faq` 필드에서, `toolJsonLd()`가 두 세트를 합쳐 `FAQPage` JSON-LD로 함께 생성.
+- **콘텐츠 레지스트리**: `app/lib/content.ts`에서 공통 카피와 도구별 메타데이터, 단계(`howItWorks`), 예시, 배경 설명, FAQ를 관리한다. 가이드의 구체적인 사용 상황은 `app/lib/tool-guide-context.ts`에 한/영으로 등록한다.
+- **UI 마이크로카피**: 공통 라벨은 `app/lib/i18n.tsx`의 `COMMON`, 도구별 라벨과 필요한 모드별 문구는 현지화한 도구 데이터나 로컬 `DICT`에 둔다.
+- **FAQ**: 실제 작업 질문을 `ToolSupport`에서 접기/펼치기로 제공한다. `toolJsonLd()`는 화면에 표시하는 `faq`만 `FAQPage`에 포함한다. `content.aeo`는 색인 품질 검증용 편집 데이터로 유지한다.
 - 도구 클라이언트 컴포넌트는 `app/components/` 에. 페이지(`page.tsx`)는 메타+JSON-LD+컴포넌트를 묶는 얇은 래퍼.
 - **공통 레이아웃**: 루트 `layout.tsx` = `SiteHeader` + `<main class="kf-main">`(max 1216px) + `SiteFooter`.
   헤더·푸터는 `usePathname()`으로 언어(`/en` 프리픽스)와 액티브 카테고리를 도출 (`routeLang()` in `lib/i18n`).
-- 페이지 헤더(뱃지·제목·설명·3단계 가이드)는 공통 `PageHead` 컴포넌트 (`<PageHead slug="..." />`).
-- 레이아웃: 960px 기준 자동 반응형(≥좌우분할/<상하분할). 인풋은 모바일 min 240px / max 600px (`field-sizing: content`).
+- 페이지 헤더는 `PageHead`로 제목·짧은 결과 설명·가이드 바로가기를 보여준다. 단계별 가이드와 예시는 작업 영역 아래에 배치한다.
+- 레이아웃: 960px 기준 자동 반응형(≥좌우분할/<상하분할). 텍스트 편집기는 모바일 min 240px / max 600px (`field-sizing: content`).
 
 ### SEO
 - 페이지별 title/description/keywords + `canonical` + `hreflang`(ko-KR/en-US/x-default) + OpenGraph
@@ -719,8 +707,7 @@ npm run gen:tailwind-css   # 텍스트 확대 검사기의 Tailwind 기본 style
    - [x] `/tools/slack-timestamp-converter` → `/slack-timestamp-converter` 플랫 URL로 이동 (+ next.config 308 영구 리다이렉트, sitemap 자동 갱신)
    - [x] `Tool` 타입에 `targets` 태그 추가 (pm/designer/developer/job-seeker/office-worker/small-business-owner)
    - [x] 도구 페이지에 **Related Tools** 섹션 추가 (`RelatedTools` 컴포넌트: 허브 카드 스타일 재사용)
-   - [x] AEO용 **What is / Who for / How / Why** 명시 문단: 레지스트리 `content.aeo` 필드 + 탭형 `Faq` 섹션
-     ("이 도구에 대하여" 탭), 같은 Q&A를 `FAQPage` JSON-LD에도 포함 (질문에 도구 이름 포함: AI 검색 질의 직접 매칭)
+   - [x] 한/영 도구 상세를 도구 → 사용 가이드 → FAQ → 배경 설명 순서로 통합. 화면에 표시한 FAQ와 구조화 데이터를 일치시킴.
    - [x] `og.subtitle` 필드 + **동적 OG 이미지** (라우트별 `opengraph-image.tsx` → `lib/og.tsx` 헬퍼가 레지스트리 og 값 소비, 1200×630, 허브 포함)
    - [x] 허브·푸터 브랜드 카피를 "knowledge workers" 메시지로 교체
    - [x] 타겟 태그 기반 필터 1단계: 허브 히어로에 직군 필터 칩(`TARGET_LABELS`, URL 아님) 추가.
@@ -750,8 +737,7 @@ npm run gen:tailwind-css   # 텍스트 확대 검사기의 Tailwind 기본 style
      **URL 통합(리다이렉트)** 할지: 이번 작업에서는 통합하지 않았다
 2. **나머지 11개 도구 구현** (우선순위: 검색량 > 구현 난이도 낮음 > 기존 UX 열악)
    - 각 도구: `app/<slug>/page.tsx`(KO) + `app/en/<slug>/page.tsx`(EN) + `app/components/<Tool>.tsx`
-   - `content.ts` 레지스트리 항목에 `seo(title·description)/content(description·howItWorks)/faq/og` 채우고 `ready: true` 전환
-   - 컨트롤 마이크로카피는 컴포넌트 로컬 `DICT`로, 컴포넌트 끝에 `<Faq slug="..." />` 추가
+   - `/build-tool` 기준으로 한/영 레지스트리와 가이드 상황을 작성하고, `ToolGuide`로 가이드·FAQ·배경 설명을 연결한 뒤 `ready: true` 전환
    - 테마: dev=IDE / design=Canvas / text=Clean
 3. (선택) 루트 `<html lang>` 의 SSR 해결: `app/(ko)/...` · `app/(en)/en/...` route group
    재구성으로 언어별 루트 레이아웃 분리. 현재는 서브트리 `lang` 만 SSR 로 제공된다.

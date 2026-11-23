@@ -1,6 +1,6 @@
 ---
 name: new-tool
-description: Checklist and required structure for adding a new KitFolio tool. Use when the user wants to add, scaffold, design, or evaluate a new tool/utility, or asks "should we build X". Enforces the build criteria, the ko/en content registry, FAQ/AEO/OG/JSON-LD requirements, and the three-layout rule.
+description: Checklist and required structure for adding a new KitFolio tool. Use when the user wants to add, scaffold, design, or evaluate a new tool/utility, or asks "should we build X". Enforces the build criteria, the bilingual tool-first page structure, guide, FAQ, background, OG and JSON-LD requirements, and the three-layout rule.
 ---
 
 # New Tool Checklist
@@ -22,8 +22,8 @@ Each tool must include:
 - classification: exactly one topic `category` (hub 1단), 1-3 `actions` from the fixed 7 (hub 2단, primary first), `searchTerms` (procedure: `/build-tool` Step 0.5)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
-- FAQ (4-6 questions, see `docs/ai/CONTENT_POLICY.md`)
-- AEO block: What / Who / How / Why
+- Tool → Guide → FAQ → Background in each locale. The guide needs a real use case, 2-4 actionable steps and at least one worked input-to-result example. Background explains how to interpret the result, including relevant limits and sources.
+- FAQ for real blockers and exceptions, generally 4-6 questions. The editorial `aeo` fields support the indexable-tool check. See `docs/ai/CONTENT_POLICY.md` for what appears on the page.
 - Related tools
 - OG metadata (unique per tool)
 - JSON-LD (WebApplication + FAQPage)
@@ -36,19 +36,19 @@ Each tool must include:
 Do not invent new layout types.
 
 ## Page or mode tab?
-A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page automatically gets a hub card, sitemap entries, metadata and AEO/FAQ JSON-LD; nothing else is hand-wired (`npm test` → `routes.test.ts` enforces it).
+A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page automatically gets a hub card, sitemap entries, metadata and WebApplication/FAQ JSON-LD; nothing else is hand-wired (`npm test` → `routes.test.ts` enforces it).
 - New search intent + its own guide/examples/FAQ → **new page**.
 - Same component and structure, only a different formula/unit/operation → **`?mode=` tab on the existing page** (no new card, no sitemap entry). This is how CSS units, ad metrics, PDF tools, VAT, annual leave and freelancer modes work.
 
 ## Implementation footprint (current codebase)
 - `app/<slug>/page.tsx` (KO) + `app/en/<slug>/page.tsx` (EN) + `app/components/<Tool>.tsx`
-- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and flip `ready: true`
+- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and add the bilingual use case in `app/lib/tool-guide-context.ts` before setting `ready: true`.
 - Control microcopy lives in the component's local `DICT`, not the registry
-- Append `<Faq slug="..." />` at the end of the component
+- Render `PageHead → tool work area → ToolGuide → RelatedTools`. `ToolGuide` renders the shared Guide, FAQ, and Background via `ToolSupport`. For multi-mode guides, pass the current mode, matching steps and example from the tool state.
 - Layout is chosen by the work (text transform = IDE, live visual = Canvas, form → results = Card), **not** by category. Category is chosen by the problem solved (`/build-tool` Step 0.5), never by job title or layout.
 
 ## Classification gate
 - If the tool fits none of the 8 categories, stop and propose a new one to the user instead of forcing it.
 - Action tags are fixed at 7 (계산·변환·생성·편집·검사·분석·읽기). Never add one; if none fits, stop and ask.
 
-All user-facing copy is centralized in `app/lib/content.ts`. Never hardcode copy in page components.
+Keep general tool copy, examples and FAQ in the registry. Put the guide use case in `app/lib/tool-guide-context.ts`, UI labels in the component’s bilingual `DICT`, and mode-specific guide copy in the tool’s bilingual data. Follow [the page content design](../../../docs/plans/tool-page-content-design.md) and the `/build-tool` runbook.

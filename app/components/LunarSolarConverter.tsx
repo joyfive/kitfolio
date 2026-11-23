@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Solar, Lunar } from "lunar-javascript";
-import Faq from "./Faq";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -446,8 +445,7 @@ export default function LunarSolarConverter() {
         </div>
       </div>
 
-      <ToolGuide slug="lunar-solar-converter" />
-      <Faq slug="lunar-solar-converter" />
+      <ToolGuide slug="lunar-solar-converter" exampleIndex={mode === "solar-to-lunar" ? 1 : 0} />
       <RelatedTools slug="lunar-solar-converter" />
     </>
   );
