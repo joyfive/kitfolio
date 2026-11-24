@@ -2009,3 +2009,29 @@
     widows: 3;
   }
 }
+
+/* 경력기술서 ↔ 포트폴리오 전환 탭 (PageHead 위) */
+.fb-doctabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 20px;
+  border-bottom: 1px solid var(--color-blue-gray-200);
+}
+.fb-doctabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-blue-gray-600);
+}
+.fb-doctabs a:hover {
+  color: var(--color-blue-gray-900);
+}
+.fb-doctabs a.is-on {
+  color: var(--color-blue-primary-700);
+  border-bottom-color: var(--color-blue-primary-700);
+}
