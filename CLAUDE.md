@@ -322,6 +322,28 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
 
 ---
 
+### 비주얼 언어: Toss 스타일 (2026-11-27)
+
+> 컬러 팔레트(Blue Gray · Blue Primary)는 그대로 두고, 형태·타이포·모션만 토스 디자인(TDS) 방식으로 바꾼다.
+> Toss 색상값(`#3182f6` 등)은 들여오지 않는다. 역할만 Kitfolio 토큰에 대응한다
+> (본문 = blue-gray-700 · 보조 = 500 · 면 = 100 · 주요 CTA = blue-primary-700).
+
+- **면과 여백으로 층을 나눈다.** 카드는 테두리 없는 흰 면(`border: transparent`)이고, 그림자는 쓰지 않는다
+  (`--shadow-card` · `--shadow-card-hover` 는 `none`). 그림자는 떠 있는 요소(`--shadow-pop`)만.
+- **라운드**: 카드 20px(`--radius-xl`) · 패널 16px · 필드·버튼 12~14px · 칩·배지 8px · 카테고리 칩만 pill.
+  버튼 단계 토큰 `--radius-btn-sm/md/lg/xl` = 8/10/14/16.
+- **컨트롤 높이**: `--h-sm/md/lg/xl` = 32/38/48/56. 기본 버튼 48, 텍스트 필드 52, 허브 검색 56.
+  모바일 터치 영역 44px 이상(접근성)은 유지한다.
+- **버튼**: 채움(primary) · weak(옅은 primary 면, `btn-ghost`) · 회색 면(`btn-outline`). 눌림은 `scale(.96)` 이고
+  `prefers-reduced-motion` 이면 끈다. 호버는 색만 한 단계.
+- **필드**: 회색(blue-gray-100) 채움 + 투명 테두리, 포커스 시 흰 면 + primary 테두리. 핵심 입력의 진한 테두리(접근성 보강 규칙)는 유지한다.
+- **세그먼트·탭**: 회색 트랙 + 흰 썸(활성 글자 blue-gray-950). 칩은 회색 면, 활성만 진하게.
+- **타이포**: 제목 700(페이지 타이틀·히어로·섹션 제목) · UI 컴포넌트 600 · 본문 400~500. 650 같은 중간 굵기 금지.
+  페이지 h1 34px · 허브 히어로 48px · 본문 16~17px · 줄간격 1.5~1.6. 한글 제목은 `word-break: keep-all`.
+- **포커스 링**: `--ring` (primary-300 1px + primary-100 4px). 입력은 2px primary 아웃라인.
+- **IDE 다크 출력 · Canvas 체커보드**는 Kitfolio 고유 규칙이라 그대로 둔다.
+- 가이드 도해(`GuideFigure`) 목업 CSS 는 실제 화면 스타일을 따라간다. 컴포넌트 스타일을 바꾸면 `.kf-gfig-*` 도 같이 본다.
+
 ### 공통 레이아웃 / 스타일 규칙 (2026-06-12 개정)
 
 > 아래 규칙은 기존 테마별 가이드보다 우선한다.
@@ -451,7 +473,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 | IDE 테마 전체, 코드 블록 | JetBrains Mono | 400 / 500 |
 | 기본 폰트 스택 | Pretendard → Inter fallback |: |
 
-- **700은 페이지 타이틀, 히어로 헤드라인에만** 사용. UI 컴포넌트 내부에서는 500까지.
+- **700은 페이지·섹션 제목, 히어로 헤드라인에만** 사용. UI 컴포넌트(버튼·탭·칩·카드 제목)는 600, 본문은 400~500 (2026-11-27 개정).
 - 숫자 메트릭 (글자 수, 타임스탬프 등) 표시 시 Inter 500 사용 → 숫자 가독성 최적화.
 - IDE 테마에서는 JetBrains Mono만 사용. sans-serif 혼용 금지.
 

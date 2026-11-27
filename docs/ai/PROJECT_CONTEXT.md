@@ -43,6 +43,8 @@ Only three layouts exist:
 
 Avoid introducing additional layouts unless absolutely necessary. Layout is chosen by the work and is independent of category.
 
+Visual language (2026-11-27): Toss (TDS) style on the unchanged Kitfolio palette. Flat white cards with no border or shadow (20px radius), filled gray fields (52px), 48px buttons with a `scale(.96)` press, gray-track segmented controls, weight 700 for titles only and 600 for UI. Never import Toss hex values. Source of truth: CLAUDE.md, tokens in `app/globals.css`.
+
 ## Localization
 Tool content is managed in `app/lib/content.ts`. Bilingual guide situations live in `app/lib/tool-guide-context.ts`, guide figures (numbered UI mockups with matching notes) in `app/lib/guide-figures/`, and control labels live in localized UI data.
 Supported locales:
