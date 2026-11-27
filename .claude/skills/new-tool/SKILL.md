@@ -22,7 +22,7 @@ Each tool must include:
 - classification: exactly one topic `category` (hub 1단), 1-3 `actions` from the fixed 7 (hub 2단, primary first), `searchTerms` (procedure: `/build-tool` Step 0.5)
 - ko **and** en content (both locales mandatory)
 - metadata (title / description / keywords)
-- Tool → Guide → FAQ → Background in each locale. The guide needs a real use case, 2-4 actionable steps and at least one worked input-to-result example. Background explains how to interpret the result, including relevant limits and sources.
+- Tool → Guide → FAQ → Background in each locale. The guide needs a real use case, a guide figure (redrawn work area + numbered markers + matching notes, written with `/tool-guide`), 2-4 actionable steps and at least one worked input-to-result example. Background explains how to interpret the result, including relevant limits and sources.
 - FAQ for real blockers and exceptions, generally 4-6 questions. The editorial `aeo` fields support the indexable-tool check. See `docs/ai/CONTENT_POLICY.md` for what appears on the page.
 - Related tools
 - OG metadata (unique per tool)
@@ -52,3 +52,6 @@ A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page auto
 - Action tags are fixed at 7 (계산·변환·생성·편집·검사·분석·읽기). Never add one; if none fits, stop and ask.
 
 Keep general tool copy, examples and FAQ in the registry. Put the guide use case in `app/lib/tool-guide-context.ts`, UI labels in the component’s bilingual `DICT`, and mode-specific guide copy in the tool’s bilingual data. Follow [the page content design](../../../docs/plans/tool-page-content-design.md) and the `/build-tool` runbook.
+
+## Changing an existing tool
+Any change to what the user sees or does on a tool page (labels, inputs, tabs or modes, defaults, results, buttons) must update that tool's guide figure in the same change. Run `/tool-guide`; its table lists what to re-check per change.

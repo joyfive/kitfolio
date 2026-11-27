@@ -51,6 +51,9 @@ Supported locales:
 
 Every new tool must provide both language sets.
 
+## Usage guide figures
+Each tool's usage guide is a redrawn slice of its work area with numbered markers and matching numbered notes (`GuideFigure`, data in `app/lib/guide-figures/`). Hard rule: whenever a tool page is created or changed (labels, inputs, tabs or modes, defaults, formulas, rates, results), update its ko/en figure in the same change with `/tool-guide`. Tests check that figures exist and are well formed, not that labels and values still match the screen, so reviewers check that. If a change to a component, `DICT`, engine or policy data leaves the figure untouched, say why in the commit message.
+
 ## Content Philosophy
 The detail page follows Tool → Guide → FAQ → Background. Use `/build-tool` and the [detail page design](../plans/tool-page-content-design.md) to add both languages. Keep the on-page FAQ and FAQPage structured data aligned.
 
@@ -58,10 +61,12 @@ The detail page follows Tool → Guide → FAQ → Background. Use `/build-tool`
 Never optimize for content production. Always optimize for solving a real user problem.
 
 ## Related working skills
+- `/build-tool`: end-to-end runbook for a new tool page
+- `/tool-guide`: write or update a tool's guide figure (new tools and every change to an existing tool's screen)
 - `/new-tool`: checklist + required structure for adding a tool
 - `/product-review`: product-direction / scope review
 - `/branding`: branding & tone guardrails
 - `/seo`: SEO review checklist
 - `/aeo`: AEO review checklist
 
-The authoritative, detailed Korean spec lives in the root `CLAUDE.md`. This document is the concise English context for AI agents.
+The authoritative, detailed Korean spec lives in the root `CLAUDE.md`. This document is the concise English context for AI agents. There is no separate `AGENTS.md`: change `CLAUDE.md` first, then mirror the change here and in the affected skills.

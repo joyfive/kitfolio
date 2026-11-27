@@ -12,3 +12,5 @@ Write Korean and English content together for every tool. Follow the [detail pag
 Use factual copy. Instructions should match the visible labels and selected mode in each language. Keep `content.aeo` as editorial data for the indexable validation. Place useful information from it in the relevant page section.
 
 Shared UI strings live in `app/lib/i18n.tsx` (`COMMON`). Per-tool control labels and mode-specific guide copy belong in the tool’s bilingual data or local `DICT`. See `/build-tool` for implementation and `/aeo` and `/seo` for review.
+
+When a tool's screen changes (labels, inputs, modes, defaults, formulas, results), update its guide figure in the same change with `/tool-guide`.

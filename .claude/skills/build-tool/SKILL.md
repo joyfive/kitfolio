@@ -1,6 +1,6 @@
 ---
 name: build-tool
-description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description · registry entry, component, routes, OG, hub card, bilingual usage guide, FAQ, background and SEO copy, source structure, and the README/CLAUDE.md feature-list update. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool with docs updated.
+description: End-to-end runbook for building a new KitFolio tool/page from a plain feature description · registry entry, component, routes, OG, hub card, bilingual usage guide figure (via /tool-guide), FAQ, background and SEO copy, source structure, and the README/CLAUDE.md feature-list update. Use whenever the user says they want to add a tool/page/feature, e.g. "새로운 기능 개발할거야", "새로운 페이지 추가할게", "X 도구 만들자", "add a new tool/page", "build X". The user describes the feature; this skill produces a complete, shippable tool with docs updated.
 ---
 
 # Build a KitFolio Tool (end-to-end)
@@ -17,7 +17,7 @@ Goal: the user describes a feature in one or two sentences, and you ship a **com
 
 For a tool with slug `<slug>` and component `<Comp>`:
 
-1. **Registry and guide content** → append to `TOOLS` in `app/lib/content.ts` and add a bilingual use case in `app/lib/tool-guide-context.ts`
+1. **Registry and guide content** → append to `TOOLS` in `app/lib/content.ts`, add a bilingual use case in `app/lib/tool-guide-context.ts`, and write the ko/en guide figure in `app/lib/guide-figures/` with `/tool-guide` (Step 2.5)
 2. **Component** → `app/components/<Comp>.tsx` (`"use client"`, the actual tool UI)
 3. **Work-area styles** → add tool-specific CSS to `app/globals.css` (common `.kf-*` styles already exist; the input/output area is tool-specific)
 4. **KO route** → `app/<slug>/page.tsx` + `app/<slug>/opengraph-image.tsx`
@@ -158,7 +158,7 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 - **`content.description`**: detailed editorial description, usually aligned with the SEO description. The first screen uses `content.card`.
 - **Guide use case**: add `"<slug>": [situationKo, situationEn]` to `TOOL_GUIDE_CONTEXT` in `app/lib/tool-guide-context.ts`. Describe a specific task in each language, such as reducing a photo to fit a submission limit.
 - **`content.howItWorks`**: 2-4 steps using labels and actions the reader can find in the tool. Cover the first input, the action or automatic processing, and what to check, copy or download. Used for AEO/validation and as the guide fallback; the visible guide is the figure below.
-- **Guide figure** (required): add `"<slug>": { ko, en }` to the matching category file in `app/lib/guide-figures/` (`docs` · `time-work` · `pay` · `marketing` · `web` · `a11y`). Each figure redraws a few parts of the real work area (`tabs` · `field(s)` · `text` · `drop` · `check` · `chips` · `slider` · `result` · `stats` · `rows` · `code` · `swatches` · `preview` · `pages` · `buttons`, see `types.ts`), puts numbered markers `m: 1..n` (2-5) on the parts the user touches or reads, and gives `notes[n-1]` = `{ title, body }` per marker. Copy labels from the component `DICT` exactly and use values verified against the tool. ko and en must have the same parts and markers (`guide-figures.test.ts`). A tool whose `?mode=` tabs need different figures uses `"<slug>/<mode>"` keys plus `FIGURE_VARIANTS`.
+- **Guide figure** (required): written in Step 2.5 with `/tool-guide`, after the component exists, because it copies the component's real labels and computed values.
 - **`content.examples`**: supply at least one worked scenario with `title`, actual `input`, and expected `result`. Verify against the tool. Add a `note` when assumptions or interpretation matter. The first example is featured and the rest are expandable.
 - **`content.guide` / `limitations` / `sources`**: write background that helps users interpret results or compare options. Keep critical accuracy and applicability notices near the relevant input or result as well. For externally governed rules or data, give primary sources and `verifiedAt`. `npm run validate:content` checks the additional minimums for indexable tools.
 - **`content.aeo`**: retain factual What/Who/How/Why editorial fields for indexable validation. Put useful definitions, scenarios, instructions and reasoning in the relevant visible sections. The fields are not rendered as a second FAQ tab.
@@ -217,6 +217,14 @@ Reference implementations to copy structure/idiom from:
 - **canvas** (design): `CssGradient.tsx`, `TailwindPalette.tsx`
 
 Rules: client-side only; no DB, no paid/LLM APIs, free APIs only; use `common.*` keys (copy/clear/paste/privacy) from i18n `COMMON`; include the privacy line for trust.
+
+---
+
+## Step 2.5: Guide figure (`/tool-guide`)
+
+Run the [`/tool-guide`](../tool-guide/SKILL.md) skill now. It writes `"<slug>": { ko, en }` in the matching `app/lib/guide-figures/<category>.ts`: a redrawn slice of the work area with 2-5 numbered markers and one note per marker. Copy labels from the component `DICT` you just wrote and compute every value with the engine using `examples[0]`. `npm test` fails while a published tool has no figure, so this step cannot be skipped.
+
+If you later change the component (labels, inputs, modes, defaults, results), update the figure in the same change. `/tool-guide` lists what to re-check for each kind of change.
 
 ---
 
@@ -285,6 +293,7 @@ Verify before finishing:
 - `npm run build` (or `npx tsc --noEmit`) passes: the `Tool` type and routes compile.
 - In each locale, check the card name, icon, result-led summary, and primary action; find it by both the tool name and a task phrase, then verify the category and action filters.
 - Open `/<slug>` and `/en/<slug>` at 320, 390, and 1440px. Confirm tool → guide → FAQ → background, visible output, correct anchors, intact input/result state, and no horizontal overflow.
+- Check the guide figure in both locales at 360 and 1280px: labels match the live work area, values match the tool for the same input, markers align, nothing overflows.
 - Use the keyboard to jump to the guide, return to the tool, and open an FAQ. Reproduce the featured example and verify any mode changes update the guidance. Confirm the visible FAQ questions and answers match `FAQPage` in each locale.
 - In both locales, review the unique title and description, canonical and hreflang links, and OG image using the [SEO checklist](../seo/SKILL.md). Review visible answers and structured data using the [AEO checklist](../aeo/SKILL.md).
 
@@ -340,6 +349,7 @@ Replace the whole table body in both files with the output and update the `N종`
 - [ ] Classified per Step 0.5: one `category`, 1-3 `actions` (primary first), `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
 - [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs (next-step tool first)
 - [ ] Component created, `PageHead` + work area + `ToolGuide` + `RelatedTools`, client-side only
+- [ ] Guide figure written with `/tool-guide`: labels from `DICT`, values computed, ko/en same shape, `guide-figures.test.ts` passes
 - [ ] Work-area CSS added to `globals.css` with design tokens, correct theme
 - [ ] 4 route files created (KO/EN page + KO/EN opengraph-image)
 - [ ] It is a new page (own search intent + own content), not a variant that belongs in an existing tool's `?mode=` tab
