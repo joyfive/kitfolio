@@ -44,7 +44,7 @@ Only three layouts exist:
 Avoid introducing additional layouts unless absolutely necessary. Layout is chosen by the work and is independent of category.
 
 ## Localization
-Tool content is managed in `app/lib/content.ts`. Bilingual guide situations live in `app/lib/tool-guide-context.ts`, and control labels live in localized UI data.
+Tool content is managed in `app/lib/content.ts`. Bilingual guide situations live in `app/lib/tool-guide-context.ts`, guide figures (numbered UI mockups with matching notes) in `app/lib/guide-figures/`, and control labels live in localized UI data.
 Supported locales:
 - ko
 - en

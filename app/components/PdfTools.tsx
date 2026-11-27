@@ -6,6 +6,7 @@ import PageHead from "./PageHead";
 import { getTool, localizedHref } from "../lib/content";
 import { useLang } from "../lib/i18n";
 import { PDF_WORKFLOWS } from "../lib/pdf/workflow-copy";
+import { guideFigure } from "../lib/guide-figures";
 import ToolSupport from "./ToolSupport";
 import RelatedTools from "./RelatedTools";
 import PdfToolTabs, { type PdfTab } from "./PdfToolTabs";
@@ -56,7 +57,7 @@ export default function PdfTools({ defaultTab }: { defaultTab: PdfTab }) {
 
       <ToolSupport
         lang={lang}
-        guide={PDF_WORKFLOWS[lang][tab]}
+        guide={{ ...PDF_WORKFLOWS[lang][tab], figure: guideFigure(SLUG, lang, tab) }}
         faq={tool.faq?.[lang] ?? []}
         reading={{
           title: ko ? "PDF를 합치면 압축도 될까요?" : "Does merging compress a PDF?",

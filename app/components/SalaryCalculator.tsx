@@ -399,11 +399,7 @@ export default function SalaryCalculator() {
 
       <ToolGuide
         slug="salary-calculator"
-        modeLabel={t(mode === "annual" ? "sc.annual" : "sc.monthly")}
         exampleIndex={mode === "annual" ? 0 : 2}
-        steps={lang === "ko"
-          ? ["금액에 세전 급여 입력", "추가 설정에서 비과세 금액과 부양가족 조건 확인", "예상 월 실수령액과 공제 상세 비교"]
-          : ["Enter gross pay in Amount", "Check the tax-exempt amount and dependents in Additional settings", "Compare estimated monthly take-home pay and the deduction breakdown"]}
       />
       <RelatedTools slug="salary-calculator" />
     </>

@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { GuideExample, GuideSection, Lang, QA, SourceLink } from "../lib/content";
+import type { GuideFigure as Figure } from "../lib/guide-figures/types";
+import GuideFigure from "./GuideFigure";
 
 export default function ToolSupport({ lang, guide, faq, reading, articleHref }: {
   lang: Lang;
-  guide: { title: string; situation: string; steps: ReadonlyArray<{ title: string; detail?: string }>; input: string; output: string; exampleTitle?: string; note?: string; moreExamples?: readonly GuideExample[] };
+  guide: { title: string; situation: string; figure?: Figure; steps?: ReadonlyArray<{ title: string; detail?: string }>; input: string; output: string; exampleTitle?: string; note?: string; moreExamples?: readonly GuideExample[] };
   faq: readonly QA[];
   reading: { title: string; text?: string; sections?: readonly GuideSection[]; limitations?: readonly string[]; sources?: readonly SourceLink[]; verifiedAt?: string };
   articleHref?: string;
@@ -24,14 +26,16 @@ export default function ToolSupport({ lang, guide, faq, reading, articleHref }: 
       <div className="kf-support-content">
         <SupportSection id="guide" title={guide.title}>
           <p>{guide.situation}</p>
-          <ol className="kf-support-steps">
-            {guide.steps.map(({ title, detail }) => (
-              <li key={title}>
-                <h3>{title}</h3>
-                {detail && <p>{detail}</p>}
-              </li>
-            ))}
-          </ol>
+          {guide.figure ? <GuideFigure figure={guide.figure} /> : !!guide.steps?.length && (
+            <ol className="kf-support-steps">
+              {guide.steps.map(({ title, detail }) => (
+                <li key={title}>
+                  <h3>{title}</h3>
+                  {detail && <p>{detail}</p>}
+                </li>
+              ))}
+            </ol>
+          )}
           <div className="kf-support-example">
             <h3>{guide.exampleTitle ? `${l.example} · ${guide.exampleTitle}` : l.example}</h3>
             <dl><div><dt>{l.input}</dt><dd>{guide.input}</dd></div><div><dt>{l.output}</dt><dd>{guide.output}</dd></div></dl>

@@ -1194,7 +1194,7 @@ export default function ImageResizerCropper() {
         </section>
       )}
 
-      <ToolGuide slug={SLUG} modeLabel={t(mode === "resize" ? "irc.modeResize" : "irc.modeCrop")} exampleIndex={mode === "resize" ? 1 : 0} />
+      <ToolGuide slug={SLUG} exampleIndex={mode === "resize" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

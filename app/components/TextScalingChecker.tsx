@@ -1030,7 +1030,7 @@ export default function TextScalingChecker() {
         </div>
       </section>
 
-      <ToolGuide slug={SLUG} modeLabel={t(`ts.preset.${preset}`)} exampleIndex={preset === "reflow-320" ? 1 : preset === "text-spacing" ? 2 : 0} />
+      <ToolGuide slug={SLUG} exampleIndex={preset === "reflow-320" ? 1 : preset === "text-spacing" ? 2 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

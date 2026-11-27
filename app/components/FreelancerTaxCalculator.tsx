@@ -486,7 +486,7 @@ export default function FreelancerTaxCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} modeLabel={t(`ft.dir.${direction}`)} exampleIndex={mode === "other" ? 2 : direction === "reverse" ? 1 : 0} />
+      <ToolGuide slug={SLUG} exampleIndex={mode === "other" ? 2 : direction === "reverse" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

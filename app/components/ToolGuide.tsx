@@ -1,6 +1,7 @@
 "use client";
 
 import { getTool, localizedHref, type GuideExample } from "../lib/content";
+import { guideFigure } from "../lib/guide-figures";
 import { useLang } from "../lib/i18n";
 import { toolGuideContext } from "../lib/tool-guide-context";
 import ToolSupport from "./ToolSupport";
@@ -17,30 +18,29 @@ const RELATED_ARTICLES: Record<string, string> = {
   "css-unit-converter": "css-units-explained",
 };
 
-export default function ToolGuide({ slug, exampleIndex = 0, currentExample, steps, modeLabel }: {
+export default function ToolGuide({ slug, exampleIndex = 0, currentExample }: {
   slug: string;
   exampleIndex?: number;
   currentExample?: GuideExample;
-  steps?: readonly string[];
-  modeLabel?: string;
 }) {
   const { lang } = useLang();
   const tool = getTool(slug);
   const copy = tool.content[lang];
   const examples = copy.examples ?? [];
   const example = currentExample ?? examples[exampleIndex] ?? examples[0];
-  const guideSteps = steps ?? copy.howItWorks;
+  const figure = guideFigure(slug, lang);
   const article = RELATED_ARTICLES[slug];
   const ko = lang === "ko";
-  if (!example || !guideSteps?.length) return null;
+  if (!example || (!figure && !copy.howItWorks?.length)) return null;
 
   return (
     <ToolSupport
       lang={lang}
       guide={{
-        title: [ko ? "사용 가이드" : "How to use this tool", modeLabel].filter(Boolean).join(" · "),
+        title: ko ? "사용 가이드" : "How to use this tool",
         situation: toolGuideContext(slug, lang) ?? copy.card,
-        steps: guideSteps.map((title) => ({ title })),
+        figure,
+        steps: copy.howItWorks?.map((title) => ({ title })),
         exampleTitle: example.title,
         input: example.input,
         output: example.result,

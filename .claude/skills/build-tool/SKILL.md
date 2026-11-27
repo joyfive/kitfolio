@@ -157,7 +157,8 @@ Fill **every** field for both `ko` and `en`. Copywriting rules are baked in belo
 - **`content.card`**: one sentence that names the result. `PageHead` and the hub card display it.
 - **`content.description`**: detailed editorial description, usually aligned with the SEO description. The first screen uses `content.card`.
 - **Guide use case**: add `"<slug>": [situationKo, situationEn]` to `TOOL_GUIDE_CONTEXT` in `app/lib/tool-guide-context.ts`. Describe a specific task in each language, such as reducing a photo to fit a submission limit.
-- **`content.howItWorks`**: 2-4 steps using labels and actions the reader can find in the tool. Cover the first input, the action or automatic processing, and what to check, copy or download.
+- **`content.howItWorks`**: 2-4 steps using labels and actions the reader can find in the tool. Cover the first input, the action or automatic processing, and what to check, copy or download. Used for AEO/validation and as the guide fallback; the visible guide is the figure below.
+- **Guide figure** (required): add `"<slug>": { ko, en }` to the matching category file in `app/lib/guide-figures/` (`docs` · `time-work` · `pay` · `marketing` · `web` · `a11y`). Each figure redraws a few parts of the real work area (`tabs` · `field(s)` · `text` · `drop` · `check` · `chips` · `slider` · `result` · `stats` · `rows` · `code` · `swatches` · `preview` · `pages` · `buttons`, see `types.ts`), puts numbered markers `m: 1..n` (2-5) on the parts the user touches or reads, and gives `notes[n-1]` = `{ title, body }` per marker. Copy labels from the component `DICT` exactly and use values verified against the tool. ko and en must have the same parts and markers (`guide-figures.test.ts`). A tool whose `?mode=` tabs need different figures uses `"<slug>/<mode>"` keys plus `FIGURE_VARIANTS`.
 - **`content.examples`**: supply at least one worked scenario with `title`, actual `input`, and expected `result`. Verify against the tool. Add a `note` when assumptions or interpretation matter. The first example is featured and the rest are expandable.
 - **`content.guide` / `limitations` / `sources`**: write background that helps users interpret results or compare options. Keep critical accuracy and applicability notices near the relevant input or result as well. For externally governed rules or data, give primary sources and `verifiedAt`. `npm run validate:content` checks the additional minimums for indexable tools.
 - **`content.aeo`**: retain factual What/Who/How/Why editorial fields for indexable validation. Put useful definitions, scenarios, instructions and reasoning in the relevant visible sections. The fields are not rendered as a second FAQ tab.
@@ -208,7 +209,7 @@ export default function <Comp>() {
 }
 ```
 
-For a mode-driven page, pass `modeLabel`, mode-specific `steps`, and either `exampleIndex` or `currentExample` to `ToolGuide` when a mode changes inputs or outputs. Derive those props from the existing tool state. See `JsonFormatter.tsx` and `UnitConverter.tsx`. For a custom full workflow, see `PdfTools.tsx` and `app/lib/pdf/workflow-copy.ts`. Use `toolAnchor={false}` on `PageHead` only when the custom workspace already owns a single `#tool` target.
+For a mode-driven page, pass `exampleIndex` or `currentExample` to `ToolGuide` when a mode changes inputs or outputs; the figure shows the mode tabs and explains them in marker 1. Derive those props from the existing tool state. See `JsonFormatter.tsx` and `UnitConverter.tsx`. For a custom full workflow, see `PdfTools.tsx` and `app/lib/pdf/workflow-copy.ts`. Use `toolAnchor={false}` on `PageHead` only when the custom workspace already owns a single `#tool` target.
 
 Reference implementations to copy structure/idiom from:
 - **card** (text): `CharacterCounter.tsx`
@@ -335,7 +336,7 @@ Replace the whole table body in both files with the output and update the `N종`
 
 - [ ] Registry entry appended, `ready: true`, all ko+en fields filled
 - [ ] `seo.title` keyword-led; `description` ≥150 chars; `keywords` are real search terms
-- [ ] Both locales have a guide use case, 2-4 actionable steps, a verified input/result example, background, and real FAQ questions. Check `aeo` and other indexable fields where required.
+- [ ] Both locales have a guide use case, a guide figure (mock + numbered markers + notes), 2-4 actionable steps, a verified input/result example, background, and real FAQ questions. Check `aeo` and other indexable fields where required.
 - [ ] Classified per Step 0.5: one `category`, 1-3 `actions` (primary first), `searchTerms` ko/en ≥2, `scope` if jurisdiction/standard applies; no job titles or layout names used as classification
 - [ ] `og.title`/`subtitle` set; `relatedTools` = 3 valid slugs (next-step tool first)
 - [ ] Component created, `PageHead` + work area + `ToolGuide` + `RelatedTools`, client-side only

@@ -720,7 +720,7 @@ export default function ColorContrastChecker() {
         {live}
       </p>
 
-      <ToolGuide slug="color-contrast-checker" modeLabel={t(`cc.tab.${mode}`)} exampleIndex={mode === "palette" ? 2 : 0} />
+      <ToolGuide slug="color-contrast-checker" exampleIndex={mode === "palette" ? 2 : 0} />
       <RelatedTools slug="color-contrast-checker" />
     </>
   );

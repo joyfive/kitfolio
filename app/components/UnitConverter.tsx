@@ -386,10 +386,6 @@ export default function UnitConverter() {
 
       <ToolGuide
         slug={slug}
-        modeLabel={`${fromUnit} → ${toUnit}`}
-        steps={lang === "ko"
-          ? [`${fromLabel} 입력`, ...(cfg.extraLabel ? [`${cfg.extraLabel.ko} 확인`] : []), `${toUnit} 결과 확인 및 복사`]
-          : [`Enter ${fromLabel}`, ...(cfg.extraLabel ? [`Check ${cfg.extraLabel.en}`] : []), `Check and copy the result in ${toUnit}`]}
         currentExample={{
           title: `${fromUnit} → ${toUnit}`,
           input: [`${cfg.defaultInput} ${fromUnit}`, cfg.extraLabel && `${cfg.extraLabel[lang]}: ${cfg.extraDefault}`].filter(Boolean).join(" · "),

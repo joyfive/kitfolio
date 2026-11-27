@@ -42,9 +42,9 @@ A tool is **one standalone URL page** (`/<slug>` + `/en/<slug>`). Each page auto
 
 ## Implementation footprint (current codebase)
 - `app/<slug>/page.tsx` (KO) + `app/en/<slug>/page.tsx` (EN) + `app/components/<Tool>.tsx`
-- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and add the bilingual use case in `app/lib/tool-guide-context.ts` before setting `ready: true`.
+- Add the registry entry in `app/lib/content.ts` (seo / content / faq / og) at the end of its category block and add the bilingual use case in `app/lib/tool-guide-context.ts` and the guide figure in `app/lib/guide-figures/` before setting `ready: true`.
 - Control microcopy lives in the component's local `DICT`, not the registry
-- Render `PageHead → tool work area → ToolGuide → RelatedTools`. `ToolGuide` renders the shared Guide, FAQ, and Background via `ToolSupport`. For multi-mode guides, pass the current mode, matching steps and example from the tool state.
+- Render `PageHead → tool work area → ToolGuide → RelatedTools`. `ToolGuide` renders the shared Guide, FAQ, and Background via `ToolSupport`. The guide is a redrawn slice of the work area with numbered markers, then the same numbers explained below (`GuideFigure`). For multi-mode tools, pass the current example from the tool state.
 - Layout is chosen by the work (text transform = IDE, live visual = Canvas, form → results = Card), **not** by category. Category is chosen by the problem solved (`/build-tool` Step 0.5), never by job title or layout.
 
 ## Classification gate

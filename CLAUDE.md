@@ -210,6 +210,10 @@ AI 검색 엔진은 페이지 구조와 명시적 설명을 소비한다. 각 �
 ```
 
 - 기본 상세 구성은 `PageHead → 작업 영역 → ToolGuide → RelatedTools`. `ToolGuide`는 `ToolSupport`를 통해 사용 가이드 → FAQ → 배경 설명을 렌더한다. 각 도구의 한/영 사용 상황은 `app/lib/tool-guide-context.ts`에 등록한다.
+- **사용 가이드 = 도해 (2026-11-27)**: 작업 영역 일부를 다시 그린 목업에 번호 마커(1~5)를 달고, 아래에 같은 번호로 설명한다 (`GuideFigure`).
+  데이터는 `app/lib/guide-figures/` 카테고리별 파일의 `"<slug>": { ko, en }` 이고, 라벨은 컴포넌트 `DICT` 와 같게, 값은 실제 계산 결과로 쓴다.
+  목업은 `aria-hidden` 그림이고 정보는 번호 설명 목록이 전부 담는다. 탭마다 화면이 다른 도구는 `"<slug>/<mode>"` + `FIGURE_VARIANTS` (현재 PDF 도구).
+  `guide-figures.test.ts` 가 공개 도구 전부의 ko·en 도해, 마커 연속성, 설명 수, ko·en 구조 일치를 검사한다. 화면 라벨을 바꾸면 도해도 함께 고친다.
 - `sources` 는 **기관·표준 1차 자료만.** 개인 블로그·타사 계산기 금지.
   `sources` 가 있으면 `verifiedAt` 도 필수 (품질 게이트가 검사).
 

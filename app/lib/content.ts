@@ -3012,7 +3012,7 @@ export const TOOLS: Tool[] = [
           {
             title: "Slack API 응답의 ts 필드 해석",
             input: "1718071200.123456 (Slack 메시지 객체의 ts 필드)",
-            result: "2024-06-11 06:00:00 UTC · 소수부는 마이크로초",
+            result: "2024-06-11 02:00:00 UTC · 소수부는 마이크로초",
             note: "Slack API 응답을 로그로 찍어보면 ts 필드가 이런 형식으로 나옵니다. 소수점 아래 자리는 초 미만 정밀도이며, 그대로 붙여넣으면 자동으로 인식됩니다.",
           },
           {
@@ -3024,7 +3024,7 @@ export const TOOLS: Tool[] = [
           {
             title: "초 단위와 밀리초 단위 타임스탬프 구분하기",
             input: "1718071200 (10자리, 초) vs 1718071200000 (13자리, 밀리초)",
-            result: "둘 다 같은 시각(2024-06-11 06:00:00 UTC)으로 변환",
+            result: "둘 다 같은 시각(2024-06-11 02:00:00 UTC)으로 변환",
             note: "JavaScript의 Date.now()는 밀리초를, 대부분의 서버 로그는 초를 씁니다. 자릿수를 세지 않아도 도구가 자동으로 구분해 같은 결과를 냅니다.",
           },
         ],
@@ -3073,7 +3073,7 @@ export const TOOLS: Tool[] = [
           {
             title: "Reading the ts field from a Slack API response",
             input: "1718071200.123456 (the ts field of a Slack message object)",
-            result: "2024-06-11 06:00:00 UTC, with sub-second precision",
+            result: "2024-06-11 02:00:00 UTC, with sub-second precision",
             note: "Logging a Slack API response shows the ts field in this shape. The digits after the decimal are sub-second precision, and pasting the value as-is is recognized automatically.",
           },
           {
@@ -3085,7 +3085,7 @@ export const TOOLS: Tool[] = [
           {
             title: "Telling second and millisecond timestamps apart",
             input: "1718071200 (10 digits, seconds) vs. 1718071200000 (13 digits, milliseconds)",
-            result: "Both convert to the same instant (2024-06-11 06:00:00 UTC)",
+            result: "Both convert to the same instant (2024-06-11 02:00:00 UTC)",
             note: "JavaScript's Date.now() returns milliseconds while most server logs use seconds. You don't have to count digits yourself; the tool tells them apart and lands on the same result.",
           },
         ],
