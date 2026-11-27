@@ -156,8 +156,6 @@ export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthM
     return compute(mode, numericInputs);
   }, [mode, numericInputs, allFilled, error]);
 
-  const tabLabel = cfg.tabs.find((tab) => tab.mode === mode)?.label[lang];
-  const fieldNames = cfg.inputs.map(({ label }) => label[lang]).join(" · ");
   const output = cfg.outputs.find((item) => item.primary) ?? cfg.outputs[0];
   const preset = cfg.examples[0];
   const sampleValue = preset ? compute(mode, preset.inputs)?.[output.key] : undefined;
@@ -353,11 +351,7 @@ export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthM
 
       <ToolGuide
         slug={cfg.slug}
-        modeLabel={tabLabel}
         currentExample={guideExample}
-        steps={lang === "ko"
-          ? [`${tabLabel} 탭 선택`, `${fieldNames} 입력`, `${output.label[lang]} 확인 후 결과 복사`]
-          : [`Choose ${tabLabel}`, `Enter ${fieldNames}`, `Check ${output.label[lang]} and copy the result`]}
       />
       <RelatedTools slug={cfg.slug} />
     </>

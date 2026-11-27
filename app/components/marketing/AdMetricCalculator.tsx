@@ -494,12 +494,8 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
 
       <ToolGuide
         slug={slug}
-        modeLabel={`${metricKey.toUpperCase()} · ${modeLabel}`}
         exampleIndex={{ roas: 0, cpa: 2, cpc: 3, cpm: 4, ctr: 5 }[metricKey]}
         currentExample={currentExample}
-        steps={planExample && (lang === "ko"
-          ? [`${modeLabel} 선택`, `${t(`${p}.${planExample[0]}`)}와 ${t(`${p}.${planExample[2]}`)} 입력`, "계산 결과와 계산식 확인 후 복사"]
-          : [`Select ${modeLabel}`, `Enter ${t(`${p}.${planExample[0]}`)} and ${t(`${p}.${planExample[2]}`)}`, "Check the result and formula, then copy the result"])}
       />
       <RelatedTools slug={slug} />
     </>

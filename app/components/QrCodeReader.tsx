@@ -15,11 +15,6 @@ const DICT: Dict = {
     "r.paste": "붙여넣기",
     "r.upload": "이미지 업로드",
     "r.camera": "카메라",
-    "guide.paste": "붙여넣기 탭에서 복사한 QR 이미지 붙여넣기",
-    "guide.upload": "이미지 업로드 탭에서 QR이 든 파일 선택",
-    "guide.camera": "카메라 탭에서 카메라를 켜고 QR을 화면에 맞추기",
-    "guide.read": "판독 결과의 주소나 원문 텍스트 확인",
-    "guide.copy": "주소를 확인한 뒤 복사하거나 링크 열기",
     "guide.pasteExample": "캡처한 QR 이미지를 클립보드에서 읽기",
     "guide.pasteInput": "복사한 회의 자료의 QR 이미지",
     "guide.pasteResult": "이미지 속 QR의 주소 또는 원문 텍스트",
@@ -59,11 +54,6 @@ const DICT: Dict = {
     "r.paste": "Paste",
     "r.upload": "Upload image",
     "r.camera": "Camera",
-    "guide.paste": "Paste the copied QR image in the Paste tab",
-    "guide.upload": "Select a file containing a QR code in Upload image",
-    "guide.camera": "Start the camera in Camera and line up the code",
-    "guide.read": "Check the decoded URL or plain text",
-    "guide.copy": "Verify the address before copying it or opening the link",
     "guide.pasteExample": "Read a QR screenshot from the clipboard",
     "guide.pasteInput": "A copied QR image from meeting materials",
     "guide.pasteResult": "The URL or text stored in the QR image",
@@ -604,8 +594,6 @@ export default function QrCodeReader() {
 
       <ToolGuide
         slug="qr-code-reader"
-        modeLabel={t(`r.${mode}`)}
-        steps={[t(`guide.${mode}`), t("guide.read"), t("guide.copy")]}
         exampleIndex={mode === "camera" ? 0 : 1}
         currentExample={mode === "paste" ? {
           title: t("guide.pasteExample"), input: t("guide.pasteInput"), result: t("guide.pasteResult"),

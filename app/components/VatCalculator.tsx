@@ -821,7 +821,7 @@ export default function VatCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} modeLabel={mode === "simplified" ? t("vt.tab.simplified") : t(`vt.dir.${direction}`)} exampleIndex={mode === "simplified" ? 2 : direction === "reverse" ? 1 : 0} />
+      <ToolGuide slug={SLUG} exampleIndex={mode === "simplified" ? 2 : direction === "reverse" ? 1 : 0} />
       <RelatedTools slug={SLUG} />
     </>
   );

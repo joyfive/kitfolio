@@ -745,7 +745,7 @@ export default function AnnualLeaveCalculator() {
         </div>
       </div>
 
-      <ToolGuide slug={SLUG} modeLabel={t(`al.tab.${mode}`)} exampleIndex={mode === "hire" ? 0 : 1} />
+      <ToolGuide slug={SLUG} exampleIndex={mode === "hire" ? 0 : 1} />
       <RelatedTools slug={SLUG} />
     </>
   );
