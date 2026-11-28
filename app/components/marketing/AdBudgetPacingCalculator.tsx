@@ -8,7 +8,7 @@ import ToolGuide from "../ToolGuide";
 import { useLang, useT, type Dict } from "../../lib/i18n";
 import { calcBudgetPacing } from "../../lib/marketing/budgetPacing";
 import type { Currency, PacingStatus } from "../../lib/marketing/types";
-import { fmtCurrency, fmtPct, fmtNumber, parseNum } from "../../lib/marketing/format";
+import { fmtCurrency, fmtPct, parseNum } from "../../lib/marketing/format";
 
 const DICT: Dict = {
   ko: {
@@ -177,10 +177,6 @@ export default function AdBudgetPacingCalculator() {
   function statusMsg(status: PacingStatus, gap: number): string {
     const absGap = Math.abs(gap).toFixed(1);
     return t(`bp.statusMsg.${statusClass(status)}`).replace("{gap}", absGap);
-  }
-
-  function barPct(v: number) {
-    return Math.min(100, Math.max(0, v));
   }
 
   return (

@@ -135,15 +135,6 @@ function formatViewLabel(t: (k: string) => string, view: ViewType, strength: num
   return view === "grayscale" ? t("cb.view.grayscale") : `${name} · ${strength}%`;
 }
 
-function IconAlert() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M8 2.8l5.6 10H2.4L8 2.8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M8 6.6v3M8 11.6v.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export default function ColorBlindnessSimulator() {
   const { lang } = useLang();
   const t = useT(DICT);

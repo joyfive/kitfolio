@@ -72,11 +72,9 @@ const DICT: Dict = {
     "io.statusStale": "설정 변경됨",
     "io.staleHint": "설정이 바뀌었습니다. 다시 최적화하면 결과를 받을 수 있습니다.",
     "io.emptyResults": "아직 결과가 없습니다. 이미지를 추가하고 최적화를 실행하세요.",
-    "io.partial": "완료된 {done}개만 ZIP에 포함됩니다. {failed}개는 처리하지 못했습니다.",
     "io.summary": "완료 {done}개 · 오류 {failed}개",
     "io.deviceHint":
       "브라우저 메모리는 기기마다 다릅니다. 제한 이하에서도 아주 큰 이미지는 실패할 수 있습니다.",
-    "io.progress": "{done} / {total} 처리 완료",
   },
   en: {
     "io.upload": "Add images",
@@ -113,11 +111,9 @@ const DICT: Dict = {
     "io.statusStale": "Settings changed",
     "io.staleHint": "Settings changed. Optimize again to get new results.",
     "io.emptyResults": "No results yet. Add images and run the optimizer.",
-    "io.partial": "Only the {done} completed files are included. {failed} could not be processed.",
     "io.summary": "{done} completed · {failed} failed",
     "io.deviceHint":
       "Browser memory varies by device. Very large images can fail even below these limits.",
-    "io.progress": "{done} of {total} processed",
   },
 };
 
@@ -178,7 +174,6 @@ export default function ImageOptimizer() {
   const [addError, setAddError] = useState<ImageErrorType | null>(null);
   const [running, setRunning] = useState(false);
   const [zipping, setZipping] = useState(false);
-  const [progress, setProgress] = useState({ done: 0, total: 0 });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -308,7 +303,6 @@ export default function ImageOptimizer() {
 
   const clearAll = useCallback(() => {
     setAddError(null);
-    setProgress({ done: 0, total: 0 });
     inputReportedRef.current = false;
     for (const item of itemsRef.current) URL.revokeObjectURL(item.previewUrl);
     commitItems([]);
@@ -324,7 +318,6 @@ export default function ImageOptimizer() {
     runningRef.current = true;
     setRunning(true);
     setAddError(null);
-    setProgress({ done: 0, total: targets.length });
 
     trackEvent("tool_run", {
       slug: SLUG,
@@ -374,7 +367,6 @@ export default function ImageOptimizer() {
         mapItems((i) => (i.id === target.id ? { ...i, status: "error", error: type } : i));
       }
 
-      setProgress((p) => ({ ...p, done: p.done + 1 }));
     }
 
     trackEvent("tool_result", {

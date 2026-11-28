@@ -12,7 +12,6 @@ import {
   toReadable,
   toRelative,
   toSlackFormats,
-  type InputKind,
 } from "../lib/timestamp";
 import { copyText } from "../lib/clipboard";
 

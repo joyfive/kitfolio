@@ -114,7 +114,6 @@ const DICT: Dict = {
     "ac.summary.itemsTotal": "전체 항목",
 
     "ac.restore.banner": "이 브라우저에 저장된 “{name}” 체크리스트를 불러왔습니다.",
-    "ac.restore.dismiss": "확인",
     "ac.error.unreadable":
       "저장된 체크리스트 형식을 읽을 수 없습니다. 내보낸 파일이 있다면 보관한 뒤 새로 시작해 주세요.",
     "ac.error.save":
@@ -227,7 +226,6 @@ const DICT: Dict = {
     "ac.summary.itemsTotal": "Total items",
 
     "ac.restore.banner": "Loaded the “{name}” checklist saved in this browser.",
-    "ac.restore.dismiss": "Got it",
     "ac.error.unreadable":
       "The saved checklist could not be read. Keep any exported file, then start a new checklist.",
     "ac.error.save":

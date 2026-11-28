@@ -524,11 +524,6 @@ function NumField({
   );
 }
 
-function CurrencySymbol({ currency }: { currency: Currency }) {
-  const map: Record<Currency, string> = { KRW: "₩", USD: "$", JPY: "¥", EUR: "€" };
-  return <>{map[currency]}</>;
-}
-
 function RoasInputs({ mode, vals, set, t, currency }: {
   mode: Mode; vals: Record<string, string>;
   set: (k: string, v: string) => void; t: (k: string) => string; currency: Currency;

@@ -5,7 +5,7 @@ import PdfDropzone from "./PdfDropzone";
 import PdfPageThumbnail from "./PdfPageThumbnail";
 import { useToastOnChange } from "../lib/toast";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 import { loadPdfFile, type LoadedPdf } from "../lib/pdf/loadPdf";
 import { mergePdfs } from "../lib/pdf/operations";
 import { normalizePdfError, PdfError, type PdfErrorType } from "../lib/pdf/pdfErrors";
@@ -64,7 +64,6 @@ const DICT: Dict = {
 type ResultState = { blob: Blob; url: string; name: string; pages: number } | null;
 
 export default function PdfMerge() {
-  const { lang } = useLang();
   const t = useT(DICT);
 
   const [files, setFiles] = useState<LoadedPdf[]>([]);

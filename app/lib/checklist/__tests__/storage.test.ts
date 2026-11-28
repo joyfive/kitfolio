@@ -5,7 +5,7 @@
    1. 읽을 수 없는 데이터를 자동으로 삭제하지 않는다.
    2. 저장에 실패해도 예외를 던지지 않고 false 만 돌려준다 (화면 입력 보존).
    ============================================================ */
-import { test, describe, beforeEach, afterEach } from "node:test";
+import { test, describe, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { createProject } from "../catalog.ts";
 import { clearProject, loadProject, saveProject } from "../storage.ts";

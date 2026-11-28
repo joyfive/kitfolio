@@ -7,7 +7,7 @@ import PdfThumbnailGrid from "./PdfThumbnailGrid";
 import PdfPageRangeInput from "./PdfPageRangeInput";
 import { useToastOnChange } from "../lib/toast";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 import { loadPdfFile, type LoadedPdf } from "../lib/pdf/loadPdf";
 import { usePdfjsDoc } from "../lib/pdf/usePdfjsDoc";
 import { deletePages } from "../lib/pdf/operations";
@@ -77,7 +77,6 @@ const DICT: Dict = {
 type Result = { blob: Blob; name: string } | null;
 
 export default function PdfPageDelete() {
-  const { lang } = useLang();
   const t = useT(DICT);
 
   const [pdf, setPdf] = useState<LoadedPdf | null>(null);

@@ -50,7 +50,6 @@ const DICT: Dict = {
       "플랫폼별 미리보기는 대표적인 링크 카드 형태를 기준으로 한 시뮬레이션입니다. 실제 노출 결과는 앱 버전, 기기 및 캐시 상태에 따라 달라질 수 있습니다.",
     "og.privacy":
       "첨부한 이미지와 입력한 내용은 서버로 전송되거나 저장되지 않습니다. 모든 미리보기는 브라우저에서 처리됩니다.",
-    "og.warnings": "경고",
     "og.chars": "자",
     "og.errBadType": "PNG, JPG 또는 WebP 이미지 파일을 첨부해 주세요.",
     "og.errTooLarge": "10MB 이하의 이미지를 첨부해 주세요.",
@@ -106,7 +105,6 @@ const DICT: Dict = {
       "Platform previews simulate common link card layouts. Actual results may vary by app version, device, and cache status.",
     "og.privacy":
       "Uploaded images and entered content are not sent to or stored on a server. All previews are processed in your browser.",
-    "og.warnings": "Warnings",
     "og.chars": "chars",
     "og.errBadType": "Attach a PNG, JPG, or WebP image file.",
     "og.errTooLarge": "Attach an image of 10MB or less.",

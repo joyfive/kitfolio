@@ -12,7 +12,6 @@ import {
   publishedTools,
   type ActionId,
   type CategoryId,
-  type Tool,
 } from "../lib/content";
 
 // 허브 화면 UI 마이크로카피만 로컬 dict. 카피·라벨·검색 색인은 content.ts.

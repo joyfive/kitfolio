@@ -47,9 +47,6 @@ const DICT: Dict = {
     "g.svg": "SVG 다운로드",
     "g.preview": "QR 코드 미리보기",
     "g.contrast": "색상 대비가 낮아 인식이 어려울 수 있습니다.",
-    "g.st.empty": "URL을 입력하면 QR 코드가 표시됩니다.",
-    "g.st.invalid": "유효한 http 또는 https URL을 입력해 주세요.",
-    "g.st.validating": "QR 코드 인식을 확인하고 있습니다.",
     "g.st.ok": "이 브라우저에서 QR 코드 인식을 확인했습니다.",
     "g.st.fail":
       "현재 설정으로 QR 코드를 읽지 못했습니다. 색상 대비를 높이거나 인식 품질을 변경해 주세요.",
@@ -78,9 +75,6 @@ const DICT: Dict = {
     "g.svg": "Download SVG",
     "g.preview": "QR code preview",
     "g.contrast": "Low color contrast may reduce scannability.",
-    "g.st.empty": "Enter a URL to preview the QR code.",
-    "g.st.invalid": "Enter a valid http or https URL.",
-    "g.st.validating": "Checking that the QR code is readable…",
     "g.st.ok": "Verified readable in this browser.",
     "g.st.fail":
       "Couldn't read the QR code with the current settings. Increase color contrast or change the recognition quality.",

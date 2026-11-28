@@ -340,7 +340,3 @@ export function renderArtSvg(
   );
 }
 
-/** 흐림 방지용: 정수 배율에 가까운 캔버스 변 계산(대략치). */
-export function artCanvasSize(matrixSize: number, target: number): number {
-  return target; // fit 단계에서 스케일하므로 목표 크기 그대로 사용
-}

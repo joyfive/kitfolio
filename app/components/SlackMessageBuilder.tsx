@@ -100,8 +100,6 @@ const DICT: Dict = {
     "out.app": "내 앱",
     "out.envNote": "토큰은 환경 변수 {env} 에서 읽습니다. 이 페이지에 토큰을 입력하지 마세요.",
     "status.blocks": "블록 {n}개",
-    "status.errors": "오류 {n}건",
-    "status.warns": "경고 {n}건",
     "issue.msg": "메시지",
     "issue.block": "{n}번 블록",
     "issue.tooManyBlocks": "블록이 {actual}개입니다. 메시지당 최대 {limit}개까지 보낼 수 있습니다.",
@@ -188,8 +186,6 @@ const DICT: Dict = {
     "out.app": "Your App",
     "out.envNote": "The token is read from the {env} environment variable. Do not paste tokens into this page.",
     "status.blocks": "{n} blocks",
-    "status.errors": "{n} errors",
-    "status.warns": "{n} warnings",
     "issue.msg": "Message",
     "issue.block": "Block {n}",
     "issue.tooManyBlocks": "{actual} blocks. A message can hold up to {limit}.",
@@ -237,7 +233,6 @@ export default function SlackMessageBuilder() {
   const fallback = manualFallback ?? autoFallback(blocks);
   const payload = useMemo(() => buildPayload(blocks, fallback), [blocks, fallback]);
   const issues = useMemo(() => validate(blocks, fallback), [blocks, fallback]);
-  const errors = issues.filter((i) => i.severity === "error").length;
   /* 검증 결과는 화면에 그리지 않고 토스트로: 오류가 있으면 첫 오류, 없으면 첫 경고 */
   const firstIssue = issues.find((i) => i.severity === "error") ?? issues[0];
   useToastNotice(
@@ -248,7 +243,6 @@ export default function SlackMessageBuilder() {
         }
       : null,
   );
-  const warns = issues.length - errors;
   const code = tab === "preview" ? "" : buildCode(tab, payload, { channel, blocksOnly });
 
   function issueText(i: Issue): string {
