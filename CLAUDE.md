@@ -435,13 +435,13 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 
 **IDE / Editor** (출력 박스만 다크)
 - 작업 박스 / 인풋 패널: white (텍스트 `blue-gray-900`, 테두리 `blue-gray-200`)
-- 출력 패널 배경: `blue-gray-950` (#21242D)
-- 출력 패널 헤더: `blue-gray-900` (#434650)
-- 라인 넘버 / 주석: `blue-gray-700` (#61646F)
+- 출력 패널 배경: `blue-gray-900` (#434650) (2026-11-28: 950 에서 한 단계 밝힘)
+- 출력 패널 헤더: `blue-gray-800` (#50535E)
+- 라인 넘버 / 주석: `blue-gray-300` (#BCC0CC)
 - 출력 일반 텍스트: `blue-gray-200` (#D4D9E5)
-- 신택스: 키워드: `blue-primary-400` (#899ff3)
-- 신택스: 함수: `blue-primary-500` (#6486ef)
-- 신택스: 문자열: `blue-primary-300` (#a7b6f6)
+- 신택스: 키워드·함수·불리언: `blue-primary-300` (#a7b6f6)
+- 신택스: 문자열: `blue-primary-200` (#c4cdf9)
+- 어두운 면 위 모든 글자는 AA 4.5:1 이상. 900 배경에서 본문 gray-100~200, 보조 gray-300 이상, 800 헤더 위 보조는 gray-200 이상. 800 을 본문 배경으로 쓰면 신택스 색이 AA 미달이라 쓰지 않는다.
 - 액티브 탭 / 포인트: `blue-primary-700` (#2d5dc8)
 - 상태 배지(라이트 영역): `blue-primary-100` bg + `blue-primary-700` text
 
