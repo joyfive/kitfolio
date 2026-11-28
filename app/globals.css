@@ -5044,11 +5044,10 @@ textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
    밀어내지 않게 한다. 넘치는 만큼은 미리보기 안에서 스크롤된다. */
 .irc-body { display: grid; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 960px) {
-  /* 데스크톱: 좌 컨트롤 · 우 미리보기.
-     DOM 은 미리보기가 먼저이므로 열 위치를 명시해 좌우를 맞춘다. */
-  .irc-body { grid-template-columns: 360px minmax(0, 1fr); align-items: start; }
-  .irc-controls { grid-column: 1; grid-row: 1; }
-  .irc-preview { grid-column: 2; grid-row: 1; }
+  /* 데스크톱: 좌 미리보기 · 우 컨트롤 (모바일은 미리보기 위, 컨트롤 아래). */
+  .irc-body { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; }
+  .irc-preview { grid-column: 1; grid-row: 1; }
+  .irc-controls { grid-column: 2; grid-row: 1; }
 }
 
 /* ---------- 미리보기 ---------- */
@@ -5703,3 +5702,11 @@ textarea.ts-code::placeholder { color: var(--color-blue-gray-700); }
 /* 어두운 출력 패널(blue-gray-900 · 헤더 800) 안의 보조 글자는 AA 4.5:1 이상 */
 .pane-out .ts-empty { color: var(--color-blue-gray-300); }
 .pane-out .ts-empty svg { color: var(--color-blue-gray-400); }
+
+/* ---------- 작업 영역 좌우 규칙: PC 는 좌 = 프리뷰·결과, 우 = 입력 / 모바일은 위 = 입력, 아래 = 결과 ----------
+   DOM 은 입력이 먼저(모바일 순서)다. 두 칸 그리드는 direction 을 뒤집어 열 순서만 좌우로 바꾸고,
+   한 칸으로 쌓이는 모바일에서는 방향과 무관하게 DOM 순서가 유지된다. 자식은 ltr 로 되돌려 글자 방향을 지킨다. */
+:is(.cv-work, .cc-work, .ccc-work, .fw-work, .sc-work, .sv-work, .tc-work, .tv-work, .lc-body, .uc-work, .gc-work,
+    .adm-grid, .bp-work, .fn-work, .og-preview-work, .qr-gen-work, .qr-read-work, .pdf-work, .io-work, .panes) { direction: rtl; }
+:is(.cv-work, .cc-work, .ccc-work, .fw-work, .sc-work, .sv-work, .tc-work, .tv-work, .lc-body, .uc-work, .gc-work,
+    .adm-grid, .bp-work, .fn-work, .og-preview-work, .qr-gen-work, .qr-read-work, .pdf-work, .io-work, .panes) > * { direction: ltr; }

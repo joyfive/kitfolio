@@ -7476,7 +7476,7 @@ export const TOOLS: Tool[] = [
         aeo: {
           what: "JSON 포매터는 한 줄로 뭉치거나 어지럽게 섞인 JSON 문자열을 들여쓰기와 색상 강조가 적용된 읽기 쉬운 형태로 정리하고, 동시에 문법 오류를 검사해주는 도구입니다.",
           who: "API 응답과 설정 파일을 다루는 개발자, 로그·데이터 페이로드를 확인해야 하는 PM과 데이터 작업자를 위한 도구입니다.",
-          how: "왼쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 오른쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
+          how: "오른쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 왼쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
           why: "서버 전송 없이 브라우저에서만 동작해 민감한 데이터도 안전하고, 설치·가입 없이 바로 쓸 수 있어 디버깅 시간을 줄여줍니다.",
         },
         guide: [
@@ -7534,14 +7534,14 @@ export const TOOLS: Tool[] = [
         description:
           "Paste a JSON string and it is instantly formatted with indentation and syntax highlighting. Syntax errors are pinpointed by line and column, and you can minify to a single line too. Everything runs entirely in your browser.",
         howItWorks: [
-          "Paste JSON on the left",
+          "Paste JSON on the right",
           "Auto-format & validate",
-          "Copy the result on the right",
+          "Copy the result on the left",
         ],
         aeo: {
           what: "JSON Formatter is a tool that turns a minified or messy JSON string into a readable, indented and syntax-highlighted document while validating it.",
           who: "It is for developers working with API responses and config files, and for PMs or data workers who need to inspect JSON logs and payloads.",
-          how: "Paste JSON into the left pane and it is parsed instantly in your browser: the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
+          how: "Paste JSON into the right pane and it is parsed instantly in your browser: the formatted result appears on the left, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
           why: "It runs entirely in your browser with no upload, so sensitive data stays safe, and with no install or sign-up, debugging gets faster.",
         },
         guide: [
