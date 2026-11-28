@@ -3,6 +3,7 @@
 
    서버로 아무것도 보내지 않는다. 저장 위치는 현재 브라우저의 localStorage 한 곳이다.
    두 도구(경력기술서 빌더 · 포트폴리오 빌더)가 같은 키를 쓴다: 공통 프로필을 함께 쓰기 때문.
+   페이지 언어(KO · EN)마다 키를 나눈다: 영문 페이지는 영문 예시·영문 프로필로 따로 시작한다.
 
    원칙 (체크리스트 빌더와 같다):
    1. SSR 중에는 접근하지 않는다.
@@ -11,6 +12,8 @@
 import type { DocLang, FolioEntry, FolioKind, SourceDoc, Workspace } from "./types";
 
 export const STORAGE_KEY = "kf:folio:v1";
+/** 페이지 언어별 저장 키. KO 는 처음 출시한 키를 그대로 쓴다 (기존 저장본 유지). */
+export const storageKey = (pageLang: DocLang) => (pageLang === "en" ? `${STORAGE_KEY}:en` : STORAGE_KEY);
 export const BACKUP_MARK = "kitfolio_folio_backup";
 
 export type LoadResult =
@@ -54,11 +57,11 @@ export function normalizeWorkspace(v: unknown): Workspace | null {
   };
 }
 
-export function loadWorkspace(): LoadResult {
+export function loadWorkspace(pageLang: DocLang): LoadResult {
   if (typeof window === "undefined") return { kind: "empty" };
   let raw: string | null = null;
   try {
-    raw = window.localStorage.getItem(STORAGE_KEY);
+    raw = window.localStorage.getItem(storageKey(pageLang));
   } catch {
     return { kind: "empty" };
   }
@@ -71,10 +74,10 @@ export function loadWorkspace(): LoadResult {
   }
 }
 
-export function saveWorkspace(ws: Workspace): SaveResult {
+export function saveWorkspace(ws: Workspace, pageLang: DocLang): SaveResult {
   if (typeof window === "undefined") return { ok: true };
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(ws));
+    window.localStorage.setItem(storageKey(pageLang), JSON.stringify(ws));
     return { ok: true };
   } catch (e) {
     const name = (e as { name?: string }).name ?? "";

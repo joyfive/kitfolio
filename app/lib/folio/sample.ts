@@ -8,9 +8,9 @@ import { makeEntry } from "./storage";
 
 const PROFILE: Record<DocLang, SourceDoc> = {
   ko: {
-    name: "한서윤",
+    name: "홍길동",
     contact: [
-      { value: "seoyun.han@example.com" },
+      { value: "gildong.hong@example.com" },
       { value: "010-0000-0000" },
       { value: "portfolio.example.com", strong: true },
     ],
@@ -43,9 +43,9 @@ const PROFILE: Record<DocLang, SourceDoc> = {
     ],
   },
   en: {
-    name: "Jordan Lee",
+    name: "Gildong Hong",
     contact: [
-      { value: "jordan.lee@example.com" },
+      { value: "gildong.hong@example.com" },
       { value: "+1 555 0100" },
       { value: "portfolio.example.com", strong: true },
     ],

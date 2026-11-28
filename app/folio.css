@@ -1629,13 +1629,14 @@
   display: none;
   margin: 12px 16px 0;
 }
+/* 미리보기 왼쪽 · 편집 오른쪽 */
 .fb-split {
   display: grid;
-  grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
   align-items: start;
 }
 .fb-editor {
-  border-right: 1px solid var(--color-blue-gray-200);
+  border-left: 1px solid var(--color-blue-gray-200);
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -1941,7 +1942,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .fb-editor {
-    border-right: 0;
+    border-left: 0;
   }
   .fb-editor-body {
     max-height: none;

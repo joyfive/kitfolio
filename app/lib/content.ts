@@ -2319,6 +2319,7 @@ export const TOOLS: Tool[] = [
         ],
         limitations: [
           "내용은 이 브라우저의 localStorage에만 저장됩니다. 다른 기기와 동기화되지 않고, 브라우저 데이터를 지우면 사라지므로 '전체 백업'으로 파일을 보관하세요.",
+          "한국어 페이지와 영문 페이지는 저장 공간이 따로입니다. 다른 언어 페이지로 옮기려면 '전체 백업'으로 내려받아 그 페이지에서 '불러오기'하세요.",
           "PDF는 브라우저 인쇄 기능으로 만듭니다. 글꼴 렌더링과 페이지 나눔은 브라우저마다 조금 다를 수 있으며, 데스크톱 Chrome·Edge에서 가장 안정적입니다.",
           "레이아웃은 A4 한 가지입니다. 섹션 순서와 디자인은 바꿀 수 없고, 비어 있는 섹션만 자동으로 빠집니다.",
           "맞춤법 검사나 문장 첨삭, 채용 공고 분석 같은 AI 기능은 없습니다.",
@@ -2378,6 +2379,7 @@ export const TOOLS: Tool[] = [
         ],
         limitations: [
           "Content is saved only in this browser's localStorage. It does not sync across devices and is lost if you clear browser data, so keep a 'Full backup' file.",
+          "The English and Korean pages keep separate saves. To move your work between them, download a 'Full backup' and use 'Import' on the other page.",
           "The PDF is made with the browser's print feature. Font rendering and page breaks can differ slightly between browsers; desktop Chrome and Edge are the most reliable.",
           "There is one A4 layout. Section order and design cannot be changed; empty sections are simply left out.",
           "There are no AI features such as proofreading, rewriting or job-posting analysis.",
@@ -2527,6 +2529,7 @@ export const TOOLS: Tool[] = [
         ],
         limitations: [
           "내용과 이미지는 이 브라우저의 localStorage에 저장됩니다. 보통 5MB 안팎이라 이미지를 많이 넣으면 저장이 실패할 수 있으니 '전체 백업'으로 파일을 보관하세요.",
+          "한국어 페이지와 영문 페이지는 저장 공간이 따로입니다. 다른 언어 페이지로 옮기려면 '전체 백업'으로 내려받아 그 페이지에서 '불러오기'하세요.",
           "페이지 구성과 디자인은 정해진 형태 하나입니다. 슬라이드 위치를 끌어서 바꾸거나 글자 크기를 조절하는 기능은 없습니다.",
           "내용이 너무 길면 슬라이드 아래쪽이 잘립니다. 미리보기에서 넘치는지 확인하고 문장을 줄이거나 페이지를 나누세요.",
           "1920×1080 PDF 저장은 데스크톱 Chrome·Edge에서 가장 정확합니다. 일부 브라우저는 사용자 지정 용지 크기를 무시합니다.",
@@ -2585,6 +2588,7 @@ export const TOOLS: Tool[] = [
         ],
         limitations: [
           "Content and images are saved in this browser's localStorage, usually around 5MB. Many images can make saving fail, so keep a 'Full backup' file.",
+          "The English and Korean pages keep separate saves. To move your work between them, download a 'Full backup' and use 'Import' on the other page.",
           "There is one fixed page structure and design. You cannot drag slides around or change font sizes.",
           "Very long content is cut off at the bottom of a slide. Check the preview for overflow and shorten sentences or split the page.",
           "Saving a 1920×1080 PDF is most accurate in desktop Chrome and Edge. Some browsers ignore custom paper sizes.",

@@ -21,25 +21,25 @@ export function useWorkspace(kind: FolioKind, pageLang: DocLang) {
   const [rev, setRev] = useState(0);
 
   useEffect(() => {
-    const r = loadWorkspace();
+    const r = loadWorkspace(pageLang);
     if (r.kind === "ok") {
       setWs(r.workspace);
       setSave("saved");
     } else if (r.kind === "unreadable") setUnreadable(r.raw);
     setLoaded(true);
-  }, []);
+  }, [pageLang]);
 
   // 변경 후 400ms 디바운스 저장
   useEffect(() => {
     if (!loaded || !dirty.current) return;
     setSave("saving");
     const id = window.setTimeout(() => {
-      const r = saveWorkspace(ws);
+      const r = saveWorkspace(ws, pageLang);
       setSave(r.ok ? "saved" : r.reason);
       if (r.ok) setUnreadable(null);
     }, 400);
     return () => window.clearTimeout(id);
-  }, [ws, loaded]);
+  }, [ws, loaded, pageLang]);
 
   const update = useCallback((fn: (w: Workspace) => Workspace) => {
     dirty.current = true;

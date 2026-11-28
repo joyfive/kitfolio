@@ -247,6 +247,12 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
       </div>
 
       <div className="fb-split">
+        <section className="fb-preview" aria-label={t("fb.viewPreview")}>
+          <PreviewBoundary message={t("fb.renderError")} resetKey={`${entry.id}:${W.rev}`}>
+            <div className="fb-preview-inner">{kind === "resume" ? <FitZoom width={960}>{doc}</FitZoom> : doc}</div>
+          </PreviewBoundary>
+          <p className="fb-hint fb-print-hint">{t("fb.printHint")}</p>
+        </section>
         <section className="fb-editor" aria-label={t("fb.viewEdit")}>
           <div className="fb-tabs" role="tablist">
             <button type="button" role="tab" aria-selected={tab === "form"} className={tab === "form" ? "is-on" : ""} onClick={() => setTab("form")}>
@@ -314,13 +320,6 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
             {W.loaded && W.save === "saved" ? ` · ${t("fb.storage").replace("{n}", String(workspaceSizeKb(ws)))}` : ""}
           </p>
           <p className="fb-privacy">{t("fb.privacy")}</p>
-        </section>
-
-        <section className="fb-preview" aria-label={t("fb.viewPreview")}>
-          <PreviewBoundary message={t("fb.renderError")} resetKey={`${entry.id}:${W.rev}`}>
-            <div className="fb-preview-inner">{kind === "resume" ? <FitZoom width={960}>{doc}</FitZoom> : doc}</div>
-          </PreviewBoundary>
-          <p className="fb-hint fb-print-hint">{t("fb.printHint")}</p>
         </section>
       </div>
 

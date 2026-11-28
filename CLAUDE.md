@@ -533,11 +533,11 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > 2026-11-24 auto-folio(별도 저장소, yml → 경력기술서 A4 · 포트폴리오 1920×1080 PDF)를 브라우저 저장 방식으로 이식해
 > 경력기술서 빌더(`/resume-builder`)와 포트폴리오 빌더(`/portfolio-builder`)를 더해 현재 37종이다.
 > 두 도구는 **공통 프로필 하나**(이름·연락처·소개·경력·학력·활동)를 함께 쓰고, 지원처별 문서를 그 위에 덮어쓴다(deep-merge, 문서 우선).
-> 편집은 폼 에디터와 yml 탭(auto-folio 작성 형식 그대로) 두 가지이며 같은 데이터를 고친다. 저장은 localStorage 키 `kf:folio:v1` 하나,
+> 편집은 폼 에디터와 yml 탭(auto-folio 작성 형식 그대로) 두 가지이며 같은 데이터를 고친다. 저장은 localStorage 키 `kf:folio:v1`(KO 페이지) · `kf:folio:v1:en`(EN 페이지)로 페이지 언어마다 따로이고(영문 페이지는 영문 예시로 시작),
 > yml 내려받기(문서 + 프로필 병합본)·전체 백업·불러오기(백업이면 전체 교체, 아니면 새 문서)로 보관한다.
 > PDF 는 서버 Playwright 대신 **브라우저 인쇄**: 인쇄 시에만 문서를 body 직속 포털로 그리고 `@page`(A4 · 1920px×1080px)를 주입한다.
 > 다이어그램은 mermaid(securityLevel strict)를 다이어그램이 있을 때만 동적 import 한다. 이미지는 브라우저에서 줄인 JPEG data URL.
-> 문서 라벨 언어(한국어·English)는 페이지 언어와 별개로 문서마다 고른다. 예시 데이터는 가상 인물이다(실제 이력 미포함).
+> 문서 라벨 언어(한국어·English)는 페이지 언어와 별개로 문서마다 고른다. 예시 데이터는 가상 인물 홍길동(EN: Gildong Hong)이다(실제 이력 미포함). 작업 영역은 미리보기 왼쪽 · 편집 오른쪽.
 > 변환 `app/lib/folio/transform.ts`(auto-folio `lib/content.mjs` 이식), 폼 텍스트 규칙 `text.ts`, yml `yaml.ts`, 저장 `storage.ts`,
 > 렌더 `app/components/folio/{ResumeDoc,PortfolioDoc}.tsx`, 작업 영역 `FolioBuilder.tsx`, 스타일 `app/folio.css`(두 페이지에서만 import),
 > 검사 `app/lib/folio/__tests__/folio.test.ts`. 첫 출시에서 템플릿 선택·섹션 순서 변경·클라우드 동기화·AI 첨삭은 제외.
