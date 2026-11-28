@@ -29,8 +29,9 @@ describe("legalVersions", () => {
     test(`${slug}: 이전 버전의 시행 종료일은 다음 개정 전날`, () => {
       const v = legalVersions(slug);
       assert.equal(v[0].until, undefined);
-      assert.equal(v[1].until, "2026-10-23");
-      assert.equal(v[2].until, "2026-08-15");
+      assert.equal(v[1].until, "2026-11-23");
+      assert.equal(v[2].until, "2026-10-23");
+      assert.equal(v[3].until, "2026-08-15");
     });
 
     test(`${slug}: 모든 버전이 ko·en 문서와 개정 요약을 갖는다`, () => {
