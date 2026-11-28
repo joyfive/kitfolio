@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastNotice } from "../lib/toast";
+
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
@@ -26,6 +28,7 @@ import {
   type CodeTab,
 } from "../lib/slackmsg/snippets";
 import { template, TEMPLATE_IDS, type TemplateId } from "../lib/slackmsg/templates";
+import { copyText } from "../lib/clipboard";
 
 const SLUG = "slack-message-builder";
 
@@ -235,6 +238,16 @@ export default function SlackMessageBuilder() {
   const payload = useMemo(() => buildPayload(blocks, fallback), [blocks, fallback]);
   const issues = useMemo(() => validate(blocks, fallback), [blocks, fallback]);
   const errors = issues.filter((i) => i.severity === "error").length;
+  /* 검증 결과는 화면에 그리지 않고 토스트로: 오류가 있으면 첫 오류, 없으면 첫 경고 */
+  const firstIssue = issues.find((i) => i.severity === "error") ?? issues[0];
+  useToastNotice(
+    firstIssue
+      ? {
+          kind: firstIssue.severity === "error" ? "error" : "warning",
+          message: `${firstIssue.block === null ? t("issue.msg") : fill(t("issue.block"), { n: firstIssue.block + 1 })} ${issueText(firstIssue)}`,
+        }
+      : null,
+  );
   const warns = issues.length - errors;
   const code = tab === "preview" ? "" : buildCode(tab, payload, { channel, blocksOnly });
 
@@ -274,7 +287,7 @@ export default function SlackMessageBuilder() {
     trackEvent("tool_run", { slug: SLUG, tab: next });
   }
   function copyCode() {
-    navigator.clipboard.writeText(code).then(() => {
+    copyText(code).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
       trackEvent("tool_result", { slug: SLUG, action: "copy", tab });
@@ -454,32 +467,9 @@ export default function SlackMessageBuilder() {
           </div>
         </div>
 
-        {/* ── Issues ── */}
-        {issues.length > 0 && (
-          <ul className="sm-issues" aria-live="polite">
-            {issues.map((i, k) => (
-              <li key={k} className={"sm-issue is-" + i.severity}>
-                <span className="sm-issue-where">
-                  {i.block === null ? t("issue.msg") : fill(t("issue.block"), { n: i.block + 1 })}
-                </span>
-                {issueText(i)}
-              </li>
-            ))}
-          </ul>
-        )}
-
         {/* ── Status bar ── */}
         <div className="ide-status">
-          {errors > 0 ? (
-            <span className="status-pill err">error</span>
-          ) : warns > 0 ? (
-            <span className="status-pill idle">warn</span>
-          ) : (
-            <span className="status-pill ok">valid</span>
-          )}
           <span>{fill(t("status.blocks"), { n: blocks.length })}</span>
-          {errors > 0 && <span className="err-detail">{fill(t("status.errors"), { n: errors })}</span>}
-          {warns > 0 && <span>{fill(t("status.warns"), { n: warns })}</span>}
         </div>
       </div>
 

@@ -30,6 +30,7 @@ import {
   type ImageErrorType,
 } from "../lib/image/imageErrors";
 import { IMAGE_LIMITS, LIMIT_SUMMARY } from "../lib/image/imageLimits";
+import { toast, useToastOnChange } from "../lib/toast";
 import { optimizeImage } from "../lib/image/optimize";
 import { ZIP_NAME, zipImages } from "../lib/image/zip";
 
@@ -221,6 +222,22 @@ export default function ImageOptimizer() {
   const failedCount = items.filter((i) => i.status === "error").length;
   const hasResults = items.some((i) => i.result);
   const staleCount = items.filter((i) => isStale(i)).length;
+
+  /* ---------- 알림: 화면에 그리지 않고 토스트로 ---------- */
+  useToastOnChange(addError ? imageErrorMessage(addError, lang) : null, "error");
+  const firstItemError = items.find((i) => i.status === "error" && i.error)?.error;
+  useToastOnChange(firstItemError ? imageErrorMessage(firstItemError, lang) : null, "error");
+  useEffect(() => {
+    if (running) toast.info(t("io.running"), { key: "io-run" });
+  }, [running, t]);
+  const summaryMsg = !running && hasResults ? fill(t("io.summary"), { done: completed.length, failed: failedCount }) : "";
+  useEffect(() => {
+    if (!summaryMsg) return;
+    if (failedCount > 0) toast.warning(summaryMsg, { key: "io-summary" });
+    else toast.success(summaryMsg, { key: "io-summary" });
+  }, [summaryMsg, failedCount]);
+  const staleMsg = staleCount > 0 && !running ? t("io.staleHint") : "";
+  useToastOnChange(staleMsg, "info");
 
   /* ---------- 파일 추가 ---------- */
 
@@ -484,11 +501,6 @@ export default function ImageOptimizer() {
             </div>
             <p className="io-limits">{t("io.limits")}</p>
 
-            {addError && (
-              <p className="io-alert" role="alert">
-                {imageErrorMessage(addError, lang)}
-              </p>
-            )}
 
             <div className="io-settings">
               <span className="field-label" id="io-format-label">
@@ -577,13 +589,6 @@ export default function ImageOptimizer() {
             )}
           </div>
 
-          <p className="io-live" role="status" aria-live="polite">
-            {running
-              ? `${t("io.running")} · ${fill(t("io.progress"), progress)}`
-              : hasResults
-                ? fill(t("io.summary"), { done: completed.length, failed: failedCount })
-                : ""}
-          </p>
 
           {items.length === 0 ? (
             <p className="io-empty">{t("io.emptyResults")}</p>
@@ -629,12 +634,6 @@ export default function ImageOptimizer() {
                           </span>
                         )}
                       </span>
-
-                      {item.status === "error" && item.error && (
-                        <span className="io-alert" role="alert">
-                          {imageErrorMessage(item.error, lang)}
-                        </span>
-                      )}
 
                       {result && (
                         <span className="io-sizes">
@@ -703,15 +702,10 @@ export default function ImageOptimizer() {
               >
                 {zipping ? t("io.zipping") : `${t("io.downloadAll")} · ${completed.length}`}
               </button>
-              {failedCount > 0 && (
-                <p className="io-note">
-                  {fill(t("io.partial"), { done: completed.length, failed: failedCount })}
-                </p>
-              )}
             </div>
           )}
 
-          {staleCount > 0 && !running && <p className="io-note">{t("io.staleHint")}</p>}
+          {null}
           <p className="io-device-hint">{t("io.deviceHint")}</p>
         </div>
       </div>

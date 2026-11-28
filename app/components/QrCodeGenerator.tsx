@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -154,6 +156,11 @@ export default function QrCodeGenerator() {
   const ecLevel: QrErrorLevel = ecFixed ? "H" : level;
 
   const lowContrast = useMemo(() => contrastRatio(fg, bg) < 3, [fg, bg]);
+  // 색 대비 경고와 인식 검증 결과는 화면에 그리지 않고 토스트로 알린다
+  useToastOnChange(lowContrast ? t("g.contrast") : null, "warning");
+  useToastOnChange(status === "ok" ? t("g.st.ok") : null, "success");
+  useToastOnChange(status === "unconfirmed" ? t("g.st.unconfirmed") : null, "warning");
+  useToastOnChange(status === "fail" ? t("g.st.fail") : null, "error");
 
   // URL·모양·색상·품질 변경 시 debounce 후 생성 + 자체 판독 검증
   useEffect(() => {
@@ -399,11 +406,6 @@ export default function QrCodeGenerator() {
                 </div>
               </div>
             </div>
-            {lowContrast && (
-              <p className="qr-warn" role="status">
-                {t("g.contrast")}
-              </p>
-            )}
           </div>
         </div>
 
@@ -428,15 +430,6 @@ export default function QrCodeGenerator() {
               </div>
             )}
           </div>
-
-          <p
-            className={"qr-status qr-status-" + status}
-            role="status"
-            aria-live="polite"
-          >
-            <span className="qr-status-dot" aria-hidden />
-            <span>{t("g.st." + status)}</span>
-          </p>
 
           <div className="qr-dl">
             <button

@@ -5,6 +5,7 @@ import PdfDropzone from "./PdfDropzone";
 import PdfFileSummary from "./PdfFileSummary";
 import PdfThumbnailGrid from "./PdfThumbnailGrid";
 import PdfPageRangeInput from "./PdfPageRangeInput";
+import { useToastOnChange } from "../lib/toast";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { loadPdfFile, type LoadedPdf } from "../lib/pdf/loadPdf";
@@ -87,6 +88,7 @@ export default function PdfPageDelete() {
   const [state, setState] = useState<PdfProcessState>("idle");
   const [error, setError] = useState<PdfErrorType | null>(null);
   const [warn, setWarn] = useState<string | null>(null);
+  useToastOnChange(warn, "warning");
   const [result, setResult] = useState<Result>(null);
   const busyRef = useRef(false);
 
@@ -324,12 +326,7 @@ export default function PdfPageDelete() {
                 autoComplete="off"
               />
 
-              {warn && (
-                <div className="pdf-status pdf-status-warn" role="status">
-                  {warn}
-                </div>
-              )}
-              <PdfProcessingStatus state={state} error={error} processingLabel={t("d.running")} />
+              <PdfProcessingStatus state={state} error={error} processingLabel={t("d.running")} done={!!result} />
 
               <button
                 type="button"

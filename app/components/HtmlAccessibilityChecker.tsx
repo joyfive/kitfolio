@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastNotice, type ToastNotice } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -19,6 +21,7 @@ import {
   type FindingLevel,
   type Scope,
 } from "../lib/a11y/types";
+import { copyText } from "../lib/clipboard";
 
 /* 컨트롤 마이크로카피만 로컬 dict.
    페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리,
@@ -344,7 +347,7 @@ export default function HtmlAccessibilityChecker() {
   async function handleCopy() {
     if (!result) return;
     try {
-      await navigator.clipboard.writeText(buildReport(result, lang, t));
+      await copyText(buildReport(result, lang, t), { success: t("a11y.state.copied"), fail: t("a11y.state.copyFailed") });
       setCopyState("done");
     } catch {
       setCopyState("failed");
@@ -372,6 +375,16 @@ export default function HtmlAccessibilityChecker() {
       review: String(result.counts.review),
     });
   })();
+
+  const statusNotice: ToastNotice =
+    running && slow
+      ? { kind: "info", message: t("a11y.state.running") }
+      : errorType
+        ? { kind: "error", message: t(`a11y.error.${errorType}`) }
+        : result
+          ? { kind: result.counts.issue === 0 && result.counts.review === 0 ? "success" : "warning", message: statusMessage }
+          : null;
+  useToastNotice(statusNotice);
 
   return (
     <>
@@ -682,9 +695,6 @@ export default function HtmlAccessibilityChecker() {
         <div className="ide-status">
           <span className={"status-pill " + statusPill(running, errorType, result)}>
             <span>{t(`a11y.scope.${result?.scope ?? scope}`)}</span>
-          </span>
-          <span className="a11y-live" role="status" aria-live="polite">
-            {statusMessage}
           </span>
           <span className="spacer" />
           <span>

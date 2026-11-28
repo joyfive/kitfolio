@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import PdfDropzone from "./PdfDropzone";
 import PdfPageThumbnail from "./PdfPageThumbnail";
+import { useToastOnChange } from "../lib/toast";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
 import { useLang, useT, type Dict } from "../lib/i18n";
 import { loadPdfFile, type LoadedPdf } from "../lib/pdf/loadPdf";
@@ -70,6 +71,7 @@ export default function PdfMerge() {
   const [state, setState] = useState<PdfProcessState>("idle");
   const [error, setError] = useState<PdfErrorType | null>(null);
   const [warn, setWarn] = useState<string | null>(null);
+  useToastOnChange(warn, "warning");
   const [outName, setOutName] = useState("kitfolio-merged.pdf");
   const [result, setResult] = useState<ResultState>(null);
   const busyRef = useRef(false);
@@ -221,10 +223,7 @@ export default function PdfMerge() {
               disabled={state === "processing"}
             />
 
-            {warn && (
-              <div className="pdf-status pdf-status-warn" role="status">{warn}</div>
-            )}
-            {files.length === 0 && <PdfProcessingStatus state={state} error={error} processingLabel={t("m.running")} />}
+            {files.length === 0 && <PdfProcessingStatus state={state} error={error} processingLabel={t("m.running")} done={!!result} />}
             {files.length > 0 && (
               <>
                 <div className="pdf-list-head">
@@ -350,7 +349,7 @@ export default function PdfMerge() {
 
             {result && (
               <div className="pdf-ready">
-                <p role="status">{result.name}</p>
+                <p>{result.name}</p>
                 <button type="button" className="btn btn-primary pdf-download" onClick={download}>
                   {t("m.download")}
                 </button>

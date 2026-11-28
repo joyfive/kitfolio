@@ -6,6 +6,7 @@ import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useT, type Dict } from "../lib/i18n";
+import { copyText } from "../lib/clipboard";
 
 // 컨트롤 마이크로카피만 로컬 dict. 페이지 콘텐츠는 content.ts 레지스트리.
 const DICT: Dict = {
@@ -159,7 +160,7 @@ export default function TailwindPalette() {
 
   async function copyHex(s: Shade) {
     try {
-      await navigator.clipboard.writeText(s.hex.toUpperCase());
+      await copyText(s.hex.toUpperCase());
     } catch {
       /* ignore */
     }
@@ -169,7 +170,7 @@ export default function TailwindPalette() {
 
   async function copyCode() {
     try {
-      await navigator.clipboard.writeText(code);
+      await copyText(code);
     } catch {
       /* ignore */
     }

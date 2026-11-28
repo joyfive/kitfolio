@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
@@ -56,6 +58,7 @@ import {
   type Standard,
   type Status,
 } from "../lib/checklist/types";
+import { copyText } from "../lib/clipboard";
 
 const SLUG = "accessibility-checklist";
 
@@ -342,6 +345,11 @@ export default function AccessibilityChecklist() {
   const [loadError, setLoadError] = useState(false);
   const [saveError, setSaveError] = useState(false);
   const [live, setLive] = useState("");
+  /* 알림은 화면에 그리지 않고 토스트로 */
+  useToastOnChange(live, "success");
+  useToastOnChange(loadError ? t("ac.error.unreadable") : null, "error");
+  useToastOnChange(saveError ? t("ac.error.save") : null, "error");
+  useToastOnChange(restoredName && !setupOpen ? t("ac.restore.banner").replace("{name}", restoredName) : null, "info");
   const [resetOpen, setResetOpen] = useState(false);
 
   const [query, setQuery] = useState("");
@@ -576,7 +584,7 @@ export default function AccessibilityChecklist() {
   async function copyMarkdown() {
     if (!project) return;
     try {
-      await navigator.clipboard.writeText(toMarkdown(project, lang));
+      await copyText(toMarkdown(project, lang));
       announce(t("ac.export.copied"));
       trackEvent("tool_download", {
         slug: SLUG,
@@ -672,20 +680,6 @@ export default function AccessibilityChecklist() {
       </nav>
 
       <p className="ac-privacy">{t("ac.privacy")}</p>
-
-      <div className="ac-alerts" role="status" aria-live="polite">
-        {live && <p className="ac-live">{live}</p>}
-        {loadError && <p className="ac-alert is-error">{t("ac.error.unreadable")}</p>}
-        {saveError && <p className="ac-alert is-error">{t("ac.error.save")}</p>}
-        {restoredName && !setupOpen && (
-          <p className="ac-alert">
-            {t("ac.restore.banner").replace("{name}", restoredName)}{" "}
-            <button type="button" onClick={() => setRestoredName(null)}>
-              {t("ac.restore.dismiss")}
-            </button>
-          </p>
-        )}
-      </div>
 
       {setupOpen && (
         <section className="ac-setup" aria-labelledby="ac-setup-title">

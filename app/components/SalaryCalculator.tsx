@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useMemo, useState } from "react";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
@@ -157,6 +159,7 @@ export default function SalaryCalculator() {
 
   const hasInput = amount.trim() !== "";
   const invalid = hasInput && amountNum <= 0;
+  useToastOnChange(invalid ? t("sc.invalid") : null, "error");
 
   const rows = result
     ? [
@@ -297,9 +300,7 @@ export default function SalaryCalculator() {
         {/* ── 결과 ── */}
         <div className="fw-results">
           {!hasInput || invalid ? (
-            <p className="sc-start-note" role="status">
-              {invalid ? t("sc.invalid") : t("sc.empty")}
-            </p>
+            <p className="sc-start-note">{t("sc.empty")}</p>
           ) : (
             result && (
               <>

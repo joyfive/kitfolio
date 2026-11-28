@@ -5,6 +5,7 @@ import { LangProvider } from "./lib/i18n";
 import { HUB, SITE } from "./lib/content";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
+import ToastHost from "./components/ToastHost";
 import { getPromptSlugs } from "./lib/prompts";
 
 const ADSENSE_CLIENT = "ca-pub-7537584957079478";
@@ -66,6 +67,7 @@ export default function RootLayout({
           <LangProvider lang="ko">{children}</LangProvider>
         </main>
         <SiteFooter />
+        <ToastHost />
       </body>
       {/* GA4 (페이지뷰 자동 추적, SPA 라우팅 포함) */}
       <GoogleAnalytics gaId={GA_ID} />

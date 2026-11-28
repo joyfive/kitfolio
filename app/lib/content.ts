@@ -7605,7 +7605,7 @@ export const TOOLS: Tool[] = [
         {
           question: "JSON 문법 오류는 어떻게 찾아주나요?",
           answer:
-            "유효하지 않은 JSON을 붙여넣으면 하단 상태 표시줄에 오류 내용과 함께 줄·열 위치를 표시합니다. 해당 위치를 수정하면 결과가 실시간으로 다시 검증됩니다.",
+            "유효하지 않은 JSON을 붙여넣으면 오류 내용과 함께 줄·열 위치를 토스트로 알려줍니다. 해당 위치를 수정하면 결과가 실시간으로 다시 검증됩니다.",
         },
         {
           question: "들여쓰기 간격을 바꾸거나 한 줄로 압축할 수 있나요?",
@@ -7627,7 +7627,7 @@ export const TOOLS: Tool[] = [
         {
           question: "How are syntax errors reported?",
           answer:
-            "When you paste invalid JSON, the status bar shows the error message along with the line and column. Fix the spot and the result re-validates in real time.",
+            "When you paste invalid JSON, a toast shows the error message along with the line and column. Fix the spot and the result re-validates in real time.",
         },
         {
           question: "Can I change the indentation or minify to one line?",

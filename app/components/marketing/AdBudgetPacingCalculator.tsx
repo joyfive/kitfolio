@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useToastOnChange } from "../../lib/toast";
 import PageHead from "../PageHead";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
@@ -152,6 +153,7 @@ export default function AdBudgetPacingCalculator() {
     return null;
   }, [totalBudget, startDate, endDate, t]);
 
+  useToastOnChange(validationError, "error");
   const result = useMemo(() => {
     if (validationError || !startDate || !endDate || !refDate) return null;
     const budget = parseNum(totalBudget);
@@ -244,9 +246,6 @@ export default function AdBudgetPacingCalculator() {
               <input type="text" inputMode="numeric" value={expectedDaily} onChange={(e) => setExpectedDaily(e.target.value)} placeholder="-" />
             </BpField>
 
-            {validationError && (
-              <div className="bp-error" role="alert">{validationError}</div>
-            )}
           </div>
         </div>
 

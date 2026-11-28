@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { copyText } from "../lib/clipboard";
 
 /**
  * 본문 코드 블록(pre)마다 복사 버튼을 붙인다.
@@ -30,7 +31,7 @@ export default function PromptCopyButtons({
       btn.addEventListener("click", async () => {
         const text = pre.querySelector("code")?.textContent ?? pre.textContent ?? "";
         try {
-          await navigator.clipboard.writeText(text.replace(/\n$/, ""));
+          await copyText(text.replace(/\n$/, ""));
           btn.textContent = copiedLabel;
           window.setTimeout(() => (btn.textContent = copyLabel), 1500);
         } catch {

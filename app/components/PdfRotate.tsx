@@ -316,7 +316,7 @@ export default function PdfRotate() {
                 autoComplete="off"
               />
 
-              <PdfProcessingStatus state={state} error={error} processingLabel={t("r.running")} />
+              <PdfProcessingStatus state={state} error={error} processingLabel={t("r.running")} done={!!result} />
 
               <button
                 type="button"

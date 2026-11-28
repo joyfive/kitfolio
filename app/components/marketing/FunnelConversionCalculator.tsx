@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useToastOnChange } from "../../lib/toast";
 import PageHead from "../PageHead";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
@@ -8,6 +9,7 @@ import { useLang, useT, type Dict } from "../../lib/i18n";
 import { analyzeFunnel, reverseCalculateFunnel } from "../../lib/marketing/funnel";
 import type { FunnelStage, ReverseFunnelStage } from "../../lib/marketing/types";
 import { fmtPct, fmtNumber } from "../../lib/marketing/format";
+import { copyText } from "../../lib/clipboard";
 
 let _id = 0;
 function uid() { return `s${++_id}`; }
@@ -225,6 +227,7 @@ export default function FunnelConversionCalculator() {
   }, [finalTarget, reverseStages]);
 
   const hasAnalyzeResult = analyzeResult.stages.some((s) => s.count > 0);
+  useToastOnChange(analyzeResult.stages.some((s) => s.warning) ? t("fn.warning") : null, "warning");
 
   function copyPlan() {
     let text = "";
@@ -247,7 +250,7 @@ export default function FunnelConversionCalculator() {
       }
     }
     if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
+    copyText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -441,9 +444,6 @@ export default function FunnelConversionCalculator() {
                             </span>
                           )}
                         </div>
-                        {stage.warning && (
-                          <div className="fn-stage-warn" role="alert">{t("fn.warning")}</div>
-                        )}
                       </div>
                     );
                   })}

@@ -263,7 +263,7 @@ export default function PdfSplit() {
               </dl>
               <p className="pdf-hint">{t("s.zipNote")}</p>
 
-              <PdfProcessingStatus state={state} error={error} processingLabel={t("s.running")} />
+              <PdfProcessingStatus state={state} error={error} processingLabel={t("s.running")} done={!!result} />
 
               <button
                 type="button"

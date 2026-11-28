@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastNotice, useToastOnChange, type ToastNotice } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -712,6 +714,17 @@ export default function TextScalingChecker() {
     return t("ts.state.found").replace("{count}", String(result.candidates.length));
   })();
 
+  const statusNotice: ToastNotice =
+    phase === "rendering" || phase === "measuring"
+      ? { kind: "info", message: status }
+      : errorType
+        ? { kind: "error", message: status }
+        : result
+          ? { kind: result.candidates.length === 0 ? "success" : "warning", message: status }
+          : null;
+  useToastNotice(statusNotice);
+  useToastOnChange(dirty && applied ? t("ts.state.dirty") : null, "info");
+
   const shown = result ?? null;
   const frameW = Math.round(viewports.test * fit);
 
@@ -913,10 +926,7 @@ export default function TextScalingChecker() {
         </div>
 
         <div className="ts-status">
-          {dirty && applied && <span className="ts-badge">{t("ts.state.dirty")}</span>}
-          <span role="status" aria-live="polite">
-            {status}
-          </span>
+          {null}
         </div>
 
         {notices.length > 0 && (

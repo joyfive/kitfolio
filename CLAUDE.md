@@ -60,7 +60,7 @@ SEO 최적화된 단일 도메인 + 서브패스 구조로 운영.
 - **주제 카테고리 8개 (도구당 정확히 1개)**: 문서·이미지 · QR 코드 · 날짜·시간 · 근무·휴가 · 급여·세금 ·
   광고·성과 · 코드·웹 제작 · 웹 접근성
 - **작업 태그 7종 (대표 1 + 보조 최대 2)**: 계산 · 변환 · 생성 · 편집 · 검사 · 분석 · 읽기.
-  허브에서는 선택한 카테고리 도구가 가진 작업만 2단 칩으로 보인다. 카드에는 대표 작업 1개.
+  허브에서는 선택한 카테고리 도구가 가진 작업만 2단 칩으로 **항상 두 줄로 노출**한다(펼침 버튼 없음). 카드에는 대표 작업 1개.
 - 1단·2단은 **칩 스타일로 depth 구분** (카테고리 = 둥근 pill 채움 · 작업 = 작은 사각 점선/테두리).
 - **검색어(`searchTerms`)**: "계약서 합치기"처럼 작업으로 찾는 말. 허브 검색 전용, 화면 미노출. 검색은 단어 단위 일치.
 - **적용 범위(`scope`)**: 한국 기준·2026년 적용·WCAG 2.2 같은 정보는 탐색 태그가 아니라 도구 상세 eyebrow 에 표시.
@@ -346,6 +346,10 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
   - 글자 `--text-caption~display` = 12·13·14·15·16·17·18·20·24·28·34·40·48, 굵기 `--fw-title/ui/medium/body`
   - 라운드 `--radius-xs~2xl · pill`, 높이 `--h-sm~xl`, 모션 `--dur-fast/base/slow` + `--ease`, 표면·상태색 `--white` `--danger*` `--warning`
   - 예외: 1~2px 헤어라인, 음수 마진 보정, 가이드 도해 목업(`.kf-gfig-*`), 고정 크기 컨트롤(아이콘·핸들).
+- **상태·에러·완료 알림은 화면에 직접 그리지 않고 토스트로 일괄 처리한다** (`app/lib/toast.ts` · `ToastHost`, 루트 레이아웃에 한 번 마운트).
+  `toast.success/error/warning/info(message)`, 상태로 존재하는 메시지는 `useToastOnChange(message, kind)` · `useToastNotice({kind, message})`,
+  복사는 `copyText()`(`app/lib/clipboard.ts`)가 결과 토스트까지 띄운다. 같은 `key` 는 교체되고, 메시지가 사라지면 토스트도 걷힌다.
+  화면에 남기는 것: 입력 전 안내(빈 상태 문구), 스크린리더 전용(`sr-only` aria-live), 결과 영역 자체. 인라인 `role="alert"`/`role="status"` 박스는 새로 만들지 않는다.
 - **너비는 full-width 기본.** 폭은 래퍼(`.kf-main` 1216 · 본문 래퍼 `.kf-legal`/`.kf-article`/`.kf-support-content` · 작업 영역의 열 비율)에서만 정하고,
   그 안의 텍스트·컨트롤·카드는 `width: 100%` 로 가득 채운다. 개별 UI 에 `width`·`max-width`·`min-width` 의 px/ch 고정 금지
   (예외: 아이콘·아바타·썸네일 같은 정사각 고정 크기, QR·썸네일 미리보기 같은 미디어, 터치 영역 44px).

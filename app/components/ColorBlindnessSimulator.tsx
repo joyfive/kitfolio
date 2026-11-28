@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -151,6 +153,8 @@ export default function ColorBlindnessSimulator() {
   const [strength, setStrength] = useState(DEFAULT_STRENGTH);
   const [issue, setIssue] = useState<ImageIssue | null>(null);
   const [loading, setLoading] = useState(false);
+  useToastOnChange(issue ? t(`cb.err.${issue}`) : null, "error");
+  useToastOnChange(!issue && loading ? t("cb.loading") : null, "info");
   const [processing, setProcessing] = useState(false);
   const [live, setLive] = useState("");
   const [dragging, setDragging] = useState(false);
@@ -503,12 +507,6 @@ export default function ColorBlindnessSimulator() {
           }}
         />
 
-        {(issue || loading) && (
-          <p className={`cbs-status${issue ? " is-error" : ""}`} role="status">
-            {issue ? <IconAlert /> : null}
-            <span>{issue ? t(`cb.err.${issue}`) : t("cb.loading")}</span>
-          </p>
-        )}
       </div>
 
       <section className="cbs-checks" aria-label={t("cb.check.heading")}>

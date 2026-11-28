@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 /** 페이지 범위 입력 (예: 1-3, 4-7, 8). 검증/파싱은 부모가 담당하고
  *  여기서는 입력과 오류/경고 문구 표시만 한다. */
 export default function PdfPageRangeInput({
@@ -22,6 +24,9 @@ export default function PdfPageRangeInput({
   id?: string;
 }) {
   const invalid = (errors?.length ?? 0) > 0;
+  // 입력 오류·경고는 필드 아래에 그리지 않고 토스트로 알린다
+  useToastOnChange(errors?.[0], "error");
+  useToastOnChange(warnings?.[0], "warning");
   return (
     <div className="pdf-range">
       <label className="field-label" htmlFor={id}>
@@ -40,16 +45,6 @@ export default function PdfPageRangeInput({
         spellCheck={false}
       />
       {example && <span className="pdf-range-example">{example}</span>}
-      {errors?.map((msg, i) => (
-        <span key={`e${i}`} className="pdf-range-msg is-error" role="alert">
-          {msg}
-        </span>
-      ))}
-      {warnings?.map((msg, i) => (
-        <span key={`w${i}`} className="pdf-range-msg is-warn" role="status">
-          {msg}
-        </span>
-      ))}
     </div>
   );
 }

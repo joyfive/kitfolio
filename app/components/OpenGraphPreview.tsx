@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useEffect, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -394,6 +396,11 @@ export default function OpenGraphPreview() {
   }
 
   const warns = imageWarnings();
+  /* 알림은 화면에 그리지 않고 토스트로 */
+  useToastOnChange(uploadError, "error");
+  useToastOnChange(urlState.status === "error" ? urlState.message : null, "error");
+  useToastOnChange(codeState.status === "error" ? codeState.message : null, "error");
+  useToastOnChange(warns.length > 0 ? warns.join("\n") : null, "warning");
   if (title.length > TITLE_LIMIT) warns.unshift(t("og.warnTitleLong"));
   if (description.length > DESC_LIMIT) warns.unshift(t("og.warnDescLong"));
 
@@ -486,11 +493,6 @@ export default function OpenGraphPreview() {
                     </span>
                   )}
                 </label>
-                {uploadError && (
-                  <p className="og-error" role="alert">
-                    {uploadError}
-                  </p>
-                )}
               </div>
             )}
 
@@ -519,8 +521,7 @@ export default function OpenGraphPreview() {
                 </div>
                 <p className="og-field-note">{t("og.urlNote")}</p>
                 {urlState.status === "error" && (
-                  <div className="og-error" role="alert">
-                    <span>{urlState.message}</span>
+                  <div className="og-error">
                     <button className="og-link-btn" onClick={goToUpload}>
                       {t("og.attachDirectly")}
                     </button>
@@ -551,11 +552,6 @@ export default function OpenGraphPreview() {
                 >
                   {t("og.renderImage")}
                 </button>
-                {codeState.status === "error" && (
-                  <p className="og-error" role="alert">
-                    {codeState.message}
-                  </p>
-                )}
               </div>
             )}
           </div>
@@ -641,18 +637,6 @@ export default function OpenGraphPreview() {
           )}
 
           {/* 경고 */}
-          {warns.length > 0 && (
-            <div className="field-group">
-              <span className="field-label">{t("og.warnings")}</span>
-              <ul className="og-warning-list" aria-live="polite">
-                {warns.map((w, i) => (
-                  <li className="og-warning" key={i}>
-                    {w}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           <p className="og-privacy">{t("og.privacy")}</p>
         </div>
