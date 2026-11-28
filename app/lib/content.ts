@@ -402,20 +402,20 @@ export type LegalArchiveEntry = {
   doc: Record<PolicySlug, { ko: LegalDoc; en: LegalDoc }>;
 };
 
-/** 현행 개정: 2026-10-24 */
+/** 현행 개정: 2026-11-24 */
 export const LEGAL_REVISION: {
   id: string;
   summary: Record<PolicySlug, { ko: string; en: string }>;
 } = {
-  id: "2026-10-24",
+  id: "2026-11-24",
   summary: {
     "privacy-policy": {
-      ko: "서비스 소개 문구 변경, 도구 사용 이벤트·기기 저장 정보·카메라와 클립보드·이메일 문의 처리 안내 추가, 이용자의 권리·권익침해 구제·방침 변경 조항 추가",
-      en: "Updated the service description; added disclosures for tool usage events, on-device storage, camera and clipboard, and email inquiries; added sections on your rights, remedies and policy changes",
+      ko: "기기에 저장하는 정보에 경력기술서 빌더·포트폴리오 빌더의 입력 내용을 추가",
+      en: "Added Resume Builder and Portfolio Builder content to the information stored on your device",
     },
     "terms-of-service": {
-      ko: "서비스 소개 문구 변경, 기기 저장 정보 안내와 법령 기반 계산 결과의 성격 명시, 소스코드 공개 범위·광고와 외부 링크·약관 변경 조항 추가",
-      en: "Updated the service description; clarified on-device data and the nature of law-based calculations; added clauses on published source code, ads and external links, and changes to these terms",
+      ko: "개인정보처리방침 개정에 맞춰 시행일 갱신 (조항 변경 없음)",
+      en: "Effective date updated alongside the privacy policy revision (no clause changes)",
     },
   },
 };
@@ -751,6 +751,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
               "아래 기능은 편의를 위해 이용자 브라우저의 로컬 저장소(localStorage)에 정보를 남깁니다. 이 정보는 해당 기기의 브라우저에만 있으며 본 사이트나 제3자에게 전송되지 않습니다.",
               "**즐겨찾기:** 홈에서 별표로 표시한 도구 목록",
               "**웹접근성 체크리스트 빌더:** 이용자가 만든 체크리스트의 프로젝트명·항목 상태·메모·근거 URL",
+              "**경력기술서 빌더 · 포트폴리오 빌더:** 이용자가 입력한 공통 프로필(이름·연락처·소개·경력·학력·활동)과 지원처별 문서 내용, 직접 고른 사진·이미지(브라우저 안에서 줄인 사본)",
               "브라우저 설정에서 이 사이트의 사이트 데이터를 삭제하면 위 정보도 함께 지워집니다. 다른 기기나 브라우저와 동기화되지 않습니다.",
             ],
           },
@@ -846,6 +847,7 @@ export const LEGAL: Record<LegalSlug, LegalEntry> = {
               "For convenience, the features below keep information in your browser's local storage (localStorage). It stays in that browser on that device and is never sent to us or to any third party.",
               "**Favorites:** the tools you starred on the home page",
               "**Web Accessibility Checklist Builder:** the project name, item statuses, notes and evidence URLs of the checklist you create",
+              "**Resume Builder · Portfolio Builder:** the shared profile you enter (name, contact details, introduction, experience, education and activities), your per-company documents, and any photos or images you choose (a reduced copy made in your browser)",
               "Clearing this site's data in your browser settings removes this information. It is not synced to other devices or browsers.",
             ],
           },
@@ -2231,6 +2233,427 @@ export const TOOLS: Tool[] = [
         title: "Image Resizer & Cropper",
         subtitle: "Resize and crop images to exact dimensions",
       },
+    },
+  },
+
+  {
+    slug: "resume-builder",
+    layout: "canvas",
+    category: "docs-images",
+    actions: ["generate", "edit"],
+    searchTerms: {
+      ko: ["경력기술서 만들기", "이력서 PDF 만들기", "회사별 이력서 관리", "경력기술서 양식"],
+      en: ["make a resume pdf", "tailor resume per company", "resume template a4", "build resume in browser"],
+    },
+    ico: "CV",
+    ready: true,
+    indexable: false,
+    name: { ko: "경력기술서 빌더", en: "Resume Builder" },
+    relatedTools: ["portfolio-builder", "pdf-tools", "character-counter"],
+    seo: {
+      ko: {
+        title: "경력기술서 빌더 | 회사별 이력서를 A4 PDF로",
+        description:
+          "공통 프로필은 한 번만 쓰고 지원하는 회사마다 헤드라인·핵심 역량·프로젝트만 바꿔 A4 경력기술서를 만듭니다. 폼이나 yml로 편집하면 미리보기가 바로 바뀌고, 강조색을 회사 색으로 바꾼 뒤 PDF로 저장할 수 있습니다. 로그인 없이 브라우저에서 동작하며 내용은 이 브라우저에만 저장됩니다.",
+        keywords: ["경력기술서", "경력기술서 양식", "이력서 만들기", "이력서 PDF", "경력기술서 작성", "resume builder"],
+      },
+      en: {
+        title: "Resume Builder | Tailored A4 Resumes as PDF",
+        description:
+          "Write your shared profile once, then change only the headline, strengths and projects for each company to produce an A4 resume. Edit with a form or YAML and watch the preview update, switch the accent color to the company's, and save as PDF. No login: it runs in your browser and saves only in this browser.",
+        keywords: ["resume builder", "resume pdf", "a4 resume template", "tailored resume", "cv builder", "resume yaml"],
+      },
+    },
+    content: {
+      ko: {
+        card: "공통 프로필 하나로 회사별 경력기술서를 만들고 A4 PDF로 저장합니다.",
+        description:
+          "이름·연락처·경력처럼 바뀌지 않는 내용은 공통 프로필에 한 번 쓰고, 지원하는 회사마다 헤드라인·핵심 역량·스킬·프로젝트만 따로 씁니다. 폼이나 yml로 고치면 A4 미리보기가 바로 바뀌고, 회사 색을 강조색으로 넣어 브라우저 인쇄로 PDF를 저장합니다. 모든 내용은 이 브라우저에만 저장됩니다.",
+        howItWorks: [
+          "'지원처'에 회사명과 강조색을 넣고, '기본 정보'와 '경력'에 공통 프로필을 채웁니다.",
+          "'핵심 역량'과 '프로젝트'를 회사에 맞게 고치며 오른쪽 A4 미리보기를 확인합니다.",
+          "다른 회사용은 '복제'로 문서를 만들고, 완성되면 'PDF로 저장'을 눌러 인쇄 창에서 PDF로 저장합니다.",
+        ],
+        aeo: {
+          what: "경력기술서 빌더는 공통 프로필과 회사별 내용을 합쳐 A4 경력기술서를 만들고 PDF로 저장하는 브라우저 도구입니다.",
+          who: "여러 회사에 지원하면서 회사마다 강조할 역량과 프로젝트를 바꿔 내야 하는 구직자를 위한 도구입니다.",
+          how: "공통 프로필 위에 회사별 문서를 덮어써 A4 레이아웃으로 렌더하고, 브라우저 인쇄 기능으로 PDF를 만듭니다. 내용은 localStorage에 저장됩니다.",
+          why: "같은 경력을 회사마다 다시 쓰거나 파일을 여러 벌 복사해 관리하지 않아도 되고, 문서 구조와 디자인이 일정하게 유지됩니다.",
+        },
+        guide: [
+          {
+            heading: "공통 프로필과 회사별 문서를 나누는 이유",
+            body: [
+              "경력기술서에서 회사마다 바뀌는 부분은 생각보다 적습니다. 이름·연락처·경력 요약·학력은 그대로이고, 헤드라인과 핵심 역량, 어떤 프로젝트를 앞에 둘지가 달라집니다. 이 도구는 바뀌지 않는 내용을 공통 프로필에, 회사마다 다른 내용을 문서에 두고 둘을 합쳐 보여줍니다.",
+              "같은 항목을 문서에 다시 쓰면 문서 값이 이깁니다. 예를 들어 공통 프로필의 소개 문장을 특정 회사에서만 바꾸고 싶다면 yml 탭의 '이 문서'에 lead 를 적으면 됩니다. 공통 프로필을 고치면 모든 문서에 한 번에 반영되고, 포트폴리오 빌더도 같은 프로필을 씁니다.",
+            ],
+          },
+          {
+            heading: "프로젝트 블록을 읽히게 쓰는 법",
+            body: [
+              "프로젝트는 역할 · 문제 정의 · 솔루션 · 성과 네 칸으로 나뉩니다. 각 칸은 그냥 쓰면 문단, 줄머리에 '- '를 붙이면 리스트가 되고, 두 칸 들여쓰면 하위 항목이 됩니다. 성과 칸은 강조색 박스로 표시되므로 숫자가 있는 결과 하나를 앞에 두면 눈에 잘 띕니다.",
+              "입력칸 위의 B · I · U 버튼(또는 Ctrl/⌘+B · I · U)으로 고른 글자를 굵게 · 기울임 · 밑줄로 바꿀 수 있고, 입력한 줄바꿈은 문서에도 그대로 들어갑니다. 굵게는 한 프로젝트에 한두 곳만 쓰는 편이 좋습니다. 강조가 많으면 오히려 아무것도 강조되지 않습니다.",
+            ],
+          },
+          {
+            heading: "PDF로 저장할 때 확인할 것",
+            body: [
+              "'PDF로 저장'을 누르면 문서만 남긴 인쇄 화면이 열립니다. 대상(프린터)을 'PDF로 저장'으로 고르고, 강조색과 표 배경이 보이도록 '배경 그래픽'을 켜세요. 용지는 A4, 위아래 여백 14mm로 자동 설정됩니다.",
+              "섹션이나 프로젝트 블록이 페이지 경계에서 잘리지 않도록 블록 단위로 다음 페이지로 넘깁니다. 그래서 페이지 하단에 빈 공간이 생길 수 있는데, 문장을 줄이거나 프로젝트 순서를 바꾸면 대부분 해결됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "같은 경력으로 두 회사에 지원",
+            input: "공통 프로필(이름·경력 2곳·학력) + 문서 A(새솔랩, 강조색 #2D5DC8) · '복제'로 문서 B를 만들어 회사명과 강조색만 바꿈",
+            result: "문서 목록에 두 문서가 생기고, 경력·학력은 같고 회사명·헤드라인·강조색만 다른 A4 경력기술서 두 벌",
+            note: "공통 프로필의 경력을 고치면 두 문서에 동시에 반영됩니다.",
+          },
+          {
+            title: "auto-folio 형식의 yml 가져오기",
+            input: "company_name·primary·headline·projects 가 있는 회사 yml 파일을 '불러오기'로 선택",
+            result: "새 문서로 추가되고 공통 프로필과 합쳐진 미리보기가 바로 표시됨",
+            note: "파일 안에 이름·경력 같은 공통 항목이 있으면 그 문서에서는 파일의 값이 우선합니다.",
+          },
+        ],
+        limitations: [
+          "내용은 이 브라우저의 localStorage에만 저장됩니다. 다른 기기와 동기화되지 않고, 브라우저 데이터를 지우면 사라지므로 '전체 백업'으로 파일을 보관하세요.",
+          "한국어 페이지와 영문 페이지는 저장 공간이 따로입니다. 다른 언어 페이지로 옮기려면 '전체 백업'으로 내려받아 그 페이지에서 '불러오기'하세요.",
+          "PDF는 브라우저 인쇄 기능으로 만듭니다. 글꼴 렌더링과 페이지 나눔은 브라우저마다 조금 다를 수 있으며, 데스크톱 Chrome·Edge에서 가장 안정적입니다.",
+          "레이아웃은 A4 한 가지입니다. 섹션 순서와 디자인은 바꿀 수 없고, 비어 있는 섹션만 자동으로 빠집니다.",
+          "맞춤법 검사나 문장 첨삭, 채용 공고 분석 같은 AI 기능은 없습니다.",
+        ],
+      },
+      en: {
+        card: "Turn one shared profile into a resume per company and save it as an A4 PDF.",
+        description:
+          "Write what never changes, such as your name, contacts and experience, once in a shared profile. For each company, write only the headline, strengths, skills and projects. Edit with a form or YAML to update the A4 preview instantly, use the company's color as the accent, and save a PDF with your browser's print dialog. Everything stays in this browser.",
+        howItWorks: [
+          "Enter the company name and accent color under 'Target company', then fill your shared profile in 'Basics' and 'Experience'.",
+          "Adjust 'Core strengths' and 'Projects' for the company while checking the A4 preview on the right.",
+          "Use 'Duplicate' for the next company, then press 'Save as PDF' and choose PDF in the print dialog.",
+        ],
+        aeo: {
+          what: "Resume Builder is a browser tool that combines a shared profile with company-specific content into an A4 resume and saves it as PDF.",
+          who: "It is for job seekers applying to several companies who need to emphasize different strengths and projects for each one.",
+          how: "It layers each company document over the shared profile, renders an A4 layout, and creates the PDF with the browser's print feature. Content is saved in localStorage.",
+          why: "You no longer rewrite the same experience or juggle copies of a file per company, and the structure and design stay consistent.",
+        },
+        guide: [
+          {
+            heading: "Why the profile and the documents are separate",
+            body: [
+              "Less of a resume changes per company than you might expect. Your name, contacts, experience and education stay the same, while the headline, the strengths you lead with and the projects you put first change. This tool keeps the unchanging part in a shared profile, the changing part in each document, and merges the two.",
+              "If a document repeats a field, the document wins. To change the intro sentence for one company only, add lead under 'This document' in the YAML tab. Editing the shared profile updates every document at once, and Portfolio Builder uses the same profile.",
+            ],
+          },
+          {
+            heading: "Writing project blocks that read well",
+            body: [
+              "Each project has four parts: role, problem, solution and impact. Plain text becomes a paragraph, a line starting with '- ' becomes a list item, and indenting two spaces makes a sub-item. Impact appears in an accent-colored box, so lead with one result that has a number.",
+              "The B, I and U buttons above each field (or Ctrl/⌘+B, I, U) make the selected text bold, italic or underlined, and line breaks you type carry over to the document. Keep bold to one or two places per project: when everything is bold, nothing stands out.",
+            ],
+          },
+          {
+            heading: "Before you save the PDF",
+            body: [
+              "'Save as PDF' opens a print view that contains only the document. Choose 'Save as PDF' as the destination and turn on 'Background graphics' so the accent color and table shading appear. The paper is set to A4 with 14mm top and bottom margins.",
+              "Sections and project blocks move to the next page as a whole instead of splitting across a page break. This can leave space at the bottom of a page; trimming a sentence or reordering projects usually fixes it.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "Applying to two companies with the same experience",
+            input: "Shared profile (name, two jobs, education) + document A (Brightleaf Labs, accent #2D5DC8) · 'Duplicate' to make document B and change only the company and color",
+            result: "Two documents in the list: two A4 resumes with the same experience and education but a different company, headline and accent color",
+            note: "Editing experience in the shared profile updates both documents.",
+          },
+          {
+            title: "Importing YAML in the auto-folio format",
+            input: "Choose a company YAML file with company_name, primary, headline and projects under 'Import'",
+            result: "It is added as a new document and the preview merged with the shared profile appears right away",
+            note: "If the file also contains shared fields such as name or experience, the file's values win for that document.",
+          },
+        ],
+        limitations: [
+          "Content is saved only in this browser's localStorage. It does not sync across devices and is lost if you clear browser data, so keep a 'Full backup' file.",
+          "The English and Korean pages keep separate saves. To move your work between them, download a 'Full backup' and use 'Import' on the other page.",
+          "The PDF is made with the browser's print feature. Font rendering and page breaks can differ slightly between browsers; desktop Chrome and Edge are the most reliable.",
+          "There is one A4 layout. Section order and design cannot be changed; empty sections are simply left out.",
+          "There are no AI features such as proofreading, rewriting or job-posting analysis.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "작성한 내용은 어디에 저장되나요?",
+          answer:
+            "지금 쓰는 브라우저의 localStorage에만 저장되고 서버로 전송되지 않습니다. 다른 기기나 브라우저에서는 보이지 않으니 '전체 백업'으로 yml 파일을 내려받아 두고, 다른 곳에서 '불러오기'로 복원하세요.",
+        },
+        {
+          question: "PDF에 강조색이나 표 배경이 안 나와요.",
+          answer:
+            "인쇄 창의 설정에서 '배경 그래픽'을 켜야 색이 인쇄됩니다. Chrome·Edge는 '설정 더보기' 안에 있습니다. 대상은 프린터가 아니라 'PDF로 저장'을 고르세요.",
+        },
+        {
+          question: "회사마다 다른 버전을 어떻게 만드나요?",
+          answer:
+            "문서 목록에서 '복제'를 누르면 현재 문서가 복사됩니다. 복사본에서 회사명·강조색·헤드라인·프로젝트를 바꾸면 됩니다. 이름·경력·학력은 공통 프로필에 있어 모든 문서가 함께 씁니다.",
+        },
+        {
+          question: "영문 경력기술서도 만들 수 있나요?",
+          answer:
+            "'문서 언어'를 English로 바꾸면 섹션 제목이 영문으로 바뀝니다. 내용은 직접 영문으로 써야 하며, 영문용 공통 프로필이 따로 필요하면 yml 탭의 '이 문서'에 영문 이름·경력을 적어 덮어쓰세요.",
+        },
+        {
+          question: "yml 탭은 꼭 써야 하나요?",
+          answer:
+            "아니요. 폼으로 모든 항목을 쓸 수 있습니다. yml 탭은 여러 항목을 한 번에 붙여 넣거나, 다른 문서의 내용을 옮기거나, 공통 프로필 값을 특정 문서에서만 바꿀 때 편합니다. 문법 오류가 있으면 오류 줄을 알려주고 마지막으로 읽힌 내용을 유지합니다.",
+        },
+      ],
+      en: [
+        {
+          question: "Where is my content saved?",
+          answer:
+            "Only in this browser's localStorage; nothing is sent to a server. It will not appear on other devices or browsers, so download a 'Full backup' YAML file and use 'Import' to restore it elsewhere.",
+        },
+        {
+          question: "The accent color or table shading is missing from the PDF.",
+          answer:
+            "Turn on 'Background graphics' in the print dialog so colors are printed. In Chrome and Edge it is under 'More settings'. Choose 'Save as PDF' as the destination rather than a printer.",
+        },
+        {
+          question: "How do I make a different version for each company?",
+          answer:
+            "Press 'Duplicate' to copy the current document, then change the company, accent color, headline and projects in the copy. Your name, experience and education live in the shared profile, which every document uses.",
+        },
+        {
+          question: "Can I write the resume in Korean?",
+          answer:
+            "Set 'Document language' to 한국어 to switch the section titles to Korean. Write the content in Korean yourself; to use a Korean name or experience for one document only, override those fields under 'This document' in the YAML tab.",
+        },
+        {
+          question: "Do I have to use the YAML tab?",
+          answer:
+            "No. Every field can be filled in with the form. The YAML tab is handy for pasting many fields at once, moving content between documents, or overriding a shared profile value for one document. On a syntax error it shows the line and keeps the last valid version.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "경력기술서 빌더", subtitle: "공통 프로필 하나로 회사별 A4 경력기술서 PDF" },
+      en: { title: "Resume Builder", subtitle: "One shared profile, a tailored A4 resume PDF per company" },
+    },
+  },
+  {
+    slug: "portfolio-builder",
+    layout: "canvas",
+    category: "docs-images",
+    actions: ["generate", "edit"],
+    searchTerms: {
+      ko: ["포트폴리오 만들기", "포트폴리오 PDF 만들기", "기획자 포트폴리오 양식", "프로젝트 포트폴리오 정리"],
+      en: ["make a portfolio pdf", "product manager portfolio template", "case study slides", "project portfolio deck"],
+    },
+    ico: "16:9",
+    ready: true,
+    indexable: false,
+    name: { ko: "포트폴리오 빌더", en: "Portfolio Builder" },
+    relatedTools: ["resume-builder", "image-optimizer", "pdf-tools"],
+    seo: {
+      ko: {
+        title: "포트폴리오 빌더 | 프로젝트 케이스를 가로형 PDF로",
+        description:
+          "표지·프로필·일하는 방식·Overview·프로젝트 케이스(개요·문제 정의·가설·솔루션·성과)를 정해진 순서의 16:9 슬라이드로 만듭니다. 폼이나 yml로 쓰면 슬라이드가 바로 바뀌고, 표·인용·이미지·mermaid 다이어그램을 넣어 1920×1080 PDF로 저장합니다. 로그인 없이 브라우저에서 동작합니다.",
+        keywords: ["포트폴리오 만들기", "포트폴리오 PDF", "기획자 포트폴리오", "PM 포트폴리오", "포트폴리오 양식", "portfolio builder"],
+      },
+      en: {
+        title: "Portfolio Builder | Case Studies as 16:9 PDF",
+        description:
+          "Build a 16:9 deck in a fixed order: cover, profile, how you work, overview and project case studies with overview, problem, hypothesis, solution and outcome pages. Write with a form or YAML, add tables, quotes, images and Mermaid diagrams, and save a 1920×1080 PDF. No login: it runs in your browser.",
+        keywords: ["portfolio builder", "portfolio pdf", "product manager portfolio", "case study template", "portfolio slides", "portfolio yaml"],
+      },
+    },
+    content: {
+      ko: {
+        card: "프로젝트 케이스를 정해진 흐름의 16:9 슬라이드로 만들고 PDF로 저장합니다.",
+        description:
+          "표지부터 프로필 요약, 일하는 방식, Overview, 프로젝트별 개요 · 문제 정의 · 가설 수립 · 솔루션 · 성과 페이지까지 정해진 흐름으로 슬라이드를 만듭니다. 쓴 항목만 페이지가 되고, 솔루션 페이지에는 표 · 인용 · 이미지 · 다이어그램을 넣을 수 있습니다. 경력기술서 빌더와 공통 프로필을 함께 쓰며, 내용은 이 브라우저에만 저장됩니다.",
+        howItWorks: [
+          "'표지'에 회사명·강조색·표지 제목을 넣습니다. 이름·경력은 공통 프로필에서 그대로 가져옵니다.",
+          "'프로젝트'에서 필요한 페이지(개요·문제 정의·가설·성과)를 켜고, 솔루션 페이지에 섹션과 요소를 추가합니다.",
+          "오른쪽 슬라이드를 확인한 뒤 'PDF로 저장'을 눌러 1920×1080 PDF로 저장합니다.",
+        ],
+        aeo: {
+          what: "포트폴리오 빌더는 프로젝트 케이스를 표지·프로필·Overview·프로젝트 페이지로 구성된 16:9 슬라이드로 만들고 PDF로 저장하는 브라우저 도구입니다.",
+          who: "기획자·PM·디자이너처럼 프로젝트의 문제 정의부터 성과까지를 케이스로 보여줘야 하는 지원자를 위한 도구입니다.",
+          how: "작성한 항목을 고정된 페이지 구조로 렌더하고, 다이어그램은 mermaid 코드로 그리며, 브라우저 인쇄로 가로형 PDF를 만듭니다.",
+          why: "슬라이드 디자인을 매번 손으로 맞추지 않고 내용에 집중할 수 있고, 회사마다 순서와 강조색만 바꾼 버전을 빠르게 만들 수 있습니다.",
+        },
+        guide: [
+          {
+            heading: "고정된 페이지 흐름으로 쓰는 이유",
+            body: [
+              "포트폴리오를 보는 사람은 짧은 시간 안에 '어떤 문제를, 어떤 근거로, 어떻게 풀어, 무엇이 바뀌었는지'를 찾습니다. 이 도구는 프로젝트마다 개요 → 문제 정의 → 가설 수립 → 솔루션 → 성과 순서로 페이지를 만들고, 상단 탭에 지금 위치를 표시해 그 흐름을 따라가기 쉽게 합니다.",
+              "모든 페이지가 필수는 아닙니다. 가설이 없던 프로젝트라면 가설 수립 페이지를 끄면 되고, 탭에서도 빠집니다. 솔루션 페이지는 여러 장 만들 수 있고, 라벨을 비우면 Point 1, Point 2 로 번호가 붙습니다.",
+            ],
+          },
+          {
+            heading: "솔루션 페이지 구성하기",
+            body: [
+              "솔루션 페이지는 섹션을 위에서 아래로 쌓습니다. 섹션마다 제목 · 설명 · 요소 · 주석을 쓸 수 있고, 있는 것만 표시됩니다. '2단으로 나누기'를 켜면 그 행만 좌우 두 칸이 되어 비교나 전후 화면을 나란히 보여줄 수 있습니다.",
+              "요소는 리스트 · 표 · 인용 · 이미지 · 다이어그램 중에서 고릅니다. 표는 셀을 | 로 나눠 한 줄에 한 행을 쓰고, 다이어그램은 mermaid 문법(예: flowchart LR)으로 씁니다. 이미지는 고르면 가로 1600px 이하로 줄여 저장하므로 원본 해상도가 필요하면 이미지 주소를 넣으세요.",
+            ],
+          },
+          {
+            heading: "성과 페이지와 하단 키 메시지",
+            body: [
+              "성과 페이지는 협업 · 리딩 경험, 주요 성과, 레슨런 세 카드로 나뉩니다. 주요 성과에 이전 값과 결과를 함께 쓰면 '120건 → 30건'처럼 화살표로 이어진 강조 표시가 됩니다.",
+              "각 페이지의 '하단 키 메시지'는 푸터 바로 위에 강조색으로 표시됩니다. 그 페이지에서 한 문장만 기억하게 한다면 무엇일지 쓰면 됩니다.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "프로젝트 하나로 다섯 장 케이스 만들기",
+            input: "프로젝트 1개 · 개요·문제 정의·성과 페이지 켬 · 솔루션 페이지 1장(다이어그램 섹션 1개) · 가설 수립 끔",
+            result: "프로젝트 페이지 4장(개요 → 문제 정의 → 솔루션 → 성과)과 상단 탭 4개, 표지·프로필·일하는 방식·Overview·엔딩을 더해 총 9장",
+            note: "가설 수립 페이지를 켜면 탭과 페이지가 하나씩 늘어납니다.",
+          },
+          {
+            title: "같은 포트폴리오를 다른 회사용으로",
+            input: "'복제' 후 회사명과 강조색을 #00A86B 로 바꾸고 엔딩 문장 수정",
+            result: "표지 로고 자리의 회사명, 강조점·탭·성과 강조색이 바뀐 새 문서",
+          },
+        ],
+        limitations: [
+          "내용과 이미지는 이 브라우저의 localStorage에 저장됩니다. 보통 5MB 안팎이라 이미지를 많이 넣으면 저장이 실패할 수 있으니 '전체 백업'으로 파일을 보관하세요.",
+          "한국어 페이지와 영문 페이지는 저장 공간이 따로입니다. 다른 언어 페이지로 옮기려면 '전체 백업'으로 내려받아 그 페이지에서 '불러오기'하세요.",
+          "페이지 구성과 디자인은 정해진 형태 하나입니다. 슬라이드 위치를 끌어서 바꾸거나 글자 크기를 조절하는 기능은 없습니다.",
+          "내용이 너무 길면 슬라이드 아래쪽이 잘립니다. 미리보기에서 넘치는지 확인하고 문장을 줄이거나 페이지를 나누세요.",
+          "1920×1080 PDF 저장은 데스크톱 Chrome·Edge에서 가장 정확합니다. 일부 브라우저는 사용자 지정 용지 크기를 무시합니다.",
+        ],
+      },
+      en: {
+        card: "Turn project case studies into a 16:9 deck with a set flow and save it as PDF.",
+        description:
+          "Build slides in a set flow: cover, profile, how you work, overview, then overview, problem, hypothesis, solution and outcome pages for each project. Only the parts you write become pages, and solution pages can hold tables, quotes, images and diagrams. It shares the profile with Resume Builder, and everything stays in this browser.",
+        howItWorks: [
+          "Under 'Cover', enter the company, accent color and cover title. Your name and experience come from the shared profile.",
+          "In 'Projects', switch on the pages you need (overview, problem, hypothesis, outcome) and add sections and elements to solution pages.",
+          "Check the slides on the right, then press 'Save as PDF' to save a 1920×1080 PDF.",
+        ],
+        aeo: {
+          what: "Portfolio Builder is a browser tool that turns project case studies into a 16:9 deck of cover, profile, overview and project pages and saves it as PDF.",
+          who: "It is for product managers, planners and designers who need to show a project from problem framing to outcome as a case study.",
+          how: "It renders your content in a fixed page structure, draws diagrams from Mermaid code, and creates a landscape PDF with the browser's print feature.",
+          why: "You can focus on content instead of laying out slides by hand, and quickly make versions per company that differ only in order and accent color.",
+        },
+        guide: [
+          {
+            heading: "Why the page flow is fixed",
+            body: [
+              "Reviewers skim a portfolio for what problem you took on, on what evidence, how you solved it and what changed. Each project here becomes overview, problem, hypothesis, solution and outcome pages in that order, with tabs at the top that show where the reader is.",
+              "Not every page is required. If a project had no hypothesis, switch that page off and it disappears from the tabs too. You can add several solution pages; leave the label empty and they are numbered Point 1, Point 2.",
+            ],
+          },
+          {
+            heading: "Building a solution page",
+            body: [
+              "A solution page stacks sections from top to bottom. Each section can have a title, description, element and note, and only filled parts are shown. 'Split into two columns' turns that row into two side-by-side cells, useful for comparisons or before and after screens.",
+              "Elements are a list, table, quote, image or diagram. For a table, separate cells with | and write one row per line; for a diagram, use Mermaid syntax such as flowchart LR. A chosen image is reduced to at most 1600px wide, so use an image URL if you need the original resolution.",
+            ],
+          },
+          {
+            heading: "Outcome pages and key messages",
+            body: [
+              "The outcome page has three cards: collaboration and leadership, key results and lessons learned. Give a key result both a before value and a result to show a highlighted '120 → 30' with an arrow.",
+              "Each page's 'Key message' appears in the accent color just above the footer. Write the one sentence you want the reader to remember from that page.",
+            ],
+          },
+        ],
+        examples: [
+          {
+            title: "A five-part case from one project",
+            input: "One project · overview, problem and outcome pages on · one solution page with a diagram section · hypothesis off",
+            result: "Four project pages (overview → problem → solution → outcome) with four tabs, plus cover, profile, how I work, overview and closing for nine slides in total",
+            note: "Turning on the hypothesis page adds one tab and one page.",
+          },
+          {
+            title: "Reusing a portfolio for another company",
+            input: "'Duplicate', then change the company and the accent color to #00A86B and edit the closing lines",
+            result: "A new document with the company name on the cover and the accent dots, tabs and result highlights in the new color",
+          },
+        ],
+        limitations: [
+          "Content and images are saved in this browser's localStorage, usually around 5MB. Many images can make saving fail, so keep a 'Full backup' file.",
+          "The English and Korean pages keep separate saves. To move your work between them, download a 'Full backup' and use 'Import' on the other page.",
+          "There is one fixed page structure and design. You cannot drag slides around or change font sizes.",
+          "Very long content is cut off at the bottom of a slide. Check the preview for overflow and shorten sentences or split the page.",
+          "Saving a 1920×1080 PDF is most accurate in desktop Chrome and Edge. Some browsers ignore custom paper sizes.",
+        ],
+      },
+    },
+    faq: {
+      ko: [
+        {
+          question: "경력기술서 빌더와 무엇을 공유하나요?",
+          answer:
+            "이름·연락처·소개·경력·학력·활동이 들어 있는 공통 프로필을 함께 씁니다. 한쪽에서 경력을 고치면 다른 쪽에도 반영됩니다. 표지 제목·일하는 방식·프로젝트 케이스 같은 포트폴리오 내용은 포트폴리오 문서에만 있습니다.",
+        },
+        {
+          question: "슬라이드 아래쪽 글이 잘려요.",
+          answer:
+            "슬라이드는 1920×1080 고정 크기라 내용이 넘치면 잘립니다. 리스트 항목을 줄이거나, 솔루션 섹션을 다른 솔루션 페이지로 옮겨 나누세요. 미리보기에서 보이는 모습이 PDF와 같습니다.",
+        },
+        {
+          question: "다이어그램은 어떻게 그리나요?",
+          answer:
+            "솔루션 섹션의 요소를 '다이어그램'으로 고르고 mermaid 코드를 씁니다. 예를 들어 'flowchart LR' 다음 줄에 'A[주문] --> B[정산]'처럼 쓰면 됩니다. 노드와 선은 강조색으로 칠해지고, 문법이 틀리면 오류 메시지가 슬라이드에 표시됩니다.",
+        },
+        {
+          question: "이미지를 넣었더니 저장 공간이 가득 찼다고 나와요.",
+          answer:
+            "브라우저 저장 공간은 보통 5MB 안팎입니다. 쓰지 않는 이미지를 지우거나, 이미지를 웹에 올린 뒤 '이미지 주소'를 넣으면 용량을 거의 쓰지 않습니다. 저장 실패 상태에서도 '전체 백업'으로 지금 내용을 파일로 받을 수 있습니다.",
+        },
+        {
+          question: "PDF가 가로 슬라이드 크기로 저장되지 않아요.",
+          answer:
+            "인쇄 창에서 대상을 'PDF로 저장'으로 고르고 여백을 '기본값' 또는 '없음'으로 두세요. 데스크톱 Chrome·Edge는 1920×1080 용지를 그대로 씁니다. Safari 등 일부 브라우저는 사용자 지정 용지를 무시할 수 있습니다.",
+        },
+      ],
+      en: [
+        {
+          question: "What does it share with Resume Builder?",
+          answer:
+            "The shared profile: name, contacts, intro, experience, education and activities. Edit your experience in one tool and the other updates too. Portfolio content such as the cover title, how you work and project case studies lives only in the portfolio document.",
+        },
+        {
+          question: "Text is cut off at the bottom of a slide.",
+          answer:
+            "Slides are a fixed 1920×1080, so overflowing content is clipped. Trim list items or move a solution section to another solution page. What you see in the preview matches the PDF.",
+        },
+        {
+          question: "How do I draw a diagram?",
+          answer:
+            "Set a solution section's element to 'Diagram' and write Mermaid code, for example 'flowchart LR' followed by a line such as 'A[Orders] --> B[Settlement]'. Nodes and lines use the accent color, and a syntax error is shown on the slide.",
+        },
+        {
+          question: "After adding images it says storage is full.",
+          answer:
+            "Browser storage is usually around 5MB. Remove unused images, or upload an image to the web and enter its URL, which uses almost no space. Even when saving fails, 'Full backup' still downloads your current content as a file.",
+        },
+        {
+          question: "The PDF is not saved at slide size.",
+          answer:
+            "Choose 'Save as PDF' as the destination and leave margins at 'Default' or 'None'. Desktop Chrome and Edge use the 1920×1080 paper as is; some browsers such as Safari may ignore custom paper sizes.",
+        },
+      ],
+    },
+    og: {
+      ko: { title: "포트폴리오 빌더", subtitle: "프로젝트 케이스를 16:9 슬라이드 PDF로" },
+      en: { title: "Portfolio Builder", subtitle: "Project case studies as a 16:9 slide PDF" },
     },
   },
 

@@ -1,0 +1,2106 @@
+/* ============================================================
+   경력기술서 · 포트폴리오 빌더 (auto-folio 이식)
+
+   두 도구 페이지에서만 import 한다 (ResumeBuilder · PortfolioBuilder).
+   ① 문서 토큰   : .folio-doc 에만 건다. :root 를 건드리지 않는다.
+   ② 경력기술서  : .rf-doc 아래로 스코프 (A4 세로)
+   ③ 포트폴리오  : .pf-* (1920×1080 가로 슬라이드)
+   ④ 빌더 UI     : .fb-* (편집기 · 미리보기)
+   ⑤ 인쇄        : html.fb-printing 일 때 인쇄 포털만 남긴다
+   문서 안 색은 토큰(var)만 쓴다. --primary 는 문서 루트에 브랜드 색으로 주입된다.
+   ============================================================ */
+
+/* ① 문서 토큰 (auto-folio 쿨그레이 팔레트) */
+.folio-doc {
+  --primary: #2d5dc8;
+  --primary-soft: color-mix(in srgb, var(--primary) 10%, white);
+  --ink-strong: #16191d;
+  --ink-muted: #3c434d;
+  --ink-subtle: #727a85;
+  --line: #e6e9ed;
+  --background: #ffffff;
+  --surface-muted: #f6f9fc;
+  --font-base: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  --gap-3: 24px;
+  --gap-5: 40px;
+  --doc-max: 960px;
+  --doc-margin-x: 48px;
+  --label-w: 72px;
+  --cap-label-w: 188px;
+  font-family: var(--font-base);
+  font-feature-settings: "tnum";
+  -webkit-font-smoothing: antialiased;
+}
+.folio-doc ul.dash {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.folio-doc ul.dash li {
+  position: relative;
+}
+.folio-doc h1,
+.folio-doc h2,
+.folio-doc h3,
+.folio-doc h4,
+.folio-doc p {
+  margin: 0;
+}
+
+/* ② 경력기술서 */
+.rf-doc {
+  max-width: var(--doc-max);
+  margin: 0 auto;
+  background: var(--background);
+  padding: 64px var(--doc-margin-x) 96px;
+  line-height: 1.66;
+  font-size: 14.5px;
+  color: var(--ink-muted);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
+}
+.rf-doc .masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--ink-strong);
+  padding-bottom: 18px;
+  margin-bottom: 8px;
+}
+.rf-doc .name {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink-strong);
+  line-height: 1.1;
+  margin: 0;
+}
+.rf-doc .role-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 8px;
+  letter-spacing: 0.01em;
+}
+.rf-doc .contact {
+  font-size: 12.5px;
+  color: var(--ink-subtle);
+  text-align: right;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+.rf-doc .contact b {
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+.rf-doc .sec {
+  margin-top: var(--gap-5);
+}
+.rf-doc .masthead + .sec {
+  margin-top: var(--gap-3);
+}
+.rf-doc .sec-h {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 7px;
+  margin-bottom: 18px;
+}
+.rf-doc .sec-k {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.14em;
+  font-feature-settings: "tnum";
+}
+.rf-doc .sec-t {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink-strong);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.rf-doc .sec-meta {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--ink-subtle);
+  font-weight: 600;
+}
+.rf-doc .lead {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink-strong);
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+.rf-doc .intro-p {
+  margin: 0 0 12px;
+}
+.rf-doc .sub-h {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-strong);
+  margin: 24px 0 12px;
+}
+.rf-doc .cap {
+  display: grid;
+  gap: 11px;
+}
+.rf-doc .cap-row {
+  display: grid;
+  grid-template-columns: var(--cap-label-w) 1fr;
+  gap: 18px;
+  align-items: start;
+}
+.rf-doc .cap-t {
+  font-weight: 700;
+  color: var(--ink-strong);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.rf-doc .cap-d {
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+.rf-doc .tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+.rf-doc .tbl th,
+.rf-doc .tbl td {
+  text-align: left;
+  vertical-align: top;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.rf-doc .tbl thead th {
+  background: var(--surface-muted);
+  font-weight: 700;
+  color: var(--ink-strong);
+  font-size: 12.5px;
+  border-bottom: 1px solid var(--line);
+}
+.rf-doc .tbl td.k {
+  width: 120px;
+  font-weight: 700;
+  color: var(--ink-strong);
+  white-space: nowrap;
+  background: var(--surface-muted);
+}
+.rf-doc .tbl td.v {
+  color: var(--ink-muted);
+}
+.rf-doc .job {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.rf-doc .job:last-child {
+  border-bottom: none;
+}
+.rf-doc .job-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.rf-doc .job-co {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--ink-strong);
+}
+.rf-doc .job-per {
+  font-size: 12.5px;
+  color: var(--ink-subtle);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rf-doc .job-role {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 4px 0 11px;
+  letter-spacing: 0.01em;
+}
+.rf-doc ul.dash.bul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 7px;
+}
+.rf-doc ul.dash.bul li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+.rf-doc ul.dash.bul li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+.rf-doc .proj {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.rf-doc .proj:first-of-type {
+  border-top: none;
+  padding-top: 4px;
+}
+.rf-doc .proj-head {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+  margin-bottom: 4px;
+}
+.rf-doc .proj-num {
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--primary);
+  border-radius: 5px;
+  padding: 3px 8px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.rf-doc .proj-t {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink-strong);
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.3;
+}
+.rf-doc .proj-meta {
+  font-size: 12.5px;
+  color: var(--ink-subtle);
+  font-weight: 600;
+  margin: 0 0 16px;
+  padding-left: 1px;
+}
+.rf-doc .proj-meta b {
+  color: var(--primary);
+  font-weight: 700;
+}
+.rf-doc .pblock {
+  display: grid;
+  grid-template-columns: var(--label-w) 1fr;
+  gap: 16px;
+  margin-top: 13px;
+  align-items: start;
+}
+.rf-doc .plabel {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.06em;
+  padding-top: 2px;
+}
+.rf-doc .pbody {
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+.rf-doc .pbody p {
+  margin: 0;
+}
+.rf-doc ul.dash {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.rf-doc ul.dash li {
+  position: relative;
+  padding-left: 14px;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+.rf-doc ul.dash li::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0.78em;
+  width: 7px;
+  height: 1.5px;
+  background: var(--ink-subtle);
+}
+.rf-doc ul.dash li ul {
+  margin-top: 6px;
+}
+.rf-doc ul.dash li ul li::before {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  top: 0.7em;
+}
+.rf-doc .perfbox {
+  background: var(--primary-soft);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+.rf-doc .perfbox b,
+.rf-doc .pbody b {
+  color: var(--ink-strong);
+  font-weight: 700;
+}
+.rf-doc .perfbox ul.dash li::before {
+  background: var(--primary);
+}
+.rf-doc .trio {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 8px;
+}
+.rf-doc .f-h {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink-strong);
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+.rf-doc .edu-co {
+  font-weight: 700;
+  color: var(--ink-strong);
+  font-size: 14px;
+}
+.rf-doc .edu-meta {
+  font-size: 12.5px;
+  color: var(--ink-subtle);
+  margin-top: 2px;
+}
+.rf-doc .edu-sub {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 5px;
+}
+.rf-doc .award-g {
+  margin-top: 14px;
+}
+.rf-doc .award-y {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.rf-doc .misc-co {
+  font-weight: 700;
+  color: var(--ink-strong);
+  font-size: 13.5px;
+}
+.rf-doc .misc-d {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+  line-height: 1.55;
+}
+
+/* ③ 포트폴리오 */
+/* ─────────────────────────────────────────────────────────────
+   포트폴리오 (가로형 1920×1080). 시안 토큰/레이아웃 기반.
+   색은 brand/page 토큰에서 파생하고, 생성 데이터는 content/*.yml 원천.
+   ───────────────────────────────────────────────────────────── */
+.pf-root {
+  --pf-ink: var(--ink-strong);
+  --pf-ink2: var(--ink-muted);
+  --pf-muted: var(--ink-subtle);
+  --pf-faint: var(--ink-subtle);
+  --pf-line: var(--line);
+  --pf-line-strong: var(--line);
+  --pf-bg2: var(--surface-muted);
+  --pf-primary-soft: var(--primary-soft);
+  /* 여백 토큰: 콘텐츠 영역(헤더 라인 ~ 푸터 라인 사이) 기준 */
+  --sp-body-y: 64px; /* 콘텐츠 영역 상하 패딩 (헤더 아래 · 푸터 위) */
+  --sp-group: 40px; /* 콘텐츠 박스(그룹) 간 */
+  --sp-title: 32px; /* 제목 → 본콘텐츠 */
+  --sp-subtitle: 24px; /* 박스 내부 소제목(가설·근거·성과 카드 헤더 등) → 본콘텐츠 */
+  --sp-item: 16px; /* 같은 depth 본콘텐츠 간 (텍스트/리스트/주석/표) */
+}
+
+.pf-deck {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.pf-slide-frame {
+  width: 100%;
+  height: calc(1080px * var(--fit, 1));
+  display: flex;
+  justify-content: center;
+}
+
+.pf-slide {
+  width: 1920px;
+  height: 1080px;
+  flex: 0 0 auto;
+  transform: scale(var(--fit, 1));
+  transform-origin: top center;
+  background: var(--background);
+  color: var(--pf-ink2);
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 74px 92px;
+  box-shadow: none;
+}
+
+.pf-slide--cover {
+  padding: 120px 100px;
+  justify-content: space-between;
+}
+
+.pf-cover-top,
+.pf-cover-bottom,
+.pf-ptop,
+.pf-ptitle,
+.pf-shead,
+.pf-profile-meta,
+.pf-person {
+  display: flex;
+}
+
+.pf-cover-top,
+.pf-cover-bottom,
+.pf-shead,
+.pf-ptop,
+.pf-ptitle {
+  justify-content: space-between;
+}
+
+.pf-cover-top {
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.pf-cover-bottom,
+.pf-profile-meta,
+.pf-person {
+  align-items: center;
+}
+
+.pf-cover-title,
+.pf-ending {
+  margin: 0;
+  max-width: 1320px;
+  color: var(--pf-ink);
+  font-size: 82px;
+  font-weight: 800;
+  line-height: 1.16;
+  word-break: keep-all;
+}
+
+.pf-ending {
+  font-size: 72px;
+}
+
+.pf-dot {
+  color: var(--primary);
+}
+
+.pf-logo {
+  color: var(--pf-ink);
+  font-size: 42px;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 업로드한 로고: 높이 기준으로 맞추고 가로가 긴 로고는 폭 상한에서 멈춘다 */
+.pf-logo--img {
+  flex: none;
+}
+.pf-logo--img img {
+  display: block;
+  max-height: 88px;
+  max-width: 420px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.pf-person {
+  gap: 16px;
+  min-width: 0;
+}
+
+.pf-cover-name,
+.pf-cv-name {
+  color: var(--pf-ink);
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.pf-cv-name {
+  font-size: 32px;
+}
+
+.pf-tag,
+.pf-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  border-radius: 999px;
+  background: var(--pf-bg2);
+  color: var(--pf-ink2);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.1;
+  padding: 7px 17px;
+  white-space: nowrap;
+}
+
+.pf-tag--blue {
+  background: var(--pf-primary-soft);
+  color: var(--primary);
+}
+
+.pf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pf-tags span {
+  min-height: 34px;
+  font-size: 20px;
+  padding: 5px 14px;
+}
+
+.pf-shead {
+  align-items: flex-end;
+  border-bottom: 1px solid var(--pf-line);
+  padding-bottom: 18px;
+  margin-bottom: var(--sp-body-y);
+}
+
+.pf-eyebrow {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.pf-stitle {
+  color: var(--pf-ink);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.pf-pageno {
+  color: var(--pf-faint);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pf-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-body--about {
+  gap: var(--sp-group);
+}
+
+.pf-profile {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.pf-photo {
+  width: 112px;
+  height: 134px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--pf-bg2);
+  border: 1px solid var(--pf-line);
+  color: var(--pf-faint);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.pf-profile-meta {
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pf-q {
+  margin: 8px 0 0;
+  color: var(--pf-ink2);
+  font-size: 23px;
+  line-height: 1.42;
+}
+
+.pf-q--lead {
+  color: var(--pf-ink);
+  font-weight: 700;
+}
+
+.pf-about-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.95fr) minmax(0, 0.85fr);
+  gap: 56px;
+}
+
+.pf-card {
+  min-width: 0;
+}
+
+.pf-card-h {
+  margin: 0 0 var(--sp-title);
+  border-bottom: 1px solid var(--pf-line-strong);
+  padding-bottom: 14px;
+  color: var(--pf-ink);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pf-card-h span {
+  color: var(--pf-muted);
+  font-size: 24px;
+  font-weight: 600;
+  margin-left: 12px;
+}
+
+.pf-exp-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-exp {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 22px;
+  border-top: 1px solid var(--pf-line);
+  padding: 8px 0;
+}
+
+.pf-exp:first-child {
+  border-top: none;
+}
+
+.pf-exp-co {
+  color: var(--pf-ink);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.25;
+  word-break: keep-all;
+}
+
+.pf-exp-meta {
+  color: var(--pf-muted);
+  font-size: 21px;
+  line-height: 1.3;
+  margin-top: 4px;
+}
+
+.pf-exp-role {
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 5px;
+  word-break: keep-all;
+}
+
+.pf-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+/* 우측 보조 컬럼은 밀도를 높여 푸터 침범 방지 */
+.pf-side-stack .pf-card-h {
+  margin-bottom: 8px;
+  padding-bottom: 10px;
+  font-size: 26px;
+}
+
+.pf-soft-row {
+  border-top: 1px solid var(--pf-line);
+  padding: 6px 0;
+}
+
+.pf-soft-row:first-of-type {
+  border-top: none;
+}
+
+.pf-mini-list,
+.pf-work-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.pf-mini-list.dash li,
+.pf-work-list.dash li,
+.pf-solution ul.dash li,
+.pf-psections ul.dash li,
+.pf-pcard ul.dash li {
+  position: relative;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.5;
+  padding-left: 22px;
+}
+
+.pf-mini-list.dash li::before,
+.pf-work-list.dash li::before,
+.pf-solution ul.dash li::before,
+.pf-psections ul.dash li::before,
+.pf-pcard ul.dash li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 13px;
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+}
+
+.pf-mini-list.dash {
+  gap: 5px;
+}
+
+.pf-mini-list.dash li {
+  font-size: 18.5px;
+  line-height: 1.34;
+}
+
+.pf-mini-list.dash li::before {
+  top: 10px;
+  width: 5px;
+  height: 5px;
+}
+
+.pf-overview-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 56px;
+}
+
+.pf-work {
+  gap: var(--sp-group);
+}
+
+.pf-work-top {
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+}
+
+.pf-philo-card,
+.pf-peer-summary,
+.pf-work-top > .pf-card {
+  flex: 1 1 0;
+}
+
+/* 기획철학: 타이틀/설명 2단: 카드 소제목·본문 스타일 준용.
+   항목(title+desc 묶음) 간은 그룹 간격, title→desc 는 소제목 간격. */
+.pf-philo {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-group);
+}
+
+.pf-philo li {
+  color: var(--pf-ink);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.pf-work-list {
+  gap: 14px;
+}
+
+.pf-work-list.dash li {
+  font-size: 27px;
+  line-height: 1.45;
+}
+
+.pf-peer-source {
+  margin: -2px 0 28px;
+  color: var(--pf-muted);
+  font-size: 25px;
+  line-height: 1.35;
+}
+
+.pf-peer-bars {
+  display: grid;
+  gap: 22px;
+}
+
+.pf-peer-bar {
+  display: grid;
+  grid-template-columns: 238px 1fr 70px;
+  gap: 24px;
+  align-items: center;
+  color: var(--pf-ink2);
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.pf-peer-bar b {
+  color: var(--primary);
+  font-size: 29px;
+  font-weight: 800;
+  text-align: right;
+}
+
+.pf-bar-track {
+  height: 12px;
+  background: var(--pf-line);
+  overflow: hidden;
+}
+
+.pf-bar-track i {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+}
+
+.pf-peer-quotes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-item) 54px;
+  width: 100%;
+}
+
+.pf-peer-quotes blockquote {
+  margin: 0;
+  border-top: 1px solid var(--pf-line);
+  padding-top: 20px;
+  color: var(--pf-ink2);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.48;
+  word-break: keep-all;
+}
+
+.pf-peer-quotes .em {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.pf-cap-list,
+.pf-project-map {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-cap-row {
+  border-top: 1px solid var(--pf-line);
+  padding: 8px 0;
+}
+
+.pf-cap-row:first-child {
+  border-top: none;
+}
+
+.pf-cap-title {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  color: var(--pf-ink);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pf-cap-title span {
+  color: var(--primary);
+}
+
+.pf-cap-row p {
+  margin: 8px 0 0;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.4;
+}
+
+.pf-map-row {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 22px;
+  border-top: 1px solid var(--pf-line);
+  padding: 8px 0;
+}
+
+.pf-map-row:first-child {
+  border-top: none;
+}
+
+.pf-map-no {
+  color: var(--primary);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.pf-map-title {
+  color: var(--pf-ink);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 8px;
+  word-break: keep-all;
+}
+
+.pf-map-desc {
+  margin: 0 0 8px;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.38;
+  word-break: keep-all;
+}
+
+.pf-map-links {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 12px;
+  color: var(--pf-ink);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pf-map-links > span {
+  color: var(--pf-muted);
+}
+
+.pf-map-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-right: 18px;
+  margin-bottom: 4px;
+}
+
+.pf-map-link b {
+  color: var(--primary);
+}
+
+.pf-map-link strong {
+  border-bottom: 2px solid var(--primary-soft);
+  color: var(--pf-ink);
+  font-weight: 800;
+}
+
+.pf-phead {
+  margin-bottom: var(--sp-body-y);
+}
+
+.pf-ptop {
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pf-ptitle {
+  align-items: flex-end;
+  border-bottom: 1px solid var(--pf-line);
+  padding-bottom: 14px;
+}
+
+.pf-tabs {
+  display: flex;
+  gap: 24px;
+  max-width: 1080px;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+.pf-tab {
+  color: var(--pf-faint);
+  border-bottom: 2px solid transparent;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  padding-bottom: 14px;
+  margin-bottom: -15px;
+  white-space: nowrap;
+}
+
+.pf-tab.is-on {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 700;
+}
+
+/* ── 솔루션 페이지: 섹션 1단 스택 기본, columns 행만 2단 ─────── */
+.pf-solution {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-group);
+}
+
+.pf-ssec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-item);
+  min-width: 0;
+}
+
+.pf-ssec > .pf-heading {
+  margin-bottom: calc(var(--sp-title) - var(--sp-item));
+}
+
+/* 섹션 안 요소(figure)는 섹션 폭을 따른다: align-self:start 로 쪼그라들지 않게 */
+.pf-ssec .pf-diagram,
+.pf-ssec .pf-capture {
+  align-self: stretch;
+}
+
+.pf-scols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 56px;
+  align-items: start;
+}
+
+.pf-solution ul.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-snote {
+  margin: 0;
+  color: var(--pf-muted);
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+/* 솔루션 카드 본문은 24px (기본 pf-text 28px 대비 축소) */
+.pf-solution .pf-text {
+  font-size: 24px;
+}
+
+.pf-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--pf-ink);
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.pf-heading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: var(--primary);
+  flex: none;
+}
+
+.pf-text {
+  color: var(--pf-ink2);
+  font-size: 28px;
+  line-height: 1.5;
+  margin: 0;
+  word-break: keep-all;
+}
+
+.pf-solution .em,
+.pf-q .em,
+.pf-mini-list .em,
+.pf-work-list .em,
+.pf-philo .em,
+.pf-povr .em,
+.pf-psections .em,
+.pf-pcard .em,
+.pf-plead .em {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.pf-result {
+  border-top: 1px solid var(--pf-line);
+  padding-top: 18px;
+  grid-column: 1 / -1;
+}
+
+.pf-note {
+  border-top: 1px solid var(--pf-line);
+  display: grid;
+  gap: 8px;
+  padding-top: 16px;
+  align-self: start;
+}
+
+.pf-blabel {
+  color: var(--pf-ink);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pf-quote {
+  margin: 0;
+  border-top: 1px solid var(--pf-line);
+  padding-top: 18px;
+  color: var(--pf-ink);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.pf-quote cite {
+  display: block;
+  color: var(--pf-muted);
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.pf-table {
+  margin: 0;
+  align-self: start;
+}
+
+.pf-table table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--pf-ink2);
+  font-size: 24px;
+}
+
+.pf-table th,
+.pf-table td {
+  border: 1px solid var(--pf-line);
+  padding: 13px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.pf-table th {
+  color: var(--pf-ink);
+  font-weight: 700;
+  background: var(--pf-bg2);
+}
+
+.pf-table figcaption,
+.pf-diagram figcaption,
+.pf-capture figcaption {
+  color: var(--pf-muted);
+  font-size: 20px;
+  margin-top: 12px;
+}
+
+.pf-diagram {
+  margin: 0;
+  border-top: 1px solid var(--pf-line);
+  padding-top: 16px;
+  align-self: start;
+}
+
+/* 1단/2단 무관 좌측 정렬: 제목/설명/다이어그램/주석 라인 통일 */
+.pf-diagram-svg {
+  display: flex;
+  justify-content: flex-start;
+  min-height: 250px;
+  align-items: center;
+}
+
+/* mermaid 가 svg 에 자연 크기 max-width 를 인라인으로 박으므로 !important 로 해제.
+   viewBox 비율 유지 스케일: 컬럼(2단)에서는 컬럼 폭을 채운다. */
+.pf-diagram-svg svg {
+  width: 100%;
+  max-width: none !important;
+  height: auto;
+}
+
+/* 솔루션 1단(전체 폭) 다이어그램은 과확대 방지: 최대 1000px 중앙 */
+.pf-solution > .pf-ssec .pf-diagram-svg svg {
+  max-width: 1000px !important;
+}
+
+.pf-diagram-err,
+.pf-unknown {
+  color: var(--primary);
+  font-size: 18px;
+  white-space: pre-wrap;
+}
+
+.pf-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+.pf-capture {
+  margin: 0;
+}
+
+.pf-capture img {
+  display: block;
+  width: 100%; /* 기본은 섹션 폭 가득. 슬라이더 값(인라인 width)이 덮어쓴다 */
+  max-width: 100%;
+  height: auto; /* 너비만 바꿔도 비율 유지 */
+  border: 1px solid var(--pf-line);
+}
+
+/* ── 프로젝트 고정 페이지 (개요/문제정의/가설수립/성과) ───────── */
+.pf-povr {
+  display: flex;
+  flex-direction: column;
+}
+
+.pf-povr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 48px;
+  margin-bottom: var(--sp-title);
+}
+
+.pf-povr-head h3 {
+  margin: 0;
+  color: var(--pf-ink);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.pf-povr-meta {
+  color: var(--pf-muted);
+  font-size: 24px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+/* 개요 표: 위 테두리 + 행마다 아래 테두리, 왼쪽 라벨 칸은 옅은 회색 면 */
+.pf-povr-head + div {
+  border-top: 1px solid var(--pf-line);
+}
+
+.pf-povr-row {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  border-bottom: 1px solid var(--pf-line);
+}
+
+.pf-povr-label {
+  background: var(--pf-bg2);
+  padding: 20px 24px;
+  color: var(--pf-ink);
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.pf-povr-row p {
+  margin: 0;
+  padding: 20px 28px;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.pf-psections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-group);
+}
+
+.pf-psections ul.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-pcards {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.pf-psections section > .pf-heading {
+  margin-bottom: var(--sp-title);
+}
+
+.pf-pcard {
+  min-width: 0;
+  border-top: 1px solid var(--pf-line);
+  padding-top: 16px;
+}
+
+.pf-pcard h4 {
+  margin: 0 0 var(--sp-subtitle);
+  color: var(--pf-ink);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.pf-pcard p {
+  margin: 0;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.pf-pcard ul.dash {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pf-plead {
+  margin: 0;
+  color: var(--pf-ink);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.32;
+  word-break: keep-all;
+}
+
+.pf-phypo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* ── 성과 페이지: 상단 2단(협업·리딩 | 주요 성과) + 레슨런 full-width ── */
+.pf-pout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-group) 56px;
+  align-content: start;
+}
+
+.pf-pcard--wide {
+  grid-column: 1 / -1;
+}
+
+.pf-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-item);
+}
+
+/* 성과 항목: 라벨 뒤에 강조값이 텍스트처럼 이어지는 flex: 갭 16px, 세로 중앙 */
+.pf-metric {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.pf-metric-label {
+  color: var(--pf-ink2);
+  font-size: 24px;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.pf-metric-value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.15;
+  word-break: keep-all;
+}
+
+.pf-metric-from {
+  color: var(--pf-muted);
+  opacity: 0.6;
+}
+
+.pf-metric-arrow {
+  color: var(--pf-muted);
+  font-size: 30px;
+  opacity: 0.6;
+}
+
+.pf-metric-value b {
+  color: color-mix(in srgb, var(--primary) 60%, white);
+}
+
+/* 기획 철학: desc: 카드 본문과 동일 톤, 소제목 간격으로 이어짐 */
+.pf-philo-desc {
+  margin: var(--sp-subtitle) 0 0;
+  color: var(--pf-ink2);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* 시안의 슬라이드 하단 키 메시지: 본문 그리드 밖, 푸터 바로 위 */
+.pf-takeaway {
+  margin: var(--sp-item) 0 0;
+  color: var(--pf-ink);
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.32;
+  word-break: keep-all;
+}
+
+.pf-takeaway .em {
+  color: var(--primary);
+}
+
+.pf-thanks {
+  color: var(--pf-muted);
+  font-size: 26px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.pf-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--pf-line);
+  padding-top: 16px;
+  margin-top: var(--sp-body-y);
+  color: var(--pf-faint);
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+@media print {
+  .pf-root {
+    background: var(--background);
+  }
+
+  .pf-deck {
+    gap: 0;
+    padding: 0;
+  }
+
+  .pf-slide-frame {
+    height: 1080px;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+  }
+
+  /* 마지막 슬라이드 뒤 강제 분할은 트레일링 빈 페이지를 만든다 */
+  .pf-slide-frame:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .pf-slide {
+    transform: none;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}
+
+/* ④ 빌더 UI (Canvas 테마: 흰 편집 패널 → 회색 미리보기) */
+.fb-work {
+  background: #fff;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.fb-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-blue-gray-200);
+}
+.fb-docpick {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+  flex: 1 1 200px;
+}
+.fb-docpick--lang {
+  flex: 0 1 140px;
+  min-width: 120px;
+}
+.fb-docpick label,
+.fb-field > label,
+.fb-label,
+.fb-list-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-blue-gray-700);
+}
+.fb-docpick select,
+.fb-field input:not([type="checkbox"]):not([type="color"]):not([type="file"]),
+.fb-field select,
+.fb-field textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--color-blue-gray-900);
+  font: inherit;
+  font-size: 14px;
+}
+.fb-field textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+.fb-field textarea.is-mono,
+.fb-yaml-in {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+.fb-docpick select:focus-visible,
+.fb-field input:focus-visible,
+.fb-field select:focus-visible,
+.fb-field textarea:focus-visible,
+.fb-yaml-in:focus-visible {
+  outline: 2px solid var(--color-blue-primary-600);
+  outline-offset: 1px;
+}
+.fb-toolbar-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.fb-print-btn {
+  margin-left: auto;
+}
+.fb-alert {
+  margin: 12px 16px 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--color-blue-primary-50);
+  color: var(--color-blue-primary-900);
+  font-size: 13px;
+}
+.fb-linkbtn {
+  text-decoration: underline;
+  color: var(--color-blue-primary-700);
+}
+.fb-viewseg {
+  display: none;
+  margin: 12px 16px 0;
+}
+/* 미리보기 왼쪽 · 편집 오른쪽 */
+.fb-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 420px);
+  align-items: start;
+}
+.fb-editor {
+  border-left: 1px solid var(--color-blue-gray-200);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.fb-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 16px 0;
+  border-bottom: 1px solid var(--color-blue-gray-200);
+}
+.fb-tabs button {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-blue-gray-600);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.fb-tabs button.is-on {
+  color: var(--color-blue-primary-700);
+  border-bottom-color: var(--color-blue-primary-700);
+}
+.fb-editor-body {
+  padding: 12px 16px 16px;
+  max-height: calc(100vh - 220px);
+  min-height: 420px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.fb-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fb-sec {
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+.fb-sec > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 12px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-blue-gray-900);
+}
+.fb-sec > summary em {
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--color-blue-primary-700);
+}
+.fb-sec[open] > summary {
+  border-bottom: 1px solid var(--color-blue-gray-100);
+}
+.fb-sec-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px 14px;
+}
+.fb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.fb-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-blue-gray-500);
+}
+.fb-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  font-size: 13px;
+  color: var(--color-blue-gray-800);
+  cursor: pointer;
+}
+.fb-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-blue-primary-700);
+}
+.fb-color {
+  display: flex;
+  gap: 8px;
+}
+.fb-color input[type="color"] {
+  width: 44px;
+  height: 40px;
+  padding: 2px;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+.fb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fb-item {
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-blue-gray-50);
+}
+.fb-item-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 10px;
+  border-bottom: 1px solid var(--color-blue-gray-200);
+}
+.fb-item-no {
+  font-family: var(--font-inter);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-blue-primary-700);
+}
+.fb-item-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-blue-gray-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fb-item-tools {
+  display: flex;
+  gap: 2px;
+}
+.fb-item-tools button {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--color-blue-gray-600);
+  font-size: 13px;
+}
+.fb-item-tools button:hover:not(:disabled) {
+  background: var(--color-blue-gray-100);
+  color: var(--color-blue-gray-900);
+}
+.fb-item-tools button:disabled {
+  opacity: 0.35;
+}
+.fb-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+.fb-add {
+  align-self: flex-start;
+}
+.fb-page,
+.fb-checks,
+.fb-col {
+  margin: 0;
+  padding: 10px;
+  border: 1px dashed var(--color-blue-gray-300);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.fb-page > legend,
+.fb-checks > legend,
+.fb-col > legend {
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-blue-gray-700);
+}
+.fb-checks {
+  gap: 0;
+}
+.fb-cols {
+  display: grid;
+  gap: 10px;
+}
+.fb-element {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fb-image {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.fb-image img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-blue-gray-200);
+}
+.fb-yamlseg {
+  margin-bottom: 8px;
+}
+.fb-yaml {
+  margin-top: 8px;
+}
+.fb-yaml-in {
+  width: 100%;
+  min-height: 480px;
+  padding: 12px;
+  border: 1px solid var(--color-blue-gray-200);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--color-blue-gray-900);
+  line-height: 1.6;
+  resize: vertical;
+  tab-size: 2;
+}
+.fb-yaml-in[aria-invalid="true"] {
+  border-color: #c2410c;
+}
+.fb-yaml-err {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  color: #b42318;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+}
+.fb-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--color-blue-gray-200);
+}
+.fb-status,
+.fb-privacy {
+  margin: 0;
+  padding: 0 16px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-blue-gray-500);
+}
+.fb-status:empty {
+  display: none;
+}
+.fb-preview {
+  position: sticky;
+  top: 56px;
+  min-width: 0;
+  padding: 20px;
+  background: var(--color-blue-gray-100);
+  max-height: calc(100vh - 72px);
+  overflow: auto;
+}
+.fb-work--portfolio .fb-preview {
+  padding: 16px;
+}
+.fb-preview-inner .rf-doc {
+  margin: 0 auto;
+}
+.fb-zoom > .rf-doc {
+  width: 960px;
+  max-width: none;
+  zoom: var(--z, 1);
+}
+.fb-preview .pf-deck {
+  padding: 0;
+  gap: 16px;
+}
+.fb-preview .pf-slide {
+  box-shadow: 0 1px 3px rgba(27, 29, 33, 0.12);
+}
+.fb-print-hint {
+  margin-top: 12px;
+}
+.fb-render-error {
+  margin: 0;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #b42318;
+  font-size: 13px;
+}
+
+@media (max-width: 959px) {
+  .fb-viewseg {
+    display: inline-flex;
+  }
+  .fb-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fb-editor {
+    border-left: 0;
+  }
+  .fb-editor-body {
+    max-height: none;
+    min-height: 240px;
+  }
+  .fb-preview {
+    position: static;
+    max-height: none;
+    padding: 12px;
+  }
+  .fb-work[data-view="edit"] .fb-preview,
+  .fb-work[data-view="preview"] .fb-editor {
+    display: none;
+  }
+  .fb-print-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+  .fb-toolbar-btns .btn {
+    min-height: 40px;
+  }
+}
+
+/* ⑤ 인쇄: 인쇄 포털만 남긴다 (FolioBuilder 가 html.fb-printing 과 @page 를 붙인다) */
+.fb-print-root {
+  display: none;
+}
+@media print {
+  html.fb-printing body > :not(.fb-print-root) {
+    display: none !important;
+  }
+  html.fb-printing,
+  html.fb-printing body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  html.fb-printing .fb-print-root {
+    display: block;
+  }
+  .fb-print-root .rf-doc {
+    max-width: none;
+    margin: 0;
+    padding: 0 var(--doc-margin-x);
+    box-shadow: none;
+  }
+  .fb-print-root .rf-doc .proj,
+  .fb-print-root .rf-doc .trio,
+  .fb-print-root .rf-doc .job,
+  .fb-print-root .rf-doc .perfbox,
+  .fb-print-root .rf-doc .cap-row,
+  .fb-print-root .rf-doc tr,
+  .fb-print-root .rf-doc .pblock {
+    break-inside: avoid;
+  }
+  .fb-print-root .rf-doc .sec-h,
+  .fb-print-root .rf-doc .proj-head {
+    break-after: avoid;
+  }
+  .fb-print-root .rf-doc p,
+  .fb-print-root .rf-doc li {
+    orphans: 3;
+    widows: 3;
+  }
+}
+
+/* 경력기술서 ↔ 포트폴리오 전환 탭 (PageHead 위) */
+.fb-doctabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 20px;
+  border-bottom: 1px solid var(--color-blue-gray-200);
+}
+.fb-doctabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-blue-gray-600);
+}
+.fb-doctabs a:hover {
+  color: var(--color-blue-gray-900);
+}
+.fb-doctabs a.is-on {
+  color: var(--color-blue-primary-700);
+  border-bottom-color: var(--color-blue-primary-700);
+}
+
+/* 문서 안 인라인 서식: 기울임 · 밑줄 (굵게는 .em) */
+.folio-doc i {
+  font-style: italic;
+}
+.folio-doc u {
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.18em;
+}
+
+/* 폼 미니 에디터 (슬랙 메시지 빌더의 .sm-md-bar 를 재사용) */
+.fb-md-bar {
+  margin-bottom: -4px;
+}
+.fb-md-bar .sm-md-btn {
+  min-width: 32px;
+  height: 28px;
+  font-family: var(--font-inter);
+  font-size: 13px;
+}
+.fb-md-bold {
+  font-weight: 700;
+}
+.fb-md-italic {
+  font-style: italic;
+}
+.fb-md-underline {
+  text-decoration: underline;
+}
+.fb-field textarea.fb-md-input {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* 이미지 너비 슬라이더 */
+.fb-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+}
+.fb-range-val {
+  min-width: 48px;
+  text-align: right;
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-blue-gray-900);
+}

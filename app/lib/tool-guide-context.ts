@@ -3,6 +3,8 @@ export const TOOL_GUIDE_CONTEXT = {
   "character-counter": ["게시물이나 지원서에 글자 수 제한이 있다면, 작성한 문장을 붙여 넣고 그 서비스가 공백을 포함해 세는지 확인하세요.", "When a post or application has a character limit, paste a draft and check whether the destination counts spaces."],
   "image-optimizer": ["웹이나 메일에 넣을 이미지가 너무 무거울 때, 같은 크기의 이미지를 다른 형식이나 품질로 저장해 보세요.", "When an image is too large for a website or email, try saving it at the same dimensions with a different format or quality."],
   "image-resizer-cropper": ["프로필 사진의 비율이나 제출 이미지의 가로·세로 크기를 맞추려면 원하는 비율과 픽셀 값을 정하세요.", "Start with the required aspect ratio and pixel dimensions when preparing a profile photo or submission image."],
+  "resume-builder": ["여러 회사에 지원한다면 이름·경력·학력은 공통 프로필에 한 번 쓰고, 회사마다 다른 헤드라인과 프로젝트만 문서별로 바꾸세요.", "When applying to several companies, write your name, experience and education once in the shared profile and change only the headline and projects per document."],
+  "portfolio-builder": ["면접 전에 프로젝트 하나를 케이스로 정리하려면 문제 정의와 결과 숫자부터 적고, 필요한 페이지만 켜서 흐름을 만드세요.", "To prepare one project as a case study before an interview, start with the problem and the result numbers, then switch on only the pages you need."],
   "qr-code-generator": ["안내문이나 포스터에서 웹페이지로 연결하려면 열어야 할 주소부터 입력하세요. 인쇄 전에 내려받은 코드를 휴대폰으로 읽어 보세요.", "Start with the destination URL for a poster or sign. Scan the exported code with a phone before printing."],
   "qr-code-reader": ["메신저로 받은 QR 이미지를 열어야 한다면 이미지 파일이나 클립보드를, 눈앞의 코드를 읽으려면 카메라를 사용하세요.", "Use an image file or the clipboard for a code someone sent you. Use the camera for a code in front of you."],
   "kst-utc-converter": ["해외 동료에게 한국 시간으로 잡은 일정을 보낼 때는 시각과 함께 날짜가 바뀌는지 확인하세요.", "When sharing a meeting scheduled in Korean time, check the converted date as well as the time."],
