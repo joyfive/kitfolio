@@ -10,6 +10,7 @@ import { compute } from "./growthMath";
 import type { GrowthMode, Direction } from "./growthMath";
 import { CONFIGS } from "./calculatorConfig";
 import type { OutputFormat } from "./calculatorConfig";
+import { copyText } from "../../lib/clipboard";
 
 // ── Number formatting ─────────────────────────────────────
 
@@ -166,7 +167,7 @@ export default function GrowthCalculator({ defaultMode }: { defaultMode: GrowthM
   } : undefined;
 
   async function handleCopy(key: string, displayValue: string) {
-    try { await navigator.clipboard.writeText(displayValue); } catch { /* ignore */ }
+    try { await copyText(displayValue); } catch { /* ignore */ }
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   }

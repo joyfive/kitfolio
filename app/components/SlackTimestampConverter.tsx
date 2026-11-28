@@ -12,8 +12,8 @@ import {
   toReadable,
   toRelative,
   toSlackFormats,
-  type InputKind,
 } from "../lib/timestamp";
+import { copyText } from "../lib/clipboard";
 
 // 컨트롤 마이크로카피(패널·행 라벨)만 로컬 dict.
 // 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
@@ -97,7 +97,7 @@ export default function SlackTimestampConverter() {
   }, [valid, result?.unixSeconds]);
 
   function copy(key: string, value: string) {
-    navigator.clipboard.writeText(value).then(() => {
+    copyText(value).then(() => {
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1600);
     });

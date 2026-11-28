@@ -15,6 +15,7 @@ import {
   type Zone,
 } from "../lib/kstutc/convert";
 import { buildSnippet, CODE_LANGS, type CodeLang } from "../lib/kstutc/snippets";
+import { copyText } from "../lib/clipboard";
 
 // 컨트롤 마이크로카피만 로컬 dict.
 // 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
@@ -126,7 +127,7 @@ export default function KstUtcConverter() {
   }
 
   function copy(key: string, value: string) {
-    navigator.clipboard.writeText(value).then(() => {
+    copyText(value).then(() => {
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 1600);
     });

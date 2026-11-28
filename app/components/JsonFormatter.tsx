@@ -5,6 +5,8 @@ import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
 import { useT, type Dict } from "../lib/i18n";
+import { copyText } from "../lib/clipboard";
+import { useToastOnChange } from "../lib/toast";
 
 // 컨트롤 마이크로카피(버튼·상태 라벨)만 로컬 dict.
 // 페이지 콘텐츠(제목·설명·가이드·FAQ)는 content.ts 레지스트리.
@@ -16,9 +18,6 @@ const DICT: Dict = {
     "json.format": "포맷",
     "guide.minifyExample": "요청 본문을 한 줄로 줄이기",
     "json.minify": "압축",
-    "json.status.idle": "입력 대기 중",
-    "json.status.valid": "유효한 JSON",
-    "json.status.invalid": "문법 오류",
     "json.lines": "줄",
     "json.keys": "키",
   },
@@ -29,9 +28,6 @@ const DICT: Dict = {
     "json.format": "Format",
     "guide.minifyExample": "Put a request body on one line",
     "json.minify": "Minify",
-    "json.status.idle": "Waiting for input",
-    "json.status.valid": "Valid JSON",
-    "json.status.invalid": "Syntax error",
     "json.lines": "lines",
     "json.keys": "keys",
   },
@@ -93,7 +89,6 @@ export default function JsonFormatter() {
   const [text, setText] = useState(SAMPLE);
   const [indent, setIndent] = useState("2");
   const [mode, setMode] = useState<"format" | "minify">("format");
-  const [copyFailed, setCopyFailed] = useState(false);
   const [copied, setCopied] = useState(false);
   const inGutterRef = useRef<HTMLDivElement>(null);
 
@@ -152,21 +147,15 @@ export default function JsonFormatter() {
     };
   }, [text, indent, mode, t]);
 
-  const statusKey =
-    result.status === "ok"
-      ? "json.status.valid"
-      : result.status === "err"
-        ? "json.status.invalid"
-        : "json.status.idle";
+  // 문법 오류는 화면에 그리지 않고 토스트로 알린다 (입력이 바뀌어 오류 문구가 달라질 때만)
+  useToastOnChange(result.errDetail, "error");
 
   async function copyOut() {
     if (!result.plain) return;
-    setCopyFailed(false);
     try {
-      await navigator.clipboard.writeText(result.plain);
+      await copyText(result.plain, { fail: t("json.copyFailed") });
     } catch {
       setCopied(false);
-      setCopyFailed(true);
       return;
     }
     setCopied(true);
@@ -299,11 +288,7 @@ export default function JsonFormatter() {
             </div>
           </div>
 
-          <div className="ide-status" role="status">
-            <span className={"status-pill " + result.status}>
-              <span>{t(statusKey)}</span>
-            </span>
-            <span className="err-detail">{copyFailed ? t("json.copyFailed") : result.errDetail}</span>
+          <div className="ide-status">
             <span className="spacer" />
             <span>{result.sizeInfo}</span>
           </div>

@@ -30,6 +30,7 @@ import {
   type ImageErrorType,
 } from "../lib/image/imageErrors";
 import { IMAGE_LIMITS, LIMIT_SUMMARY } from "../lib/image/imageLimits";
+import { toast, useToastOnChange } from "../lib/toast";
 import { optimizeImage } from "../lib/image/optimize";
 import { ZIP_NAME, zipImages } from "../lib/image/zip";
 
@@ -71,11 +72,9 @@ const DICT: Dict = {
     "io.statusStale": "설정 변경됨",
     "io.staleHint": "설정이 바뀌었습니다. 다시 최적화하면 결과를 받을 수 있습니다.",
     "io.emptyResults": "아직 결과가 없습니다. 이미지를 추가하고 최적화를 실행하세요.",
-    "io.partial": "완료된 {done}개만 ZIP에 포함됩니다. {failed}개는 처리하지 못했습니다.",
     "io.summary": "완료 {done}개 · 오류 {failed}개",
     "io.deviceHint":
       "브라우저 메모리는 기기마다 다릅니다. 제한 이하에서도 아주 큰 이미지는 실패할 수 있습니다.",
-    "io.progress": "{done} / {total} 처리 완료",
   },
   en: {
     "io.upload": "Add images",
@@ -112,11 +111,9 @@ const DICT: Dict = {
     "io.statusStale": "Settings changed",
     "io.staleHint": "Settings changed. Optimize again to get new results.",
     "io.emptyResults": "No results yet. Add images and run the optimizer.",
-    "io.partial": "Only the {done} completed files are included. {failed} could not be processed.",
     "io.summary": "{done} completed · {failed} failed",
     "io.deviceHint":
       "Browser memory varies by device. Very large images can fail even below these limits.",
-    "io.progress": "{done} of {total} processed",
   },
 };
 
@@ -177,7 +174,6 @@ export default function ImageOptimizer() {
   const [addError, setAddError] = useState<ImageErrorType | null>(null);
   const [running, setRunning] = useState(false);
   const [zipping, setZipping] = useState(false);
-  const [progress, setProgress] = useState({ done: 0, total: 0 });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -221,6 +217,22 @@ export default function ImageOptimizer() {
   const failedCount = items.filter((i) => i.status === "error").length;
   const hasResults = items.some((i) => i.result);
   const staleCount = items.filter((i) => isStale(i)).length;
+
+  /* ---------- 알림: 화면에 그리지 않고 토스트로 ---------- */
+  useToastOnChange(addError ? imageErrorMessage(addError, lang) : null, "error");
+  const firstItemError = items.find((i) => i.status === "error" && i.error)?.error;
+  useToastOnChange(firstItemError ? imageErrorMessage(firstItemError, lang) : null, "error");
+  useEffect(() => {
+    if (running) toast.info(t("io.running"), { key: "io-run" });
+  }, [running, t]);
+  const summaryMsg = !running && hasResults ? fill(t("io.summary"), { done: completed.length, failed: failedCount }) : "";
+  useEffect(() => {
+    if (!summaryMsg) return;
+    if (failedCount > 0) toast.warning(summaryMsg, { key: "io-summary" });
+    else toast.success(summaryMsg, { key: "io-summary" });
+  }, [summaryMsg, failedCount]);
+  const staleMsg = staleCount > 0 && !running ? t("io.staleHint") : "";
+  useToastOnChange(staleMsg, "info");
 
   /* ---------- 파일 추가 ---------- */
 
@@ -291,7 +303,6 @@ export default function ImageOptimizer() {
 
   const clearAll = useCallback(() => {
     setAddError(null);
-    setProgress({ done: 0, total: 0 });
     inputReportedRef.current = false;
     for (const item of itemsRef.current) URL.revokeObjectURL(item.previewUrl);
     commitItems([]);
@@ -307,7 +318,6 @@ export default function ImageOptimizer() {
     runningRef.current = true;
     setRunning(true);
     setAddError(null);
-    setProgress({ done: 0, total: targets.length });
 
     trackEvent("tool_run", {
       slug: SLUG,
@@ -357,7 +367,6 @@ export default function ImageOptimizer() {
         mapItems((i) => (i.id === target.id ? { ...i, status: "error", error: type } : i));
       }
 
-      setProgress((p) => ({ ...p, done: p.done + 1 }));
     }
 
     trackEvent("tool_result", {
@@ -484,11 +493,6 @@ export default function ImageOptimizer() {
             </div>
             <p className="io-limits">{t("io.limits")}</p>
 
-            {addError && (
-              <p className="io-alert" role="alert">
-                {imageErrorMessage(addError, lang)}
-              </p>
-            )}
 
             <div className="io-settings">
               <span className="field-label" id="io-format-label">
@@ -577,13 +581,6 @@ export default function ImageOptimizer() {
             )}
           </div>
 
-          <p className="io-live" role="status" aria-live="polite">
-            {running
-              ? `${t("io.running")} · ${fill(t("io.progress"), progress)}`
-              : hasResults
-                ? fill(t("io.summary"), { done: completed.length, failed: failedCount })
-                : ""}
-          </p>
 
           {items.length === 0 ? (
             <p className="io-empty">{t("io.emptyResults")}</p>
@@ -629,12 +626,6 @@ export default function ImageOptimizer() {
                           </span>
                         )}
                       </span>
-
-                      {item.status === "error" && item.error && (
-                        <span className="io-alert" role="alert">
-                          {imageErrorMessage(item.error, lang)}
-                        </span>
-                      )}
 
                       {result && (
                         <span className="io-sizes">
@@ -703,15 +694,10 @@ export default function ImageOptimizer() {
               >
                 {zipping ? t("io.zipping") : `${t("io.downloadAll")} · ${completed.length}`}
               </button>
-              {failedCount > 0 && (
-                <p className="io-note">
-                  {fill(t("io.partial"), { done: completed.length, failed: failedCount })}
-                </p>
-              )}
             </div>
           )}
 
-          {staleCount > 0 && !running && <p className="io-note">{t("io.staleHint")}</p>}
+          {null}
           <p className="io-device-hint">{t("io.deviceHint")}</p>
         </div>
       </div>

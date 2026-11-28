@@ -47,7 +47,7 @@ import {
   type HeadingInfo,
   type LandmarkInfo,
 } from "./structure";
-import { isFocusable, isInTabSequence, isNativelyFocusable, tabIndexOf } from "./focus";
+import { isFocusable, isInTabSequence, tabIndexOf } from "./focus";
 import { MANUAL_CHECKS, RULES, type RuleId, type RuleMeta } from "./catalog";
 import type { Finding, Scope } from "./types";
 

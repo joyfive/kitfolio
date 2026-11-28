@@ -21,6 +21,8 @@ import {
   type CriterionId,
   type TargetId,
 } from "../lib/color/contrast";
+import { useToastOnChange } from "../lib/toast";
+import { copyText } from "../lib/clipboard";
 
 // 컨트롤 마이크로카피만 로컬 dict. 페이지 콘텐츠는 content.ts 레지스트리.
 const DICT: Dict = {
@@ -222,6 +224,8 @@ export default function ColorContrastChecker() {
   const [paletteText, setPaletteText] = useState("");
   const [palette, setPalette] = useState<{ colors: string[]; invalid: number } | null>(null);
   const [paletteMsg, setPaletteMsg] = useState<{ kind: "error" | "warn"; text: string } | null>(null);
+  useToastOnChange(paletteMsg?.kind === "error" ? paletteMsg.text : null, "error");
+  useToastOnChange(paletteMsg?.kind === "warn" ? paletteMsg.text : null, "warning");
 
   const [live, setLive] = useState("");
 
@@ -298,7 +302,7 @@ export default function ColorContrastChecker() {
 
   async function copyHex(hex: string) {
     try {
-      await navigator.clipboard.writeText(hex);
+      await copyText(hex, { success: t("cc.copied"), fail: t("cc.copyFail") });
       setCopyState("done");
     } catch {
       setCopyState("fail");
@@ -556,11 +560,6 @@ export default function ColorContrastChecker() {
               </p>
             )}
             <p className="ccc-note">{t("cc.suggest.method")}</p>
-            {copyState !== "idle" && (
-              <p className="ccc-note" role="status">
-                {copyState === "done" ? t("cc.copied") : t("cc.copyFail")}
-              </p>
-            )}
           </section>
 
           {/* 미리보기 */}
@@ -634,12 +633,6 @@ export default function ColorContrastChecker() {
                 {t("cc.reset")}
               </button>
             </div>
-            {paletteMsg && (
-              <p className={`ccc-palmsg is-${paletteMsg.kind}`} role="status">
-                <IconAlert />
-                <span>{paletteMsg.text}</span>
-              </p>
-            )}
             <p className="ccc-privacy">{t("common.privacy")}</p>
           </div>
 

@@ -6,6 +6,7 @@ import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
 import { useLang, useT, type Dict } from "../lib/i18n";
+import { copyText } from "../lib/clipboard";
 
 const DICT: Dict = {
   ko: {
@@ -232,7 +233,7 @@ export default function LunarSolarConverter() {
   async function handleCopy() {
     if (!result.ok) return;
     try {
-      await navigator.clipboard.writeText(buildCopyText(result, mode, lang));
+      await copyText(buildCopyText(result, mode, lang));
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch { /* ignore */ }

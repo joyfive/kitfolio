@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -133,15 +135,6 @@ function formatViewLabel(t: (k: string) => string, view: ViewType, strength: num
   return view === "grayscale" ? t("cb.view.grayscale") : `${name} · ${strength}%`;
 }
 
-function IconAlert() {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M8 2.8l5.6 10H2.4L8 2.8z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M8 6.6v3M8 11.6v.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export default function ColorBlindnessSimulator() {
   const { lang } = useLang();
   const t = useT(DICT);
@@ -151,6 +144,8 @@ export default function ColorBlindnessSimulator() {
   const [strength, setStrength] = useState(DEFAULT_STRENGTH);
   const [issue, setIssue] = useState<ImageIssue | null>(null);
   const [loading, setLoading] = useState(false);
+  useToastOnChange(issue ? t(`cb.err.${issue}`) : null, "error");
+  useToastOnChange(!issue && loading ? t("cb.loading") : null, "info");
   const [processing, setProcessing] = useState(false);
   const [live, setLive] = useState("");
   const [dragging, setDragging] = useState(false);
@@ -503,12 +498,6 @@ export default function ColorBlindnessSimulator() {
           }}
         />
 
-        {(issue || loading) && (
-          <p className={`cbs-status${issue ? " is-error" : ""}`} role="status">
-            {issue ? <IconAlert /> : null}
-            <span>{issue ? t(`cb.err.${issue}`) : t("cb.loading")}</span>
-          </p>
-        )}
       </div>
 
       <section className="cbs-checks" aria-label={t("cb.check.heading")}>

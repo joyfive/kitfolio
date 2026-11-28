@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -685,12 +687,11 @@ export default function ImageResizerCropper() {
     />
   );
 
-  const dimError = (field: DimField) =>
-    invalid[field] ? (
-      <span className="irc-field-error" role="alert">
-        {t("irc.dimError")}
-      </span>
-    ) : null;
+  /* 알림은 화면에 그리지 않고 토스트로 */
+  useToastOnChange(Object.values(invalid).some(Boolean) ? t("irc.dimError") : null, "error");
+  useToastOnChange(error ? imageErrorMessage(error, lang) : null, "error");
+  useToastOnChange(running ? t("irc.running") : stale && result ? t("irc.staleHint") : null, "info");
+  const dimError = (_field: DimField): null => null;
 
   const overlay = src ? toPercent(clampRect(rect, src.width, src.height), src.width, src.height) : null;
 
@@ -711,11 +712,6 @@ export default function ImageResizerCropper() {
             />
             {fileField}
             <p className="irc-limits">{t("irc.limits")}</p>
-            {error && (
-              <p className="irc-alert" role="alert">
-                {imageErrorMessage(error, lang)}
-              </p>
-            )}
             <p className="irc-privacy">{t("irc.privacy")}</p>
           </div>
         ) : (
@@ -1113,8 +1109,7 @@ export default function ImageResizerCropper() {
                 </button>
 
                 {error && (
-                  <div className="irc-error" role="alert">
-                    <p className="irc-alert">{imageErrorMessage(error, lang)}</p>
+                  <div className="irc-error">
                     <div className="irc-error-actions">
                       <button type="button" className="btn btn-sm btn-outline" onClick={run}>
                         {t("irc.retry")}
@@ -1138,9 +1133,6 @@ export default function ImageResizerCropper() {
         <section className="irc-result" aria-label={t("irc.result")}>
           <div className="irc-result-head">
             <h2>{t("irc.result")}</h2>
-            <p className="irc-live" role="status" aria-live="polite">
-              {running ? t("irc.running") : stale && result ? t("irc.staleHint") : ""}
-            </p>
           </div>
 
           {!result ? (

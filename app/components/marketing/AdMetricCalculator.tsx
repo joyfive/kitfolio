@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useToastOnChange } from "../../lib/toast";
 import PageHead from "../PageHead";
 import RelatedTools from "../RelatedTools";
 import ToolGuide from "../ToolGuide";
@@ -17,6 +18,7 @@ import {
   calcCtr, calcRequiredClicks, calcRequiredImpressions,
 } from "../../lib/marketing/adMetrics";
 import type { AdMetricKey } from "../../lib/marketing/types";
+import { copyText } from "../../lib/clipboard";
 
 const DICT: Dict = {
   ko: {
@@ -329,6 +331,7 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
     }
     return {};
   }, [metricKey, mode, v]);
+  useToastOnChange((result as { warning?: boolean } | null)?.warning ? t("m.warning.clicksOverImpressions") : null, "warning");
 
   // ── Copy result summary ──
   function copyResult() {
@@ -340,7 +343,7 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
         lines.push(`${k}: ${val}`);
       }
     }
-    navigator.clipboard.writeText(lines.join("\n")).then(() => {
+    copyText(lines.join("\n")).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -439,14 +442,6 @@ export default function AdMetricCalculator({ defaultMetric }: Props) {
           <div className="adm-result-col">
             {result && Object.keys(result).some((k) => k !== "warning" && k !== "beRoas" && result[k as keyof typeof result] !== null && result[k as keyof typeof result] !== undefined) ? (
               <>
-                {(result as { warning?: boolean }).warning && (
-                  <div className="adm-warning" role="alert">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M8 2L1.5 13.5h13L8 2z" /><path d="M8 6v4M8 11.5v.5" />
-                    </svg>
-                    <span>{t("m.warning.clicksOverImpressions")}</span>
-                  </div>
-                )}
                 <div className="adm-result-cards" aria-live="polite">
                   {metricKey === "roas" && <RoasResults mode={mode} result={result as Record<string, number | null>} t={t} currency={currency} />}
                   {metricKey === "cpa" && <SimpleResult result={result as Record<string, number | null>} t={t} currency={currency} metricKey="cpa" mode={mode} />}
@@ -527,11 +522,6 @@ function NumField({
       {hint && <span className="adm-field-hint">{hint}</span>}
     </div>
   );
-}
-
-function CurrencySymbol({ currency }: { currency: Currency }) {
-  const map: Record<Currency, string> = { KRW: "₩", USD: "$", JPY: "¥", EUR: "€" };
-  return <>{map[currency]}</>;
 }
 
 function RoasInputs({ mode, vals, set, t, currency }: {

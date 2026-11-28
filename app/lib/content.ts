@@ -2677,7 +2677,7 @@ export const TOOLS: Tool[] = [
       ko: {
         title: "QR코드 만들기 | 무료 QR 코드 생성기·디자인 QR",
         description:
-          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+          "URL을 입력해 QR 코드를 만들고 사각형, 라운드, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
         keywords: ["QR 코드 생성기", "QR 만들기", "링크 QR 코드", "QR 코드 PNG", "QR 코드 SVG", "하트 QR 코드", "하트 QR", "감성 QR 생성", "디자인 QR 생성", "QR 디자인", "디자인 QR", "청첩장 QR 코드", "QR 코드 모양", "QR 코드 색상 변경", "QR코드 만들기", "큐알코드 만들기", "QR코드 생성", "링크 QR코드 만들기"],
       },
       en: {
@@ -2691,14 +2691,14 @@ export const TOOLS: Tool[] = [
       ko: {
         card: "링크를 QR 코드로 만들고 색상과 모양을 설정해 PNG·SVG로 다운로드합니다.",
         description:
-          "URL을 입력해 QR 코드를 만들고 사각형, 둥근 사각형, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
+          "URL을 입력해 QR 코드를 만들고 사각형, 라운드, 아치형, 하트형 모양과 색상, 인식 품질을 설정하세요. 아치형·하트형은 온전한 QR 코어에 장식을 더한 감성 디자인 QR로, 인식 안정성을 위해 오류 복원을 최고로 고정합니다. 청첩장·인쇄물용 디자인 QR을 브라우저에서 확인한 뒤 PNG 또는 SVG로 다운로드할 수 있으며 입력한 링크는 서버로 전송되지 않습니다.",
         howItWorks: [
           "QR 코드로 만들 URL을 입력합니다.",
           "인식 품질, 색상, 셀 모양을 설정합니다.",
           "판독 확인 후 PNG 또는 SVG로 다운로드합니다.",
         ],
         aeo: {
-          what: "QR 코드 생성기는 URL을 QR 코드로 변환하고 사각형·둥근 사각형·아치형·하트형 등 전체 모양과 색상을 설정할 수 있는 브라우저 도구입니다.",
+          what: "QR 코드 생성기는 URL을 QR 코드로 변환하고 사각형·라운드·아치형·하트형 등 전체 모양과 색상을 설정할 수 있는 브라우저 도구입니다.",
           who: "웹 링크를 인쇄물, 문서, 매장 안내, 청첩장·행사 자료 또는 온라인 콘텐츠에 넣어야 하는 사용자를 위한 도구입니다.",
           how: "URL을 온전한 QR 코어로 만든 뒤, 아치·하트 같은 모양은 코어 주위에 장식 셀을 더해 구성하고, 결과를 브라우저에서 다시 판독해 인식을 확인합니다.",
           why: "청첩장·인쇄물에 어울리는 감성 디자인 QR을 서버 전송 없이 만들고 PNG·SVG로 바로 내려받을 수 있습니다.",
@@ -7899,7 +7899,7 @@ export const TOOLS: Tool[] = [
         aeo: {
           what: "JSON 포매터는 한 줄로 뭉치거나 어지럽게 섞인 JSON 문자열을 들여쓰기와 색상 강조가 적용된 읽기 쉬운 형태로 정리하고, 동시에 문법 오류를 검사해주는 도구입니다.",
           who: "API 응답과 설정 파일을 다루는 개발자, 로그·데이터 페이로드를 확인해야 하는 PM과 데이터 작업자를 위한 도구입니다.",
-          how: "왼쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 오른쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
+          how: "오른쪽 입력 칸에 JSON을 붙여넣으면 브라우저 안에서 즉시 파싱해 왼쪽에 포맷된 결과를 보여줍니다. 오류가 있으면 줄·열 위치를 짚어주고, 들여쓰기 변경과 한 줄 압축(minify)도 지원합니다.",
           why: "서버 전송 없이 브라우저에서만 동작해 민감한 데이터도 안전하고, 설치·가입 없이 바로 쓸 수 있어 디버깅 시간을 줄여줍니다.",
         },
         guide: [
@@ -7957,14 +7957,14 @@ export const TOOLS: Tool[] = [
         description:
           "Paste a JSON string and it is instantly formatted with indentation and syntax highlighting. Syntax errors are pinpointed by line and column, and you can minify to a single line too. Everything runs entirely in your browser.",
         howItWorks: [
-          "Paste JSON on the left",
+          "Paste JSON on the right",
           "Auto-format & validate",
-          "Copy the result on the right",
+          "Copy the result on the left",
         ],
         aeo: {
           what: "JSON Formatter is a tool that turns a minified or messy JSON string into a readable, indented and syntax-highlighted document while validating it.",
           who: "It is for developers working with API responses and config files, and for PMs or data workers who need to inspect JSON logs and payloads.",
-          how: "Paste JSON into the left pane and it is parsed instantly in your browser: the formatted result appears on the right, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
+          how: "Paste JSON into the right pane and it is parsed instantly in your browser: the formatted result appears on the left, errors are pinpointed by line and column, and you can switch indentation or minify to one line.",
           why: "It runs entirely in your browser with no upload, so sensitive data stays safe, and with no install or sign-up, debugging gets faster.",
         },
         guide: [
@@ -8028,7 +8028,7 @@ export const TOOLS: Tool[] = [
         {
           question: "JSON 문법 오류는 어떻게 찾아주나요?",
           answer:
-            "유효하지 않은 JSON을 붙여넣으면 하단 상태 표시줄에 오류 내용과 함께 줄·열 위치를 표시합니다. 해당 위치를 수정하면 결과가 실시간으로 다시 검증됩니다.",
+            "유효하지 않은 JSON을 붙여넣으면 오류 내용과 함께 줄·열 위치를 토스트로 알려줍니다. 해당 위치를 수정하면 결과가 실시간으로 다시 검증됩니다.",
         },
         {
           question: "들여쓰기 간격을 바꾸거나 한 줄로 압축할 수 있나요?",
@@ -8050,7 +8050,7 @@ export const TOOLS: Tool[] = [
         {
           question: "How are syntax errors reported?",
           answer:
-            "When you paste invalid JSON, the status bar shows the error message along with the line and column. Fix the spot and the result re-validates in real time.",
+            "When you paste invalid JSON, a toast shows the error message along with the line and column. Fix the spot and the result re-validates in real time.",
         },
         {
           question: "Can I change the indentation or minify to one line?",

@@ -12,14 +12,12 @@ import {
   publishedTools,
   type ActionId,
   type CategoryId,
-  type Tool,
 } from "../lib/content";
 
 // 허브 화면 UI 마이크로카피만 로컬 dict. 카피·라벨·검색 색인은 content.ts.
 const DICT: Dict = {
   ko: {
     searchLabel: "도구 검색",
-    narrow: "작업으로 좁히기",
     reset: "검색·필터 초기화",
     emptyFavorites: "조건에 맞는 즐겨찾기가 없습니다. 도구 옆 별표로 추가할 수 있어요.",
     quick: "대표 작업",
@@ -32,7 +30,6 @@ const DICT: Dict = {
   },
   en: {
     searchLabel: "Search tools",
-    narrow: "Filter by task",
     reset: "Clear search and filters",
     emptyFavorites: "No matching favorites. Use the star beside a tool to save it.",
     quick: "Quick tasks",
@@ -86,7 +83,6 @@ export default function Hub() {
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<"all" | CategoryId>("all");
   const [activeAction, setActiveAction] = useState<"all" | ActionId>("all");
-  const [actionsOpen, setActionsOpen] = useState(false);
   const [onlyFav, setOnlyFav] = useState(false);
   const [favs, setFavs] = useState<Set<string>>(new Set());
 
@@ -106,7 +102,6 @@ export default function Hub() {
     if (c && CAT_IDS.has(c)) setActiveCat(c as CategoryId);
     if (a && ACTION_IDS.has(a)) {
       setActiveAction(a as ActionId);
-      setActionsOpen(true);
     }
   }, []);
 
@@ -126,7 +121,6 @@ export default function Hub() {
     setActiveCat(cat);
     setActiveAction("all");
     setOnlyFav(false);
-    setActionsOpen(false);
     syncQuery(cat, "all");
   }
 
@@ -258,11 +252,7 @@ export default function Hub() {
               </button>
             ))}
           </div>
-          <button type="button" className="hub-narrow" aria-expanded={actionsOpen}
-            aria-controls="hub-task-filters" onClick={() => setActionsOpen((open) => !open)}>
-            {t("narrow")}{activeAction !== "all" && ` · ${ACTIONS.find((action) => action.id === activeAction)?.label[lang]}`}
-          </button>
-          <div id="hub-task-filters" className="hub-actions" hidden={!actionsOpen}
+          <div id="hub-task-filters" className="hub-actions"
             role="group" aria-label={lang === "ko" ? "작업" : "Task"}>
             <button type="button" aria-pressed={activeAction === "all"} onClick={() => selectAction("all")}>
               {t("allActions")}

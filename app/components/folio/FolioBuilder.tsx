@@ -10,7 +10,7 @@ import type { DocLang, FolioKind, SourceDoc } from "../../lib/folio/types";
 import { buildPortfolio, buildResume, deepMerge } from "../../lib/folio/transform";
 import { dumpYaml, parseYaml } from "../../lib/folio/yaml";
 import { ensureFontLoaded, resolveFont } from "../../lib/folio/fonts";
-import { BACKUP_MARK, normalizeWorkspace, workspaceSizeKb } from "../../lib/folio/storage";
+import { BACKUP_MARK, normalizeWorkspace } from "../../lib/folio/storage";
 import { blankDoc, samplePortfolio, sampleResume } from "../../lib/folio/sample";
 import { downloadBlob } from "../../lib/downloadBlob";
 import { useLang, useT } from "../../lib/i18n";
@@ -19,6 +19,7 @@ import { useWorkspace } from "./useWorkspace";
 import ResumeDoc from "./ResumeDoc";
 import PortfolioDoc from "./PortfolioDoc";
 import { FitZoom } from "./Deck";
+import { toast, useToastOnChange } from "../../lib/toast";
 import ResumeForm from "./ResumeForm";
 import PortfolioForm from "./PortfolioForm";
 import type { Obj } from "./FormKit";
@@ -41,6 +42,11 @@ function YamlPanel({ initial, onDoc, t }: { initial: string; onDoc: (d: SourceDo
   const id = useId();
   const [text, setText] = useState(initial);
   const [err, setErr] = useState<{ message: string; line?: number } | null>(null);
+  // YAML 오류는 화면에 그리지 않고 토스트로 알린다
+  useToastOnChange(
+    err ? `${t("fb.yamlError")}${err.line ? ` · ${t("fb.yamlLine").replace("{n}", String(err.line))}` : ""}: ${err.message}` : null,
+    "error",
+  );
   return (
     <div className="fb-yaml">
       <label htmlFor={id} className="sr-only">
@@ -52,7 +58,6 @@ function YamlPanel({ initial, onDoc, t }: { initial: string; onDoc: (d: SourceDo
         value={text}
         spellCheck={false}
         aria-invalid={!!err}
-        aria-describedby={err ? `${id}-err` : undefined}
         onChange={(e) => {
           setText(e.target.value);
           const r = parseYaml(e.target.value);
@@ -62,12 +67,6 @@ function YamlPanel({ initial, onDoc, t }: { initial: string; onDoc: (d: SourceDo
           } else setErr({ message: r.message, line: r.line });
         }}
       />
-      {err && (
-        <p className="fb-yaml-err" id={`${id}-err`} role="status">
-          {t("fb.yamlError")}
-          {err.line ? ` · ${t("fb.yamlLine").replace("{n}", String(err.line))}` : ""}: {err.message}
-        </p>
-      )}
     </div>
   );
 }
@@ -86,11 +85,9 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
   const { ws, entry } = W;
   const [tab, setTab] = useState<"form" | "yaml">("form");
   const [yamlTarget, setYamlTarget] = useState<"doc" | "profile">("doc");
-  const [view, setView] = useState<"edit" | "preview">("edit");
   /** 인쇄 요청 번호: 0 이면 인쇄 중 아님. 누를 때마다 늘려 같은 상태에서도 다시 인쇄한다. */
   const [printReq, setPrintReq] = useState(0);
   const printing = printReq > 0;
-  const [notice, setNotice] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const selectId = useId();
   const langId = useId();
@@ -156,7 +153,7 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
   const importFile = async (file: File) => {
     const r = parseYaml(await file.text());
     if (!r.ok) {
-      setNotice(`${t("fb.importFail")}: ${r.message}`);
+      toast.error(`${t("fb.importFail")}: ${r.message}`);
       return;
     }
     if (r.doc[BACKUP_MARK] != null) {
@@ -164,27 +161,28 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
       void _mark;
       const next = normalizeWorkspace(rest);
       if (!next) {
-        setNotice(t("fb.importFail"));
+        toast.error(t("fb.importFail"));
         return;
       }
       if (window.confirm(t("fb.importBackup"))) {
         W.replace(next);
-        setNotice(t("fb.importDone"));
+        toast.success(t("fb.importDone"));
       }
       return;
     }
     W.add(r.doc, docLang);
-    setNotice(t("fb.importDoc"));
+    toast.success(t("fb.importDoc"));
   };
 
-  const saveText =
-    W.save === "quota" ? t("fb.saveQuota") : W.save === "blocked" ? t("fb.saveBlocked") : W.save === "saving" ? t("fb.saving") : W.save === "saved" ? t("fb.saved") : "";
+  // 저장 실패만 알린다 (자동 저장 성공은 조용히)
+  useToastOnChange(W.save === "quota" ? t("fb.saveQuota") : W.save === "blocked" ? t("fb.saveBlocked") : null, "error");
+  useToastOnChange(W.unreadable ? t("fb.unreadable") : null, "warning");
 
   const formKey = `${entry.id}:${tab}:${W.loaded ? 1 : 0}`;
   const list = ws[kind];
 
   return (
-    <div className={`fb-work fb-work--${kind}`} data-view={view}>
+    <div className={`fb-work fb-work--${kind}`}>
       <div className="fb-toolbar">
         <div className="fb-docpick">
           <label htmlFor={selectId}>{t("fb.doc")}</label>
@@ -218,6 +216,15 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
           >
             {t("fb.duplicate")}
           </button>
+          {W.unreadable && (
+            <button
+              type="button"
+              className="btn btn-sm btn-ghost"
+              onClick={() => downloadBlob(new Blob([W.unreadable ?? ""], { type: "application/json" }), "kitfolio-folio-unreadable.json")}
+            >
+              {t("fb.unreadableDownload")}
+            </button>
+          )}
           <button
             type="button"
             className="btn btn-sm btn-outline"
@@ -231,28 +238,6 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
         </div>
         <button type="button" className="btn btn-primary fb-print-btn" onClick={() => setPrintReq((n) => n + 1)}>
           {t("fb.print")}
-        </button>
-      </div>
-
-      {W.unreadable && (
-        <div className="fb-alert" role="alert">
-          {t("fb.unreadable")}{" "}
-          <button
-            type="button"
-            className="fb-linkbtn"
-            onClick={() => downloadBlob(new Blob([W.unreadable ?? ""], { type: "application/json" }), "kitfolio-folio-unreadable.json")}
-          >
-            {t("fb.unreadableDownload")}
-          </button>
-        </div>
-      )}
-
-      <div className="seg fb-viewseg" role="group" aria-label={`${t("fb.viewEdit")} · ${t("fb.viewPreview")}`}>
-        <button type="button" className={view === "edit" ? "is-active" : ""} aria-pressed={view === "edit"} onClick={() => setView("edit")}>
-          {t("fb.viewEdit")}
-        </button>
-        <button type="button" className={view === "preview" ? "is-active" : ""} aria-pressed={view === "preview"} onClick={() => setView("preview")}>
-          {t("fb.viewPreview")}
         </button>
       </div>
 
@@ -324,11 +309,6 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
               }}
             />
           </div>
-          <p className="fb-status" role="status" aria-live="polite">
-            {notice ? `${notice} · ` : ""}
-            {saveText}
-            {W.loaded && W.save === "saved" ? ` · ${t("fb.storage").replace("{n}", String(workspaceSizeKb(ws)))}` : ""}
-          </p>
           <p className="fb-privacy">{t("fb.privacy")}</p>
         </section>
       </div>

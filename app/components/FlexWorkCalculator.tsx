@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import ToolGuide from "./ToolGuide";
 import RelatedTools from "./RelatedTools";
 import PageHead from "./PageHead";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 import { calcFlexWork } from "../lib/flexwork";
 import { hasHolidayData } from "../lib/holidays";
 
@@ -118,7 +118,6 @@ function num(s: string, fallback = 0): number {
 }
 
 export default function FlexWorkCalculator() {
-  const { lang } = useLang();
   const t = useT(DICT);
 
   const [year, setYear] = useState(DEFAULTS.year);

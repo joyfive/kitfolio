@@ -11,14 +11,12 @@ export const WEB_FIGURES: GuideFigureMap = {
       parts: [
         { t: "tabs", items: ["포맷", "압축"], m: 1 },
         { t: "text", label: "입력", value: "{\"id\":1042,\"user\":{\"name\":\"김서연\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}", mono: true, m: 2 },
-        { t: "rows", items: [{ label: "상태", value: "유효한 JSON", tone: "ok" }], m: 3 },
-        { t: "code", title: "결과", lines: ["{", "  \"id\": 1042,", "  \"user\": {", "    \"name\": \"김서연\",", "    \"roles\": [\"admin\", \"editor\"]", "  },", "  \"active\": true", "}"], m: 4 },
+        { t: "code", title: "결과", lines: ["{", "  \"id\": 1042,", "  \"user\": {", "    \"name\": \"김서연\",", "    \"roles\": [\"admin\", \"editor\"]", "  },", "  \"active\": true", "}"], m: 3 },
       ],
       notes: [
         { title: "포맷 · 압축", body: "읽기 쉽게 줄을 나누려면 포맷, 요청 본문처럼 한 줄로 줄이려면 압축을 고르세요. 포맷에서는 들여쓰기 칸 수도 정할 수 있습니다." },
-        { title: "입력", body: "로그나 응답에서 복사한 JSON을 붙여 넣으세요. 입력하는 대로 자동으로 정리됩니다." },
-        { title: "상태", body: "유효한 JSON인지, 문법 오류라면 몇 번째 줄 몇 번째 글자인지 알려줍니다. 줄 수와 키 개수도 함께 보여줍니다." },
-        { title: "결과", body: "오류가 없는지 확인한 뒤 결과를 복사하세요. 입력한 내용은 브라우저 밖으로 보내지 않습니다." },
+        { title: "입력", body: "로그나 응답에서 복사한 JSON을 붙여 넣으세요. 입력하는 대로 자동으로 정리되고, 문법 오류가 있으면 몇 번째 줄 몇 번째 글자인지 토스트로 알려줍니다." },
+        { title: "결과", body: "줄 수와 키 개수를 확인하고 결과를 복사하세요. 복사하면 토스트로 알려줍니다. 입력한 내용은 브라우저 밖으로 보내지 않습니다." },
       ],
     },
     en: {
@@ -26,14 +24,12 @@ export const WEB_FIGURES: GuideFigureMap = {
       parts: [
         { t: "tabs", items: ["Format", "Minify"], m: 1 },
         { t: "text", label: "Input", value: "{\"id\":1042,\"user\":{\"name\":\"Seoyeon Kim\",\"roles\":[\"admin\",\"editor\"]},\"active\":true}", mono: true, m: 2 },
-        { t: "rows", items: [{ label: "Status", value: "Valid JSON", tone: "ok" }], m: 3 },
-        { t: "code", title: "Result", lines: ["{", "  \"id\": 1042,", "  \"user\": {", "    \"name\": \"Seoyeon Kim\",", "    \"roles\": [\"admin\", \"editor\"]", "  },", "  \"active\": true", "}"], m: 4 },
+        { t: "code", title: "Result", lines: ["{", "  \"id\": 1042,", "  \"user\": {", "    \"name\": \"Seoyeon Kim\",", "    \"roles\": [\"admin\", \"editor\"]", "  },", "  \"active\": true", "}"], m: 3 },
       ],
       notes: [
         { title: "Format or Minify", body: "Choose Format to break JSON into readable lines, or Minify to put a request body on one line. Format also lets you set the indent width." },
-        { title: "Input", body: "Paste JSON copied from a log or response. It is reformatted as you type." },
-        { title: "Status", body: "Shows whether the JSON is valid, or the line and column of a syntax error, along with line and key counts." },
-        { title: "Result", body: "Copy the result once there are no errors. Nothing you enter leaves your browser." },
+        { title: "Input", body: "Paste JSON copied from a log or response. It is reformatted as you type, and a toast shows the line and column of any syntax error." },
+        { title: "Result", body: "Check the line and key counts, then copy the result. A toast confirms the copy. Nothing you enter leaves your browser." },
       ],
     },
   },

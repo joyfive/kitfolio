@@ -6,6 +6,7 @@ import PageHead from "./PageHead";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
+import { copyText } from "../lib/clipboard";
 
 export type ConverterMode = "rem-px" | "em-px" | "vw-px" | "percent-px" | "ms-s";
 
@@ -211,7 +212,7 @@ export default function UnitConverter() {
 
   async function handleCopy() {
     if (!outputValue) return;
-    try { await navigator.clipboard.writeText(outputValue); } catch { /* ignore */ }
+    try { await copyText(outputValue); } catch { /* ignore */ }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }

@@ -235,15 +235,14 @@ export const DOCS_FIGURES: GuideFigureMap = {
       parts: [
         { t: "field", label: "URL", value: "https://example.com/menu", m: 1 },
         { t: "tabs", label: "인식 품질", items: ["일반", "높음", "최고"], active: 2, m: 2 },
-        { t: "chips", label: "모양", items: ["사각형", "둥근 사각형", "아치형", "하트형"], active: [0], m: 3 },
-        { t: "rows", items: [{ label: "상태", value: "QR 코드 인식을 확인했습니다", tone: "ok" }] },
+        { t: "chips", label: "모양", items: ["사각형", "라운드", "아치형", "하트형"], active: [0], m: 3 },
         { t: "buttons", items: ["SVG 다운로드", "PNG 다운로드"], primary: 1, m: 4 },
       ],
       notes: [
         { title: "URL", body: "QR로 열릴 주소를 http 또는 https로 시작하게 입력하세요. 주소가 바뀌면 미리보기도 바로 바뀝니다." },
         { title: "인식 품질", body: "인쇄물이 접히거나 로고가 덮일 수 있다면 높음이나 최고를 고르세요. 품질이 높을수록 점이 촘촘해집니다." },
         { title: "모양과 색상", body: "셀 모양, QR 색상, 배경 색상을 정합니다. 대비가 낮으면 인식이 어려울 수 있다는 경고가 나옵니다." },
-        { title: "다운로드", body: "인식 확인 메시지가 보이면 인쇄용은 SVG, 화면용은 PNG로 받으세요. 인쇄 전에 휴대폰으로 한 번 더 읽어 보세요." },
+        { title: "다운로드", body: "인식 확인 토스트가 뜨면 인쇄용은 SVG, 화면용은 PNG로 받으세요. 인쇄 전에 휴대폰으로 한 번 더 읽어 보세요." },
       ],
     },
     en: {
@@ -252,14 +251,13 @@ export const DOCS_FIGURES: GuideFigureMap = {
         { t: "field", label: "URL", value: "https://example.com/menu", m: 1 },
         { t: "tabs", label: "Recognition quality", items: ["Standard", "High", "Highest"], active: 2, m: 2 },
         { t: "chips", label: "Shape", items: ["Square", "Rounded", "Arch", "Heart"], active: [0], m: 3 },
-        { t: "rows", items: [{ label: "Status", value: "QR code verified", tone: "ok" }] },
         { t: "buttons", items: ["Download SVG", "Download PNG"], primary: 1, m: 4 },
       ],
       notes: [
         { title: "URL", body: "Enter the address the code should open, starting with http or https. The preview updates as you type." },
         { title: "Recognition quality", body: "Choose High or Highest if the print may get folded or covered by a logo. Higher quality packs the dots more densely." },
         { title: "Shape and colors", body: "Set the module shape, QR color and background color. A warning appears if the contrast may be too low to scan." },
-        { title: "Download", body: "Once the verified message appears, use SVG for print and PNG for screens. Scan the code with a phone before printing." },
+        { title: "Download", body: "Once the verified toast appears, use SVG for print and PNG for screens. Scan the code with a phone before printing." },
       ],
     },
   },
@@ -293,6 +291,71 @@ export const DOCS_FIGURES: GuideFigureMap = {
         { title: "Add the image", body: "Drop or choose a file and decoding starts right away. The image is processed only in your browser." },
         { title: "Decoded result", body: "Shows the URL or text stored in the code. For URLs the domain is shown separately so you can check it before opening." },
         { title: "Copy or open", body: "After checking the address, copy it or open it in a new tab. Use read again for the next image." },
+      ],
+    },
+  },
+  "resume-builder": {
+    ko: {
+      caption: "회사를 고르고 오른쪽 폼에 쓰면 왼쪽 A4 미리보기가 바로 바뀌고, 끝나면 PDF로 저장합니다.",
+      parts: [
+        { t: "fields", items: [{ label: "지원 문서", value: "새솔랩", select: true }, { label: "문서 언어", value: "한국어", select: true }], m: 1 },
+        { t: "tabs", items: ["폼", "yml"], active: 0, m: 2 },
+        { t: "rows", title: "지원처", items: [{ label: "지원 회사명", value: "새솔랩" }, { label: "강조색", value: "#2D5DC8" }, { label: "글꼴", value: "Pretendard" }], m: 3 },
+        { t: "buttons", items: ["yml 내려받기", "PDF로 저장"], primary: 1, m: 4 },
+      ],
+      notes: [
+        { title: "지원 문서 · 문서 언어", body: "지원하는 회사마다 문서를 하나씩 만들고, 한국어와 영어 중 문서 언어를 고르세요. 공통 프로필은 모든 문서가 함께 씁니다." },
+        { title: "폼 · yml", body: "폼에서 칸을 채우면 됩니다. yml 탭에서는 같은 내용을 텍스트로 고치거나 붙여 넣을 수 있습니다." },
+        { title: "지원처 · 섹션 입력", body: "지원 회사명, 강조색, 글꼴을 정하고 소개, 핵심 역량, 경력, 프로젝트를 접고 펼치며 채우세요. 입력하는 대로 왼쪽 미리보기가 바뀝니다." },
+        { title: "저장", body: "미리보기를 확인한 뒤 PDF로 저장하세요. 내용은 이 브라우저에만 저장되고 서버로 보내지 않으니, 다른 기기에서 쓰려면 yml로 내려받아 두세요." },
+      ],
+    },
+    en: {
+      caption: "Pick a company and fill in the form on the right; the A4 preview on the left updates at once, then save as PDF.",
+      parts: [
+        { t: "fields", items: [{ label: "Document", value: "새솔랩", select: true }, { label: "Document language", value: "한국어", select: true }], m: 1 },
+        { t: "tabs", items: ["Form", "YAML"], active: 0, m: 2 },
+        { t: "rows", title: "Target company", items: [{ label: "Company applying to", value: "새솔랩" }, { label: "Accent color", value: "#2D5DC8" }, { label: "Font", value: "Pretendard" }], m: 3 },
+        { t: "buttons", items: ["Download YAML", "Save as PDF"], primary: 1, m: 4 },
+      ],
+      notes: [
+        { title: "Document · Document language", body: "Make one document per company you apply to, and choose Korean or English as its language. Every document shares the same profile." },
+        { title: "Form · YAML", body: "Fill in the form fields. The YAML tab lets you edit or paste the same content as text." },
+        { title: "Target company · Sections", body: "Set the company, accent color and font, then fill in the introduction, capabilities, career and projects, opening and closing each section. The preview on the left updates as you type." },
+        { title: "Save", body: "Check the preview, then save as PDF. Your content stays in this browser and is never sent to a server, so download YAML if you want to use it on another device." },
+      ],
+    },
+  },
+
+  "portfolio-builder": {
+    ko: {
+      caption: "슬라이드 구성을 폼으로 채우면 왼쪽 미리보기가 바로 바뀌고, 끝나면 PDF로 저장합니다.",
+      parts: [
+        { t: "fields", items: [{ label: "지원 문서", value: "새솔랩", select: true }, { label: "문서 언어", value: "한국어", select: true }], m: 1 },
+        { t: "tabs", items: ["폼", "yml"], active: 0, m: 2 },
+        { t: "rows", title: "지원처", items: [{ label: "지원 회사명", value: "새솔랩" }, { label: "강조색", value: "#2D5DC8" }, { label: "글꼴", value: "Pretendard" }], m: 3 },
+        { t: "buttons", items: ["yml 내려받기", "PDF로 저장"], primary: 1, m: 4 },
+      ],
+      notes: [
+        { title: "지원 문서 · 문서 언어", body: "회사별로 포트폴리오를 따로 만들고 문서 언어를 고르세요. 공통 프로필은 경력기술서와 함께 씁니다." },
+        { title: "폼 · yml", body: "폼으로 슬라이드 내용을 채우거나, yml 탭에서 같은 내용을 텍스트로 고칩니다." },
+        { title: "지원처 · 슬라이드 구성", body: "지원 회사명, 강조색, 글꼴을 정한 뒤 표지, 일하는 방식, 프로젝트, 엔딩 순으로 채우세요. 이미지는 너비를 슬라이더로 맞출 수 있습니다." },
+        { title: "저장", body: "미리보기에서 슬라이드를 확인한 뒤 PDF로 저장하세요. 내용은 이 브라우저에만 저장되니 다른 기기에서 쓰려면 yml로 내려받아 두세요." },
+      ],
+    },
+    en: {
+      caption: "Fill in the slides with the form and the preview on the left updates at once, then save as PDF.",
+      parts: [
+        { t: "fields", items: [{ label: "Document", value: "새솔랩", select: true }, { label: "Document language", value: "한국어", select: true }], m: 1 },
+        { t: "tabs", items: ["Form", "YAML"], active: 0, m: 2 },
+        { t: "rows", title: "Target company", items: [{ label: "Company applying to", value: "새솔랩" }, { label: "Accent color", value: "#2D5DC8" }, { label: "Font", value: "Pretendard" }], m: 3 },
+        { t: "buttons", items: ["Download YAML", "Save as PDF"], primary: 1, m: 4 },
+      ],
+      notes: [
+        { title: "Document · Document language", body: "Make a separate portfolio for each company and choose its language. It shares the common profile with the resume." },
+        { title: "Form · YAML", body: "Fill in the slide content with the form, or edit the same content as text in the YAML tab." },
+        { title: "Target company · Slides", body: "Set the company, accent color and font, then fill in the cover, way of working, projects and ending in order. You can set an image width with the slider." },
+        { title: "Save", body: "Check the slides in the preview, then save as PDF. Your content stays in this browser, so download YAML to use it on another device." },
       ],
     },
   },

@@ -6,7 +6,7 @@ import PdfFileSummary from "./PdfFileSummary";
 import PdfThumbnailGrid from "./PdfThumbnailGrid";
 import PdfPageRangeInput from "./PdfPageRangeInput";
 import PdfProcessingStatus, { type PdfProcessState } from "./PdfProcessingStatus";
-import { useLang, useT, type Dict } from "../lib/i18n";
+import { useT, type Dict } from "../lib/i18n";
 import { loadPdfFile, type LoadedPdf } from "../lib/pdf/loadPdf";
 import { usePdfjsDoc } from "../lib/pdf/usePdfjsDoc";
 import { extractPages } from "../lib/pdf/operations";
@@ -81,7 +81,6 @@ type Mode = "each" | "range";
 type Result = { blob: Blob; name: string; count: number } | null;
 
 export default function PdfSplit() {
-  const { lang } = useLang();
   const t = useT(DICT);
 
   const [pdf, setPdf] = useState<LoadedPdf | null>(null);
@@ -263,7 +262,7 @@ export default function PdfSplit() {
               </dl>
               <p className="pdf-hint">{t("s.zipNote")}</p>
 
-              <PdfProcessingStatus state={state} error={error} processingLabel={t("s.running")} />
+              <PdfProcessingStatus state={state} error={error} processingLabel={t("s.running")} done={!!result} />
 
               <button
                 type="button"

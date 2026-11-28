@@ -5,6 +5,7 @@ import PageHead from "./PageHead";
 import RelatedTools from "./RelatedTools";
 import ToolGuide from "./ToolGuide";
 import { useLang, useT, type Dict } from "../lib/i18n";
+import { copyText } from "../lib/clipboard";
 
 const DICT: Dict = {
   ko: {
@@ -97,7 +98,7 @@ export default function TimeCalculator() {
   const copy = useCallback(
     async (text: string, key: string) => {
       try {
-        await navigator.clipboard.writeText(text);
+        await copyText(text);
       } catch {
         /* ignore */
       }

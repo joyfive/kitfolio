@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "./PageHead";
 import ToolGuide from "./ToolGuide";
@@ -33,7 +35,7 @@ const DICT: Dict = {
     "g.res": "PNG 해상도",
     "g.shape": "모양",
     "g.s.square": "사각형",
-    "g.s.rounded": "둥근 사각형",
+    "g.s.rounded": "라운드",
     "g.s.arch": "아치형",
     "g.s.heart": "하트형",
     "g.ecFixed": "감성 코드는 인식 안정성을 위해 오류 복원 ‘최고’로 고정됩니다.",
@@ -45,9 +47,6 @@ const DICT: Dict = {
     "g.svg": "SVG 다운로드",
     "g.preview": "QR 코드 미리보기",
     "g.contrast": "색상 대비가 낮아 인식이 어려울 수 있습니다.",
-    "g.st.empty": "URL을 입력하면 QR 코드가 표시됩니다.",
-    "g.st.invalid": "유효한 http 또는 https URL을 입력해 주세요.",
-    "g.st.validating": "QR 코드 인식을 확인하고 있습니다.",
     "g.st.ok": "이 브라우저에서 QR 코드 인식을 확인했습니다.",
     "g.st.fail":
       "현재 설정으로 QR 코드를 읽지 못했습니다. 색상 대비를 높이거나 인식 품질을 변경해 주세요.",
@@ -76,9 +75,6 @@ const DICT: Dict = {
     "g.svg": "Download SVG",
     "g.preview": "QR code preview",
     "g.contrast": "Low color contrast may reduce scannability.",
-    "g.st.empty": "Enter a URL to preview the QR code.",
-    "g.st.invalid": "Enter a valid http or https URL.",
-    "g.st.validating": "Checking that the QR code is readable…",
     "g.st.ok": "Verified readable in this browser.",
     "g.st.fail":
       "Couldn't read the QR code with the current settings. Increase color contrast or change the recognition quality.",
@@ -154,6 +150,11 @@ export default function QrCodeGenerator() {
   const ecLevel: QrErrorLevel = ecFixed ? "H" : level;
 
   const lowContrast = useMemo(() => contrastRatio(fg, bg) < 3, [fg, bg]);
+  // 색 대비 경고와 인식 검증 결과는 화면에 그리지 않고 토스트로 알린다
+  useToastOnChange(lowContrast ? t("g.contrast") : null, "warning");
+  useToastOnChange(status === "ok" ? t("g.st.ok") : null, "success");
+  useToastOnChange(status === "unconfirmed" ? t("g.st.unconfirmed") : null, "warning");
+  useToastOnChange(status === "fail" ? t("g.st.fail") : null, "error");
 
   // URL·모양·색상·품질 변경 시 debounce 후 생성 + 자체 판독 검증
   useEffect(() => {
@@ -186,7 +187,7 @@ export default function QrCodeGenerator() {
         const ok = await validateQrOutput(matrix, shape, opts, normalized);
         if (token !== runToken.current) return;
         // 감성 코드(장식)는 ZXing 이 보수적이라 오탐이 잦다 → 차단 대신 권고.
-        // 사각형·둥근 사각형은 ZXing 이 정확하므로 실패 시 하드 차단 유지.
+        // 사각형·라운드은 ZXing 이 정확하므로 실패 시 하드 차단 유지.
         setStatus(ok ? "ok" : ecFixed ? "unconfirmed" : "fail");
       } catch {
         if (token !== runToken.current) return;
@@ -399,11 +400,6 @@ export default function QrCodeGenerator() {
                 </div>
               </div>
             </div>
-            {lowContrast && (
-              <p className="qr-warn" role="status">
-                {t("g.contrast")}
-              </p>
-            )}
           </div>
         </div>
 
@@ -428,15 +424,6 @@ export default function QrCodeGenerator() {
               </div>
             )}
           </div>
-
-          <p
-            className={"qr-status qr-status-" + status}
-            role="status"
-            aria-live="polite"
-          >
-            <span className="qr-status-dot" aria-hidden />
-            <span>{t("g.st." + status)}</span>
-          </p>
 
           <div className="qr-dl">
             <button

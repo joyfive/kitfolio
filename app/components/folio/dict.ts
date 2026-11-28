@@ -31,8 +31,6 @@ export const FOLIO_DICT: Dict = {
     "fb.viewEdit": "편집",
     "fb.viewPreview": "미리보기",
     // 저장 · 파일
-    "fb.saved": "이 브라우저에 자동 저장됨",
-    "fb.saving": "저장 중",
     "fb.saveQuota": "브라우저 저장 공간이 가득 찼습니다. 큰 이미지를 지우거나 백업 파일로 내보내세요.",
     "fb.saveBlocked": "이 브라우저에서는 저장할 수 없습니다 (시크릿 모드·저장 차단). 백업 파일로 내보내세요.",
     "fb.unreadable": "이 브라우저에 저장된 데이터를 읽을 수 없어 예시를 보여줍니다. 편집을 시작하면 덮어씁니다.",
@@ -48,7 +46,6 @@ export const FOLIO_DICT: Dict = {
     "fb.importFail": "파일을 읽을 수 없습니다",
     "fb.privacy": "입력한 내용은 이 브라우저(localStorage)에만 저장되고 서버로 전송되지 않습니다. 다른 기기와 동기화되지 않으니 백업 파일로 보관하세요.",
     "fb.renderError": "이 값으로는 미리보기를 그릴 수 없습니다. 방금 고친 항목의 형식을 확인하세요.",
-    "fb.storage": "저장 용량 약 {n}KB",
     // 섹션
     "fb.sec.target": "지원처",
     "fb.sec.profile": "기본 정보",
@@ -207,8 +204,6 @@ export const FOLIO_DICT: Dict = {
     "fb.yamlLine": "line {n}",
     "fb.viewEdit": "Edit",
     "fb.viewPreview": "Preview",
-    "fb.saved": "Saved automatically in this browser",
-    "fb.saving": "Saving",
     "fb.saveQuota": "Browser storage is full. Remove large images or export a backup file.",
     "fb.saveBlocked": "This browser cannot save (private mode or storage blocked). Export a backup file.",
     "fb.unreadable": "Data saved in this browser could not be read, so a sample is shown. Editing will overwrite it.",
@@ -224,7 +219,6 @@ export const FOLIO_DICT: Dict = {
     "fb.importFail": "Could not read the file",
     "fb.privacy": "What you enter is saved only in this browser (localStorage) and never sent to a server. It does not sync across devices, so keep a backup file.",
     "fb.renderError": "The preview cannot be drawn with this value. Check the format of the field you just changed.",
-    "fb.storage": "About {n} KB stored",
     "fb.sec.target": "Target company",
     "fb.sec.profile": "Basics",
     "fb.sec.intro": "Introduction",

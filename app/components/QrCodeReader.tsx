@@ -1,5 +1,7 @@
 "use client";
 
+import { useToastOnChange } from "../lib/toast";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { IScannerControls } from "@zxing/browser";
 import PageHead from "./PageHead";
@@ -9,6 +11,7 @@ import QrToolTabs from "./QrToolTabs";
 import { useT, type Dict } from "../lib/i18n";
 import { decodeImageElement } from "../lib/qr/decodeQr";
 import { isSafeHttpUrl } from "../lib/qr/url";
+import { copyText } from "../lib/clipboard";
 
 const DICT: Dict = {
   ko: {
@@ -119,6 +122,13 @@ export default function QrCodeReader() {
   const [facing, setFacing] = useState<"environment" | "user">("environment");
   const [dragOver, setDragOver] = useState(false);
   const [pasteTextHint, setPasteTextHint] = useState(false);
+  /* 알림은 화면에 그리지 않고 토스트로 */
+  useToastOnChange(pasteTextHint ? t("r.pasteText") : null, "warning");
+  useToastOnChange(status === "error" ? t("e." + (errKind ?? "notfound")) : null, "error");
+  useToastOnChange(
+    status === "loading" ? t("r.scanning") : status === "requesting-permission" ? t("r.requesting") : status === "scanning" ? t("r.guide") : null,
+    "info",
+  );
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
@@ -337,7 +347,7 @@ export default function QrCodeReader() {
 
   const copy = useCallback(async (text: string) => {
     try {
-      await navigator.clipboard.writeText(text);
+      await copyText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 1200);
     } catch {
@@ -376,11 +386,6 @@ export default function QrCodeReader() {
                 <div className="qr-paste-area" tabIndex={0}>
                   <PasteIcon />
                   <p>{t("r.pasteHint")}</p>
-                  {pasteTextHint && (
-                    <p className="qr-warn" role="status">
-                      {t("r.pasteText")}
-                    </p>
-                  )}
                 </div>
                 {clipboardSupported && (
                   <button
@@ -544,8 +549,7 @@ export default function QrCodeReader() {
               )}
             </div>
           ) : status === "error" ? (
-            <div className="qr-result-empty qr-result-error" role="status" aria-live="polite">
-              <p>{t("e." + (errKind ?? "notfound"))}</p>
+            <div className="qr-result-empty qr-result-error">
               <div className="qr-result-actions">
                 {mode === "camera" ? (
                   <button
@@ -577,16 +581,8 @@ export default function QrCodeReader() {
               </div>
             </div>
           ) : (
-            <div className="qr-result-empty" role="status" aria-live="polite">
-              <p>
-                {status === "loading"
-                  ? t("r.scanning")
-                  : status === "requesting-permission"
-                    ? t("r.requesting")
-                    : status === "scanning"
-                      ? t("r.guide")
-                      : t("r.idle")}
-              </p>
+            <div className="qr-result-empty">
+              <p>{t("r.idle")}</p>
             </div>
           )}
         </div>

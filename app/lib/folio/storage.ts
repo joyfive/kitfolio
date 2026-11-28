@@ -85,11 +85,6 @@ export function saveWorkspace(ws: Workspace, pageLang: DocLang): SaveResult {
   }
 }
 
-/** 저장 크기(문자 수 기준 대략치, KB) */
-export function workspaceSizeKb(ws: Workspace): number {
-  return Math.round(JSON.stringify(ws).length / 1024);
-}
-
 export function makeEntry(doc: SourceDoc, lang: DocLang): FolioEntry {
   return { id: newId(), lang, doc, updatedAt: new Date().toISOString() };
 }
