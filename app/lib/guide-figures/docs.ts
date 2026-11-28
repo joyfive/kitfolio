@@ -235,7 +235,7 @@ export const DOCS_FIGURES: GuideFigureMap = {
       parts: [
         { t: "field", label: "URL", value: "https://example.com/menu", m: 1 },
         { t: "tabs", label: "인식 품질", items: ["일반", "높음", "최고"], active: 2, m: 2 },
-        { t: "chips", label: "모양", items: ["사각형", "둥근 사각형", "아치형", "하트형"], active: [0], m: 3 },
+        { t: "chips", label: "모양", items: ["사각형", "라운드", "아치형", "하트형"], active: [0], m: 3 },
         { t: "rows", items: [{ label: "상태", value: "QR 코드 인식을 확인했습니다", tone: "ok" }] },
         { t: "buttons", items: ["SVG 다운로드", "PNG 다운로드"], primary: 1, m: 4 },
       ],

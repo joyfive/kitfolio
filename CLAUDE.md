@@ -346,6 +346,13 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
   - 글자 `--text-caption~display` = 12·13·14·15·16·17·18·20·24·28·34·40·48, 굵기 `--fw-title/ui/medium/body`
   - 라운드 `--radius-xs~2xl · pill`, 높이 `--h-sm~xl`, 모션 `--dur-fast/base/slow` + `--ease`, 표면·상태색 `--white` `--danger*` `--warning`
   - 예외: 1~2px 헤어라인, 음수 마진 보정, 가이드 도해 목업(`.kf-gfig-*`), 고정 크기 컨트롤(아이콘·핸들).
+- **너비는 full-width 기본.** 폭은 래퍼(`.kf-main` 1216 · 본문 래퍼 `.kf-legal`/`.kf-article`/`.kf-support-content` · 작업 영역의 열 비율)에서만 정하고,
+  그 안의 텍스트·컨트롤·카드는 `width: 100%` 로 가득 채운다. 개별 UI 에 `width`·`max-width`·`min-width` 의 px/ch 고정 금지
+  (예외: 아이콘·아바타·썸네일 같은 정사각 고정 크기, QR·썸네일 미리보기 같은 미디어, 터치 영역 44px).
+  좌우 분할 작업 영역은 `380px 1fr` 같은 px 열 대신 `minmax(0, 1fr) minmax(0, 2fr)` 비율을 쓴다.
+  선택지 묶음(QR 모양 등)은 `repeat(N, minmax(0, 1fr))` 로 균등 분할한다.
+- **줄바꿈은 자동이 기본**이고, 끊는 위치를 정하고 싶은 카피는 문구 안에 `\n` 을 넣는다
+  (제목·리드·카드 설명·FAQ·지원 문단은 `white-space: pre-line`). 제목은 `text-wrap: balance`, 본문은 `pretty`.
 - **구분선 금지.** 영역은 `1px` 선이 아니라 여백(`--space-*`)과 면 색 차이로 나눈다. 허용되는 선은 강조용 두꺼운 막대(인용·콜아웃 3~4px), 탭 활성 표시(2px), 번호 마커 연결선뿐이다.
 - **밑줄 버튼 금지.** 버튼형 링크·텍스트 버튼은 평소 투명, 호버 시 배경색이 들어오는 고스트 형태로 만든다
   (`:is(...)` 고스트 규칙 목록에 추가). 밑줄은 본문 문장 안의 링크에만 쓴다.

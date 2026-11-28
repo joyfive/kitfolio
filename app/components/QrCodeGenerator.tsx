@@ -33,7 +33,7 @@ const DICT: Dict = {
     "g.res": "PNG 해상도",
     "g.shape": "모양",
     "g.s.square": "사각형",
-    "g.s.rounded": "둥근 사각형",
+    "g.s.rounded": "라운드",
     "g.s.arch": "아치형",
     "g.s.heart": "하트형",
     "g.ecFixed": "감성 코드는 인식 안정성을 위해 오류 복원 ‘최고’로 고정됩니다.",
@@ -186,7 +186,7 @@ export default function QrCodeGenerator() {
         const ok = await validateQrOutput(matrix, shape, opts, normalized);
         if (token !== runToken.current) return;
         // 감성 코드(장식)는 ZXing 이 보수적이라 오탐이 잦다 → 차단 대신 권고.
-        // 사각형·둥근 사각형은 ZXing 이 정확하므로 실패 시 하드 차단 유지.
+        // 사각형·라운드은 ZXing 이 정확하므로 실패 시 하드 차단 유지.
         setStatus(ok ? "ok" : ecFixed ? "unconfirmed" : "fail");
       } catch {
         if (token !== runToken.current) return;
