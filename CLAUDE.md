@@ -341,6 +341,13 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
 - **타이포**: 제목 700(페이지 타이틀·히어로·섹션 제목) · UI 컴포넌트 600 · 본문 400~500. 650 같은 중간 굵기 금지.
   페이지 h1 34px · 허브 히어로 48px · 본문 16~17px · 줄간격 1.5~1.6. 한글 제목은 `word-break: keep-all`.
 - **포커스 링**: `--ring` (primary-300 1px + primary-100 4px). 입력은 2px primary 아웃라인.
+- **디자인 토큰 단일 출처는 `app/globals.css` 의 `@theme`·`:root`**. 새 스타일에 `px` 를 직접 쓰지 않고 토큰을 쓴다.
+  - 간격 `--space-1~14` = 4·8·12·16·20·24·28·32·40·48·56·64·80·96 (여백은 시원하게: 카드 안쪽 24~28, 섹션 사이 48~64)
+  - 글자 `--text-caption~display` = 12·13·14·15·16·17·18·20·24·28·34·40·48, 굵기 `--fw-title/ui/medium/body`
+  - 라운드 `--radius-xs~2xl · pill`, 높이 `--h-sm~xl`, 모션 `--dur-fast/base/slow` + `--ease`, 표면·상태색 `--white` `--danger*` `--warning`
+  - 예외: 1~2px 헤어라인, 음수 마진 보정, 가이드 도해 목업(`.kf-gfig-*`), 고정 크기 컨트롤(아이콘·핸들).
+- **밑줄 버튼 금지.** 버튼형 링크·텍스트 버튼은 평소 투명, 호버 시 배경색이 들어오는 고스트 형태로 만든다
+  (`:is(...)` 고스트 규칙 목록에 추가). 밑줄은 본문 문장 안의 링크에만 쓴다.
 - **IDE 다크 출력 · Canvas 체커보드**는 Kitfolio 고유 규칙이라 그대로 둔다.
 - 가이드 도해(`GuideFigure`) 목업 CSS 는 실제 화면 스타일을 따라간다. 컴포넌트 스타일을 바꾸면 `.kf-gfig-*` 도 같이 본다.
 
