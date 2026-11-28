@@ -26,7 +26,7 @@ import { CapabilitiesEditor } from "./ResumeForm";
 type T = (k: string) => string;
 
 /** 이미지 고르기 → 줄여서 data URL */
-function ImagePick({ label, value, onChange, t, maxWidth }: { label: string; value: string; onChange: (v: string | undefined) => void; t: T; maxWidth: number }) {
+function ImagePick({ label, value, onChange, t, maxWidth, keepAlpha, hint }: { label: string; value: string; onChange: (v: string | undefined) => void; t: T; maxWidth: number; keepAlpha?: boolean; hint?: string }) {
   const id = useId();
   const [busy, setBusy] = useState(false);
   return (
@@ -51,7 +51,7 @@ function ImagePick({ label, value, onChange, t, maxWidth }: { label: string; val
             if (!file) return;
             setBusy(true);
             try {
-              onChange(await imageToDataUrl(file, maxWidth));
+              onChange(await imageToDataUrl(file, maxWidth, 0.85, keepAlpha));
             } catch {
               /* 읽을 수 없는 이미지는 무시 */
             } finally {
@@ -65,6 +65,7 @@ function ImagePick({ label, value, onChange, t, maxWidth }: { label: string; val
           </button>
         )}
       </div>
+      {hint && <p className="fb-hint">{hint}</p>}
     </div>
   );
 }
@@ -347,6 +348,7 @@ export default function PortfolioForm({
     <div className="fb-form">
       <Section title={t("fb.sec.cover")} open>
         <Field label={t("f.company")} value={asStr(doc.company_name)} onChange={(v) => set("company_name", v)} />
+        <ImagePick label={t("f.logo")} hint={t("f.logoHint")} value={asStr(doc.logo)} onChange={(v) => set("logo", v)} t={t} maxWidth={640} keepAlpha />
         <ColorField label={t("f.primary")} value={asStr(doc.primary)} onChange={(v) => set("primary", v)} />
         <Field label={t("f.title")} value={asStr(doc.title)} onChange={(v) => set("title", v)} />
         <Field label={t("f.headline")} value={asStr(doc.headline)} onChange={(v) => set("headline", v)} />

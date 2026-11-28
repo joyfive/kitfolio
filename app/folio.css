@@ -534,6 +534,19 @@
   white-space: nowrap;
 }
 
+/* 업로드한 로고: 높이 기준으로 맞추고 가로가 긴 로고는 폭 상한에서 멈춘다 */
+.pf-logo--img {
+  flex: none;
+}
+.pf-logo--img img {
+  display: block;
+  max-height: 88px;
+  max-width: 420px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
 .pf-person {
   gap: 16px;
   min-width: 0;

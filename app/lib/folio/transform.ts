@@ -326,6 +326,7 @@ export function toPortfolio(d: SourceDoc): PortfolioData {
     fixed: {
       cover: { title: str(d.title), name: str(d.name), role: str(d.headline) },
       photo: str(d.photo),
+      logo: str(d.logo),
       contact: contacts(d.contact),
       total_experience: str(d.total_experience),
       career: careers(d.career),

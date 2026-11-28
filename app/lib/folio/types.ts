@@ -116,6 +116,8 @@ export type PortfolioData = {
   fixed: {
     cover: { title: string; name: string; role: string };
     photo: string;
+    /** 지원 회사 로고 (data URL·https). 없으면 회사명을 텍스트로 쓴다 */
+    logo: string;
     contact: Contact[];
     total_experience: string;
     career: CareerEntry[];

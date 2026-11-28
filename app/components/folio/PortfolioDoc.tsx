@@ -334,6 +334,18 @@ function OverviewItem({ item, index, L }: { item: Overview; index: number; L: Po
   );
 }
 
+/** 표지·엔딩 우상단: 로고 이미지가 있으면 이미지, 없으면 회사명 텍스트 */
+function Logo({ src, company }: { src: string; company: string }) {
+  const safe = /^(https?:|data:image\/)/i.test(src) ? src : "";
+  if (!safe) return <div className="pf-logo">{company}</div>;
+  return (
+    <div className="pf-logo pf-logo--img">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={safe} alt={company} />
+    </div>
+  );
+}
+
 export default function PortfolioDoc({ data, lang }: { data: PortfolioData; lang: DocLang }) {
   const L = PORTFOLIO_LABELS[lang];
   const { fixed, projects, meta } = data;
@@ -351,7 +363,7 @@ export default function PortfolioDoc({ data, lang }: { data: PortfolioData; lang
               <Inline text={fixed.cover.title || L.portfolio} />
               <span className="pf-dot">.</span>
             </h1>
-            <div className="pf-logo">{company}</div>
+            <Logo src={fixed.logo} company={company} />
           </div>
           <div className="pf-cover-bottom">
             <div className="pf-person">
@@ -595,7 +607,7 @@ export default function PortfolioDoc({ data, lang }: { data: PortfolioData; lang
                 ))}
                 <span className="pf-dot">.</span>
               </h2>
-              <div className="pf-logo">{company}</div>
+              <Logo src={fixed.logo} company={company} />
             </div>
             <div className="pf-cover-bottom">
               <div>
