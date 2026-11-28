@@ -51,7 +51,8 @@ export type ResumeData = {
   appendix: { education: Education | null; etc: EtcItem[]; awards: AwardGroup[] };
 };
 
-export type Brand = { company: string; primary: string };
+/** font: FOLIO_FONTS 의 id (fonts.ts) */
+export type Brand = { company: string; primary: string; font: string };
 
 /* ── 포트폴리오 ─────────────────────────────────────────── */
 

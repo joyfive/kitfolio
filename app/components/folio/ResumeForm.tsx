@@ -1,6 +1,6 @@
 "use client";
 
-import { ColorField, Field, ListEditor, RichArea, Section, asArr, asObj, asStr, setKey, type Obj } from "./FormKit";
+import { Area, ColorField, Field, FontField, ListEditor, RichArea, Section, asArr, asObj, asStr, setKey, type Obj } from "./FormKit";
 import { ProfileActivities, ProfileBasics, ProfileCareer, ProfileEducation, ProfileIntro } from "./ProfileForm";
 
 type T = (k: string) => string;
@@ -11,6 +11,7 @@ export function TargetFields({ doc, setDoc, t }: { doc: Obj; setDoc: (d: Obj) =>
     <>
       <Field label={t("f.company")} value={asStr(doc.company_name)} onChange={(v) => set("company_name", v)} />
       <ColorField label={t("f.primary")} value={asStr(doc.primary)} onChange={(v) => set("primary", v)} />
+      <FontField label={t("f.font")} hint={t("f.fontHint")} value={doc.font} onChange={(v) => set("font", v === "pretendard" ? undefined : v)} />
       <Field label={t("f.headline")} value={asStr(doc.headline)} onChange={(v) => set("headline", v)} />
     </>
   );
@@ -29,7 +30,7 @@ export function CapabilitiesEditor({ doc, setDoc, t }: { doc: Obj; setDoc: (d: O
       render={(c, setC) => (
         <>
           <Field label={t("f.capTitle")} value={asStr(c.title)} onChange={(v) => setC(setKey(c, "title", v))} />
-          <Field label={t("f.capDesc")} value={asStr(c.desc)} onChange={(v) => setC(setKey(c, "desc", v))} />
+          <Area label={t("f.capDesc")} rows={2} value={c.desc} onChange={(v) => setC(setKey(c, "desc", v))} />
         </>
       )}
     />
@@ -72,7 +73,7 @@ export default function ResumeForm({
           render={(s, setS) => (
             <>
               <Field label={t("f.skillK")} value={asStr(s.k)} onChange={(v) => setS(setKey(s, "k", v))} />
-              <Field label={t("f.skillV")} value={asStr(s.v)} onChange={(v) => setS(setKey(s, "v", v))} />
+              <Area label={t("f.skillV")} rows={2} value={s.v} onChange={(v) => setS(setKey(s, "v", v))} />
             </>
           )}
         />

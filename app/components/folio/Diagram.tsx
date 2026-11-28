@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { softTint } from "../../lib/folio/transform";
+import { Inline } from "./RichText";
 
 /* mermaid 텍스트 → SVG. mermaid 는 다이어그램이 있을 때만 동적 import 한다.
    securityLevel "strict": 사용자가 쓴 라벨의 HTML·스크립트를 실행하지 않는다. */
@@ -20,6 +21,7 @@ export default function Diagram({ code, caption }: { code: string; caption?: str
       const primary = cs?.getPropertyValue("--primary").trim() || "#2D5DC8";
       const ink = cs?.getPropertyValue("--ink-strong").trim() || "#16191d";
       const line = cs?.getPropertyValue("--line").trim() || "#e6e9ed";
+      const font = cs?.getPropertyValue("--font-base").trim() || "Pretendard, sans-serif";
       try {
         const mermaid = (await import("mermaid")).default;
         mermaid.initialize({
@@ -34,7 +36,7 @@ export default function Diagram({ code, caption }: { code: string; caption?: str
             secondaryColor: "#ffffff",
             tertiaryColor: "#ffffff",
             tertiaryBorderColor: line,
-            fontFamily: "Pretendard, sans-serif",
+            fontFamily: font,
             fontSize: "20px",
           },
         });
@@ -60,7 +62,11 @@ export default function Diagram({ code, caption }: { code: string; caption?: str
       ) : (
         <div className="pf-diagram-svg" dangerouslySetInnerHTML={{ __html: svg }} />
       )}
-      {caption && <figcaption>{caption}</figcaption>}
+      {caption && (
+        <figcaption>
+          <Inline text={caption} />
+        </figcaption>
+      )}
     </figure>
   );
 }

@@ -6,6 +6,8 @@
    폼 전체가 다시 마운트되어 새 값으로 초기화된다. */
 import { useId, useRef, useState, type ReactNode } from "react";
 import type { ListItem, Rich } from "../../lib/folio/types";
+import { FOLIO_FONTS, resolveFont } from "../../lib/folio/fonts";
+import { useLang } from "../../lib/i18n";
 import { linesToText, listToText, richToText, textToLines, textToList, textToRich } from "../../lib/folio/text";
 
 export type Obj = Record<string, unknown>;
@@ -235,6 +237,25 @@ export function ColorField({ label, value, onChange }: { label: string; value: s
         <input type="color" aria-label={label} value={valid ? value : "#2d5dc8"} onChange={(e) => onChange(e.target.value.toUpperCase())} />
         <input id={id} type="text" value={value} spellCheck={false} onChange={(e) => onChange(e.target.value)} />
       </div>
+    </div>
+  );
+}
+
+/** 문서 글꼴 선택 (yml 의 font 키) */
+export function FontField({ label, hint, value, onChange }: { label: string; hint?: string; value: unknown; onChange: (v: string) => void }) {
+  const id = useId();
+  const { lang } = useLang();
+  return (
+    <div className="fb-field">
+      <label htmlFor={id}>{label}</label>
+      <select id={id} value={resolveFont(value).id} onChange={(e) => onChange(e.target.value)}>
+        {FOLIO_FONTS.map((f) => (
+          <option key={f.id} value={f.id}>
+            {f.label[lang]}
+          </option>
+        ))}
+      </select>
+      {hint && <p className="fb-hint">{hint}</p>}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   Check,
   ColorField,
   Field,
+  FontField,
   LinesArea,
   ListArea,
   ListEditor,
@@ -106,7 +107,7 @@ function ElementEditor({ el, setEl, t }: { el: Obj | undefined; setEl: (v: Obj |
             onChange={(v) => set("headers", v.trim() ? v.split("|").map((c) => c.trim()) : undefined)}
           />
           <Area label={t("f.tableRows")} value={rowsToText(e.rows)} rows={4} onChange={(v) => set("rows", textToRows(v))} />
-          <Field label={t("f.caption")} value={asStr(e.caption)} onChange={(v) => set("caption", v)} />
+          <Area label={t("f.caption")} rows={2} value={e.caption} onChange={(v) => set("caption", v)} />
         </>
       )}
       {type === "quote" && (
@@ -118,7 +119,7 @@ function ElementEditor({ el, setEl, t }: { el: Obj | undefined; setEl: (v: Obj |
       {type === "diagram" && (
         <>
           <Area label={t("f.diagramCode")} hint={t("f.diagramHint")} value={e.code} rows={6} mono onChange={(v) => set("code", v)} />
-          <Field label={t("f.caption")} value={asStr(e.caption)} onChange={(v) => set("caption", v)} />
+          <Area label={t("f.caption")} rows={2} value={e.caption} onChange={(v) => set("caption", v)} />
         </>
       )}
       {type === "capture" && (
@@ -127,7 +128,7 @@ function ElementEditor({ el, setEl, t }: { el: Obj | undefined; setEl: (v: Obj |
           <p className="fb-hint">{t("f.imageHint")}</p>
           <Field label={t("f.imageUrl")} type="url" value={/^https?:/.test(asStr(e.src)) ? asStr(e.src) : ""} onChange={(v) => set("src", v)} />
           <Field label={t("f.imageWidth")} value={asStr(e.w)} onChange={(v) => set("w", v)} />
-          <Field label={t("f.caption")} value={asStr(e.caption)} onChange={(v) => set("caption", v)} />
+          <Area label={t("f.caption")} rows={2} value={e.caption} onChange={(v) => set("caption", v)} />
         </>
       )}
     </div>
@@ -141,7 +142,7 @@ function SectionFields({ s, setS, t }: { s: Obj; setS: (v: Obj) => void; t: T })
       <Field label={t("f.secTitle")} value={asStr(s.title)} onChange={(v) => set("title", v)} />
       <Area label={t("f.secDesc")} value={s.desc} rows={2} onChange={(v) => set("desc", v)} />
       <ElementEditor el={isObj(s.element) ? s.element : undefined} setEl={(v) => set("element", v)} t={t} />
-      <Field label={t("f.secNote")} value={asStr(s.note)} onChange={(v) => set("note", v)} />
+      <Area label={t("f.secNote")} rows={2} value={s.note} onChange={(v) => set("note", v)} />
     </>
   );
 }
@@ -229,13 +230,13 @@ function ProjectFields({ proj, setProj, t }: { proj: Obj; setProj: (v: Obj) => v
           const s = (k: string, v: unknown) => setO(setKey(o, k, v));
           return (
             <>
-              <Field label={t("f.headlineOv")} value={asStr(o.headline)} onChange={(v) => s("headline", v)} />
+              <Area label={t("f.headlineOv")} rows={2} value={o.headline} onChange={(v) => s("headline", v)} />
               <Area label={t("f.background")} value={o.background} rows={2} onChange={(v) => s("background", v)} />
               <Area label={t("f.problem")} value={o.problem} rows={2} onChange={(v) => s("problem", v)} />
               <Area label={t("f.hypothesis")} value={o.hypothesis} rows={2} onChange={(v) => s("hypothesis", v)} />
               <Area label={t("f.solution")} value={o.solution} rows={2} onChange={(v) => s("solution", v)} />
               <Area label={t("f.resultLesson")} value={o.result} rows={2} onChange={(v) => s("result", v)} />
-              <Field label={t("f.takeaway")} value={asStr(o.takeaway)} onChange={(v) => s("takeaway", v)} />
+              <Area label={t("f.takeaway")} rows={2} value={o.takeaway} onChange={(v) => s("takeaway", v)} />
             </>
           );
         }}
@@ -255,12 +256,12 @@ function ProjectFields({ proj, setProj, t }: { proj: Obj; setProj: (v: Obj) => v
               addLabel={t("f.cards")}
               render={(c, setC) => (
                 <>
-                  <Field label={t("f.cardTitle")} value={asStr(c.title)} onChange={(v) => setC(setKey(c, "title", v))} />
+                  <Area label={t("f.cardTitle")} rows={2} value={c.title} onChange={(v) => setC(setKey(c, "title", v))} />
                   <Area label={t("f.cardDesc")} value={c.desc} rows={2} onChange={(v) => setC(setKey(c, "desc", v))} />
                 </>
               )}
             />
-            <Field label={t("f.takeaway")} value={asStr(p.takeaway)} onChange={(v) => setP(setKey(p, "takeaway", v))} />
+            <Area label={t("f.takeaway")} rows={2} value={p.takeaway} onChange={(v) => setP(setKey(p, "takeaway", v))} />
           </>
         )}
       </PageToggle>
@@ -271,7 +272,7 @@ function ProjectFields({ proj, setProj, t }: { proj: Obj; setProj: (v: Obj) => v
             <Area label={t("f.hypoLead")} value={h.lead} rows={2} onChange={(v) => setH(setKey(h, "lead", v))} />
             <Area label={t("f.hypothesis")} value={h.hypothesis} rows={2} onChange={(v) => setH(setKey(h, "hypothesis", v))} />
             <ListArea label={t("f.evidence")} value={h.evidence} onChange={(v) => setH(setKey(h, "evidence", v))} />
-            <Field label={t("f.takeaway")} value={asStr(h.takeaway)} onChange={(v) => setH(setKey(h, "takeaway", v))} />
+            <Area label={t("f.takeaway")} rows={2} value={h.takeaway} onChange={(v) => setH(setKey(h, "takeaway", v))} />
           </>
         )}
       </PageToggle>
@@ -288,7 +289,7 @@ function ProjectFields({ proj, setProj, t }: { proj: Obj; setProj: (v: Obj) => v
           <>
             <Field label={t("f.slideLabel")} hint={t("f.slideLabelHint")} value={asStr(s.label)} onChange={(v) => setS(setKey(s, "label", v))} />
             <SolutionSections slide={s} setSlide={setS} t={t} />
-            <Field label={t("f.takeaway")} value={asStr(s.takeaway)} onChange={(v) => setS(setKey(s, "takeaway", v))} />
+            <Area label={t("f.takeaway")} rows={2} value={s.takeaway} onChange={(v) => setS(setKey(s, "takeaway", v))} />
           </>
         )}
       />
@@ -314,7 +315,7 @@ function ProjectFields({ proj, setProj, t }: { proj: Obj; setProj: (v: Obj) => v
               )}
             />
             <RichArea label={t("f.lesson")} value={o.lesson} onChange={(v) => setO(setKey(o, "lesson", v))} />
-            <Field label={t("f.takeaway")} value={asStr(o.takeaway)} onChange={(v) => setO(setKey(o, "takeaway", v))} />
+            <Area label={t("f.takeaway")} rows={2} value={o.takeaway} onChange={(v) => setO(setKey(o, "takeaway", v))} />
           </>
         )}
       </PageToggle>
@@ -350,7 +351,8 @@ export default function PortfolioForm({
         <Field label={t("f.company")} value={asStr(doc.company_name)} onChange={(v) => set("company_name", v)} />
         <ImagePick label={t("f.logo")} hint={t("f.logoHint")} value={asStr(doc.logo)} onChange={(v) => set("logo", v)} t={t} maxWidth={640} keepAlpha />
         <ColorField label={t("f.primary")} value={asStr(doc.primary)} onChange={(v) => set("primary", v)} />
-        <Field label={t("f.title")} value={asStr(doc.title)} onChange={(v) => set("title", v)} />
+        <FontField label={t("f.font")} hint={t("f.fontHint")} value={doc.font} onChange={(v) => set("font", v === "pretendard" ? undefined : v)} />
+        <Area label={t("f.title")} rows={2} value={doc.title} onChange={(v) => set("title", v)} />
         <Field label={t("f.headline")} value={asStr(doc.headline)} onChange={(v) => set("headline", v)} />
         <ImagePick label={t("f.photo")} value={asStr(doc.photo)} onChange={(v) => set("photo", v)} t={t} maxWidth={480} />
       </Section>
@@ -371,7 +373,7 @@ export default function PortfolioForm({
           addLabel={t("f.philosophy")}
           render={(x, setX) => (
             <>
-              <Field label={t("f.philoTitle")} value={asStr(x.title)} onChange={(v) => setX(setKey(x, "title", v))} />
+              <Area label={t("f.philoTitle")} rows={2} value={x.title} onChange={(v) => setX(setKey(x, "title", v))} />
               <Area label={t("f.philoDesc")} value={x.desc} rows={2} onChange={(v) => setX(setKey(x, "desc", v))} />
             </>
           )}
@@ -420,7 +422,7 @@ export default function PortfolioForm({
             const linked = new Set(asArr(o.projects).map((l) => Number(isObj(l) ? l.no : l)));
             return (
               <>
-                <Field label={t("f.ovTitle")} value={asStr(o.title)} onChange={(v) => setO(setKey(o, "title", v))} />
+                <Area label={t("f.ovTitle")} rows={2} value={o.title} onChange={(v) => setO(setKey(o, "title", v))} />
                 <Area label={t("f.ovDesc")} value={o.desc} rows={2} onChange={(v) => setO(setKey(o, "desc", v))} />
                 {projects.length > 0 && (
                   <fieldset className="fb-checks">

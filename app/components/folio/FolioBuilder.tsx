@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import type { DocLang, FolioKind, SourceDoc } from "../../lib/folio/types";
 import { buildPortfolio, buildResume, deepMerge } from "../../lib/folio/transform";
 import { dumpYaml, parseYaml } from "../../lib/folio/yaml";
+import { ensureFontLoaded, resolveFont } from "../../lib/folio/fonts";
 import { BACKUP_MARK, normalizeWorkspace, workspaceSizeKb } from "../../lib/folio/storage";
 import { blankDoc, samplePortfolio, sampleResume } from "../../lib/folio/sample";
 import { downloadBlob } from "../../lib/downloadBlob";
@@ -98,10 +99,14 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
   const merged = useMemo(() => deepMerge(ws.profile, entry.doc) as SourceDoc, [ws.profile, entry.doc]);
   const companyOf = (d: SourceDoc) => (typeof d.company_name === "string" && d.company_name) || t("fb.untitled");
 
+  // 문서 글꼴: 고르면 스타일시트를 붙인다. key 로 다시 그려 다이어그램도 새 글꼴로 측정한다.
+  const font = resolveFont(merged.font);
+  useEffect(() => ensureFontLoaded(font), [font]);
+
   const doc = useMemo(() => {
-    if (kind === "resume") return <ResumeDoc data={buildResume(ws.profile, entry.doc)} lang={docLang} />;
-    return <PortfolioDoc data={buildPortfolio(ws.profile, entry.doc)} lang={docLang} />;
-  }, [kind, ws.profile, entry.doc, docLang]);
+    if (kind === "resume") return <ResumeDoc key={font.id} data={buildResume(ws.profile, entry.doc)} lang={docLang} />;
+    return <PortfolioDoc key={font.id} data={buildPortfolio(ws.profile, entry.doc)} lang={docLang} />;
+  }, [kind, ws.profile, entry.doc, docLang, font.id]);
 
   /* ── 인쇄 ─────────────────────────────────────────── */
   useEffect(() => {
@@ -116,9 +121,14 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
     let fallback = 0;
     // 다이어그램(mermaid)이 다 그려진 뒤 인쇄한다. 최대 4초 기다린다.
     const started = Date.now();
+    let fontsReady = false;
+    void document.fonts?.ready.then(() => {
+      fontsReady = true;
+    });
     const timer = window.setInterval(() => {
       const pending = document.querySelectorAll('.fb-print-root [data-diagram][data-ready="0"]').length;
-      if (pending === 0 || Date.now() - started > 4000) {
+      // 글꼴(웹 폰트)과 다이어그램이 준비된 뒤 인쇄한다
+      if ((pending === 0 && (fontsReady || !document.fonts)) || Date.now() - started > 4000) {
         window.clearInterval(timer);
         window.print();
         // afterprint 를 보내지 않는 브라우저 대비 (인쇄 창이 닫힐 시간을 넉넉히 둔다)

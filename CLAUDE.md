@@ -537,7 +537,7 @@ Tailwind CSS v4 `@theme` 블록에 아래 토큰을 등록해서 사용한다.
 > yml 내려받기(문서 + 프로필 병합본)·전체 백업·불러오기(백업이면 전체 교체, 아니면 새 문서)로 보관한다.
 > PDF 는 서버 Playwright 대신 **브라우저 인쇄**: 인쇄 시에만 문서를 body 직속 포털로 그리고 `@page`(A4 · 1920px×1080px)를 주입한다.
 > 다이어그램은 mermaid(securityLevel strict)를 다이어그램이 있을 때만 동적 import 한다. 이미지는 브라우저에서 줄인 JPEG data URL(포트폴리오 표지·엔딩의 회사 로고 `logo` 만 투명 배경 유지 PNG, 비우면 회사명 텍스트).
-> 문서 라벨 언어(한국어·English)는 페이지 언어와 별개로 문서마다 고른다. 예시 데이터는 가상 인물 홍길동(EN: Gildong Hong)이다(실제 이력 미포함). 작업 영역은 미리보기 왼쪽 · 편집 오른쪽.
+> 문서 라벨 언어(한국어·English)는 페이지 언어와 별개로 문서마다 고른다. 문서 글꼴은 yml `font` 키로 문서마다 고른다: Pretendard(기본, 사이트 공통 로드) · SUIT · 나눔스퀘어 · 나눔고딕 (`app/lib/folio/fonts.ts`, 고른 문서가 있을 때만 jsDelivr npm 고정 버전·Google Fonts 스타일시트를 붙이고, 인쇄는 `document.fonts.ready` 뒤). 문장이 들어가는 칸은 모두 텍스트에리어이고, 입력한 줄바꿈은 렌더에서 `<br>` 로 살린다(`Inline`). 예시 데이터는 가상 인물 홍길동(EN: Gildong Hong)이다(실제 이력 미포함). 작업 영역은 미리보기 왼쪽 · 편집 오른쪽.
 > 변환 `app/lib/folio/transform.ts`(auto-folio `lib/content.mjs` 이식), 폼 텍스트 규칙 `text.ts`, yml `yaml.ts`, 저장 `storage.ts`,
 > 렌더 `app/components/folio/{ResumeDoc,PortfolioDoc}.tsx`, 작업 영역 `FolioBuilder.tsx`, 스타일 `app/folio.css`(두 페이지에서만 import),
 > 검사 `app/lib/folio/__tests__/folio.test.ts`. 첫 출시에서 템플릿 선택·섹션 순서 변경·클라우드 동기화·AI 첨삭은 제외.

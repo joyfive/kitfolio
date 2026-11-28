@@ -41,7 +41,11 @@ export default function BlockView({ block }: { block: Block }) {
           ) : (
             <div className="pf-capture-empty">image</div>
           )}
-          {s(block.caption) && <figcaption>{s(block.caption)}</figcaption>}
+          {s(block.caption) && (
+            <figcaption>
+              <Inline text={s(block.caption)} />
+            </figcaption>
+          )}
         </figure>
       );
     }
@@ -77,7 +81,11 @@ function BlockTable({ block }: { block: Block }) {
           ))}
         </tbody>
       </table>
-      {s(block.caption) && <figcaption>{s(block.caption)}</figcaption>}
+      {s(block.caption) && (
+            <figcaption>
+              <Inline text={s(block.caption)} />
+            </figcaption>
+          )}
     </figure>
   );
 }

@@ -2,13 +2,15 @@
 import type { CSSProperties } from "react";
 import type { DocLang, ResumeData, Rich } from "../../lib/folio/types";
 import { RESUME_LABELS } from "../../lib/folio/labels";
+import { fontStack, resolveFont } from "../../lib/folio/fonts";
 import { DashList, Inline, TextOrList } from "./RichText";
 
-export function brandVars(primary: string): CSSProperties {
+export function brandVars(primary: string, font: string): CSSProperties {
   // --primary-soft 는 같은 엘리먼트에서 brand hex 로 파생한다
   return {
     "--primary": primary,
     "--primary-soft": `color-mix(in srgb, ${primary} 10%, white)`,
+    "--font-base": fontStack(resolveFont(font)),
   } as CSSProperties;
 }
 
@@ -44,11 +46,15 @@ export default function ResumeDoc({ data, lang }: { data: ResumeData; lang: DocL
   const secNo = () => String(++no).padStart(2, "0");
 
   return (
-    <article className="rf-doc folio-doc" style={brandVars(data.brand.primary)} lang={lang}>
+    <article className="rf-doc folio-doc" style={brandVars(data.brand.primary, data.brand.font)} lang={lang}>
       <header className="masthead">
         <div>
           <h1 className="name">{header.name}</h1>
-          {header.role && <div className="role-title">{header.role}</div>}
+          {header.role && (
+            <div className="role-title">
+              <Inline text={header.role} />
+            </div>
+          )}
         </div>
         <div className="contact">
           {header.contact.map((c, i) => (
@@ -79,7 +85,9 @@ export default function ResumeDoc({ data, lang }: { data: ResumeData; lang: DocL
               <div className="cap">
                 {profile.capabilities.map((c, i) => (
                   <div className="cap-row" key={i}>
-                    <div className="cap-t">{c.title}</div>
+                    <div className="cap-t">
+                      <Inline text={c.title} />
+                    </div>
                     <div className="cap-d">
                       <Inline text={c.desc} />
                     </div>
@@ -102,7 +110,9 @@ export default function ResumeDoc({ data, lang }: { data: ResumeData; lang: DocL
                   {profile.skills.map((s, i) => (
                     <tr key={i}>
                       <td className="k">{s.k}</td>
-                      <td className="v">{s.v}</td>
+                      <td className="v">
+                        <Inline text={s.v} />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -188,7 +198,11 @@ export default function ResumeDoc({ data, lang }: { data: ResumeData; lang: DocL
                   <h4 className="f-h">{L.education}</h4>
                   <div className="edu-co">{appendix.education.school}</div>
                   {appendix.education.period && <div className="edu-meta">{appendix.education.period}</div>}
-                  {appendix.education.detail && <div className="edu-sub">{appendix.education.detail}</div>}
+                  {appendix.education.detail && (
+                    <div className="edu-sub">
+                      <Inline text={appendix.education.detail} />
+                    </div>
+                  )}
                 </>
               )}
               {appendix.etc.length > 0 && (

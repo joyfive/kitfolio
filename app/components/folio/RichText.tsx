@@ -1,9 +1,9 @@
 import { Fragment } from "react";
 import type { ListItem, Rich } from "../../lib/folio/types";
 
-/** 문자열 안 `**강조**` → <b class="em">. 그 외는 평문 (HTML 주입 없음). */
-export function Inline({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+/** 한 줄 안의 `**강조**` → <b class="em">. 그 외는 평문 (HTML 주입 없음). */
+function Emphasis({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*\n]+\*\*)/g);
   return (
     <>
       {parts.map((p, i) =>
@@ -15,6 +15,22 @@ export function Inline({ text }: { text: string }) {
           <Fragment key={i}>{p}</Fragment>
         ),
       )}
+    </>
+  );
+}
+
+/** 문장 렌더: 입력한 줄바꿈(\n)을 <br> 로 살리고, 줄마다 `**강조**` 를 적용한다.
+ *  앞뒤 빈 줄은 버린다 (yml 블록 스칼라의 끝 줄바꿈 등). */
+export function Inline({ text }: { text: string }) {
+  const lines = text.replace(/\r\n?/g, "\n").replace(/^\n+|\n+$/g, "").split("\n");
+  return (
+    <>
+      {lines.map((line, i) => (
+        <Fragment key={i}>
+          {i > 0 && <br />}
+          <Emphasis text={line} />
+        </Fragment>
+      ))}
     </>
   );
 }

@@ -29,6 +29,7 @@ import type {
   SolutionSlide,
   SourceDoc,
 } from "./types";
+import { resolveFont } from "./fonts";
 
 export const DEFAULT_PRIMARY = "#2D5DC8";
 
@@ -146,7 +147,7 @@ export function splitActivities(d: SourceDoc): { etc: EtcItem[]; awards: AwardGr
 }
 
 function brand(d: SourceDoc): Brand {
-  return { company: str(d.company_name), primary: normalizeHex(d.primary) };
+  return { company: str(d.company_name), primary: normalizeHex(d.primary), font: resolveFont(d.font).id };
 }
 
 /* ── 경력기술서 ──────────────────────────────────────── */

@@ -3,6 +3,7 @@
 /* 공통 프로필 폼: 두 도구가 같은 profile 을 고친다.
    etc(활동·수상)는 한 리스트에 섞어 저장한다 (auto-folio 작성 형식). 폼에서는 둘로 나눠 보여준다. */
 import {
+  Area,
   Check,
   Field,
   LinesArea,
@@ -51,7 +52,7 @@ export function ProfileIntro({ profile, setProfile, t }: Props) {
   const set = (k: string, v: unknown) => setProfile(setKey(profile, k, v));
   return (
     <Section title={t("fb.sec.intro")} note={t("fb.shared")}>
-      <Field label={t("f.lead")} value={asStr(profile.lead)} onChange={(v) => set("lead", v)} />
+      <Area label={t("f.lead")} rows={2} value={profile.lead} onChange={(v) => set("lead", v)} />
       <ParagraphsArea label={t("f.paragraphs")} hint={t("f.paragraphsHint")} value={profile.paragraphs} onChange={(v) => set("paragraphs", v)} />
     </Section>
   );
@@ -91,7 +92,7 @@ export function ProfileEducation({ profile, setProfile, t }: Props) {
     <Section title={t("fb.sec.education")} note={t("fb.shared")}>
       <Field label={t("f.school")} value={asStr(edu.school)} onChange={(v) => setEdu("school", v)} />
       <Field label={t("f.period")} value={asStr(edu.period)} onChange={(v) => setEdu("period", v)} />
-      <Field label={t("f.eduDetail")} value={asStr(edu.detail)} onChange={(v) => setEdu("detail", v)} />
+      <Area label={t("f.eduDetail")} rows={2} value={edu.detail} onChange={(v) => setEdu("detail", v)} />
     </Section>
   );
 }

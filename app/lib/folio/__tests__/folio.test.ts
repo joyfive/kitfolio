@@ -150,3 +150,20 @@ describe("저장 정규화", () => {
     assert.equal(activeEntry(ws, "portfolio")?.lang, "en");
   });
 });
+
+describe("글꼴", () => {
+  test("id · 표시명 · family 이름 모두 받고, 모르는 값은 Pretendard", async () => {
+    const { resolveFont, fontStack } = await import("../fonts.ts");
+    assert.equal(resolveFont("suit").id, "suit");
+    assert.equal(resolveFont("Pretendard").id, "pretendard");
+    assert.equal(resolveFont("나눔 스퀘어").id, "nanumsquare");
+    assert.equal(resolveFont("Nanum Gothic").id, "nanumgothic");
+    assert.equal(resolveFont("Comic Sans").id, "pretendard");
+    assert.equal(resolveFont(undefined).id, "pretendard");
+    assert.match(fontStack(resolveFont("suit")), /^'SUIT', 'Pretendard'/);
+  });
+  test("문서의 font 가 브랜드로 전달된다", () => {
+    assert.equal(toResume({ font: "nanumgothic" }).brand.font, "nanumgothic");
+    assert.equal(toPortfolio({}).brand.font, "pretendard");
+  });
+});

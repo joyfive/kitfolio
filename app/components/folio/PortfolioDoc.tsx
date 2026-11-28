@@ -304,7 +304,9 @@ function OverviewItem({ item, index, L }: { item: Overview; index: number; L: Po
     <div className="pf-map-row">
       <div className="pf-map-no">{index + 1}</div>
       <div className="pf-map-content">
-        <div className="pf-map-title">{item.title}</div>
+        <div className="pf-map-title">
+          <Inline text={item.title} />
+        </div>
         {item.desc && (
           <p className="pf-map-desc">
             <Inline text={item.desc} />
@@ -355,7 +357,7 @@ export default function PortfolioDoc({ data, lang }: { data: PortfolioData; lang
   let page = 1;
 
   return (
-    <div className="pf-root folio-doc" style={brandVars(data.brand.primary)} lang={lang}>
+    <div className="pf-root folio-doc" style={brandVars(data.brand.primary, data.brand.font)} lang={lang}>
       <Deck>
         <Slide kind="cover">
           <div className="pf-cover-top">
@@ -538,7 +540,7 @@ export default function PortfolioDoc({ data, lang }: { data: PortfolioData; lang
                     <div className="pf-cap-row" key={i}>
                       <div className="pf-cap-title">
                         <span>{pageNo(i + 1)}</span>
-                        {c.title}
+                        <Inline text={c.title} />
                       </div>
                       <p>
                         <Inline text={c.desc} />
