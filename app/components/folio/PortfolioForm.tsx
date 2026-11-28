@@ -71,6 +71,38 @@ function ImagePick({ label, value, onChange, t, maxWidth, keepAlpha, hint }: { l
   );
 }
 
+/** 이미지 너비 슬라이더 (섹션 폭 대비 %, 높이는 비율대로 따라간다). 100% 면 키를 지운다. */
+function WidthSlider({ label, value, onChange, t }: { label: string; value: string; onChange: (v: string | undefined) => void; t: T }) {
+  const id = useId();
+  const pct = /^\s*(\d+(?:\.\d+)?)\s*%\s*$/.exec(value);
+  const n = pct ? Math.max(10, Math.min(100, Math.round(Number(pct[1])))) : 100;
+  const custom = value.trim() !== "" && !pct;
+  return (
+    <div className="fb-field">
+      <label htmlFor={id}>{label}</label>
+      <div className="fb-range">
+        <input
+          id={id}
+          type="range"
+          min={10}
+          max={100}
+          step={5}
+          value={n}
+          aria-valuetext={`${n}%`}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            onChange(v >= 100 ? undefined : `${v}%`);
+          }}
+        />
+        <output htmlFor={id} className="fb-range-val">
+          {custom ? value : `${n}%`}
+        </output>
+      </div>
+      <p className="fb-hint">{custom ? t("f.imageWidthCustom") : t("f.imageWidthHint")}</p>
+    </div>
+  );
+}
+
 const EL_TYPES = ["none", "list", "table", "quote", "diagram", "capture"] as const;
 
 function ElementEditor({ el, setEl, t }: { el: Obj | undefined; setEl: (v: Obj | undefined) => void; t: T }) {
@@ -127,7 +159,7 @@ function ElementEditor({ el, setEl, t }: { el: Obj | undefined; setEl: (v: Obj |
           <ImagePick label={t("f.el.capture")} value={asStr(e.src)} onChange={(v) => set("src", v)} t={t} maxWidth={1600} />
           <p className="fb-hint">{t("f.imageHint")}</p>
           <Field label={t("f.imageUrl")} type="url" value={/^https?:/.test(asStr(e.src)) ? asStr(e.src) : ""} onChange={(v) => set("src", v)} />
-          <Field label={t("f.imageWidth")} value={asStr(e.w)} onChange={(v) => set("w", v)} />
+          <WidthSlider label={t("f.imageWidth")} value={asStr(e.w)} onChange={(v) => set("w", v)} t={t} />
           <Area label={t("f.caption")} rows={2} value={e.caption} onChange={(v) => set("caption", v)} />
         </>
       )}

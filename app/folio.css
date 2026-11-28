@@ -1288,7 +1288,10 @@
 }
 
 .pf-capture img {
+  display: block;
+  width: 100%; /* 기본은 섹션 폭 가득. 슬라이더 값(인라인 width)이 덮어쓴다 */
   max-width: 100%;
+  height: auto; /* 너비만 바꿔도 비율 유지 */
   border: 1px solid var(--pf-line);
 }
 
@@ -2087,4 +2090,20 @@
 .fb-field textarea.fb-md-input {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+/* 이미지 너비 슬라이더 */
+.fb-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+}
+.fb-range-val {
+  min-width: 48px;
+  text-align: right;
+  font-family: var(--font-inter);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-blue-gray-900);
 }
