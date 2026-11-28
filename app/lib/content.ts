@@ -2292,7 +2292,7 @@ export const TOOLS: Tool[] = [
             heading: "프로젝트 블록을 읽히게 쓰는 법",
             body: [
               "프로젝트는 역할 · 문제 정의 · 솔루션 · 성과 네 칸으로 나뉩니다. 각 칸은 그냥 쓰면 문단, 줄머리에 '- '를 붙이면 리스트가 되고, 두 칸 들여쓰면 하위 항목이 됩니다. 성과 칸은 강조색 박스로 표시되므로 숫자가 있는 결과 하나를 앞에 두면 눈에 잘 띕니다.",
-              "문장 안의 **두 별표**로 감싼 부분은 굵게 표시됩니다. 한 프로젝트에 한두 곳만 쓰는 편이 좋습니다. 강조가 많으면 오히려 아무것도 강조되지 않습니다.",
+              "입력칸 위의 B · I · U 버튼(또는 Ctrl/⌘+B · I · U)으로 고른 글자를 굵게 · 기울임 · 밑줄로 바꿀 수 있고, 입력한 줄바꿈은 문서에도 그대로 들어갑니다. 굵게는 한 프로젝트에 한두 곳만 쓰는 편이 좋습니다. 강조가 많으면 오히려 아무것도 강조되지 않습니다.",
             ],
           },
           {
@@ -2352,7 +2352,7 @@ export const TOOLS: Tool[] = [
             heading: "Writing project blocks that read well",
             body: [
               "Each project has four parts: role, problem, solution and impact. Plain text becomes a paragraph, a line starting with '- ' becomes a list item, and indenting two spaces makes a sub-item. Impact appears in an accent-colored box, so lead with one result that has a number.",
-              "Text wrapped in **double asterisks** is shown in bold. Keep it to one or two places per project: when everything is bold, nothing stands out.",
+              "The B, I and U buttons above each field (or Ctrl/⌘+B, I, U) make the selected text bold, italic or underlined, and line breaks you type carry over to the document. Keep bold to one or two places per project: when everything is bold, nothing stands out.",
             ],
           },
           {

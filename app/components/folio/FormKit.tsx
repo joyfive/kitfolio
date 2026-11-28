@@ -60,6 +60,13 @@ export function Field({
   );
 }
 
+/** 미니 에디터 서식: 선택한 글자를 표기로 감싼다 (RichText 의 Inline 이 렌더) */
+const FORMATS = [
+  { key: "bold", mark: "**", glyph: "B", label: { ko: "굵게", en: "Bold" }, hotkey: "b" },
+  { key: "italic", mark: "*", glyph: "I", label: { ko: "기울임", en: "Italic" }, hotkey: "i" },
+  { key: "underline", mark: "++", glyph: "U", label: { ko: "밑줄", en: "Underline" }, hotkey: "u" },
+] as const;
+
 function TextArea({
   label,
   hint,
@@ -78,20 +85,77 @@ function TextArea({
   placeholder?: string;
 }) {
   const id = useId();
+  const { lang } = useLang();
+  const ref = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState(initial);
+  const change = (next: string) => {
+    setText(next);
+    onText(next);
+  };
+
+  /** 선택 영역을 mark 로 감싼다. 이미 감싸져 있으면 벗긴다. 선택이 없으면 자리표시 글자를 넣고 선택한다. */
+  function wrap(mark: string) {
+    const el = ref.current;
+    if (!el) return;
+    const { selectionStart: s, selectionEnd: e } = el;
+    const before = text.slice(0, s);
+    const after = text.slice(e);
+    let next: string;
+    let selS: number;
+    let selE: number;
+    if (s !== e && before.endsWith(mark) && after.startsWith(mark) && !(mark === "*" && before.endsWith("**"))) {
+      next = before.slice(0, -mark.length) + text.slice(s, e) + after.slice(mark.length);
+      selS = s - mark.length;
+      selE = e - mark.length;
+    } else {
+      const inner = text.slice(s, e) || (lang === "ko" ? "텍스트" : "text");
+      next = before + mark + inner + mark + after;
+      selS = s + mark.length;
+      selE = selS + inner.length;
+    }
+    change(next);
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(selS, selE);
+    });
+  }
+
   return (
     <div className="fb-field">
       <label htmlFor={id}>{label}</label>
+      {!mono && (
+        <div className="sm-md-bar fb-md-bar" role="toolbar" aria-label={`${label}: ${lang === "ko" ? "서식" : "formatting"}`}>
+          {FORMATS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              className={`sm-md-btn fb-md-${f.key}`}
+              title={`${f.label[lang]} (Ctrl/⌘+${f.hotkey.toUpperCase()})`}
+              aria-label={f.label[lang]}
+              aria-controls={id}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => wrap(f.mark)}
+            >
+              {f.glyph}
+            </button>
+          ))}
+        </div>
+      )}
       <textarea
         id={id}
+        ref={ref}
         rows={rows}
         value={text}
         placeholder={placeholder}
-        className={mono ? "is-mono" : undefined}
+        className={mono ? "is-mono" : "fb-md-input"}
         spellCheck={!mono}
-        onChange={(e) => {
-          setText(e.target.value);
-          onText(e.target.value);
+        onChange={(e) => change(e.target.value)}
+        onKeyDown={(e) => {
+          if (mono || !(e.metaKey || e.ctrlKey) || e.shiftKey || e.altKey) return;
+          const f = FORMATS.find((x) => x.hotkey === e.key.toLowerCase());
+          if (!f) return;
+          e.preventDefault();
+          wrap(f.mark);
         }}
       />
       {hint && <p className="fb-hint">{hint}</p>}

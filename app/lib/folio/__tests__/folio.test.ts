@@ -167,3 +167,21 @@ describe("글꼴", () => {
     assert.equal(toPortfolio({}).brand.font, "pretendard");
   });
 });
+
+describe("인라인 서식 렌더", () => {
+  test("굵게 · 기울임 · 밑줄 · 겹침 · 줄바꿈, HTML 은 해석하지 않는다", async () => {
+    const React = await import("react");
+    const { createElement } = React;
+    // tsx 는 JSX 를 classic 런타임(전역 React)으로 변환한다: 테스트에서만 전역에 둔다
+    (globalThis as { React?: unknown }).React = React;
+    const { renderToStaticMarkup } = await import("react-dom/server");
+    const { Inline } = await import("../../../components/folio/RichText.tsx");
+    const html = (text: string) => renderToStaticMarkup(createElement(Inline, { text }));
+    assert.equal(html("a **b** c"), 'a <b class="em">b</b> c');
+    assert.equal(html("*기울임* ++밑줄++"), "<i>기울임</i> <u>밑줄</u>");
+    assert.equal(html("**굵게 *안쪽* 끝**"), '<b class="em">굵게 <i>안쪽</i> 끝</b>');
+    assert.equal(html("첫 줄\n둘째 줄\n"), "첫 줄<br/>둘째 줄");
+    assert.equal(html("5 * 3 = 15"), "5 * 3 = 15");
+    assert.equal(html("<script>x</script>"), "&lt;script&gt;x&lt;/script&gt;");
+  });
+});

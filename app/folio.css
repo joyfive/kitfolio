@@ -431,7 +431,7 @@
   --pf-bg2: var(--surface-muted);
   --pf-primary-soft: var(--primary-soft);
   /* 여백 토큰: 콘텐츠 영역(헤더 라인 ~ 푸터 라인 사이) 기준 */
-  --sp-body-y: 40px; /* 콘텐츠 영역 상하 패딩 */
+  --sp-body-y: 64px; /* 콘텐츠 영역 상하 패딩 (헤더 아래 · 푸터 위) */
   --sp-group: 40px; /* 콘텐츠 박스(그룹) 간 */
   --sp-title: 32px; /* 제목 → 본콘텐츠 */
   --sp-subtitle: 24px; /* 박스 내부 소제목(가설·근거·성과 카드 헤더 등) → 본콘텐츠 */
@@ -1303,8 +1303,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 48px;
-  border-bottom: 1px solid var(--pf-line);
-  padding-bottom: var(--sp-subtitle);
+  margin-bottom: var(--sp-title);
 }
 
 .pf-povr-head h3 {
@@ -1323,15 +1322,20 @@
   white-space: nowrap;
 }
 
+/* 개요 표: 위 테두리 + 행마다 아래 테두리, 왼쪽 라벨 칸은 옅은 회색 면 */
+.pf-povr-head + div {
+  border-top: 1px solid var(--pf-line);
+}
+
 .pf-povr-row {
   display: grid;
-  grid-template-columns: 210px 1fr;
-  gap: 28px;
+  grid-template-columns: 240px 1fr;
   border-bottom: 1px solid var(--pf-line);
-  padding: 8px 0;
 }
 
 .pf-povr-label {
+  background: var(--pf-bg2);
+  padding: 20px 24px;
   color: var(--pf-ink);
   font-size: 25px;
   font-weight: 800;
@@ -1340,6 +1344,7 @@
 
 .pf-povr-row p {
   margin: 0;
+  padding: 20px 28px;
   color: var(--pf-ink2);
   font-size: 24px;
   line-height: 1.5;
@@ -2048,4 +2053,38 @@
 .fb-doctabs a.is-on {
   color: var(--color-blue-primary-700);
   border-bottom-color: var(--color-blue-primary-700);
+}
+
+/* 문서 안 인라인 서식: 기울임 · 밑줄 (굵게는 .em) */
+.folio-doc i {
+  font-style: italic;
+}
+.folio-doc u {
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.18em;
+}
+
+/* 폼 미니 에디터 (슬랙 메시지 빌더의 .sm-md-bar 를 재사용) */
+.fb-md-bar {
+  margin-bottom: -4px;
+}
+.fb-md-bar .sm-md-btn {
+  min-width: 32px;
+  height: 28px;
+  font-family: var(--font-inter);
+  font-size: 13px;
+}
+.fb-md-bold {
+  font-weight: 700;
+}
+.fb-md-italic {
+  font-style: italic;
+}
+.fb-md-underline {
+  text-decoration: underline;
+}
+.fb-field textarea.fb-md-input {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
