@@ -346,6 +346,7 @@ Kitfolio = **a searchable library of small browser-based tools to calculate, con
   - 글자 `--text-caption~display` = 12·13·14·15·16·17·18·20·24·28·34·40·48, 굵기 `--fw-title/ui/medium/body`
   - 라운드 `--radius-xs~2xl · pill`, 높이 `--h-sm~xl`, 모션 `--dur-fast/base/slow` + `--ease`, 표면·상태색 `--white` `--danger*` `--warning`
   - 예외: 1~2px 헤어라인, 음수 마진 보정, 가이드 도해 목업(`.kf-gfig-*`), 고정 크기 컨트롤(아이콘·핸들).
+- **구분선 금지.** 영역은 `1px` 선이 아니라 여백(`--space-*`)과 면 색 차이로 나눈다. 허용되는 선은 강조용 두꺼운 막대(인용·콜아웃 3~4px), 탭 활성 표시(2px), 번호 마커 연결선뿐이다.
 - **밑줄 버튼 금지.** 버튼형 링크·텍스트 버튼은 평소 투명, 호버 시 배경색이 들어오는 고스트 형태로 만든다
   (`:is(...)` 고스트 규칙 목록에 추가). 밑줄은 본문 문장 안의 링크에만 쓴다.
 - **IDE 다크 출력 · Canvas 체커보드**는 Kitfolio 고유 규칙이라 그대로 둔다.
