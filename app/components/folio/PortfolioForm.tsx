@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { imageToDataUrl } from "../../lib/folio/image";
 import { rowsToText, textToRows } from "../../lib/folio/text";
 import {
@@ -28,24 +28,35 @@ type T = (k: string) => string;
 
 /** 이미지 고르기 → 줄여서 data URL */
 function ImagePick({ label, value, onChange, t, maxWidth, keepAlpha, hint }: { label: string; value: string; onChange: (v: string | undefined) => void; t: T; maxWidth: number; keepAlpha?: boolean; hint?: string }) {
-  const id = useId();
+  const labelId = useId();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   return (
     <div className="fb-field">
-      <span className="fb-label">{label}</span>
+      <span className="fb-label" id={labelId}>
+        {label}
+      </span>
       <div className="fb-image">
         {/^data:image\/|^https?:/.test(value) && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={value} alt="" />
         )}
-        <label htmlFor={id} className="btn btn-sm btn-outline">
+        {/* 파일 창은 버튼에서 연다. 숨긴 input 에 포커스가 가면 브라우저가 그 위치로 스크롤해 버린다. */}
+        <button
+          type="button"
+          className="btn btn-sm btn-outline"
+          aria-describedby={labelId}
+          disabled={busy}
+          onClick={() => fileRef.current?.click()}
+        >
           {busy ? "…" : t("f.photoPick")}
-        </label>
+        </button>
         <input
-          id={id}
+          ref={fileRef}
           type="file"
           accept="image/*"
-          className="sr-only"
+          hidden
+          tabIndex={-1}
           onChange={async (e) => {
             const file = e.target.files?.[0];
             e.target.value = "";

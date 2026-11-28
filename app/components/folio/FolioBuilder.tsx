@@ -314,7 +314,7 @@ export default function FolioBuilder({ kind }: { kind: FolioKind }) {
               ref={fileRef}
               type="file"
               accept=".yml,.yaml,text/yaml,text/plain"
-              className="sr-only"
+              hidden
               tabIndex={-1}
               aria-hidden="true"
               onChange={(e) => {

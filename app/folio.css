@@ -1867,9 +1867,6 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-blue-gray-200);
 }
-.fb-image label.btn {
-  cursor: pointer;
-}
 .fb-yamlseg {
   margin-bottom: 8px;
 }
